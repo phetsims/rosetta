@@ -8,13 +8,13 @@
 var express = require( 'express' );
 var https = require( 'https' );
 var doT = require( 'express-dot' );
+var LocaleInfo = require( __dirname + '/js/LocaleInfo' );
 
 // constants
-var app = express();
-var view = __dirname + '/views';
 var LISTEN_PORT = 16372;
 
-// Configure the ExpressJS app
+// Create and configure the ExpressJS app
+var app = express();
 app.set( 'views', __dirname + '/html/views' );
 app.set( 'view engine', 'dot' );
 app.engine( 'html', doT.__express );
@@ -41,12 +41,13 @@ function escapeHTML( s ) {
 }
 
 // Handle a URL to translate a specific simulation.
-app.get( '/translate/sim/:simName', function( req, res ) {
+app.get( '/translate/sim/:simName?/:targetLocale?', function( req, res ) {
 
   var simName = req.param( 'simName' );
+  var targetLocale = req.param( 'targetLocale' );
   var path = '/phetsims/' + simName + '/master/strings/' + simName + '-strings_en.json';
 
-  // Pull the string data from github.
+  // Pull the English string data from github.
   https.get( { host: 'raw.githubusercontent.com', path: path }, function( response ) {
     response.on( 'data', function( data ) {
 
@@ -69,7 +70,7 @@ app.get( '/translate/sim/:simName', function( req, res ) {
         var templateData = {
           title: "PhET Translation Utility",
           subtitle: "Please enter a translation for each English string:",
-          destinationLanguage: 'Spanish',
+          destinationLanguage: LocaleInfo.localeToLanguageString( targetLocale ),
           stringsTable: stringsTable
         };
 
@@ -84,8 +85,7 @@ app.get( '/translate/sim/:simName', function( req, res ) {
 } );
 
 app.get( '/*', function( req, res ) {
-  console.log( 'req.baseUrl = ' + req.baseUrl );
-  res.send( '<p>Error: Page not found.  URL = ' + req.baseUrl + '</p>' );
+  res.send( '<p>Error: Page not found.  URL = ' + req.url + '</p>' );
 } );
 
 app.listen( LISTEN_PORT, function() { console.log( 'Listening on port ' + LISTEN_PORT ) } );
