@@ -1,3 +1,9 @@
+// Copyright 2002-2015, University of Colorado Boulder
+
+/**
+ * Main entry point for PhET translation web app.
+ */
+
 var express = require( 'express' );
 var https = require( 'https' );
 var app = express();
@@ -97,7 +103,8 @@ app.get( '/translate/sim/:simName', function( req, res ) {
 
         // Assemble the data that will be supplied to the template.
         var templateData = {
-          title: "Enter a translation for each English string:",
+          title: "PhET Translation Utility",
+          subtitle: "Please enter a translation for each English string:",
           destinationLanguage: 'Spanish',
           stringsTable: stringsTable
         };
