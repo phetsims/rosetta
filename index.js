@@ -74,6 +74,7 @@ app.get( '/translate/sim/:simName?/:targetLocale?', function( req, res ) {
           destinationLanguage: LocaleInfo.localeToLanguageString( targetLocale ),
           stringsTable: stringsTable,
           //simUrl: TranslatableSimInfo.getSimTestUrl( simName )
+          simName: simName,
           simUrl: 'http://localhost/git-dev/' + simName + '/' + simName + '_en.html'
         };
 

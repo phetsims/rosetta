@@ -14,23 +14,22 @@
     <button id="submitButton" style="font-size:125%;position:relative;left:-200px;top:30px">Submit</button>
 
     <!--data for sim url-->
-    <div id="simUrlDiv" data-sim-url={{=it.simUrl}}></div>
+    <div id="simData" data-sim-url={{=it.simUrl}} data-sim-name={{=it.simName}}></div>
 
     <script>
       var testButton = document.getElementById( "testButton" );
       testButton.addEventListener( 'click', function() {
-        var simUrl = document.getElementById( 'simUrlDiv' ).getAttribute( 'data-sim-url' );
-        var replacementStrings = JSON.stringify( { 'NEURON/legend': 'Yadda' } );
+        var simUrl = document.getElementById( 'simData' ).getAttribute( 'data-sim-url' );
+        var stringPrefix = document.getElementById( 'simData' ).getAttribute( 'data-sim-name' ).replace( /-/g, '_' ).toUpperCase();
+        var stringsToReplace = {};
         var table = document.getElementById( 'stringsTable' );
         for ( var i = 1, row; row = table.rows[ i ]; i++ ) {
           var translation = row.cells[ 1 ].children[ 0 ].value;
           if ( translation.length > 0 ) {
-            console.log( '--------------' );
-            console.log( 'found translated string, value = ' + translation );
-            console.log( 'string key = ' + row.getAttribute( 'data-string-key' ) );
+            stringsToReplace[ stringPrefix + '/' + row.getAttribute( 'data-string-key' ) ] = translation;
           }
         }
-        var win = window.open( simUrl + '?' + 'strings=' + replacementStrings, '_blank' );
+        var win = window.open( simUrl + '?' + 'strings=' + encodeURIComponent( JSON.stringify( stringsToReplace ) ), '_blank' );
         win.focus();
       } );
     </script>
