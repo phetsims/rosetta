@@ -9,6 +9,7 @@ var express = require( 'express' );
 var https = require( 'https' );
 var doT = require( 'express-dot' );
 var LocaleInfo = require( __dirname + '/js/LocaleInfo' );
+var TranslatableSimInfo = require( __dirname + '/js/TranslatableSimInfo' );
 
 // constants
 var LISTEN_PORT = 16372;
@@ -59,7 +60,7 @@ app.get( '/translate/sim/:simName?/:targetLocale?', function( req, res ) {
         var stringsTable = '';
         for ( var key in strings ) {
           if ( strings.hasOwnProperty( key ) ) {
-            stringsTable += '<tr>';
+            stringsTable += '<tr data-string-key=' + key + '>';
             stringsTable += '<td>' + escapeHTML( strings[ key ] ) + '</td>';
             stringsTable += '<td><input type=\"text\" </td>';
             stringsTable += '</tr>';
@@ -71,7 +72,9 @@ app.get( '/translate/sim/:simName?/:targetLocale?', function( req, res ) {
           title: "PhET Translation Utility",
           subtitle: "Please enter a translation for each English string:",
           destinationLanguage: LocaleInfo.localeToLanguageString( targetLocale ),
-          stringsTable: stringsTable
+          stringsTable: stringsTable,
+          //simUrl: TranslatableSimInfo.getSimTestUrl( simName )
+          simUrl: 'http://localhost/git-dev/' + simName + '/' + simName + '_en.html'
         };
 
         // Render the page.

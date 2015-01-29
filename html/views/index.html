@@ -3,7 +3,7 @@
     <h1>{{=it.title}}</h1>
 
     <h2>{{=it.subtitle}}</h2>
-    <table style="width:50%">
+    <table id="stringsTable" style="width:50%">
       <tr>
         <td><strong>English</strong></td>
         <td><strong>{{=it.destinationLanguage}}</strong></td>
@@ -12,5 +12,27 @@
     </table>
     <button id="testButton" style="font-size:125%;position:relative;left:-300px;top:30px">Test</button>
     <button id="submitButton" style="font-size:125%;position:relative;left:-200px;top:30px">Submit</button>
+
+    <!--data for sim url-->
+    <div id="simUrlDiv" data-sim-url={{=it.simUrl}}></div>
+
+    <script>
+      var testButton = document.getElementById( "testButton" );
+      testButton.addEventListener( 'click', function() {
+        var simUrl = document.getElementById( 'simUrlDiv' ).getAttribute( 'data-sim-url' );
+        var replacementStrings = JSON.stringify( { 'NEURON/legend': 'Yadda' } );
+        var table = document.getElementById( 'stringsTable' );
+        for ( var i = 1, row; row = table.rows[ i ]; i++ ) {
+          var translation = row.cells[ 1 ].children[ 0 ].value;
+          if ( translation.length > 0 ) {
+            console.log( '--------------' );
+            console.log( 'found translated string, value = ' + translation );
+            console.log( 'string key = ' + row.getAttribute( 'data-string-key' ) );
+          }
+        }
+        var win = window.open( simUrl + '?' + 'strings=' + replacementStrings, '_blank' );
+        win.focus();
+      } );
+    </script>
   </div>
 </div><!-- /.container -->

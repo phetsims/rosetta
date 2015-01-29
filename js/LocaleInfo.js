@@ -1,9 +1,9 @@
 // Copyright 2002-2015, University of Colorado Boulder
 
 /**
- * A module that provide information and utilities related to language locales.
+ * A module that provides information and utilities related to language locales.
  */
-'use strict';
+'use strict'; // TODO: Does this work, and is it needed?
 
 // locale-to-language strings TODO: This is incomplete.
 var localeInfo = {
