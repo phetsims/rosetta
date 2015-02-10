@@ -19,15 +19,10 @@
 
 <div>
   <h2>Select Simulation</h2>
-  <select id="simSelector">
-    <option value="acid-base-solutions">Acid-Base Solutions</option>
-    <option value="area-builder">Area Builder</option>
-    <option value="arithmetic">Arithmetic</option>
-    <option value="build-an-atom">Build an Atom</option>
-    <option value="energy-skate-park-basics">Energy Skate Park Basics</option>
-    <option value="molarity">Molarity</option>
-    <option value="neuron">Neuron</option>
-    <option value="reactants-products-and-leftovers">Reactants, Products, and Leftovers</option>
+  <select id="simSelector2">
+    {{~it.simInfoArray :value:index}}
+    <option value="{{=value.projectName}}">{{=value.simTitle}}</option>
+    {{~}}
   </select>
 
   <h2>Select Target Language</h2>

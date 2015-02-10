@@ -30,16 +30,18 @@ app.use( '/translate/fonts', express.static( __dirname + '/public/fonts' ) );
 // Set up the routes
 //----------------------------------------------------------------------------
 
-app.get( '/translate/', function( req, res ) {
-  res.sendfile( __dirname + '/html/views/translate-home.html' );
-} );
-
+// convenience function for presenting escaped HTML
 function escapeHTML( s ) {
   return s.replace( /&/g, '&amp;' )
     .replace( /"/g, '&quot;' )
     .replace( /</g, '&lt;' )
     .replace( />/g, '&gt;' );
 }
+
+// Initial page for the translation utility
+app.get( '/translate/', function( req, res ) {
+  res.render( __dirname + '/html/views/translate-home.html', { simInfoArray: TranslatableSimInfo.simInfoArray } );
+} );
 
 // Handle a URL to translate a specific simulation.
 app.get( '/translate/sim/:simName?/:targetLocale?', function( req, res ) {

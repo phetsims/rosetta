@@ -11,36 +11,36 @@
  */
 'use strict'; // TODO: Does this work, and is it needed?
 
-var simInfo = {
-  reactantsProductsAndLeftovers: {
+var simInfoArray = [
+  {
     simTitle: 'Reactants, Products, and Leftovers',
     projectName: 'reactants-products-and-leftovers',
     urlOfTestFile: 'http://phet.colorado.edu/sims/html/reactants-products-and-leftovers/latest/reactants-products-and-leftovers_en.html'
   },
-  arithmetic: {
+  {
     simTitle: 'Arithmetic',
     projectName: 'arithmetic',
     urlOfTestFile: 'http://www.colorado.edu/physics/phet/dev/html/arithmetic/1.0.0-dev.12/arithmetic_en.html'
   },
-  neuron: {
+  {
     simTitle: 'Neuron',
     projectName: 'neuron',
     urlOfTestFile: 'http://www.colorado.edu/physics/phet/dev/html/neuron/1.0.0-dev.7/neuron_en.html'
   }
-};
+];
+
+module.exports.simInfoArray = simInfoArray;
 
 /**
- * Get the URL for the HTML5 simulation that should be used for testing of a translation using the 'strings' queary
- * parameter.
+ * Get the simulation information given the project name.
  * @param {string} projectName - Project name for the simulation, same as the GitHub repo name.
- * @returns {string} url to use for testing
+ * @returns {object} simulation information, see above for structure, null if no match found
  */
-module.exports.getSimTestUrl = function( projectName ) {
-  for ( var key in simInfo ) {
-    if ( simInfo.hasOwnProperty( key ) ) {
-      if ( projectName === simInfo[ key ].projectName ) {
-        return simInfo[ key ].urlOfTestFile;
-      }
+module.exports.getSimInfoByProjectName = function( projectName ) {
+  for ( var i = 0; i < simInfoArray.length; i++ ) {
+    if ( projectName === simInfoArray[ i ].projectName ) {
+      return simInfoArray[ i ]
     }
   }
+  return null;
 };
