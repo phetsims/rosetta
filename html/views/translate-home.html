@@ -19,7 +19,7 @@
 
 <div>
   <h2>Select Simulation</h2>
-  <select id="simSelector2">
+  <select id="simSelector">
     {{~it.simInfoArray :value:index}}
     <option value="{{=value.projectName}}">{{=value.simTitle}}</option>
     {{~}}
@@ -43,7 +43,7 @@
 <script>
   var button = document.getElementById( "goButton" );
   button.addEventListener( 'click', function() {
-    console.log( 'button clicked' );
+    console.log( 'go button clicked' );
     var simSelector = document.getElementById( "simSelector" );
     var simulation = simSelector.options[ simSelector.selectedIndex ].value;
     var targetLocaleSelector = document.getElementById( "localeSelector" );

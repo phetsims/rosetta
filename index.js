@@ -81,7 +81,7 @@ app.get( '/translate/sim/:simName?/:targetLocale?', function( req, res ) {
         };
 
         // Render the page.
-        res.render( 'index.html', templateData );
+        res.render( 'translate-sim.html', templateData );
       }
       else {
         res.send( 'Error: Sim data not found' );
