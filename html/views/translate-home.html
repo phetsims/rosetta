@@ -17,6 +17,11 @@
 <body>
 <h1>PhET Translation Utility</h1>
 
+<!--show username if available -->
+{{? it.username }}
+<div><p>user: {{=it.name}}</p>p></div>
+{{?}}
+
 <div>
   <h2>Select Simulation</h2>
   <select id="simSelector">

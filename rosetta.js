@@ -46,9 +46,14 @@ app.use( express.cookieParser() );
 // check for the presence of the login cookie
 if ( REQUIRE_LOGIN ) {
   app.get( '/translate/*', function( req, res, next ) {
+    console.log( 'all cookies :' );
+    for ( var k in req.cookies ) {
+      if ( req.cookies.hasOwnProperty( k ) ) {
+        alert( "Key is " + k + ", value is" + req.cookies[ k ] );
+      }
+    }
+    console.log( '------------' );
     console.log( 'Checking for login cookie' );
-    console.log( 'all cookies = ' + JSON.stringify( req.cookies ) );
-    // check if client sent cookie
     var cookie = req.cookies.JSESSIONID;
     if ( cookie === undefined ) {
       // no: the user must log in
