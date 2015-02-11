@@ -14,6 +14,7 @@ var TranslatableSimInfo = require( __dirname + '/js/TranslatableSimInfo' );
 
 // constants
 var LISTEN_PORT = 16372;
+var REQUIRE_LOGIN = true;
 
 // Create and configure the ExpressJS app
 var app = express();
@@ -42,32 +43,32 @@ function escapeHTML( s ) {
 // need cookieParser middleware before we can do anything with cookies
 app.use( express.cookieParser() );
 
-// set cookie on translation landing page
-app.get( '/translate/', function( req, res, next ) {
-  // check if client sent cookie
-  var cookie = req.cookies.translationLandingPageCookie;
-  if ( cookie === undefined ) {
-    // no: set a new cookie
-    var randomNumber = Math.random().toString();
-    randomNumber = randomNumber.substring( 2, randomNumber.length );
-    res.cookie( 'translationLandingPageCookie', randomNumber, { maxAge: 900000, httpOnly: true } );
-    console.log( 'cookie has been created successfully' );
-  }
-  else {
-    // yes, cookie was already present, do nothing
-    console.log( 'cookie exists', cookie );
-  }
-  next(); // send to next route
-} );
+// check for the presence of the login cookie
+if ( REQUIRE_LOGIN ) {
+  app.get( '/translate/*', function( req, res, next ) {
+    console.log( 'Checking for login cookie' );
+    // check if client sent cookie
+    var cookie = req.cookies.JSESSIONID;
+    if ( cookie === undefined ) {
+      // no: the user must log in
+      console.log( 'session cookie not found, sending to login page' );
+      res.render( 'not-logged-in.html' );
+    }
+    else {
+      // yes, cookie was present, go to the next route
+      console.log( 'session cookie found, moving to next step' );
+      next(); // send to next route
+    }
+  } );
+}
 
 // Initial page for the translation utility
 app.get( '/translate/', function( req, res, next ) {
-  res.render( __dirname + '/html/views/translate-home.html', { simInfoArray: TranslatableSimInfo.simInfoArray } );
+  res.render( 'translate-home.html', { simInfoArray: TranslatableSimInfo.simInfoArray } );
 } );
 
-// Handle a URL to translate a specific simulation.
+// route for translating a specific sim to a specific language
 app.get( '/translate/sim/:simName?/:targetLocale?', function( req, res ) {
-  console.log( "Cookies: ", req.cookies );
   var simName = req.param( 'simName' );
   var targetLocale = req.param( 'targetLocale' );
   var path = '/phetsims/' + simName + '/master/strings/' + simName + '-strings_en.json';
