@@ -49,7 +49,7 @@ if ( REQUIRE_LOGIN ) {
     console.log( 'all cookies :' );
     for ( var k in req.cookies ) {
       if ( req.cookies.hasOwnProperty( k ) ) {
-        alert( "Key is " + k + ", value is" + req.cookies[ k ] );
+        console.log( "Key is " + k + ", value is" + req.cookies[ k ] );
       }
     }
     console.log( '------------' );
