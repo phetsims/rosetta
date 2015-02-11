@@ -53,7 +53,7 @@ if ( REQUIRE_LOGIN ) {
     if ( cookie === undefined ) {
       // no: the user must log in
       console.log( 'session cookie not found, sending to login page' );
-      res.render( 'not-logged-in.html' );
+      res.render( 'login-required.html', { title: 'Login Required' } );
     }
     else {
       // yes, cookie was present, go to the next route
