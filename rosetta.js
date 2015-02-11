@@ -14,7 +14,7 @@ var TranslatableSimInfo = require( __dirname + '/js/TranslatableSimInfo' );
 
 // constants
 var LISTEN_PORT = 16372;
-var REQUIRE_LOGIN = true;
+var REQUIRE_LOGIN = false;
 
 // Create and configure the ExpressJS app
 var app = express();
@@ -70,7 +70,14 @@ if ( REQUIRE_LOGIN ) {
 
 // Initial page for the translation utility
 app.get( '/translate/', function( req, res, next ) {
-  res.render( 'translate-home.html', { simInfoArray: TranslatableSimInfo.simInfoArray } );
+
+  // Pull the username from the cookie
+  var username = req.cookies[ 'sign-in-panel.sign-in-form.username' ] || 'Not logged in';
+
+  res.render( 'translate-home.html', {
+    simInfoArray: TranslatableSimInfo.simInfoArray,
+    username: username
+  } );
 } );
 
 // route for translating a specific sim to a specific language
@@ -98,6 +105,9 @@ app.get( '/translate/sim/:simName?/:targetLocale?', function( req, res ) {
           }
         }
 
+        // Pull the username from the cookie
+        var username = req.cookies[ 'sign-in-panel.sign-in-form.username' ] || 'Not logged in';
+
         // Assemble the data that will be supplied to the template.
         var templateData = {
           title: "PhET Translation Utility",
@@ -105,7 +115,8 @@ app.get( '/translate/sim/:simName?/:targetLocale?', function( req, res ) {
           destinationLanguage: LocaleInfo.localeToLanguageString( targetLocale ),
           stringsTable: stringsTable,
           simName: simName,
-          simUrl: TranslatableSimInfo.getSimInfoByProjectName( simName ).testUrl
+          simUrl: TranslatableSimInfo.getSimInfoByProjectName( simName ).testUrl,
+          username: username
         };
 
         // Render the page.
