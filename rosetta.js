@@ -47,7 +47,7 @@ app.use( express.cookieParser() );
 if ( REQUIRE_LOGIN ) {
   app.get( '/translate/*', function( req, res, next ) {
     console.log( 'Checking for login cookie' );
-    console.log( 'all cookies = ' + req.cookies );
+    console.log( 'all cookies = ' + JSON.stringify( req.cookies ) );
     // check if client sent cookie
     var cookie = req.cookies.JSESSIONID;
     if ( cookie === undefined ) {
