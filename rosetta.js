@@ -14,7 +14,7 @@ var TranslatableSimInfo = require( __dirname + '/js/TranslatableSimInfo' );
 
 // constants
 var LISTEN_PORT = 16372;
-var REQUIRE_LOGIN = false;
+var REQUIRE_LOGIN = true;
 
 // Create and configure the ExpressJS app
 var app = express();
@@ -75,6 +75,7 @@ app.get( '/translate/', function( req, res, next ) {
   var username = req.cookies[ 'sign-in-panel.sign-in-form.username' ] || 'Not logged in';
 
   res.render( 'translate-home.html', {
+    title: 'PhET Translation Utility',
     simInfoArray: TranslatableSimInfo.simInfoArray,
     username: username
   } );
