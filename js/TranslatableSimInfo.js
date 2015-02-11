@@ -15,17 +15,17 @@ var simInfoArray = [
   {
     simTitle: 'Reactants, Products, and Leftovers',
     projectName: 'reactants-products-and-leftovers',
-    urlOfTestFile: 'http://phet.colorado.edu/sims/html/reactants-products-and-leftovers/latest/reactants-products-and-leftovers_en.html'
+    testUrl: 'http://phet.colorado.edu/sims/html/reactants-products-and-leftovers/latest/reactants-products-and-leftovers_en.html'
   },
   {
     simTitle: 'Arithmetic',
     projectName: 'arithmetic',
-    urlOfTestFile: 'http://www.colorado.edu/physics/phet/dev/html/arithmetic/1.0.0-dev.12/arithmetic_en.html'
+    testUrl: 'http://www.colorado.edu/physics/phet/dev/html/arithmetic/1.0.0-dev.12/arithmetic_en.html'
   },
   {
     simTitle: 'Neuron',
     projectName: 'neuron',
-    urlOfTestFile: 'http://www.colorado.edu/physics/phet/dev/html/neuron/1.0.0-dev.7/neuron_en.html'
+    testUrl: 'http://www.colorado.edu/physics/phet/dev/html/neuron/1.0.0-dev.7/neuron_en.html'
   }
 ];
 

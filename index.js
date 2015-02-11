@@ -45,7 +45,6 @@ app.get( '/translate/', function( req, res ) {
 
 // Handle a URL to translate a specific simulation.
 app.get( '/translate/sim/:simName?/:targetLocale?', function( req, res ) {
-
   var simName = req.param( 'simName' );
   var targetLocale = req.param( 'targetLocale' );
   var path = '/phetsims/' + simName + '/master/strings/' + simName + '-strings_en.json';
@@ -75,9 +74,8 @@ app.get( '/translate/sim/:simName?/:targetLocale?', function( req, res ) {
           subtitle: "Please enter a translation for each English string:",
           destinationLanguage: LocaleInfo.localeToLanguageString( targetLocale ),
           stringsTable: stringsTable,
-          //simUrl: TranslatableSimInfo.getSimTestUrl( simName )
           simName: simName,
-          simUrl: 'http://localhost/git-dev/' + simName + '/' + simName + '_en.html'
+          simUrl: TranslatableSimInfo.getSimInfoByProjectName( simName ).testUrl
         };
 
         // Render the page.
