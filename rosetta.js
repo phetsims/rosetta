@@ -41,21 +41,24 @@ function escapeHTML( s ) {
 // need cookieParser middleware before we can do anything with cookies
 app.use( express.cookieParser() );
 
-// check for the presence of the login cookie
+// check for the presence of the PhET login cookie
 app.get( '/translate/*', function( req, res, next ) {
   console.log( 'all cookies :' );
   for ( var k in req.cookies ) {
     if ( req.cookies.hasOwnProperty( k ) ) {
-      console.log( "Key is " + k + ", value is" + req.cookies[ k ] );
+      console.log( "Key is " + k + ", value is: " + req.cookies[ k ] );
     }
   }
   console.log( '------------' );
-  console.log( 'Checking for login cookie' );
+  console.log( 'Checking for login cookie (bypassed for localhost)' );
   var cookie = req.cookies.JSESSIONID;
-  if ( req.get( 'host' ).indexOf( 'localhost' ) !== 0 && cookie === undefined ) {
+  //if ( req.get( 'host' ).indexOf( 'localhost' ) !== 0 && cookie === undefined ) {
+  if ( cookie === undefined ) {
     // no: the user must log in
     console.log( 'session cookie not found, sending to login page' );
-    res.render( 'login-required.html', { title: 'Login Required' } );
+    console.log( 'host = ' + req.get( 'host' ) );
+    console.log( 'req.url = ' + req.url );
+    res.render( 'login-required.html', { title: 'Login Required', host: req.get( 'host' ), destinationUrl: req.url } );
   }
   else {
     // yes, cookie was present, go to the next route
