@@ -13,7 +13,12 @@
         <td><strong>English</strong></td>
         <td><strong>{{=it.destinationLanguage}}</strong></td>
       </tr>
-      {{=it.stringsTable}}
+      {{~it.englishStringsArray :value:index}}
+      <tr data-string-key={{=value.key}}>
+        <td>{{=value.string}}</td>
+        <td><input type="text"></td>
+      </tr>
+      {{~}}
     </table>
     <button id="testButton" style="font-size:125%;position:relative;left:-300px;top:30px">Test</button>
     <button id="submitButton" style="font-size:125%;position:relative;left:-200px;top:30px">Submit</button>

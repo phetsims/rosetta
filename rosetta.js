@@ -96,13 +96,24 @@ app.get( '/translate/sim/:simName?/:targetLocale?', function( req, res ) {
         strings = JSON.parse( data );
 
         // Create a table for the strings to be translated.
-        var stringsTable = '';
+        //var stringsTable = '';
+        //for ( var key in strings ) {
+        //  if ( strings.hasOwnProperty( key ) ) {
+        //    stringsTable += '<tr data-string-key=' + key + '>';
+        //    stringsTable += '<td>' + escapeHTML( strings[ key ] ) + '</td>';
+        //    stringsTable += '<td><input type=\"text\" </td>';
+        //    stringsTable += '</tr>';
+        //  }
+        //}
+
+        // Create the strings array to pass in to the HTML template
+        var englishStringsArray = [];
         for ( var key in strings ) {
           if ( strings.hasOwnProperty( key ) ) {
-            stringsTable += '<tr data-string-key=' + key + '>';
-            stringsTable += '<td>' + escapeHTML( strings[ key ] ) + '</td>';
-            stringsTable += '<td><input type=\"text\" </td>';
-            stringsTable += '</tr>';
+            englishStringsArray.push( {
+              key: key,
+              string: escapeHTML( strings[ key ] )
+            } );
           }
         }
 
@@ -114,7 +125,7 @@ app.get( '/translate/sim/:simName?/:targetLocale?', function( req, res ) {
           title: "PhET Translation Utility",
           subtitle: "Please enter a translation for each English string:",
           destinationLanguage: LocaleInfo.localeToLanguageString( targetLocale ),
-          stringsTable: stringsTable,
+          englishStringsArray: englishStringsArray,
           simName: simName,
           simUrl: TranslatableSimInfo.getSimInfoByProjectName( simName ).testUrl,
           username: username
