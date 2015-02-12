@@ -5,7 +5,6 @@
  */
 
 // modules
-var cookieParser = require( 'cookie-parser' );
 var express = require( 'express' );
 var https = require( 'https' );
 var doT = require( 'express-dot' );
@@ -14,7 +13,6 @@ var TranslatableSimInfo = require( __dirname + '/js/TranslatableSimInfo' );
 
 // constants
 var LISTEN_PORT = 16372;
-var REQUIRE_LOGIN = true;
 
 // Create and configure the ExpressJS app
 var app = express();
@@ -44,29 +42,27 @@ function escapeHTML( s ) {
 app.use( express.cookieParser() );
 
 // check for the presence of the login cookie
-if ( REQUIRE_LOGIN ) {
-  app.get( '/translate/*', function( req, res, next ) {
-    console.log( 'all cookies :' );
-    for ( var k in req.cookies ) {
-      if ( req.cookies.hasOwnProperty( k ) ) {
-        console.log( "Key is " + k + ", value is" + req.cookies[ k ] );
-      }
+app.get( '/translate/*', function( req, res, next ) {
+  console.log( 'all cookies :' );
+  for ( var k in req.cookies ) {
+    if ( req.cookies.hasOwnProperty( k ) ) {
+      console.log( "Key is " + k + ", value is" + req.cookies[ k ] );
     }
-    console.log( '------------' );
-    console.log( 'Checking for login cookie' );
-    var cookie = req.cookies.JSESSIONID;
-    if ( cookie === undefined ) {
-      // no: the user must log in
-      console.log( 'session cookie not found, sending to login page' );
-      res.render( 'login-required.html', { title: 'Login Required' } );
-    }
-    else {
-      // yes, cookie was present, go to the next route
-      console.log( 'session cookie found, moving to next step' );
-      next(); // send to next route
-    }
-  } );
-}
+  }
+  console.log( '------------' );
+  console.log( 'Checking for login cookie' );
+  var cookie = req.cookies.JSESSIONID;
+  if ( req.get( 'host' ).indexOf( 'localhost' ) !== 0 && cookie === undefined ) {
+    // no: the user must log in
+    console.log( 'session cookie not found, sending to login page' );
+    res.render( 'login-required.html', { title: 'Login Required' } );
+  }
+  else {
+    // yes, cookie was present, go to the next route
+    console.log( 'session cookie found, moving to next step' );
+    next(); // send to next route
+  }
+} );
 
 // Initial page for the translation utility
 app.get( '/translate/', function( req, res, next ) {
