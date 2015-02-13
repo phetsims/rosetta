@@ -7,6 +7,7 @@
 // modules
 var express = require( 'express' );
 var https = require( 'https' );
+var http = require( 'http' );
 var doT = require( 'express-dot' );
 var LocaleInfo = require( __dirname + '/js/LocaleInfo' );
 var TranslatableSimInfo = require( __dirname + '/js/TranslatableSimInfo' );
@@ -52,8 +53,9 @@ app.get( '/translate/*', function( req, res, next ) {
   console.log( '------------' );
   console.log( 'Checking for login cookie (bypassed for localhost)' );
   var cookie = req.cookies.JSESSIONID;
-  //if ( req.get( 'host' ).indexOf( 'localhost' ) !== 0 && cookie === undefined ) {
-  if ( cookie === undefined ) {
+  console.log( 'headers: ' + JSON.stringify( req.headers ) );
+  console.log( 'cookie: ' + cookie );
+  if ( req.get( 'host' ).indexOf( 'localhost' ) !== 0 && cookie === undefined ) {
     // no: the user must log in
     console.log( 'session cookie not found, sending to login page' );
     console.log( 'host = ' + req.get( 'host' ) );
@@ -61,7 +63,59 @@ app.get( '/translate/*', function( req, res, next ) {
     res.render( 'login-required.html', { title: 'Login Required', host: req.get( 'host' ), destinationUrl: req.url } );
   }
   else {
-    // yes, cookie was present, go to the next route
+     // yes, session cookie was present, attempt to extract session information
+/*
+      return https.get({
+        host: 'phet-dev.colorado.edu',
+        path: '/check-login',
+        headers: {
+           'Cookie': 'JSESSIONID='+cookie
+        }
+    }, function(response) {
+        var data = '';
+        
+        response.on('data', function(d) {
+            console.log( '--> data, value = ' + d);
+            
+        });
+        response.on('end', function() {
+            console.log( '--> end' );
+        });
+        response.on('error', function() {
+            console.log( '--> error' );
+        });
+    }); 
+*/
+    ///////////////////////////////////////////////
+    var options = {
+      host: 'phet-dev.colorado.edu',
+      path: '/check-login',
+      method: 'GET',
+      headers: {
+        'Cookie': 'JSESSIONID='+cookie
+      }
+    };
+
+    callback = function(response) {
+      var data = '';
+
+      // another chunk of data has been recieved, so append it
+      response.on('data', function (chunk) {
+        data += chunk;
+      });
+
+      // the whole response has been recieved, so we just print it out here
+      response.on('end', function () {
+        console.log('data received: ' + data);
+      });
+    }
+
+    var httpRequest = https.request(options, callback);
+    console.log( 'request headers: ' + httpRequest.headers );
+    console.log( 'temp: ' + httpRequest.cookie ); 
+    httpRequest.end();
+    ///////////////////////////////////////////////
+
     console.log( 'session cookie found, moving to next step' );
     next(); // send to next route
   }
