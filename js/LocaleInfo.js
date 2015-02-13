@@ -2,6 +2,8 @@
 
 /**
  * A module that provides information and utilities related to language locales.
+ *
+ * @author John Blanco
  */
 'use strict'; // TODO: Does this work, and is it needed?
 

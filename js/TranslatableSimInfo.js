@@ -8,6 +8,8 @@
  * meaning that it will generate the sim list and URLs in some standard way based on the list of active simulations
  * already maintained in GitHub (see chipper/active-sims).  The reason that it is hardcoded now is that most sims
  * haven't been published with the code that supports the needed approach for query parameter string loading.
+ *
+ * @author John Blanco
  */
 'use strict'; // TODO: Does this work, and is it needed?
 
