@@ -68,7 +68,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
         data += chunk;
       } );
 
-      // the whole response has been recieved, so we just print it out here
+      // the whole response has been recieved - see if the credentials are valid
       response.on( 'end', function() {
         console.log( 'data received: ' + data );
         // TODO: The response as of Feb 13 2015 is JSON enclosed in XML.  The XML will eventually be eliminated, and
@@ -97,19 +97,24 @@ module.exports.checkForValidSession = function( req, res, next ) {
           sendUserToLoginPage( res, req.get( 'host' ), req.url );
         }
       } );
-
-      response.on( 'error', function( err ) {
-        console.log( 'error: ' + err );
-        res.render( 'error.html', {
-            title: 'Translation Utility Error',
-            message: 'Unable to obtain user credentials',
-            errorDetails: err
-          }
-        );
-      } );
     };
 
-    https.request( options, sessionDataRequestCallback ).end();
+    var requestCredentials = https.request( options, sessionDataRequestCallback );
+
+    // error handling
+    requestCredentials.on( 'error', function( err ){
+      console.log( 'error retrieving session data: ' + err );
+      res.render( 'error.html', {
+          title: 'Translation Utility Error',
+          message: 'Unable to obtain user credentials',
+          errorDetails: err,
+          timestamp: new Date().getTime()
+        }
+      );
+    } );
+
+    // send the request
+    requestCredentials.end();
   }
 };
 
