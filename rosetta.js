@@ -39,21 +39,17 @@ function escapeHTML( s ) {
     .replace( />/g, '&gt;' );
 }
 
-function sendUserToLoginPage( res, host, destinationUrl ){
+function sendUserToLoginPage( res, host, destinationUrl ) {
   res.render( 'login-required.html', { title: 'Login Required', host: host, destinationUrl: destinationUrl } );
 }
 
 // need cookieParser middleware before we can do anything with cookies
 app.use( express.cookieParser() );
 
-// check for the presence of the PhET login cookie
+// route that checks whether the user is logged in
 app.get( '/translate/*', function( req, res, next ) {
-  console.log( 'all cookies :' );
-  for ( var k in req.cookies ) {
-    if ( req.cookies.hasOwnProperty( k ) ) {
-      console.log( "Key is " + k + ", value is: " + req.cookies[ k ] );
-    }
-  }
+
+  // check whether the session cookie exists at all
   console.log( 'Checking for login cookie (bypassed for localhost)' );
   var cookie = req.cookies.JSESSIONID;
   if ( req.get( 'host' ).indexOf( 'localhost' ) !== 0 && cookie === undefined ) {
@@ -64,27 +60,27 @@ app.get( '/translate/*', function( req, res, next ) {
     sendUserToLoginPage( res, req.get( 'host' ), req.url );
   }
   else {
-     // session cookie was present, attempt to obtain session information
+    // session cookie was present, attempt to obtain session information
     var options = {
-      host: 'phet-dev.colorado.edu',
+      host: req.get( 'host' ),
       path: '/check-login',
       method: 'GET',
       headers: {
-        'Cookie': 'JSESSIONID='+cookie
+        'Cookie': 'JSESSIONID=' + cookie
       }
     };
 
-    callback = function(response) {
+    var callback = function( response ) {
       var data = '';
 
       // another chunk of data has been recieved, so append it
-      response.on('data', function (chunk) {
+      response.on( 'data', function( chunk ) {
         data += chunk;
-      });
+      } );
 
       // the whole response has been recieved, so we just print it out here
-      response.on('end', function () {
-        console.log('data received: ' + data);
+      response.on( 'end', function() {
+        console.log( 'data received: ' + data );
         // TODO: The response as of Feb 13 2015 is JSON enclosed in XML.  The XML will eventually be eliminated, and
         // when it is, the following code for extracting the JSON part should be removed.
         var jsonStartIndex = data.indexOf( '{' );
@@ -93,8 +89,7 @@ app.get( '/translate/*', function( req, res, next ) {
         // TODO: The response as of Feb 13 2015 doesn't appear to be property formed JSON (at least not as I
         // understand it) because the keys and values aren't quoted.  The following code handles this case, and should
         // be removed once the issue is fixed.
-        var userData;
-        if ( jsonUserData.indexOf('\"') < 0  ){
+        if ( jsonUserData.indexOf( '\"' ) < 0 ) {
           console.log( 'adding quotes to json user data' );
           jsonUserData = jsonUserData.replace( /{ /g, '{ \"' );
           jsonUserData = jsonUserData.replace( / }/g, '\" }' );
@@ -103,22 +98,23 @@ app.get( '/translate/*', function( req, res, next ) {
         }
         console.log( 'json user data: ' + jsonUserData );
         var userData = JSON.parse( jsonUserData );
-        if ( userData.loggedIn ){
+        if ( userData.loggedIn ) {
           console.log( 'credentials obtained, user logged in, moving to next step' );
           next(); // send to next route
         }
-        else{
-          // user is not logged in
+        else {
+          // user is not logged in, send them to the login page
           sendUserToLoginPage( res, req.get( 'host' ), req.url );
         }
       } );
-      
-      response.on( 'error', function( err ){
+
+      response.on( 'error', function( err ) {
         console.log( 'error: ' + err );
-        res.render( 'error.html', { 
-          title: 'Translation Utility Error', 
-          message: 'Unable to obtain user credentials', 
-          errorDetails: err } 
+        res.render( 'error.html', {
+            title: 'Translation Utility Error',
+            message: 'Unable to obtain user credentials',
+            errorDetails: err
+          }
         );
       } );
     };
