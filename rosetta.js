@@ -39,6 +39,10 @@ function escapeHTML( s ) {
     .replace( />/g, '&gt;' );
 }
 
+function sendUserToLoginPage( res, host, destinationUrl ){
+  res.render( 'login-required.html', { title: 'Login Required', host: host, destinationUrl: destinationUrl } );
+}
+
 // need cookieParser middleware before we can do anything with cookies
 app.use( express.cookieParser() );
 
@@ -50,43 +54,17 @@ app.get( '/translate/*', function( req, res, next ) {
       console.log( "Key is " + k + ", value is: " + req.cookies[ k ] );
     }
   }
-  console.log( '------------' );
   console.log( 'Checking for login cookie (bypassed for localhost)' );
   var cookie = req.cookies.JSESSIONID;
-  console.log( 'headers: ' + JSON.stringify( req.headers ) );
-  console.log( 'cookie: ' + cookie );
   if ( req.get( 'host' ).indexOf( 'localhost' ) !== 0 && cookie === undefined ) {
-    // no: the user must log in
+    // no session cookie present, the user must log in
     console.log( 'session cookie not found, sending to login page' );
     console.log( 'host = ' + req.get( 'host' ) );
     console.log( 'req.url = ' + req.url );
-    res.render( 'login-required.html', { title: 'Login Required', host: req.get( 'host' ), destinationUrl: req.url } );
+    sendUserToLoginPage( res, req.get( 'host' ), req.url );
   }
   else {
-     // yes, session cookie was present, attempt to extract session information
-/*
-      return https.get({
-        host: 'phet-dev.colorado.edu',
-        path: '/check-login',
-        headers: {
-           'Cookie': 'JSESSIONID='+cookie
-        }
-    }, function(response) {
-        var data = '';
-        
-        response.on('data', function(d) {
-            console.log( '--> data, value = ' + d);
-            
-        });
-        response.on('end', function() {
-            console.log( '--> end' );
-        });
-        response.on('error', function() {
-            console.log( '--> error' );
-        });
-    }); 
-*/
-    ///////////////////////////////////////////////
+     // session cookie was present, attempt to obtain session information
     var options = {
       host: 'phet-dev.colorado.edu',
       path: '/check-login',
@@ -107,17 +85,45 @@ app.get( '/translate/*', function( req, res, next ) {
       // the whole response has been recieved, so we just print it out here
       response.on('end', function () {
         console.log('data received: ' + data);
-      });
-    }
+        // TODO: The response as of Feb 13 2015 is JSON enclosed in XML.  The XML will eventually be eliminated, and
+        // when it is, the following code for extracting the JSON part should be removed.
+        var jsonStartIndex = data.indexOf( '{' );
+        var jsonEndIndex = data.indexOf( '}' ) + 1;
+        var jsonUserData = data.substring( jsonStartIndex, jsonEndIndex );
+        // TODO: The response as of Feb 13 2015 doesn't appear to be property formed JSON (at least not as I
+        // understand it) because the keys and values aren't quoted.  The following code handles this case, and should
+        // be removed once the issue is fixed.
+        var userData;
+        if ( jsonUserData.indexOf('\"') < 0  ){
+          console.log( 'adding quotes to json user data' );
+          jsonUserData = jsonUserData.replace( /{ /g, '{ \"' );
+          jsonUserData = jsonUserData.replace( / }/g, '\" }' );
+          jsonUserData = jsonUserData.replace( /: /g, '\": \"' );
+          jsonUserData = jsonUserData.replace( /, /g, '\", \"' );
+        }
+        console.log( 'json user data: ' + jsonUserData );
+        var userData = JSON.parse( jsonUserData );
+        if ( userData.loggedIn ){
+          console.log( 'credentials obtained, user logged in, moving to next step' );
+          next(); // send to next route
+        }
+        else{
+          // user is not logged in
+          sendUserToLoginPage( res, req.get( 'host' ), req.url );
+        }
+      } );
+      
+      response.on( 'error', function( err ){
+        console.log( 'error: ' + err );
+        res.render( 'error.html', { 
+          title: 'Translation Utility Error', 
+          message: 'Unable to obtain user credentials', 
+          errorDetails: err } 
+        );
+      } );
+    };
 
-    var httpRequest = https.request(options, callback);
-    console.log( 'request headers: ' + httpRequest.headers );
-    console.log( 'temp: ' + httpRequest.cookie ); 
-    httpRequest.end();
-    ///////////////////////////////////////////////
-
-    console.log( 'session cookie found, moving to next step' );
-    next(); // send to next route
+    https.request( options, callback ).end();
   }
 } );
 
