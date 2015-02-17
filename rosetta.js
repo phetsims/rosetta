@@ -1,7 +1,7 @@
 // Copyright 2002-2015, University of Colorado Boulder
 
 /**
- * Main entry point for PhET translation web app.
+ * Main entry point for PhET translation web app.  This is where ExpressJS gets configured and the routes are set up.
  *
  * @author John Blanco
  */
@@ -19,7 +19,7 @@ var app = express();
 app.set( 'views', __dirname + '/html/views' );
 app.set( 'view engine', 'dot' );
 app.engine( 'html', doT.__express );
-// TODO - the following came in with the template code used to start this project.  Can they go?
+// TODO - the following lines came in with the template code used to start this project.  Can they go?
 app.use( '/translate/css', express.static( __dirname + '/public/css' ) );
 app.use( '/translate/sim/css', express.static( __dirname + '/public/css' ) );
 app.use( '/translate/img', express.static( __dirname + '/public/img' ) );

@@ -71,25 +71,9 @@ module.exports.checkForValidSession = function( req, res, next ) {
       // the whole response has been recieved - see if the credentials are valid
       response.on( 'end', function() {
         console.log( 'data received: ' + data );
-        // TODO: The response as of Feb 13 2015 is JSON enclosed in XML.  The XML will eventually be eliminated, and
-        // when it is, the following code for extracting the JSON part should be removed.
-        var jsonStartIndex = data.indexOf( '{' );
-        var jsonEndIndex = data.indexOf( '}' ) + 1;
-        var jsonUserData = data.substring( jsonStartIndex, jsonEndIndex );
-        // TODO: The response as of Feb 13 2015 doesn't appear to be property formed JSON (at least not as I
-        // understand it) because the keys and values aren't quoted.  The following code handles this case, and should
-        // be removed once the issue is fixed.
-        if ( jsonUserData.indexOf( '\"' ) < 0 ) {
-          console.log( 'adding quotes to json user data' );
-          jsonUserData = jsonUserData.replace( /{ /g, '{ \"' );
-          jsonUserData = jsonUserData.replace( / }/g, '\" }' );
-          jsonUserData = jsonUserData.replace( /: /g, '\": \"' );
-          jsonUserData = jsonUserData.replace( /, /g, '\", \"' );
-        }
-        console.log( 'json user data: ' + jsonUserData );
-        var userData = JSON.parse( jsonUserData );
+        var userData = JSON.parse( data );
         if ( userData.loggedIn ) {
-          console.log( 'credentials obtained, user logged in, moving to next step' );
+          console.log( 'credentials obtained, user is logged in, moving to next step' );
           next(); // send to next route
         }
         else {
