@@ -43,6 +43,9 @@ app.get( '/translate/', routes.chooseSimulationAndLanguage );
 // route for translating a specific sim to a specific language
 app.get( '/translate/sim/:simName?/:targetLocale?', routes.translateSimulation );
 
+// route for extracting strings from a sim
+app.get( '/extractStrings', routes.extractStrings );
+
 // fall through route
 app.get( '/*', routes.pageNotFound );
 
