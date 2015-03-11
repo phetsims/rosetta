@@ -8,9 +8,9 @@
 
 // modules
 var https = require( 'https' );
-var http = require( 'http' );
 var LocaleInfo = require( './LocaleInfo' );
 var TranslatableSimInfo = require( './TranslatableSimInfo' );
+var TranslationUtils = require( './TranslationUtils' );
 
 // utility function for sending the user to the login page
 function sendUserToLoginPage( res, host, destinationUrl ) {
@@ -195,90 +195,6 @@ module.exports.pageNotFound = function( req, res ) {
 };
 
 /**
- * Route that extracts strings from a built sim. Expects query parameters 'host' and 'path'.
- * See the defaults for host and path for an example.
- *
- * TODO: This may not be a route in the future, maybe it should just be a method?
- *
- * @param req
- * @param res
+ * Route for extracting strings from a build sim, see TranslationUtils.extractStrings.
  */
-module.exports.extractStrings = function( req, res ) {
-  var host = req.param( 'host' ) || 'www.colorado.edu'; // included for an easy default test
-  var path = req.param( 'path' ) || '/physics/phet/dev/html/arithmetic/1.0.0-dev.13/arithmetic_en.html';
-
-  var options = {
-    host: host,
-    path: path,
-    method: 'GET'
-  };
-
-  // convenience method to check if an item is in an array
-  var contains = function( array, item ) {
-    for ( var i = 0; i < array.length; i++ ) {
-      if ( array[i] === item ) {
-        return true;
-      }
-    }
-    return false;
-  };
-
-  var sessionDataRequestCallback = function( response ) {
-    var data = '';
-
-    // another chunk of data has been received, so append it
-    response.on( 'data', function( chunk ) {
-      data += chunk;
-    } );
-
-    // the whole response has been received
-    response.on( 'end', function() {
-      var result = [];
-      var projects = {};
-      var matches = data.match( /string!([\w\.\/]+)/g );
-
-      // if no matches are found, it probably means the sim url was not correct
-      if ( matches === null ) {
-        res.send( '<p>Error: No strings found at ' + host + path + '</p>' );
-      }
-
-      for ( var i = 0; i < matches.length; i++ ) {
-        var projectAndString = matches[i].substring( 7 ).split( '/' );
-        var projectName = projectAndString[0];
-        var string = projectAndString[1];
-
-        projects[projectName] = projects[projectName] || [];
-
-        if ( !contains( projects[projectName], string ) ) {
-          projects[projectName].push( string );
-        }
-      }
-
-      for ( var project in projects ) {
-        result.push( {
-          projectName: project.replace( '_', '-' ).toLowerCase(),
-          stringKeys: projects[project]
-        } );
-      }
-
-      res.setHeader( 'Content-Type', 'application/json' );
-      res.end( JSON.stringify( result, null, 3 ) );
-    } );
-  };
-
-  var strings = http.request( options, sessionDataRequestCallback );
-
-  strings.on( 'error', function( err ) {
-    console.log( 'Error getting sim strings - ' + err );
-    res.render( 'error.html', {
-        title: 'Translation Utility Error',
-        message: 'Unable to obtain sim strings',
-        errorDetails: err,
-        timestamp: new Date().getTime()
-      }
-    );
-  } );
-
-  // send the request
-  strings.end();
-}
+module.exports.extractStrings = TranslationUtils.extractStrings;
