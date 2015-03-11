@@ -39,11 +39,17 @@ function escapeHTML( s ) {
  */
 module.exports.checkForValidSession = function( req, res, next ) {
 
-  // check whether the session cookie exists at all
-  console.log( 'Checking for login cookie (bypassed for localhost)' );
-  console.log( 'req.get( \'host\' ) = ' + req.get( 'host' ) );
+  if ( req.get( 'host' ).indexOf( 'localhost' ) === 0 ) {
+    // bypass credential evaluation to allow testing on localhost
+    console.log( 'Bypassing session validation to allow testing on localhost' );
+    next(); // send to next route
+    return;
+  }
+
+  // check whether the session cookie exists
+  console.log( 'Checking for login cookie' );
   var cookie = req.cookies.JSESSIONID;
-  if ( req.get( 'host' ).indexOf( 'localhost' ) === 0 || cookie === undefined ) {
+  if ( cookie === undefined ) {
     // no session cookie present, the user must log in
     console.log( 'session cookie not found, sending to login page' );
     console.log( 'host = ' + req.get( 'host' ) );
@@ -64,12 +70,12 @@ module.exports.checkForValidSession = function( req, res, next ) {
     var sessionDataRequestCallback = function( response ) {
       var data = '';
 
-      // another chunk of data has been recieved, so append it
+      // another chunk of data has been received, so append it
       response.on( 'data', function( chunk ) {
         data += chunk;
       } );
 
-      // the whole response has been recieved - see if the credentials are valid
+      // the whole response has been received - see if the credentials are valid
       response.on( 'end', function() {
         console.log( 'data received: ' + data );
         var userData = JSON.parse( data );
@@ -114,7 +120,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
 module.exports.chooseSimulationAndLanguage = function( req, res ) {
 
   // Pull the username from the cookie
-  var username = req.cookies[ 'sign-in-panel.sign-in-form.username' ] || 'Not logged in';
+  var username = req.cookies[ 'sign-in-panel.sign-in-form.username' ] || 'not logged in';
 
   res.render( 'translate-home.html', {
     title: 'PhET Translation Utility',
@@ -155,7 +161,7 @@ module.exports.translateSimulation = function( req, res ) {
         }
 
         // Pull the username from the cookie
-        var username = req.cookies[ 'sign-in-panel.sign-in-form.username' ] || 'Not logged in';
+        var username = req.cookies[ 'sign-in-panel.sign-in-form.username' ] || 'not logged in';
 
         // Assemble the data that will be supplied to the template.
         var templateData = {
