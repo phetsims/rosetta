@@ -7,6 +7,7 @@
  */
 
 var http = require( 'http' );
+var winston = require( './logger' )( );
 
 /**
  * Route that extracts strings from a built sim. Expects query parameter 'simUrl', the url of the built sim to
@@ -43,7 +44,7 @@ module.exports.extractStrings = function( req, res ) {
     }
   }
 
-  console.log( 'requesting sim at host: ' + options.host + ', port: ' + options.port + ', and path: ' + options.path );
+  winston.log( 'info', 'requesting sim at host: ' + options.host + ', port: ' + options.port + ', and path: ' + options.path );
 
   // convenience method to check if an item is in an array
   var contains = function( array, item ) {
@@ -101,7 +102,7 @@ module.exports.extractStrings = function( req, res ) {
   var strings = http.request( options, sessionDataRequestCallback );
 
   strings.on( 'error', function( err ) {
-    console.log( 'Error getting sim strings - ' + err );
+    winston.log( 'error', 'Error getting sim strings - ' + err );
     res.render( 'error.html', {
         title: 'Translation Utility Error',
         message: 'Unable to obtain sim strings',
