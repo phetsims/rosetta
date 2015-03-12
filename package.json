@@ -1,6 +1,7 @@
 {
   "name": "rosetta",
   "version": "0.0.1",
+  "license": "GPLv3",
   "phetLibs": "rosetta",
   "description": "PhET simulation translation utility",
   "main": "rosetta.js",
@@ -22,6 +23,5 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/phetsims/rosetta.git"
-  },
-  "license": "GPLv3"
+  }
 }
