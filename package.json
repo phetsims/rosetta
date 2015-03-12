@@ -2,7 +2,6 @@
   "name": "rosetta",
   "version": "0.0.1",
   "license": "GPLv3",
-  "phetLibs": "rosetta",
   "description": "PhET simulation translation utility",
   "main": "rosetta.js",
   "dependencies": {
