@@ -10,7 +10,12 @@ var http = require( 'http' );
 
 /**
  * Route that extracts strings from a built sim. Expects query parameter 'simUrl', the url of the built sim to
- * extract the strings from.
+ * extract the strings from. Requests are made via http. Do not include to protocol in the simUrl parameter.
+ *
+ * Example simUrl values:
+ * - www.colorado.edu/physics/phet/dev/html/arithmetic/1.0.0-dev.13/arithmetic_en.html
+ * - localhost:8000/color-vision/build/color-vision_en.html
+ * - phet.colorado.edu/sims/html/energy-skate-park-basics/latest/energy-skate-park-basics_en.html
  *
  * @param req
  * @param res
