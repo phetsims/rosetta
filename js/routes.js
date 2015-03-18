@@ -79,6 +79,9 @@ module.exports.checkForValidSession = function( req, res, next ) {
       response.on( 'end', function() {
         console.log( 'data received: ' + data );
         var userData = JSON.parse( data );
+        if ( userData.teamMember ) {
+          console.log( 'User is detected as being a PhET team member' );
+        }
         if ( userData.loggedIn ) {
           console.log( 'credentials obtained, user is logged in, moving to next step' );
           next(); // send to next route
