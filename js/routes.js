@@ -60,7 +60,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
     // session cookie was present, attempt to obtain session information
     var options = {
       host: req.get( 'host' ),
-      path: '/check-login',
+      path: '/services/check-login',
       method: 'GET',
       headers: {
         'Cookie': 'JSESSIONID=' + cookie
