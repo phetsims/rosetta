@@ -10,6 +10,7 @@
 var express = require( 'express' );
 var doT = require( 'express-dot' );
 var routes = require( __dirname + '/js/routes' );
+var winston = require( __dirname + '/js/logger' )( );
 
 // constants
 var LISTEN_PORT = 16372;
@@ -50,4 +51,4 @@ app.get( '/translate/extractStrings', routes.extractStrings );
 app.get( '/*', routes.pageNotFound );
 
 // start the server
-app.listen( LISTEN_PORT, function() { console.log( 'Listening on port ' + LISTEN_PORT ) } );
+app.listen( LISTEN_PORT, function() { winston.log( 'info', 'Listening on port ' + LISTEN_PORT ) } );

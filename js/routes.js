@@ -11,6 +11,7 @@ var https = require( 'https' );
 var LocaleInfo = require( './LocaleInfo' );
 var TranslatableSimInfo = require( './TranslatableSimInfo' );
 var TranslationUtils = require( './TranslationUtils' );
+var winston = require( './logger' )( );
 
 // utility function for sending the user to the login page
 function sendUserToLoginPage( res, host, destinationUrl ) {
@@ -41,19 +42,19 @@ module.exports.checkForValidSession = function( req, res, next ) {
 
   if ( req.get( 'host' ).indexOf( 'localhost' ) === 0 ) {
     // bypass credential evaluation to allow testing on localhost
-    console.log( 'Bypassing session validation to allow testing on localhost' );
+    winston.log( 'warn', 'Bypassing session validation to allow testing on localhost' );
     next(); // send to next route
     return;
   }
 
   // check whether the session cookie exists
-  console.log( 'Checking for login cookie' );
+  winston.log( 'info', 'Checking for login cookie' );
   var cookie = req.cookies.JSESSIONID;
   if ( cookie === undefined ) {
     // no session cookie present, the user must log in
-    console.log( 'session cookie not found, sending to login page' );
-    console.log( 'host = ' + req.get( 'host' ) );
-    console.log( 'req.url = ' + req.url );
+    winston.log( 'info', 'session cookie not found, sending to login page' );
+    winston.log( 'info', 'host = ' + req.get( 'host' ) );
+    winston.log( 'info', 'req.url = ' + req.url );
     sendUserToLoginPage( res, req.get( 'host' ), req.url );
   }
   else {
@@ -77,13 +78,13 @@ module.exports.checkForValidSession = function( req, res, next ) {
 
       // the whole response has been received - see if the credentials are valid
       response.on( 'end', function() {
-        console.log( 'data received: ' + data );
+        winston.log( 'info', 'data received: ' + data );
         var userData = JSON.parse( data );
         if ( userData.teamMember ) {
           console.log( 'User is detected as being a PhET team member' );
         }
         if ( userData.loggedIn ) {
-          console.log( 'credentials obtained, user is logged in, moving to next step' );
+          winston.log( 'info', 'credentials obtained, user is logged in, moving to next step' );
           next(); // send to next route
         }
         else {
@@ -97,7 +98,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
 
     // error handling
     requestCredentials.on( 'error', function( err ) {
-      console.log( 'error retrieving session data: ' + err );
+      winston.log( 'error', 'error retrieving session data: ' + err );
       res.render( 'error.html', {
           title: 'Translation Utility Error',
           message: 'Unable to obtain user credentials',
