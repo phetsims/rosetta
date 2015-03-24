@@ -16,8 +16,6 @@
 // Keep data in simInfoArray.json in alphabetical order
 var simInfoArray = require( '../data/simInfoArray.json' );
 
-module.exports.simInfoArray = simInfoArray;
-
 /**
  * Get the simulation information given the project name.
  * @param {string} projectName - Project name for the simulation, same as the GitHub repo name.

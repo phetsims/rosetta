@@ -10,6 +10,7 @@
 var https = require( 'https' );
 var LocaleInfo = require( './LocaleInfo' );
 var TranslatableSimInfo = require( './TranslatableSimInfo' );
+var simInfoArray = require( '../data/simInfoArray.json' );
 var TranslationUtils = require( './TranslationUtils' );
 var winston = require( 'winston' );
 
@@ -128,7 +129,7 @@ module.exports.chooseSimulationAndLanguage = function( req, res ) {
 
   res.render( 'translate-home.html', {
     title: 'PhET Translation Utility',
-    simInfoArray: TranslatableSimInfo.simInfoArray,
+    simInfoArray: simInfoArray,
     username: username
   } );
 };
