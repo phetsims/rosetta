@@ -5,25 +5,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>{{=it.title}}</title>
-  <style>
-    body {
-      padding-top: 10px;
-      background-color: #f5f5dc;
-    }
 
-    * {
-      font-family: Arial, sans-serif;
-    }
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/translate/css/main.css">
 
-    * {
-      text-align: left;
-    }
-
-    .starter-template {
-      padding: 40px 15px;
-      text-align: center;
-    }
-  </style>
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -31,7 +16,34 @@
   <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
   <![endif]-->
 </head>
+
 <body>
-{{=it.body}}
+<div id="page-header" class="ltr">
+  <div id="page-header-container">
+    <div id="page-header-logo">
+      <a href="/translate/" style="color: white;"> <!--white color for FF focus outline-->
+        <img src="http://phet.colorado.edu/images/phet-logo-117.svg" alt="PhET Home Page" title="Go to the PhET home page" class="header-logo-image"
+             width="223" height="106" id="phet-logo-main-image">
+      </a>
+    </div>
+    <div id="page-header-sims-served">
+      <span>Over 200 million simulations delivered</span>
+    </div>
+    <div id="page-header-cu">
+      <a href="http://www.colorado.edu/" target="_blank" style="display: inline-block; color: white">
+        <img src="http://phet.colorado.edu/images/cu-logo-half.png" alt="University of Colorado" width="150" height="77" style="border: none;">
+      </a>
+
+      <div id="page-header-user">
+        {{? it.username }}
+        <div><p>user: {{=it.username}}</p></div>
+        {{?}}
+      </div>
+    </div>
+  </div>
+</div>
+<div class="content">
+  {{=it.body}}
+</div>
 </body>
 </html>

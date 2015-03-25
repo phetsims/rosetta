@@ -2,12 +2,8 @@
   <div class="starter-template">
     <h1>{{=it.title}}</h1>
 
-    <!--show username if available -->
-    {{? it.username }}
-    <div><p>user: {{=it.username}}</p></div>
-    {{?}}
-
-    <h2>{{=it.subtitle}}</h2>
+    <h5>{{=it.subtitle}}</h5>
+    <div class="form-group">
     <table id="stringsTable" style="width:50%">
       <tr>
         <td><strong>English</strong></td>
@@ -16,12 +12,15 @@
       {{~it.englishStringsArray :value:index}}
       <tr data-string-key={{=value.key}}>
         <td>{{=value.string}}</td>
-        <td><input type="text"></td>
+        <td><input type="text" class="form-control"></td>
+
       </tr>
       {{~}}
+
     </table>
-    <button id="testButton" style="font-size:125%;position:relative;left:-300px;top:30px">Test</button>
-    <button id="submitButton" style="font-size:125%;position:relative;left:-200px;top:30px">Submit</button>
+    </div>
+    <button type="button" class="btn btn-default" id="testButton" style="font-size:125%;position:relative;left:-300px;top:30px">Test</button>
+    <button type="button" class="btn btn-default" id="submitButton" style="font-size:125%;position:relative;left:-200px;top:30px">Submit</button>
 
     <!--data for sim url-->
     <div id="simData" data-sim-url={{=it.simUrl}} data-sim-name={{=it.simName}}></div>

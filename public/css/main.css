@@ -1,0 +1,88 @@
+
+body {
+  padding-top: 0px;
+  margin: 0;
+  background-color: #ffffff;
+}
+
+.div {
+  display: block;
+}
+
+#page-header {
+  background-color: #2a326a;
+  height: 127px;
+}
+
+#page-header-container {
+  height: 127px;
+  margin: 0 auto;
+  width: 765px;
+  position: relative;
+}
+
+.header-logo-image {
+  position: relative;
+  top: 8px;
+  display: inline-block;
+}
+
+#page-header-sims-served {
+  position: absolute;
+  left: 250px;
+  top: 26px;
+  font-size: 13px;
+  color: #fff;
+  font-style: italic;
+  font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+}
+
+#page-header-cu {
+  position: absolute;
+  right: 19px;
+  top: 25px;
+  border: 0;
+}
+
+#page-header-user {
+  color: white;
+  display: table;
+  margin: 0 auto;
+  margin-top: 2px;
+}
+
+.selector {
+  margin-left: 20px;
+}
+
+#goButton {
+  margin-left: 100px;
+}
+
+h1 {
+  display: block;
+  font-size: 2em;
+  -webkit-margin-before: 0.67em;
+  -webkit-margin-after: 0.67em;
+  -webkit-margin-start: 0px;
+  -webkit-margin-end: 0px;
+  font-weight: bold;
+}
+
+* {
+  font-family: Arial, sans-serif;
+}
+
+* {
+  text-align: left;
+}
+
+.starter-template {
+  padding: 0px 15px;
+  text-align: center;
+}
+
+.content {
+  width: 70%;
+  margin: 0 auto;
+}
