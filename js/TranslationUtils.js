@@ -8,6 +8,7 @@
 
 var http = require( 'http' );
 var winston = require( 'winston' );
+var github = require( 'octonode' );
 
 /**
  * Route that extracts strings from a built sim. Expects query parameter 'simUrl', the url of the built sim to
@@ -115,3 +116,95 @@ module.exports.extractStrings = function( req, res ) {
   // send the request
   strings.end();
 };
+
+/*---------------------------------------------------------------------------*
+ * Github API functions
+ *---------------------------------------------------------------------------*/
+
+// convenience for a nicer looking stringify 
+function stringify( data ) {
+  return JSON.stringify( data, null, 3 );
+}
+
+/**
+ * generic callback for all github functions, useful to leave here for testing other github api functions
+ * @param err
+ * @param data
+ * @param headers
+ */
+function githubCallback( err, data, headers ) {
+  console.log( 'error: ' + err );
+  console.log( 'data: ' + stringify( data ) );
+  console.log( 'headers:' + headers );
+}
+
+/**
+ * Commit a new file or a change to an existing file on github.
+ *
+ * @param {Object} repo - return value from ghClient.repo()
+ * @param {string} file - file to be added or modified (must include the full path from the repo root)
+ * @param {string} content - file contents
+ * @param {string} message - commit message
+ * @param {string} [branch='master'] - branch name (defaults to master)
+ */
+function commit( repo, file, content, message, branch ) {
+
+  if ( !branch ) {
+    branch = 'master';
+  }
+
+  repo.contents( file, branch, function( err, data, headers ) {
+
+    // if the file is not found, create a new file instead of updating an existing one
+    if ( err ) {
+      repo.createContents( file, message, content, branch, githubCallback );
+    }
+
+    // otherwise, update the file using it's sha
+    else {
+      var sha = data.sha;
+      repo.updateContents( file, message, content, sha, branch, function( err, data, headers ) {
+
+        if ( err ) {
+          console.log( err, 'This probably means that the file hash does not match the file' );
+        }
+      } );
+    }
+  } );
+}
+
+/**
+ * Return an octonode github client using the credentials in config.json.
+ * Use config.json.template as an example for creating a config.json file with your github credentials
+ * @returns {*}
+ */
+function getGhClient() {
+  var config = require( '../config.json' );
+  var username = config.githubUsername;
+  var pass = config.githubPassword;
+
+  return github.client( {
+    username: username,
+    password: pass
+  } );
+}
+
+/**
+ * For testing use of the github API
+ */
+function githubTest() {
+  var ghClient = getGhClient();
+  var babel = ghClient.repo( 'phetsims/babel' );
+
+  var commitMessage = 'commit message';
+  var content = 'some content';
+  var branch = 'tests';
+  var file = 'test-file-new.txt';
+
+  // one of these commits will fail most likely
+  commit( babel, file, content + '1', commitMessage + '1', branch );
+  commit( babel, file, content + '2', commitMessage + '2', branch );
+}
+
+//githubTest();
+
