@@ -49,7 +49,7 @@ module.exports.extractStrings = function( req, res ) {
   // convenience method to check if an item is in an array
   var contains = function( array, item ) {
     for ( var i = 0; i < array.length; i++ ) {
-      if ( array[i] === item ) {
+      if ( array[ i ] === item ) {
         return true;
       }
     }
@@ -76,21 +76,21 @@ module.exports.extractStrings = function( req, res ) {
       }
 
       for ( var i = 0; i < matches.length; i++ ) {
-        var projectAndString = matches[i].substring( 7 ).split( '/' );
-        var projectName = projectAndString[0];
-        var string = projectAndString[1];
+        var projectAndString = matches[ i ].substring( 7 ).split( '/' );
+        var projectName = projectAndString[ 0 ];
+        var string = projectAndString[ 1 ];
 
-        projects[projectName] = projects[projectName] || [];
+        projects[ projectName ] = projects[ projectName ] || [];
 
-        if ( !contains( projects[projectName], string ) ) {
-          projects[projectName].push( string );
+        if ( !contains( projects[ projectName ], string ) ) {
+          projects[ projectName ].push( string );
         }
       }
 
       for ( var project in projects ) {
         result.push( {
           projectName: project.replace( '_', '-' ).toLowerCase(),
-          stringKeys: projects[project]
+          stringKeys: projects[ project ]
         } );
       }
 
