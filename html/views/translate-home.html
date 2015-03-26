@@ -1,42 +1,41 @@
 <div class="container">
-  <div class="starter-template">
-    <h1>{{=it.title}}</h1>
+  <h1>{{=it.title}}</h1>
 
-    <div>
-      <h2>Select Simulation</h2>
-      <select id="simSelector" class="selector">
-        {{~it.simInfoArray :value:index}}
-        <option value="{{=value.projectName}}">{{=value.simTitle}}</option>
-        {{~}}
-      </select>
+  <div>
+    <h2>Select Simulation</h2>
+    <select id="simSelector" class="selector">
+      {{~it.simInfoArray :value:index}}
+      <option value="{{=value.projectName}}">{{=value.simTitle}}</option>
+      {{~}}
+    </select>
 
-      <h2>Select Target Language</h2>
-      <select id="localeSelector" class="selector">
-        <option value="zh_CN">Chinese - China</option>
-        <option value="zh_TW">Chinese - Taiwan</option>
-        <option value="fr">French</option>
-        <option value="de">German</option>
-        <option value="es">Spanish</option>
-        <option value="es_MX">Spanish - Mexico</option>
-      </select>
-    </div>
-
-
-    <br>
-    <div>
-      <button type="button" id="goButton" class="btn btn-default">Go</button>
-    </div>
-
-    <script>
-      var button = document.getElementById( "goButton" );
-      button.addEventListener( 'click', function() {
-        console.log( 'go button clicked' );
-        var simSelector = document.getElementById( "simSelector" );
-        var simulation = simSelector.options[ simSelector.selectedIndex ].value;
-        var targetLocaleSelector = document.getElementById( "localeSelector" );
-        var targetLocale = targetLocaleSelector.options[ targetLocaleSelector.selectedIndex ].value;
-        window.location.href = window.location.href + 'sim/' + simulation + '/' + targetLocale;
-      } );
-    </script>
+    <h2>Select Target Language</h2>
+    <select id="localeSelector" class="selector">
+      <option value="zh_CN">Chinese - China</option>
+      <option value="zh_TW">Chinese - Taiwan</option>
+      <option value="fr">French</option>
+      <option value="de">German</option>
+      <option value="es">Spanish</option>
+      <option value="es_MX">Spanish - Mexico</option>
+    </select>
   </div>
+
+
+  <br>
+
+  <div>
+    <button type="button" class="btn" id="goButton">Go</button>
+  </div>
+
+  <script>
+    var button = document.getElementById( "goButton" );
+    button.addEventListener( 'click', function() {
+      console.log( 'go button clicked' );
+      var simSelector = document.getElementById( "simSelector" );
+      var simulation = simSelector.options[ simSelector.selectedIndex ].value;
+      var targetLocaleSelector = document.getElementById( "localeSelector" );
+      var targetLocale = targetLocaleSelector.options[ targetLocaleSelector.selectedIndex ].value;
+      window.location.href = window.location.href + 'sim/' + simulation + '/' + targetLocale;
+    } );
+  </script>
 </div>
