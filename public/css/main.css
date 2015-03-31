@@ -69,6 +69,10 @@ body {
   border: 1px solid #1A87B9
 }
 
+.btn:hover {
+  background: #6D77BD;
+}
+
 #testButton {
   position: relative;
   left: 100px;
