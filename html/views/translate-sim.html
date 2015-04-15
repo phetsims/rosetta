@@ -21,13 +21,16 @@
   <button type="button" class="btn" id="submitButton">Submit</button>
 
   <!--data for sim url-->
-  <div id="simData" data-sim-url={{=it.simUrl}} data-sim-name={{=it.simName}}></div>
+  <div id="simData" data-sim-url={{=it.simUrl}} data-sim-name={{=it.simName}} data-trusted-translator={{=it.trustedTranslator}}></div>
 
   <script>
-    var testButton = document.getElementById( "testButton" );
+    var testButton = document.getElementById( 'testButton' );
+    var submitButton = document.getElementById( 'submitButton' );
+    var simData = document.getElementById( 'simData' );
+
     testButton.addEventListener( 'click', function() {
-      var simUrl = document.getElementById( 'simData' ).getAttribute( 'data-sim-url' );
-      var stringPrefix = document.getElementById( 'simData' ).getAttribute( 'data-sim-name' ).replace( /-/g, '_' ).toUpperCase();
+      var simUrl = simData.getAttribute( 'data-sim-url' );
+      var stringPrefix = simData.getAttribute( 'data-sim-name' ).replace( /-/g, '_' ).toUpperCase();
       var stringsToReplace = {};
       var table = document.getElementById( 'stringsTable' );
       for ( var i = 1, row; row = table.rows[ i ]; i++ ) {
@@ -39,5 +42,16 @@
       var win = window.open( simUrl + '?' + 'strings=' + encodeURIComponent( JSON.stringify( stringsToReplace ) ), '_blank' );
       win.focus();
     } );
+
+    submitButton.addEventListener( 'click', function() {
+      console.log( simData.getAttribute( 'data-trusted-translator' ) );
+      if ( simData.getAttribute( 'data-trusted-translator' ) === 'true' ) {
+        alert( 'Submit functionality not yet implemented.' );
+      }
+      else {
+        alert( 'You must be a trusted translator to use the translation utility at this point. Please email phethelp@colorado.edu for more information' );
+      }
+    } );
+
   </script>
 </div><!-- /.container -->

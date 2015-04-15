@@ -83,6 +83,17 @@ module.exports.checkForValidSession = function( req, res, next ) {
         var userData = JSON.parse( data );
         if ( userData.teamMember ) {
           winston.log( 'info', 'User is detected as being a PhET team member' );
+          req.session.teamMember = true;
+        }
+        else {
+          req.session.teamMember = false;
+        }
+        if ( userData.trustedTranslator ) {
+          winston.log( 'info', 'User is detected as being a PhET team member' );
+          req.session.trustedTranslator = true;
+        }
+        else {
+          req.session.trustedTranslator = false;
         }
         if ( userData.loggedIn ) {
           winston.log( 'info', 'credentials obtained, user is logged in, moving to next step' );
@@ -176,7 +187,8 @@ module.exports.translateSimulation = function( req, res ) {
           englishStringsArray: englishStringsArray,
           simName: simName,
           simUrl: TranslatableSimInfo.getSimInfoByProjectName( simName ).testUrl,
-          username: username
+          username: username,
+          trustedTranslator: ( req.session.trustedTranslator ) ? req.session.trustedTranslator : false
         };
 
         // Render the page.

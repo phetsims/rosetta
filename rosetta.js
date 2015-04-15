@@ -88,6 +88,7 @@ app.use( '/translate/fonts', express.static( __dirname + '/public/fonts' ) );
 
 // need cookieParser middleware before we can do anything with cookies
 app.use( express.cookieParser() );
+app.use( express.session( { secret: '1234567890QWERTY' } ) );
 
 //----------------------------------------------------------------------------
 // Set up the routes.  The order matters.
