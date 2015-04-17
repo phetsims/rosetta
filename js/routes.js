@@ -14,7 +14,6 @@ var simInfoArray = require( '../data/simInfoArray.json' );
 var TranslationUtils = require( './TranslationUtils' );
 var winston = require( 'winston' );
 var request = require( 'request' );
-var async = require( 'async' );
 
 // utility function for sending the user to the login page
 function sendUserToLoginPage( res, host, destinationUrl ) {
