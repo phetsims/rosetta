@@ -10,6 +10,47 @@ var http = require( 'http' );
 var winston = require( 'winston' );
 var github = require( 'octonode' );
 
+// convenience method to check if an item is in an array
+var contains = function( array, item ) {
+  for ( var i = 0; i < array.length; i++ ) {
+    if ( array[ i ] === item ) {
+      return true;
+    }
+  }
+  return false;
+};
+module.exports.contains = contains;
+
+var extractStrings = function( result, data ) {
+  var projects = {};
+  var matches = data.match( /string!([\w\.\/]+)/g );
+
+  // if no matches are found, it probably means the sim url was not correct
+  if ( matches === null ) {
+    return;
+  }
+
+  for ( var i = 0; i < matches.length; i++ ) {
+    var projectAndString = matches[ i ].substring( 7 ).split( '/' );
+    var projectName = projectAndString[ 0 ];
+    var string = projectAndString[ 1 ];
+
+    projects[ projectName ] = projects[ projectName ] || [];
+
+    if ( !contains( projects[ projectName ], string ) ) {
+      projects[ projectName ].push( string );
+    }
+  }
+
+  for ( var project in projects ) {
+    result.push( {
+      projectName: project.replace( '_', '-' ).toLowerCase(),
+      stringKeys: projects[ project ]
+    } );
+  }
+};
+module.exports.extractStrings = extractStrings;
+
 /**
  * Route that extracts strings from a built sim. Expects query parameter 'simUrl', the url of the built sim to
  * extract the strings from. Requests are made via http. Do not include to protocol in the simUrl parameter.
@@ -22,7 +63,7 @@ var github = require( 'octonode' );
  * @param req
  * @param res
  */
-module.exports.extractStrings = function( req, res ) {
+module.exports.extractStringsAPI = function( req, res ) {
   // included for an easy default test
   var url = req.param( 'simUrl' ) || 'www.colorado.edu/physics/phet/dev/html/arithmetic/1.0.0-dev.13/arithmetic_en.html';
   var localhost = ( url.indexOf( 'localhost' ) === 0 );
@@ -47,16 +88,6 @@ module.exports.extractStrings = function( req, res ) {
 
   winston.log( 'info', 'requesting sim at host: ' + options.host + ', port: ' + options.port + ', and path: ' + options.path );
 
-  // convenience method to check if an item is in an array
-  var contains = function( array, item ) {
-    for ( var i = 0; i < array.length; i++ ) {
-      if ( array[ i ] === item ) {
-        return true;
-      }
-    }
-    return false;
-  };
-
   var sessionDataRequestCallback = function( response ) {
     var data = '';
 
@@ -68,35 +99,15 @@ module.exports.extractStrings = function( req, res ) {
     // the whole response has been received
     response.on( 'end', function() {
       var result = [];
-      var projects = {};
-      var matches = data.match( /string!([\w\.\/]+)/g );
+      extractStrings( result, data );
 
-      // if no matches are found, it probably means the sim url was not correct
-      if ( matches === null ) {
+      if ( result.lenght > 0 ) {
         res.send( '<p>Error: No strings found at ' + host + path + '</p>' );
       }
-
-      for ( var i = 0; i < matches.length; i++ ) {
-        var projectAndString = matches[ i ].substring( 7 ).split( '/' );
-        var projectName = projectAndString[ 0 ];
-        var string = projectAndString[ 1 ];
-
-        projects[ projectName ] = projects[ projectName ] || [];
-
-        if ( !contains( projects[ projectName ], string ) ) {
-          projects[ projectName ].push( string );
-        }
+      else {
+        res.setHeader( 'Content-Type', 'application/json' );
+        res.end( JSON.stringify( result, null, 3 ) );
       }
-
-      for ( var project in projects ) {
-        result.push( {
-          projectName: project.replace( '_', '-' ).toLowerCase(),
-          stringKeys: projects[ project ]
-        } );
-      }
-
-      res.setHeader( 'Content-Type', 'application/json' );
-      res.end( JSON.stringify( result, null, 3 ) );
     } );
   };
 

@@ -13,6 +13,8 @@ var TranslatableSimInfo = require( './TranslatableSimInfo' );
 var simInfoArray = require( '../data/simInfoArray.json' );
 var TranslationUtils = require( './TranslationUtils' );
 var winston = require( 'winston' );
+var request = require( 'request' );
+var async = require( 'async' );
 
 // utility function for sending the user to the login page
 function sendUserToLoginPage( res, host, destinationUrl ) {
@@ -155,50 +157,112 @@ module.exports.chooseSimulationAndLanguage = function( req, res ) {
 module.exports.translateSimulation = function( req, res ) {
   var simName = req.param( 'simName' );
   var targetLocale = req.param( 'targetLocale' );
-  var path = '/phetsims/' + simName + '/master/strings/' + simName + '-strings_en.json';
+  var rawGithub = 'https://raw.githubusercontent.com';
+  var simPath = '/phetsims/' + simName + '/master/strings/' + simName + '-strings_en.json';
+  var activeSimsPath = '/phetsims/chipper/master/data/active-sims';
+
+  // get the url of the live sim (from simInfoArray)
+  var simUrl;
+  for ( var i = 0; i < simInfoArray.length; i++ ) {
+    if ( simInfoArray[ i ].projectName === simName ) {
+      simUrl = simInfoArray[ i ].testUrl;
+      break;
+    }
+  }
+
+  var sims; // array of all active sims, will be initialized in activeSimsRequestCallback
+  var result = []; // array of { projectName: {string}, stringKeys: {Array.<string>} }, initialized in stringExtractRequestCallback
+
+  var activeSimsUrl = rawGithub + activeSimsPath;
+  var englishStringsUrl = rawGithub + simPath;
+
+  // convenience method to check if an item is in an array
+  var contains = function( array, item ) {
+    for ( var i = 0; i < array.length; i++ ) {
+      if ( array[ i ] === item ) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  // get a list of all active sims from github to separate common strings from sim strings
+  var activeSimsRequestCallback = function( error, response, body ) {
+    if ( !error && response.statusCode == 200 ) {
+      sims = body.toString().split( '\n' );
+    }
+    request( simUrl, stringExtractRequestCallback );
+  };
+
+  // extract strings from the live sim's html file
+  var stringExtractRequestCallback = function( error, response, body ) {
+    if ( !error && response.statusCode == 200 ) {
+      TranslationUtils.extractStrings( result, body );
+    }
+    else {
+      winston.log( 'error', error );
+    }
+    request( englishStringsUrl, englishStringsRequestCallback );
+  };
 
   // Pull the English string data from github.
-  https.get( { host: 'raw.githubusercontent.com', path: path }, function( response ) {
-    response.on( 'data', function( data ) {
+  var englishStringsRequestCallback = function( error, response, body ) {
+    if ( !error && response.statusCode == 200 ) {
+      var strings = JSON.parse( body );
 
-      if ( response.statusCode === 200 ) {
-        // Parse the returned JSON data into a JavaScript object.
-        var strings = JSON.parse( data );
+      var englishStringsArray = [];
+      var commonStringsArray = [];
 
-        // Create the strings array to pass in to the HTML template
-        var englishStringsArray = [];
-        for ( var key in strings ) {
+      // iterate over all projects that this sim takes strings from
+      for ( var i = 0; i < result.length; i++ ) {
+        var project = result[ i ];
+
+        // put the strings under common strings or sim strings depending on which project they are from
+        var array = ( contains( sims, project.projectName ) ) ? englishStringsArray : commonStringsArray;
+        for ( var j = 0; j < project.stringKeys.length; j++ ) {
+          var key = project.stringKeys[ j ];
           if ( strings.hasOwnProperty( key ) ) {
-            englishStringsArray.push( {
+            array.push( {
               key: key,
               string: escapeHTML( strings[ key ] )
             } );
           }
+
+          // if an english string isn't found for a key, use the key name instead
+          else {
+            array.push( {
+              key: key,
+              string: key
+            } );
+          }
         }
-
-        // Pull the username from the cookie
-        var username = req.cookies[ 'sign-in-panel.sign-in-form.username' ] || 'not logged in';
-
-        // Assemble the data that will be supplied to the template.
-        var templateData = {
-          title: "PhET Translation Utility",
-          subtitle: "Please enter a translation for each English string:",
-          destinationLanguage: LocaleInfo.localeToLanguageString( targetLocale ),
-          englishStringsArray: englishStringsArray,
-          simName: simName,
-          simUrl: TranslatableSimInfo.getSimInfoByProjectName( simName ).testUrl,
-          username: username,
-          trustedTranslator: ( req.session.trustedTranslator ) ? req.session.trustedTranslator : false
-        };
-
-        // Render the page.
-        res.render( 'translate-sim.html', templateData );
       }
-      else {
-        res.send( 'Error: Sim data not found' );
-      }
-    } );
-  } );
+
+      // Pull the username from the cookie
+      var username = req.cookies[ 'sign-in-panel.sign-in-form.username' ] || 'not logged in';
+
+      // Assemble the data that will be supplied to the template.
+      var templateData = {
+        title: "PhET Translation Utility",
+        subtitle: "Please enter a translation for each English string:",
+        destinationLanguage: LocaleInfo.localeToLanguageString( targetLocale ),
+        englishStringsArray: englishStringsArray,
+        commonStringsArray: commonStringsArray,
+        simName: simName,
+        simUrl: TranslatableSimInfo.getSimInfoByProjectName( simName ).testUrl,
+        username: username,
+        trustedTranslator: ( req.session.trustedTranslator ) ? req.session.trustedTranslator : false
+      };
+
+      // Render the page.
+      res.render( 'translate-sim.html', templateData );
+    }
+    else {
+      res.send( 'Error: Sim data not found' );
+    }
+  };
+
+  request( activeSimsUrl, activeSimsRequestCallback );
 };
 
 /**
@@ -214,4 +278,4 @@ module.exports.pageNotFound = function( req, res ) {
 /**
  * Route for extracting strings from a build sim, see TranslationUtils.extractStrings.
  */
-module.exports.extractStrings = TranslationUtils.extractStrings;
+module.exports.extractStringsAPI = TranslationUtils.extractStringsAPI;

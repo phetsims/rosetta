@@ -104,7 +104,7 @@ app.get( '/translate/', routes.chooseSimulationAndLanguage );
 app.get( '/translate/sim/:simName?/:targetLocale?', routes.translateSimulation );
 
 // route for extracting strings from a sim
-app.get( '/translate/extractStrings', routes.extractStrings );
+app.get( '/translate/extractStrings', routes.extractStringsAPI );
 
 // fall through route
 app.get( '/*', routes.pageNotFound );
