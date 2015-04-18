@@ -9,10 +9,10 @@
       <td><strong>English</strong></td>
       <td><strong>{{=it.destinationLanguage}}</strong></td>
     </tr>
-    {{~it.englishStringsArray :value:index}}
+    {{~it.simStringsArray :value:index}}
     <tr data-string-key={{=value.key}}>
       <td>{{=value.string}}</td>
-      <td><input type="text"></td>
+      <td><input type="text" value="{{=value.value}}"></td>
     </tr>
     {{~}}
   </table>
@@ -26,7 +26,7 @@
     {{~it.commonStringsArray :value:index}}
     <tr data-string-key={{=value.key}}>
       <td>{{=value.string}}</td>
-      <td><input type="text"></td>
+      <td><input type="text" value={{=value.value}}></td>
     </tr>
     {{~}}
   </table>

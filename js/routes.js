@@ -193,11 +193,17 @@ module.exports.translateSimulation = function( req, res ) {
       TranslationUtils.extractStrings( extractedStrings, body );
 
       var englishStrings = {}; // object to hold the English strings
+      var translatedStrings = {}; // object to hold the already translated strings
 
-      // after finished is called once for every repo with English strings that are needed, plus one more for the request to
-      // get the active sims, the page will be constructed and rendered.
-      var finished = _.after( extractedStrings.length + 1, function() {
-        var englishStringsArray = [];
+      var numberOfReposWithRequiredStrings = extractedStrings.length;
+
+      /*
+       * finished() must be called numberOfReposWithRequiredStrings * 2 + 1 times. This is the number of http requests to github that
+       * need to return before we are ready to render the page. We make two requests per repo - one for the English strings from the sims's
+       * repo, and one for the translated strings from babel - plus one more for the request to get the active sims list from chipper.
+       */
+      var finished = _.after( numberOfReposWithRequiredStrings * 2 + 1, function() {
+        var simStringsArray = [];
         var commonStringsArray = [];
 
         // iterate over all projects that this sim takes strings from
@@ -206,20 +212,22 @@ module.exports.translateSimulation = function( req, res ) {
           var strings = englishStrings[ project.projectName ];
 
           // put the strings under common strings or sim strings depending on which project they are from
-          var array = ( contains( sims, project.projectName ) ) ? englishStringsArray : commonStringsArray;
+          var array = ( contains( sims, project.projectName ) ) ? simStringsArray : commonStringsArray;
           for ( var j = 0; j < project.stringKeys.length; j++ ) {
             var key = project.stringKeys[ j ];
             if ( strings.hasOwnProperty( key ) ) {
               array.push( {
                 key: key,
-                string: escapeHTML( strings[ key ] )
+                string: escapeHTML( strings[ key ] ),
+                value: translatedStrings[ project.projectName ][ key ] ? escapeHTML( translatedStrings[ project.projectName ][ key ].value ) : ''
               } );
             }
             // if an english string isn't found for a key, use the key name instead
             else {
               array.push( {
                 key: key,
-                string: key
+                string: key,
+                value: translatedStrings[ project.projectName ][ key ] ? escapeHTML( translatedStrings[ project.projectName ][ key ].value ) : ''
               } );
             }
           }
@@ -233,7 +241,7 @@ module.exports.translateSimulation = function( req, res ) {
           title: "PhET Translation Utility",
           subtitle: "Please enter a translation for each English string:",
           destinationLanguage: LocaleInfo.localeToLanguageString( targetLocale ),
-          englishStringsArray: englishStringsArray,
+          simStringsArray: simStringsArray,
           commonStringsArray: commonStringsArray,
           simName: simName,
           simUrl: TranslatableSimInfo.getSimInfoByProjectName( simName ).testUrl,
@@ -250,7 +258,9 @@ module.exports.translateSimulation = function( req, res ) {
         (function( i ) {
           var projectName = extractedStrings[ i ].projectName;
           var stringsFilePath = rawGithub + '/phetsims/' + projectName + '/master/strings/' + projectName + '-strings_en.json';
-          var callback = function( error, response, body ) {
+          var translatedStringsPath = rawGithub + '/phetsims/babel/master/' + projectName + '/' + projectName + '-strings_' + targetLocale + '.json';
+
+          request( stringsFilePath, function( error, response, body ) {
             if ( !error && response.statusCode == 200 ) {
               englishStrings[ projectName ] = JSON.parse( body );
             }
@@ -258,8 +268,19 @@ module.exports.translateSimulation = function( req, res ) {
               winston.log( 'error', error );
             }
             finished();
-          };
-          request( stringsFilePath, callback );
+          } );
+
+          request( translatedStringsPath, function( error, response, body ) {
+            if ( !error && response.statusCode == 200 ) {
+              translatedStrings[ projectName ] = JSON.parse( body );
+            }
+            else {
+              winston.log( 'warn', 'Github responded with a ' + response.statusCode + ' status code for url ' + translatedStringsPath +
+                                   '. Mostly likely the file does not exist on github' );
+              translatedStrings[ projectName ] = {}; // add an empty object with the project name key so key lookups don't fail later on
+            }
+            finished();
+          } );
         })( i );
       }
     }
