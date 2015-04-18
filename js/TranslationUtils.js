@@ -134,7 +134,7 @@ module.exports.extractStringsAPI = function( req, res ) {
 
 // convenience for a nicer looking stringify 
 function stringify( data ) {
-  return JSON.stringify( data, null, 3 );
+  return JSON.stringify( data, null, 2 );
 }
 
 /**
@@ -217,5 +217,7 @@ function githubTest() {
   commit( babel, file, content + '2', commitMessage + '2', branch );
 }
 
-//githubTest();
-
+// export github functions
+module.exports.getGhClient = getGhClient;
+module.exports.commit = commit;
+module.exports.stringify = stringify;

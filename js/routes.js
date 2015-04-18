@@ -16,6 +16,9 @@ var winston = require( 'winston' );
 var request = require( 'request' );
 var _ = require( 'underscore' );
 var contains = TranslationUtils.contains;
+var getGhClient = TranslationUtils.getGhClient;
+var commit = TranslationUtils.commit;
+var stringify = TranslationUtils.stringify;
 
 // utility function for sending the user to the login page
 function sendUserToLoginPage( res, host, destinationUrl ) {
@@ -294,7 +297,45 @@ module.exports.translateSimulation = function( req, res ) {
 };
 
 module.exports.submitStrings = function( req, res ) {
-  console.log( req.body );
+  var targetLocale = req.param( 'targetLocale' );
+  var ghClient = getGhClient();
+  var babel = ghClient.repo( 'phetsims/babel' );
+
+  var repos = {};
+
+  for ( var string in req.body ) {
+    if ( req.body.hasOwnProperty( string ) ) {
+      var repoAndKey = string.split( ' ' );
+      var repo = repoAndKey[ 0 ];
+      var key = repoAndKey[ 1 ];
+
+      if ( !repos[ repo ] ) {
+        repos[ repo ] = [];
+      }
+      if ( req.body[ string ] !== '' ) {
+        var stringObject = {};
+        stringObject[ key ] = { 'value': req.body[ string ], 'history': [] };
+        repos[ repo ].push( stringObject );
+      }
+    }
+  }
+
+  for ( var repository in repos ) {
+    if ( req.body.hasOwnProperty( string ) ) {
+      var branch = 'tests';
+      var strings = repos[ repository ];
+      var content = stringify( strings );
+
+      if ( content.length ) {
+        var file = repository + '/' + repository + '-strings_' + targetLocale + '.json';
+        var commitMessage = Date.now() + ' automated commit from rosetta for file ' + file;
+
+        commit( babel, file, content, commitMessage, branch );
+        winston.log( 'info', commitMessage );
+      }
+    }
+  }
+
   res.send( 'Strings submitted' );
 };
 
