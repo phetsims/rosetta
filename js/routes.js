@@ -170,38 +170,39 @@ module.exports.translateSimulation = function( req, res ) {
     }
   }
 
-  var sims; // array of all active sims, will be initialized in activeSimsRequestCallback
-  var result = []; // array of { projectName: {string}, stringKeys: {Array.<string>} }, initialized in stringExtractRequestCallback
-
-  var activeSimsUrl = rawGithub + activeSimsPath;
-
-  // get a list of all active sims from github to separate common strings from sim strings
-  var activeSimsRequestCallback = function( error, response, body ) {
-    if ( !error && response.statusCode == 200 ) {
-      sims = body.toString().split( '\n' );
-    }
-    request( simUrl, stringExtractRequestCallback );
-  };
-
   // extract strings from the live sim's html file
-  var stringExtractRequestCallback = function( error, response, body ) {
+  request( simUrl, function( error, response, body ) {
     if ( !error && response.statusCode == 200 ) {
       var i;
+      var sims; // array of all active sims
 
-      // extract strings from the html file and store them in the result array
-      TranslationUtils.extractStrings( result, body );
+      // initialize the sims array from the active-sims file in chipper
+      request( rawGithub + activeSimsPath, function( error, response, body ) {
+        if ( !error && response.statusCode == 200 ) {
+          sims = body.toString().split( '\n' );
+        }
+        else {
+          winston.log( 'error', error );
+        }
+        finished();
+      } );
+
+      // extract strings from the sim's html file and store them in the extractedStrings array
+      // extractedStrings in an array of objects of the form { projectName: 'color-vision', stringKeys: [ 'key1', 'key2', ... ] }
+      var extractedStrings = [];
+      TranslationUtils.extractStrings( extractedStrings, body );
 
       var englishStrings = {}; // object to hold the English strings
 
-      // after finished is called once for every repo with English strings that are needed, the page will be
-      // constructed and rendered.
-      var finished = _.after( result.length, function() {
+      // after finished is called once for every repo with English strings that are needed, plus one more for the request to
+      // get the active sims, the page will be constructed and rendered.
+      var finished = _.after( extractedStrings.length + 1, function() {
         var englishStringsArray = [];
         var commonStringsArray = [];
 
         // iterate over all projects that this sim takes strings from
-        for ( i = 0; i < result.length; i++ ) {
-          var project = result[ i ];
+        for ( i = 0; i < extractedStrings.length; i++ ) {
+          var project = extractedStrings[ i ];
           var strings = englishStrings[ project.projectName ];
 
           // put the strings under common strings or sim strings depending on which project they are from
@@ -245,9 +246,9 @@ module.exports.translateSimulation = function( req, res ) {
       } );
 
       // send requests to github for the common code English strings
-      for ( i = 0; i < result.length; i++ ) {
+      for ( i = 0; i < extractedStrings.length; i++ ) {
         (function( i ) {
-          var projectName = result[ i ].projectName;
+          var projectName = extractedStrings[ i ].projectName;
           var stringsFilePath = rawGithub + '/phetsims/' + projectName + '/master/strings/' + projectName + '-strings_en.json';
           var callback = function( error, response, body ) {
             if ( !error && response.statusCode == 200 ) {
@@ -266,9 +267,7 @@ module.exports.translateSimulation = function( req, res ) {
       winston.log( 'error', error );
       res.send( 'Error: Sim data not found' );
     }
-  };
-
-  request( activeSimsUrl, activeSimsRequestCallback );
+  } );
 };
 
 /**
