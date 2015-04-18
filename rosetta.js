@@ -12,6 +12,7 @@ var doT = require( 'express-dot' );
 var routes = require( __dirname + '/js/routes' );
 var parseArgs = require( 'minimist' );
 var winston = require( 'winston' );
+var bodyParser = require( 'body-parser' );
 var _ = require( 'underscore' );
 
 // constants
@@ -89,6 +90,8 @@ app.use( '/translate/fonts', express.static( __dirname + '/public/fonts' ) );
 // need cookieParser middleware before we can do anything with cookies
 app.use( express.cookieParser() );
 app.use( express.session( { secret: '1234567890QWERTY' } ) );
+app.use( bodyParser.json() );
+app.use( bodyParser.urlencoded() );
 
 //----------------------------------------------------------------------------
 // Set up the routes.  The order matters.
@@ -102,6 +105,7 @@ app.get( '/translate/', routes.chooseSimulationAndLanguage );
 
 // route for translating a specific sim to a specific language
 app.get( '/translate/sim/:simName?/:targetLocale?', routes.translateSimulation );
+app.post( '/translate/sim/:simName?/:targetLocale?', routes.submitStrings );
 
 // route for extracting strings from a sim
 app.get( '/translate/extractStrings', routes.extractStringsAPI );

@@ -219,7 +219,8 @@ module.exports.translateSimulation = function( req, res ) {
               array.push( {
                 key: key,
                 string: escapeHTML( strings[ key ] ),
-                value: translatedStrings[ project.projectName ][ key ] ? escapeHTML( translatedStrings[ project.projectName ][ key ].value ) : ''
+                value: translatedStrings[ project.projectName ][ key ] ? escapeHTML( translatedStrings[ project.projectName ][ key ].value ) : '',
+                repo: project.projectName
               } );
             }
             // if an english string isn't found for a key, use the key name instead
@@ -227,7 +228,8 @@ module.exports.translateSimulation = function( req, res ) {
               array.push( {
                 key: key,
                 string: key,
-                value: translatedStrings[ project.projectName ][ key ] ? escapeHTML( translatedStrings[ project.projectName ][ key ].value ) : ''
+                value: translatedStrings[ project.projectName ][ key ] ? escapeHTML( translatedStrings[ project.projectName ][ key ].value ) : '',
+                repo: project.projectName
               } );
             }
           }
@@ -289,6 +291,11 @@ module.exports.translateSimulation = function( req, res ) {
       res.send( 'Error: Sim data not found' );
     }
   } );
+};
+
+module.exports.submitStrings = function( req, res ) {
+  console.log( req.body );
+  res.send( 'Strings submitted' );
 };
 
 /**
