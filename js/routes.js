@@ -14,6 +14,8 @@ var simInfoArray = require( '../data/simInfoArray.json' );
 var TranslationUtils = require( './TranslationUtils' );
 var winston = require( 'winston' );
 var request = require( 'request' );
+var _ = require( 'underscore' );
+var contains = TranslationUtils.contains;
 
 // utility function for sending the user to the login page
 function sendUserToLoginPage( res, host, destinationUrl ) {
@@ -157,7 +159,6 @@ module.exports.translateSimulation = function( req, res ) {
   var simName = req.param( 'simName' );
   var targetLocale = req.param( 'targetLocale' );
   var rawGithub = 'https://raw.githubusercontent.com';
-  var simPath = '/phetsims/' + simName + '/master/strings/' + simName + '-strings_en.json';
   var activeSimsPath = '/phetsims/chipper/master/data/active-sims';
 
   // get the url of the live sim (from simInfoArray)
@@ -173,17 +174,6 @@ module.exports.translateSimulation = function( req, res ) {
   var result = []; // array of { projectName: {string}, stringKeys: {Array.<string>} }, initialized in stringExtractRequestCallback
 
   var activeSimsUrl = rawGithub + activeSimsPath;
-  var englishStringsUrl = rawGithub + simPath;
-
-  // convenience method to check if an item is in an array
-  var contains = function( array, item ) {
-    for ( var i = 0; i < array.length; i++ ) {
-      if ( array[ i ] === item ) {
-        return true;
-      }
-    }
-    return false;
-  };
 
   // get a list of all active sims from github to separate common strings from sim strings
   var activeSimsRequestCallback = function( error, response, body ) {
@@ -196,67 +186,84 @@ module.exports.translateSimulation = function( req, res ) {
   // extract strings from the live sim's html file
   var stringExtractRequestCallback = function( error, response, body ) {
     if ( !error && response.statusCode == 200 ) {
+      var i;
+
+      // extract strings from the html file and store them in the result array
       TranslationUtils.extractStrings( result, body );
+
+      var englishStrings = {}; // object to hold the English strings
+
+      // after finished is called once for every repo with English strings that are needed, the page will be
+      // constructed and rendered.
+      var finished = _.after( result.length, function() {
+        var englishStringsArray = [];
+        var commonStringsArray = [];
+
+        // iterate over all projects that this sim takes strings from
+        for ( i = 0; i < result.length; i++ ) {
+          var project = result[ i ];
+          var strings = englishStrings[ project.projectName ];
+
+          // put the strings under common strings or sim strings depending on which project they are from
+          var array = ( contains( sims, project.projectName ) ) ? englishStringsArray : commonStringsArray;
+          for ( var j = 0; j < project.stringKeys.length; j++ ) {
+            var key = project.stringKeys[ j ];
+            if ( strings.hasOwnProperty( key ) ) {
+              array.push( {
+                key: key,
+                string: escapeHTML( strings[ key ] )
+              } );
+            }
+            // if an english string isn't found for a key, use the key name instead
+            else {
+              array.push( {
+                key: key,
+                string: key
+              } );
+            }
+          }
+        }
+
+        // Pull the username from the cookie
+        var username = req.cookies[ 'sign-in-panel.sign-in-form.username' ] || 'not logged in';
+
+        // Assemble the data that will be supplied to the template.
+        var templateData = {
+          title: "PhET Translation Utility",
+          subtitle: "Please enter a translation for each English string:",
+          destinationLanguage: LocaleInfo.localeToLanguageString( targetLocale ),
+          englishStringsArray: englishStringsArray,
+          commonStringsArray: commonStringsArray,
+          simName: simName,
+          simUrl: TranslatableSimInfo.getSimInfoByProjectName( simName ).testUrl,
+          username: username,
+          trustedTranslator: ( req.session.trustedTranslator ) ? req.session.trustedTranslator : false
+        };
+
+        // Render the page.
+        res.render( 'translate-sim.html', templateData );
+      } );
+
+      // send requests to github for the common code English strings
+      for ( i = 0; i < result.length; i++ ) {
+        (function( i ) {
+          var projectName = result[ i ].projectName;
+          var stringsFilePath = rawGithub + '/phetsims/' + projectName + '/master/strings/' + projectName + '-strings_en.json';
+          var callback = function( error, response, body ) {
+            if ( !error && response.statusCode == 200 ) {
+              englishStrings[ projectName ] = JSON.parse( body );
+            }
+            else {
+              winston.log( 'error', error );
+            }
+            finished();
+          };
+          request( stringsFilePath, callback );
+        })( i );
+      }
     }
     else {
       winston.log( 'error', error );
-    }
-    request( englishStringsUrl, englishStringsRequestCallback );
-  };
-
-  // Pull the English string data from github.
-  var englishStringsRequestCallback = function( error, response, body ) {
-    if ( !error && response.statusCode == 200 ) {
-      var strings = JSON.parse( body );
-
-      var englishStringsArray = [];
-      var commonStringsArray = [];
-
-      // iterate over all projects that this sim takes strings from
-      for ( var i = 0; i < result.length; i++ ) {
-        var project = result[ i ];
-
-        // put the strings under common strings or sim strings depending on which project they are from
-        var array = ( contains( sims, project.projectName ) ) ? englishStringsArray : commonStringsArray;
-        for ( var j = 0; j < project.stringKeys.length; j++ ) {
-          var key = project.stringKeys[ j ];
-          if ( strings.hasOwnProperty( key ) ) {
-            array.push( {
-              key: key,
-              string: escapeHTML( strings[ key ] )
-            } );
-          }
-
-          // if an english string isn't found for a key, use the key name instead
-          else {
-            array.push( {
-              key: key,
-              string: key
-            } );
-          }
-        }
-      }
-
-      // Pull the username from the cookie
-      var username = req.cookies[ 'sign-in-panel.sign-in-form.username' ] || 'not logged in';
-
-      // Assemble the data that will be supplied to the template.
-      var templateData = {
-        title: "PhET Translation Utility",
-        subtitle: "Please enter a translation for each English string:",
-        destinationLanguage: LocaleInfo.localeToLanguageString( targetLocale ),
-        englishStringsArray: englishStringsArray,
-        commonStringsArray: commonStringsArray,
-        simName: simName,
-        simUrl: TranslatableSimInfo.getSimInfoByProjectName( simName ).testUrl,
-        username: username,
-        trustedTranslator: ( req.session.trustedTranslator ) ? req.session.trustedTranslator : false
-      };
-
-      // Render the page.
-      res.render( 'translate-sim.html', templateData );
-    }
-    else {
       res.send( 'Error: Sim data not found' );
     }
   };
