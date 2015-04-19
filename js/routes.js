@@ -87,22 +87,12 @@ module.exports.checkForValidSession = function( req, res, next ) {
       response.on( 'end', function() {
         winston.log( 'info', 'data received: ' + data );
         var userData = JSON.parse( data );
-        if ( userData.teamMember ) {
-          winston.log( 'info', 'User is detected as being a PhET team member' );
-          req.session.teamMember = true;
-        }
-        else {
-          req.session.teamMember = false;
-        }
-        if ( userData.trustedTranslator ) {
-          winston.log( 'info', 'User is detected as being a PhET team member' );
-          req.session.trustedTranslator = true;
-        }
-        else {
-          req.session.trustedTranslator = false;
-        }
         if ( userData.loggedIn ) {
           winston.log( 'info', 'credentials obtained, user is logged in, moving to next step' );
+          req.session.teamMember = userData.teamMember;
+          req.session.trustedTranslator = userData.trustedTranslator;
+          req.session.userId = userData.userId;
+          req.session.username = userData.username;
           next(); // send to next route
         }
         else {
@@ -314,7 +304,18 @@ module.exports.submitStrings = function( req, res ) {
       }
       if ( req.body[ string ] !== '' ) {
         var stringObject = {};
-        stringObject[ key ] = { 'value': req.body[ string ], 'history': [] };
+        stringObject[ key ] = {
+          value: req.body[ string ], history: [
+            // TODO: implement proper history
+            //{
+            //  userId: ( req.session.userId ) ? req.session.userId : 'phet',
+            //  timestamp: Date.now(),
+            //  oldValue: null,
+            //  newValue: null,
+            //  explanation: null
+            //}
+          ]
+        };
         repos[ repo ].push( stringObject );
       }
     }
