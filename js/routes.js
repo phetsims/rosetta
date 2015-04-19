@@ -89,6 +89,17 @@ module.exports.checkForValidSession = function( req, res, next ) {
         var userData = JSON.parse( data );
         if ( userData.loggedIn ) {
           winston.log( 'info', 'credentials obtained, user is logged in, moving to next step' );
+
+          if ( !userData.trustedTranslator ) {
+            res.render( 'error.html', {
+                title: 'Translation Utility Error',
+                message: 'You must be a trusted translator to use the PhET translation utility. Email phethelp@colorado.edu for more information.',
+                errorDetails: '',
+                timestamp: new Date().getTime()
+              }
+            );
+          }
+
           req.session.teamMember = userData.teamMember;
           req.session.trustedTranslator = userData.trustedTranslator;
           req.session.userId = userData.userId;
