@@ -4,6 +4,7 @@
  * ExpressJS-style routes for handling the various URLs for the translation utility.
  *
  * @author John Blanco
+ * @author Aaron Davis
  */
 
 // modules
@@ -19,6 +20,10 @@ var contains = TranslationUtils.contains;
 var getGhClient = TranslationUtils.getGhClient;
 var commit = TranslationUtils.commit;
 var stringify = TranslationUtils.stringify;
+
+var translatedStrings = {}; // object to hold the already translated strings
+
+var BRANCH = 'tests'; // branch of babel to commit to, should be changed to master when testing is finished
 
 // utility function for sending the user to the login page
 function sendUserToLoginPage( res, host, destinationUrl ) {
@@ -197,7 +202,6 @@ module.exports.translateSimulation = function( req, res ) {
       TranslationUtils.extractStrings( extractedStrings, body );
 
       var englishStrings = {}; // object to hold the English strings
-      var translatedStrings = {}; // object to hold the already translated strings
 
       var numberOfReposWithRequiredStrings = extractedStrings.length;
 
@@ -264,7 +268,7 @@ module.exports.translateSimulation = function( req, res ) {
         (function( i ) {
           var projectName = extractedStrings[ i ].projectName;
           var stringsFilePath = rawGithub + '/phetsims/' + projectName + '/master/strings/' + projectName + '-strings_en.json';
-          var translatedStringsPath = rawGithub + '/phetsims/babel/master/' + projectName + '/' + projectName + '-strings_' + targetLocale + '.json';
+          var translatedStringsPath = rawGithub + '/phetsims/babel/' + BRANCH + '/' + projectName + '/' + projectName + '-strings_' + targetLocale + '.json';
 
           request( stringsFilePath, function( error, response, body ) {
             if ( !error && response.statusCode == 200 ) {
@@ -311,30 +315,31 @@ module.exports.submitStrings = function( req, res ) {
       var key = repoAndKey[ 1 ];
 
       if ( !repos[ repo ] ) {
-        repos[ repo ] = [];
+        repos[ repo ] = {};
       }
-      if ( req.body[ string ] !== '' ) {
-        var stringObject = {};
-        stringObject[ key ] = {
-          value: req.body[ string ], history: [
-            // TODO: implement proper history
-            //{
-            //  userId: ( req.session.userId ) ? req.session.userId : 'phet',
-            //  timestamp: Date.now(),
-            //  oldValue: null,
-            //  newValue: null,
-            //  explanation: null
-            //}
-          ]
-        };
-        repos[ repo ].push( stringObject );
+
+      var stringValue = req.body[ string ];
+      var translatedString = ( translatedStrings[ repo ] ) ? translatedStrings[ repo ][ key ] : null;
+      var history = ( translatedString ) ? translatedString.history : null;
+      var newHistoryEntry = {
+        userId: ( req.session.userId ) ? req.session.userId : 'phet-test',
+        timestamp: Date.now(),
+        oldValue: ( history && history.length ) ? history[ history.length - 1 ].newValue : null,
+        newValue: stringValue,
+        explanation: null // TODO
+      };
+      if ( history ) {
+        history.push( newHistoryEntry );
       }
+      else {
+        history = [ newHistoryEntry ];
+      }
+      repos[ repo ][ key ] = { value: stringValue, history: history };
     }
   }
 
   for ( var repository in repos ) {
-    if ( req.body.hasOwnProperty( string ) ) {
-      var branch = 'tests';
+    if ( repos.hasOwnProperty( repository ) ) {
       var strings = repos[ repository ];
       var content = stringify( strings );
 
@@ -342,7 +347,7 @@ module.exports.submitStrings = function( req, res ) {
         var file = repository + '/' + repository + '-strings_' + targetLocale + '.json';
         var commitMessage = Date.now() + ' automated commit from rosetta for file ' + file;
 
-        commit( babel, file, content, commitMessage, branch );
+        commit( babel, file, content, commitMessage, BRANCH );
         winston.log( 'info', commitMessage );
       }
     }
