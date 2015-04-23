@@ -277,7 +277,7 @@ module.exports.translateSimulation = function( req, res ) {
             }
             else {
               winston.log( 'error', 'request for english strings for project ' + projectName + 'failed. Response code: ' +
-                response.statusCode + '. Error: ' + error );
+                response.statusCode + '. URL: ' + stringsFileParth + '. Error: ' + error );
             }
             finished();
           } );
@@ -288,7 +288,7 @@ module.exports.translateSimulation = function( req, res ) {
             }
             else {
               winston.log( 'error', 'request for translated strings for project ' + projectName + 'failed. Response code: ' +
-                response.statusCode + '. Error: ' + error );
+                response.statusCode + '. URL: ' + translatedStringsPath + '. Error: ' + error );
               translatedStrings[ projectName ] = {}; // add an empty object with the project name key so key lookups don't fail later on
             }
             finished();
