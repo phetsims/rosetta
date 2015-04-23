@@ -104,12 +104,13 @@ module.exports.checkForValidSession = function( req, res, next ) {
               }
             );
           }
-
-          req.session.teamMember = userData.teamMember;
-          req.session.trustedTranslator = userData.trustedTranslator;
-          req.session.userId = userData.userId;
-          req.session.username = userData.username;
-          next(); // send to next route
+          else {
+            req.session.teamMember = userData.teamMember;
+            req.session.trustedTranslator = userData.trustedTranslator;
+            req.session.userId = userData.userId;
+            req.session.username = userData.username;
+            next(); // send to next route
+          }
         }
         else {
           // user is not logged in, send them to the login page
