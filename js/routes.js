@@ -23,7 +23,7 @@ var stringify = TranslationUtils.stringify;
 
 var translatedStrings = {}; // object to hold the already translated strings
 
-var BRANCH = 'tests'; // branch of babel to commit to, should be changed to master when testing is finished
+var BRANCH = 'master'; // branch of babel to commit to, should be changed to master when testing is finished
 
 // utility function for sending the user to the login page
 function sendUserToLoginPage( res, host, destinationUrl ) {

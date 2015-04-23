@@ -44,7 +44,7 @@ var extractStrings = function( result, data ) {
 
   for ( var project in projects ) {
     result.push( {
-      projectName: project.replace( '_', '-' ).toLowerCase(),
+      projectName: project.replace( new RegExp( '_', 'g' ), '-' ).toLowerCase(),
       stringKeys: projects[ project ]
     } );
   }
