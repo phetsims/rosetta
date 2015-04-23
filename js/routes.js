@@ -277,7 +277,7 @@ module.exports.translateSimulation = function( req, res ) {
             }
             else {
               winston.log( 'error', 'request for english strings for project ' + projectName + 'failed. Response code: ' +
-                response.statusCode + '. URL: ' + stringsFileParth + '. Error: ' + error );
+                response.statusCode + '. URL: ' + stringsFilePath + '. Error: ' + error );
             }
             finished();
           } );
