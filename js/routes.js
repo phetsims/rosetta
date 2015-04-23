@@ -276,7 +276,8 @@ module.exports.translateSimulation = function( req, res ) {
               englishStrings[ projectName ] = JSON.parse( body );
             }
             else {
-              winston.log( 'error', error );
+              winston.log( 'error', 'request for english strings for project ' + projectName + 'failed. Response code: ' +
+                response.statusCode + '. Error: ' + error );
             }
             finished();
           } );
@@ -286,8 +287,8 @@ module.exports.translateSimulation = function( req, res ) {
               translatedStrings[ projectName ] = JSON.parse( body );
             }
             else {
-              winston.log( 'warn', 'Github responded with a ' + response.statusCode + ' status code for url ' + translatedStringsPath +
-                                   '. Mostly likely the file does not exist on github' );
+              winston.log( 'error', 'request for translated strings for project ' + projectName + 'failed. Response code: ' +
+                response.statusCode + '. Error: ' + error );
               translatedStrings[ projectName ] = {}; // add an empty object with the project name key so key lookups don't fail later on
             }
             finished();
