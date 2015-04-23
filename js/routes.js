@@ -227,7 +227,7 @@ module.exports.translateSimulation = function( req, res ) {
             if ( strings.hasOwnProperty( key ) ) {
               array.push( {
                 key: key,
-                string: escapeHTML( strings[ key ] ),
+                string: escapeHTML( strings[ key ].value ),
                 value: translatedStrings[ project.projectName ][ key ] ? escapeHTML( translatedStrings[ project.projectName ][ key ].value ) : '',
                 repo: project.projectName
               } );
@@ -268,7 +268,7 @@ module.exports.translateSimulation = function( req, res ) {
       for ( i = 0; i < extractedStrings.length; i++ ) {
         (function( i ) {
           var projectName = extractedStrings[ i ].projectName;
-          var stringsFilePath = rawGithub + '/phetsims/' + projectName + '/master/strings/' + projectName + '-strings_en.json';
+          var stringsFilePath = rawGithub + '/phetsims/' + projectName + '/master/' + projectName + '-strings_en.json';
           var translatedStringsPath = rawGithub + '/phetsims/babel/' + BRANCH + '/' + projectName + '/' + projectName + '-strings_' + targetLocale + '.json';
 
           request( stringsFilePath, function( error, response, body ) {
