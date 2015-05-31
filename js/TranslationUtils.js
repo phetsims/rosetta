@@ -156,28 +156,39 @@ function githubCallback( err, data, headers ) {
  * @param {string} file - file to be added or modified (must include the full path from the repo root)
  * @param {string} content - file contents
  * @param {string} message - commit message
- * @param {string} [branch='master'] - branch name (defaults to master)
+ * @param {string} branch - branch of babel, will usually be 'master', but sometimes 'tests'
+ * @param {function} callback
  */
-function commit( repo, file, content, message, branch ) {
+function commit( repo, file, content, message, branch, callback ) {
 
   if ( !branch ) {
     branch = 'master';
   }
 
+  // get the current contents of the file from github
   repo.contents( file, branch, function( err, data, headers ) {
 
     // if the file is not found, create a new file instead of updating an existing one
     if ( err ) {
-      repo.createContents( file, message, content, branch, githubCallback );
+      repo.createContents( file, message, content, branch, function( err, data, headers ) {
+        if ( err ) {
+          callback( err );
+        }
+        else {
+          callback();
+        }
+      } );
     }
 
     // otherwise, update the file using it's sha
     else {
       var sha = data.sha;
       repo.updateContents( file, message, content, sha, branch, function( err, data, headers ) {
-
         if ( err ) {
-          console.log( err, 'This probably means that the file hash does not match the file' );
+          callback( err );
+        }
+        else {
+          callback();
         }
       } );
     }

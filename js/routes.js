@@ -16,6 +16,7 @@ var TranslationUtils = require( './TranslationUtils' );
 var winston = require( 'winston' );
 var request = require( 'request' );
 var _ = require( 'underscore' );
+var async = require( 'async' );
 var contains = TranslationUtils.contains;
 var getGhClient = TranslationUtils.getGhClient;
 var commit = TranslationUtils.commit;
@@ -23,7 +24,7 @@ var stringify = TranslationUtils.stringify;
 
 var translatedStrings = {}; // object to hold the already translated strings
 
-var BRANCH = 'master'; // branch of babel to commit to, should be changed to master when testing is finished
+var BRANCH = 'tests'; // branch of babel to commit to, should be changed to master when testing is finished
 
 // utility function for sending the user to the login page
 function sendUserToLoginPage( res, host, destinationUrl ) {
@@ -276,8 +277,8 @@ module.exports.translateSimulation = function( req, res ) {
               englishStrings[ projectName ] = JSON.parse( body );
             }
             else {
-              winston.log( 'error', 'request for english strings for project ' + projectName + 'failed. Response code: ' +
-                response.statusCode + '. URL: ' + stringsFilePath + '. Error: ' + error );
+              winston.log( 'error', 'request for english strings for project ' + projectName + ' failed. Response code: ' +
+                                    response.statusCode + '. URL: ' + stringsFilePath + '. Error: ' + error );
             }
             finished();
           } );
@@ -287,8 +288,8 @@ module.exports.translateSimulation = function( req, res ) {
               translatedStrings[ projectName ] = JSON.parse( body );
             }
             else {
-              winston.log( 'error', 'request for translated strings for project ' + projectName + 'failed. Response code: ' +
-                response.statusCode + '. URL: ' + translatedStringsPath + '. Error: ' + error );
+              winston.log( 'error', 'request for translated strings for project ' + projectName + ' failed. Response code: ' +
+                                    response.statusCode + '. URL: ' + translatedStringsPath + '. Error: ' + error );
               translatedStrings[ projectName ] = {}; // add an empty object with the project name key so key lookups don't fail later on
             }
             finished();
@@ -304,14 +305,36 @@ module.exports.translateSimulation = function( req, res ) {
 };
 
 module.exports.submitStrings = function( req, res ) {
+  winston.log( 'info', 'queuing task' );
+  taskQueue.push( { req: req, res: res }, function() {
+    winston.log( 'info', 'build finished' );
+  } );
+};
+
+/*
+ * Code for submitting to github. Uses a queue to ensure only one batch of strings is submitted at 
+ * the same time.
+ */
+var taskQueue = async.queue( function( task, taskCallback ) {
+  var req = task.req;
+  var res = task.res;
+
   var targetLocale = req.param( 'targetLocale' );
   var ghClient = getGhClient();
   var babel = ghClient.repo( 'phetsims/babel' );
 
+  /*
+   * Repos will contain an object whose keys are repository names and whose values are of the same form
+   * as the objects stored in babel. Multiple repositories can be committed to at the same time because
+   * common code strings might be submitted as well.
+   */
   var repos = {};
 
+  // req.body contains all of the strings submitted in the POST request from the translation utility
   for ( var string in req.body ) {
     if ( req.body.hasOwnProperty( string ) ) {
+
+      // data submitted is in the form "[repository] [key]", for example "area-builder area-builder.name"
       var repoAndKey = string.split( ' ' );
       var repo = repoAndKey[ 0 ];
       var key = repoAndKey[ 1 ];
@@ -321,42 +344,66 @@ module.exports.submitStrings = function( req, res ) {
       }
 
       var stringValue = req.body[ string ];
+
+      // check if the string is already in translatedStrings to get the history if it exists
       var translatedString = ( translatedStrings[ repo ] ) ? translatedStrings[ repo ][ key ] : null;
       var history = ( translatedString ) ? translatedString.history : null;
-      var newHistoryEntry = {
-        userId: ( req.session.userId ) ? req.session.userId : 'phet-test',
-        timestamp: Date.now(),
-        oldValue: ( history && history.length ) ? history[ history.length - 1 ].newValue : null,
-        newValue: stringValue,
-        explanation: null // TODO
-      };
-      if ( history ) {
-        history.push( newHistoryEntry );
+      var oldValue = ( history && history.length ) ? history[ history.length - 1 ].newValue : '';
+
+      // don't add the string if the value hasn't changed
+      if ( stringValue !== '' && oldValue !== stringValue ) {
+        var newHistoryEntry = {
+          userId: ( req.session.userId ) ? req.session.userId : 'phet-test',
+          timestamp: Date.now(),
+          oldValue: oldValue,
+          newValue: stringValue,
+          explanation: null // TODO
+        };
+
+        if ( history ) {
+          history.push( newHistoryEntry );
+        }
+        else {
+          history = [ newHistoryEntry ];
+        }
+        repos[ repo ][ key ] = { value: stringValue, history: history };
       }
-      else {
-        history = [ newHistoryEntry ];
+      else if ( translatedString ) {
+        repos[ repo ][ key ] = translatedString;
       }
-      repos[ repo ][ key ] = { value: stringValue, history: history };
     }
   }
 
+  // commit to every repository that has submitted strings
   for ( var repository in repos ) {
     if ( repos.hasOwnProperty( repository ) ) {
       var strings = repos[ repository ];
       var content = stringify( strings );
+      var file = repository + '/' + repository + '-strings_' + targetLocale + '.json';
 
-      if ( content.length ) {
-        var file = repository + '/' + repository + '-strings_' + targetLocale + '.json';
+      if ( content.length && content !== stringify( translatedStrings[ repository ] ) ) {
         var commitMessage = Date.now() + ' automated commit from rosetta for file ' + file;
 
-        commit( babel, file, content, commitMessage, BRANCH );
-        winston.log( 'info', commitMessage );
+        (function( file, commitMessage ) {
+          commit( babel, file, content, commitMessage, BRANCH, function( err ) {
+            if ( err ) {
+              winston.log( 'error', err + '. Error committing to file ' + file +
+                                    '. This probably means that the file hash does not match the file' );
+            }
+            else {
+              winston.log( 'info', 'commit: "' + commitMessage + '" committed successfully' );
+            }
+          } );
+        })( file, commitMessage );
+      }
+      else {
+        winston.log( 'info', 'no commit attempted for ' + file + ' because no changes were made.' );
       }
     }
   }
 
   res.send( 'Strings submitted' );
-};
+}, 1 );
 
 /**
  * Default route for when a page is not found in the translation utility.
