@@ -319,8 +319,36 @@ var taskQueue = async.queue( function( task, taskCallback ) {
   var res = task.res;
 
   var targetLocale = req.param( 'targetLocale' );
+  var simName = req.param( 'simName' );
   var ghClient = getGhClient();
   var babel = ghClient.repo( 'phetsims/babel' );
+
+  // overwrite this function so we can get better error information
+  babel.updateContents = function( path, message, content, sha, cbOrBranch, cb ) {
+    if ( (cb === null) && cbOrBranch ) {
+      cb = cbOrBranch;
+      cbOrBranch = 'master';
+    }
+    return this.client.put( "/repos/" + this.name + "/contents/" + path, {
+      branch: cbOrBranch,
+      message: message,
+      content: new Buffer( content ).toString( 'base64' ),
+      sha: sha
+    }, function( err, s, b, h ) {
+      if ( err ) {
+        return cb( err );
+      }
+      if ( s === 409 ) {
+        return cb( new Error( "409 error from github: the git repository is empty or unavailable. This typically means it is being created still." ) );
+      }
+      else if ( s !== 200 ) {
+        return cb( new Error( "Repo updateContents error. Status code = " + s ) );
+      }
+      else {
+        return cb( null, b, h );
+      }
+    } );
+  };
 
   /*
    * Repos will contain an object whose keys are repository names and whose values are of the same form
@@ -373,24 +401,22 @@ var taskQueue = async.queue( function( task, taskCallback ) {
     }
   }
 
-  var errors = '';
-  var successes = '';
+  var errors = [];
+  var successes = [];
+  var errorDetails = '';
 
+  // after all commits are finished, render the response
   var finished = _.after( Object.keys( repos ).length, function() {
-    if ( successes.length === 0 && errors.length === 0 ) {
-      res.send( 'No new strings were submitted, did you submit the form without changing anything?' );
-    }
-    else {
-      var response = 'The following strings have been submitted:<br>';
-      response += successes;
-
-      if ( errors.length > 0 ) {
-        response += '<br><br>The following strings failed to submit:<br>';
-        response += errors;
-      }
-
-      res.send( response );
-    }
+    res.render( 'translation-submit.html', {
+      strings: successes,
+      errorStrings: errors,
+      error: errors.length > 0,
+      stringsNotSubmitted: successes.length === 0 && errors.length === 0,
+      errorDetails: errorDetails,
+      timestamp: new Date().getTime(),
+      simName: simName,
+      targetLocale: targetLocale
+    } );
 
     taskCallback();
   } );
@@ -410,24 +436,31 @@ var taskQueue = async.queue( function( task, taskCallback ) {
             var stringKey;
             var stringValue;
 
+            // commit failed
+            // TODO: figure out why github sometimes returns a 409 error and what we should do if it happens.
+            // One option is just to try committing again after a timeout.
             if ( err ) {
               winston.log( 'error', err + '. Error committing to file ' + file );
+              errorDetails += err + '. Error committing to file ' + file + '<br>';
               for ( stringKey in repos[ repository ] ) {
                 stringValue = repos[ repository ][ stringKey ].value;
                 if ( !translatedStrings[ repository ] || !translatedStrings[ repository ][ stringKey ] || stringValue !== translatedStrings[ repository ][ stringKey ].value ) {
-                  errors += stringKey + ': ' + stringValue + '<br>';
+                  errors.push( { stringKey: stringKey, stringValue: stringValue } );
                 }
               }
             }
+
+            // commit succeeded
             else {
               winston.log( 'info', 'commit: "' + commitMessage + '" committed successfully' );
               for ( stringKey in repos[ repository ] ) {
                 stringValue = repos[ repository ][ stringKey ].value;
                 if ( !translatedStrings[ repository ] || !translatedStrings[ repository ][ stringKey ] || stringValue !== translatedStrings[ repository ][ stringKey ].value ) {
-                  successes += stringKey + ': ' + stringValue + '<br>';
+                  successes.push( { stringKey: stringKey, stringValue: stringValue } );
                 }
               }
             }
+
             finished();
           } );
         })( file, commitMessage, repository );
