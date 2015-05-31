@@ -373,6 +373,28 @@ var taskQueue = async.queue( function( task, taskCallback ) {
     }
   }
 
+  var errors = '';
+  var successes = '';
+
+  var finished = _.after( Object.keys( repos ).length, function() {
+    if ( successes.length === 0 && errors.length === 0 ) {
+      res.send( 'No new strings were submitted, did you submit the form without changing anything?' );
+    }
+    else {
+      var response = 'The following strings have been submitted:<br>';
+      response += successes;
+
+      if ( errors.length > 0 ) {
+        response += '<br><br>The following strings failed to submit:<br>';
+        response += errors;
+      }
+
+      res.send( response );
+    }
+
+    taskCallback();
+  } );
+
   // commit to every repository that has submitted strings
   for ( var repository in repos ) {
     if ( repos.hasOwnProperty( repository ) ) {
@@ -383,31 +405,48 @@ var taskQueue = async.queue( function( task, taskCallback ) {
       if ( content.length && content !== stringify( translatedStrings[ repository ] ) ) {
         var commitMessage = Date.now() + ' automated commit from rosetta for file ' + file;
 
-        (function( file, commitMessage ) {
+        (function( file, commitMessage, repository ) {
           commit( babel, file, content, commitMessage, BRANCH, function( err ) {
+            var stringKey;
+            var stringValue;
+
             if ( err ) {
-              winston.log( 'error', err + '. Error committing to file ' + file +
-                                    '. This probably means that the file hash does not match the file' );
+              winston.log( 'error', err + '. Error committing to file ' + file );
+              for ( stringKey in repos[ repository ] ) {
+                stringValue = repos[ repository ][ stringKey ].value;
+                if ( !translatedStrings[ repository ] || !translatedStrings[ repository ][ stringKey ] || stringValue !== translatedStrings[ repository ][ stringKey ].value ) {
+                  errors += stringKey + ': ' + stringValue + '<br>';
+                }
+              }
             }
             else {
               winston.log( 'info', 'commit: "' + commitMessage + '" committed successfully' );
+              for ( stringKey in repos[ repository ] ) {
+                stringValue = repos[ repository ][ stringKey ].value;
+                if ( !translatedStrings[ repository ] || !translatedStrings[ repository ][ stringKey ] || stringValue !== translatedStrings[ repository ][ stringKey ].value ) {
+                  successes += stringKey + ': ' + stringValue + '<br>';
+                }
+              }
             }
+            finished();
           } );
-        })( file, commitMessage );
+        })( file, commitMessage, repository );
       }
       else {
         winston.log( 'info', 'no commit attempted for ' + file + ' because no changes were made.' );
+        finished();
       }
     }
   }
-
-  res.send( 'Strings submitted' );
 }, 1 );
 
 module.exports.submitStrings = function( req, res ) {
-  winston.log( 'info', 'queuing task' );
+  var simName = req.param( 'simName' );
+  var targetLocale = req.param( 'targetLocale' );
+
+  winston.log( 'info', 'queuing string submission for ' + simName + '_' + targetLocale );
   taskQueue.push( { req: req, res: res }, function() {
-    winston.log( 'info', 'build finished' );
+    winston.log( 'info', 'finished string submission for ' + simName + '_' + targetLocale );
   } );
 };
 
