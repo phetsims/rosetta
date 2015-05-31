@@ -7,6 +7,9 @@
  * @author Aaron Davis
  */
 
+/* jslint node: true */
+'use strict';
+
 // modules
 var https = require( 'https' );
 var LocaleInfo = require( './LocaleInfo' );
@@ -15,12 +18,15 @@ var simInfoArray = require( '../data/simInfoArray.json' );
 var TranslationUtils = require( './TranslationUtils' );
 var winston = require( 'winston' );
 var request = require( 'request' );
-var _ = require( 'underscore' );
 var async = require( 'async' );
 var contains = TranslationUtils.contains;
 var getGhClient = TranslationUtils.getGhClient;
 var commit = TranslationUtils.commit;
 var stringify = TranslationUtils.stringify;
+
+/* jshint -W079 */
+var _ = require( 'underscore' );
+/* jshint +W079 */
 
 var translatedStrings = {}; // object to hold the already translated strings
 
@@ -183,13 +189,13 @@ module.exports.translateSimulation = function( req, res ) {
 
   // extract strings from the live sim's html file
   request( simUrl, function( error, response, body ) {
-    if ( !error && response.statusCode == 200 ) {
+    if ( !error && response.statusCode === 200 ) {
       var i;
       var sims; // array of all active sims
 
       // initialize the sims array from the active-sims file in chipper
       request( rawGithub + activeSimsPath, function( error, response, body ) {
-        if ( !error && response.statusCode == 200 ) {
+        if ( !error && response.statusCode === 200 ) {
           sims = body.toString().split( '\n' );
         }
         else {
@@ -273,7 +279,7 @@ module.exports.translateSimulation = function( req, res ) {
           var translatedStringsPath = rawGithub + '/phetsims/babel/' + BRANCH + '/' + projectName + '/' + projectName + '-strings_' + targetLocale + '.json';
 
           request( stringsFilePath, function( error, response, body ) {
-            if ( !error && response.statusCode == 200 ) {
+            if ( !error && response.statusCode === 200 ) {
               englishStrings[ projectName ] = JSON.parse( body );
             }
             else {
@@ -284,7 +290,7 @@ module.exports.translateSimulation = function( req, res ) {
           } );
 
           request( translatedStringsPath, function( error, response, body ) {
-            if ( !error && response.statusCode == 200 ) {
+            if ( !error && response.statusCode === 200 ) {
               translatedStrings[ projectName ] = JSON.parse( body );
             }
             else {
@@ -301,13 +307,6 @@ module.exports.translateSimulation = function( req, res ) {
       winston.log( 'error', error );
       res.send( 'Error: Sim data not found' );
     }
-  } );
-};
-
-module.exports.submitStrings = function( req, res ) {
-  winston.log( 'info', 'queuing task' );
-  taskQueue.push( { req: req, res: res }, function() {
-    winston.log( 'info', 'build finished' );
   } );
 };
 
@@ -404,6 +403,13 @@ var taskQueue = async.queue( function( task, taskCallback ) {
 
   res.send( 'Strings submitted' );
 }, 1 );
+
+module.exports.submitStrings = function( req, res ) {
+  winston.log( 'info', 'queuing task' );
+  taskQueue.push( { req: req, res: res }, function() {
+    winston.log( 'info', 'build finished' );
+  } );
+};
 
 /**
  * Default route for when a page is not found in the translation utility.

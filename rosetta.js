@@ -4,7 +4,11 @@
  * Main entry point for PhET translation web app.  This is where ExpressJS gets configured and the routes are set up.
  *
  * @author John Blanco
+ * @author Aaron Davis
  */
+
+/* jslint node: true */
+'use strict';
 
 // modules
 var express = require( 'express' );

@@ -5,7 +5,9 @@
  *
  * @author John Blanco
  */
-'use strict'; // TODO: Does this work, and is it needed?
+
+/* jslint node: true */ 
+'use strict';
 
 // locale-to-language strings TODO: This is incomplete.
 var localeInfo = {

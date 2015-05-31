@@ -11,7 +11,9 @@
  *
  * @author John Blanco
  */
-'use strict'; // TODO: Does this work, and is it needed?
+
+/* jslint node: true */
+'use strict';
 
 // Keep data in simInfoArray.json in alphabetical order
 var simInfoArray = require( '../data/simInfoArray.json' );
@@ -24,7 +26,7 @@ var simInfoArray = require( '../data/simInfoArray.json' );
 module.exports.getSimInfoByProjectName = function( projectName ) {
   for ( var i = 0; i < simInfoArray.length; i++ ) {
     if ( projectName === simInfoArray[ i ].projectName ) {
-      return simInfoArray[ i ]
+      return simInfoArray[ i ];
     }
   }
   return null;

@@ -6,6 +6,9 @@
  * @author Aaron Davis
  */
 
+/* jslint node: true */
+'use strict';
+
 var http = require( 'http' );
 var winston = require( 'winston' );
 var github = require( 'octonode' );
@@ -138,18 +141,6 @@ function stringify( data ) {
 }
 
 /**
- * generic callback for all github functions, useful to leave here for testing other github api functions
- * @param err
- * @param data
- * @param headers
- */
-function githubCallback( err, data, headers ) {
-  console.log( 'error: ' + err );
-  console.log( 'data: ' + stringify( data ) );
-  console.log( 'headers:' + headers );
-}
-
-/**
  * Commit a new file or a change to an existing file on github.
  *
  * @param {Object} repo - return value from ghClient.repo()
@@ -214,19 +205,19 @@ function getGhClient() {
 /**
  * For testing use of the github API
  */
-function githubTest() {
-  var ghClient = getGhClient();
-  var babel = ghClient.repo( 'phetsims/babel' );
+// function githubTest() {
+//   var ghClient = getGhClient();
+//   var babel = ghClient.repo( 'phetsims/babel' );
 
-  var commitMessage = 'commit message';
-  var content = 'some content';
-  var branch = 'tests';
-  var file = 'test-file-new.txt';
+//   var commitMessage = 'commit message';
+//   var content = 'some content';
+//   var branch = 'tests';
+//   var file = 'test-file-new.txt';
 
-  // one of these commits will fail most likely
-  commit( babel, file, content + '1', commitMessage + '1', branch );
-  commit( babel, file, content + '2', commitMessage + '2', branch );
-}
+//   // one of these commits will fail most likely
+//   commit( babel, file, content + '1', commitMessage + '1', branch );
+//   commit( babel, file, content + '2', commitMessage + '2', branch );
+// }
 
 // export github functions
 module.exports.getGhClient = getGhClient;
