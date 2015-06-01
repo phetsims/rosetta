@@ -1,4 +1,3 @@
-
 body {
   padding-top: 0px;
   margin: 0;
@@ -73,18 +72,22 @@ body {
   background: #6D77BD;
 }
 
-#testButton {
+.translate-btn {
   position: relative;
-  left: 100px;
   float: left;
   top: 20px;
 }
 
+#testButton {
+  left: 100px;
+}
+
 #submitButton {
-  float: left;
-  position: relative;
   left: 200px;
-  top: 20px;
+}
+
+#saveButton {
+  left: 300px;
 }
 
 h1 {
