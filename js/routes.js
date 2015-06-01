@@ -26,7 +26,17 @@ var stringify = TranslationUtils.stringify;
 
 // postgres query API
 var query = require( 'pg-query' );
-query.connectionParameters = 'postgresql://localhost/rosetta';
+
+try {
+  var config = require( '../config.json' );
+  query.connectionParameters = config.pgConnectionString;
+}
+
+// localhost configuration
+catch( e ) {
+  query.connectionParameters = 'postgresql://localhost/rosetta';
+}
+
 
 /* jshint -W079 */
 var _ = require( 'underscore' );
@@ -386,6 +396,7 @@ var taskQueue = async.queue( function( task, taskCallback ) {
     } );
   };
 
+  // overwrite this function so we can get better error information
   babel.createContents = function( path, message, content, cbOrBranchOrOptions, cb ) {
     var param;
     content = new Buffer( content ).toString( 'base64' );
