@@ -30,10 +30,12 @@ var query = require( 'pg-query' );
 try {
   var config = require( '../config.json' );
   query.connectionParameters = config.pgConnectionString;
+  console.log( 'using production postgres configuration' );
 }
 
 // localhost configuration
 catch( e ) {
+  console.log( 'using localhost postgres configuration' );
   query.connectionParameters = 'postgresql://localhost/rosetta';
 }
 
