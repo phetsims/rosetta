@@ -255,7 +255,7 @@ module.exports.translateSimulation = function( req, res ) {
           }
 
           // load saved strings from database to saveStrings object if there are any
-          if ( rows.length > 0 ) {
+          if ( rows && rows.length > 0 ) {
             for ( i = 0; i < rows.length; i++ ) {
               var row = rows[ i ];
               savedStrings[ row.repository ][ row.stringkey ] = row.stringvalue;
