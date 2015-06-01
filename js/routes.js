@@ -181,6 +181,7 @@ module.exports.translateSimulation = function( req, res ) {
   var targetLocale = req.param( 'targetLocale' );
   var rawGithub = 'https://raw.githubusercontent.com';
   var activeSimsPath = '/phetsims/chipper/master/data/active-sims';
+  var userId = ( req.session.userId ) ? req.session.userId : 0;
 
   // get the url of the live sim (from simInfoArray)
   var simUrl;
@@ -231,18 +232,19 @@ module.exports.translateSimulation = function( req, res ) {
           }
           repositories += 'repository = \'' + extractedStrings[ i ].projectName + '\'';
 
-          // initialize saved strings for every repo to an empty object. Later, it store string key/value pairs for each repo.
+          // Initialize saved strings for every repo to an empty object.
+          // These objects will store string key/value pairs for each repo.
           savedStrings[ extractedStrings[ i ].projectName ] = {};
         }
-        var savedStringsQuery = 'SELECT * from saved_translations where user_id = $1 AND (' + repositories + ')';
+        var savedStringsQuery = 'SELECT * from saved_translations where user_id = $1 AND locale = $2 AND (' + repositories + ')';
 
         // query postgres to see if there are any saved strings for this user
-        query( savedStringsQuery, [ ( req.session.userId ) ? req.session.userId : 0 ], function( err, rows ) {
+        query( savedStringsQuery, [ userId, targetLocale ], function( err, rows ) {
           if ( err ) {
             winston.log( 'error', err );
           }
 
-          // load saved strings from database to saveStrings object
+          // load saved strings from database to saveStrings object if there are any
           if ( rows.length > 0 ) {
             for ( i = 0; i < rows.length; i++ ) {
               var row = rows[ i ];
@@ -275,7 +277,7 @@ module.exports.translateSimulation = function( req, res ) {
               else {
                 stringRenderInfo.value = translatedStrings[ project.projectName ][ key ] ? escapeHTML( translatedStrings[ project.projectName ][ key ].value ) : '';
               }
-              
+
               array.push( stringRenderInfo );
             }
           }
@@ -353,7 +355,9 @@ var taskQueue = async.queue( function( task, taskCallback ) {
   var ghClient = getGhClient();
   var babel = ghClient.repo( 'phetsims/babel' );
 
+  var userId = ( req.session.userId ) ? req.session.userId : 0;
   var save = req.param( 'save' ) === 'true';
+  delete req.body.save; // delete this so it doesn't show up when iterating over submitted strings later
 
   // overwrite this function so we can get better error information
   babel.updateContents = function( path, message, content, sha, cbOrBranch, cb ) {
@@ -375,6 +379,40 @@ var taskQueue = async.queue( function( task, taskCallback ) {
       }
       else if ( s !== 200 ) {
         return cb( new Error( "Repo updateContents error. Status code = " + s ) );
+      }
+      else {
+        return cb( null, b, h );
+      }
+    } );
+  };
+
+  babel.createContents = function( path, message, content, cbOrBranchOrOptions, cb ) {
+    var param;
+    content = new Buffer( content ).toString( 'base64' );
+    if ( (cb === null) && cbOrBranchOrOptions ) {
+      cb = cbOrBranchOrOptions;
+      cbOrBranchOrOptions = 'master';
+    }
+    if ( typeof cbOrBranchOrOptions === 'string' ) {
+      param = {
+        branch: cbOrBranchOrOptions,
+        message: message,
+        content: content
+      };
+    }
+    else if ( typeof cbOrBranchOrOptions === 'hash' ) {
+      param = cbOrBranchOrOptions;
+      /* jshint -W069 */
+      param[ 'message' ] = message;
+      param[ 'content' ] = content;
+      /* jshint -W069 */
+    }
+    return this.client.put( "/repos/" + this.name + "/contents/" + path, param, function( err, s, b, h ) {
+      if ( err ) {
+        return cb( err );
+      }
+      if ( s !== 201 ) {
+        return cb( new Error( "Repo createContents error s = " + s ) );
       }
       else {
         return cb( null, b, h );
@@ -406,19 +444,19 @@ var taskQueue = async.queue( function( task, taskCallback ) {
 
       // TODO: probably more efficient to batch these inserts into one command. Not sure if it matters too much though.
       if ( save ) {
-        var userId = ( req.session.userId ) ? req.session.userId : 0;
-
         (function( key, stringValue ) {
-          query( 'INSERT INTO saved_translations VALUES ($1::bigint, $2::varchar(255), $3::varchar(255), $4::varchar(255), $5::timestamp)',
-            [ userId, key, repo, stringValue, new Date() ], function( err, rows, result ) {
-              if ( !err ) {
-                winston.log( 'info', result );
-              }
-              else {
-                winston.log( 'error', 'inserting row: (' + userId + ', ' + key + ', ' + stringValue + ')' );
-                winston.log( 'error', err );
-              }
-            } );
+          if ( key && stringValue && stringValue.length > 0 ) {
+            query( 'INSERT INTO saved_translations VALUES ($1::bigint, $2::varchar(255), $3::varchar(255), $4::varchar(8), $5::varchar(255), $6::timestamp)',
+              [ userId, key, repo, targetLocale, stringValue, new Date() ], function( err, rows, result ) {
+                if ( !err ) {
+                  winston.log( 'info', 'inserted row: (' + userId + ', ' + key + ', ' + stringValue + ', ' + targetLocale + ')' );
+                }
+                else {
+                  winston.log( 'error', 'inserting row: (' + userId + ', ' + key + ', ' + stringValue + ', ' + targetLocale + ')' );
+                  winston.log( 'error', err );
+                }
+              } );
+          }
         })( key, stringValue );
       }
 
@@ -460,13 +498,33 @@ var taskQueue = async.queue( function( task, taskCallback ) {
     return;
   }
 
+  // keep track of strings that successfully committed and those that didn't
   var errors = [];
   var successes = [];
   var errorDetails = '';
 
   // after all commits are finished, render the response
   var finished = _.after( Object.keys( repos ).length, function() {
+
+    var repositories = [];
+    for ( var repo in repos ) {
+      repositories.push( 'repository = \'' + repo + '\'' );
+    }
+    var repositoriesString = repositories.join( ' OR ' );
+
+    var deleteQuery = 'DELETE FROM saved_translations WHERE user_id = $1 AND locale = $2 AND (' + repositoriesString + ')';
+    winston.log( 'info', 'running SQL command: ' + deleteQuery );
+    query( deleteQuery, [ userId, targetLocale ], function( err, rows ) {
+      if ( err ) {
+        winston.log( 'error', err );
+      }
+      else {
+        winston.log( 'info', 'deleted saved strings for translation with user_id = ' + userId + ' locale = ' + targetLocale + ' ' + repositoriesString );
+      }
+    } );
+
     res.render( 'translation-submit.html', {
+      title: 'Translation submitted',
       strings: successes,
       errorStrings: errors,
       error: ( errors.length > 0 ),
