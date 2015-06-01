@@ -230,6 +230,8 @@ module.exports.translateSimulation = function( req, res ) {
             repositories += ' OR ';
           }
           repositories += 'repository = \'' + extractedStrings[ i ].projectName + '\'';
+
+          // initialize saved strings for every repo to an empty object. Later, it store string key/value pairs for each repo.
           savedStrings[ extractedStrings[ i ].projectName ] = {};
         }
         var savedStringsQuery = 'SELECT * from saved_translations where user_id = $1 AND (' + repositories + ')';
@@ -240,6 +242,7 @@ module.exports.translateSimulation = function( req, res ) {
             winston.log( 'error', err );
           }
 
+          // load saved strings from database to saveStrings object
           if ( rows.length > 0 ) {
             for ( i = 0; i < rows.length; i++ ) {
               var row = rows[ i ];
@@ -257,22 +260,23 @@ module.exports.translateSimulation = function( req, res ) {
             for ( var j = 0; j < project.stringKeys.length; j++ ) {
               var key = project.stringKeys[ j ];
 
-              var obj = {
+              // data needed to render to the string on the page - the key, the current value, the English value, and the repo
+              var stringRenderInfo = {
                 key: key,
-                string: ( strings.hasOwnProperty( key ) ) ? escapeHTML( strings[ key ].value ) : key,
+                englishValue: ( strings.hasOwnProperty( key ) ) ? escapeHTML( strings[ key ].value ) : key,
                 repo: project.projectName
               };
 
               // used saved string if it exists
               if ( savedStrings[ project.projectName ][ key ] ) {
                 winston.log( 'info', 'using saved string ' + key + ': ' + savedStrings[ project.projectName ][ key ] );
-                obj.value = escapeHTML( savedStrings[ project.projectName ][ key ] );
+                stringRenderInfo.value = escapeHTML( savedStrings[ project.projectName ][ key ] );
               }
               else {
-                obj.value = translatedStrings[ project.projectName ][ key ] ? escapeHTML( translatedStrings[ project.projectName ][ key ].value ) : '';
+                stringRenderInfo.value = translatedStrings[ project.projectName ][ key ] ? escapeHTML( translatedStrings[ project.projectName ][ key ].value ) : '';
               }
               
-              array.push( obj );
+              array.push( stringRenderInfo );
             }
           }
 
