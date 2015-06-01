@@ -3,7 +3,7 @@
 
   <h5>{{=it.subtitle}}</h5>
 
-  <form id="strings" method="post">
+  <form name="form" id="strings" method="post">
     <h2>Sim Strings</h2>
     <table id="stringsTable" style="width:50%">
       <tr>
@@ -31,10 +31,13 @@
       </tr>
       {{~}}
     </table>
+
+    <input id="saveField" type="hidden" name="save" value="false">
   </form>
 
   <button type="button" class="btn" id="testButton">Test</button>
   <button type="submit" class="btn" id="submitButton" form="strings">Submit</button>
+  <button type="button" class="btn" id="saveButton" form="strings">Save</button>
 
   <!--data for sim url-->
   <div id="simData" data-sim-url={{=it.simUrl}} data-sim-name={{=it.simName}} data-trusted-translator={{=it.trustedTranslator}}></div>
@@ -42,6 +45,7 @@
   <script>
     var testButton = document.getElementById( 'testButton' );
     var submitButton = document.getElementById( 'submitButton' );
+    var saveButton = document.getElementById( 'saveButton' );
     var simData = document.getElementById( 'simData' );
 
     testButton.addEventListener( 'click', function() {
@@ -59,15 +63,10 @@
       win.focus();
     } );
 
-//    submitButton.addEventListener( 'click', function() {
-//      console.log( simData.getAttribute( 'data-trusted-translator' ) );
-//      if ( simData.getAttribute( 'data-trusted-translator' ) === 'true' ) {
-//        alert( 'Submit functionality not yet implemented.' );
-//      }
-//      else {
-//        alert( 'You must be a trusted translator to use the translation utility at this point. Please email phethelp@colorado.edu for more information' );
-//      }
-//    } );
+   saveButton.addEventListener( 'click', function() {
+     document.form.save.value = true;
+     document.getElementById('strings').submit();
+   } );
 
   </script>
 </div><!-- /.container -->

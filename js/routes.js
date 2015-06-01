@@ -24,6 +24,10 @@ var getGhClient = TranslationUtils.getGhClient;
 var commit = TranslationUtils.commit;
 var stringify = TranslationUtils.stringify;
 
+// postgres query API
+var query = require( 'pg-query' );
+query.connectionParameters = 'postgresql://localhost/rosetta';
+
 /* jshint -W079 */
 var _ = require( 'underscore' );
 /* jshint +W079 */
@@ -208,67 +212,89 @@ module.exports.translateSimulation = function( req, res ) {
       // extractedStrings in an array of objects of the form { projectName: 'color-vision', stringKeys: [ 'key1', 'key2', ... ] }
       var extractedStrings = [];
       TranslationUtils.extractStrings( extractedStrings, body );
-
       var englishStrings = {}; // object to hold the English strings
 
-      var numberOfReposWithRequiredStrings = extractedStrings.length;
-
       /*
-       * finished() must be called numberOfReposWithRequiredStrings * 2 + 1 times. This is the number of http requests to github that
+       * finished() must be called extractedStrings.length * 2 + 1 times. This is the number of http requests to github that
        * need to return before we are ready to render the page. We make two requests per repo - one for the English strings from the sims's
        * repo, and one for the translated strings from babel - plus one more for the request to get the active sims list from chipper.
        */
-      var finished = _.after( numberOfReposWithRequiredStrings * 2 + 1, function() {
+      var finished = _.after( extractedStrings.length * 2 + 1, function() {
         var simStringsArray = [];
         var commonStringsArray = [];
 
-        // iterate over all projects that this sim takes strings from
+        var repositories = '';
+        var savedStrings = {};
         for ( i = 0; i < extractedStrings.length; i++ ) {
-          var project = extractedStrings[ i ];
-          var strings = englishStrings[ project.projectName ];
+          if ( i > 0 ) {
+            repositories += ' OR ';
+          }
+          repositories += 'repository = \'' + extractedStrings[ i ].projectName + '\'';
+          savedStrings[ extractedStrings[ i ].projectName ] = {};
+        }
+        var savedStringsQuery = 'SELECT * from saved_translations where user_id = $1 AND (' + repositories + ')';
 
-          // put the strings under common strings or sim strings depending on which project they are from
-          var array = ( contains( sims, project.projectName ) ) ? simStringsArray : commonStringsArray;
-          for ( var j = 0; j < project.stringKeys.length; j++ ) {
-            var key = project.stringKeys[ j ];
-            if ( strings.hasOwnProperty( key ) ) {
-              array.push( {
-                key: key,
-                string: escapeHTML( strings[ key ].value ),
-                value: translatedStrings[ project.projectName ][ key ] ? escapeHTML( translatedStrings[ project.projectName ][ key ].value ) : '',
-                repo: project.projectName
-              } );
-            }
-            // if an english string isn't found for a key, use the key name instead
-            else {
-              array.push( {
-                key: key,
-                string: key,
-                value: translatedStrings[ project.projectName ][ key ] ? escapeHTML( translatedStrings[ project.projectName ][ key ].value ) : '',
-                repo: project.projectName
-              } );
+        // query postgres to see if there are any saved strings for this user
+        query( savedStringsQuery, [ ( req.session.userId ) ? req.session.userId : 0 ], function( err, rows ) {
+          if ( err ) {
+            winston.log( 'error', err );
+          }
+
+          if ( rows.length > 0 ) {
+            for ( i = 0; i < rows.length; i++ ) {
+              var row = rows[ i ];
+              savedStrings[ row.repository ][ row.stringkey ] = row.stringvalue;
             }
           }
-        }
 
-        // Pull the username from the cookie
-        var username = req.cookies[ 'sign-in-panel.sign-in-form.username' ] || 'not logged in';
+          // iterate over all projects that this sim takes strings from
+          for ( i = 0; i < extractedStrings.length; i++ ) {
+            var project = extractedStrings[ i ];
+            var strings = englishStrings[ project.projectName ];
 
-        // Assemble the data that will be supplied to the template.
-        var templateData = {
-          title: "PhET Translation Utility",
-          subtitle: "Please enter a translation for each English string:",
-          destinationLanguage: LocaleInfo.localeToLanguageString( targetLocale ),
-          simStringsArray: simStringsArray,
-          commonStringsArray: commonStringsArray,
-          simName: simName,
-          simUrl: TranslatableSimInfo.getSimInfoByProjectName( simName ).testUrl,
-          username: username,
-          trustedTranslator: ( req.session.trustedTranslator ) ? req.session.trustedTranslator : false
-        };
+            // put the strings under common strings or sim strings depending on which project they are from
+            var array = ( contains( sims, project.projectName ) ) ? simStringsArray : commonStringsArray;
+            for ( var j = 0; j < project.stringKeys.length; j++ ) {
+              var key = project.stringKeys[ j ];
 
-        // Render the page.
-        res.render( 'translate-sim.html', templateData );
+              var obj = {
+                key: key,
+                string: ( strings.hasOwnProperty( key ) ) ? escapeHTML( strings[ key ].value ) : key,
+                repo: project.projectName
+              };
+
+              // used saved string if it exists
+              if ( savedStrings[ project.projectName ][ key ] ) {
+                winston.log( 'info', 'using saved string ' + key + ': ' + savedStrings[ project.projectName ][ key ] );
+                obj.value = escapeHTML( savedStrings[ project.projectName ][ key ] );
+              }
+              else {
+                obj.value = translatedStrings[ project.projectName ][ key ] ? escapeHTML( translatedStrings[ project.projectName ][ key ].value ) : '';
+              }
+              
+              array.push( obj );
+            }
+          }
+
+          // Pull the username from the cookie
+          var username = req.cookies[ 'sign-in-panel.sign-in-form.username' ] || 'not logged in';
+
+          // Assemble the data that will be supplied to the template.
+          var templateData = {
+            title: "PhET Translation Utility",
+            subtitle: "Please enter a translation for each English string:",
+            destinationLanguage: LocaleInfo.localeToLanguageString( targetLocale ),
+            simStringsArray: simStringsArray,
+            commonStringsArray: commonStringsArray,
+            simName: simName,
+            simUrl: TranslatableSimInfo.getSimInfoByProjectName( simName ).testUrl,
+            username: username,
+            trustedTranslator: ( req.session.trustedTranslator ) ? req.session.trustedTranslator : false
+          };
+
+          // Render the page.
+          res.render( 'translate-sim.html', templateData );
+        } );
       } );
 
       // send requests to github for the common code English strings
@@ -323,6 +349,8 @@ var taskQueue = async.queue( function( task, taskCallback ) {
   var ghClient = getGhClient();
   var babel = ghClient.repo( 'phetsims/babel' );
 
+  var save = req.param( 'save' ) === 'true';
+
   // overwrite this function so we can get better error information
   babel.updateContents = function( path, message, content, sha, cbOrBranch, cb ) {
     if ( (cb === null) && cbOrBranch ) {
@@ -372,33 +400,60 @@ var taskQueue = async.queue( function( task, taskCallback ) {
 
       var stringValue = req.body[ string ];
 
-      // check if the string is already in translatedStrings to get the history if it exists
-      var translatedString = ( translatedStrings[ repo ] ) ? translatedStrings[ repo ][ key ] : null;
-      var history = ( translatedString ) ? translatedString.history : null;
-      var oldValue = ( history && history.length ) ? history[ history.length - 1 ].newValue : '';
+      // TODO: probably more efficient to batch these inserts into one command. Not sure if it matters too much though.
+      if ( save ) {
+        var userId = ( req.session.userId ) ? req.session.userId : 0;
 
-      // don't add the string if the value hasn't changed
-      if ( stringValue !== '' && oldValue !== stringValue ) {
-        var newHistoryEntry = {
-          userId: ( req.session.userId ) ? req.session.userId : 'phet-test',
-          timestamp: Date.now(),
-          oldValue: oldValue,
-          newValue: stringValue,
-          explanation: null // TODO
-        };
-
-        if ( history ) {
-          history.push( newHistoryEntry );
-        }
-        else {
-          history = [ newHistoryEntry ];
-        }
-        repos[ repo ][ key ] = { value: stringValue, history: history };
+        (function( key, stringValue ) {
+          query( 'INSERT INTO saved_translations VALUES ($1::bigint, $2::varchar(255), $3::varchar(255), $4::varchar(255), $5::timestamp)',
+            [ userId, key, repo, stringValue, new Date() ], function( err, rows, result ) {
+              if ( !err ) {
+                winston.log( 'info', result );
+              }
+              else {
+                winston.log( 'error', 'inserting row: (' + userId + ', ' + key + ', ' + stringValue + ')' );
+                winston.log( 'error', err );
+              }
+            } );
+        })( key, stringValue );
       }
-      else if ( translatedString ) {
-        repos[ repo ][ key ] = translatedString;
+
+      else {
+
+        // check if the string is already in translatedStrings to get the history if it exists
+        var translatedString = ( translatedStrings[ repo ] ) ? translatedStrings[ repo ][ key ] : null;
+        var history = ( translatedString ) ? translatedString.history : null;
+        var oldValue = ( history && history.length ) ? history[ history.length - 1 ].newValue : '';
+
+        // don't add the string if the value hasn't changed
+        if ( stringValue !== '' && oldValue !== stringValue ) {
+          var newHistoryEntry = {
+            userId: ( req.session.userId ) ? req.session.userId : 'phet-test',
+            timestamp: Date.now(),
+            oldValue: oldValue,
+            newValue: stringValue,
+            explanation: null // TODO
+          };
+
+          if ( history ) {
+            history.push( newHistoryEntry );
+          }
+          else {
+            history = [ newHistoryEntry ];
+          }
+          repos[ repo ][ key ] = { value: stringValue, history: history };
+        }
+        else if ( translatedString ) {
+          repos[ repo ][ key ] = translatedString;
+        }
       }
     }
+  }
+
+  if ( save ) {
+    res.send( 'Your strings have been saved' );
+    taskCallback();
+    return;
   }
 
   var errors = [];
@@ -410,7 +465,7 @@ var taskQueue = async.queue( function( task, taskCallback ) {
     res.render( 'translation-submit.html', {
       strings: successes,
       errorStrings: errors,
-      error: errors.length > 0,
+      error: ( errors.length > 0 ),
       stringsNotSubmitted: successes.length === 0 && errors.length === 0,
       errorDetails: errorDetails,
       timestamp: new Date().getTime(),
