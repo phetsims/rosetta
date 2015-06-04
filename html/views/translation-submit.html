@@ -1,0 +1,77 @@
+<!-- Copyright 2002-2015, University of Colorado Boulder -->
+
+<style>
+  .table-header {
+    font-weight: bold;
+  }
+
+  table {
+    border-collapse: collapse;
+  }
+
+  td {
+    padding: 3px 7px 2px 7px;
+    border: 1px solid rgb(0, 0, 0);
+  }
+</style>
+
+<div class="container">
+  <h2>Translation submitted for {{=it.simName}}_{{=it.targetLocale}}</h2>
+
+  {{? it.stringsNotSubmitted}}
+
+  <p>No new strings were submitted, did you submit the form without changing anything?</p>
+
+  {{??}}
+
+  <h3>The following strings have been submitted:</h3>
+
+  <table>
+    <tr class="table-header">
+      <td>String key</td>
+      <td>Submitted value</td>
+    </tr>
+    {{~it.strings :value:index}}
+    <tr>
+      <td>
+        {{=value.stringKey}}
+      </td>
+      <td>
+        {{=value.stringValue}}
+      </td>
+    </tr>
+    {{~}}
+  </table>
+
+  {{? it.error}}
+  <h3>Error! Some strings have failed to submit:</h3>
+
+  <table>
+    <tr class="table-header">
+      <td>String key</td>
+      <td>Submitted value</td>
+    </tr>
+    {{~it.errorStrings :value:index}}
+    <tr>
+      <td>
+        {{=value.stringKey}}
+      </td>
+      <td>
+        {{=value.stringValue}}
+      </td>
+    </tr>
+    {{~}}
+  </table>
+
+  <p>
+    If this problem has occurred multiple times and is preventing you from working on translations, please contact
+    phethelp@colorado.edu, and include all information on this page.
+  </p>
+
+  <p>Timestamp: {{=it.timestamp}}</p>
+
+  <p>Details: {{=it.errorDetails}}</p>
+
+  {{?}}
+  {{?}}
+</div>
