@@ -555,31 +555,37 @@ var taskQueue = async.queue( function( task, taskCallback ) {
       targetLocale: targetLocale
     } );
 
-    var versions = fs.readdirSync( HTML_SIMS_DIRECTORY + simName ).sort();
-    var version = versions[ versions.length - 1 ]; // most recent version
-    winston.log( 'info', versions );
-    winston.log( 'info', 'detecting latest version: ' + version ); 
-    var dependencies = require( HTML_SIMS_DIRECTORY + simName + '/' + version + '/dependencies.json' );
-    winston.log( 'info', dependencies ); 
+    try {
+      var versions = fs.readdirSync( HTML_SIMS_DIRECTORY + simName ).sort();
+      var version = versions[ versions.length - 1 ]; // most recent version
+      winston.log( 'info', versions );
+      winston.log( 'info', 'detecting latest version: ' + version );
+      var dependencies = require( HTML_SIMS_DIRECTORY + simName + '/' + version + '/dependencies.json' );
+      winston.log( 'info', dependencies );
 
-    var queryString = querystring.stringify( {
-      'repos': JSON.stringify( dependencies ),
-      'simName': simName,
-      'version': version,
-      'serverName': 'simian'
-    } );
+      var queryString = querystring.stringify( {
+        'repos': JSON.stringify( dependencies ),
+        'simName': simName,
+        'version': version,
+        'serverName': 'simian'
+      } );
 
-    var url = 'http://phet-dev.colorado.edu/deploy-html-simulation?' + queryString;
+      var url = 'http://phet-dev.colorado.edu/deploy-html-simulation?' + queryString;
 
-    request( url, function( error, response, body ) {
-      if ( !error && response.statusCode === 200 ) {
-        winston.log( 'info', 'sending build server request to: ' + url );
-      }
-      else {
-        winston.log( 'info', 'error: deploy failed' );
-      }
+      request( url, function( error, response, body ) {
+        if ( !error && response.statusCode === 200 ) {
+          winston.log( 'info', 'sending build server request to: ' + url );
+        }
+        else {
+          winston.log( 'info', 'error: deploy failed' );
+        }
+        taskCallback();
+      } );
+    }
+    catch( e ) {
+      winston.log( 'error', 'error notifying builder server ' + e );
       taskCallback();
-    } );
+    }
   } );
 
   // commit to every repository that has submitted strings
@@ -607,7 +613,7 @@ var taskQueue = async.queue( function( task, taskCallback ) {
             // commit failed
             // Github sometimes returns a 409 error and fails to commit, in this case we'll try again once
             if ( err ) {
-              winston.log( 'error', err + '. Error committing to file ' + file + '. Trying again in 5 seconds...');
+              winston.log( 'error', err + '. Error committing to file ' + file + '. Trying again in 5 seconds...' );
               setTimeout( function() {
                 commit( babel, file, content, commitMessage, BRANCH, function( err ) {
                   if ( err ) {
