@@ -29,13 +29,17 @@ var query = require( 'pg-query' );
 
 try {
   var config = require( '../config.json' );
-  query.connectionParameters = config.pgConnectionString;
-  console.log( 'using production postgres configuration' );
+  if ( config.pgConnectionString ) {
+    query.connectionParameters = config.pgConnectionString;
+  }
+  else {
+    query.connectionParameters = 'postgresql://localhost/rosetta';
+  }
 }
 
 // localhost configuration
 catch( e ) {
-  console.log( 'using localhost postgres configuration' );
+  console.log( 'config.json not found: using localhost postgres configuration' );
   query.connectionParameters = 'postgresql://localhost/rosetta';
 }
 
@@ -558,37 +562,50 @@ var taskQueue = async.queue( function( task, taskCallback ) {
       var content = stringify( strings );
       var file = repository + '/' + repository + '-strings_' + targetLocale + '.json';
 
+      var stringKey;
+
       if ( content.length && content !== stringify( translatedStrings[ repository ] ) ) {
         var commitMessage = Date.now() + ' automated commit from rosetta for file ' + file;
 
         (function( file, commitMessage, repository ) {
-          commit( babel, file, content, commitMessage, BRANCH, function( err ) {
-            var stringKey;
-            var stringValue;
-
-            // commit failed
-            // TODO: figure out why github sometimes returns a 409 error and what we should do if it happens.
-            // One option is just to try committing again after a timeout.
-            if ( err ) {
-              winston.log( 'error', err + '. Error committing to file ' + file );
-              errorDetails += err + '. Error committing to file ' + file + '<br>';
-              for ( stringKey in repos[ repository ] ) {
-                stringValue = repos[ repository ][ stringKey ].value;
-                if ( !translatedStrings[ repository ] || !translatedStrings[ repository ][ stringKey ] || stringValue !== translatedStrings[ repository ][ stringKey ].value ) {
-                  errors.push( { stringKey: stringKey, stringValue: stringValue } );
-                }
+          var onCommitSuccess = function() {
+            winston.log( 'info', 'commit: "' + commitMessage + '" committed successfully' );
+            for ( stringKey in repos[ repository ] ) {
+              stringValue = repos[ repository ][ stringKey ].value;
+              if ( !translatedStrings[ repository ] || !translatedStrings[ repository ][ stringKey ] || stringValue !== translatedStrings[ repository ][ stringKey ].value ) {
+                successes.push( { stringKey: stringKey, stringValue: stringValue } );
               }
+            }
+          };
+
+          commit( babel, file, content, commitMessage, BRANCH, function( err ) {
+            // commit failed
+            // Github sometimes returns a 409 error and fails to commit, in this case we'll try again once
+            if ( err ) {
+              winston.log( 'error', err + '. Error committing to file ' + file + '. Trying again in 5 seconds...');
+              setTimeout( function() {
+                commit( babel, file, content, commitMessage, BRANCH, function( err ) {
+                  if ( err ) {
+                    errorDetails += err + '. Error committing to file ' + file + '<br>';
+                    winston.log( 'error', err + '. Error committing to file ' + file );
+                    for ( stringKey in repos[ repository ] ) {
+                      stringValue = repos[ repository ][ stringKey ].value;
+                      if ( !translatedStrings[ repository ] || !translatedStrings[ repository ][ stringKey ] || stringValue !== translatedStrings[ repository ][ stringKey ].value ) {
+                        errors.push( { stringKey: stringKey, stringValue: stringValue } );
+                      }
+                    }
+                  }
+                  else {
+                    onCommitSuccess();
+                  }
+                  finished();
+                } );
+              }, 5000 );
             }
 
             // commit succeeded
             else {
-              winston.log( 'info', 'commit: "' + commitMessage + '" committed successfully' );
-              for ( stringKey in repos[ repository ] ) {
-                stringValue = repos[ repository ][ stringKey ].value;
-                if ( !translatedStrings[ repository ] || !translatedStrings[ repository ][ stringKey ] || stringValue !== translatedStrings[ repository ][ stringKey ].value ) {
-                  successes.push( { stringKey: stringKey, stringValue: stringValue } );
-                }
-              }
+              onCommitSuccess();
             }
 
             finished();
