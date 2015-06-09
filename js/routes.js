@@ -32,7 +32,7 @@ var _ = require( 'underscore' );
 
 // constants
 var HTML_SIMS_DIRECTORY = '/data/web/htdocs/phetsims/sims/html/';
-var BRANCH = 'tests'; // branch of babel to commit to, should be changed to master when testing is finished
+var BRANCH = 'master'; // branch of babel to commit to, should be changed to master when testing is finished
 
 // postgres query API
 var query = require( 'pg-query' );
