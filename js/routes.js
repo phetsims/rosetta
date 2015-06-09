@@ -43,7 +43,7 @@ try {
     query.connectionParameters = config.pgConnectionString;
   }
   else {
-    query.connectionParameters = 'postgresql://localhost/rosetta';
+   // query.connectionParameters = 'postgresql://localhost/rosetta';
   }
 }
 
@@ -376,7 +376,6 @@ var taskQueue = async.queue( function( task, taskCallback ) {
   var babel = ghClient.repo( 'phetsims/babel' );
 
   var userId = ( req.session.userId ) ? req.session.userId : 0;
-  var save = req.param( 'save' ) === 'true';
   delete req.body.save; // delete this so it doesn't show up when iterating over submitted strings later
 
   // overwrite this function so we can get better error information
@@ -463,61 +462,37 @@ var taskQueue = async.queue( function( task, taskCallback ) {
 
       var stringValue = req.body[ string ];
 
-      // TODO: probably more efficient to batch these inserts into one command. Not sure if it matters too much though.
-      if ( save ) {
-        (function( key, stringValue ) {
-          if ( key && stringValue && stringValue.length > 0 ) {
-            query( 'INSERT INTO saved_translations VALUES ($1::bigint, $2::varchar(255), $3::varchar(255), $4::varchar(8), $5::varchar(255), $6::timestamp)',
-              [ userId, key, repo, targetLocale, stringValue, new Date() ], function( err, rows, result ) {
-                if ( !err ) {
-                  winston.log( 'info', 'inserted row: (' + userId + ', ' + key + ', ' + stringValue + ', ' + targetLocale + ')' );
-                }
-                else {
-                  winston.log( 'error', 'inserting row: (' + userId + ', ' + key + ', ' + stringValue + ', ' + targetLocale + ')' );
-                  winston.log( 'error', err );
-                }
-              } );
-          }
-        })( key, stringValue );
-      }
-
-      else {
 
         // check if the string is already in translatedStrings to get the history if it exists
-        var translatedString = ( translatedStrings[ repo ] ) ? translatedStrings[ repo ][ key ] : null;
-        var history = ( translatedString ) ? translatedString.history : null;
-        var oldValue = ( history && history.length ) ? history[ history.length - 1 ].newValue : '';
+      var translatedString = ( translatedStrings[ repo ] ) ? translatedStrings[ repo ][ key ] : null;
+      var history = ( translatedString ) ? translatedString.history : null;
+      var oldValue = ( history && history.length ) ? history[ history.length - 1 ].newValue : '';
 
-        // don't add the string if the value hasn't changed
-        if ( stringValue !== '' && oldValue !== stringValue ) {
-          var newHistoryEntry = {
-            userId: ( req.session.userId ) ? req.session.userId : 'phet-test',
-            timestamp: Date.now(),
-            oldValue: oldValue,
-            newValue: stringValue,
-            explanation: null // TODO
-          };
+      // don't add the string if the value hasn't changed
+      if ( stringValue !== '' && oldValue !== stringValue ) {
+        var newHistoryEntry = {
+          userId: ( req.session.userId ) ? req.session.userId : 'phet-test',
+          timestamp: Date.now(),
+          oldValue: oldValue,
+          newValue: stringValue,
+          explanation: null // TODO
+        };
 
-          if ( history ) {
-            history.push( newHistoryEntry );
-          }
-          else {
-            history = [ newHistoryEntry ];
-          }
-          repos[ repo ][ key ] = { value: stringValue, history: history };
+        if ( history ) {
+          history.push( newHistoryEntry );
         }
-        else if ( translatedString ) {
-          repos[ repo ][ key ] = translatedString;
+        else {
+          history = [ newHistoryEntry ];
         }
+        repos[ repo ][ key ] = { value: stringValue, history: history };
+      }
+      else if ( translatedString ) {
+        repos[ repo ][ key ] = translatedString;
       }
     }
   }
 
-  if ( save ) {
-    res.send( 'Your strings have been saved' );
-    taskCallback();
-    return;
-  }
+
 
   // keep track of strings that successfully committed and those that didn't
   var errors = [];
@@ -662,6 +637,52 @@ module.exports.submitStrings = function( req, res ) {
     winston.log( 'info', 'finished string submission for ' + simName + '_' + targetLocale );
   } );
 };
+module.exports.saveStrings = function( req, res ) {
+  var simName = req.param( 'simName' );
+  var targetLocale = req.param( 'targetLocale' );
+  var userId = ( req.session.userId ) ? req.session.userId : 0;
+
+
+  var repos = {};
+  for ( var string in req.body ) {
+    if ( req.body.hasOwnProperty( string ) ) {
+
+      // data submitted is in the form "[repository] [key]", for example "area-builder area-builder.name"
+      var repoAndKey = string.split( ' ' );
+      var repo = repoAndKey[ 0 ];
+      var key = repoAndKey[ 1 ];
+
+      if ( !repos[ repo ] ) {
+        repos[ repo ] = {};
+      }
+
+      var stringValue = req.body[ string ];
+
+      (function( key, stringValue ) {
+        if ( key && stringValue && stringValue.length > 0 ) {
+          query( 'INSERT INTO saved_translations VALUES ' +
+                 '($1::bigint, $2::varchar(255), $3::varchar(255), $4::varchar(8), $5::varchar(255), $6::timestamp)',
+            [ userId, key, repo, targetLocale, stringValue, new Date() ], function( err, rows, result ) {
+              if ( !err ) {
+                winston.log( 'info', 'inserted row: (' + userId + ', ' + key + ', ' + stringValue + ', ' + targetLocale + ')' );
+              }
+              else {
+                winston.log( 'error', 'inserting row: (' + userId + ', ' + key + ', ' + stringValue + ', ' + targetLocale + ')' );
+                winston.log( 'error', err );
+              }
+            } );
+        }
+      })( key, stringValue );
+    }
+  }
+
+
+  res.send( '<h2>Your strings have been saved<h2>' );
+  winston.log( 'info', 'finished string saving for ' + simName + '_' + targetLocale);
+
+
+
+}
 
 /**
  * Default route for when a page is not found in the translation utility.

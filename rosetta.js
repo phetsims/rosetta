@@ -109,6 +109,7 @@ app.get( '/translate/', routes.chooseSimulationAndLanguage );
 
 // route for translating a specific sim to a specific language
 app.get( '/translate/sim/:simName?/:targetLocale?', routes.translateSimulation );
+app.post( '/translate/sim/:simName?/:targetLocale?', routes.saveStrings );
 app.post( '/translate/sim/:simName?/:targetLocale?', routes.submitStrings );
 
 // route for extracting strings from a sim
