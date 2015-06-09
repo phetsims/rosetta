@@ -31,7 +31,7 @@ var _ = require( 'underscore' );
 /* jshint +W079 */
 
 // constants
-var HTML_SIMS_DIRECTORY = '/data/web/htdocs/phet/sims/html/';
+var HTML_SIMS_DIRECTORY = '/data/web/htdocs/phetsims/sims/html/';
 var BRANCH = 'tests'; // branch of babel to commit to, should be changed to master when testing is finished
 
 // postgres query API
@@ -567,6 +567,7 @@ var taskQueue = async.queue( function( task, taskCallback ) {
         'repos': JSON.stringify( dependencies ),
         'simName': simName,
         'version': version,
+        'locales': targetLocale,
         'serverName': 'simian'
       } );
 
