@@ -177,6 +177,7 @@ module.exports.chooseSimulationAndLanguage = function( req, res ) {
   res.render( 'translate-home.html', {
     title: 'PhET Translation Utility',
     simInfoArray: simInfoArray,
+    localeInfoArray: LocaleInfo.localeInfoArray(),
     username: username
   } );
 };

@@ -9,15 +9,14 @@
 /* jslint node: true */ 
 'use strict';
 
-// locale-to-language strings TODO: This is incomplete.
-var localeInfo = {
-  fr: 'French',
-  de: 'German',
-  es: 'Spanish',
-  es_MX: 'Spanish - Mexico',
-  zh_CN: 'Chinese - China',
-  zh_TW: 'Chinese - Taiwan'
+
+var localeInfo = require('../../chipper/js/data/localeinfo.js');
+
+
+module.exports.localeInfoArray = function(){
+  return localeInfo;
 };
+
 
 /**
  * Obtain a string that describes the language associated with the provided locale.  For example, if the caller
@@ -26,5 +25,5 @@ var localeInfo = {
  * @returns {String}
  */
 module.exports.localeToLanguageString = function( locale ) {
-  return localeInfo[ locale ];
+  return localeInfo[ locale ].name;
 };
