@@ -567,7 +567,7 @@ var taskQueue = async.queue( function( task, taskCallback ) {
         'repos': JSON.stringify( dependencies ),
         'simName': simName,
         'version': version,
-        'locales': targetLocale,
+        'locales': JSON.stringify( [ targetLocale ] ),
         'serverName': 'simian'
       } );
 
