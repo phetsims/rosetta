@@ -7,10 +7,10 @@
 'use strict';
 
 
-var testButton1 = document.getElementById( 'testButton1' );
-var saveButton1 = document.getElementById( 'saveButton1' );
-var testButton2 = document.getElementById( 'testButton2' );
-var saveButton2 = document.getElementById( 'saveButton2' );
+var testButtonTop = document.getElementById( 'testButtonTop' );
+var saveButtonTop = document.getElementById( 'saveButtonTop' );
+var testButtonBottom = document.getElementById( 'testButtonBottom' );
+var saveButtonBottom = document.getElementById( 'saveButtonBottom' );
 var simData = document.getElementById( 'simData' );
 
 
@@ -28,8 +28,8 @@ function testButtonEL() {
   var win = window.open( simUrl + '?' + 'strings=' + encodeURIComponent( JSON.stringify( stringsToReplace ) ), '_blank' );
   win.focus();
 }
-testButton1.addEventListener( 'click', testButtonEL );
-testButton2.addEventListener( 'click', testButtonEL );
+testButtonTop.addEventListener( 'click', testButtonEL );
+testButtonBottom.addEventListener( 'click', testButtonEL );
 
 
 
@@ -43,21 +43,31 @@ function saveButtonEL() {
 
   $.post( '/translate/sim/save/' + simData.getAttribute( 'data-sim-name' ) + '/' + simData.getAttribute( 'data-locale-name' ),strings );
 
-  saveButton1.style.backgroundColor = 'grey';
-  saveButton1.style.borderColor = 'black';
-  saveButton2.style.backgroundColor = 'grey';
-  saveButton2.style.borderColor = 'black';
+
+  saveButtonTop.style.backgroundColor = 'grey';
+  saveButtonTop.style.borderColor = 'black';
+  saveButtonTop.disabled = true;
+  saveButtonBottom.style.backgroundColor = 'grey';
+  saveButtonBottom.style.borderColor = 'black';
+  saveButtonBottom.disabled = true;
+  $('.savedSpan' ).attr( 'style' , 'visibility: visible');
+}
+saveButtonTop.addEventListener( 'click', saveButtonEL );
+saveButtonBottom.addEventListener( 'click', saveButtonEL );
+
+
+
+function restoreButton( button){
+  button.style.backgroundColor = '#2a326a';
+  button.style.borderColor = '#1A87B9';
+  button.disabled=false;
 
 }
-saveButton1.addEventListener( 'click', saveButtonEL );
-saveButton2.addEventListener( 'click', saveButtonEL );
-
-
 function inputEL(){
-  saveButton1.style.backgroundColor = '#2a326a';
-  saveButton1.style.borderColor = '#1A87B9';
-  saveButton2.style.backgroundColor = '#2a326a';
-  saveButton2.style.borderColor = '#1A87B9';
+  restoreButton(saveButtonTop);
+  restoreButton(saveButtonBottom);
+  $('.savedSpan' ).attr( 'style' , 'visibility: hidden');
+
 }
 var inputs = $('input' );
 inputs.each(function(index, item){

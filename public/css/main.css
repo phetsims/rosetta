@@ -127,6 +127,15 @@ h1 {
   margin-bottom: 5em;
 
 }
-#strings{
+#strings {
   margin-top: 5em;
+}
+
+.savedSpan{
+  font-size: 10px;
+  margin-left: 9em;
+  position: relative;
+  left: 7.3em;
+  bottom: .8em;
+  visibility: hidden;
 }
