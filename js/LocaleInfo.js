@@ -10,7 +10,7 @@
 'use strict';
 
 
-var localeInfo = require('../../chipper/js/data/localeinfo.js');
+var localeInfo = require('../../chipper/js/data/localeInfo.js');
 
 
 module.exports.localeInfoArray = function(){
