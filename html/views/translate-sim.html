@@ -1,8 +1,16 @@
 <div class="container">
   <h1>{{=it.title}}</h1>
 
+  <h4><a href="/translate/">Translate Another Simultaion Here</a></h4>
+
   <h5>{{=it.subtitle}}</h5>
 
+
+  <div class="top-btns">
+    <button type="button" class="btn translate-btn" id="testButton1">Test</button>
+    <button type="button" class="btn translate-btn" id="saveButton1" form="strings">Save</button>
+    <button type="submit" class="btn translate-btn" id="submitButton1" form="strings">Submit</button>
+  </div>
   <form name="form" id="strings" method="post">
     <h2>Sim Strings</h2>
     <table id="stringsTable" style="width:50%">
@@ -32,41 +40,18 @@
       {{~}}
     </table>
 
-    <input id="saveField" type="hidden" name="save" value="false">
   </form>
 
-  <button type="button" class="btn translate-btn" id="testButton">Test</button>
-  <button type="submit" class="btn translate-btn" id="submitButton" form="strings">Submit</button>
-  <button type="button" class="btn translate-btn" id="saveButton" form="strings">Save</button>
+  <div class="bottom-btns">
+    <button type="button" class="btn translate-btn" id="testButton2">Test</button>
+    <button type="button" class="btn translate-btn" id="saveButton2" form="strings">Save</button>
+    <button type="submit" class="btn translate-btn" id="submitButton2" form="strings">Submit</button>
+  </div>
 
   <!--data for sim url-->
-  <div id="simData" data-sim-url={{=it.simUrl}} data-sim-name={{=it.simName}} data-trusted-translator={{=it.trustedTranslator}}></div>
+  <div id="simData" data-sim-url={{=it.simUrl}} data-sim-name={{=it.simName}} data-locale-name={{=it.localeName}}
+       data-trusted-translator={{=it.trustedTranslator}}></div>
 
-  <script>
-    var testButton = document.getElementById( 'testButton' );
-    var submitButton = document.getElementById( 'submitButton' );
-    var saveButton = document.getElementById( 'saveButton' );
-    var simData = document.getElementById( 'simData' );
-
-    testButton.addEventListener( 'click', function() {
-      var simUrl = simData.getAttribute( 'data-sim-url' );
-      var stringPrefix = simData.getAttribute( 'data-sim-name' ).replace( /-/g, '_' ).toUpperCase();
-      var stringsToReplace = {};
-      var table = document.getElementById( 'stringsTable' );
-      for ( var i = 1, row; row = table.rows[ i ]; i++ ) {
-        var translation = row.cells[ 1 ].children[ 0 ].value;
-        if ( translation.length > 0 ) {
-          stringsToReplace[ stringPrefix + '/' + row.getAttribute( 'data-string-key' ) ] = translation;
-        }
-      }
-      var win = window.open( simUrl + '?' + 'strings=' + encodeURIComponent( JSON.stringify( stringsToReplace ) ), '_blank' );
-      win.focus();
-    } );
-
-   saveButton.addEventListener( 'click', function() {
-     document.form.save.value = true;
-     document.getElementById('strings').submit();
-   } );
-
-  </script>
+  <script type="text/javascript" src="/translate/js/translate-sim.js"></script>
 </div><!-- /.container -->
+

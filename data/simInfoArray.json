@@ -1,10 +1,5 @@
 [
   {
-    "simTitle": "Arithmetic",
-    "projectName": "arithmetic",
-    "testUrl": "http://www.colorado.edu/physics/phet/dev/html/arithmetic/1.0.0-dev.13/arithmetic_en.html"
-  },
-  {
     "simTitle": "Example Sim",
     "projectName": "example-sim",
     "testUrl": "http://www.colorado.edu/physics/phet/dev/html/example-sim/1.0.0-dev.5/example-sim_en.html"

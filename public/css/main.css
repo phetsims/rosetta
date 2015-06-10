@@ -59,7 +59,7 @@ body {
 
 .btn {
   background: #2a326a;
-  padding: 8px 13px;
+  padding: 5px 13px;
   color: #fff;
   font-size: 17px;
   border-radius: 4px;
@@ -75,18 +75,18 @@ body {
 .translate-btn {
   position: relative;
   float: left;
-  top: 20px;
+  margin-left: 5px;
 }
 
-#testButton {
+[class~=testButton] {
   left: 100px;
 }
 
-#submitButton {
+[class~=saveButton] {
   left: 200px;
 }
 
-#saveButton {
+[class~=submitButton] {
   left: 300px;
 }
 
@@ -113,4 +113,20 @@ h1 {
   margin: 0 auto;
   padding: 0px 15px;
   text-align: center;
+}
+
+.top-btns{
+  bottom:20px;
+  margin-left: 5em;
+}
+.bottom-btns{
+  position: relative;
+  top: 20px;
+  margin-left: 5em;
+
+  margin-bottom: 5em;
+
+}
+#strings{
+  margin-top: 5em;
 }

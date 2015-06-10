@@ -313,6 +313,7 @@ module.exports.translateSimulation = function( req, res ) {
             simStringsArray: simStringsArray,
             commonStringsArray: commonStringsArray,
             simName: simName,
+            localeName: targetLocale,
             simUrl: TranslatableSimInfo.getSimInfoByProjectName( simName ).testUrl,
             username: username,
             trustedTranslator: ( req.session.trustedTranslator ) ? req.session.trustedTranslator : false
@@ -660,6 +661,7 @@ module.exports.saveStrings = function( req, res ) {
 
       (function( key, stringValue ) {
         if ( key && stringValue && stringValue.length > 0 ) {
+          // TODO handle if key already exists, and overwrite rather than create.
           query( 'INSERT INTO saved_translations VALUES ' +
                  '($1::bigint, $2::varchar(255), $3::varchar(255), $4::varchar(8), $5::varchar(255), $6::timestamp)',
             [ userId, key, repo, targetLocale, stringValue, new Date() ], function( err, rows, result ) {
@@ -676,13 +678,9 @@ module.exports.saveStrings = function( req, res ) {
     }
   }
 
-
-  res.send( '<h2>Your strings have been saved<h2>' );
   winston.log( 'info', 'finished string saving for ' + simName + '_' + targetLocale);
 
-
-
-}
+};
 
 /**
  * Default route for when a page is not found in the translation utility.

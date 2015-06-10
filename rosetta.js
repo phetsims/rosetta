@@ -19,6 +19,7 @@ var winston = require( 'winston' );
 var bodyParser = require( 'body-parser' );
 var _ = require( 'underscore' );
 
+
 // constants
 var LISTEN_PORT = 16372;
 
@@ -109,7 +110,7 @@ app.get( '/translate/', routes.chooseSimulationAndLanguage );
 
 // route for translating a specific sim to a specific language
 app.get( '/translate/sim/:simName?/:targetLocale?', routes.translateSimulation );
-app.post( '/translate/sim/:simName?/:targetLocale?', routes.saveStrings );
+app.post( '/translate/sim/save/:simName?/:targetLocale?', routes.saveStrings );
 app.post( '/translate/sim/:simName?/:targetLocale?', routes.submitStrings );
 
 // route for extracting strings from a sim
