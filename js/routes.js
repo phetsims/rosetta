@@ -43,7 +43,7 @@ try {
     query.connectionParameters = config.pgConnectionString;
   }
   else {
-   // query.connectionParameters = 'postgresql://localhost/rosetta';
+    query.connectionParameters = 'postgresql://localhost/rosetta';
   }
 }
 
@@ -464,7 +464,7 @@ var taskQueue = async.queue( function( task, taskCallback ) {
       var stringValue = req.body[ string ];
 
 
-        // check if the string is already in translatedStrings to get the history if it exists
+      // check if the string is already in translatedStrings to get the history if it exists
       var translatedString = ( translatedStrings[ repo ] ) ? translatedStrings[ repo ][ key ] : null;
       var history = ( translatedString ) ? translatedString.history : null;
       var oldValue = ( history && history.length ) ? history[ history.length - 1 ].newValue : '';
@@ -492,7 +492,6 @@ var taskQueue = async.queue( function( task, taskCallback ) {
       }
     }
   }
-
 
 
   // keep track of strings that successfully committed and those that didn't
@@ -678,7 +677,7 @@ module.exports.saveStrings = function( req, res ) {
     }
   }
 
-  winston.log( 'info', 'finished string saving for ' + simName + '_' + targetLocale);
+  winston.log( 'info', 'finished string saving for ' + simName + '_' + targetLocale );
 
 };
 
