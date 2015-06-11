@@ -72,6 +72,9 @@ if ( parsedCommandLineOptions.hasOwnProperty( 'help' ) || parsedCommandLineOptio
 // Merge the default and supplied options.
 var options = _.extend( defaultOptions, parsedCommandLineOptions );
 
+winston.remove( winston.transports.Console );
+winston.add( winston.transports.Console, { 'timestamp': true } );
+
 if ( options.logFile ) {
   winston.add( winston.transports.File, { filename: options.logFile } );
 }

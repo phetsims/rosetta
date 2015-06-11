@@ -263,9 +263,11 @@ module.exports.translateSimulation = function( req, res ) {
           savedStrings[ extractedStrings[ i ].projectName ] = {};
         }
         var savedStringsQuery = 'SELECT * from saved_translations where user_id = $1 AND locale = $2 AND (' + repositories + ')';
+        winston.log( 'info', 'running query: ' + savedStringsQuery );
 
         // query postgres to see if there are any saved strings for this user
         query( savedStringsQuery, [ userId, targetLocale ], function( err, rows ) {
+          winston.log( 'info', 'query returned' );
           if ( err ) {
             winston.log( 'error', err );
           }
