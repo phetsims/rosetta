@@ -116,26 +116,25 @@ h1 {
 }
 
 .top-btns{
-  bottom:20px;
+  position: relative;
+  top: 10px;
   margin-left: 5em;
+  height: 32px;
 }
 .bottom-btns{
   position: relative;
   top: 20px;
   margin-left: 5em;
-
   margin-bottom: 5em;
 
 }
-#strings {
-  margin-top: 5em;
-}
 
 .savedSpan{
-  font-size: 10px;
-  margin-left: 9em;
+  font-size: 15px;
+  color: green;
   position: relative;
-  left: 7.3em;
-  bottom: .8em;
+  left: 5.4em;
+  bottom: .3em;
   visibility: hidden;
+  
 }

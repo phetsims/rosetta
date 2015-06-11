@@ -31,7 +31,8 @@ function testButtonEL() {
 testButtonTop.addEventListener( 'click', testButtonEL );
 testButtonBottom.addEventListener( 'click', testButtonEL );
 
-
+// Var to help only restore save button once from inputs
+var once = false;
 
 function saveButtonEL() {
 
@@ -43,7 +44,7 @@ function saveButtonEL() {
 
   $.post( '/translate/sim/save/' + simData.getAttribute( 'data-sim-name' ) + '/' + simData.getAttribute( 'data-locale-name' ),strings );
 
-
+// grey out both save buttons, add saved below
   saveButtonTop.style.backgroundColor = 'grey';
   saveButtonTop.style.borderColor = 'black';
   saveButtonTop.disabled = true;
@@ -51,6 +52,7 @@ function saveButtonEL() {
   saveButtonBottom.style.borderColor = 'black';
   saveButtonBottom.disabled = true;
   $('.savedSpan' ).attr( 'style' , 'visibility: visible');
+  once = false;
 }
 saveButtonTop.addEventListener( 'click', saveButtonEL );
 saveButtonBottom.addEventListener( 'click', saveButtonEL );
@@ -61,13 +63,21 @@ function restoreButton( button){
   button.style.backgroundColor = '#2a326a';
   button.style.borderColor = '#1A87B9';
   button.disabled=false;
-
+  $('#' + button.id).hover(function(){
+      $(this ).css({ background: '#6D77BD' });
+    },
+    function(){
+      $(this ).css({ background: '#2a326a' });
+    });
 }
 function inputEL(){
-  restoreButton(saveButtonTop);
-  restoreButton(saveButtonBottom);
-  $('.savedSpan' ).attr( 'style' , 'visibility: hidden');
+  if(!once) {
+    $( '.savedSpan' ).attr( 'style', 'visibility: hidden' );
+    restoreButton( saveButtonTop );
+    restoreButton( saveButtonBottom );
 
+    once = true;
+  }
 }
 var inputs = $('input' );
 inputs.each(function(index, item){
