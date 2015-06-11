@@ -43,7 +43,7 @@ try {
     query.connectionParameters = config.pgConnectionString;
   }
   else {
-   // query.connectionParameters = 'postgresql://localhost/rosetta';
+    query.connectionParameters = 'postgresql://localhost/rosetta';
   }
 }
 
@@ -203,6 +203,8 @@ module.exports.translateSimulation = function( req, res ) {
   var activeSimsPath = '/phetsims/chipper/master/data/active-sims';
   var userId = ( req.session.userId ) ? req.session.userId : 0;
 
+  winston.log( 'info', 'loading page for ' + simName + ' ' + targetLocale );
+
   // get the url of the live sim (from simInfoArray)
   var simUrl;
   for ( var i = 0; i < simInfoArray.length; i++ ) {
@@ -211,6 +213,8 @@ module.exports.translateSimulation = function( req, res ) {
       break;
     }
   }
+
+  winston.log( 'info', 'getting strings from ' + simUrl );
 
   // extract strings from the live sim's html file
   request( simUrl, function( error, response, body ) {
@@ -241,6 +245,8 @@ module.exports.translateSimulation = function( req, res ) {
        * repo, and one for the translated strings from babel - plus one more for the request to get the active sims list from chipper.
        */
       var finished = _.after( extractedStrings.length * 2 + 1, function() {
+        winston.log( 'info', 'finished called in translateSimulation' );
+
         var simStringsArray = [];
         var commonStringsArray = [];
 
@@ -257,12 +263,16 @@ module.exports.translateSimulation = function( req, res ) {
           savedStrings[ extractedStrings[ i ].projectName ] = {};
         }
         var savedStringsQuery = 'SELECT * from saved_translations where user_id = $1 AND locale = $2 AND (' + repositories + ')';
+        winston.log( 'info', 'running query: ' + savedStringsQuery );
 
         // query postgres to see if there are any saved strings for this user
         query( savedStringsQuery, [ userId, targetLocale ], function( err, rows ) {
+          winston.log( 'info', 'query returned' );
           if ( err ) {
             winston.log( 'error', err );
           }
+
+          winston.log( 'info', 'using ' + rows.length + ' saved strings' );
 
           // load saved strings from database to saveStrings object if there are any
           if ( rows && rows.length > 0 ) {
@@ -377,7 +387,6 @@ var taskQueue = async.queue( function( task, taskCallback ) {
   var babel = ghClient.repo( 'phetsims/babel' );
 
   var userId = ( req.session.userId ) ? req.session.userId : 0;
-  delete req.body.save; // delete this so it doesn't show up when iterating over submitted strings later
 
   // overwrite this function so we can get better error information
   babel.updateContents = function( path, message, content, sha, cbOrBranch, cb ) {
@@ -464,7 +473,7 @@ var taskQueue = async.queue( function( task, taskCallback ) {
       var stringValue = req.body[ string ];
 
 
-        // check if the string is already in translatedStrings to get the history if it exists
+      // check if the string is already in translatedStrings to get the history if it exists
       var translatedString = ( translatedStrings[ repo ] ) ? translatedStrings[ repo ][ key ] : null;
       var history = ( translatedString ) ? translatedString.history : null;
       var oldValue = ( history && history.length ) ? history[ history.length - 1 ].newValue : '';
@@ -492,7 +501,6 @@ var taskQueue = async.queue( function( task, taskCallback ) {
       }
     }
   }
-
 
 
   // keep track of strings that successfully committed and those that didn't
@@ -532,6 +540,10 @@ var taskQueue = async.queue( function( task, taskCallback ) {
       targetLocale: targetLocale
     } );
 
+    /*
+     * Try to notify the build server that a new translation has been published. If this succeeds, the
+     * new translation will appear on the website. This will fail when testing locally.
+     */
     try {
       var versions = fs.readdirSync( HTML_SIMS_DIRECTORY + simName ).sort();
       var version = versions[ versions.length - 1 ]; // most recent version
@@ -561,7 +573,7 @@ var taskQueue = async.queue( function( task, taskCallback ) {
       } );
     }
     catch( e ) {
-      winston.log( 'error', 'error notifying builder server ' + e );
+      winston.log( 'error', 'error notifying build server ' + e );
       taskCallback();
     }
   } );
@@ -638,11 +650,11 @@ module.exports.submitStrings = function( req, res ) {
     winston.log( 'info', 'finished string submission for ' + simName + '_' + targetLocale );
   } );
 };
+
 module.exports.saveStrings = function( req, res ) {
   var simName = req.param( 'simName' );
   var targetLocale = req.param( 'targetLocale' );
   var userId = ( req.session.userId ) ? req.session.userId : 0;
-
 
   var repos = {};
   for ( var string in req.body ) {
@@ -669,8 +681,11 @@ module.exports.saveStrings = function( req, res ) {
                 winston.log( 'info', 'inserted row: (' + userId + ', ' + key + ', ' + stringValue + ', ' + targetLocale + ')' );
               }
               else {
-                winston.log( 'error', 'inserting row: (' + userId + ', ' + key + ', ' + stringValue + ', ' + targetLocale + ')' );
-                winston.log( 'error', err );
+                // there is generally no need to log an error here since usually it just means the saved string already exists,
+                // and that the user is saving some new strings.
+
+                // winston.log( 'error', 'inserting row: (' + userId + ', ' + key + ', ' + stringValue + ', ' + targetLocale + ')' );
+                // winston.log( 'error', err );
               }
             } );
         }
@@ -678,8 +693,7 @@ module.exports.saveStrings = function( req, res ) {
     }
   }
 
-  winston.log( 'info', 'finished string saving for ' + simName + '_' + targetLocale);
-
+  winston.log( 'info', 'finished string saving for ' + simName + '_' + targetLocale );
 };
 
 /**
