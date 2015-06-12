@@ -502,7 +502,6 @@ var taskQueue = async.queue( function( task, taskCallback ) {
     }
   }
 
-
   // keep track of strings that successfully committed and those that didn't
   var errors = [];
   var successes = [];

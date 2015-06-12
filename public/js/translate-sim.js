@@ -1,18 +1,16 @@
 // Copyright 2002-2015, University of Colorado Boulder
 
 /**
- * @author Michael Kauzmann and Aaron Davis on 6/10/2015.
+ * Created 6/10/15
+ * @author Michael Kauzmann
+ * @author Aaron Davis
  */
-
-'use strict';
-
 
 var testButtonTop = document.getElementById( 'testButtonTop' );
 var saveButtonTop = document.getElementById( 'saveButtonTop' );
 var testButtonBottom = document.getElementById( 'testButtonBottom' );
 var saveButtonBottom = document.getElementById( 'saveButtonBottom' );
 var simData = document.getElementById( 'simData' );
-
 
 function testButtonEL() {
   var simUrl = simData.getAttribute( 'data-sim-url' );
@@ -36,42 +34,45 @@ var once = false;
 
 function saveButtonEL() {
 
-  var inputs = $('input' );
+  var inputs = $( 'input' );
   var strings = {};
-  inputs.each(function(index, item){
-    strings[item.name] = item.value;
-  });
+  inputs.each( function( index, item ) {
+    strings[ item.name ] = item.value;
+  } );
 
-  $.post( '/translate/sim/save/' + simData.getAttribute( 'data-sim-name' ) + '/' + simData.getAttribute( 'data-locale-name' ),strings );
+  $.post( '/translate/sim/save/' + simData.getAttribute( 'data-sim-name' ) + '/' + simData.getAttribute( 'data-locale-name' ), strings );
 
-// grey out both save buttons, add saved below
+  // grey out both save buttons, add saved below
   saveButtonTop.style.backgroundColor = 'grey';
   saveButtonTop.style.borderColor = 'black';
   saveButtonTop.disabled = true;
   saveButtonBottom.style.backgroundColor = 'grey';
   saveButtonBottom.style.borderColor = 'black';
   saveButtonBottom.disabled = true;
-  $('.savedSpan' ).attr( 'style' , 'visibility: visible');
+  $( '.savedSpan' ).attr( 'style', 'visibility: visible' );
   once = false;
 }
 saveButtonTop.addEventListener( 'click', saveButtonEL );
 saveButtonBottom.addEventListener( 'click', saveButtonEL );
 
-
-
-function restoreButton( button){
+function restoreButton( button ) {
   button.style.backgroundColor = '#2a326a';
   button.style.borderColor = '#1A87B9';
-  button.disabled=false;
-  $('#' + button.id).hover(function(){
-      $(this ).css({ background: '#6D77BD' });
+  button.disabled = false;
+  $( '#' + button.id ).hover( function() {
+      $( this ).css( {
+        background: '#6D77BD'
+      } );
     },
-    function(){
-      $(this ).css({ background: '#2a326a' });
-    });
+    function() {
+      $( this ).css( {
+        background: '#2a326a'
+      } );
+    } );
 }
-function inputEL(){
-  if(!once) {
+
+function inputEL() {
+  if ( !once ) {
     $( '.savedSpan' ).attr( 'style', 'visibility: hidden' );
     restoreButton( saveButtonTop );
     restoreButton( saveButtonBottom );
@@ -79,7 +80,8 @@ function inputEL(){
     once = true;
   }
 }
-var inputs = $('input' );
-inputs.each(function(index, item){
-  item.addEventListener('keydown', inputEL);
-});
+
+var inputs = $( 'input' );
+inputs.each( function( index, item ) {
+  item.addEventListener( 'keydown', inputEL );
+} );
