@@ -99,6 +99,11 @@ module.exports.checkForValidSession = function( req, res, next ) {
     winston.log( 'info', 'req.url = ' + req.url );
     sendUserToLoginPage( res, req.get( 'host' ), req.url );
   }
+  // if the session already has trustedTranslator defined, and it is true, then the user must be a trusted
+  // translator who has already logged in
+  else if ( req.session.trustedTranslator ) {
+    next();
+  }
   else {
     // session cookie was present, attempt to obtain session information
     var options = {
