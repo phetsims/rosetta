@@ -40,7 +40,9 @@ function saveButtonEL() {
     strings[ item.name ] = item.value;
   } );
 
-  $.post( '/translate/sim/save/' + simData.getAttribute( 'data-sim-name' ) + '/' + simData.getAttribute( 'data-locale-name' ), strings );
+  $.post( '/translate/sim/save/' + simData.getAttribute( 'data-sim-name' ) + '/' + simData.getAttribute( 'data-locale-name' ), strings, function( data ) {
+    console.log( data );
+  } );
 
   // grey out both save buttons, add saved below
   saveButtonTop.style.backgroundColor = 'grey';
