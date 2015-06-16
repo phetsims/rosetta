@@ -656,7 +656,7 @@ module.exports.saveStrings = function( req, res ) {
 
   console.log( req.body );
 
-  var finished = _.after( req.body.length, function() {
+  var finished = _.after( Object.keys( req.body ).length, function() {
     winston.log( 'info', 'finished string saving for ' + simName + '_' + targetLocale );
     res.json( {
       'success': true
