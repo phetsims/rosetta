@@ -695,8 +695,12 @@ module.exports.saveStrings = function( req, res ) {
               }
               finished();
             } );
+        } else {
+          finished();
         }
       } )( key, stringValue );
+    } else {
+      finished();
     }
   }
 };
