@@ -41,18 +41,24 @@ function saveButtonEL() {
   } );
 
   $.post( '/translate/sim/save/' + simData.getAttribute( 'data-sim-name' ) + '/' + simData.getAttribute( 'data-locale-name' ), strings, function( data ) {
-    console.log( data );
+    if ( data.success ) {
+      // grey out both save buttons, add saved below
+      saveButtonTop.style.backgroundColor = 'grey';
+      saveButtonTop.style.borderColor = 'black';
+      saveButtonTop.disabled = true;
+      saveButtonBottom.style.backgroundColor = 'grey';
+      saveButtonBottom.style.borderColor = 'black';
+      saveButtonBottom.disabled = true;
+      $( '.savedSpan' ).attr( 'style', 'visibility: visible; color: green;' );
+      $( '.savedSpan' ).html( '<br><br>Saved' );
+      once = false;
+    } else {
+      $( '.savedSpan' ).attr( 'style', 'visibility: visible; color: red;' );
+      $( '.savedSpan' ).html( '<br><br>Error Saving' );
+    }
   } );
 
-  // grey out both save buttons, add saved below
-  saveButtonTop.style.backgroundColor = 'grey';
-  saveButtonTop.style.borderColor = 'black';
-  saveButtonTop.disabled = true;
-  saveButtonBottom.style.backgroundColor = 'grey';
-  saveButtonBottom.style.borderColor = 'black';
-  saveButtonBottom.disabled = true;
-  $( '.savedSpan' ).attr( 'style', 'visibility: visible' );
-  once = false;
+
 }
 saveButtonTop.addEventListener( 'click', saveButtonEL );
 saveButtonBottom.addEventListener( 'click', saveButtonEL );
