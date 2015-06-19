@@ -274,10 +274,9 @@ module.exports.translateSimulation = function( req, res ) {
             winston.log( 'error', err );
           }
 
-          winston.log( 'info', 'using ' + rows.length + ' saved strings' );
-
           // load saved strings from database to saveStrings object if there are any
           if ( rows && rows.length > 0 ) {
+            winston.log( 'info', 'using ' + rows.length + ' saved strings' );
             for ( i = 0; i < rows.length; i++ ) {
               var row = rows[ i ];
               savedStrings[ row.repository ][ row.stringkey ] = row.stringvalue;

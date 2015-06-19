@@ -136,5 +136,13 @@ h1 {
   left: 5.4em;
   bottom: .3em;
   visibility: hidden;
-  
+}
+
+.saving-gif {
+  display: none;
+  padding-left: 20px;
+}
+
+.saving-gif img {
+  height: 30px;
 }

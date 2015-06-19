@@ -41,6 +41,8 @@ function saveButtonEL() {
   } );
 
   $.post( '/translate/sim/save/' + simData.getAttribute( 'data-sim-name' ) + '/' + simData.getAttribute( 'data-locale-name' ), strings, function( data ) {
+    $('.saving-gif' ).hide();
+
     if ( data.success ) {
       // grey out both save buttons, add saved below
       saveButtonTop.style.backgroundColor = 'grey';
@@ -57,7 +59,7 @@ function saveButtonEL() {
       $( '.savedSpan' ).html( '<br><br>Error Saving' );
     }
   } );
-
+  $('.saving-gif' ).show();
 
 }
 saveButtonTop.addEventListener( 'click', saveButtonEL );
