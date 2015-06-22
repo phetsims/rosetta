@@ -539,10 +539,8 @@ var taskQueue = async.queue( function( task, taskCallback ) {
     try {
       var versions = fs.readdirSync( HTML_SIMS_DIRECTORY + simName ).sort();
       var version = versions[ versions.length - 1 ]; // most recent version
-      winston.log( 'info', versions );
       winston.log( 'info', 'detecting latest version: ' + version );
       var dependencies = require( HTML_SIMS_DIRECTORY + simName + '/' + version + '/dependencies.json' );
-      winston.log( 'info', dependencies );
 
       var queryString = querystring.stringify( {
         'repos': JSON.stringify( dependencies ),
