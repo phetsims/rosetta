@@ -32,16 +32,18 @@ testButtonBottom.addEventListener( 'click', testButtonEL );
 // Var to help only restore save button once from inputs
 var once = false;
 
+var inputs = $( 'input' );
+var savedSpans = $( '.savedSpan' );
+
 function saveButtonEL() {
 
-  var inputs = $( 'input' );
   var strings = {};
   inputs.each( function( index, item ) {
     strings[ item.name ] = item.value;
   } );
 
   $.post( '/translate/sim/save/' + simData.getAttribute( 'data-sim-name' ) + '/' + simData.getAttribute( 'data-locale-name' ), strings, function( data ) {
-    $('.saving-gif' ).hide();
+    $( '.saving-gif' ).hide();
 
     if ( data.success ) {
       // grey out both save buttons, add saved below
@@ -51,17 +53,18 @@ function saveButtonEL() {
       saveButtonBottom.style.backgroundColor = 'grey';
       saveButtonBottom.style.borderColor = 'black';
       saveButtonBottom.disabled = true;
-      $( '.savedSpan' ).attr( 'style', 'visibility: visible; color: green;' );
-      $( '.savedSpan' ).html( '<br><br>Saved' );
+      savedSpans.attr( 'style', 'visibility: visible; color: green;' );
+      savedSpans.html( '<br><br>Saved' );
       once = false;
-    } else {
-      $( '.savedSpan' ).attr( 'style', 'visibility: visible; color: red;' );
-      $( '.savedSpan' ).html( '<br><br>Error Saving' );
+    }
+    else {
+      savedSpans.attr( 'style', 'visibility: visible; color: red;' );
+      savedSpans.html( '<br><br>Error Saving' );
     }
   } );
-  $('.saving-gif' ).show();
-
+  $( '.saving-gif' ).show();
 }
+
 saveButtonTop.addEventListener( 'click', saveButtonEL );
 saveButtonBottom.addEventListener( 'click', saveButtonEL );
 
@@ -91,7 +94,10 @@ function inputEL() {
   }
 }
 
-var inputs = $( 'input' );
 inputs.each( function( index, item ) {
   item.addEventListener( 'keydown', inputEL );
 } );
+
+if ( simData.getAttribute( 'data-direction' ) === 'rtl' ) {
+  inputs.attr( 'dir', 'rtl' );
+}

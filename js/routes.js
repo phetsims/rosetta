@@ -321,6 +321,8 @@ module.exports.translateSimulation = function( req, res ) {
           // Pull the username from the cookie
           var username = req.cookies[ 'sign-in-panel.sign-in-form.username' ] || 'not logged in';
 
+          var locale = LocaleInfo.localeInfoArray()[ targetLocale ];
+
           // Assemble the data that will be supplied to the template.
           var templateData = {
             title: "PhET Translation Utility",
@@ -330,6 +332,7 @@ module.exports.translateSimulation = function( req, res ) {
             commonStringsArray: commonStringsArray,
             simName: simName,
             localeName: targetLocale,
+            direction: locale ? locale.direction : 'ltr',
             simUrl: TranslatableSimInfo.getSimInfoByProjectName( simName ).testUrl,
             username: username,
             trustedTranslator: ( req.session.trustedTranslator ) ? req.session.trustedTranslator : false

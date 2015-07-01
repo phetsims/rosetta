@@ -6,14 +6,14 @@
  * @author John Blanco
  */
 
-/* jslint node: true */ 
+/* jslint node: true */
 'use strict';
 
 
-var localeInfo = require('../../chipper/js/data/localeInfo.js');
+var localeInfo = require( '../../chipper/js/data/localeInfo.js' );
 
 
-module.exports.localeInfoArray = function(){
+module.exports.localeInfoArray = function() {
   return localeInfo;
 };
 
