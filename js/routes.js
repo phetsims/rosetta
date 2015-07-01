@@ -41,13 +41,14 @@ try {
   var config = require( '../config.json' );
   if ( config.pgConnectionString ) {
     query.connectionParameters = config.pgConnectionString;
-  } else {
+  }
+  else {
     query.connectionParameters = 'postgresql://localhost/rosetta';
   }
 }
 
 // localhost configuration
-catch ( e ) {
+catch( e ) {
   console.log( 'config.json not found: using localhost postgres configuration' );
   query.connectionParameters = 'postgresql://localhost/rosetta';
 }
@@ -106,7 +107,8 @@ module.exports.checkForValidSession = function( req, res, next ) {
   // translator who has already logged in
   else if ( req.session.trustedTranslator ) {
     next();
-  } else {
+  }
+  else {
     // session cookie was present, attempt to obtain session information
     var options = {
       host: req.get( 'host' ),
@@ -139,14 +141,16 @@ module.exports.checkForValidSession = function( req, res, next ) {
               errorDetails: '',
               timestamp: new Date().getTime()
             } );
-          } else {
+          }
+          else {
             req.session.teamMember = userData.teamMember;
             req.session.trustedTranslator = userData.trustedTranslator;
             req.session.userId = userData.userId;
             req.session.username = userData.username;
             next(); // send to next route
           }
-        } else {
+        }
+        else {
           // user is not logged in, send them to the login page
           sendUserToLoginPage( res, req.get( 'host' ), req.url );
         }
@@ -204,7 +208,7 @@ module.exports.translateSimulation = function( req, res ) {
   var targetLocale = req.param( 'targetLocale' );
   var rawGithub = 'https://raw.githubusercontent.com';
   var activeSimsPath = '/phetsims/chipper/master/data/active-sims';
-  var userId = ( req.session.userId ) ? req.session.userId : 0;
+  var userId = ( req.session.userId ) ? req.session.userId : 0; // use an id of 0 for localhost testing
 
   winston.log( 'info', 'loading page for ' + simName + ' ' + targetLocale );
 
@@ -229,7 +233,8 @@ module.exports.translateSimulation = function( req, res ) {
       request( rawGithub + activeSimsPath, function( error, response, body ) {
         if ( !error && response.statusCode === 200 ) {
           sims = body.toString().split( '\n' );
-        } else {
+        }
+        else {
           winston.log( 'error', error );
         }
         finished();
@@ -304,7 +309,8 @@ module.exports.translateSimulation = function( req, res ) {
               if ( savedStrings[ project.projectName ][ key ] ) {
                 winston.log( 'info', 'using saved string ' + key + ': ' + savedStrings[ project.projectName ][ key ] );
                 stringRenderInfo.value = escapeHTML( savedStrings[ project.projectName ][ key ] );
-              } else {
+              }
+              else {
                 stringRenderInfo.value = translatedStrings[ project.projectName ][ key ] ? escapeHTML( translatedStrings[ project.projectName ][ key ].value ) : '';
               }
 
@@ -336,7 +342,7 @@ module.exports.translateSimulation = function( req, res ) {
 
       // send requests to github for the common code English strings
       for ( i = 0; i < extractedStrings.length; i++ ) {
-        ( function( i ) {
+        (function( i ) {
           var projectName = extractedStrings[ i ].projectName;
           var stringsFilePath = rawGithub + '/phetsims/' + projectName + '/master/' + projectName + '-strings_en.json';
           var translatedStringsPath = rawGithub + '/phetsims/babel/' + BRANCH + '/' + projectName + '/' + projectName + '-strings_' + targetLocale + '.json';
@@ -344,9 +350,10 @@ module.exports.translateSimulation = function( req, res ) {
           request( stringsFilePath, function( error, response, body ) {
             if ( !error && response.statusCode === 200 ) {
               englishStrings[ projectName ] = JSON.parse( body );
-            } else {
+            }
+            else {
               winston.log( 'error', 'request for english strings for project ' + projectName + ' failed. Response code: ' +
-                response.statusCode + '. URL: ' + stringsFilePath + '. Error: ' + error );
+                                    response.statusCode + '. URL: ' + stringsFilePath + '. Error: ' + error );
             }
             finished();
           } );
@@ -354,16 +361,18 @@ module.exports.translateSimulation = function( req, res ) {
           request( translatedStringsPath, function( error, response, body ) {
             if ( !error && response.statusCode === 200 ) {
               translatedStrings[ projectName ] = JSON.parse( body );
-            } else {
+            }
+            else {
               winston.log( 'error', 'request for translated strings for project ' + projectName + ' failed. Response code: ' +
-                response.statusCode + '. URL: ' + translatedStringsPath + '. Error: ' + error );
+                                    response.statusCode + '. URL: ' + translatedStringsPath + '. Error: ' + error );
               translatedStrings[ projectName ] = {}; // add an empty object with the project name key so key lookups don't fail later on
             }
             finished();
           } );
-        } )( i );
+        })( i );
       }
-    } else {
+    }
+    else {
       winston.log( 'error', error );
       res.send( 'Error: Sim data not found' );
     }
@@ -384,64 +393,6 @@ var taskQueue = async.queue( function( task, taskCallback ) {
   var babel = ghClient.repo( 'phetsims/babel' );
 
   var userId = ( req.session.userId ) ? req.session.userId : 0;
-
-  // overwrite this function so we can get better error information
-  babel.updateContents = function( path, message, content, sha, cbOrBranch, cb ) {
-    if ( ( cb === null ) && cbOrBranch ) {
-      cb = cbOrBranch;
-      cbOrBranch = 'master';
-    }
-    return this.client.put( "/repos/" + this.name + "/contents/" + path, {
-      branch: cbOrBranch,
-      message: message,
-      content: new Buffer( content ).toString( 'base64' ),
-      sha: sha
-    }, function( err, s, b, h ) {
-      if ( err ) {
-        return cb( err );
-      }
-      if ( s === 409 ) {
-        return cb( new Error( "409 error from github: the git repository is empty or unavailable. This typically means it is being created still." ) );
-      } else if ( s !== 200 ) {
-        return cb( new Error( "Repo updateContents error. Status code = " + s ) );
-      } else {
-        return cb( null, b, h );
-      }
-    } );
-  };
-
-  // overwrite this function so we can get better error information
-  babel.createContents = function( path, message, content, cbOrBranchOrOptions, cb ) {
-    var param;
-    content = new Buffer( content ).toString( 'base64' );
-    if ( ( cb === null ) && cbOrBranchOrOptions ) {
-      cb = cbOrBranchOrOptions;
-      cbOrBranchOrOptions = 'master';
-    }
-    if ( typeof cbOrBranchOrOptions === 'string' ) {
-      param = {
-        branch: cbOrBranchOrOptions,
-        message: message,
-        content: content
-      };
-    } else if ( typeof cbOrBranchOrOptions === 'hash' ) {
-      param = cbOrBranchOrOptions;
-      /* jshint -W069 */
-      param[ 'message' ] = message;
-      param[ 'content' ] = content;
-      /* jshint -W069 */
-    }
-    return this.client.put( "/repos/" + this.name + "/contents/" + path, param, function( err, s, b, h ) {
-      if ( err ) {
-        return cb( err );
-      }
-      if ( s !== 201 ) {
-        return cb( new Error( "Repo createContents error s = " + s ) );
-      } else {
-        return cb( null, b, h );
-      }
-    } );
-  };
 
   /*
    * Repos will contain an object whose keys are repository names and whose values are of the same form
@@ -483,14 +434,16 @@ var taskQueue = async.queue( function( task, taskCallback ) {
 
         if ( history ) {
           history.push( newHistoryEntry );
-        } else {
+        }
+        else {
           history = [ newHistoryEntry ];
         }
         repos[ repo ][ key ] = {
           value: stringValue,
           history: history
         };
-      } else if ( translatedString ) {
+      }
+      else if ( translatedString ) {
         repos[ repo ][ key ] = translatedString;
       }
     }
@@ -515,7 +468,8 @@ var taskQueue = async.queue( function( task, taskCallback ) {
     query( deleteQuery, [ userId, targetLocale ], function( err, rows ) {
       if ( err ) {
         winston.log( 'error', err );
-      } else {
+      }
+      else {
         winston.log( 'info', 'deleted saved strings for translation with user_id = ' + userId + ' locale = ' + targetLocale + ' ' + repositoriesString );
       }
     } );
@@ -555,12 +509,14 @@ var taskQueue = async.queue( function( task, taskCallback ) {
       request( url, function( error, response, body ) {
         if ( !error && response.statusCode === 200 ) {
           winston.log( 'info', 'sending build server request to: ' + url );
-        } else {
+        }
+        else {
           winston.log( 'info', 'error: deploy failed' );
         }
         taskCallback();
       } );
-    } catch ( e ) {
+    }
+    catch( e ) {
       winston.log( 'error', 'error notifying build server ' + e );
       taskCallback();
     }
@@ -576,7 +532,7 @@ var taskQueue = async.queue( function( task, taskCallback ) {
       if ( content.length && content !== stringify( translatedStrings[ repository ] ) ) {
         var commitMessage = Date.now() + ' automated commit from rosetta for file ' + file;
 
-        ( function( file, commitMessage, repository ) {
+        (function( file, commitMessage, repository, content ) {
           var onCommitSuccess = function() {
             winston.log( 'info', 'commit: "' + commitMessage + '" committed successfully' );
             for ( var stringKey in repos[ repository ] ) {
@@ -588,6 +544,7 @@ var taskQueue = async.queue( function( task, taskCallback ) {
                 } );
               }
             }
+            finished();
           };
 
           commit( babel, file, content, commitMessage, BRANCH, function( err ) {
@@ -609,10 +566,11 @@ var taskQueue = async.queue( function( task, taskCallback ) {
                         } );
                       }
                     }
-                  } else {
+                    finished();
+                  }
+                  else {
                     onCommitSuccess();
                   }
-                  finished();
                 } );
               }, 5000 );
             }
@@ -622,10 +580,10 @@ var taskQueue = async.queue( function( task, taskCallback ) {
               onCommitSuccess();
             }
 
-            finished();
           } );
-        } )( file, commitMessage, repository );
-      } else {
+        })( file, commitMessage, repository, content );
+      }
+      else {
         winston.log( 'info', 'no commit attempted for ' + file + ' because no changes were made.' );
         finished();
       }
@@ -676,10 +634,10 @@ module.exports.saveStrings = function( req, res ) {
       var stringValue = req.body[ string ];
       var ts = new Date();
 
-      ( function( key, stringValue ) {
+      (function( key, stringValue ) {
         if ( key && stringValue && stringValue.length > 0 ) {
           query( 'SELECT upsert_saved_translations' +
-            '($1::bigint, $2::varchar(255), $3::varchar(255), $4::varchar(8), $5::varchar(255), $6::timestamp)', [ userId, key, repo, targetLocale, stringValue, ts ],
+                 '($1::bigint, $2::varchar(255), $3::varchar(255), $4::varchar(8), $5::varchar(255), $6::timestamp)', [ userId, key, repo, targetLocale, stringValue, ts ],
             function( err, rows, result ) {
               if ( err ) {
                 winston.log( 'error', 'inserting row: (' + userId + ', ' + key + ', ' + stringValue + ', ' + targetLocale + ')' );
@@ -688,11 +646,13 @@ module.exports.saveStrings = function( req, res ) {
               }
               finished();
             } );
-        } else {
+        }
+        else {
           finished();
         }
-      } )( key, stringValue );
-    } else {
+      })( key, stringValue );
+    }
+    else {
       finished();
     }
   }
