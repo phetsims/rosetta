@@ -100,4 +100,5 @@ inputs.each( function( index, item ) {
 
 if ( simData.getAttribute( 'data-direction' ) === 'rtl' ) {
   inputs.attr( 'dir', 'rtl' );
+  inputs.css( 'text-align', 'right' );
 }
