@@ -15,10 +15,16 @@
   }
 </style>
 
+<script type="text/javascript">
+  $( document ).ready( function() {
+    $( 'td[dir=rtl]' ).css( 'text-align', 'right' );
+  } );
+</script>
+
 <div class="container">
   <h2>Translation submitted for {{=it.simName}}_{{=it.targetLocale}}</h2>
 
-  <p>You will see your translation appear on the website within half an hour.<p>
+  <p>You will see your translation appear on the website within half an hour.</p>
 
   <h4><a href="/translate/">Translate Another Simulation</a></h4>
 
@@ -44,7 +50,7 @@
       <td>
         {{=value.stringKey}}
       </td>
-      <td>
+      <td dir={{=it.direction}}>
         {{=value.stringValue}}
       </td>
     </tr>
@@ -64,7 +70,7 @@
       <td>
         {{=value.stringKey}}
       </td>
-      <td>
+      <td dir={{=it.direction}}>
         {{=value.stringValue}}
       </td>
     </tr>

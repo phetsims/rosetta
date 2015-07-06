@@ -327,7 +327,7 @@ module.exports.translateSimulation = function( req, res ) {
           var templateData = {
             title: "PhET Translation Utility",
             subtitle: "Please enter a translation for each English string:",
-            destinationLanguage: LocaleInfo.localeToLanguageString( targetLocale ),
+            destinationLanguage: locale ? locale.name : 'Non existent locale',
             simStringsArray: simStringsArray,
             commonStringsArray: commonStringsArray,
             simName: simName,
@@ -477,6 +477,8 @@ var taskQueue = async.queue( function( task, taskCallback ) {
       }
     } );
 
+    var locale = LocaleInfo.localeInfoArray()[ targetLocale ];
+
     res.render( 'translation-submit.html', {
       title: 'Translation submitted',
       strings: successes,
@@ -486,7 +488,8 @@ var taskQueue = async.queue( function( task, taskCallback ) {
       errorDetails: errorDetails,
       timestamp: new Date().getTime(),
       simName: simName,
-      targetLocale: targetLocale
+      targetLocale: targetLocale,
+      direction: locale ? locale.direction : 'ltr'
     } );
 
     /*
