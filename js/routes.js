@@ -426,7 +426,7 @@ var taskQueue = async.queue( function( task, taskCallback ) {
       var oldValue = ( history && history.length ) ? history[ history.length - 1 ].newValue : '';
 
       // don't add the string if the value hasn't changed
-      if ( stringValue !== '' && oldValue !== stringValue ) {
+      if ( oldValue !== stringValue ) {
         var newHistoryEntry = {
           userId: ( req.session.userId ) ? req.session.userId : 'phet-test',
           timestamp: Date.now(),
