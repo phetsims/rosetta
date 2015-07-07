@@ -11,6 +11,7 @@ var saveButtonTop = document.getElementById( 'saveButtonTop' );
 var testButtonBottom = document.getElementById( 'testButtonBottom' );
 var saveButtonBottom = document.getElementById( 'saveButtonBottom' );
 var simData = document.getElementById( 'simData' );
+var rtl = simData.getAttribute( 'data-direction' ) === 'rtl';
 
 function testButtonEL() {
   var simUrl = simData.getAttribute( 'data-sim-url' );
@@ -20,6 +21,10 @@ function testButtonEL() {
   for ( var i = 1, row; row = table.rows[ i ]; i++ ) {
     var translation = row.cells[ 1 ].children[ 0 ].value;
     if ( translation.length > 0 ) {
+      // add rtl embedding markers for rtl strings
+      if ( rtl ) {
+        translation = '%E2%80%AB' + translation + '%E2%80%AC';
+      }
       stringsToReplace[ stringPrefix + '/' + row.getAttribute( 'data-string-key' ) ] = translation;
     }
   }
@@ -98,7 +103,7 @@ inputs.each( function( index, item ) {
   item.addEventListener( 'keydown', inputEL );
 } );
 
-if ( simData.getAttribute( 'data-direction' ) === 'rtl' ) {
+if ( rtl ) {
   inputs.attr( 'dir', 'rtl' );
   inputs.css( 'text-align', 'right' );
 }
