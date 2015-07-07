@@ -419,7 +419,6 @@ var taskQueue = async.queue( function( task, taskCallback ) {
 
       var stringValue = req.body[ string ];
 
-
       // check if the string is already in translatedStrings to get the history if it exists
       var translatedString = ( translatedStrings[ repo ] ) ? translatedStrings[ repo ][ key ] : null;
       var history = ( translatedString ) ? translatedString.history : null;
@@ -533,6 +532,10 @@ var taskQueue = async.queue( function( task, taskCallback ) {
     if ( repos.hasOwnProperty( repository ) ) {
       var strings = repos[ repository ];
       var content = stringify( strings );
+
+      // fix newlines that have been changed automatically by stringify
+      content = content.replace( /\\\\n/g, '\\n' );
+
       var file = repository + '/' + repository + '-strings_' + targetLocale + '.json';
 
       if ( content.length && content !== stringify( translatedStrings[ repository ] ) ) {
