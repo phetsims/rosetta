@@ -13,5 +13,10 @@
     "simTitle": "Molecule Shapes",
     "projectName": "molecule-shapes",
     "testUrl": "http://www.colorado.edu/physics/phet/dev/html/molecule-shapes/1.0.0-dev.15/molecule-shapes_en.html"
+  },
+  {
+    "simTitle": "Chains",
+    "projectName": "chains",
+    "testUrl": "http://www.colorado.edu/physics/phet/dev/html/chains/1.0.0-dev.1/chains_en.html"
   }
 ]

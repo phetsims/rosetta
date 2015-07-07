@@ -28,7 +28,10 @@ function testButtonEL() {
       stringsToReplace[ stringPrefix + '/' + row.getAttribute( 'data-string-key' ) ] = translation;
     }
   }
-  var win = window.open( simUrl + '?' + 'strings=' + encodeURIComponent( JSON.stringify( stringsToReplace ) ), '_blank' );
+  var encodedStrings = encodeURIComponent( JSON.stringify( stringsToReplace ) );
+  encodedStrings = encodedStrings.replace( '%5C%5Cn', '%5Cn' ); // put back newlines
+
+  var win = window.open( simUrl + '?' + 'strings=' + encodedStrings, '_blank' );
   win.focus();
 }
 testButtonTop.addEventListener( 'click', testButtonEL );
