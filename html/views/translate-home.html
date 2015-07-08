@@ -17,12 +17,9 @@
 
     <h2>Select Target Language</h2>
     <select id="localeSelector" class="selector">
-      {{ for(var prop in it.localeInfoArray) { }}
-
-      <option value="{{=prop}}">{{=it.localeInfoArray[prop].name}} ({{=prop}})</option>
-      {{ } }}
-
-
+      {{~it.localeInfoArray :value:index}}
+      <option value="{{=value.code}}">{{=value.name}} ({{=value.code}})</option>
+      {{~}}
     </select>
   </div>
 
