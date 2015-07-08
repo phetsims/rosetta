@@ -21,7 +21,7 @@ for ( var localeObject in localeInfo ) {
     name: localeInfo[ localeObject ].name,
     localizedName: localeInfo[ localeObject ].localizedName,
     direction: localeInfo[ localeObject ].direction
-  } )
+  } );
 }
 
 sortedLocales.sort( function( a, b ) {
