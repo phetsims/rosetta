@@ -21,6 +21,9 @@ var request = require( 'request' );
 var async = require( 'async' );
 var querystring = require( 'querystring' );
 var fs = require( 'fs' );
+var query = require( 'pg-query' );
+var assert = require( 'assert' );
+var email = require( 'emailjs/email' );
 var contains = TranslationUtils.contains;
 var getGhClient = TranslationUtils.getGhClient;
 var commit = TranslationUtils.commit;
@@ -33,24 +36,57 @@ var _ = require( 'underscore' );
 // constants
 var HTML_SIMS_DIRECTORY = '/data/web/htdocs/phetsims/sims/html/';
 var BRANCH = 'tests'; // branch of babel to commit to, should be changed to master when testing is finished
+var PREFERENCES_FILE = process.env.HOME + '/.phet/build-local.json';
 
-// postgres query API
-var query = require( 'pg-query' );
+assert( fs.existsSync( PREFERENCES_FILE ), 'missing preferences file ' + PREFERENCES_FILE );
+var preferences = require( PREFERENCES_FILE );
 
-try {
-  var config = require( '../config.json' );
-  if ( config.pgConnectionString ) {
-    query.connectionParameters = config.pgConnectionString;
-  }
-  else {
-    query.connectionParameters = 'postgresql://localhost/rosetta';
-  }
+assert( preferences.githubUsername, 'githubUsername is missing from ' + PREFERENCES_FILE );
+assert( preferences.githubPassword, 'githubPassword is missing from ' + PREFERENCES_FILE );
+
+// configure email server if credentials are present
+var server;
+if ( preferences.emailUsername && preferences.emailPassword && preferences.emailServer && preferences.emailFrom && preferences.emailTo ) {
+  var server = email.server.connect( {
+    user: preferences.emailUsername,
+    password: preferences.emailPassword,
+    host: preferences.emailServer,
+    tls: preferences.tls || true
+  } );
 }
 
-// localhost configuration
-catch( e ) {
-  console.log( 'config.json not found: using localhost postgres configuration' );
+// configure postgres connection
+if ( preferences.pgConnectionString ) {
+  query.connectionParameters = preferences.pgConnectionString;
+}
+else {
   query.connectionParameters = 'postgresql://localhost/rosetta';
+}
+
+/**
+ * Send an email if server is defined. Used to notify developers push to babel fails
+ * @param subject
+ * @param text
+ */
+function sendEmail( subject, text ) {
+  if ( server ) {
+    server.send( {
+      text: text,
+      from: 'Rosetta <' + preferences.emailFrom + '>',
+      to: preferences.emailTo,
+      subject: subject
+    }, function( err, message ) {
+      if ( err ) {
+        console.log( 'error sending email', err );
+      }
+      else {
+        console.log( 'send email', message );
+      }
+    } );
+  }
+  else {
+    winston.log( 'warn', 'email not sent because server credentials were not present in preferences file' );
+  }
 }
 
 var translatedStrings = {}; // object to hold the already translated strings
@@ -577,6 +613,7 @@ var taskQueue = async.queue( function( task, taskCallback ) {
                       }
                     }
                     finished();
+                    sendEmail( 'PUSH FAILED', err + '\n\n' + errorDetails + '\n\n' + errors );
                   }
                   else {
                     onCommitSuccess();
