@@ -47,7 +47,7 @@ assert( preferences.githubPassword, 'githubPassword is missing from ' + PREFEREN
 // configure email server if credentials are present
 var server;
 if ( preferences.emailUsername && preferences.emailPassword && preferences.emailServer && preferences.emailFrom && preferences.emailTo ) {
-  var server = email.server.connect( {
+  server = email.server.connect( {
     user: preferences.emailUsername,
     password: preferences.emailPassword,
     host: preferences.emailServer,
