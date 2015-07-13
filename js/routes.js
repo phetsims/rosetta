@@ -523,8 +523,7 @@ var taskQueue = async.queue( function( task, taskCallback ) {
         winston.log( 'error', err );
       }
       else {
-        console.log( rows );
-        winston.log( 'info', 'added translator to user_localized_simulation_mapping with user_id = ' + userId + ' locale = ' + targetLocale + ' ' + simName );
+        winston.log( 'info', 'added translator to user_localized_simulation_mapping with user_id = ' + userId + ' locale = ' + targetLocale + ' simName = ' + simName );
       }
     } );
 
