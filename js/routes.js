@@ -513,6 +513,21 @@ var taskQueue = async.queue( function( task, taskCallback ) {
       }
     } );
 
+    var getLocalizedSimsQuery = 'SELECT localized_simulation.id, phet_user.id from localized_simulation, simulation, project, phet_user ' +
+                                'WHERE simulation.name = \'' + simName + '\' AND locale = \'' + targetLocale + '\' AND phet_user.id = ' + userId + ' AND ' +
+                                'simulation = simulation.id AND simulation.project = project.id AND project.type = 2'
+    var addTranslatorQuery = 'INSERT INTO user_localized_simulation_mapping ' + getLocalizedSimsQuery;
+    winston.log( 'info', 'running SQL command: ' + addTranslatorQuery );
+    query( addTranslatorQuery, function( err, rows ) {
+      if ( err ) {
+        winston.log( 'error', err );
+      }
+      else {
+        console.log( rows );
+        winston.log( 'info', 'added translator to user_localized_simulation_mapping with user_id = ' + userId + ' locale = ' + targetLocale + ' ' + simName );
+      }
+    } );
+
     var locale = LocaleInfo.localeInfoArray()[ targetLocale ];
 
     res.render( 'translation-submit.html', {
