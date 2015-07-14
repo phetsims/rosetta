@@ -5,7 +5,6 @@
  * @author Michael Kauzmann
  * @author Aaron Davis
  */
-
 var testButtonTop = document.getElementById( 'testButtonTop' );
 var saveButtonTop = document.getElementById( 'saveButtonTop' );
 var testButtonBottom = document.getElementById( 'testButtonBottom' );
@@ -13,7 +12,7 @@ var saveButtonBottom = document.getElementById( 'saveButtonBottom' );
 var simData = document.getElementById( 'simData' );
 var rtl = simData.getAttribute( 'data-direction' ) === 'rtl';
 
-function testButtonEL() {
+function testButtonEventListener() {
   var simUrl = simData.getAttribute( 'data-sim-url' );
   var stringPrefix = simData.getAttribute( 'data-sim-name' ).replace( /-/g, '_' ).toUpperCase();
   var stringsToReplace = {};
@@ -34,8 +33,9 @@ function testButtonEL() {
   var win = window.open( simUrl + '?' + 'strings=' + encodedStrings, '_blank' );
   win.focus();
 }
-testButtonTop.addEventListener( 'click', testButtonEL );
-testButtonBottom.addEventListener( 'click', testButtonEL );
+
+testButtonTop.addEventListener( 'click', testButtonEventListener );
+testButtonBottom.addEventListener( 'click', testButtonEventListener );
 
 // Var to help only restore save button once from inputs
 var once = false;
@@ -43,8 +43,7 @@ var once = false;
 var inputs = $( 'input' );
 var savedSpans = $( '.savedSpan' );
 
-function saveButtonEL() {
-
+function saveButtonEventListener() {
   var strings = {};
   inputs.each( function( index, item ) {
     strings[ item.name ] = item.value;
@@ -73,9 +72,13 @@ function saveButtonEL() {
   $( '.saving-gif' ).show();
 }
 
-saveButtonTop.addEventListener( 'click', saveButtonEL );
-saveButtonBottom.addEventListener( 'click', saveButtonEL );
+saveButtonTop.addEventListener( 'click', saveButtonEventListener );
+saveButtonBottom.addEventListener( 'click', saveButtonEventListener );
 
+/**
+ * Restore a button to its original (non-greyed out) state
+ * @param button
+ */
 function restoreButton( button ) {
   button.style.backgroundColor = '#2a326a';
   button.style.borderColor = '#1A87B9';
@@ -92,20 +95,23 @@ function restoreButton( button ) {
     } );
 }
 
-function inputEL() {
+/**
+ * remove "saved" text when any change is made to inputs
+ */
+function inputEventListener() {
   if ( !once ) {
     $( '.savedSpan' ).attr( 'style', 'visibility: hidden' );
     restoreButton( saveButtonTop );
     restoreButton( saveButtonBottom );
-
     once = true;
   }
 }
 
 inputs.each( function( index, item ) {
-  item.addEventListener( 'keydown', inputEL );
+  item.addEventListener( 'keydown', inputEventListener );
 } );
 
+// fix dir and text-align for rtl languages
 if ( rtl ) {
   inputs.attr( 'dir', 'rtl' );
   inputs.css( 'text-align', 'right' );
