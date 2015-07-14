@@ -142,7 +142,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
   }
   // if the session already has trustedTranslator defined, and it is true, then the user must be a trusted
   // translator who has already logged in
-  else if ( req.session.trustedTranslator ) {
+  else if ( req.session.trustedTranslator || req.session.teamMember ) {
     next();
   }
   else {
@@ -171,7 +171,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
         if ( userData.loggedIn ) {
           winston.log( 'info', 'credentials obtained, user is logged in, moving to next step' );
 
-          if ( !userData.trustedTranslator ) {
+          if ( !userData.trustedTranslator && !userData.teamMember ) {
             res.render( 'error.html', {
               title: 'Translation Utility Error',
               message: 'You must be a trusted translator to use the PhET translation utility. Email phethelp@colorado.edu for more information.',
