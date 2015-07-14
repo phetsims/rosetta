@@ -111,6 +111,11 @@ inputs.each( function( index, item ) {
   item.addEventListener( 'keydown', inputEventListener );
 } );
 
+// add red highlight to "\n" so users are aware that this is treated specially
+$( 'td:contains("\\\\n")' ).each( function( i, e ) {
+  $( e ).html( $( e ).text().replace( '\\n', '<span style="color: red">\\n</span>' ) );
+} );
+
 // fix dir and text-align for rtl languages
 if ( rtl ) {
   inputs.attr( 'dir', 'rtl' );
