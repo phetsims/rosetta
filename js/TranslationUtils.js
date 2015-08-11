@@ -13,6 +13,9 @@ var http = require( 'http' );
 var winston = require( 'winston' );
 var github = require( 'octonode' );
 
+// constants
+var PREFERENCES_FILE = process.env.HOME + '/.phet/build-local.json';
+
 // convenience method to check if an item is in an array
 var contains = function( array, item ) {
   for ( var i = 0; i < array.length; i++ ) {
@@ -192,9 +195,9 @@ function commit( repo, file, content, message, branch, callback ) {
  * @returns {*}
  */
 function getGhClient() {
-  var config = require( '../config.json' );
-  var username = config.githubUsername;
-  var pass = config.githubPassword;
+  var preferences = require( PREFERENCES_FILE );
+  var username = preferences.githubUsername;
+  var pass = preferences.githubPassword;
 
   return github.client( {
     username: username,

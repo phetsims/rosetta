@@ -515,7 +515,7 @@ var taskQueue = async.queue( function( task, taskCallback ) {
 
     var getLocalizedSimsQuery = 'SELECT localized_simulation.id, phet_user.id from localized_simulation, simulation, project, phet_user ' +
                                 'WHERE simulation.name = \'' + simName + '\' AND locale = \'' + targetLocale + '\' AND phet_user.id = ' + userId + ' AND ' +
-                                'simulation = simulation.id AND simulation.project = project.id AND project.type = 2'
+                                'simulation = simulation.id AND simulation.project = project.id AND project.type = 2';
     var addTranslatorQuery = 'INSERT INTO user_localized_simulation_mapping ' + getLocalizedSimsQuery;
     winston.log( 'info', 'running SQL command: ' + addTranslatorQuery );
     query( addTranslatorQuery, function( err, rows ) {
