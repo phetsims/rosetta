@@ -43,6 +43,8 @@ var preferences = require( PREFERENCES_FILE );
 
 assert( preferences.githubUsername, 'githubUsername is missing from ' + PREFERENCES_FILE );
 assert( preferences.githubPassword, 'githubPassword is missing from ' + PREFERENCES_FILE );
+assert( preferences.buildServerAuthorizationCode, 'buildServerAuthorizationCode is missing from ' + PREFERENCES_FILE );
+
 
 // configure email server if credentials are present
 var server;
@@ -557,7 +559,8 @@ var taskQueue = async.queue( function( task, taskCallback ) {
         'simName': simName,
         'version': version,
         'locales': JSON.stringify( [ targetLocale ] ),
-        'serverName': 'simian'
+        'serverName': 'simian.colorado.edu',
+        'authorizationCode': preferences.buildServerAuthorizationCode
       } );
 
       var url = 'http://phet-dev.colorado.edu/deploy-html-simulation?' + queryString;

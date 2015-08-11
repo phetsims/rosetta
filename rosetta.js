@@ -17,19 +17,7 @@ var routes = require( __dirname + '/js/routes' );
 var parseArgs = require( 'minimist' );
 var winston = require( 'winston' );
 var bodyParser = require( 'body-parser' );
-var assert = require( 'assert' );
-var fs = require( 'fs' );
 var _ = require( 'underscore' );
-
-// constants
-var PREFERENCES_FILE = process.env.HOME + '/.phet/build-local.json';
-
-assert( fs.existsSync( PREFERENCES_FILE ), 'missing preferences file ' + PREFERENCES_FILE );
-var preferences = require( PREFERENCES_FILE );
-
-// verify that preferences contains required entries
-assert( preferences.githubUsername, 'githubUsername is missing from ' + PREFERENCES_FILE );
-assert( preferences.githubPassword, 'githubPassword is missing from ' + PREFERENCES_FILE );
 
 // constants
 var LISTEN_PORT = 16372;
