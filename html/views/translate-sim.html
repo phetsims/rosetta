@@ -14,13 +14,13 @@
   </div>
   <form name="form" id="strings" method="post">
     <h2>Sim Strings</h2>
-    <table id="stringsTable" style="width:50%">
+    <table id="simStringsTable" style="width:50%">
       <tr>
         <td><strong>English</strong></td>
         <td><strong>{{=it.destinationLanguage}}</strong></td>
       </tr>
       {{~it.simStringsArray :value:index}}
-      <tr data-string-key={{=value.key}}>
+      <tr data-string-key={{=value.key}} data-string-repo={{=value.repo}}>
         <td>{{=value.englishValue}}</td>
         <td><input type="text" name="{{=value.repo}} {{=value.key}}" value="{{=value.value}}"></td>
       </tr>
@@ -37,7 +37,7 @@
         <td><strong>{{=it.destinationLanguage}}</strong></td>
       </tr>
       {{~it.commonStringsArray :value:index}}
-      <tr data-string-key={{=value.key}}>
+      <tr data-string-key={{=value.key}} data-string-repo={{=value.repo}}>
         <td>{{=value.englishValue}}</td>
         <td><input type="text" name="{{=value.repo}} {{=value.key}}" value="{{=value.value}}"></td>
       </tr>

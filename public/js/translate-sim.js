@@ -14,17 +14,18 @@ var rtl = simData.getAttribute( 'data-direction' ) === 'rtl';
 
 function testButtonEventListener() {
   var simUrl = simData.getAttribute( 'data-sim-url' );
-  var stringPrefix = simData.getAttribute( 'data-sim-name' ).replace( /-/g, '_' ).toUpperCase();
   var stringsToReplace = {};
-  var table = document.getElementById( 'stringsTable' );
-  for ( var i = 1, row; row = table.rows[ i ]; i++ ) {
+  var rows = document.getElementsByTagName( 'TR' );
+  for ( var i = 1, row; row = rows[ i ]; i++ ) {
     var translation = row.cells[ 1 ].children[ 0 ].value;
-    if ( translation.length > 0 ) {
+    if ( translation && translation.length > 0 ) {
       // add rtl embedding markers for rtl strings
       if ( rtl ) {
         translation = '%E2%80%AB' + translation + '%E2%80%AC';
       }
-      stringsToReplace[ stringPrefix + '/' + row.getAttribute( 'data-string-key' ) ] = translation;
+      var stringKey = row.getAttribute( 'data-string-repo' ).replace( /-/g, '_' ).toUpperCase() + '/' + row.getAttribute( 'data-string-key' );
+      console.log( stringKey );
+      stringsToReplace[ stringKey ] = translation;
     }
   }
   var encodedStrings = encodeURIComponent( JSON.stringify( stringsToReplace ) );
