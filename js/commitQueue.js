@@ -205,75 +205,81 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
       (function( repository, file, translatedStringsPath ) {
         winston.log( 'info', 'sending request to ' + translatedStringsPath );
         request( translatedStringsPath, function( error, response, body ) {
+          var strings = repos[ repository ];
+          var githubStrings = {};
+
           if ( !error && response.statusCode === 200 ) {
-            var strings = repos[ repository ];
-            var githubStrings = JSON.parse( body );
-            strings = _.extend( githubStrings, strings );
-            var content = stringify( strings );
-
-            // fix newlines that have been changed automatically by stringify
-            content = content.replace( /\\\\n/g, '\\n' );
-
-            if ( content.length && content !== stringify( githubStrings ) ) {
-              var commitMessage = Date.now() + ' automated commit from rosetta for file ' + file;
-
-              var onCommitSuccess = function() {
-                winston.log( 'info', 'commit: "' + commitMessage + '" committed successfully' );
-                for ( var stringKey in repos[ repository ] ) {
-                  stringValue = repos[ repository ][ stringKey ].value;
-                  if ( !translatedStrings[ repository ] || !translatedStrings[ repository ][ stringKey ] || stringValue !== translatedStrings[ repository ][ stringKey ].value ) {
-                    successes.push( {
-                      stringKey: stringKey,
-                      stringValue: stringValue
-                    } );
-                  }
-                }
-                finished();
-              };
-
-              commit( babel, file, content, commitMessage, BRANCH, function( err ) {
-                // commit failed
-                // Github sometimes returns a 409 error and fails to commit, in this case we'll try again once
-                if ( err ) {
-                  winston.log( 'error', err + '. Error committing to file ' + file + '. Trying again in 5 seconds...' );
-                  setTimeout( function() {
-                    commit( babel, file, content, commitMessage, BRANCH, function( err ) {
-                      if ( err ) {
-                        errorDetails += err + '. Error committing to file ' + file + '<br>';
-                        winston.log( 'error', err + '. Error committing to file ' + file );
-                        for ( var stringKey in repos[ repository ] ) {
-                          stringValue = repos[ repository ][ stringKey ].value;
-                          if ( !translatedStrings[ repository ] || !translatedStrings[ repository ][ stringKey ] || stringValue !== translatedStrings[ repository ][ stringKey ].value ) {
-                            errors.push( {
-                              stringKey: stringKey,
-                              stringValue: stringValue
-                            } );
-                          }
-                        }
-                        finished();
-                        sendEmail( 'PUSH FAILED', err + '\n\n' + errorDetails + '\n\n' + errors );
-                      }
-                      else {
-                        onCommitSuccess();
-                      }
-                    } );
-                  }, 5000 );
-                }
-
-                // commit succeeded
-                else {
-                  onCommitSuccess();
-                }
-
-              } );
-            }
-            else {
-              winston.log( 'info', 'no commit attempted for ' + file + ' because no changes were made.' );
-              finished();
-            }
+            githubStrings = JSON.parse( body );
           }
           else {
-            winston.log( 'error', 'request to ' + translatedStringsPath + ' failed with error ' + error );
+            if ( error ) {
+              winston.log( 'error', 'request to ' + translatedStringsPath + ' failed with error ' + error );
+            }
+            else if ( response ) {
+              winston.log( 'error', 'request to ' + translatedStringsPath + ' failed with status ' + response.statusCode );
+            }
+          }
+          strings = _.extend( githubStrings, strings );
+          var content = stringify( strings );
+
+          // fix newlines that have been changed automatically by stringify
+          content = content.replace( /\\\\n/g, '\\n' );
+
+          if ( content.length && content !== stringify( githubStrings ) ) {
+            var commitMessage = Date.now() + ' automated commit from rosetta for file ' + file;
+
+            var onCommitSuccess = function() {
+              winston.log( 'info', 'commit: "' + commitMessage + '" committed successfully' );
+              for ( var stringKey in repos[ repository ] ) {
+                stringValue = repos[ repository ][ stringKey ].value;
+                if ( !translatedStrings[ repository ] || !translatedStrings[ repository ][ stringKey ] || stringValue !== translatedStrings[ repository ][ stringKey ].value ) {
+                  successes.push( {
+                    stringKey: stringKey,
+                    stringValue: stringValue
+                  } );
+                }
+              }
+              finished();
+            };
+
+            commit( babel, file, content, commitMessage, BRANCH, function( err ) {
+              // commit failed
+              // Github sometimes returns a 409 error and fails to commit, in this case we'll try again once
+              if ( err ) {
+                winston.log( 'error', err + '. Error committing to file ' + file + '. Trying again in 5 seconds...' );
+                setTimeout( function() {
+                  commit( babel, file, content, commitMessage, BRANCH, function( err ) {
+                    if ( err ) {
+                      errorDetails += err + '. Error committing to file ' + file + '<br>';
+                      winston.log( 'error', err + '. Error committing to file ' + file );
+                      for ( var stringKey in repos[ repository ] ) {
+                        stringValue = repos[ repository ][ stringKey ].value;
+                        if ( !translatedStrings[ repository ] || !translatedStrings[ repository ][ stringKey ] || stringValue !== translatedStrings[ repository ][ stringKey ].value ) {
+                          errors.push( {
+                            stringKey: stringKey,
+                            stringValue: stringValue
+                          } );
+                        }
+                      }
+                      finished();
+                      sendEmail( 'PUSH FAILED', err + '\n\n' + errorDetails + '\n\n' + errors );
+                    }
+                    else {
+                      onCommitSuccess();
+                    }
+                  } );
+                }, 5000 );
+              }
+
+              // commit succeeded
+              else {
+                onCommitSuccess();
+              }
+
+            } );
+          }
+          else {
+            winston.log( 'info', 'no commit attempted for ' + file + ' because no changes were made.' );
             finished();
           }
         } );
