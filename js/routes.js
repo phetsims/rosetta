@@ -21,12 +21,17 @@ var TranslatableSimInfo = require( './TranslatableSimInfo' );
 var commitQueue = require( './commitQueue' );
 var simInfoArray = require( '../data/simInfoArray.json' );
 var TranslationUtils = require( './TranslationUtils' );
+var constants = require( './constants' );
 var contains = TranslationUtils.contains;
 var escapeHTML = TranslationUtils.escapeHTML;
 
 /* jshint -W079 */
 var _ = require( 'underscore' );
 /* jshint +W079 */
+
+// constants
+var BRANCH = constants.BRANCH;
+var GITHUB_URL_BASE = constants.GITHUB_URL_BASE;
 
 // globals
 var translatedStrings = global.translatedStrings;
@@ -174,7 +179,6 @@ module.exports.chooseSimulationAndLanguage = function( req, res ) {
 module.exports.translateSimulation = function( req, res ) {
   var simName = req.param( 'simName' );
   var targetLocale = req.param( 'targetLocale' );
-  var rawGithub = 'https://raw.githubusercontent.com';
   var activeSimsPath = '/phetsims/chipper/master/data/active-sims';
   var userId = ( req.session.userId ) ? req.session.userId : 0; // use an id of 0 for localhost testing
 
@@ -198,7 +202,7 @@ module.exports.translateSimulation = function( req, res ) {
       var sims; // array of all active sims
 
       // initialize the sims array from the active-sims file in chipper
-      request( rawGithub + activeSimsPath, function( error, response, body ) {
+      request( GITHUB_URL_BASE + activeSimsPath, function( error, response, body ) {
         if ( !error && response.statusCode === 200 ) {
           sims = body.toString().split( '\n' );
         }
@@ -315,8 +319,8 @@ module.exports.translateSimulation = function( req, res ) {
       for ( i = 0; i < extractedStrings.length; i++ ) {
         (function( i ) {
           var projectName = extractedStrings[ i ].projectName;
-          var stringsFilePath = rawGithub + '/phetsims/' + projectName + '/master/' + projectName + '-strings_en.json';
-          var translatedStringsPath = rawGithub + '/phetsims/babel/' + global.BRANCH + '/' + projectName + '/' + projectName + '-strings_' + targetLocale + '.json';
+          var stringsFilePath = GITHUB_URL_BASE + '/phetsims/' + projectName + '/master/' + projectName + '-strings_en.json';
+          var translatedStringsPath = GITHUB_URL_BASE + '/phetsims/babel/' + BRANCH + '/' + projectName + '/' + projectName + '-strings_' + targetLocale + '.json';
 
           request( stringsFilePath, function( error, response, body ) {
             if ( !error && response.statusCode === 200 ) {

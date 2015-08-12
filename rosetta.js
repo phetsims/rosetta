@@ -33,7 +33,6 @@ assert( preferences.githubPassword, 'githubPassword is missing from ' + PREFEREN
 assert( preferences.buildServerAuthorizationCode, 'buildServerAuthorizationCode is missing from ' + PREFERENCES_FILE );
 
 // initialize globals
-global.BRANCH = 'tests'; // branch of babel to commit to, should be changed to master when testing is finished
 global.preferences = preferences;
 global.translatedStrings = {}; // object to hold the already translated strings
 

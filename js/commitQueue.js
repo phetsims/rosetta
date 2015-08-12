@@ -20,6 +20,7 @@ var querystring = require( 'querystring' );
 var request = require( 'request' );
 var winston = require( 'winston' );
 
+var constants = require( './constants' );
 var LocaleInfo = require( './LocaleInfo' );
 var TranslationUtils = require( './TranslationUtils' );
 var getGhClient = TranslationUtils.getGhClient;
@@ -29,6 +30,8 @@ var stringify = TranslationUtils.stringify;
 
 // constants
 var HTML_SIMS_DIRECTORY = '/data/web/htdocs/phetsims/sims/html/';
+var BRANCH = constants.BRANCH;
+var GITHUB_URL_BASE = constants.GITHUB_URL_BASE;
 
 // globals
 var translatedStrings = global.translatedStrings;
@@ -219,13 +222,13 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
             finished();
           };
 
-          commit( babel, file, content, commitMessage, global.BRANCH, function( err ) {
+          commit( babel, file, content, commitMessage, BRANCH, function( err ) {
             // commit failed
             // Github sometimes returns a 409 error and fails to commit, in this case we'll try again once
             if ( err ) {
               winston.log( 'error', err + '. Error committing to file ' + file + '. Trying again in 5 seconds...' );
               setTimeout( function() {
-                commit( babel, file, content, commitMessage, global.BRANCH, function( err ) {
+                commit( babel, file, content, commitMessage, BRANCH, function( err ) {
                   if ( err ) {
                     errorDetails += err + '. Error committing to file ' + file + '<br>';
                     winston.log( 'error', err + '. Error committing to file ' + file );
