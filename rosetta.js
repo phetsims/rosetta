@@ -1,7 +1,7 @@
 // Copyright 2002-2015, University of Colorado Boulder
 
 /**
- * Main entry point for PhET translation web app.  This is where ExpressJS gets configured and the routes are set up.
+ * Main entry point for PhET translation web app. This is where ExpressJS gets configured and the routes are set up.
  *
  * @author John Blanco
  * @author Aaron Davis
@@ -17,10 +17,34 @@ var routes = require( __dirname + '/js/routes' );
 var parseArgs = require( 'minimist' );
 var winston = require( 'winston' );
 var bodyParser = require( 'body-parser' );
+var query = require( 'pg-query' );
+var fs = require( 'fs' );
 var _ = require( 'underscore' );
 
 // constants
 var LISTEN_PORT = 16372;
+var PREFERENCES_FILE = process.env.HOME + '/.phet/build-local.json';
+
+// ensure that the preferences file exists and has the required fields
+assert( fs.existsSync( PREFERENCES_FILE ), 'missing preferences file ' + PREFERENCES_FILE );
+var preferences = require( PREFERENCES_FILE );
+assert( preferences.githubUsername, 'githubUsername is missing from ' + PREFERENCES_FILE );
+assert( preferences.githubPassword, 'githubPassword is missing from ' + PREFERENCES_FILE );
+assert( preferences.buildServerAuthorizationCode, 'buildServerAuthorizationCode is missing from ' + PREFERENCES_FILE );
+
+// initialize globals
+global.BRANCH = 'tests'; // branch of babel to commit to, should be changed to master when testing is finished
+global.preferences = preferences;
+global.translatedStrings = {}; // object to hold the already translated strings
+
+// configure postgres connection
+if ( preferences.pgConnectionString ) {
+  query.connectionParameters = preferences.pgConnectionString;
+}
+else {
+  query.connectionParameters = 'postgresql://localhost/rosetta';
+}
+
 
 // Handle command line input
 // First 2 args provide info about executables, ignore

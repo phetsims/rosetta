@@ -12,9 +12,58 @@
 var http = require( 'http' );
 var winston = require( 'winston' );
 var github = require( 'octonode' );
+var email = require( 'emailjs/email' );
 
-// constants
-var PREFERENCES_FILE = process.env.HOME + '/.phet/build-local.json';
+var preferences = global.preferences;
+
+// email utilities
+
+// configure email server if credentials are present
+var server;
+if ( preferences.emailUsername && preferences.emailPassword && preferences.emailServer && preferences.emailFrom && preferences.emailTo ) {
+  server = email.server.connect( {
+    user: preferences.emailUsername,
+    password: preferences.emailPassword,
+    host: preferences.emailServer,
+    tls: preferences.tls || true
+  } );
+}
+
+/**
+ * Send an email if server is defined. Used to notify developers push to babel fails
+ * @param subject
+ * @param text
+ */
+module.exports.sendEmail = function( subject, text ) {
+  if ( server ) {
+    server.send( {
+      text: text,
+      from: 'Rosetta <' + preferences.emailFrom + '>',
+      to: preferences.emailTo,
+      subject: subject
+    }, function( err, message ) {
+      if ( err ) {
+        console.log( 'error sending email', err );
+      }
+      else {
+        console.log( 'send email', message );
+      }
+    } );
+  }
+  else {
+    winston.log( 'warn', 'email not sent because server credentials were not present in preferences file' );
+  }
+};
+
+// utility function for presenting escaped HTML, also escapes newline character
+var escapeHTML = function( s ) {
+  return s.replace( /&/g, '&amp;' )
+    .replace( /"/g, '&quot;' )
+    .replace( /</g, '&lt;' )
+    .replace( />/g, '&gt;' )
+    .replace( /\n/g, '&#92;n' );
+};
+module.exports.escapeHTML = escapeHTML;
 
 // convenience method to check if an item is in an array
 var contains = function( array, item ) {
@@ -195,7 +244,6 @@ function commit( repo, file, content, message, branch, callback ) {
  * @returns {*}
  */
 function getGhClient() {
-  var preferences = require( PREFERENCES_FILE );
   var username = preferences.githubUsername;
   var pass = preferences.githubPassword;
 
