@@ -206,7 +206,7 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
         winston.log( 'info', 'sending request to ' + translatedStringsPath );
         request( translatedStringsPath, function( error, response, body ) {
           var strings = repos[ repository ];
-          var githubStrings = {};
+          var githubStrings; // strings currently in babel (if the file exists)
 
           if ( !error && response.statusCode === 200 ) {
             githubStrings = JSON.parse( body );
@@ -219,13 +219,18 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
               winston.log( 'error', 'request to ' + translatedStringsPath + ' failed with status ' + response.statusCode );
             }
           }
-          strings = _.extend( githubStrings, strings );
+
           var content = stringify( strings );
+          var newStrings = true;
+          if ( githubStrings ) {
+            strings = _.extend( githubStrings, strings );
+            newStrings = ( content !== stringify( githubStrings ) );
+          }
 
           // fix newlines that have been changed automatically by stringify
           content = content.replace( /\\\\n/g, '\\n' );
 
-          if ( content.length && content !== stringify( githubStrings ) ) {
+          if ( content.length && newStrings ) {
             var commitMessage = Date.now() + ' automated commit from rosetta for file ' + file;
 
             var onCommitSuccess = function() {
