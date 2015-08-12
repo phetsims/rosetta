@@ -18,7 +18,7 @@ var winston = require( 'winston' );
 
 var LocaleInfo = require( './LocaleInfo' );
 var TranslatableSimInfo = require( './TranslatableSimInfo' );
-var commitQueue = require( './commitQueue' );
+var commitQueue = require( './commitQueue' ).commitQueue;
 var simInfoArray = require( '../data/simInfoArray.json' );
 var TranslationUtils = require( './TranslationUtils' );
 var constants = require( './constants' );
