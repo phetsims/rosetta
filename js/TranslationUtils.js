@@ -14,14 +14,18 @@ var winston = require( 'winston' );
 var github = require( 'octonode' );
 var email = require( 'emailjs/email' );
 
+// globals
 var preferences = global.preferences;
 
-// email utilities
+
+/*---------------------------------------------------------------------------*
+ * Email utilities
+ *---------------------------------------------------------------------------*/
 
 // configure email server if credentials are present
-var server;
+var emailServer;
 if ( preferences.emailUsername && preferences.emailPassword && preferences.emailServer && preferences.emailFrom && preferences.emailTo ) {
-  server = email.server.connect( {
+  emailServer = email.server.connect( {
     user: preferences.emailUsername,
     password: preferences.emailPassword,
     host: preferences.emailServer,
@@ -35,8 +39,8 @@ if ( preferences.emailUsername && preferences.emailPassword && preferences.email
  * @param text
  */
 module.exports.sendEmail = function( subject, text ) {
-  if ( server ) {
-    server.send( {
+  if ( emailServer ) {
+    emailServer.send( {
       text: text,
       from: 'Rosetta <' + preferences.emailFrom + '>',
       to: preferences.emailTo,
@@ -54,6 +58,11 @@ module.exports.sendEmail = function( subject, text ) {
     winston.log( 'warn', 'email not sent because server credentials were not present in preferences file' );
   }
 };
+
+
+/*---------------------------------------------------------------------------*
+ * Utility functions
+ *---------------------------------------------------------------------------*/
 
 // utility function for presenting escaped HTML, also escapes newline character
 var escapeHTML = function( s ) {
@@ -183,6 +192,7 @@ module.exports.extractStringsAPI = function( req, res ) {
   strings.end();
 };
 
+
 /*---------------------------------------------------------------------------*
  * Github API functions
  *---------------------------------------------------------------------------*/
@@ -252,23 +262,6 @@ function getGhClient() {
     password: pass
   } );
 }
-
-/**
- * For testing use of the github API
- */
-// function githubTest() {
-//   var ghClient = getGhClient();
-//   var babel = ghClient.repo( 'phetsims/babel' );
-
-//   var commitMessage = 'commit message';
-//   var content = 'some content';
-//   var branch = 'tests';
-//   var file = 'test-file-new.txt';
-
-//   // one of these commits will fail most likely
-//   commit( babel, file, content + '1', commitMessage + '1', branch );
-//   commit( babel, file, content + '2', commitMessage + '2', branch );
-// }
 
 // export github functions
 module.exports.getGhClient = getGhClient;

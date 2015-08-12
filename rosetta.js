@@ -11,9 +11,9 @@
 'use strict';
 
 // modules
+var assert = require( 'assert' );
 var express = require( 'express' );
 var doT = require( 'express-dot' );
-var routes = require( __dirname + '/js/routes' );
 var parseArgs = require( 'minimist' );
 var winston = require( 'winston' );
 var bodyParser = require( 'body-parser' );
@@ -37,6 +37,9 @@ global.BRANCH = 'tests'; // branch of babel to commit to, should be changed to m
 global.preferences = preferences;
 global.translatedStrings = {}; // object to hold the already translated strings
 
+// must be required after global.preferences has been initialized
+var routes = require( __dirname + '/js/routes' );
+
 // configure postgres connection
 if ( preferences.pgConnectionString ) {
   query.connectionParameters = preferences.pgConnectionString;
@@ -44,7 +47,6 @@ if ( preferences.pgConnectionString ) {
 else {
   query.connectionParameters = 'postgresql://localhost/rosetta';
 }
-
 
 // Handle command line input
 // First 2 args provide info about executables, ignore
