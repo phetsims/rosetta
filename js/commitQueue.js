@@ -224,9 +224,18 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
           var newStrings = true;
           var content;
           if ( githubStrings ) {
-            strings = _.extend( strings, githubStrings );
+            var githubContent = stringify( githubStrings );
+            for ( var key in githubStrings ) {
+              if ( !strings.hasOwnProperty( key ) ) {
+                strings[ key ] = githubStrings[ key ];
+              }
+              else {
+                winston.log( 'info', 'other key: ' + key );
+              }
+            }
             content = stringify( strings );
-            newStrings = ( content !== stringify( githubStrings ) );
+            newStrings = ( content !== githubContent );
+            winston.log( 'info', 'new strings: ' + newStrings );
           }
           else {
             content = stringify( strings );
