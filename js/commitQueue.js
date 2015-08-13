@@ -78,6 +78,11 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
       var history = ( translatedString ) ? translatedString.history : null;
       var oldValue = ( history && history.length ) ? history[ history.length - 1 ].newValue : '';
 
+      // handle special case of multiline string
+      if ( oldValue.indexOf( '\n' ) > -1 ) {
+        oldValue = oldValue.replace( /\n/g, '\\n' );
+      }
+
       // don't add the string if the value hasn't changed
       if ( oldValue !== stringValue ) {
         var newHistoryEntry = {
@@ -229,9 +234,6 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
               if ( !strings.hasOwnProperty( key ) ) {
                 strings[ key ] = githubStrings[ key ];
               }
-              else {
-                winston.log( 'info', 'other key: ' + key );
-              }
             }
             content = stringify( strings );
             newStrings = ( content !== githubContent );
@@ -240,8 +242,6 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
           else {
             content = stringify( strings );
           }
-
-          winston.log( 'info', content );
 
           // fix newlines that have been changed automatically by stringify
           content = content.replace( /\\\\n/g, '\\n' );
