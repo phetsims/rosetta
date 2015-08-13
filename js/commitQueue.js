@@ -137,6 +137,7 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
     winston.log( 'info', 'running SQL command: ' + addTranslatorQuery );
     query( addTranslatorQuery, function( err, rows ) {
       if ( err ) {
+        winston.log( 'error', 'adding to user_localized_simulation_mapping, translator probably already exists for this sim and locale' );
         winston.log( 'error', err );
       }
       else {
@@ -223,7 +224,7 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
           var newStrings = true;
           var content;
           if ( githubStrings ) {
-            strings = _.extend( githubStrings, strings );
+            strings = _.extend( strings, githubStrings );
             content = stringify( strings );
             newStrings = ( content !== stringify( githubStrings ) );
           }
