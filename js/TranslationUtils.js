@@ -197,9 +197,22 @@ module.exports.extractStringsAPI = function( req, res ) {
  * Github API functions
  *---------------------------------------------------------------------------*/
 
-// convenience for a nicer looking stringify 
+// convenience for a nicer looking stringify, also ensures a sorted JSON string
 function stringify( data ) {
-  return JSON.stringify( data, null, 2 );
+  var keys = [];
+  var key;
+  if ( data ) {
+    for ( key in data ) {
+      keys.push( key );
+    }
+  }
+  keys.sort();
+  var sortedData = {};
+  for ( var index in keys ) {
+    key = keys[ index ];
+    sortedData[ key ] = data[ key ];
+  }
+  return JSON.stringify( sortedData, null, 2 );
 }
 
 /**
