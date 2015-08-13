@@ -220,11 +220,17 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
             }
           }
 
-          var content = stringify( strings );
+          winston.log( 'info', githubStrings );
+
           var newStrings = true;
+          var content;
           if ( githubStrings ) {
             strings = _.extend( githubStrings, strings );
+            content = stringify( strings );
             newStrings = ( content !== stringify( githubStrings ) );
+          }
+          else {
+            content = stringify( strings );
           }
 
           // fix newlines that have been changed automatically by stringify
