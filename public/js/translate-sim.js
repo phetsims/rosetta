@@ -29,7 +29,7 @@ function testButtonEventListener() {
     }
   }
   var encodedStrings = encodeURIComponent( JSON.stringify( stringsToReplace ) );
-  encodedStrings = encodedStrings.replace( '%5C%5Cn', '%5Cn' ); // put back newlines
+  encodedStrings = encodedStrings.replace( /%5C%5Cn/g, '%5Cn' ); // put back newlines
 
   var win = window.open( simUrl + '?' + 'strings=' + encodedStrings, '_blank' );
   win.focus();
