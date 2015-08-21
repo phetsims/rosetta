@@ -19,7 +19,6 @@ var winston = require( 'winston' );
 var LocaleInfo = require( './LocaleInfo' );
 var TranslatableSimInfo = require( './TranslatableSimInfo' );
 var commitQueue = require( './commitQueue' ).commitQueue;
-var simInfoArray = require( '../data/simInfoArray.json' );
 var TranslationUtils = require( './TranslationUtils' );
 var constants = require( './constants' );
 var contains = TranslationUtils.contains;
@@ -32,6 +31,7 @@ var _ = require( 'underscore' );
 // constants
 var BRANCH = constants.BRANCH;
 var GITHUB_URL_BASE = constants.GITHUB_URL_BASE;
+var SIM_INFO_ARRAY = '../data/simInfoArray.json';
 
 // globals
 var translatedStrings = global.translatedStrings;
@@ -163,7 +163,7 @@ module.exports.chooseSimulationAndLanguage = function( req, res ) {
 
   res.render( 'translate-home.html', {
     title: 'PhET Translation Utility',
-    simInfoArray: simInfoArray,
+    simInfoArray: require( SIM_INFO_ARRAY ),
     localeInfoArray: LocaleInfo.sortedLocaleInfoArray(),
     username: username
   } );
@@ -186,6 +186,7 @@ module.exports.translateSimulation = function( req, res ) {
 
   // get the url of the live sim (from simInfoArray)
   var simUrl;
+  var simInfoArray = require( SIM_INFO_ARRAY );
   for ( var i = 0; i < simInfoArray.length; i++ ) {
     if ( simInfoArray[ i ].projectName === simName ) {
       simUrl = simInfoArray[ i ].testUrl;
