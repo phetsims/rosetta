@@ -23,15 +23,5 @@
     "simTitle": "Concentration",
     "projectName": "concentration",
     "testUrl": "http://www.colorado.edu/physics/phet/dev/html/concentration/1.2.0-dev.5/concentration_en.html"
-  },
-  {
-    "simTitle": "Molecules and Light",
-    "projectName": "molecules-and-light",
-    "testUrl": "/data/web/htdocs/phetsims/sims/html/molecules-and-light/1.2.0/molecules-and-light_en.html"
-  },
-  {
-    "simTitle": "Chains",
-    "projectName": "chains",
-    "testUrl": "/data/web/htdocs/phetsims/sims/html/chains/1.0.0/chains_en.html"
   }
 ]
