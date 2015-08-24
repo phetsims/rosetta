@@ -38,5 +38,10 @@
     "simTitle": "Chains",
     "projectName": "chains",
     "testUrl": "/data/web/htdocs/phetsims/sims/html/chains/1.0.0/chains_en.html"
+  },
+  {
+    "simTitle": "Chains",
+    "projectName": "chains",
+    "testUrl": "/data/web/htdocs/phetsims/sims/html/chains/1.0.0/chains_en.html"
   }
 ]
