@@ -23,5 +23,10 @@
     "simTitle": "Concentration",
     "projectName": "concentration",
     "testUrl": "/data/web/htdocs/phetsims/sims/html/concentration/1.2.0/concentration_en.html"
+  },
+  {
+    "simTitle": "Atomic Interactions",
+    "projectName": "atomic-interactions",
+    "testUrl": "/data/web/htdocs/phetsims/sims/html/atomic-interactions/1.0.0/atomic-interactions_en.html"
   }
 ]
