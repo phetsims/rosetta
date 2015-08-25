@@ -15,6 +15,7 @@ var https = require( 'https' );
 var query = require( 'pg-query' );
 var request = require( 'request' );
 var winston = require( 'winston' );
+var fs = require( 'fs' );
 
 var LocaleInfo = require( './LocaleInfo' );
 var TranslatableSimInfo = require( './TranslatableSimInfo' );
@@ -163,7 +164,7 @@ module.exports.chooseSimulationAndLanguage = function( req, res ) {
 
   res.render( 'translate-home.html', {
     title: 'PhET Translation Utility',
-    simInfoArray: require( SIM_INFO_ARRAY ),
+    simInfoArray: JSON.parse( fs.readFileSync( SIM_INFO_ARRAY, 'utf8' ) ),
     localeInfoArray: LocaleInfo.sortedLocaleInfoArray(),
     username: username
   } );
@@ -186,7 +187,7 @@ module.exports.translateSimulation = function( req, res ) {
 
   // get the url of the live sim (from simInfoArray)
   var simUrl;
-  var simInfoArray = require( SIM_INFO_ARRAY );
+  var simInfoArray = JSON.parse( fs.readFileSync( SIM_INFO_ARRAY, 'utf8' ) );
   for ( var i = 0; i < simInfoArray.length; i++ ) {
     if ( simInfoArray[ i ].projectName === simName ) {
       simUrl = simInfoArray[ i ].testUrl;
