@@ -179,7 +179,7 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
         'repos': JSON.stringify( dependencies ),
         'simName': simName,
         'version': version,
-        'locales': JSON.stringify( [ targetLocale ] ),
+        'locales': targetLocale,
         'serverName': 'simian.colorado.edu',
         'authorizationCode': global.preferences.buildServerAuthorizationCode
       } );
