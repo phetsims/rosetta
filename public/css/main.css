@@ -146,3 +146,8 @@ h1 {
 .saving-gif img {
   height: 30px;
 }
+
+.validation-message {
+  color: red;
+  margin-top: 1em;
+}

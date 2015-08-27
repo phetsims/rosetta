@@ -122,3 +122,34 @@ if ( rtl ) {
   inputs.attr( 'dir', 'rtl' );
   inputs.css( 'text-align', 'right' );
 }
+
+function validatePatterns() {
+  var validated = true;
+
+  $( 'tr' ).each( function( index, item ) {
+    var tds = $( item ).find( 'td' );
+    var matches = $( tds[ 0 ] ).text().match( /\{\d\}/g );
+    if ( matches ) {
+      var td = $( tds[ 1 ] );
+      var input = $( td.find( 'input' ).get( 0 ) );
+      var value = input.val();
+      for ( var i = 0; i < matches.length; i++ ) {
+        if ( value.indexOf( matches[ i ] ) === -1 ) {
+          validated = false;
+          input.css( { outline: '1px solid red' } );
+        }
+        else {
+          input.css( { outline: 'initial' } );
+        }
+      }
+    }
+  } );
+  return validated;
+}
+
+$( '#strings' ).submit( function( event ) {
+  if ( !validatePatterns() ) {
+    $( '.validation-message' ).text( 'Error: You must submit the same pattern replacements as the English strings' );
+    event.preventDefault();
+  }
+} );
