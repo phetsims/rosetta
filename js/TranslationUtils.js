@@ -87,7 +87,7 @@ module.exports.contains = contains;
 
 var extractStrings = function( result, data ) {
   var projects = {};
-  var matches = data.match( /string!([\w\.\/]+)/g );
+  var matches = data.match( /string!([\w\.\/-]+)/g );
 
   // if no matches are found, it probably means the sim url was not correct
   if ( matches === null ) {
