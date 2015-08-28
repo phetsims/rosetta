@@ -35,7 +35,6 @@ var _ = require( 'underscore' );
 // constants
 var HTML_SIMS_DIRECTORY = '/data/web/htdocs/phetsims/sims/html/';
 var BRANCH = constants.BRANCH;
-var GITHUB_URL_BASE = constants.GITHUB_URL_BASE;
 
 // globals
 var translatedStrings = global.translatedStrings;
