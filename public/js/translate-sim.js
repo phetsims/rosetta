@@ -24,7 +24,6 @@ function testButtonEventListener() {
         translation = '%E2%80%AB' + translation + '%E2%80%AC';
       }
       var stringKey = row.getAttribute( 'data-string-repo' ).replace( /-/g, '_' ).toUpperCase() + '/' + row.getAttribute( 'data-string-key' );
-      console.log( stringKey );
       stringsToReplace[ stringKey ] = translation;
     }
   }
@@ -133,14 +132,18 @@ function validatePatterns() {
       var td = $( tds[ 1 ] );
       var input = $( td.find( 'input' ).get( 0 ) );
       var value = input.val();
+      var redOutline = false;
       for ( var i = 0; i < matches.length; i++ ) {
-        if ( value.indexOf( matches[ i ] ) === -1 ) {
+        if ( value.length > 0 && value.indexOf( matches[ i ] ) === -1 ) {
           validated = false;
-          input.css( { outline: '1px solid red' } );
+          redOutline = true;
         }
-        else {
-          input.css( { outline: 'initial' } );
-        }
+      }
+      if ( redOutline ) {
+        input.css( { outline: '1px solid red' } );
+      }
+      else {
+        input.css( { outline: 'initial' } );
       }
     }
   } );
@@ -151,5 +154,8 @@ $( '#strings' ).submit( function( event ) {
   if ( !validatePatterns() ) {
     $( '.validation-message' ).text( 'Error: You must submit the same pattern replacements as the English strings' );
     event.preventDefault();
+  }
+  else {
+    $( '.validation-message' ).text( '' );
   }
 } );
