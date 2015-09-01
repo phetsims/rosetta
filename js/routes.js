@@ -32,7 +32,7 @@ var _ = require( 'underscore' );
 // constants
 var BRANCH = constants.BRANCH;
 var GITHUB_URL_BASE = constants.GITHUB_URL_BASE;
-var SIM_INFO_ARRAY = 'data/simInfoArray.json';
+var SIM_INFO_ARRAY = constants.SIM_INFO_ARRAY;
 
 // globals
 var translatedStrings = global.translatedStrings;
