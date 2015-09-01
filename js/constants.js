@@ -9,5 +9,5 @@
 /* jslint node: true */
 'use strict';
 
-module.exports.BRANCH = 'tests'; // branch of babel to commit to, should be changed to master when testing is finished
+module.exports.BRANCH = 'master'; // branch of babel to commit to, should be changed to master when testing is finished
 module.exports.GITHUB_URL_BASE = 'https://raw.githubusercontent.com';
