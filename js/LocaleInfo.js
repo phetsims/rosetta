@@ -15,13 +15,15 @@ var localeInfo = require( '../../chipper/js/data/localeInfo.js' );
 // get locales into a sorted array
 var sortedLocales = [];
 
-for ( var localeObject in localeInfo ) {
-  sortedLocales.push( {
-    code: localeObject,
-    name: localeInfo[ localeObject ].name,
-    localizedName: localeInfo[ localeObject ].localizedName,
-    direction: localeInfo[ localeObject ].direction
-  } );
+for ( var locale in localeInfo ) {
+  if ( locale !== 'en' ) {
+    sortedLocales.push( {
+      code: locale,
+      name: localeInfo[ locale ].name,
+      localizedName: localeInfo[ locale ].localizedName,
+      direction: localeInfo[ locale ].direction
+    } );
+  }
 }
 
 sortedLocales.sort( function( a, b ) {
