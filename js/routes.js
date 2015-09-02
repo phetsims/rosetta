@@ -33,6 +33,7 @@ var _ = require( 'underscore' );
 var BRANCH = constants.BRANCH;
 var GITHUB_URL_BASE = constants.GITHUB_URL_BASE;
 var SIM_INFO_ARRAY = constants.SIM_INFO_ARRAY;
+var TITLE = 'Phet Translation Utility (HTML5)'
 
 // globals
 var translatedStrings = global.translatedStrings;
@@ -163,7 +164,7 @@ module.exports.chooseSimulationAndLanguage = function( req, res ) {
   var username = req.cookies[ 'sign-in-panel.sign-in-form.username' ] || 'not logged in';
 
   res.render( 'translate-home.html', {
-    title: 'PhET Translation Utility',
+    title: TITLE,
     simInfoArray: JSON.parse( fs.readFileSync( SIM_INFO_ARRAY, 'utf8' ) ),
     localeInfoArray: LocaleInfo.sortedLocaleInfoArray(),
     username: username
@@ -299,8 +300,8 @@ module.exports.translateSimulation = function( req, res ) {
 
           // Assemble the data that will be supplied to the template.
           var templateData = {
-            title: "PhET Translation Utility",
-            subtitle: "Please enter a translation for each English string:",
+            title: TITLE,
+            subtitle: 'Please enter a translation for each English string:',
             destinationLanguage: locale ? locale.name : 'Non existent locale',
             simStringsArray: simStringsArray,
             commonStringsArray: commonStringsArray,
