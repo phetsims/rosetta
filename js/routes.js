@@ -296,6 +296,19 @@ module.exports.translateSimulation = function( req, res ) {
           // Pull the username from the cookie
           var username = req.cookies[ 'sign-in-panel.sign-in-form.username' ] || 'not logged in';
 
+          // sort the arrays by the english values
+          var compare = function( a, b ) {
+            if ( a.englishValue < b.englishValue ) {
+              return -1;
+            }
+            if ( a.englishValue > b.englishValue ) {
+              return 1;
+            }
+            return 0;
+          };
+          simStringsArray.sort( compare );
+          commonStringsArray.sort( compare );
+
           var locale = LocaleInfo.localeInfoArray()[ targetLocale ];
 
           // Assemble the data that will be supplied to the template.
