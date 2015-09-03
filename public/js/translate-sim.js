@@ -115,8 +115,8 @@ $( document ).ready( function() {
   } );
 
   // add highlight to "\n" so users are aware that this is treated specially
-  $( 'td:nth-child(2):contains("\\\\n")' ).each( function( index, element ) {
-    $( element ).html( $( element ).text().replace( '\\n', '<span class="highlight">\\n</span>' ) );
+  $( 'td:nth-child(2)' ).each( function( index, element ) {
+    $( element ).html( $( element ).text().replace( /(\{\d\}|\\n)/g, '<span class="highlight">$1</span>' ) );
   } );
 
   // fix dir and text-align for rtl languages
