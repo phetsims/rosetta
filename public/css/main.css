@@ -1,5 +1,5 @@
 body {
-  padding-top: 0px;
+  padding-top: 0;
   margin: 0;
   background-color: #ffffff;
 }
@@ -150,4 +150,31 @@ h1 {
 .validation-message {
   color: red;
   margin-top: 1em;
+}
+
+.rosetta-table {
+  border-collapse: collapse;
+}
+
+.rosetta-table td, th {
+  padding: 5px;
+  border-bottom: 1px solid gray;
+}
+
+.rosetta-table td:nth-child(1) {
+  font-size: 12px;
+  color: gray;
+  text-align: right;
+}
+
+.rosetta-table div[contenteditable] {
+  width: 300px;
+  padding: 3px;
+  font-size: 16px;
+  border: 1px solid lightgrey;
+  display: inline-block;
+}
+
+.highlight {
+  color: red;
 }

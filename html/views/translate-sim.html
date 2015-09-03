@@ -15,15 +15,20 @@
   </div>
   <form name="form" id="strings" method="post">
     <h2>Simulation Strings</h2>
-    <table id="simStringsTable" style="width:50%">
+    <table id="simStringsTable" class="rosetta-table">
       <tr>
-        <td><strong>English</strong></td>
-        <td><strong>{{=it.destinationLanguage}}</strong></td>
+        <th><strong>String Key</strong></th>
+        <th><strong>English</strong></th>
+        <th><strong>{{=it.destinationLanguage}}</strong></th>
       </tr>
       {{~it.simStringsArray :value:index}}
       <tr data-string-key={{=value.key}} data-string-repo={{=value.repo}}>
+        <td>{{=value.key}}</td>
         <td>{{=value.englishValue}}</td>
-        <td><input type="text" name="{{=value.repo}} {{=value.key}}" value="{{=value.value}}"></td>
+        <td>
+          <div contenteditable="true">{{=value.value}}</div>
+          <input type="hidden" name="{{=value.repo}} {{=value.key}}" value="{{=value.value}}">
+        </td>
       </tr>
       {{~}}
     </table>
@@ -32,15 +37,20 @@
 
     <p style="color: red;">WARNING: Translating common strings will effect all simulations that use these strings.</p>
 
-    <table id="commonStringsTable" style="width:50%">
+    <table id="commonStringsTable" class="rosetta-table">
       <tr>
-        <td><strong>English</strong></td>
-        <td><strong>{{=it.destinationLanguage}}</strong></td>
+        <th><strong>String Key</strong></th>
+        <th><strong>English</strong></th>
+        <th><strong>{{=it.destinationLanguage}}</strong></th>
       </tr>
       {{~it.commonStringsArray :value:index}}
       <tr data-string-key={{=value.key}} data-string-repo={{=value.repo}}>
+        <td>{{=value.key}}</td>
         <td>{{=value.englishValue}}</td>
-        <td><input type="text" name="{{=value.repo}} {{=value.key}}" value="{{=value.value}}"></td>
+        <td>
+          <div contenteditable="true">{{=value.value}}</div>
+          <input type="hidden" name="{{=value.repo}} {{=value.key}}" value="{{=value.value}}">
+        </td>
       </tr>
       {{~}}
     </table>
