@@ -158,7 +158,7 @@ h1 {
 
 .rosetta-table td, th {
   padding: 5px;
-  border-bottom: 1px solid gray;
+  /*border-bottom: 1px solid gray;*/
 }
 
 .rosetta-table td:nth-child(1) {
@@ -177,4 +177,13 @@ h1 {
 
 .highlight {
   color: #0000ff;
+}
+
+img.warning {
+  width: 28px;
+  vertical-align: bottom
+}
+
+img.warning:hover {
+  cursor: pointer;
 }

@@ -7,6 +7,9 @@
  */
 $( document ).ready( function() {
 
+  // constants
+  var PATTERN_ERROR_MESSAGE = 'You must submit the same pattern replacements as the English strings';
+
   var testButtonTop = document.getElementById( 'testButtonTop' );
   var saveButtonTop = document.getElementById( 'saveButtonTop' );
   var testButtonBottom = document.getElementById( 'testButtonBottom' );
@@ -114,7 +117,7 @@ $( document ).ready( function() {
     item.addEventListener( 'keydown', inputEventListener );
   } );
 
-  // add highlight to "\n" so users are aware that this is treated specially
+  // add highlight to "\n" and "{\d}" so users are aware that this is treated specially
   $( 'td:nth-child(2)' ).each( function( index, element ) {
     $( element ).html( $( element ).text().replace( /(\{\d\}|\\n)/g, '<span class="highlight">$1</span>' ) );
   } );
@@ -125,29 +128,51 @@ $( document ).ready( function() {
     inputs.css( 'text-align', 'right' );
   }
 
+  /**
+   * Make sure a string that should have pattern fields has the required fields in the translated string
+   * @param row - the row of the table, including the english string and the input string
+   * @returns {boolean}
+   */
+  function validateRow( row ) {
+    var validated = true;
+    var tds = $( row ).find( 'td' );
+    var matches = $( tds[ 1 ] ).text().match( /\{\d\}/g );
+    if ( matches ) {
+      var td = $( tds[ 2 ] );
+      var input = $( td.find( 'div[contenteditable]' ).get( 0 ) );
+      var value = input.text();
+      var redOutline = false;
+      for ( var i = 0; i < matches.length; i++ ) {
+        if ( value.length > 0 && value.indexOf( matches[ i ] ) === -1 ) {
+          validated = false;
+          redOutline = true;
+        }
+      }
+      if ( redOutline ) {
+        input.css( { outline: '1px solid red' } );
+        var img = $( '<img>', { src: '/translate/img/warning.png', class: 'warning' } );
+        td.append( img );
+        img.click( function() {
+          alert( PATTERN_ERROR_MESSAGE );
+        } );
+      }
+      else {
+        input.css( { outline: 'initial' } );
+        td.find( 'img:last-child' ).remove();
+      }
+    }
+    return validated;
+  }
+
+  /**
+   * Make sure every row has the required patterns
+   * @returns {boolean}
+   */
   function validatePatterns() {
     var validated = true;
-
     $( 'tr' ).each( function( index, item ) {
-      var tds = $( item ).find( 'td' );
-      var matches = $( tds[ 0 ] ).text().match( /\{\d\}/g );
-      if ( matches ) {
-        var td = $( tds[ 1 ] );
-        var input = $( td.find( 'input' ).get( 0 ) );
-        var value = input.val();
-        var redOutline = false;
-        for ( var i = 0; i < matches.length; i++ ) {
-          if ( value.length > 0 && value.indexOf( matches[ i ] ) === -1 ) {
-            validated = false;
-            redOutline = true;
-          }
-        }
-        if ( redOutline ) {
-          input.css( { outline: '1px solid red' } );
-        }
-        else {
-          input.css( { outline: 'initial' } );
-        }
+      if ( !validateRow( item ) ) {
+        validated = false;
       }
     } );
     return validated;
@@ -156,7 +181,7 @@ $( document ).ready( function() {
   // validate the inputs before submitting the form
   $( '#strings' ).submit( function( event ) {
     if ( !validatePatterns() ) {
-      $( '.validation-message' ).text( 'Error: You must submit the same pattern replacements as the English strings' );
+      $( '.validation-message' ).text( 'Error: ' + PATTERN_ERROR_MESSAGE );
       event.preventDefault();
     }
     else {
@@ -164,15 +189,23 @@ $( document ).ready( function() {
     }
   } );
 
+  var inputSelector = '.rosetta-table div[contenteditable]';
+
   // disable pressing enter in inputs because it complicates things by adding <br> and possibly other html
-  $( document ).on( 'keypress', '.rosetta-table div[contenteditable]', function( e ) {
+  $( document ).on( 'keypress', inputSelector, function( e ) {
     return e.which !== 13;
   } );
 
   // on every keyup, copy the content from the editable div to a hidden input so it gets submitted with the form
-  $( document ).on( 'keyup', '.rosetta-table div[contenteditable]', function( e ) {
+  $( document ).on( 'keyup', inputSelector, function( e ) {
     var contentEditable = $( this );
     var input = contentEditable.next().get( 0 );
     input.value = contentEditable.text();
+  } );
+
+  // on blur, validate the row to make sure it has the correct patterns
+  $( document ).on( 'blur', inputSelector, function( e ) {
+    var row = this.parentNode.parentNode;
+    validateRow( row );
   } );
 } );
