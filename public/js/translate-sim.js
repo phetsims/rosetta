@@ -153,6 +153,7 @@ $( document ).ready( function() {
     return validated;
   }
 
+  // validate the inputs before submitting the form
   $( '#strings' ).submit( function( event ) {
     if ( !validatePatterns() ) {
       $( '.validation-message' ).text( 'Error: You must submit the same pattern replacements as the English strings' );
@@ -163,14 +164,15 @@ $( document ).ready( function() {
     }
   } );
 
+  // disable pressing enter in inputs because it complicates things by adding <br> and possibly other html
   $( document ).on( 'keypress', '.rosetta-table div[contenteditable]', function( e ) {
     return e.which !== 13;
   } );
 
+  // on every keyup, copy the content from the editable div to a hidden input so it gets submitted with the form
   $( document ).on( 'keyup', '.rosetta-table div[contenteditable]', function( e ) {
     var contentEditable = $( this );
     var input = contentEditable.next().get( 0 );
     input.value = contentEditable.text();
-    console.log( input.value );
   } );
 } );
