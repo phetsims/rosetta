@@ -229,6 +229,7 @@ module.exports.translateSimulation = function( req, res ) {
       var finished = _.after( extractedStrings.length * 2 + 1, function() {
         winston.log( 'info', 'finished called in translateSimulation' );
 
+        var currentSimStringsArray = [];
         var simStringsArray = [];
         var commonStringsArray = [];
 
@@ -263,13 +264,28 @@ module.exports.translateSimulation = function( req, res ) {
             }
           }
 
+          var simTitle; // sim title gets filled in here (e.g. Area Builder instead of area-builder)
+          var otherSims = []; // other sim dependencies get filled in here (e.g. beers-law-lab when translating concentration)
+
           // iterate over all projects that this sim takes strings from
           for ( i = 0; i < extractedStrings.length; i++ ) {
             var project = extractedStrings[ i ];
             var strings = englishStrings[ project.projectName ];
 
-            // put the strings under common strings or sim strings depending on which project they are from
-            var array = ( contains( sims, project.projectName ) ) ? simStringsArray : commonStringsArray;
+            // put the strings under common strings, current sim stirngs, or sim strings depending on which project they are from
+            var array;
+            if ( project.projectName === simName ) {
+              simTitle = strings[ project.projectName + '.name' ] && strings[ project.projectName + '.name' ].value;
+              array = currentSimStringsArray;
+            }
+            else if ( contains( sims, project.projectName ) ) {
+              otherSims.push( project.projectName );
+              array = simStringsArray;
+            }
+            else {
+              array = commonStringsArray;
+            }
+
             for ( var j = 0; j < project.stringKeys.length; j++ ) {
               var key = project.stringKeys[ j ];
 
@@ -316,9 +332,12 @@ module.exports.translateSimulation = function( req, res ) {
             title: TITLE,
             subtitle: 'Please enter a translation for each English string:',
             destinationLanguage: locale ? locale.name : 'Non existent locale',
+            currentSimStringsArray: currentSimStringsArray,
             simStringsArray: simStringsArray,
             commonStringsArray: commonStringsArray,
             simName: simName,
+            simTitle: simTitle ? simTitle : simName,
+            otherSimNames: otherSims.join( ', ' ),
             localeName: targetLocale,
             direction: locale ? locale.direction : 'ltr',
             simUrl: TranslatableSimInfo.getSimInfoByProjectName( simName ).testUrl,

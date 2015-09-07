@@ -14,14 +14,14 @@
     <span class="savedSpan" id="savedTop"><br><br>Saved</span>
   </div>
   <form name="form" id="strings" method="post">
-    <h2>Simulation Strings</h2>
-    <table id="simStringsTable" class="rosetta-table">
+    <h2>{{=it.simTitle}} Strings</h2>
+    <table class="rosetta-table">
       <tr>
         <th><strong>String Key</strong></th>
         <th><strong>English</strong></th>
         <th><strong>{{=it.destinationLanguage}}</strong></th>
       </tr>
-      {{~it.simStringsArray :value:index}}
+      {{~it.currentSimStringsArray :value:index}}
       <tr data-string-key={{=value.key}} data-string-repo={{=value.repo}}>
         <td>{{=value.key}}</td>
         <td>{{=value.englishValue}}</td>
@@ -33,9 +33,28 @@
       {{~}}
     </table>
 
-    <h2>Common Strings</h2>
+    {{? it.otherSimNames}}
+      <h2>Shared Strings (will affect {{=it.otherSimNames}})</h2>
+      <table class="rosetta-table">
+        <tr>
+          <th><strong>String Key</strong></th>
+          <th><strong>English</strong></th>
+          <th><strong>{{=it.destinationLanguage}}</strong></th>
+        </tr>
+        {{~it.simStringsArray :value:index}}
+        <tr data-string-key={{=value.key}} data-string-repo={{=value.repo}}>
+          <td>{{=value.key}}</td>
+          <td>{{=value.englishValue}}</td>
+          <td>
+            <div contenteditable="true">{{=value.value}}</div>
+            <input type="hidden" name="{{=value.repo}} {{=value.key}}" value="{{=value.value}}">
+          </td>
+        </tr>
+        {{~}}
+      </table>
+    {{?}}
 
-    <p style="color: red;">WARNING: Translating common strings will effect all simulations that use these strings.</p>
+    <h2>Common Strings (will affect multiple simulations)</h2>
 
     <table id="commonStringsTable" class="rosetta-table">
       <tr>
