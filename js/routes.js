@@ -162,10 +162,20 @@ module.exports.chooseSimulationAndLanguage = function( req, res ) {
 
   // Pull the username from the cookie
   var username = req.cookies[ 'sign-in-panel.sign-in-form.username' ] || 'not logged in';
+  var simInfoArray = JSON.parse( fs.readFileSync( SIM_INFO_ARRAY, 'utf8' ) );
+  simInfoArray.sort( function( a, b ) {
+    if ( a.simTitle < b.simTitle ) {
+      return -1;
+    }
+    else if ( a.simTitle > b.simTitle ) {
+      return 1;
+    }
+    return 0;
+  } );
 
   res.render( 'translate-home.html', {
     title: TITLE,
-    simInfoArray: JSON.parse( fs.readFileSync( SIM_INFO_ARRAY, 'utf8' ) ),
+    simInfoArray: simInfoArray,
     localeInfoArray: LocaleInfo.sortedLocaleInfoArray(),
     username: username
   } );
