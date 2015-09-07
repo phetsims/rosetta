@@ -298,10 +298,10 @@ module.exports.translateSimulation = function( req, res ) {
 
           // sort the arrays by the english values
           var compare = function( a, b ) {
-            if ( a.englishValue < b.englishValue ) {
+            if ( a.englishValue.toLowerCase() < b.englishValue.toLowerCase() ) {
               return -1;
             }
-            if ( a.englishValue > b.englishValue ) {
+            else if ( a.englishValue.toLowerCase() > b.englishValue.toLowerCase() ) {
               return 1;
             }
             return 0;
