@@ -166,6 +166,10 @@ h1 {
   text-align: right;
 }
 
+.rosetta-table td:nth-child(2) {
+  max-width: 400px;
+}
+
 .rosetta-table div[contenteditable] {
   width: 300px;
   padding: 3px;

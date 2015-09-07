@@ -150,11 +150,13 @@ $( document ).ready( function() {
       }
       if ( redOutline ) {
         input.css( { outline: '1px solid red' } );
-        var img = $( '<img>', { src: '/translate/img/warning.png', class: 'warning' } );
-        td.append( img );
-        img.click( function() {
-          alert( PATTERN_ERROR_MESSAGE );
-        } );
+        if ( !td.find( 'img:last-child' ).length ) {
+          var img = $( '<img>', { src: '/translate/img/warning.png', class: 'warning' } );
+          td.append( img );
+          img.click( function() {
+            alert( PATTERN_ERROR_MESSAGE );
+          } );
+        }
       }
       else {
         input.css( { outline: 'initial' } );
