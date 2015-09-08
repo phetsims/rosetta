@@ -7,9 +7,6 @@
  */
 $( document ).ready( function() {
 
-  // constants
-  var PATTERN_ERROR_MESSAGE = 'You must submit the same pattern replacements as the English strings';
-
   var testButtonTop = document.getElementById( 'testButtonTop' );
   var saveButtonTop = document.getElementById( 'saveButtonTop' );
   var testButtonBottom = document.getElementById( 'testButtonBottom' );
@@ -142,10 +139,12 @@ $( document ).ready( function() {
       var input = $( td.find( 'div[contenteditable]' ).get( 0 ) );
       var value = input.text();
       var redOutline = false;
+      var missingPlaceholders = [];
       for ( var i = 0; i < matches.length; i++ ) {
         if ( value.length > 0 && value.indexOf( matches[ i ] ) === -1 ) {
           validated = false;
           redOutline = true;
+          missingPlaceholders.push( matches[ i ] );
         }
       }
       if ( redOutline ) {
@@ -154,7 +153,7 @@ $( document ).ready( function() {
           var img = $( '<img>', { src: '/translate/img/warning.png', class: 'warning' } );
           td.append( img );
           img.click( function() {
-            alert( PATTERN_ERROR_MESSAGE );
+            alert( 'Your translation has the following errors:\n\nmissing MessageFormat placeholders: ' + missingPlaceholders.join( ', ' ) );
           } );
         }
       }
@@ -183,7 +182,7 @@ $( document ).ready( function() {
   // validate the inputs before submitting the form
   $( '#strings' ).submit( function( event ) {
     if ( !validatePatterns() ) {
-      $( '.validation-message' ).text( 'Error: ' + PATTERN_ERROR_MESSAGE );
+      $( '.validation-message' ).text( 'Your translation has MessageFormat errors. Please correct these before submitting' );
       event.preventDefault();
     }
     else {
