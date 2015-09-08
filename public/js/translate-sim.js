@@ -99,7 +99,7 @@ $( document ).ready( function() {
   }
 
   /**
-   * remove "saved" text when any change is made to inputs
+   * remove 'saved' text when any change is made to inputs
    */
   function inputEventListener() {
     if ( !once ) {
@@ -114,9 +114,9 @@ $( document ).ready( function() {
     item.addEventListener( 'keydown', inputEventListener );
   } );
 
-  // add highlight to "\n" and "{\d}" so users are aware that this is treated specially
+  // add highlight to '\n' and '{\d}' so users are aware that this is treated specially
   $( 'td:nth-child(2)' ).each( function( index, element ) {
-    $( element ).html( $( element ).text().replace( /(\{\d\}|\\n)/g, '<span class="highlight">$1</span>' ) );
+    $( element ).html( $( element ).text().replace( /(\{\d\}|\\n)/g, '<span class=\'highlight\'>$1</span>' ) );
   } );
 
   // fix dir and text-align for rtl languages
@@ -147,6 +147,14 @@ $( document ).ready( function() {
           missingPlaceholders.push( matches[ i ] );
         }
       }
+
+      var regExp = new RegExp('\{[' + matches.length + '-9]\}', 'g');
+
+      // debugger;
+      if (value.match(regExp) !== null) {
+        redOutline = true;
+      }
+
       if ( redOutline ) {
         input.css( { outline: '1px solid red' } );
         if ( !td.find( 'img:last-child' ).length ) {
