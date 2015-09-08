@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>{{=it.title}}</title>
 
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="/translate/css/main.css">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -19,6 +20,9 @@
 
 <body>
 <div id="page-header" class="ltr">
+  <a href="#">
+    <i class="fa fa-question-circle"> Help</i>
+  </a>
   <div id="page-header-container">
     <div id="page-header-logo">
       <a href="/translate/" style="color: white;"> <!--white color for FF focus outline-->
@@ -36,7 +40,10 @@
 
       <div id="page-header-user">
         {{? it.username }}
-        <div><p>user: {{=it.username}}</p></div>
+        <div>
+          <p>user: {{=it.username}}</p>
+        </div>
+
         {{?}}
       </div>
     </div>

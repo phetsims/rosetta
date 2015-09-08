@@ -190,3 +190,17 @@ img.warning {
 img.warning:hover {
   cursor: pointer;
 }
+
+.fa-question-circle {
+  color: black;
+  position: absolute;
+  top: 40px;
+  right: 70px;
+  font-size: 26px;
+  background-color: #e6e6e6;
+  border-radius: 4px;
+  padding: 7px;
+}
+.fa-question-circle:hover {
+  background-color: #f5f5f5;
+}
