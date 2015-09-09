@@ -124,8 +124,8 @@ $( document ).ready( function() {
 
       // make sure every MessageFormat placeholder that exists in the English exists in the translation
       for ( var i = 0; i < matches.length; i++ ) {
-        console.log( matches[ i ].replace( '{', '\\{' ).replace( '}', '\\}' ) );
-        var numberOfOccurrences = (value.match( new RegExp( matches[ i ].replace( '{', '\\{' ).replace( '}', '\\}' ), 'g' ) ) || []).length;
+        var escapedMatch = matches[ i ].replace( '{', '\\{' ).replace( '}', '\\}' );
+        var numberOfOccurrences = (value.match( new RegExp(  escapedMatch, 'g' ) ) || []).length;
         if ( value.length > 0 && numberOfOccurrences !== 1 ) {
           validated = false;
           redOutline = true;
