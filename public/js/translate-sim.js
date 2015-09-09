@@ -111,44 +111,38 @@ $( document ).ready( function() {
    */
   function validateRow( row ) {
     var validated = true;
+    var messageFormatRegexp = /\{\d+\}/g;
     var tds = $( row ).find( 'td' );
-    var matches = $( tds[ 1 ] ).text().match( /\{\d\}/g );
-    if ( matches ) {
+    var englishMatches = $( tds[ 1 ] ).text().match( messageFormatRegexp );
+    if ( englishMatches ) {
       var td = $( tds[ 2 ] );
       var input = $( td.find( 'div[contenteditable]' ).get( 0 ) );
       var value = input.text();
-      var redOutline = false;
       var missingPlaceholders = [];
       var extraPlaceholders = [];
-      var duplicatePlaceholders = [];
+
+      var translatedMatches = value.match( messageFormatRegexp );
 
       // make sure every MessageFormat placeholder that exists in the English exists in the translation
-      for ( var i = 0; i < matches.length; i++ ) {
-        var escapedMatch = matches[ i ].replace( '{', '\\{' ).replace( '}', '\\}' );
-        var numberOfOccurrences = (value.match( new RegExp(  escapedMatch, 'g' ) ) || []).length;
-        if ( value.length > 0 && numberOfOccurrences !== 1 ) {
+      for ( var i = 0; i < englishMatches.length; i++ ) {
+        if ( value.length > 0 && value.indexOf( englishMatches[ i ] ) === -1 ) {
           validated = false;
-          redOutline = true;
-          if ( numberOfOccurrences < 1 ) {
-            missingPlaceholders.push( matches[ i ] );
-          }
-          else {
-            duplicatePlaceholders.push( matches[ i ] );
+          missingPlaceholders.push( englishMatches[ i ] );
+        }
+        if ( translatedMatches ) {
+          var index = translatedMatches.indexOf( englishMatches[ i ] );
+          if ( index !== -1 ) {
+            translatedMatches.splice( index, 1 );
           }
         }
       }
-
-      // make sure the are no MessageFormat placeholders that exist in the translation that don't exist in the English
-      var regExp = new RegExp( '\{[' + matches.length + '-9]\}', 'g' );
-      var extraMatches = value.match( regExp );
-      if ( extraMatches !== null ) {
-        redOutline = true;
+      if ( translatedMatches && translatedMatches.length ) {
         validated = false;
-        extraPlaceholders = extraPlaceholders.concat( extraMatches );
+        extraPlaceholders = translatedMatches;
       }
 
       td.find( 'img:last-child' ).remove(); // remove the old error message either way
-      if ( redOutline ) {
+      if ( missingPlaceholders.length || extraPlaceholders.length ) {
         input.css( { outline: '1px solid red' } );
         var img = $( '<img>', { src: '/translate/img/warning.png', class: 'warning' } );
         td.append( img );
@@ -160,9 +154,6 @@ $( document ).ready( function() {
           }
           if ( extraPlaceholders.length ) {
             errorMessage.push( 'extra MessageFormat placeholders: ' + extraPlaceholders.join( ', ' ) );
-          }
-          if ( duplicatePlaceholders.length ) {
-            errorMessage.push( 'duplicate MessageFormat placeholders: ' + duplicatePlaceholders.join( ', ' ) );
           }
           alert( errorMessage.join( '\n' ) );
         } );
