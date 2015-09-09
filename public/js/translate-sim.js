@@ -214,7 +214,7 @@ $( document ).ready( function() {
     if ( e.type === 'paste' ) {
       setTimeout( function() {
         input.value = contentEditable.text();
-        contentEditable.html( contentEditable.text() );
+        contentEditable.text( contentEditable.text() );
       }, 50 );
     }
 
