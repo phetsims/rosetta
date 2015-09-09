@@ -140,6 +140,9 @@ $( document ).ready( function() {
       var value = input.text();
       var redOutline = false;
       var missingPlaceholders = [];
+      var extraPlaceholders = [];
+
+      // make sure every MessageFormat placeholder that exists in the English exists in the translation
       for ( var i = 0; i < matches.length; i++ ) {
         if ( value.length > 0 && value.indexOf( matches[ i ] ) === -1 ) {
           validated = false;
@@ -148,11 +151,13 @@ $( document ).ready( function() {
         }
       }
 
-      var regExp = new RegExp('\{[' + matches.length + '-9]\}', 'g');
-
-      // debugger;
-      if (value.match(regExp) !== null) {
+      // make sure the are no MessageFormat placeholders that exist in the translation that don't exist in the English
+      var regExp = new RegExp( '\{[' + matches.length + '-9]\}', 'g' );
+      var extraMatches = value.match( regExp );
+      if ( extraMatches !== null ) {
         redOutline = true;
+        validated = false;
+        extraPlaceholders = extraMatches;
       }
 
       if ( redOutline ) {
@@ -161,7 +166,14 @@ $( document ).ready( function() {
           var img = $( '<img>', { src: '/translate/img/warning.png', class: 'warning' } );
           td.append( img );
           img.click( function() {
-            alert( 'Your translation has the following errors:\n\nmissing MessageFormat placeholders: ' + missingPlaceholders.join( ', ' ) );
+            var errorMessage = [ 'Your translation has the following errors:\n' ];
+            if ( missingPlaceholders.length ) {
+              errorMessage.push( 'missing MessageFormat placeholders: ' + missingPlaceholders.join( ', ' ) );
+            }
+            if ( extraPlaceholders.length ) {
+              errorMessage.push( 'extra MessageFormat placeholders: ' + extraPlaceholders.join( ', ' ) );
+            }
+            alert( errorMessage.join( '\n' ) );
           } );
         }
       }
