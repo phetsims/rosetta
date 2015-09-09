@@ -101,25 +101,9 @@ $( document ).ready( function() {
       } );
   }
 
-  /**
-   * remove 'saved' text when any change is made to inputs
-   */
-  function inputEventListener() {
-    if ( !once ) {
-      $( '.savedSpan' ).attr( 'style', 'visibility: hidden' );
-      restoreButton( saveButtonTop );
-      restoreButton( saveButtonBottom );
-      once = true;
-    }
-  }
-
-  inputs.each( function( index, item ) {
-    item.addEventListener( 'keydown', inputEventListener );
-  } );
-
   // add highlight to '\n' and '{\d}' so users are aware that this is treated specially
   $( 'td:nth-child(2)' ).each( function( index, element ) {
-    $( element ).html( $( element ).text().replace( /(\{\d\}|\\n)/g, '<span class=\'highlight\'>$1</span>' ) );
+    $( element ).html( $( element ).html().replace( /(\{\d\}|\\n)/g, '<span class=\'highlight\'>$1</span>' ) );
   } );
 
   // fix dir and text-align for rtl languages
@@ -232,6 +216,14 @@ $( document ).ready( function() {
         input.value = contentEditable.text();
         contentEditable.html( contentEditable.text() );
       }, 50 );
+    }
+
+    // undo-gray saved button on any input change
+    if ( !once ) {
+      $( '.savedSpan' ).attr( 'style', 'visibility: hidden' );
+      restoreButton( saveButtonTop );
+      restoreButton( saveButtonBottom );
+      once = true;
     }
   } );
 
