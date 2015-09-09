@@ -82,6 +82,8 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
         oldValue = oldValue.replace( /\n/g, '\\n' );
       }
 
+      console.log( string + ': ' + stringValue + '. Old val: ' + oldValue );
+
       // don't add the string if the value hasn't changed
       if ( oldValue !== stringValue ) {
         var newHistoryEntry = {
@@ -217,7 +219,6 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
           var commitMessage = Date.now() + ' automated commit from rosetta for file ' + file;
 
           var onCommitSuccess = function() {
-            winston.log( 'info', 'commit: "' + commitMessage + '" committed successfully' );
             for ( var stringKey in repos[ repository ] ) {
               stringValue = repos[ repository ][ stringKey ].value;
               if ( !translatedStrings[ repository ] || !translatedStrings[ repository ][ stringKey ] || stringValue !== translatedStrings[ repository ][ stringKey ].value ) {

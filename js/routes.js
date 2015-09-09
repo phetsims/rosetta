@@ -206,7 +206,7 @@ module.exports.translateSimulation = function( req, res ) {
     }
   }
 
-  winston.log( 'info', 'getting strings from ' + simUrl );
+  winston.log( 'info', 'sending request to ' + simUrl );
 
   // extract strings from the live sim's html file
   request( simUrl, function( error, response, body ) {
@@ -214,9 +214,13 @@ module.exports.translateSimulation = function( req, res ) {
       var i;
       var sims; // array of all active sims
 
+      winston.log( 'info', 'request from ' + simUrl + ' returned successfully' );
+
       // initialize the sims array from the active-sims file in chipper
+      winston.log( 'info', 'sending request to ' + GITHUB_URL_BASE + activeSimsPath );
       request( GITHUB_URL_BASE + activeSimsPath, function( error, response, body ) {
         if ( !error && response.statusCode === 200 ) {
+          winston.log( 'info', 'request from ' + GITHUB_URL_BASE + activeSimsPath + ' returned successfully' );
           sims = body.toString().split( '\n' );
         }
         else {
@@ -367,9 +371,11 @@ module.exports.translateSimulation = function( req, res ) {
           var stringsFilePath = GITHUB_URL_BASE + '/phetsims/' + projectName + '/master/' + projectName + '-strings_en.json';
           var translatedStringsPath = GITHUB_URL_BASE + '/phetsims/babel/' + BRANCH + '/' + projectName + '/' + projectName + '-strings_' + targetLocale + '.json';
 
+          winston.log( 'info', 'sending request to ' + stringsFilePath );
           request( stringsFilePath, function( error, response, body ) {
             if ( !error && response.statusCode === 200 ) {
               englishStrings[ projectName ] = JSON.parse( body );
+              winston.log( 'info', 'request to ' + stringsFilePath + ' returned successfully' );
             }
             else {
               winston.log( 'error', 'request for english strings for project ' + projectName + ' failed. Response code: ' +
@@ -378,9 +384,11 @@ module.exports.translateSimulation = function( req, res ) {
             finished();
           } );
 
+          winston.log( 'info', 'sending request to ' + translatedStringsPath );
           request( translatedStringsPath, function( error, response, body ) {
             if ( !error && response.statusCode === 200 ) {
               translatedStrings[ projectName ] = JSON.parse( body );
+              winston.log( 'info', 'request to ' + translatedStringsPath + ' returned successfully' );
             }
             else {
               winston.log( 'error', 'request for translated strings for project ' + projectName + ' failed. Response code: ' +

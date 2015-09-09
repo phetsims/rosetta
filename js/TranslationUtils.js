@@ -249,14 +249,22 @@ function commit( repo, file, content, message, branch, callback ) {
     // otherwise, update the file using it's sha
     else {
       var sha = data.sha;
-      repo.updateContents( file, message, content, sha, branch, function( err, data, headers ) {
-        if ( err ) {
-          callback( err );
-        }
-        else {
-          callback();
-        }
-      } );
+      var buffer = new Buffer( data.content, data.encoding );
+      if ( buffer.toString() !== content ) {
+        repo.updateContents( file, message, content, sha, branch, function( err, data, headers ) {
+          if ( err ) {
+            callback( err );
+          }
+          else {
+            winston.log( 'info', 'commit: "' + message + '" committed successfully' );
+            callback();
+          }
+        } );
+      }
+      else {
+        winston.log( 'info', 'no commit attempted for ' + file + ' because the contents haven\'t changed' );
+        callback();
+      }
     }
   } );
 }
