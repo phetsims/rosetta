@@ -33,7 +33,7 @@ var _ = require( 'underscore' );
 var BRANCH = constants.BRANCH;
 var GITHUB_URL_BASE = constants.GITHUB_URL_BASE;
 var SIM_INFO_ARRAY = constants.SIM_INFO_ARRAY;
-var TITLE = 'Phet Translation Utility (HTML5)';
+var TITLE = 'PhET Translation Utility (HTML5)';
 
 // globals
 var translatedStrings = global.translatedStrings;
