@@ -139,26 +139,25 @@ $( document ).ready( function() {
         extraPlaceholders = extraMatches;
       }
 
+      td.find( 'img:last-child' ).remove(); // remove the old error message either way
       if ( redOutline ) {
         input.css( { outline: '1px solid red' } );
-        if ( !td.find( 'img:last-child' ).length ) {
-          var img = $( '<img>', { src: '/translate/img/warning.png', class: 'warning' } );
-          td.append( img );
-          img.click( function() {
-            var errorMessage = [ 'Your translation has the following errors:\n' ];
-            if ( missingPlaceholders.length ) {
-              errorMessage.push( 'missing MessageFormat placeholders: ' + missingPlaceholders.join( ', ' ) );
-            }
-            if ( extraPlaceholders.length ) {
-              errorMessage.push( 'extra MessageFormat placeholders: ' + extraPlaceholders.join( ', ' ) );
-            }
-            alert( errorMessage.join( '\n' ) );
-          } );
-        }
+        var img = $( '<img>', { src: '/translate/img/warning.png', class: 'warning' } );
+        td.append( img );
+
+        img.click( function() {
+          var errorMessage = [ 'Your translation has the following errors:\n' ];
+          if ( missingPlaceholders.length ) {
+            errorMessage.push( 'missing MessageFormat placeholders: ' + missingPlaceholders.join( ', ' ) );
+          }
+          if ( extraPlaceholders.length ) {
+            errorMessage.push( 'extra MessageFormat placeholders: ' + extraPlaceholders.join( ', ' ) );
+          }
+          alert( errorMessage.join( '\n' ) );
+        } );
       }
       else {
         input.css( { outline: 'initial' } );
-        td.find( 'img:last-child' ).remove();
       }
     }
     return validated;
