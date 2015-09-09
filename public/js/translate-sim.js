@@ -13,6 +13,10 @@ $( document ).ready( function() {
   var saveButtonBottom = document.getElementById( 'saveButtonBottom' );
   var simData = document.getElementById( 'simData' );
   var rtl = simData.getAttribute( 'data-direction' ) === 'rtl';
+  var savedSpans = $( '.savedSpan' );
+
+  // Var to help only restore save button once from inputs
+  var once = false;
 
   function testButtonEventListener() {
     var simUrl = simData.getAttribute( 'data-sim-url' );
@@ -42,12 +46,6 @@ $( document ).ready( function() {
 
   testButtonTop.addEventListener( 'click', testButtonEventListener );
   testButtonBottom.addEventListener( 'click', testButtonEventListener );
-
-  // Var to help only restore save button once from inputs
-  var once = false;
-
-  var inputs = $( 'input' );
-  var savedSpans = $( '.savedSpan' );
 
   function saveButtonEventListener() {
     var strings = {};
@@ -105,12 +103,6 @@ $( document ).ready( function() {
   $( 'td:nth-child(2)' ).each( function( index, element ) {
     $( element ).html( $( element ).html().replace( /(\{\d\}|\\n)/g, '<span class=\'highlight\'>$1</span>' ) );
   } );
-
-  // fix dir and text-align for rtl languages
-  if ( rtl ) {
-    inputs.attr( 'dir', 'rtl' );
-    inputs.css( 'text-align', 'right' );
-  }
 
   /**
    * Make sure a string that should have pattern fields has the required fields in the translated string
@@ -198,6 +190,13 @@ $( document ).ready( function() {
   } );
 
   var inputSelector = '.rosetta-table div[contenteditable]';
+  var inputs = $( inputSelector );
+
+  // fix dir and text-align for rtl languages
+  if ( rtl ) {
+    inputs.attr( 'dir', 'rtl' );
+    inputs.css( 'text-align', 'right' );
+  }
 
   // disable pressing enter in inputs because it complicates things by adding <br> and possibly other html
   $( document ).on( 'keypress', inputSelector, function( e ) {
