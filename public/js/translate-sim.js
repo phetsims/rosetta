@@ -120,13 +120,21 @@ $( document ).ready( function() {
       var redOutline = false;
       var missingPlaceholders = [];
       var extraPlaceholders = [];
+      var duplicatePlaceholders = [];
 
       // make sure every MessageFormat placeholder that exists in the English exists in the translation
       for ( var i = 0; i < matches.length; i++ ) {
-        if ( value.length > 0 && value.indexOf( matches[ i ] ) === -1 ) {
+        console.log( matches[ i ].replace( '{', '\\{' ).replace( '}', '\\}' ) );
+        var numberOfOccurrences = (value.match( new RegExp( matches[ i ].replace( '{', '\\{' ).replace( '}', '\\}' ), 'g' ) ) || []).length;
+        if ( value.length > 0 && numberOfOccurrences !== 1 ) {
           validated = false;
           redOutline = true;
-          missingPlaceholders.push( matches[ i ] );
+          if ( numberOfOccurrences < 1 ) {
+            missingPlaceholders.push( matches[ i ] );
+          }
+          else {
+            duplicatePlaceholders.push( matches[ i ] );
+          }
         }
       }
 
@@ -136,7 +144,7 @@ $( document ).ready( function() {
       if ( extraMatches !== null ) {
         redOutline = true;
         validated = false;
-        extraPlaceholders = extraMatches;
+        extraPlaceholders = extraPlaceholders.concat( extraMatches );
       }
 
       td.find( 'img:last-child' ).remove(); // remove the old error message either way
@@ -152,6 +160,9 @@ $( document ).ready( function() {
           }
           if ( extraPlaceholders.length ) {
             errorMessage.push( 'extra MessageFormat placeholders: ' + extraPlaceholders.join( ', ' ) );
+          }
+          if ( duplicatePlaceholders.length ) {
+            errorMessage.push( 'duplicate MessageFormat placeholders: ' + duplicatePlaceholders.join( ', ' ) );
           }
           alert( errorMessage.join( '\n' ) );
         } );
