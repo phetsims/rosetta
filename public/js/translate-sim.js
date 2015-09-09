@@ -17,19 +17,22 @@ $( document ).ready( function() {
   function testButtonEventListener() {
     var simUrl = simData.getAttribute( 'data-sim-url' );
     var stringsToReplace = {};
-    var rows = document.getElementsByTagName( 'TR' );
-    for ( var i = 1, row; row = rows[ i ]; i++ ) {
-      var translation = row.cells[ 2 ].children[ 0 ].innerHTML;
-      var repo = row.getAttribute( 'data-string-repo' );
-      if ( repo && translation && translation.length > 0 ) {
-        // add rtl embedding markers for rtl strings
-        if ( rtl ) {
-          translation = '%E2%80%AB' + translation + '%E2%80%AC';
+    var inputs = $( '.rosetta-table tr' );
+    inputs.each( function( i, row ) {
+      var input = $( row ).find( 'input' ).get( 0 );
+      if ( input ) {
+        var translation = input.value;
+        var repo = row.getAttribute( 'data-string-repo' );
+        if ( repo && translation && translation.length > 0 ) {
+          // add rtl embedding markers for rtl strings
+          if ( rtl ) {
+            translation = '%E2%80%AB' + translation + '%E2%80%AC';
+          }
+          var stringKey = repo.replace( /-/g, '_' ).toUpperCase() + '/' + row.getAttribute( 'data-string-key' );
+          stringsToReplace[ stringKey ] = translation;
         }
-        var stringKey = repo.replace( /-/g, '_' ).toUpperCase() + '/' + row.getAttribute( 'data-string-key' );
-        stringsToReplace[ stringKey ] = translation;
       }
-    }
+    } );
     var encodedStrings = encodeURIComponent( JSON.stringify( stringsToReplace ) );
     encodedStrings = encodedStrings.replace( /%5C%5Cn/g, '%5Cn' ); // put back newlines
 
@@ -217,11 +220,19 @@ $( document ).ready( function() {
     return e.which !== 13;
   } );
 
-  // on every keyup, copy the content from the editable div to a hidden input so it gets submitted with the form
-  $( document ).on( 'keyup', inputSelector, function( e ) {
+  // on every change, copy the content from the editable div to a hidden input so it gets submitted with the form
+  $( document ).on( 'keyup paste', inputSelector, function( e ) {
     var contentEditable = $( this );
     var input = contentEditable.next().get( 0 );
     input.value = contentEditable.text();
+
+    // need to set a timeout after pasting in so that the paste has time to take effect
+    if ( e.type === 'paste' ) {
+      setTimeout( function() {
+        input.value = contentEditable.text();
+        contentEditable.html( contentEditable.text() );
+      }, 50 );
+    }
   } );
 
   // on blur, validate the row to make sure it has the correct patterns
