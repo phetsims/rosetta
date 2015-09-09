@@ -5,6 +5,37 @@
  * @author Michael Kauzmann
  * @author Aaron Davis
  */
+
+/**
+ * Modified from http://stackoverflow.com/questions/1125292/how-to-move-cursor-to-end-of-contenteditable-entity/3866442#3866442
+ * @param contentEditableElement
+ */
+function setEndOfContenteditable( contentEditableElement ) {
+
+  // Firefox, Chrome, Opera, Safari, IE 9+
+  if ( document.createRange ) {
+    var range = document.createRange();
+    range.selectNodeContents( contentEditableElement );
+
+    // uncomment the following line to move the cursor to the end of the input instead of selecting all
+    // range.collapse( false );
+    var selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange( range );
+  }
+
+  // IE 8 and lower
+  else if ( document.selection ) {
+    var range = document.body.createTextRange();
+    range.moveToElementText( contentEditableElement );
+
+    // uncomment the following line to move the cursor to the end of the input instead of selecting all
+    // range.collapse( false );
+    range.select();
+  }
+}
+
+
 $( document ).ready( function() {
 
   var testButtonTop = document.getElementById( 'testButtonTop' );
@@ -232,4 +263,9 @@ $( document ).ready( function() {
     var row = this.parentNode.parentNode;
     validateRow( row );
   } );
+
+  $( document ).on( 'focus', inputSelector, function( e ) {
+    setEndOfContenteditable( this );
+  } );
+
 } );
