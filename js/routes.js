@@ -303,23 +303,27 @@ module.exports.translateSimulation = function( req, res ) {
             for ( var j = 0; j < project.stringKeys.length; j++ ) {
               var key = project.stringKeys[ j ];
 
-              // data needed to render to the string on the page - the key, the current value, the English value, and the repo
-              var stringRenderInfo = {
-                key: key,
-                englishValue: ( strings.hasOwnProperty( key ) ) ? escapeHTML( strings[ key ].value ) : key,
-                repo: project.projectName
-              };
+              var stringVisible = ( strings[ key ].visible === undefined ) ? true : strings[ key ].visible;
+              if ( stringVisible ) {
 
-              // used saved string if it exists
-              if ( savedStrings[ project.projectName ][ key ] ) {
-                winston.log( 'info', 'using saved string ' + key + ': ' + savedStrings[ project.projectName ][ key ] );
-                stringRenderInfo.value = escapeHTML( savedStrings[ project.projectName ][ key ] );
-              }
-              else {
-                stringRenderInfo.value = translatedStrings[ project.projectName ][ key ] ? escapeHTML( translatedStrings[ project.projectName ][ key ].value ) : '';
-              }
+                // data needed to render to the string on the page - the key, the current value, the English value, and the repo
+                var stringRenderInfo = {
+                  key: key,
+                  englishValue: ( strings.hasOwnProperty( key ) ) ? escapeHTML( strings[ key ].value ) : key,
+                  repo: project.projectName
+                };
 
-              array.push( stringRenderInfo );
+                // use saved string if it exists
+                if ( savedStrings[ project.projectName ][ key ] ) {
+                  winston.log( 'info', 'using saved string ' + key + ': ' + savedStrings[ project.projectName ][ key ] );
+                  stringRenderInfo.value = escapeHTML( savedStrings[ project.projectName ][ key ] );
+                }
+                else {
+                  stringRenderInfo.value = translatedStrings[ project.projectName ][ key ] ? escapeHTML( translatedStrings[ project.projectName ][ key ].value ) : '';
+                }
+
+                array.push( stringRenderInfo );
+              }
             }
           }
 
