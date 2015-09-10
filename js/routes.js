@@ -303,13 +303,13 @@ module.exports.translateSimulation = function( req, res ) {
             for ( var j = 0; j < project.stringKeys.length; j++ ) {
               var key = project.stringKeys[ j ];
 
-              var stringVisible = ( strings[ key ].visible === undefined ) ? true : strings[ key ].visible;
+              var stringVisible = strings.hasOwnProperty( key ) && ( ( strings[ key ].visible === undefined ) ? true : strings[ key ].visible );
               if ( stringVisible ) {
 
                 // data needed to render to the string on the page - the key, the current value, the English value, and the repo
                 var stringRenderInfo = {
                   key: key,
-                  englishValue: ( strings.hasOwnProperty( key ) ) ? escapeHTML( strings[ key ].value ) : key,
+                  englishValue: escapeHTML( strings[ key ].value ),
                   repo: project.projectName
                 };
 
@@ -323,6 +323,9 @@ module.exports.translateSimulation = function( req, res ) {
                 }
 
                 array.push( stringRenderInfo );
+              }
+              else {
+                winston.log( 'info', 'String key ' + project.stringKeys[ j ] + ' not found or not visible' );
               }
             }
           }
