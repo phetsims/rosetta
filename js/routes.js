@@ -289,7 +289,7 @@ module.exports.translateSimulation = function( req, res ) {
             // put the strings under common strings, current sim stirngs, or sim strings depending on which project they are from
             var array;
             if ( project.projectName === simName ) {
-              simTitle = strings[ project.projectName + '.name' ] && strings[ project.projectName + '.name' ].value;
+              simTitle = strings[ project.projectName + '.title' ] && strings[ project.projectName + '.title' ].value;
               array = currentSimStringsArray;
             }
             else if ( contains( sims, project.projectName ) ) {
@@ -445,7 +445,7 @@ module.exports.saveStrings = function( req, res ) {
   for ( var string in req.body ) {
     if ( req.body.hasOwnProperty( string ) ) {
 
-      // data submitted is in the form "[repository] [key]", for example "area-builder area-builder.name"
+      // data submitted is in the form "[repository] [key]", for example "area-builder area-builder.title"
       var repoAndKey = string.split( ' ' );
       var repo = repoAndKey[ 0 ];
       var key = repoAndKey[ 1 ];

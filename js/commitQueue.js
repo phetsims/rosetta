@@ -61,7 +61,7 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
   for ( var string in req.body ) {
     if ( req.body.hasOwnProperty( string ) ) {
 
-      // data submitted is in the form "[repository] [key]", for example "area-builder area-builder.name"
+      // data submitted is in the form "[repository] [key]", for example "area-builder area-builder.title"
       var repoAndKey = string.split( ' ' );
       var repo = repoAndKey[ 0 ];
       var key = repoAndKey[ 1 ];
