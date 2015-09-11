@@ -286,7 +286,7 @@ module.exports.translateSimulation = function( req, res ) {
             var project = extractedStrings[ i ];
             var strings = englishStrings[ project.projectName ];
 
-            // put the strings under common strings, current sim stirngs, or sim strings depending on which project they are from
+            // put the strings under common strings, current sim strings, or sim strings depending on which project they are from
             var array;
             if ( project.projectName === simName ) {
               simTitle = strings[ project.projectName + '.title' ] && strings[ project.projectName + '.title' ].value;
