@@ -231,8 +231,11 @@ module.exports.translateSimulation = function( req, res ) {
 
       // extract strings from the sim's html file and store them in the extractedStrings array
       // extractedStrings in an array of objects of the form { projectName: 'color-vision', stringKeys: [ 'key1', 'key2', ... ] }
-      var extractedStrings = [];
-      TranslationUtils.extractStrings( extractedStrings, body );
+      var result = TranslationUtils.extractStrings( body, simName );
+      var extractedStrings = result.extractedStrings;
+      var simSha = result.sha; // sha of the sim at the time of publication, or 'master' if no sha is found
+      winston.log( 'info', 'sim sha: ' + simSha );
+
       var englishStrings = {}; // object to hold the English strings
 
       /*
@@ -375,7 +378,8 @@ module.exports.translateSimulation = function( req, res ) {
       for ( i = 0; i < extractedStrings.length; i++ ) {
         (function( i ) {
           var projectName = extractedStrings[ i ].projectName;
-          var stringsFilePath = GITHUB_URL_BASE + '/phetsims/' + projectName + '/master/' + projectName + '-strings_en.json';
+          var repoSha = ( projectName === simName ) ? simSha : 'master';
+          var stringsFilePath = GITHUB_URL_BASE + '/phetsims/' + projectName + '/' + repoSha + '/' + projectName + '-strings_en.json';
           var translatedStringsPath = GITHUB_URL_BASE + '/phetsims/babel/' + BRANCH + '/' + projectName + '/' + projectName + '-strings_' + targetLocale + '.json';
 
           winston.log( 'info', 'sending request to ' + stringsFilePath );

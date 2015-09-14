@@ -85,9 +85,11 @@ var contains = function( array, item ) {
 };
 module.exports.contains = contains;
 
-var extractStrings = function( result, data ) {
+var extractStrings = function( data, simName ) {
   var projects = {};
   var matches = data.match( /string!([\w\.\/-]+)/g );
+  var simShaInfo = new RegExp( '"' + simName + '": {\\s*"sha": "(\\w*)",\\s*"branch": "(\\w*)"', 'g' ).exec( data );
+  var sha = ( simShaInfo.length > 1 ) ? simShaInfo[ 1 ] : 'master'; // default to master if no sha is found
 
   // if no matches are found, it probably means the sim url was not correct
   if ( matches === null ) {
@@ -106,12 +108,15 @@ var extractStrings = function( result, data ) {
     }
   }
 
+  var result = { extractedStrings: [], sha: sha };
   for ( var project in projects ) {
-    result.push( {
+    result.extractedStrings.push( {
       projectName: project.replace( new RegExp( '_', 'g' ), '-' ).toLowerCase(),
       stringKeys: projects[ project ]
     } );
   }
+
+  return result;
 };
 module.exports.extractStrings = extractStrings;
 
@@ -129,12 +134,15 @@ module.exports.extractStrings = extractStrings;
  */
 module.exports.extractStringsAPI = function( req, res ) {
   // included for an easy default test
-  var url = req.param( 'simUrl' ) || 'www.colorado.edu/physics/phet/dev/html/arithmetic/1.0.0-dev.13/arithmetic_en.html';
+  var url = req.param( 'simUrl' ) || 'phet-dev.colorado.edu/sims/html/molecules-and-light/latest/molecules-and-light_en.html';
   var localhost = ( url.indexOf( 'localhost' ) === 0 );
 
   var slashIndex = url.indexOf( '/' );
   var host = ( localhost ) ? 'localhost' : url.substring( 0, slashIndex );
   var path = url.substring( slashIndex );
+
+  var urlSplit = url.split( '/' );
+  var simName = urlSplit[ urlSplit.length - 1 ].split( '_' )[ 0 ];
 
   var options = {
     host: host,
@@ -162,15 +170,14 @@ module.exports.extractStringsAPI = function( req, res ) {
 
     // the whole response has been received
     response.on( 'end', function() {
-      var result = [];
-      extractStrings( result, data );
+      var result = extractStrings( data, simName );
 
-      if ( result.lenght > 0 ) {
+      if ( !result.extractedStrings.length ) {
         res.send( '<p>Error: No strings found at ' + host + path + '</p>' );
       }
       else {
         res.setHeader( 'Content-Type', 'application/json' );
-        res.end( JSON.stringify( result, null, 3 ) );
+        res.end( JSON.stringify( result, null, 2 ) );
       }
     } );
   };
