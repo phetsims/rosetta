@@ -80,7 +80,7 @@ $( document ).ready( function() {
 
   function saveButtonEventListener() {
     var strings = {};
-    inputs.each( function( index, item ) {
+    $( 'td input' ).each( function( index, item ) {
       strings[ item.name ] = item.value;
     } );
 
