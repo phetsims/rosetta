@@ -239,7 +239,7 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
               setTimeout( function() {
                 commit( babel, file, content, commitMessage, BRANCH, function( err ) {
                   if ( err ) {
-                    errorDetails += err + '. Error committing to file ' + file + '<br>';
+                    errorDetails += err + '. Error committing to file ' + file;
                     winston.log( 'error', err + '. Error committing to file ' + file );
                     for ( var stringKey in repos[ repository ] ) {
                       stringValue = repos[ repository ][ stringKey ].value;

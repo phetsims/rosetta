@@ -243,14 +243,23 @@ function commit( repo, file, content, message, branch, callback ) {
 
     // if the file is not found, create a new file instead of updating an existing one
     if ( err ) {
-      repo.createContents( file, message, content, branch, function( err, data, headers ) {
-        if ( err ) {
-          callback( err );
-        }
-        else {
-          callback();
-        }
-      } );
+      winston.log( 'info', 'no file found: ' + file + '. Attempting to create with contents: ' + content );
+
+      if ( content !== '{}' ) {
+        winston.log( 'info', 'calling createContets' );
+        repo.createContents( file, message, content, branch, function( err, data, headers ) {
+          if ( err ) {
+            callback( err );
+          }
+          else {
+            callback();
+          }
+        } );
+      }
+      else {
+        winston.log( 'info', 'no commit attempted for ' + file + ' because there are no strings' );
+        callback();
+      }
     }
 
     // otherwise, update the file using it's sha
