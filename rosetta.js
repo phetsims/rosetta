@@ -20,10 +20,11 @@ var bodyParser = require( 'body-parser' );
 var query = require( 'pg-query' );
 var fs = require( 'fs' );
 var _ = require( 'underscore' );
+var pwuid = require( 'pwuid' );
 
 // constants
 var LISTEN_PORT = 16372;
-var PREFERENCES_FILE = process.env.HOME + '/.phet/build-local.json';
+var PREFERENCES_FILE = pwuid().dir + '/.phet/build-local.json';
 
 // ensure that the preferences file exists and has the required fields
 assert( fs.existsSync( PREFERENCES_FILE ), 'missing preferences file ' + PREFERENCES_FILE );
