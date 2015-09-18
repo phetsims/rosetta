@@ -95,7 +95,7 @@ $( document ).ready( function() {
 
   function saveButtonEventListener() {
     syncInputs();
-    
+
     var strings = {};
     $( 'td input' ).each( function( index, item ) {
       strings[ item.name ] = item.value;

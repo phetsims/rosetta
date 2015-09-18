@@ -20,12 +20,23 @@ var bodyParser = require( 'body-parser' );
 var query = require( 'pg-query' );
 var fs = require( 'fs' );
 var _ = require( 'underscore' );
-var osenv = require( 'osenv' );
 
 // constants
 var LISTEN_PORT = 16372;
-var PREFERENCES_FILE = osenv.home() + '/.phet/build-local.json';
-console.log( PREFERENCES_FILE );
+var PREFERENCES_FILE;
+
+/*
+ * When running on simian or figaro, rosetta is run under user "phet-admin". However, "process.env.HOME" will get
+ * the user who is starting the process's home directory, not phet-admin's home directory, therefore we need to use
+ * a different approach to get the home directory.
+ */
+if ( !/^win/.test( process.platform ) ) {
+  var passwdUser = require( 'passwd-user' );
+  PREFERENCES_FILE = passwdUser.sync( process.getuid() ).homedir + '/.phet/build-local.json';
+}
+else {
+  PREFERENCES_FILE = process.env.HOME + '/.phet/build-local.json';
+}
 
 // ensure that the preferences file exists and has the required fields
 assert( fs.existsSync( PREFERENCES_FILE ), 'missing preferences file ' + PREFERENCES_FILE );
