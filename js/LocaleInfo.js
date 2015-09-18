@@ -36,22 +36,29 @@ sortedLocales.sort( function( a, b ) {
   return 0;
 } );
 
+module.exports = {
 
-module.exports.localeInfoArray = function() {
-  return localeInfo;
-};
+  /**
+   * Return the localeInfo array from chipper's localeInfo.js
+   */
+  localeInfoArray: function() {
+    return localeInfo;
+  },
 
-module.exports.sortedLocaleInfoArray = function() {
-  return sortedLocales;
-};
+  /**
+   * Return the localeInfo array from chipper's localeInfo.js sorted by locale name
+   */
+  sortedLocaleInfoArray: function() {
+    return sortedLocales;
+  },
 
-
-/**
- * Obtain a string that describes the language associated with the provided locale.  For example, if the caller
- * specified 'es_MX', the string 'Spanish - Mexico' would be returned.
- * @param {String} locale
- * @returns {String}
- */
-module.exports.localeToLanguageString = function( locale ) {
-  return localeInfo[ locale ].name;
+  /**
+   * Obtain a string that describes the language associated with the provided locale.  For example, if the caller
+   * specified 'es_MX', the string 'Spanish - Mexico' would be returned.
+   * @param {String} locale
+   * @returns {String}
+   */
+  localeToLanguageString: function( locale ) {
+    return localeInfo[ locale ].name;
+  }
 };
