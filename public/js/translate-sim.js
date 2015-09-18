@@ -210,6 +210,9 @@ $( document ).ready( function() {
     return validated;
   }
 
+  var inputSelector = '.rosetta-table div[contenteditable]';
+  var inputs = $( inputSelector );
+
   // validate the inputs before submitting the form
   $( '#strings' ).submit( function( event ) {
     if ( !validatePatterns() ) {
@@ -218,11 +221,15 @@ $( document ).ready( function() {
     }
     else {
       $( '.validation-message' ).text( '' );
+
+      // on submit make sure all of the inputs are synced with the content editable divs
+      inputs.each( function( index, element ) {
+        var contentEditable = $( element );
+        var input = contentEditable.next().get( 0 );
+        input.value = contentEditable.text();
+        } );
     }
   } );
-
-  var inputSelector = '.rosetta-table div[contenteditable]';
-  var inputs = $( inputSelector );
 
   // fix dir and text-align for rtl languages
   if ( rtl ) {

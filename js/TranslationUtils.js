@@ -243,7 +243,7 @@ function commit( repo, file, content, message, branch, callback ) {
 
     // if the file is not found, create a new file instead of updating an existing one
     if ( err ) {
-      winston.log( 'info', 'no file found: ' + file + '. Attempting to create with contents: ' + content );
+      winston.log( 'info', 'no file found: ' + file + '. Attempting to create.' );
 
       if ( content !== '{}' ) {
         winston.log( 'info', 'calling createContets' );
