@@ -49,14 +49,29 @@ $( document ).ready( function() {
   // Var to help only restore save button once from inputs
   var once = false;
 
+  // selector for content-editable divs (where the user input goes)
+  var inputSelector = '.rosetta-table div[contenteditable]';
+  var inputs = $( inputSelector );
+
+  /**
+   * Copy all of the content-editable text into the hidden inputs to be submitted
+   */
+  function syncInputs() {
+    inputs.each( function( index, element ) {
+      var contentEditable = $( element );
+      var input = contentEditable.next().get( 0 );
+      input.value = contentEditable.text();
+    } );
+  }
+
   function testButtonEventListener() {
     var simUrl = simData.getAttribute( 'data-sim-url' );
     var stringsToReplace = {};
     var inputs = $( '.rosetta-table tr' );
     inputs.each( function( i, row ) {
-      var input = $( row ).find( 'input' ).get( 0 );
-      if ( input ) {
-        var translation = input.value;
+      var contentEditable = $( $( row ).find( 'div[contenteditable]' ).get( 0 ) );
+      if ( contentEditable ) {
+        var translation = contentEditable.text();
         var repo = row.getAttribute( 'data-string-repo' );
         if ( repo && translation && translation.length > 0 ) {
           // add rtl embedding markers for rtl strings
@@ -79,6 +94,8 @@ $( document ).ready( function() {
   testButtonBottom.addEventListener( 'click', testButtonEventListener );
 
   function saveButtonEventListener() {
+    syncInputs();
+    
     var strings = {};
     $( 'td input' ).each( function( index, item ) {
       strings[ item.name ] = item.value;
@@ -210,8 +227,7 @@ $( document ).ready( function() {
     return validated;
   }
 
-  var inputSelector = '.rosetta-table div[contenteditable]';
-  var inputs = $( inputSelector );
+
 
   // validate the inputs before submitting the form
   $( '#strings' ).submit( function( event ) {
@@ -223,11 +239,7 @@ $( document ).ready( function() {
       $( '.validation-message' ).text( '' );
 
       // on submit make sure all of the inputs are synced with the content editable divs
-      inputs.each( function( index, element ) {
-        var contentEditable = $( element );
-        var input = contentEditable.next().get( 0 );
-        input.value = contentEditable.text();
-        } );
+      syncInputs();
     }
   } );
 
