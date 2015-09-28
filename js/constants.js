@@ -9,7 +9,19 @@
 /* jslint node: true */
 'use strict';
 
-module.exports.BRANCH = 'master'; // branch of babel to commit to, should be changed to master when testing is finished
-module.exports.GITHUB_URL_BASE = 'https://raw.githubusercontent.com';
-module.exports.SIM_INFO_ARRAY = 'data/simInfoArray.json';
+// modules
+var assert = require( 'assert' );
+
+/*
+ * Change this to 'tests' for rosetta testing, so that commits will change the 'tests' branch of babel instead of master
+ */
+var BRANCH = 'master';
+
+assert( BRANCH === 'master' || BRANCH === 'tests', 'BRANCH must be set to either master or tests' );
+
+module.exports = {
+  BRANCH: BRANCH,
+  GITHUB_URL_BASE: 'https://raw.githubusercontent.com',
+  SIM_INFO_ARRAY: 'data/simInfoArray.json'
+};
 
