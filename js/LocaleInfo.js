@@ -13,11 +13,11 @@
 var localeInfo = require( '../../chipper/js/data/localeInfo.js' );
 
 // get locales into a sorted array
-var sortedLocales = [];
+var sortedLocaleInfoArray = [];
 
 for ( var locale in localeInfo ) {
   if ( locale !== 'en' ) {
-    sortedLocales.push( {
+    sortedLocaleInfoArray.push( {
       code: locale,
       name: localeInfo[ locale ].name,
       localizedName: localeInfo[ locale ].localizedName,
@@ -26,7 +26,7 @@ for ( var locale in localeInfo ) {
   }
 }
 
-sortedLocales.sort( function( a, b ) {
+sortedLocaleInfoArray.sort( function( a, b ) {
   if ( a.name > b.name ) {
     return 1;
   }
@@ -39,18 +39,14 @@ sortedLocales.sort( function( a, b ) {
 module.exports = {
 
   /**
-   * Return the localeInfo array from chipper's localeInfo.js
+   * localeInfo object from chipper's localeInfo.js
    */
-  localeInfoArray: function() {
-    return localeInfo;
-  },
+  localeInfoObject: localeInfo,
 
   /**
-   * Return the localeInfo array from chipper's localeInfo.js sorted by locale name
+   * localeInfo object from chipper's localeInfo.js, converted to an array sorted by locale name
    */
-  sortedLocaleInfoArray: function() {
-    return sortedLocales;
-  },
+  sortedLocaleInfoArray: sortedLocaleInfoArray,
 
   /**
    * Obtain a string that describes the language associated with the provided locale.  For example, if the caller

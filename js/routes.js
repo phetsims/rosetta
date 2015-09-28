@@ -176,7 +176,7 @@ module.exports.chooseSimulationAndLanguage = function( req, res ) {
   res.render( 'translate-home.html', {
     title: TITLE,
     simInfoArray: simInfoArray,
-    localeInfoArray: LocaleInfo.sortedLocaleInfoArray(),
+    localeInfoArray: LocaleInfo.sortedLocaleInfoArray,
     username: username
   } );
 };
@@ -349,7 +349,7 @@ module.exports.translateSimulation = function( req, res ) {
           simStringsArray.sort( compare );
           commonStringsArray.sort( compare );
 
-          var locale = LocaleInfo.localeInfoArray()[ targetLocale ];
+          var locale = LocaleInfo.localeInfoObject[ targetLocale ];
 
           // Assemble the data that will be supplied to the template.
           var templateData = {

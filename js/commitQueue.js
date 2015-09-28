@@ -151,7 +151,7 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
       }
     } );
 
-    var locale = LocaleInfo.localeInfoArray()[ targetLocale ];
+    var locale = LocaleInfo.localeInfoObject[ targetLocale ];
 
     res.render( 'translation-submit.html', {
       title: 'Translation submitted',
