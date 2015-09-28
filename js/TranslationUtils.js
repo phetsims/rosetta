@@ -38,7 +38,7 @@ if ( preferences.emailUsername && preferences.emailPassword && preferences.email
  * @param subject
  * @param text
  */
-module.exports.sendEmail = function( subject, text ) {
+function sendEmail( subject, text ) {
   if ( emailServer ) {
     emailServer.send( {
       text: text,
@@ -57,7 +57,7 @@ module.exports.sendEmail = function( subject, text ) {
   else {
     winston.log( 'warn', 'email not sent because server credentials were not present in preferences file' );
   }
-};
+}
 
 
 /*---------------------------------------------------------------------------*
@@ -65,26 +65,23 @@ module.exports.sendEmail = function( subject, text ) {
  *---------------------------------------------------------------------------*/
 
 // utility function for presenting escaped HTML, also escapes newline character
-var escapeHTML = function( s ) {
+function escapeHTML( s ) {
   return s.replace( /&/g, '&amp;' )
     .replace( /"/g, '&quot;' )
     .replace( /</g, '&lt;' )
     .replace( />/g, '&gt;' )
     .replace( /\n/g, '&#92;n' );
-};
-module.exports.escapeHTML = escapeHTML;
+}
 
 // convenience method to check if an item is in an array
-var contains = function( array, item ) {
+function contains( array, item ) {
   for ( var i = 0; i < array.length; i++ ) {
     if ( array[ i ] === item ) {
       return true;
     }
   }
   return false;
-};
-module.exports.contains = contains;
-
+}
 
 function renderError( res, message, err ) {
   res.render( 'error.html', {
@@ -94,9 +91,8 @@ function renderError( res, message, err ) {
     timestamp: new Date().getTime()
   } );
 }
-module.exports.renderError = renderError;
 
-var extractStrings = function( data, simName ) {
+function extractStrings( data, simName ) {
   var projects = {};
   var matches = data.match( /string!([\w\.\/-]+)/g );
 
@@ -129,8 +125,7 @@ var extractStrings = function( data, simName ) {
   }
 
   return result;
-};
-module.exports.extractStrings = extractStrings;
+}
 
 /**
  * Route that extracts strings from a built sim. Expects query parameter 'simUrl', the url of the built sim to
@@ -144,7 +139,7 @@ module.exports.extractStrings = extractStrings;
  * @param req
  * @param res
  */
-module.exports.extractStringsAPI = function( req, res ) {
+function extractStringsAPI( req, res ) {
   // included for an easy default test
   var url = req.param( 'simUrl' ) || 'phet-dev.colorado.edu/sims/html/molecules-and-light/latest/molecules-and-light_en.html';
   var localhost = ( url.indexOf( 'localhost' ) === 0 );
@@ -209,7 +204,7 @@ module.exports.extractStringsAPI = function( req, res ) {
 
   // send the request
   strings.end();
-};
+}
 
 
 /*---------------------------------------------------------------------------*
@@ -312,7 +307,15 @@ function getGhClient() {
   } );
 }
 
-// export github functions
-module.exports.getGhClient = getGhClient;
-module.exports.commit = commit;
-module.exports.stringify = stringify;
+// export all functions in this file
+module.exports = {
+  escapeHTML: escapeHTML,
+  contains: contains,
+  renderError: renderError,
+  sendEmail: sendEmail,
+  extractStrings: extractStrings,
+  extractStringsAPI: extractStringsAPI,
+  getGhClient: getGhClient,
+  commit: commit,
+  stringify: stringify
+};
