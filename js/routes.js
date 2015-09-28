@@ -24,6 +24,7 @@ var TranslationUtils = require( './TranslationUtils' );
 var constants = require( './constants' );
 var contains = TranslationUtils.contains;
 var escapeHTML = TranslationUtils.escapeHTML;
+var renderError = TranslationUtils.renderError;
 
 /* jshint -W079 */
 var _ = require( 'underscore' );
@@ -110,12 +111,8 @@ module.exports.checkForValidSession = function( req, res, next ) {
           winston.log( 'info', 'credentials obtained, user is logged in, moving to next step' );
 
           if ( !userData.trustedTranslator && !userData.teamMember ) {
-            res.render( 'error.html', {
-              title: 'Translation Utility Error',
-              message: 'You must be a trusted translator to use the PhET translation utility. Email phethelp@colorado.edu for more information.',
-              errorDetails: '',
-              timestamp: new Date().getTime()
-            } );
+            renderError( res, 'You must be a trusted translator to use the PhET translation utility. ' +
+                              'Email phethelp@colorado.edu for more information.', '' );
           }
           else {
             req.session.teamMember = userData.teamMember;
@@ -137,12 +134,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
     // error handling
     requestCredentials.on( 'error', function( err ) {
       winston.log( 'error', 'error retrieving session data: ' + err );
-      res.render( 'error.html', {
-        title: 'Translation Utility Error',
-        message: 'Unable to obtain user credentials',
-        errorDetails: err,
-        timestamp: new Date().getTime()
-      } );
+      renderError( res, 'Unable to obtain user credentials', err );
     } );
 
     // send the request
@@ -232,6 +224,11 @@ module.exports.translateSimulation = function( req, res ) {
       // extract strings from the sim's html file and store them in the extractedStrings array
       // extractedStrings in an array of objects of the form { projectName: 'color-vision', stringKeys: [ 'key1', 'key2', ... ] }
       var result = TranslationUtils.extractStrings( body, simName );
+
+      if ( !result ) {
+        renderError( res, 'Tried to extract strings from an invalid URL', 'url: ' + simUrl );
+      }
+
       var extractedStrings = result.extractedStrings;
       var simSha = result.sha; // sha of the sim at the time of publication, or 'master' if no sha is found
       winston.log( 'info', 'sim sha: ' + simSha );

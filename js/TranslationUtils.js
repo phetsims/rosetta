@@ -85,16 +85,28 @@ var contains = function( array, item ) {
 };
 module.exports.contains = contains;
 
+
+function renderError( res, message, err ) {
+  res.render( 'error.html', {
+    title: 'Translation Utility Error',
+    message: message,
+    errorDetails: err,
+    timestamp: new Date().getTime()
+  } );
+}
+module.exports.renderError = renderError;
+
 var extractStrings = function( data, simName ) {
   var projects = {};
   var matches = data.match( /string!([\w\.\/-]+)/g );
-  var simShaInfo = new RegExp( '"' + simName + '": {\\s*"sha": "(\\w*)",\\s*"branch": "(\\w*)"', 'g' ).exec( data );
-  var sha = ( simShaInfo.length > 1 ) ? simShaInfo[ 1 ] : 'master'; // default to master if no sha is found
 
   // if no matches are found, it probably means the sim url was not correct
   if ( matches === null ) {
-    return;
+    return null;
   }
+
+  var simShaInfo = new RegExp( '"' + simName + '": {\\s*"sha": "(\\w*)",\\s*"branch": "(\\w*)"', 'g' ).exec( data );
+  var sha = ( simShaInfo && simShaInfo.length > 1 ) ? simShaInfo[ 1 ] : 'master'; // default to master if no sha is found
 
   for ( var i = 0; i < matches.length; i++ ) {
     var projectAndString = matches[ i ].substring( 7 ).split( '/' );
@@ -172,8 +184,8 @@ module.exports.extractStringsAPI = function( req, res ) {
     response.on( 'end', function() {
       var result = extractStrings( data, simName );
 
-      if ( !result.extractedStrings.length ) {
-        res.send( '<p>Error: No strings found at ' + host + path + '</p>' );
+      if ( !result ) {
+        renderError( res, 'Tried to extract strings from an invalid URL', 'url: ' + host + path );
       }
       else {
         res.setHeader( 'Content-Type', 'application/json' );
