@@ -49,12 +49,10 @@ function sendUserToLoginPage( res, host, destinationUrl ) {
 }
 
 /**
- * Route that checks whether the user has a valid session in progress.  This works by looking for the cookie set when
+ * Route that checks whether the user has a valid session in progress. This works by looking for the cookie set when
  * the user logs in to the main web site and, if said cookie is present, uses it to obtain user information from the
- * 'main' web site.
- *
- * TODO: As of mid-Feb 2015, this checks the session on every page serve.  It would probably be better to do some local
- * management of sessions, and only re-check them periodically.
+ * 'main' web site. This check is run on every page, but if the user has already been confirmed as a trusted
+ * translator from the main site, it is just a single if statement instead of a call to the main web site.
  *
  * @param req
  * @param res
