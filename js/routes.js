@@ -77,8 +77,8 @@ module.exports.checkForValidSession = function( req, res, next ) {
     winston.log( 'info', 'req.url = ' + req.url );
     sendUserToLoginPage( res, req.get( 'host' ), req.url );
   }
-  // if the session already has trustedTranslator defined, and it is true, then the user must be a trusted
-  // translator who has already logged in
+  // If the session already has trustedTranslator defined, and it is true, then the user must be a trusted translator
+  // who has already logged in.
   else if ( req.session.trustedTranslator || req.session.teamMember ) {
     next();
   }
@@ -146,11 +146,10 @@ module.exports.checkForValidSession = function( req, res, next ) {
  *
  * @param req
  * @param res
- * @param next
  */
 module.exports.chooseSimulationAndLanguage = function( req, res ) {
 
-  // Pull the username from the cookie
+  // pull the username from the cookie
   var username = req.cookies[ 'sign-in-panel.sign-in-form.username' ] || 'not logged in';
   var simInfoArray = JSON.parse( fs.readFileSync( SIM_INFO_ARRAY, 'utf8' ) );
   simInfoArray.sort( function( a, b ) {
@@ -239,9 +238,10 @@ module.exports.translateSimulation = function( req, res ) {
       var englishStrings = {}; // object to hold the English strings
 
       /*
-       * finished() must be called extractedStrings.length * 2 + 1 times. This is the number of http requests to github that
-       * need to return before we are ready to render the page. We make two requests per repo - one for the English strings from the sims's
-       * repo, and one for the translated strings from babel - plus one more for the request to get the active sims list from chipper.
+       * finished() must be called extractedStrings.length * 2 + 1 times. This is the number of http requests to github
+       * that need to return before we are ready to render the page. We make two requests per repo - one for the English
+       * strings from the sims's repo, and one for the translated strings from babel - plus one more for the request to
+       * get the active sims list from chipper.
        */
       var finished = _.after( extractedStrings.length * 2 + 1, function() {
         winston.log( 'info', 'finished called in translateSimulation' );
@@ -250,6 +250,7 @@ module.exports.translateSimulation = function( req, res ) {
         var simStringsArray = [];
         var commonStringsArray = [];
 
+        // create a query for determining if the user has any saved strings
         var repositories = '';
         var savedStrings = {};
         for ( i = 0; i < extractedStrings.length; i++ ) {
