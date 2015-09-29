@@ -45,6 +45,14 @@ assert( preferences.githubUsername, 'githubUsername is missing from ' + PREFEREN
 assert( preferences.githubPassword, 'githubPassword is missing from ' + PREFERENCES_FILE );
 assert( preferences.buildServerAuthorizationCode, 'buildServerAuthorizationCode is missing from ' + PREFERENCES_FILE );
 
+// make sure we have the session secret if running on our linux production server, otherwise use a test secret
+if ( /linux/.test( process.platform ) ) {
+  assert( preferences.rosettaSessionSecret, 'rosettaSessionSecret is missing from ' + PREFERENCES_FILE );
+}
+else {
+  preferences.rosettaSessionSecret = '1234567890QWERTY';
+}
+
 // initialize globals
 global.preferences = preferences;
 global.translatedStrings = {}; // object to hold the already translated strings
@@ -134,7 +142,7 @@ app.use( '/translate/fonts', express.static( __dirname + '/public/fonts' ) );
 
 // need cookieParser middleware before we can do anything with cookies
 app.use( express.cookieParser() );
-app.use( express.session( { secret: '1234567890QWERTY' } ) );
+app.use( express.session( { secret: preferences.rosettaSessionSecret } ) );
 app.use( bodyParser.json() );
 app.use( bodyParser.urlencoded() );
 
