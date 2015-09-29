@@ -216,7 +216,11 @@ module.exports.translateSimulation = function( req, res ) {
         else {
           winston.log( 'error', error );
         }
-        finished();
+
+        // finished will not be defined if extractStrings fails
+        if ( finished ) {
+          finished();
+        }
       } );
 
       // extract strings from the sim's html file and store them in the extractedStrings array
@@ -225,6 +229,7 @@ module.exports.translateSimulation = function( req, res ) {
 
       if ( !result ) {
         renderError( res, 'Tried to extract strings from an invalid URL', 'url: ' + simUrl );
+        return;
       }
 
       var extractedStrings = result.extractedStrings;
