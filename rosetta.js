@@ -115,13 +115,11 @@ var app = express();
 app.set( 'views', __dirname + '/html/views' );
 app.set( 'view engine', 'dot' );
 app.engine( 'html', doT.__express );
-// TODO - the following lines came in with the template code used to start this project.  Can they go?
+
+// set static directories for css, img, and js
 app.use( '/translate/css', express.static( __dirname + '/public/css' ) );
-app.use( '/translate/sim/css', express.static( __dirname + '/public/css' ) );
 app.use( '/translate/img', express.static( __dirname + '/public/img' ) );
 app.use( '/translate/js', express.static( __dirname + '/public/js' ) );
-app.use( '/translate/sim/js', express.static( __dirname + '/public/js' ) );
-app.use( '/translate/fonts', express.static( __dirname + '/public/fonts' ) );
 
 // need cookieParser middleware before we can do anything with cookies
 app.use( express.cookieParser() );
