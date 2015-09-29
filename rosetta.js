@@ -77,10 +77,8 @@ var parsedCommandLineOptions = parseArgs( commandLineArgs, {
 } );
 
 var defaultOptions = {
-  logFile: undefined,
-  silent: false,
 
-  // options for supporting help
+  // options for supporting help, currently no other options are supported, but this might change
   help: false,
   h: false
 };
@@ -101,31 +99,16 @@ if ( parsedCommandLineOptions.hasOwnProperty( 'help' ) || parsedCommandLineOptio
   console.log( 'Options:' );
   console.log(
     '  --help (print usage and exit)\n' +
-    '    type: bool  default: false\n' +
-    '  --logFile (file name)\n' +
-    '    type: string  default: undefined\n' +
-    '  --silent (do not log to console)\n' +
-    '    type: bool  default: false\n'
-  );
-  console.log(
-    'Example - Run Rosetta without console output, but log to a file called log.txt:\n' +
-    '  node rosetta.js --silent --logFile=log.txt\n'
-  );
+    '    type: bool  default: false\n' );
   return;
 }
 
 // Merge the default and supplied options.
 var options = _.extend( defaultOptions, parsedCommandLineOptions );
 
+// add timestamps
 winston.remove( winston.transports.Console );
 winston.add( winston.transports.Console, { 'timestamp': true } );
-
-if ( options.logFile ) {
-  winston.add( winston.transports.File, { filename: options.logFile } );
-}
-if ( options.silent ) {
-  winston.remove( winston.transports.Console );
-}
 
 // Create and configure the ExpressJS app
 var app = express();
