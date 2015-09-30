@@ -12,9 +12,11 @@
  */
 function setEndOfContenteditable( contentEditableElement ) {
 
+  var range;
+
   // Firefox, Chrome, Opera, Safari, IE 9+
   if ( document.createRange ) {
-    var range = document.createRange();
+    range = document.createRange();
     range.selectNodeContents( contentEditableElement );
 
     // uncomment the following line to move the cursor to the end of the input instead of selecting all
@@ -26,7 +28,7 @@ function setEndOfContenteditable( contentEditableElement ) {
 
   // IE 8 and lower
   else if ( document.selection ) {
-    var range = document.body.createTextRange();
+    range = document.body.createTextRange();
     range.moveToElementText( contentEditableElement );
 
     // uncomment the following line to move the cursor to the end of the input instead of selecting all
@@ -34,7 +36,6 @@ function setEndOfContenteditable( contentEditableElement ) {
     range.select();
   }
 }
-
 
 $( document ).ready( function() {
 
@@ -226,8 +227,6 @@ $( document ).ready( function() {
     } );
     return validated;
   }
-
-
 
   // validate the inputs before submitting the form
   $( '#strings' ).submit( function( event ) {
