@@ -11,6 +11,9 @@ To start:
 To stop:
 ```sudo /etc/init.d/rosetta stop```
 
+To check if rosetta is running (note the lack of sudo):
+```/etc/init.d/rosetta status```
+
 ### Setup for local testing
 
 Create a postgres database called "rosetta"
