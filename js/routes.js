@@ -376,41 +376,39 @@ module.exports.translateSimulation = function( req, res ) {
       } );
 
       // send requests to github for the common code English strings
-      for ( i = 0; i < extractedStrings.length; i++ ) {
-        (function( i ) {
-          var projectName = extractedStrings[ i ].projectName;
-          var repoSha = ( projectName === simName ) ? simSha : 'master';
-          var stringsFilePath = GITHUB_URL_BASE + '/phetsims/' + projectName + '/' + repoSha + '/' + projectName + '-strings_en.json';
-          var translatedStringsPath = GITHUB_URL_BASE + '/phetsims/babel/' + BRANCH + '/' + projectName + '/' + projectName + '-strings_' + targetLocale + '.json';
+      extractedStrings.forEach( function( extractedStringObject ) {
+        var projectName = extractedStringObject.projectName;
+        var repoSha = ( projectName === simName ) ? simSha : 'master';
+        var stringsFilePath = GITHUB_URL_BASE + '/phetsims/' + projectName + '/' + repoSha + '/' + projectName + '-strings_en.json';
+        var translatedStringsPath = GITHUB_URL_BASE + '/phetsims/babel/' + BRANCH + '/' + projectName + '/' + projectName + '-strings_' + targetLocale + '.json';
 
-          winston.log( 'info', 'sending request to ' + stringsFilePath );
-          request( stringsFilePath, function( error, response, body ) {
-            if ( !error && response.statusCode === 200 ) {
-              englishStrings[ projectName ] = JSON.parse( body );
-              winston.log( 'info', 'request to ' + stringsFilePath + ' returned successfully' );
-            }
-            else {
-              winston.log( 'error', 'request for english strings for project ' + projectName + ' failed. Response code: ' +
-                                    response.statusCode + '. URL: ' + stringsFilePath + '. Error: ' + error );
-            }
-            finished();
-          } );
+        winston.log( 'info', 'sending request to ' + stringsFilePath );
+        request( stringsFilePath, function( error, response, body ) {
+          if ( !error && response.statusCode === 200 ) {
+            englishStrings[ projectName ] = JSON.parse( body );
+            winston.log( 'info', 'request to ' + stringsFilePath + ' returned successfully' );
+          }
+          else {
+            winston.log( 'error', 'request for english strings for project ' + projectName + ' failed. Response code: ' +
+                                  response.statusCode + '. URL: ' + stringsFilePath + '. Error: ' + error );
+          }
+          finished();
+        } );
 
-          winston.log( 'info', 'sending request to ' + translatedStringsPath );
-          request( translatedStringsPath, function( error, response, body ) {
-            if ( !error && response.statusCode === 200 ) {
-              translatedStrings[ projectName ] = JSON.parse( body );
-              winston.log( 'info', 'request to ' + translatedStringsPath + ' returned successfully' );
-            }
-            else {
-              winston.log( 'error', 'request for translated strings for project ' + projectName + ' failed. Response code: ' +
-                                    response.statusCode + '. URL: ' + translatedStringsPath + '. Error: ' + error );
-              translatedStrings[ projectName ] = {}; // add an empty object with the project name key so key lookups don't fail later on
-            }
-            finished();
-          } );
-        })( i );
-      }
+        winston.log( 'info', 'sending request to ' + translatedStringsPath );
+        request( translatedStringsPath, function( error, response, body ) {
+          if ( !error && response.statusCode === 200 ) {
+            translatedStrings[ projectName ] = JSON.parse( body );
+            winston.log( 'info', 'request to ' + translatedStringsPath + ' returned successfully' );
+          }
+          else {
+            winston.log( 'error', 'request for translated strings for project ' + projectName + ' failed. Response code: ' +
+                                  response.statusCode + '. URL: ' + translatedStringsPath + '. Error: ' + error );
+            translatedStrings[ projectName ] = {}; // add an empty object with the project name key so key lookups don't fail later on
+          }
+          finished();
+        } );
+      } );
     }
     else {
       winston.log( 'error', error );
