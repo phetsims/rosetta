@@ -1,7 +1,7 @@
 // Copyright 2002-2015, University of Colorado Boulder
 
 /**
- * This file holds various utilities useful for translation
+ * This file holds various utilities useful for translation.
  *
  * @author Aaron Davis
  */
@@ -16,7 +16,6 @@ var email = require( 'emailjs/email' );
 
 // globals
 var preferences = global.preferences;
-
 
 /*---------------------------------------------------------------------------*
  * Email utilities
@@ -34,7 +33,7 @@ if ( preferences.emailUsername && preferences.emailPassword && preferences.email
 }
 
 /**
- * Send an email if server is defined. Used to notify developers push to babel fails
+ * send an email if server is defined, used to notify developers push to babel (the string repo) fails
  * @param subject
  * @param text
  */
@@ -58,7 +57,6 @@ function sendEmail( subject, text ) {
     winston.log( 'warn', 'email not sent because server credentials were not present in preferences file' );
   }
 }
-
 
 /*---------------------------------------------------------------------------*
  * Utility functions
@@ -269,7 +267,7 @@ function commit( repo, file, content, message, branch, callback ) {
       }
     }
 
-    // otherwise, update the file using it's sha
+    // otherwise, update the file using its SHA
     else {
       var sha = data.sha;
       var buffer = new Buffer( data.content, data.encoding );
