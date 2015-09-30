@@ -44,14 +44,8 @@ var preferences = require( PREFERENCES_FILE );
 assert( preferences.githubUsername, 'githubUsername is missing from ' + PREFERENCES_FILE );
 assert( preferences.githubPassword, 'githubPassword is missing from ' + PREFERENCES_FILE );
 assert( preferences.buildServerAuthorizationCode, 'buildServerAuthorizationCode is missing from ' + PREFERENCES_FILE );
-
-// make sure we have the session secret if running on our linux production server, otherwise use a test secret
-if ( /linux/.test( process.platform ) ) {
-  assert( preferences.rosettaSessionSecret, 'rosettaSessionSecret is missing from ' + PREFERENCES_FILE );
-}
-else {
-  preferences.rosettaSessionSecret = '1234567890QWERTY';
-}
+assert( preferences.rosettaSessionSecret, 'rosettaSessionSecret is missing from ' + PREFERENCES_FILE +
+                                          '. To set this up for local testing add any string as the value for "rosettaSessionSecret"' );
 
 // initialize globals
 global.preferences = preferences;
