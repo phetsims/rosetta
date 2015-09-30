@@ -414,6 +414,13 @@ module.exports.translateSimulation = function( req, res ) {
   } );
 };
 
+/**
+ * Route for submitting strings (when the user presses the "Submit" button on a translate sim page).
+ * The translation is added to a queue of translations to be committed to github. Logic for this is
+ * in the file commitQueue.js.
+ * @param req
+ * @param res
+ */
 module.exports.submitStrings = function( req, res ) {
   var simName = req.param( 'simName' );
   var targetLocale = req.param( 'targetLocale' );
@@ -427,6 +434,12 @@ module.exports.submitStrings = function( req, res ) {
   } );
 };
 
+/**
+ * Route for saving strings (when the user presses the "Save" button on the translate sim page).
+ * Strings are added to the postgres database.
+ * @param req
+ * @param res
+ */
 module.exports.saveStrings = function( req, res ) {
   var simName = req.param( 'simName' );
   var targetLocale = req.param( 'targetLocale' );
