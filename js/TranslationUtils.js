@@ -14,6 +14,10 @@ var winston = require( 'winston' );
 var github = require( 'octonode' );
 var email = require( 'emailjs/email' );
 
+/* jshint -W079 */
+var _ = require( 'underscore' );
+/* jshint +W079 */
+
 // globals
 var preferences = global.preferences;
 
@@ -71,16 +75,6 @@ function escapeHTML( s ) {
     .replace( /\n/g, '&#92;n' );
 }
 
-// convenience method to check if an item is in an array
-function contains( array, item ) {
-  for ( var i = 0; i < array.length; i++ ) {
-    if ( array[ i ] === item ) {
-      return true;
-    }
-  }
-  return false;
-}
-
 function renderError( res, message, err ) {
   res.render( 'error.html', {
     title: 'Translation Utility Error',
@@ -109,7 +103,7 @@ function extractStrings( data, simName ) {
 
     projects[ projectName ] = projects[ projectName ] || [];
 
-    if ( !contains( projects[ projectName ], string ) ) {
+    if ( !_.contains( projects[ projectName ], string ) ) {
       projects[ projectName ].push( string );
     }
   }
@@ -308,7 +302,6 @@ function getGhClient() {
 // export all functions in this file
 module.exports = {
   escapeHTML: escapeHTML,
-  contains: contains,
   renderError: renderError,
   sendEmail: sendEmail,
   extractStrings: extractStrings,

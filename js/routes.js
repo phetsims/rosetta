@@ -22,7 +22,6 @@ var TranslatableSimInfo = require( './TranslatableSimInfo' );
 var commitQueue = require( './commitQueue' ).commitQueue;
 var TranslationUtils = require( './TranslationUtils' );
 var constants = require( './constants' );
-var contains = TranslationUtils.contains;
 var escapeHTML = TranslationUtils.escapeHTML;
 var renderError = TranslationUtils.renderError;
 
@@ -279,7 +278,7 @@ module.exports.translateSimulation = function( req, res ) {
               simTitle = strings[ project.projectName + '.title' ] && strings[ project.projectName + '.title' ].value;
               array = currentSimStringsArray;
             }
-            else if ( contains( sims, project.projectName ) ) {
+            else if ( _.contains( sims, project.projectName ) ) {
               otherSims.push( project.projectName );
               array = simStringsArray;
             }
