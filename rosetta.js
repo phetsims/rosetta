@@ -119,7 +119,7 @@ app.use( '/translate/js', express.static( __dirname + '/public/js' ) );
 app.use( express.cookieParser() );
 app.use( express.session( { secret: preferences.rosettaSessionSecret } ) );
 app.use( bodyParser.json() );
-app.use( bodyParser.urlencoded() );
+app.use( bodyParser.urlencoded( { extended: false } ) );
 
 //----------------------------------------------------------------------------
 // Set up the routes.  The order matters.
