@@ -205,23 +205,6 @@ module.exports.translateSimulation = function( req, res ) {
 
       winston.log( 'info', 'request from ' + simUrl + ' returned successfully' );
 
-      // initialize the sims array from the active-sims file in chipper
-      winston.log( 'info', 'sending request to ' + GITHUB_URL_BASE + activeSimsPath );
-      request( GITHUB_URL_BASE + activeSimsPath, function( error, response, body ) {
-        if ( !error && response.statusCode === 200 ) {
-          winston.log( 'info', 'request from ' + GITHUB_URL_BASE + activeSimsPath + ' returned successfully' );
-          sims = body.toString().split( '\n' );
-        }
-        else {
-          winston.log( 'error', error );
-        }
-
-        // finished will not be defined if extractStrings fails
-        if ( finished ) {
-          finished();
-        }
-      } );
-
       // extract strings from the sim's html file and store them in the extractedStrings array
       // extractedStrings in an array of objects of the form { projectName: 'color-vision', stringKeys: [ 'key1', 'key2', ... ] }
       var result = TranslationUtils.extractStrings( body, simName );
@@ -373,6 +356,20 @@ module.exports.translateSimulation = function( req, res ) {
           // Render the page.
           res.render( 'translate-sim.html', templateData );
         } );
+      } );
+
+      // initialize the sims array from the active-sims file in chipper
+      winston.log( 'info', 'sending request to ' + GITHUB_URL_BASE + activeSimsPath );
+      request( GITHUB_URL_BASE + activeSimsPath, function( error, response, body ) {
+        if ( !error && response.statusCode === 200 ) {
+          winston.log( 'info', 'request from ' + GITHUB_URL_BASE + activeSimsPath + ' returned successfully' );
+          sims = body.toString().split( '\n' );
+        }
+        else {
+          winston.log( 'error', error );
+        }
+
+        finished();
       } );
 
       // send requests to github for the common code English strings
