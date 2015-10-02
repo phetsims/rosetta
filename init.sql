@@ -1,4 +1,6 @@
--- upsert_saved_translations modeled from code posted here: http://stackoverflow.com/questions/1109061/insert-on-duplicate-update-in-postgresql
+-- Create a table for use by Rosetta for temporarily saving strings
+-- Each row is defined by userid, stringkey, repository, and locale.
+-- The function upsert_saved_translations is used to create a row if it doesn't exist, or update it if it does.
 
 CREATE TABLE saved_translations (
     user_id bigint,
@@ -10,6 +12,7 @@ CREATE TABLE saved_translations (
     PRIMARY KEY (user_id, stringkey, repository, locale)
 );
 
+-- modeled from code posted here: http://stackoverflow.com/questions/1109061/insert-on-duplicate-update-in-postgresql
 CREATE FUNCTION upsert_saved_translations(id bigint, key varchar, repo varchar, loc varchar, value varchar, ts timestamp) RETURNS VOID AS
 $$
 BEGIN
