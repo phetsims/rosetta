@@ -19,7 +19,6 @@ var winston = require( 'winston' );
 var bodyParser = require( 'body-parser' );
 var query = require( 'pg-query' );
 var fs = require( 'fs' );
-var _ = require( 'underscore' );
 
 // constants
 var LISTEN_PORT = 16372;
@@ -97,9 +96,6 @@ if ( parsedCommandLineOptions.hasOwnProperty( 'help' ) || parsedCommandLineOptio
   return;
 }
 
-// Merge the default and supplied options.
-var options = _.extend( defaultOptions, parsedCommandLineOptions );
-
 // add timestamps
 winston.remove( winston.transports.Console );
 winston.add( winston.transports.Console, { 'timestamp': true } );
@@ -143,4 +139,4 @@ app.get( '/translate/extractStrings', routes.extractStringsAPI );
 app.get( '/*', routes.pageNotFound );
 
 // start the server
-app.listen( LISTEN_PORT, function() { winston.log( 'info', 'Listening on port ' + LISTEN_PORT ) } );
+app.listen( LISTEN_PORT, function() { winston.log( 'info', 'Listening on port ' + LISTEN_PORT ); } );
