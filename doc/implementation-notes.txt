@@ -5,3 +5,6 @@ The term 'project name' is used throughout the code as a means to reference a si
 is essentially the repository name, but the term 'repository name' was avoided in case another VCS system is adopted
 at some point in the future.  Examples of project names are 'build-an-atom' and 'energy-skate-park-basics' and 'scenery'.
 
+The utility relies on the node module "octonode" for commits to github via the github API. Rosetta does not write or read
+from disk, it always interacts directly with files on github. Any commits to github are queued so that only one commit can
+happen at a time.
