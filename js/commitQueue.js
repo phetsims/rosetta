@@ -73,8 +73,8 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
       var stringValue = req.body[ string ];
 
       // check if the string is already in translatedStrings to get the history if it exists
-      var translatedString = ( translatedStrings[ repo ] ) ? translatedStrings[ repo ][ key ] : null;
-      var history = ( translatedString ) ? translatedString.history : null;
+      var translatedString = translatedStrings[ targetLocale ] && translatedStrings[ targetLocale ][ repo ] && translatedStrings[ targetLocale ][ repo ][ key ];
+      var history = translatedString && translatedString.history;
       var oldValue = ( history && history.length ) ? history[ history.length - 1 ].newValue : '';
 
       // handle special case of multiline string
@@ -220,8 +220,9 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
 
           var onCommitSuccess = function() {
             for ( var stringKey in repos[ repository ] ) {
-              stringValue = repos[ repository ][ stringKey ].value;
-              if ( !translatedStrings[ repository ] || !translatedStrings[ repository ][ stringKey ] || stringValue !== translatedStrings[ repository ][ stringKey ].value ) {
+              var stringValue = repos[ repository ][ stringKey ].value;
+              var translatedString = translatedStrings[ targetLocale ] && translatedStrings[ targetLocale ][ repository ] && translatedStrings[ targetLocale ][ repository ][ stringKey ];
+              if ( !translatedString || stringValue !== translatedString.value ) {
                 successes.push( {
                   stringKey: stringKey,
                   stringValue: stringValue
@@ -242,8 +243,9 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
                     errorDetails += err + '. Error committing to file ' + file;
                     winston.log( 'error', err + '. Error committing to file ' + file );
                     for ( var stringKey in repos[ repository ] ) {
-                      stringValue = repos[ repository ][ stringKey ].value;
-                      if ( !translatedStrings[ repository ] || !translatedStrings[ repository ][ stringKey ] || stringValue !== translatedStrings[ repository ][ stringKey ].value ) {
+                      var stringValue = repos[ repository ][ stringKey ].value;
+                      var translatedString = translatedStrings[ targetLocale ] && translatedStrings[ targetLocale ][ repository ] && translatedStrings[ targetLocale ][ repository ][ stringKey ];
+                      if ( !translatedString || stringValue !== translatedString.value ) {
                         errors.push( {
                           stringKey: stringKey,
                           stringValue: stringValue

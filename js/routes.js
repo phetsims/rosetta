@@ -305,7 +305,8 @@ module.exports.translateSimulation = function( req, res ) {
                   stringRenderInfo.value = escapeHTML( savedStrings[ project.projectName ][ key ] );
                 }
                 else {
-                  stringRenderInfo.value = translatedStrings[ project.projectName ][ key ] ? escapeHTML( translatedStrings[ project.projectName ][ key ].value ) : '';
+                  var translatedString = translatedStrings[ targetLocale ][ project.projectName ][ key ];
+                  stringRenderInfo.value = translatedString ? escapeHTML( translatedString.value ) : '';
                 }
 
                 array.push( stringRenderInfo );
@@ -394,13 +395,13 @@ module.exports.translateSimulation = function( req, res ) {
         winston.log( 'info', 'sending request to ' + translatedStringsPath );
         request( translatedStringsPath, function( error, response, body ) {
           if ( !error && response.statusCode === 200 ) {
-            translatedStrings[ projectName ] = JSON.parse( body );
+            translatedStrings[ targetLocale ][ projectName ] = JSON.parse( body );
             winston.log( 'info', 'request to ' + translatedStringsPath + ' returned successfully' );
           }
           else {
             winston.log( 'error', 'request for translated strings for project ' + projectName + ' failed. Response code: ' +
                                   response.statusCode + '. URL: ' + translatedStringsPath + '. Error: ' + error );
-            translatedStrings[ projectName ] = {}; // add an empty object with the project name key so key lookups don't fail later on
+            translatedStrings[ targetLocale ][ projectName ] = {}; // add an empty object with the project name key so key lookups don't fail later on
           }
           finished();
         } );
