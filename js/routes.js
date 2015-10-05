@@ -394,6 +394,7 @@ module.exports.translateSimulation = function( req, res ) {
 
         winston.log( 'info', 'sending request to ' + translatedStringsPath );
         request( translatedStringsPath, function( error, response, body ) {
+          translatedStrings[ targetLocale ] = translatedStrings[ targetLocale ] || {};
           if ( !error && response.statusCode === 200 ) {
             translatedStrings[ targetLocale ][ projectName ] = JSON.parse( body );
             winston.log( 'info', 'request to ' + translatedStringsPath + ' returned successfully' );
