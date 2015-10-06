@@ -10,7 +10,6 @@
  */
 
 /* jslint node: true */
-'use strict';
 
 // modules
 var async = require( 'async' );
@@ -40,6 +39,8 @@ var BRANCH = constants.BRANCH;
 var translatedStrings = global.translatedStrings;
 
 module.exports.commitQueue = async.queue( function( task, taskCallback ) {
+  'use strict';
+  
   var req = task.req;
   var res = task.res;
 

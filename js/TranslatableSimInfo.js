@@ -13,7 +13,6 @@
  */
 
 /* jslint node: true */
-'use strict';
 
 // modules
 var constants = require( './constants' );
@@ -28,6 +27,7 @@ var SIM_INFO_ARRAY = constants.SIM_INFO_ARRAY;
  * @returns {object} simulation information, see above for structure, null if no match found
  */
 module.exports.getSimInfoByProjectName = function( projectName ) {
+  'use strict';
 
   // read file every time in case it has changed
   var simInfoArray = JSON.parse( fs.readFileSync( SIM_INFO_ARRAY, 'utf8' ) );

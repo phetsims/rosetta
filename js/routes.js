@@ -8,7 +8,6 @@
  */
 
 /* jslint node: true */
-'use strict';
 
 // modules
 var https = require( 'https' );
@@ -40,6 +39,8 @@ var translatedStrings = global.translatedStrings;
 
 // utility function for sending the user to the login page
 function sendUserToLoginPage( res, host, destinationUrl ) {
+  'use strict';
+  
   res.render( 'login-required.html', {
     title: 'Login Required',
     host: host,
@@ -58,6 +59,7 @@ function sendUserToLoginPage( res, host, destinationUrl ) {
  * @param next
  */
 module.exports.checkForValidSession = function( req, res, next ) {
+  'use strict';
 
   if ( req.get( 'host' ).indexOf( 'localhost' ) === 0 ) {
     // bypass credential evaluation to allow testing on localhost
@@ -147,6 +149,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
  * @param res
  */
 module.exports.chooseSimulationAndLanguage = function( req, res ) {
+  'use strict';
 
   // pull the username from the cookie
   var username = req.cookies[ 'sign-in-panel.sign-in-form.username' ] || 'not logged in';
@@ -177,6 +180,8 @@ module.exports.chooseSimulationAndLanguage = function( req, res ) {
  * @param res
  */
 module.exports.translateSimulation = function( req, res ) {
+  'use strict';
+  
   var simName = req.param( 'simName' );
   var targetLocale = req.param( 'targetLocale' );
   var activeSimsPath = '/phetsims/chipper/master/data/active-sims';
@@ -423,6 +428,8 @@ module.exports.translateSimulation = function( req, res ) {
  * @param res
  */
 module.exports.submitStrings = function( req, res ) {
+  'use strict';
+  
   var simName = req.param( 'simName' );
   var targetLocale = req.param( 'targetLocale' );
 
@@ -442,6 +449,8 @@ module.exports.submitStrings = function( req, res ) {
  * @param res
  */
 module.exports.saveStrings = function( req, res ) {
+  'use strict';
+  
   var simName = req.param( 'simName' );
   var targetLocale = req.param( 'targetLocale' );
   var userId = ( req.session.userId ) ? req.session.userId : 0;
@@ -502,6 +511,8 @@ module.exports.saveStrings = function( req, res ) {
  * @param res
  */
 module.exports.pageNotFound = function( req, res ) {
+  'use strict';
+  
   res.send( '<p>Error: Page not found.  URL = ' + req.url + '</p>' );
 };
 

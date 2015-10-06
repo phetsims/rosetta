@@ -7,7 +7,6 @@
  */
 
 /* jslint node: true */
-'use strict';
 
 // modules
 var assert = require( 'assert' );

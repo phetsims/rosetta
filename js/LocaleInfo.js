@@ -8,7 +8,6 @@
  */
 
 /* jslint node: true */
-'use strict';
 
 var localeInfo = require( '../../chipper/js/data/localeInfo.js' );
 
@@ -27,6 +26,8 @@ for ( var locale in localeInfo ) {
 }
 
 sortedLocaleInfoArray.sort( function( a, b ) {
+  'use strict';
+  
   if ( a.name > b.name ) {
     return 1;
   }
@@ -55,6 +56,7 @@ module.exports = {
    * @returns {String}
    */
   localeToLanguageString: function( locale ) {
+    'use strict';
     return localeInfo[ locale ].name;
   }
 };
