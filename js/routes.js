@@ -24,9 +24,7 @@ var constants = require( './constants' );
 var escapeHTML = TranslationUtils.escapeHTML;
 var renderError = TranslationUtils.renderError;
 
-/* jshint -W079 */
 var _ = require( 'underscore' );
-/* jshint +W079 */
 
 // constants
 var BRANCH = constants.BRANCH;

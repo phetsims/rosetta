@@ -13,9 +13,7 @@ var winston = require( 'winston' );
 var github = require( 'octonode' );
 var email = require( 'emailjs/email' );
 
-/* jshint -W079 */
 var _ = require( 'underscore' );
-/* jshint +W079 */
 
 // globals
 var preferences = global.preferences;

@@ -27,9 +27,7 @@ var sendEmail = TranslationUtils.sendEmail;
 var commit = TranslationUtils.commit;
 var stringify = TranslationUtils.stringify;
 
-/* jshint -W079 */
 var _ = require( 'underscore' );
-/* jshint +W079 */
 
 // constants
 var HTML_SIMS_DIRECTORY = '/data/web/htdocs/phetsims/sims/html/';
