@@ -18,5 +18,10 @@
     "simTitle": "Chains",
     "projectName": "chains",
     "testUrl": "http://phet-dev.colorado.edu/sims/html/chains/latest/chains_en.html"
+  },
+  {
+    "simTitle": "Molarity",
+    "projectName": "molarity",
+    "testUrl": "http://phet.colorado.edu/sims/html/molarity/latest/molarity_en.html"
   }
 ]
