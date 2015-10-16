@@ -1,5 +1,25 @@
 [
   {
+    "simTitle": "Molecules and Light",
+    "projectName": "molecules-and-light",
+    "testUrl": "http://phet-dev.colorado.edu/sims/html/molecules-and-light/latest/molecules-and-light_en.html"
+  },
+  {
+    "simTitle": "Concentration",
+    "projectName": "concentration",
+    "testUrl": "http://phet-dev.colorado.edu/sims/html/concentration/latest/concentration_en.html"
+  },
+  {
+    "simTitle": "Molecule Shapes",
+    "projectName": "molecule-shapes",
+    "testUrl": "http://phet-dev.colorado.edu/sims/html/molecule-shapes/latest/molecule-shapes_en.html"
+  },
+  {
+    "simTitle": "Chains",
+    "projectName": "chains",
+    "testUrl": "http://phet-dev.colorado.edu/sims/html/chains/latest/chains_en.html"
+  },
+  {
     "simTitle": "Molarity",
     "projectName": "molarity",
     "testUrl": "http://phet.colorado.edu/sims/html/molarity/latest/molarity_en.html"
