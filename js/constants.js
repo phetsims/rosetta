@@ -14,7 +14,7 @@ var assert = require( 'assert' );
 /*
  * Change this to 'tests' for rosetta testing, so that commits will change the 'tests' branch of babel instead of master
  */
-var BRANCH = 'master';
+var BRANCH = 'tests';
 
 assert( BRANCH === 'master' || BRANCH === 'tests', 'BRANCH must be set to either master or tests' );
 
