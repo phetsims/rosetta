@@ -118,6 +118,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
             req.session.trustedTranslator = userData.trustedTranslator;
             req.session.userId = userData.userId;
             req.session.username = userData.username;
+            req.session.email = userData.email;
             req.session.jSessionId = cookie;
 
             winston.log( 'info', 'updating user id to ' + req.session.userId );
@@ -155,8 +156,6 @@ module.exports.checkForValidSession = function( req, res, next ) {
 module.exports.chooseSimulationAndLanguage = function( req, res ) {
   'use strict';
 
-  // pull the username from the cookie
-  var username = req.cookies[ 'sign-in-panel.sign-in-form.username' ] || 'not logged in';
   var simInfoArray = JSON.parse( fs.readFileSync( SIM_INFO_ARRAY, 'utf8' ) );
   simInfoArray.sort( function( a, b ) {
     if ( a.simTitle < b.simTitle ) {
@@ -172,7 +171,7 @@ module.exports.chooseSimulationAndLanguage = function( req, res ) {
     title: TITLE,
     simInfoArray: simInfoArray,
     localeInfoArray: LocaleInfo.sortedLocaleInfoArray,
-    username: username
+    username: req.session.email || 'not logged in'
   } );
 };
 
@@ -326,9 +325,6 @@ module.exports.translateSimulation = function( req, res ) {
             }
           }
 
-          // Pull the username from the cookie
-          var username = req.cookies[ 'sign-in-panel.sign-in-form.username' ] || 'not logged in';
-
           // sort the arrays by the english values
           var compare = function( a, b ) {
             if ( a.englishValue.toLowerCase() < b.englishValue.toLowerCase() ) {
@@ -358,7 +354,7 @@ module.exports.translateSimulation = function( req, res ) {
             localeName: targetLocale,
             direction: locale ? locale.direction : 'ltr',
             simUrl: TranslatableSimInfo.getSimInfoByProjectName( simName ).testUrl,
-            username: username,
+            username: req.session.email || 'not logged in',
             trustedTranslator: ( req.session.trustedTranslator ) ? req.session.trustedTranslator : false
           };
 
