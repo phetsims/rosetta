@@ -69,6 +69,8 @@ module.exports.checkForValidSession = function( req, res, next ) {
   // check whether the session cookie exists
   winston.log( 'info', 'Checking for login cookie' );
   var cookie = req.cookies.JSESSIONID;
+  winston.log( 'info', 'cookie = ' + cookie + ' jSessionId = ' + req.session.jSessionId );
+
   if ( cookie === undefined ) {
     // no session cookie present, the user must log in
     winston.log( 'info', 'session cookie not found, sending to login page' );
@@ -79,7 +81,6 @@ module.exports.checkForValidSession = function( req, res, next ) {
   // If the session already has trustedTranslator defined, and it is true, then the user must be a trusted translator
   // who has already logged in.
   else if ( req.session.jSessionId === cookie && ( req.session.trustedTranslator || req.session.teamMember ) ) {
-    winston.log( 'info', 'cookie = ' + cookie + ' jSessionId = ' + req.session.jSessionId );
     next();
   }
   else {
