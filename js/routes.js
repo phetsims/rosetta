@@ -79,6 +79,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
   // If the session already has trustedTranslator defined, and it is true, then the user must be a trusted translator
   // who has already logged in.
   else if ( req.session.jSessionId === cookie && ( req.session.trustedTranslator || req.session.teamMember ) ) {
+    winston.log( 'info', 'cookie = ' + cookie + ' jSessionId = ' + req.session.jSessionId );
     next();
   }
   else {
