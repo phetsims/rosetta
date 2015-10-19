@@ -69,7 +69,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
   // check whether the session cookie exists
   winston.log( 'info', 'Checking for login cookie' );
   var cookie = req.cookies.JSESSIONID;
-  winston.log( 'info', 'cookie = ' + cookie + ' jSessionId = ' + req.session.jSessionId );
+  winston.log( 'info', 'user id = ' + req.session.userId );
 
   if ( cookie === undefined ) {
     // no session cookie present, the user must log in
@@ -119,6 +119,9 @@ module.exports.checkForValidSession = function( req, res, next ) {
             req.session.userId = userData.userId;
             req.session.username = userData.username;
             req.session.jSessionId = cookie;
+
+            winston.log( 'info', 'updating user id to ' + req.session.userId );
+
             next(); // send to next route
           }
         }
