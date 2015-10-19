@@ -1,7 +1,7 @@
 // Copyright 2002-2015, University of Colorado Boulder
 
 /**
- * commitQueue is an async.queue with a concurency of one, meaning that only one task is executed at a time. This
+ * commitQueue is an async.queue with a concurrency of one, meaning that only one task is executed at a time. This
  * ensures that only one translation can be committing to github concurrently.
  *
  * The queue is responsible for executing the task of committing to github the submitted translation.
@@ -80,8 +80,6 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
       if ( oldValue.indexOf( '\n' ) > -1 ) {
         oldValue = oldValue.replace( /\n/g, '\\n' );
       }
-
-      console.log( string + ': ' + stringValue + '. Old val: ' + oldValue );
 
       // don't add the string if the value hasn't changed
       if ( oldValue !== stringValue ) {
