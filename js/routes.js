@@ -78,7 +78,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
   }
   // If the session already has trustedTranslator defined, and it is true, then the user must be a trusted translator
   // who has already logged in.
-  else if ( req.session.trustedTranslator || req.session.teamMember ) {
+  else if ( req.session.jSessionId === cookie && ( req.session.trustedTranslator || req.session.teamMember ) ) {
     next();
   }
   else {
@@ -116,6 +116,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
             req.session.trustedTranslator = userData.trustedTranslator;
             req.session.userId = userData.userId;
             req.session.username = userData.username;
+            req.session.jSessionId = cookie;
             next(); // send to next route
           }
         }
