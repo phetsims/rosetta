@@ -48,7 +48,6 @@ assert( preferences.rosettaSessionSecret, 'rosettaSessionSecret is missing from 
 
 // initialize globals
 global.preferences = preferences;
-global.translatedStrings = {}; // object to hold the already translated strings
 
 // must be required after global.preferences has been initialized
 var routes = require( __dirname + '/js/routes' );

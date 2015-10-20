@@ -32,9 +32,6 @@ var GITHUB_URL_BASE = constants.GITHUB_URL_BASE;
 var SIM_INFO_ARRAY = constants.SIM_INFO_ARRAY;
 var TITLE = 'PhET Translation Utility (HTML5)';
 
-// globals
-var translatedStrings = global.translatedStrings;
-
 // utility function for sending the user to the login page
 function sendUserToLoginPage( res, host, destinationUrl ) {
   'use strict';
@@ -73,14 +70,23 @@ module.exports.checkForValidSession = function( req, res, next ) {
 
   if ( cookie === undefined ) {
     // no session cookie present, the user must log in
-    winston.log( 'info', 'session cookie not found, sending to login page' );
+    winston.log( 'info', 'session cookie not found or doesn\t match, sending to login page' );
     winston.log( 'info', 'host = ' + req.get( 'host' ) );
     winston.log( 'info', 'req.url = ' + req.url );
     sendUserToLoginPage( res, req.get( 'host' ), req.url );
   }
+  else if ( req.session.jSessionId && req.session.jSessionId !== cookie ) {
+    req.sesion.destroy();
+    res.render( 'layout.html', {
+      username: '',
+      body: '<h1>Your session has expired</h1>' +
+            '<p>Go to <a href="https://phet-dev.colorado.edu/translate/">https://phet-dev.colorado.edu/translate/</a> to start a new session.</p>'
+    } );
+
+  }
   // If the session already has trustedTranslator defined, and it is true, then the user must be a trusted translator
   // who has already logged in.
-  else if ( req.session.jSessionId === cookie && ( req.session.trustedTranslator || req.session.teamMember ) ) {
+  else if ( req.session.trustedTranslator || req.session.teamMember ) {
     next();
   }
   else {
@@ -119,7 +125,9 @@ module.exports.checkForValidSession = function( req, res, next ) {
             req.session.userId = userData.userId;
             req.session.username = userData.username;
             req.session.email = userData.email;
-            req.session.jSessionId = cookie;
+            req.session.translatedStrings = {}; // for storing string history across submissions
+            req.session.jSessionId = cookie; // to verify user is still logged in
+            req.session.cookie.expires = null; // browser session
 
             winston.log( 'info', 'updating user id to ' + req.session.userId );
 
@@ -313,7 +321,7 @@ module.exports.translateSimulation = function( req, res ) {
                   stringRenderInfo.value = escapeHTML( savedStrings[ project.projectName ][ key ] );
                 }
                 else {
-                  var translatedString = translatedStrings[ targetLocale ][ project.projectName ][ key ];
+                  var translatedString = req.session.translatedStrings[ targetLocale ][ project.projectName ][ key ];
                   stringRenderInfo.value = translatedString ? escapeHTML( translatedString.value ) : '';
                 }
 
@@ -399,15 +407,15 @@ module.exports.translateSimulation = function( req, res ) {
 
         winston.log( 'info', 'sending request to ' + translatedStringsPath );
         request( translatedStringsPath, function( error, response, body ) {
-          translatedStrings[ targetLocale ] = translatedStrings[ targetLocale ] || {};
+          req.session.translatedStrings[ targetLocale ] = req.session.translatedStrings[ targetLocale ] || {};
           if ( !error && response.statusCode === 200 ) {
-            translatedStrings[ targetLocale ][ projectName ] = JSON.parse( body );
+            req.session.translatedStrings[ targetLocale ][ projectName ] = JSON.parse( body );
             winston.log( 'info', 'request to ' + translatedStringsPath + ' returned successfully' );
           }
           else {
             winston.log( 'error', 'request for translated strings for project ' + projectName + ' failed. Response code: ' +
                                   response.statusCode + '. URL: ' + translatedStringsPath + '. Error: ' + error );
-            translatedStrings[ targetLocale ][ projectName ] = {}; // add an empty object with the project name key so key lookups don't fail later on
+            req.session.translatedStrings[ targetLocale ][ projectName ] = {}; // add an empty object with the project name key so key lookups don't fail later on
           }
           finished();
         } );

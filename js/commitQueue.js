@@ -33,12 +33,9 @@ var _ = require( 'underscore' );
 var HTML_SIMS_DIRECTORY = '/data/web/htdocs/phetsims/sims/html/';
 var BRANCH = constants.BRANCH;
 
-// globals
-var translatedStrings = global.translatedStrings;
-
 module.exports.commitQueue = async.queue( function( task, taskCallback ) {
   'use strict';
-  
+
   var req = task.req;
   var res = task.res;
 
@@ -72,7 +69,9 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
       var stringValue = req.body[ string ];
 
       // check if the string is already in translatedStrings to get the history if it exists
-      var translatedString = translatedStrings[ targetLocale ] && translatedStrings[ targetLocale ][ repo ] && translatedStrings[ targetLocale ][ repo ][ key ];
+      var translatedString = req.session.translatedStrings[ targetLocale ] &&
+                             req.session.translatedStrings[ targetLocale ][ repo ] &&
+                             req.session.translatedStrings[ targetLocale ][ repo ][ key ];
       var history = translatedString && translatedString.history;
       var oldValue = ( history && history.length ) ? history[ history.length - 1 ].newValue : '';
 
@@ -218,7 +217,9 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
           var onCommitSuccess = function() {
             for ( var stringKey in repos[ repository ] ) {
               var stringValue = repos[ repository ][ stringKey ].value;
-              var translatedString = translatedStrings[ targetLocale ] && translatedStrings[ targetLocale ][ repository ] && translatedStrings[ targetLocale ][ repository ][ stringKey ];
+              var translatedString = req.session.translatedStrings[ targetLocale ] &&
+                                     req.session.translatedStrings[ targetLocale ][ repository ] &&
+                                     req.session.translatedStrings[ targetLocale ][ repository ][ stringKey ];
               if ( !translatedString || stringValue !== translatedString.value ) {
                 successes.push( {
                   stringKey: stringKey,
@@ -241,7 +242,9 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
                     winston.log( 'error', err + '. Error committing to file ' + file );
                     for ( var stringKey in repos[ repository ] ) {
                       var stringValue = repos[ repository ][ stringKey ].value;
-                      var translatedString = translatedStrings[ targetLocale ] && translatedStrings[ targetLocale ][ repository ] && translatedStrings[ targetLocale ][ repository ][ stringKey ];
+                      var translatedString = req.session.translatedStrings[ targetLocale ] &&
+                                             req.session.translatedStrings[ targetLocale ][ repository ] &&
+                                             req.session.translatedStrings[ targetLocale ][ repository ][ stringKey ];
                       if ( !translatedString || stringValue !== translatedString.value ) {
                         errors.push( {
                           stringKey: stringKey,
