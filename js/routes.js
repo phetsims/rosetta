@@ -76,7 +76,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
     sendUserToLoginPage( res, req.get( 'host' ), req.url );
   }
   else if ( req.session.jSessionId && req.session.jSessionId !== cookie ) {
-    req.sesion.destroy();
+    req.session.destroy();
     res.render( 'layout.html', {
       username: '',
       body: '<h1>Your session has expired</h1>' +
