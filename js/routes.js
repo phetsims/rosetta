@@ -35,7 +35,7 @@ var TITLE = 'PhET Translation Utility (HTML5)';
 // utility function for sending the user to the login page
 function sendUserToLoginPage( res, host, destinationUrl ) {
   'use strict';
-  
+
   res.render( 'login-required.html', {
     title: 'Login Required',
     host: host,
@@ -70,19 +70,18 @@ module.exports.checkForValidSession = function( req, res, next ) {
 
   if ( cookie === undefined ) {
     // no session cookie present, the user must log in
-    winston.log( 'info', 'session cookie not found or doesn\t match, sending to login page' );
+    winston.log( 'info', 'session cookie not found, sending to login page' );
     winston.log( 'info', 'host = ' + req.get( 'host' ) );
     winston.log( 'info', 'req.url = ' + req.url );
     sendUserToLoginPage( res, req.get( 'host' ), req.url );
   }
   else if ( req.session.jSessionId && req.session.jSessionId !== cookie ) {
-    req.session.destroy();
-    res.render( 'layout.html', {
-      username: '',
-      body: '<h1>Your session has expired</h1>' +
-            '<p>Go to <a href="https://phet-dev.colorado.edu/translate/">https://phet-dev.colorado.edu/translate/</a> to start a new session.</p>'
+    req.session.destroy( function() {
+      renderError( res,
+        '<h1>Your session has expired</h1>' +
+        '<p>Go to <a href="https://phet-dev.colorado.edu/translate/">https://phet-dev.colorado.edu/translate/</a> to start a new session.</p>',
+        '' );
     } );
-
   }
   // If the session already has trustedTranslator defined, and it is true, then the user must be a trusted translator
   // who has already logged in.
@@ -192,7 +191,7 @@ module.exports.chooseSimulationAndLanguage = function( req, res ) {
  */
 module.exports.translateSimulation = function( req, res ) {
   'use strict';
-  
+
   var simName = req.param( 'simName' );
   var targetLocale = req.param( 'targetLocale' );
   var activeSimsPath = '/phetsims/chipper/master/data/active-sims';
@@ -437,7 +436,7 @@ module.exports.translateSimulation = function( req, res ) {
  */
 module.exports.submitStrings = function( req, res ) {
   'use strict';
-  
+
   var simName = req.param( 'simName' );
   var targetLocale = req.param( 'targetLocale' );
 
@@ -458,7 +457,7 @@ module.exports.submitStrings = function( req, res ) {
  */
 module.exports.saveStrings = function( req, res ) {
   'use strict';
-  
+
   var simName = req.param( 'simName' );
   var targetLocale = req.param( 'targetLocale' );
   var userId = ( req.session.userId ) ? req.session.userId : 0;
@@ -520,7 +519,7 @@ module.exports.saveStrings = function( req, res ) {
  */
 module.exports.pageNotFound = function( req, res ) {
   'use strict';
-  
+
   res.send( '<p>Error: Page not found.  URL = ' + req.url + '</p>' );
 };
 
