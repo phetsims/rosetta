@@ -46,8 +46,14 @@ assert( preferences.buildServerAuthorizationCode, 'buildServerAuthorizationCode 
 assert( preferences.rosettaSessionSecret, 'rosettaSessionSecret is missing from ' + PREFERENCES_FILE +
                                           '. To set this up for local testing add any string as the value for "rosettaSessionSecret"' );
 
+preferences.productionServerURL = preferences.productionServerURL || 'https://phet.colorado.edu';
+preferences.productionServerName = preferences.productionServerName || 'figaro.colorado.edu';
+
 // initialize globals
 global.preferences = preferences;
+
+console.log( global.preferences.productionServerName );
+console.log( global.preferences.productionServerURL );
 
 // must be required after global.preferences has been initialized
 var routes = require( __dirname + '/js/routes' );

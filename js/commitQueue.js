@@ -177,11 +177,11 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
         'simName': simName,
         'version': version,
         'locales': targetLocale,
-        'serverName': 'simian.colorado.edu',
+        'serverName': global.preferences.productionServerName,
         'authorizationCode': global.preferences.buildServerAuthorizationCode
       } );
 
-      var url = 'https://phet-dev.colorado.edu/deploy-html-simulation?' + queryString;
+      var url = global.preferences.productionServerURL '/deploy-html-simulation?' + queryString;
 
       request( url, function( error, response, body ) {
         if ( !error && response.statusCode === 200 ) {
