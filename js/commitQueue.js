@@ -181,7 +181,7 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
         'authorizationCode': global.preferences.buildServerAuthorizationCode
       } );
 
-      var url = global.preferences.productionServerURL '/deploy-html-simulation?' + queryString;
+      var url = global.preferences.productionServerURL + '/deploy-html-simulation?' + queryString;
 
       request( url, function( error, response, body ) {
         if ( !error && response.statusCode === 200 ) {
