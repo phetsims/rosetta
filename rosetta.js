@@ -49,11 +49,18 @@ assert( preferences.rosettaSessionSecret, 'rosettaSessionSecret is missing from 
 preferences.productionServerURL = preferences.productionServerURL || 'https://phet.colorado.edu';
 preferences.productionServerName = preferences.productionServerName || 'figaro.colorado.edu';
 
+/*
+ * Add "babelBranch": "tests" in build-local.json for rosetta testing, so that commits will change the 'tests' branch
+ * of babel instead of master. Make sure to checkout the tests branch in babel on the server as well.
+ */
+preferences.babelBranch = preferences.babelBranch || 'master';
+
+assert( preferences.babelBranch === 'master' || preferences.babelBranch === 'tests', 'BRANCH must be set to either master or tests' );
+
 // initialize globals
 global.preferences = preferences;
 
-console.log( global.preferences.productionServerName );
-console.log( global.preferences.productionServerURL );
+console.log( global.preferences.branch );
 
 // must be required after global.preferences has been initialized
 var routes = require( __dirname + '/js/routes' );

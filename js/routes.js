@@ -27,7 +27,6 @@ var renderError = TranslationUtils.renderError;
 var _ = require( 'underscore' );
 
 // constants
-var BRANCH = constants.BRANCH;
 var GITHUB_URL_BASE = constants.GITHUB_URL_BASE;
 var SIM_INFO_ARRAY = constants.SIM_INFO_ARRAY;
 var TITLE = 'PhET Translation Utility (HTML5)';
@@ -389,7 +388,7 @@ module.exports.translateSimulation = function( req, res ) {
         var projectName = extractedStringObject.projectName;
         var repoSha = ( projectName === simName ) ? simSha : 'master';
         var stringsFilePath = GITHUB_URL_BASE + '/phetsims/' + projectName + '/' + repoSha + '/' + projectName + '-strings_en.json';
-        var translatedStringsPath = GITHUB_URL_BASE + '/phetsims/babel/' + BRANCH + '/' + projectName + '/' + projectName + '-strings_' + targetLocale + '.json';
+        var translatedStringsPath = GITHUB_URL_BASE + '/phetsims/babel/' + global.preferences.babelBranch + '/' + projectName + '/' + projectName + '-strings_' + targetLocale + '.json';
 
         winston.log( 'info', 'sending request to ' + stringsFilePath );
         request( stringsFilePath, function( error, response, body ) {

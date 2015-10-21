@@ -31,7 +31,6 @@ var _ = require( 'underscore' );
 
 // constants
 var HTML_SIMS_DIRECTORY = '/data/web/htdocs/phetsims/sims/html/';
-var BRANCH = constants.BRANCH;
 
 module.exports.commitQueue = async.queue( function( task, taskCallback ) {
   'use strict';
@@ -230,13 +229,13 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
             finished();
           };
 
-          commit( babel, file, content, commitMessage, BRANCH, function( err ) {
+          commit( babel, file, content, commitMessage, global.preferences.babelBranch, function( err ) {
             // commit failed
             // Github sometimes returns a 409 error and fails to commit, in this case we'll try again once
             if ( err ) {
               winston.log( 'error', err + '. Error committing to file ' + file + '. Trying again in 5 seconds...' );
               setTimeout( function() {
-                commit( babel, file, content, commitMessage, BRANCH, function( err ) {
+                commit( babel, file, content, commitMessage, global.preferences.babelBranch, function( err ) {
                   if ( err ) {
                     errorDetails += err + '. Error committing to file ' + file;
                     winston.log( 'error', err + '. Error committing to file ' + file );
