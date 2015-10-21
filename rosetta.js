@@ -60,7 +60,7 @@ assert( preferences.babelBranch === 'master' || preferences.babelBranch === 'tes
 // initialize globals
 global.preferences = preferences;
 
-console.log( global.preferences.branch );
+console.log( global.preferences.babelBranch );
 
 // must be required after global.preferences has been initialized
 var routes = require( __dirname + '/js/routes' );
