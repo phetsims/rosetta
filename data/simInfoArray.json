@@ -23,5 +23,10 @@
     "simTitle": "Molarity",
     "projectName": "molarity",
     "testUrl": "http://phet.colorado.edu/sims/html/molarity/latest/molarity_en.html"
+  },
+  {
+    "simTitle": "Hooke's Law",
+    "projectName": "hookes-law",
+    "testUrl": "http://phet.colorado.edu/sims/html/hookes-law/latest/hookes-law_en.html"
   }
 ]
