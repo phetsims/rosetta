@@ -60,8 +60,6 @@ assert( preferences.babelBranch === 'master' || preferences.babelBranch === 'tes
 // initialize globals
 global.preferences = preferences;
 
-console.log( global.preferences.babelBranch );
-
 // must be required after global.preferences has been initialized
 var routes = require( __dirname + '/js/routes' );
 
@@ -134,10 +132,10 @@ app.use( bodyParser.urlencoded( { extended: false } ) );
 //----------------------------------------------------------------------------
 
 // route that checks whether the user is logged in
-app.get( '/translate/*', routes.checkForValidSession );
+app.get( '/translate*', routes.checkForValidSession );
 
 // landing page for the translation utility
-app.get( '/translate/', routes.chooseSimulationAndLanguage );
+app.get( '/translate', routes.chooseSimulationAndLanguage );
 
 // route for translating a specific sim to a specific language
 app.get( '/translate/sim/:simName?/:targetLocale?', routes.translateSimulation );
