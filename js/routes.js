@@ -156,7 +156,7 @@ module.exports.logout = function( req, res ) {
   'use strict';
 
   req.session.destroy( function() {
-    res.redirect( 'http://phet.colorado.edu' );
+    res.redirect( '/' );
   } );
 };
 
