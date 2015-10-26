@@ -145,6 +145,8 @@ app.post( '/translate/sim/:simName?/:targetLocale?', routes.submitStrings );
 // route for extracting strings from a sim
 app.get( '/translate/extractStrings', routes.extractStringsAPI );
 
+app.get( '/translate/logout', routes.extractStringsAPI );
+
 // fall through route
 app.get( '/*', routes.pageNotFound );
 

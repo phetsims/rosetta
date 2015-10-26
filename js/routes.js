@@ -152,6 +152,14 @@ module.exports.checkForValidSession = function( req, res, next ) {
   }
 };
 
+module.exports.logout = function( req, res ) {
+  'use strict';
+
+  req.session.destroy( function() {
+    res.redirect( 'http://phet.colorado.edu' );
+  } );
+};
+
 /**
  * Route that lets the user choose a simulation and language to translate, and subsequently routes them to the actual
  * translation page.
