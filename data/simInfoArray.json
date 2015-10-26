@@ -8,5 +8,10 @@
     "simTitle": "Hooke's Law",
     "projectName": "hookes-law",
     "testUrl": "http://phet-dev.colorado.edu/sims/html/hookes-law/latest/hookes-law_en.html"
+  },
+  {
+    "simTitle": "Friction",
+    "projectName": "friction",
+    "testUrl": "http://phet.colorado.edu/sims/html/friction/latest/friction_en.html"
   }
 ]
