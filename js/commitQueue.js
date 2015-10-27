@@ -19,7 +19,6 @@ var querystring = require( 'querystring' );
 var request = require( 'request' );
 var winston = require( 'winston' );
 
-var constants = require( './constants' );
 var LocaleInfo = require( './LocaleInfo' );
 var TranslationUtils = require( './TranslationUtils' );
 var getGhClient = TranslationUtils.getGhClient;
@@ -136,13 +135,14 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
                                 'simulation = simulation.id AND simulation.project = project.id AND project.type = 2';
     var addTranslatorQuery = 'INSERT INTO user_localized_simulation_mapping ' + getLocalizedSimsQuery;
     winston.log( 'info', 'running SQL command: ' + addTranslatorQuery );
-    query( addTranslatorQuery, function( err, rows ) {
+    query( addTranslatorQuery, function( err, rows, result ) {
       if ( err ) {
         winston.log( 'error', 'adding to user_localized_simulation_mapping, translator probably already exists for this sim and locale' );
         winston.log( 'error', err );
       }
       else {
         winston.log( 'info', 'added translator to user_localized_simulation_mapping with user_id = ' + userId + ' locale = ' + targetLocale + ' simName = ' + simName );
+        winston.log( 'info', JSON.stringify( result, null, 2 ) );
       }
     } );
 
