@@ -8,10 +8,6 @@
 
 /* jslint node: true */
 
-// modules
-var assert = require( 'assert' );
-
-
 module.exports = {
   GITHUB_URL_BASE: 'https://raw.githubusercontent.com',
   SIM_INFO_ARRAY: 'data/simInfoArray.json'
