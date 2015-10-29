@@ -156,6 +156,7 @@ module.exports.logout = function( req, res ) {
   'use strict';
 
   req.session.destroy( function() {
+    res.clearCookie( 'JSESSIONID' );
     res.redirect( '/' );
   } );
 };
