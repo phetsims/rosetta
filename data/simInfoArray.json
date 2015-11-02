@@ -13,5 +13,10 @@
     "simTitle": "Friction",
     "projectName": "friction",
     "testUrl": "http://phet.colorado.edu/sims/html/friction/latest/friction_en.html"
+  },
+  {
+    "simTitle": "Faraday's Law",
+    "projectName": "faradays-law",
+    "testUrl": "http://phet.colorado.edu/sims/html/faradays-law/latest/faradays-law_en.html"
   }
 ]
