@@ -78,7 +78,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
     req.session.destroy( function() {
       renderError( res,
         '<h1>Your session has expired</h1>' +
-        '<p>Go to <a href="https://phet-dev.colorado.edu/translate/">https://phet-dev.colorado.edu/translate/</a> to start a new session.</p>',
+        '<p>Go to <a href="https://phet.colorado.edu/translate/">https://phet.colorado.edu/translate/</a> to start a new session.</p>',
         '' );
     } );
   }
