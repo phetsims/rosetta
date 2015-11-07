@@ -1,4 +1,4 @@
-// Copyright 2002-2015, University of Colorado Boulder
+// Copyright 2015, University of Colorado Boulder
 
 /**
  * commitQueue is an async.queue with a concurrency of one, meaning that only one task is executed at a time. This
