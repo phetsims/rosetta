@@ -23,5 +23,10 @@
     "simTitle": "Molecules and Light",
     "projectName": "molecules-and-light",
     "testUrl": "http://phet.colorado.edu/sims/html/molecules-and-light/latest/molecules-and-light_en.html"
+  },
+  {
+    "simTitle": "Beer's Law Lab",
+    "projectName": "beers-law-lab",
+    "testUrl": "http://phet.colorado.edu/sims/html/beers-law-lab/latest/beers-law-lab_en.html"
   }
 ]
