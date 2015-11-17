@@ -43,5 +43,10 @@
     "simTitle": "pH Scale",
     "projectName": "ph-scale",
     "testUrl": "http://phet.colorado.edu/sims/html/ph-scale/latest/ph-scale_en.html"
+  },
+  {
+    "simTitle": "pH Scale: Basics",
+    "projectName": "ph-scale-basics",
+    "testUrl": "http://phet.colorado.edu/sims/html/ph-scale-basics/latest/ph-scale-basics_en.html"
   }
 ]
