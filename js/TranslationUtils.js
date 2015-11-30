@@ -250,12 +250,12 @@ function commit( repo, file, content, message, branch, callback ) {
   // get the current contents of the file from github
   repo.contents( file, branch, function( err, data, headers ) {
 
-    // if the file is not found, create a new file instead of updating an existing one
+    // if the file is not found, create a new one
     if ( err ) {
       winston.log( 'info', 'no file found: ' + file + '. Attempting to create.' );
 
       if ( content !== '{}' ) {
-        winston.log( 'info', 'calling createContets' );
+        winston.log( 'info', 'calling createContents' );
         repo.createContents( file, message, content, branch, function( err, data, headers ) {
           if ( err ) {
             callback( err );

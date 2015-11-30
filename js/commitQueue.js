@@ -215,7 +215,7 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
           };
 
           commit( babel, file, content, commitMessage, global.preferences.babelBranch, function( err ) {
-            // commit failed
+
             // Github sometimes returns a 409 error and fails to commit, in this case we'll try again once
             if ( err ) {
               winston.log( 'error', err + '. Error committing to file ' + file + '. Trying again in 5 seconds...' );
