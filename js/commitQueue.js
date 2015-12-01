@@ -237,7 +237,7 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
                       }
                     }
                     finished();
-                    sendEmail( 'PUSH FAILED', err + '\n\n' + errorDetails + '\n\n' + errors );
+                    sendEmail( 'PUSH FAILED', err + '\n\n' + errorDetails + '\n\n' + JSON.stringify( errors ) );
                   }
                   else {
                     onCommitSuccess();
