@@ -30,6 +30,7 @@ var _ = require( 'underscore' );
 var GITHUB_URL_BASE = constants.GITHUB_URL_BASE;
 var SIM_INFO_ARRAY = constants.SIM_INFO_ARRAY;
 var TITLE = 'PhET Translation Utility (HTML5)';
+var ASCII_REGEX = /^[ -~]+$/;
 
 // utility function for sending the user to the login page
 function sendUserToLoginPage( res, host, destinationUrl ) {
@@ -322,10 +323,17 @@ module.exports.translateSimulation = function( req, res ) {
                   repo: project.projectName
                 };
 
+                var savedStringValue = savedStrings[ project.projectName ][ key ];
+
                 // use saved string if it exists
-                if ( savedStrings[ project.projectName ][ key ] ) {
-                  winston.log( 'info', 'using saved string ' + key + ': ' + savedStrings[ project.projectName ][ key ] );
-                  stringRenderInfo.value = escapeHTML( savedStrings[ project.projectName ][ key ] );
+                if ( savedStringValue ) {
+
+                  // log info about the retrieved string, but don't log non-ascii characters as they mess up the log
+                  var savedStringToLog = ASCII_REGEX.test( savedStringValue ) ? savedStringValue : '(string contains non-ascii characters)';
+                  winston.log( 'info', 'using saved string ' + key + ': ' + savedStringToLog );
+
+                  // set the retrieved value
+                  stringRenderInfo.value = escapeHTML( savedStringValue );
                 }
                 else {
                   var translatedString = req.session.translatedStrings[ targetLocale ][ project.projectName ][ key ];
