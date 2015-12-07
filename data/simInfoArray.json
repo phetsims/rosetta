@@ -48,5 +48,10 @@
     "simTitle": "pH Scale: Basics",
     "projectName": "ph-scale-basics",
     "testUrl": "http://phet.colorado.edu/sims/html/ph-scale-basics/latest/ph-scale-basics_en.html"
+  },
+  {
+    "simTitle": "Graphing Lines",
+    "projectName": "graphing-lines",
+    "testUrl": "http://phet.colorado.edu/sims/html/graphing-lines/latest/graphing-lines_en.html"
   }
 ]
