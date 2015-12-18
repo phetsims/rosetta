@@ -40,11 +40,11 @@ if ( preferences.emailUsername && preferences.emailPassword && preferences.email
  */
 function sendEmail( subject, text ) {
   'use strict';
-  
+
   if ( emailServer ) {
     emailServer.send( {
       text: text,
-      from: 'Rosetta <' + preferences.emailFrom + '>',
+      from: 'PhET Translation Utility (rosetta) <phethelp@colorado.edu>',
       to: preferences.emailTo,
       subject: subject
     }, function( err, message ) {
