@@ -58,5 +58,10 @@
     "simTitle": "Arithmetic",
     "projectName": "arithmetic",
     "testUrl": "http://phet.colorado.edu/sims/html/arithmetic/latest/arithmetic_en.html"
+  },
+  {
+    "simTitle": "Bending Light",
+    "projectName": "bending-light",
+    "testUrl": "http://phet.colorado.edu/sims/html/bending-light/latest/bending-light_en.html"
   }
 ]
