@@ -63,5 +63,10 @@
     "simTitle": "Bending Light",
     "projectName": "bending-light",
     "testUrl": "http://phet.colorado.edu/sims/html/bending-light/latest/bending-light_en.html"
+  },
+  {
+    "simTitle": "Balancing Chemical Equations",
+    "projectName": "balancing-chemical-equations",
+    "testUrl": "http://phet.colorado.edu/sims/html/balancing-chemical-equations/latest/balancing-chemical-equations_en.html"
   }
 ]
