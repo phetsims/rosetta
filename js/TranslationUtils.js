@@ -10,7 +10,7 @@
 
 var http = require( 'http' );
 var winston = require( 'winston' );
-var github = require( 'octonode' );
+var octonode = require( 'octonode' );
 var email = require( 'emailjs/email' );
 
 var _ = require( 'underscore' );
@@ -273,6 +273,8 @@ function commit( repo, file, content, message, branch, callback ) {
 
     // otherwise, update the file using its SHA
     else {
+      winston.log( 'info', 'found file ' + file + ' in GitHub.  Attempting to update.' );
+
       var sha = data.sha;
       var buffer = new Buffer( data.content, data.encoding );
       if ( buffer.toString() !== content ) {
@@ -304,7 +306,9 @@ function getGhClient() {
   var username = preferences.githubUsername;
   var pass = preferences.githubPassword;
 
-  return github.client( {
+  winston.log( 'info', 'getting GH client for user ' + username );
+
+  return octonode.client( {
     username: username,
     password: pass
   } );
