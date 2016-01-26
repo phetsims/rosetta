@@ -108,7 +108,13 @@ if ( parsedCommandLineOptions.hasOwnProperty( 'help' ) || parsedCommandLineOptio
 
 // add timestamps
 winston.remove( winston.transports.Console );
-winston.add( winston.transports.Console, { 'timestamp': true } );
+winston.add( winston.transports.Console, { 'timestamp': function(){
+  var date = new Date();
+  return date.toLocaleString() + ' GMT-' + date.getTimezoneOffset() / 60;
+} } );
+
+// log startup message
+winston.log( 'info', '---- rosetta starting up, about to create ExpressJS app ----' );
 
 // Create and configure the ExpressJS app
 var app = express();
