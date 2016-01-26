@@ -110,7 +110,7 @@ if ( parsedCommandLineOptions.hasOwnProperty( 'help' ) || parsedCommandLineOptio
 winston.remove( winston.transports.Console );
 winston.add( winston.transports.Console, { 'timestamp': function(){
   var date = new Date();
-  return date.toLocaleString() + ' GMT-' + date.getTimezoneOffset() / 60;
+  return date.toLocaleString();
 } } );
 
 // log startup message
