@@ -73,5 +73,10 @@
     "simTitle": "Reactants, Products and Leftovers",
     "projectName": "reactants-products-and-leftovers",
     "testUrl": "http://phet.colorado.edu/sims/html/reactants-products-and-leftovers/latest/reactants-products-and-leftovers_en.html"
+  },
+  {
+    "simTitle": "Molecule Shapes",
+    "projectName": "molecule-shapes",
+    "testUrl": "http://phet.colorado.edu/sims/html/molecule-shapes/latest/molecule-shapes_en.html"
   }
 ]
