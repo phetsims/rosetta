@@ -12,13 +12,14 @@
 
 // modules
 var assert = require( 'assert' );
-var express = require( 'express' );
-var doT = require( 'express-dot' );
-var parseArgs = require( 'minimist' );
-var winston = require( 'winston' );
 var bodyParser = require( 'body-parser' );
-var query = require( 'pg-query' );
+var dateformat = require( 'dateformat' );
+var doT = require( 'express-dot' );
+var express = require( 'express' );
 var fs = require( 'fs' );
+var parseArgs = require( 'minimist' );
+var query = require( 'pg-query' );
+var winston = require( 'winston' );
 
 // constants
 var LISTEN_PORT = 16372;
@@ -109,8 +110,8 @@ if ( parsedCommandLineOptions.hasOwnProperty( 'help' ) || parsedCommandLineOptio
 // add timestamps
 winston.remove( winston.transports.Console );
 winston.add( winston.transports.Console, { 'timestamp': function(){
-  var date = new Date();
-  return date.toLocaleString();
+  var now = new Date();
+  return dateformat( now, 'mmm dd yyyy HH:MM:ss Z' );
 } } );
 
 // log startup message
