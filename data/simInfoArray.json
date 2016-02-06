@@ -83,5 +83,10 @@
     "simTitle": "Molecule Shapes: Basics",
     "projectName": "molecule-shapes-basics",
     "testUrl": "http://phet.colorado.edu/sims/html/molecule-shapes-basics/latest/molecule-shapes-basics_en.html"
+  },
+  {
+    "simTitle": "Trig Tour",
+    "projectName": "trig-tour",
+    "testUrl": "http://phet.colorado.edu/sims/html/trig-tour/latest/trig-tour_en.html"
   }
 ]
