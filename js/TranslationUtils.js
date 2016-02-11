@@ -24,7 +24,7 @@ var preferences = global.preferences;
 
 // configure email server if credentials are present
 var emailServer;
-if ( preferences.emailUsername && preferences.emailPassword && preferences.emailServer && preferences.emailFrom && preferences.emailTo ) {
+if ( preferences.emailUsername && preferences.emailPassword && preferences.emailServer && preferences.emailTo ) {
   emailServer = email.server.connect( {
     user: preferences.emailUsername,
     password: preferences.emailPassword,
