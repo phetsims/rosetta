@@ -88,5 +88,10 @@
     "simTitle": "Trig Tour",
     "projectName": "trig-tour",
     "testUrl": "http://phet.colorado.edu/sims/html/trig-tour/latest/trig-tour_en.html"
+  },
+  {
+    "simTitle": "Color Vision",
+    "projectName": "color-vision",
+    "testUrl": "http://phet.colorado.edu/sims/html/color-vision/latest/color-vision_en.html"
   }
 ]
