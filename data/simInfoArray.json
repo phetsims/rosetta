@@ -98,5 +98,10 @@
     "simTitle": "Ohm's Law",
     "projectName": "ohms-law",
     "testUrl": "http://phet.colorado.edu/sims/html/ohms-law/latest/ohms-law_en.html"
+  },
+  {
+    "simTitle": "Balloons and Static Electricity",
+    "projectName": "balloons-and-static-electricity",
+    "testUrl": "http://phet.colorado.edu/sims/html/balloons-and-static-electricity/latest/balloons-and-static-electricity_en.html"
   }
 ]
