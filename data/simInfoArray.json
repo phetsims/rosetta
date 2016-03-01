@@ -103,5 +103,10 @@
     "simTitle": "Balloons and Static Electricity",
     "projectName": "balloons-and-static-electricity",
     "testUrl": "http://phet.colorado.edu/sims/html/balloons-and-static-electricity/latest/balloons-and-static-electricity_en.html"
+  },
+  {
+    "simTitle": "Neuron",
+    "projectName": "neuron",
+    "testUrl": "http://phet.colorado.edu/sims/html/neuron/latest/neuron_en.html"
   }
 ]
