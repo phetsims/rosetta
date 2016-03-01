@@ -108,5 +108,10 @@
     "simTitle": "Neuron",
     "projectName": "neuron",
     "testUrl": "http://phet.colorado.edu/sims/html/neuron/latest/neuron_en.html"
+  },
+  {
+    "simTitle": "Wave on a String",
+    "projectName": "wave-on-a-string",
+    "testUrl": "http://phet.colorado.edu/sims/html/wave-on-a-string/latest/wave-on-a-string_en.html"
   }
 ]
