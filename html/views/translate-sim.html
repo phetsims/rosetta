@@ -18,6 +18,8 @@
   </div>
 
   <form name="form" id="strings" method="post">
+
+    <!--strings for the sim-->
     <h2>{{=it.simTitle}} Strings</h2>
     <table class="rosetta-table">
       <tr>
@@ -37,6 +39,7 @@
       {{~}}
     </table>
 
+    <!--strings for other sim repos from which the current sim draw strings-->
     {{? it.otherSimNames}}
       <h2>Shared Strings (will affect {{=it.otherSimNames}})</h2>
       <table class="rosetta-table">
@@ -60,6 +63,7 @@
 
     <h2>Common Strings (will affect multiple simulations)</h2>
 
+    <!--strings from common code repos-->
     <table id="commonStringsTable" class="rosetta-table">
       <tr>
         <th><strong>String Key</strong></th>
@@ -77,6 +81,11 @@
       </tr>
       {{~}}
     </table>
+
+    <!--unused previously translated strings, included here so that they don't get overwritten-->
+    {{~it.unusedTranslatedStringsArray :value:index}}
+    <input type="hidden" name="{{=value.repo}} {{=value.key}}" value="{{=value.value}}">
+    {{~}}
 
   </form>
 

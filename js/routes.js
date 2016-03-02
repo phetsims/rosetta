@@ -43,6 +43,12 @@ function sendUserToLoginPage( res, host, destinationUrl ) {
   } );
 }
 
+// utility function that returns the string if printable or a warning message if not
+function getPrintableString( string ) {
+  'use strict';
+  return ASCII_REGEX.test( string ) ? string : '(string contains non-printable characters)';
+}
+
 /**
  * Route that checks whether the user has a valid session in progress. This works by looking for the cookie set when
  * the user logs in to the main web site and, if said cookie is present, uses it to obtain user information from the
@@ -246,8 +252,8 @@ module.exports.translateSimulation = function( req, res ) {
       /*
        * finished() must be called extractedStrings.length * 2 + 1 times. This is the number of http requests to github
        * that need to return before we are ready to render the page. We make two requests per repo - one for the English
-       * strings from the sims's repo, and one for the translated strings from babel - plus one more for the request to
-       * get the active sims list from chipper.
+       * strings from the sims or common code repo, and one for the translated strings from babel - plus one more for
+       * the request to get the active sims list from chipper.
        */
       var finished = _.after( extractedStrings.length * 2 + 1, function() {
         winston.log( 'info', 'finished called in translateSimulation' );
@@ -255,6 +261,7 @@ module.exports.translateSimulation = function( req, res ) {
         var currentSimStringsArray = [];
         var simStringsArray = [];
         var commonStringsArray = [];
+        var unusedTranslatedStringsArray = [];
 
         // create a query for determining if the user has any saved strings
         var repositories = '';
@@ -291,10 +298,11 @@ module.exports.translateSimulation = function( req, res ) {
           var simTitle; // sim title gets filled in here (e.g. Area Builder instead of area-builder)
           var otherSims = []; // other sim dependencies get filled in here (e.g. beers-law-lab when translating concentration)
 
-          // iterate over all projects that this sim takes strings from
+          // iterate over all projects from which this sim draws strings
           for ( i = 0; i < extractedStrings.length; i++ ) {
             var project = extractedStrings[ i ];
             var strings = englishStrings[ project.projectName ];
+            var previouslyTranslatedStrings = req.session.translatedStrings[ targetLocale ][ project.projectName ];
 
             // put the strings under common strings, current sim strings, or sim strings depending on which project they are from
             var array;
@@ -328,16 +336,25 @@ module.exports.translateSimulation = function( req, res ) {
                 // use saved string if it exists
                 if ( savedStringValue ) {
 
-                  // log info about the retrieved string, but don't log non-ascii characters as they mess up the log
-                  var savedStringToLog = ASCII_REGEX.test( savedStringValue ) ? savedStringValue : '(string contains non-ascii characters)';
-                  winston.log( 'info', 'using saved string ' + key + ': ' + savedStringToLog );
+                  // log info about the retrieved string
+                  winston.log( 'info', 'using saved string ' + key + ': ' + getPrintableString( savedStringValue ) );
 
                   // set the retrieved value
                   stringRenderInfo.value = escapeHTML( savedStringValue );
                 }
+                else if ( previouslyTranslatedStrings[ key ] ) {
+
+                  // use previous translation value obtained from GitHub, if it exists
+                  var translatedString = previouslyTranslatedStrings[ key ];
+                  winston.log( 'info', 'using previously translated string ' + key + ': ' +
+                                       getPrintableString( translatedString.value ) );
+                  stringRenderInfo.value = escapeHTML( translatedString.value );
+                }
                 else {
-                  var translatedString = req.session.translatedStrings[ targetLocale ][ project.projectName ][ key ];
-                  stringRenderInfo.value = translatedString ? escapeHTML( translatedString.value ) : '';
+
+                  // there is no saved or previously translated string
+                  winston.log( 'info', 'no saved or previously translated values found for string key ' + key );
+                  stringRenderInfo.value = '';
                 }
 
                 array.push( stringRenderInfo );
@@ -346,9 +363,32 @@ module.exports.translateSimulation = function( req, res ) {
                 winston.log( 'info', 'String key ' + project.stringKeys[ j ] + ' not found or not visible' );
               }
             }
+
+            // Identify strings that are translated but not used so that they don't get removed from the translation.
+            // This is only relevant for shared/common strings.
+            for ( var stringKey in previouslyTranslatedStrings ) {
+              if ( previouslyTranslatedStrings.hasOwnProperty( stringKey ) ){
+                var containsObjectWithKey = false;
+                for ( var index = 0; index < array.length; index++ ) {
+                  if ( array[ index ].key === stringKey ) {
+                    containsObjectWithKey = true;
+                    break;
+                  }
+                }
+                if ( !containsObjectWithKey ){
+                  winston.log( 'info', 'repo: ' + project.projectName + ' key: ' + stringKey + ', ' +
+                                       '- translation exists, but unused in this sim, adding to pass-through data' );
+                  unusedTranslatedStringsArray.push( {
+                    repo: project.projectName,
+                    key: stringKey,
+                    value: previouslyTranslatedStrings[ stringKey ].value
+                  } );
+                }
+              }
+            }
           }
 
-          // sort the arrays by the english values
+          // sort the arrays by the English values
           var compare = function( a, b ) {
             if ( a.englishValue.toLowerCase() < b.englishValue.toLowerCase() ) {
               return -1;
@@ -371,6 +411,7 @@ module.exports.translateSimulation = function( req, res ) {
             currentSimStringsArray: currentSimStringsArray,
             simStringsArray: simStringsArray,
             commonStringsArray: commonStringsArray,
+            unusedTranslatedStringsArray: unusedTranslatedStringsArray,
             simName: simName,
             simTitle: simTitle ? simTitle : simName,
             otherSimNames: otherSims.join( ', ' ),
@@ -400,13 +441,14 @@ module.exports.translateSimulation = function( req, res ) {
         finished();
       } );
 
-      // send requests to github for the common code English strings
+      // send requests to github for the existing strings, both English and previous translations for this locale
       extractedStrings.forEach( function( extractedStringObject ) {
         var projectName = extractedStringObject.projectName;
         var repoSha = ( projectName === simName ) ? simSha : 'master';
         var stringsFilePath = GITHUB_URL_BASE + '/phetsims/' + projectName + '/' + repoSha + '/' + projectName + '-strings_en.json';
         var translatedStringsPath = GITHUB_URL_BASE + '/phetsims/babel/' + global.preferences.babelBranch + '/' + projectName + '/' + projectName + '-strings_' + targetLocale + '.json';
 
+        // request the English strings from GitHub
         winston.log( 'info', 'sending request to ' + stringsFilePath );
         request( stringsFilePath, function( error, response, body ) {
           if ( !error && response.statusCode === 200 ) {
@@ -420,6 +462,7 @@ module.exports.translateSimulation = function( req, res ) {
           finished();
         } );
 
+        // request the already existing translated strings, which may or may not exist
         winston.log( 'info', 'sending request to ' + translatedStringsPath );
         request( translatedStringsPath, function( error, response, body ) {
           req.session.translatedStrings[ targetLocale ] = req.session.translatedStrings[ targetLocale ] || {};
