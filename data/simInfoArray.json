@@ -118,5 +118,10 @@
     "simTitle": "Resistance in a Wire",
     "projectName": "resistance-in-a-wire",
     "testUrl": "http://phet.colorado.edu/sims/html/resistance-in-a-wire/latest/resistance-in-a-wire_en.html"
+  },
+  {
+    "simTitle": "John Travoltage",
+    "projectName": "john-travoltage",
+    "testUrl": "http://phet.colorado.edu/sims/html/john-travoltage/latest/john-travoltage_en.html"
   }
 ]
