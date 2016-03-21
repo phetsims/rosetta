@@ -123,5 +123,10 @@
     "simTitle": "John Travoltage",
     "projectName": "john-travoltage",
     "testUrl": "http://phet.colorado.edu/sims/html/john-travoltage/latest/john-travoltage_en.html"
+  },
+  {
+    "simTitle": "Gravity Force Lab",
+    "projectName": "gravity-force-lab",
+    "testUrl": "http://phet.colorado.edu/sims/html/gravity-force-lab/latest/gravity-force-lab_en.html"
   }
 ]
