@@ -128,5 +128,10 @@
     "simTitle": "Gravity Force Lab",
     "projectName": "gravity-force-lab",
     "testUrl": "http://phet.colorado.edu/sims/html/gravity-force-lab/latest/gravity-force-lab_en.html"
+  },
+  {
+    "simTitle": "Fraction Matcher",
+    "projectName": "fraction-matcher",
+    "testUrl": "http://phet.colorado.edu/sims/html/fraction-matcher/latest/fraction-matcher_en.html"
   }
 ]
