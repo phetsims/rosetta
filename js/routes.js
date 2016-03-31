@@ -579,7 +579,7 @@ module.exports.saveStrings = function( req, res ) {
 module.exports.showOffLinePage = function( req, res ) {
   'use strict';
 
-  res.send( '<p>Error: Page not found.  URL = ' + req.url + '</p>' );
+  res.render( 'offline.html', { title: 'Off Line' } );
 };
 
 /**
