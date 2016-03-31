@@ -25,6 +25,10 @@ var winston = require( 'winston' );
 var LISTEN_PORT = 16372;
 var PREFERENCES_FILE;
 
+// The following flag is used to take this utility off line and show a "down for maintenance" sort of page to users.
+// This is generally set by editing the in situ version, and should never be committed to the code base as false.
+var ENABLED = true;
+
 /*
  * When running on simian or figaro, rosetta is run under user "phet-admin". However, "process.env.HOME" will get
  * the user who is starting the process's home directory, not phet-admin's home directory, therefore we need to use
@@ -137,6 +141,11 @@ app.use( bodyParser.urlencoded( { extended: false } ) );
 //----------------------------------------------------------------------------
 // Set up the routes.  The order matters.
 //----------------------------------------------------------------------------
+
+// route for showing 'down for maintenance' page when needed
+if ( !ENABLED ){
+  app.get( '/translate*', routes.showOffLinePage );
+}
 
 // route that checks whether the user is logged in
 app.get( '/translate*', routes.checkForValidSession );

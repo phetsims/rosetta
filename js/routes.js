@@ -571,6 +571,18 @@ module.exports.saveStrings = function( req, res ) {
 };
 
 /**
+ * Route used when translation utility is off line.
+ *
+ * @param req
+ * @param res
+ */
+module.exports.showOffLinePage = function( req, res ) {
+  'use strict';
+
+  res.send( '<p>Error: Page not found.  URL = ' + req.url + '</p>' );
+};
+
+/**
  * Default route for when a page is not found in the translation utility.
  *
  * @param req
