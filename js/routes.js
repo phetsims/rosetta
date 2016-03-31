@@ -579,6 +579,7 @@ module.exports.saveStrings = function( req, res ) {
 module.exports.showOffLinePage = function( req, res ) {
   'use strict';
 
+  winston.log( 'warn', 'Showing the \'Off Line\' page to the user' );
   res.render( 'offline.html', { title: 'Off Line' } );
 };
 
