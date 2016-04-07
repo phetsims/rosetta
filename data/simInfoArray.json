@@ -133,5 +133,10 @@
     "simTitle": "Fraction Matcher",
     "projectName": "fraction-matcher",
     "testUrl": "http://phet.colorado.edu/sims/html/fraction-matcher/latest/fraction-matcher_en.html"
+  },
+  {
+    "simTitle": "Balancing Act",
+    "projectName": "balancing-act",
+    "testUrl": "http://phet.colorado.edu/sims/html/balancing-act/latest/balancing-act_en.html"
   }
 ]
