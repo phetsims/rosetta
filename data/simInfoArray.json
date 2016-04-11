@@ -138,5 +138,10 @@
     "simTitle": "Balancing Act",
     "projectName": "balancing-act",
     "testUrl": "http://phet.colorado.edu/sims/html/balancing-act/latest/balancing-act_en.html"
+  },
+  {
+    "simTitle": "Energy Skate Park: Basics",
+    "projectName": "energy-skate-park-basics",
+    "testUrl": "http://phet.colorado.edu/sims/html/energy-skate-park-basics/latest/energy-skate-park-basics_en.html"
   }
 ]
