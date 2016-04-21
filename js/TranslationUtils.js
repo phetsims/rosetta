@@ -8,7 +8,7 @@
 
 /* jslint node: true */
 
-var http = require( 'http' );
+var https = require( 'https' );
 var winston = require( 'winston' );
 var octonode = require( 'octonode' );
 var email = require( 'emailjs/email' );
@@ -68,7 +68,7 @@ function sendEmail( subject, text ) {
 // utility function for presenting escaped HTML, also escapes newline character
 function escapeHTML( s ) {
   'use strict';
-  
+
   return s.replace( /&/g, '&amp;' )
     .replace( /"/g, '&quot;' )
     .replace( /</g, '&lt;' )
@@ -78,7 +78,7 @@ function escapeHTML( s ) {
 
 function renderError( res, message, err ) {
   'use strict';
-  
+
   res.render( 'error.html', {
     title: 'Translation Utility Error',
     message: message,
@@ -89,7 +89,7 @@ function renderError( res, message, err ) {
 
 function extractStrings( data, simName ) {
   'use strict';
-  
+
   var projects = {};
   var matches = data.match( /string!([\w\.\/-]+)/g );
 
@@ -126,7 +126,7 @@ function extractStrings( data, simName ) {
 
 /**
  * Route that extracts strings from a built sim. Expects query parameter 'simUrl', the url of the built sim to
- * extract the strings from. Requests are made via http. Do not include to protocol in the simUrl parameter.
+ * extract the strings from. Requests are made via https. Do not include to protocol in the simUrl parameter.
  *
  * Example simUrl values:
  * - www.colorado.edu/physics/phet/dev/html/arithmetic/1.0.0-dev.13/arithmetic_en.html
@@ -138,7 +138,7 @@ function extractStrings( data, simName ) {
  */
 function extractStringsAPI( req, res ) {
   'use strict';
-  
+
   // included for an easy default test
   var url = req.param( 'simUrl' ) || 'phet-dev.colorado.edu/sims/html/molecules-and-light/latest/molecules-and-light_en.html';
   var localhost = ( url.indexOf( 'localhost' ) === 0 );
@@ -188,7 +188,7 @@ function extractStringsAPI( req, res ) {
     } );
   };
 
-  var strings = http.request( options, sessionDataRequestCallback );
+  var strings = https.request( options, sessionDataRequestCallback );
 
   strings.on( 'error', function( err ) {
     winston.log( 'error', 'Error getting sim strings - ' + err );
@@ -213,7 +213,7 @@ function extractStringsAPI( req, res ) {
 // convenience for a nicer looking stringify, also ensures a sorted JSON string
 function stringify( data ) {
   'use strict';
-  
+
   var keys = [];
   var key;
   if ( data ) {

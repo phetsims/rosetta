@@ -29,7 +29,7 @@ var stringify = TranslationUtils.stringify;
 var _ = require( 'underscore' );
 
 // constants
-var HTML_SIMS_DIRECTORY = '/data/web/htdocs/phetsims/sims/html/';
+var HTML_SIMS_DIRECTORY = global.preferences.htmlSimsDirectory;
 
 module.exports.commitQueue = async.queue( function( task, taskCallback ) {
   'use strict';
