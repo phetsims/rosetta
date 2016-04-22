@@ -65,6 +65,10 @@ $( document ).ready( function() {
     } );
   }
 
+  /**
+   * Handler for the "Test" button on the translate page.  This creates a URL with a query parameter that contains all
+   * of the translated strings and opens the sim with them so that the user can see how the translation looks.
+   */
   function testButtonEventListener() {
     var simUrl = simData.getAttribute( 'data-sim-url' );
     var stringsToReplace = {};
