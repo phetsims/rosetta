@@ -148,5 +148,10 @@
     "simTitle": "Least-Squares Regression",
     "projectName": "least-squares-regression",
     "testUrl": "http://phet.colorado.edu/sims/html/least-squares-regression/latest/least-squares-regression_en.html"
+  },
+  {
+    "simTitle": "Build an Atom",
+    "projectName": "build-an-atom",
+    "testUrl": "http://phet.colorado.edu/sims/html/build-an-atom/latest/build-an-atom_en.html"
   }
 ]
