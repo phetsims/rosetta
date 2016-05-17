@@ -168,5 +168,10 @@
     "simTitle": "Area Builder",
     "projectName": "area-builder",
     "testUrl": "https://phet.colorado.edu/sims/html/area-builder/latest/area-builder_en.html"
+  },
+  {
+    "simTitle": "Under Pressure",
+    "projectName": "under-pressure",
+    "testUrl": "https://phet.colorado.edu/sims/html/under-pressure/latest/under-pressure_en.html"
   }
 ]
