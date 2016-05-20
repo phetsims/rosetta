@@ -173,5 +173,10 @@
     "simTitle": "Under Pressure",
     "projectName": "under-pressure",
     "testUrl": "https://phet.colorado.edu/sims/html/under-pressure/latest/under-pressure_en.html"
+  },
+  {
+    "simTitle": "Isotopes and Atomic Mass",
+    "projectName": "isotopes-and-atomic-mass",
+    "testUrl": "https://phet.colorado.edu/sims/html/isotopes-and-atomic-mass/latest/isotopes-and-atomic-mass_en.html"
   }
 ]
