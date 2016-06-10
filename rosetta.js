@@ -145,24 +145,24 @@ app.use( bodyParser.urlencoded( { extended: false } ) );
 
 // route for showing 'down for maintenance' page when needed
 if ( !ENABLED ){
-  app.get( '/translate*', routes.showOffLinePage );
+  app.get( '/translate', routes.showOffLinePage );
 }
 
 // route that checks whether the user is logged in
-app.get( '/test-translate*', routes.checkForValidSession );
+app.get( '/translate*', routes.checkForValidSession );
 
 // landing page for the translation utility
-app.get( '/test-translate', routes.chooseSimulationAndLanguage );
+app.get( '/translate', routes.chooseSimulationAndLanguage );
 
 // route for translating a specific sim to a specific language
-app.get( '/test-translate/sim/:simName?/:targetLocale?', routes.translateSimulation );
-app.post( '/test-translate/sim/save/:simName?/:targetLocale?', routes.saveStrings );
-app.post( '/test-translate/sim/:simName?/:targetLocale?', routes.submitStrings );
+app.get( '/translate/sim/:simName?/:targetLocale?', routes.translateSimulation );
+app.post( '/translate/sim/save/:simName?/:targetLocale?', routes.saveStrings );
+app.post( '/translate/sim/:simName?/:targetLocale?', routes.submitStrings );
 
 // route for extracting strings from a sim
-app.get( '/test-translate/extractStrings', routes.extractStringsAPI );
+app.get( '/translate/extractStrings', routes.extractStringsAPI );
 
-app.get( '/test-translate/logout', routes.logout );
+app.get( '/translate/logout', routes.logout );
 
 // fall through route
 app.get( '/*', routes.pageNotFound );
