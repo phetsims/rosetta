@@ -53,6 +53,7 @@ body {
 
 .selector {
   margin-left: 20px;
+  font-size: 17px;
 }
 
 #goButton {
@@ -123,12 +124,12 @@ h1 {
   margin-left: 5em;
   height: 32px;
 }
+
 .bottom-btns{
   position: relative;
   top: 20px;
   margin-left: 5em;
   margin-bottom: 5em;
-
 }
 
 .savedSpan{
