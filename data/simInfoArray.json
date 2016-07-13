@@ -178,5 +178,10 @@
     "simTitle": "Isotopes and Atomic Mass",
     "projectName": "isotopes-and-atomic-mass",
     "testUrl": "https://phet.colorado.edu/sims/html/isotopes-and-atomic-mass/latest/isotopes-and-atomic-mass_en.html"
+  },
+  {
+    "simTitle": "Function Builder",
+    "projectName": "function-builder",
+    "testUrl": "https://phet.colorado.edu/sims/html/function-builder/latest/function-builder_en.html"
   }
 ]
