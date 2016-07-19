@@ -45,3 +45,5 @@ translation will look like once they submit.
 time to avoid merge conflicts. If a push to github fails, Rosetta tries again in 5 seconds. If that push fails, then an
 error is displayed with the strings that failed to push. Rosetta commits and pushes using the github API wrapper
 octonode.
+6. When the submissions of changed strings are complete, a request is made to the build server to build and publish the
+updated translation.
