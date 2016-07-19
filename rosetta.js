@@ -129,9 +129,9 @@ app.set( 'view engine', 'dot' );
 app.engine( 'html', doT.__express );
 
 // set static directories for css, img, and js
-app.use( '/translate/css', express.static( __dirname + '/public/css' ) );
-app.use( '/translate/img', express.static( __dirname + '/public/img' ) );
-app.use( '/translate/js', express.static( __dirname + '/public/js' ) );
+app.use( '/translate/css', express.static( __dirname + '/css' ) );
+app.use( '/translate/img', express.static( __dirname + '/img' ) );
+app.use( '/translate/js', express.static( __dirname + '/js' ) );
 
 // need cookieParser middleware before we can do anything with cookies
 app.use( express.cookieParser() );
