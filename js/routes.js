@@ -76,7 +76,9 @@ module.exports.checkForValidSession = function( req, res, next ) {
     req.session.translatedStrings = {}; // for storing string history across submissions
     req.session.jSessionId = req.cookies.JSESSIONID; // to verify user is still logged in
     req.session.cookie.expires = null;
-    next(); // send to next route
+
+    // send to next route
+    next();
     return;
   }
 
