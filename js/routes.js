@@ -63,8 +63,19 @@ module.exports.checkForValidSession = function( req, res, next ) {
   'use strict';
 
   if ( req.get( 'host' ).indexOf( 'localhost' ) === 0 ) {
-    // bypass credential evaluation to allow testing on localhost
+
+    // the app is running on localhost, so session validation is bypassed
     winston.log( 'warn', 'Bypassing session validation to allow testing on localhost' );
+
+    // set up fake session data
+    req.session.teamMember = true;
+    req.session.trustedTranslator = true;
+    req.session.userId = 0;
+    req.session.username = 'localhost-user';
+    req.session.email = 'none';
+    req.session.translatedStrings = {}; // for storing string history across submissions
+    req.session.jSessionId = req.cookies.JSESSIONID; // to verify user is still logged in
+    req.session.cookie.expires = null;
     next(); // send to next route
     return;
   }
@@ -89,12 +100,14 @@ module.exports.checkForValidSession = function( req, res, next ) {
         '' );
     } );
   }
+
   // If the session already has trustedTranslator defined, and it is true, then the user must be a trusted translator
   // who has already logged in.
   else if ( req.session.trustedTranslator || req.session.teamMember ) {
     next();
   }
   else {
+
     // session cookie was present, attempt to obtain session information
     var options = {
       host: req.get( 'host' ),
