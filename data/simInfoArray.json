@@ -183,5 +183,10 @@
     "simTitle": "Function Builder",
     "projectName": "function-builder",
     "testUrl": "https://phet.colorado.edu/sims/html/function-builder/latest/function-builder_en.html"
+  },
+  {
+    "simTitle": "Example Simulation",
+    "projectName": "example-sim",
+    "testUrl": "https://phet.colorado.edu/sims/html/example-sim/latest/example-sim_en.html"
   }
 ]
