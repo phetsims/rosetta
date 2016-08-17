@@ -188,5 +188,10 @@
     "simTitle": "Example Simulation",
     "projectName": "example-sim",
     "testUrl": "https://phet.colorado.edu/sims/html/example-sim/latest/example-sim_en.html"
+  },
+  {
+    "simTitle": "Rutherford Scattering",
+    "projectName": "rutherford-scattering",
+    "testUrl": "https://phet.colorado.edu/sims/html/rutherford-scattering/latest/rutherford-scattering_en.html"
   }
 ]
