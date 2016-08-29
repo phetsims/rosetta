@@ -30,7 +30,7 @@ var PREFERENCES_FILE;
 var ENABLED = true;
 
 /*
- * When running on simian or figaro, rosetta is run under user "phet-admin". However, "process.env.HOME" will get
+ * Rosetta is run under user "phet-admin" on the dev and production servers. However, "process.env.HOME" will get
  * the user who is starting the process's home directory, not phet-admin's home directory, therefore we need to use
  * a different approach to get the home directory.
  */
@@ -53,7 +53,7 @@ assert( preferences.rosettaSessionSecret, 'rosettaSessionSecret is missing from 
 assert( preferences.htmlSimsDirectory, 'Missing htmlSimsDirectory from ' + PREFERENCES_FILE );
 
 preferences.productionServerURL = preferences.productionServerURL || 'https://phet.colorado.edu';
-preferences.productionServerName = preferences.productionServerName || 'figaro.colorado.edu';
+preferences.productionServerName = preferences.productionServerName || 'phet-server.int.colorado.edu';
 
 /*
  * Add "babelBranch": "tests" in build-local.json for rosetta testing, so that commits will change the 'tests' branch
