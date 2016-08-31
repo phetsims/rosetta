@@ -3,7 +3,24 @@ UI and server-side support for translating PhET HTML5 simulations
 
 This code is based on Node.js, ExpressJS, and the doT templating engine.
 
-### Starting and stopping rosetta on simian and figaro
+
+### Starting and stopping rosetta on phet-server
+
+To start:
+```sudo systemctl start rosetta```
+
+To stop:
+```sudo systemctl stop rosetta```
+
+To restart:
+```sudo systemctl restart rosetta```
+
+To check status:
+```sudo systemctl status rosetta```
+or
+```sudo journalctl -u rosetta```
+
+### Starting and stopping rosetta on simian and figaro (legacy servers)
 
 To start:
 ```sudo /etc/init.d/rosetta start```
@@ -14,9 +31,9 @@ To stop:
 To check if rosetta is running (note the lack of sudo):
 ```/etc/init.d/rosetta status```
 
-### Rosetta configuration on simian and figaro
+### Rosetta configuration on simian, figaro, and phet-server.
 
-All of the phet repos live on simian and figaro under /data/share/phet/phet-repos. Rosetta lives in /data/share/phet/phet-repos/rosetta.
+All of the phet repos live on simian, figaro and phet-server under /data/share/phet/phet-repos. Rosetta lives in /data/share/phet/phet-repos/rosetta.
 
 Rosetta is run as user "phet-admin". It requires the certain fields filled out in phet-admin's HOME/.phet/build-local.json
 (see assertions in rosetta.js). These fields are already filled out, but they may need to modified or updated.
