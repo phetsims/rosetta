@@ -193,5 +193,10 @@
     "simTitle": "Rutherford Scattering",
     "projectName": "rutherford-scattering",
     "testUrl": "https://phet.colorado.edu/sims/html/rutherford-scattering/latest/rutherford-scattering_en.html"
+  },
+  {
+    "simTitle": "Charges And Fields",
+    "projectName": "charges-and-fields",
+    "testUrl": "https://phet.colorado.edu/sims/html/charges-and-fields/latest/charges-and-fields_en.html"
   }
 ]
