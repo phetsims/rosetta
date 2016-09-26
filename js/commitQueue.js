@@ -150,11 +150,40 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
      * new translation will appear on the website. This will fail when testing locally.
      */
     try {
-      var versions = fs.readdirSync( HTML_SIMS_DIRECTORY + simName ).sort();
-      var version = versions[ versions.length - 1 ]; // most recent version
-      winston.log( 'info', 'detecting latest version: ' + version );
-      var dependencies = require( HTML_SIMS_DIRECTORY + simName + '/' + version + '/dependencies.json' );
 
+      // get the directory names that correspond to version numbers
+      var versions = fs.readdirSync( HTML_SIMS_DIRECTORY + simName );
+
+      // sort the list of version identifiers from oldest to newest
+      versions.sort( function( a, b ) {
+        var aTokenized = a.split( '.' );
+        var bTokenized = b.split( '.' );
+        if ( aTokenized.length !== 3 ) {
+          console.log( 'error', 'Unexpected version ID ', a, ', the correct version might not be published.' );
+        }
+        if ( bTokenized.length !== 3 ) {
+          console.log( 'error', 'Unexpected version ID ', b, ', the correct version might not be published.' );
+        }
+        var result = 0;
+        for ( var i = 0; i < aTokenized.length; i++ ) {
+          if ( Number.parseInt( aTokenized[ i ] ) < Number.parseInt( bTokenized[ i ] ) ) {
+            result = -1;
+            break;
+          }
+          else if ( Number.parseInt( aTokenized[ i ] ) > Number.parseInt( bTokenized[ i ] ) ) {
+            result = 1;
+            break;
+          }
+        }
+        return result;
+      } );
+
+      // get the latest version identifier
+      var version = versions[ versions.length - 1 ];
+      winston.log( 'info', 'detecting latest version: ' + version );
+
+      // get the dependencies and turn them into a string
+      var dependencies = require( HTML_SIMS_DIRECTORY + simName + '/' + version + '/dependencies.json' );
       var queryString = querystring.stringify( {
         'repos': JSON.stringify( dependencies ),
         'simName': simName,
@@ -165,8 +194,8 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
         'userId': userId
       } );
 
+      // compose the URL for the build request and send it off to the build server
       var url = global.preferences.productionServerURL + '/deploy-html-simulation?' + queryString;
-
       request( url, function( error, response, body ) {
         if ( !error && response.statusCode === 200 ) {
           winston.log( 'info', 'sending build server request to: ' + url );
