@@ -198,5 +198,10 @@
     "simTitle": "Charges And Fields",
     "projectName": "charges-and-fields",
     "testUrl": "https://phet.colorado.edu/sims/html/charges-and-fields/latest/charges-and-fields_en.html"
+  },
+  {
+    "simTitle": "Atomic Interactions",
+    "projectName": "atomic-interactions",
+    "testUrl": "https://phet.colorado.edu/sims/html/atomic-interactions/latest/atomic-interactions_en.html"
   }
 ]
