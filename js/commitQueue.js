@@ -146,31 +146,39 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
     } );
 
     /*
-     * Try to notify the build server that a new translation has been published. If this succeeds, the
-     * new translation will appear on the website. This will fail when testing locally.
+     * Try to notify the build server that a new translation has been published. If this succeeds, the new translation
+     * will appear on the website. This will fail when testing locally.
      */
     try {
 
       // get the directory names that correspond to version numbers
       var versions = fs.readdirSync( HTML_SIMS_DIRECTORY + simName );
 
-      // sort the list of version identifiers from oldest to newest
+      // filter out anything that doesn't look like a version identifier (example of valid version ID is 1.2.3)
+      versions = versions.filter( function( dirName ){
+        var dirNameTokenized = dirName.split( '.' );
+        if ( dirNameTokenized.length !== 3 ){
+          return false;
+        }
+        for ( var i = 0; i < 3; i++ ){
+          if ( isNaN( dirNameTokenized[ i ] ) ){
+            return false;
+          }
+        }
+        return true;
+      } );
+
+      // sort the list of version identifiers from oldest to newest, necessary because default order is lexicographic
       versions.sort( function( a, b ) {
         var aTokenized = a.split( '.' );
         var bTokenized = b.split( '.' );
-        if ( aTokenized.length !== 3 ) {
-          console.log( 'error', 'Unexpected version ID ', a, ', the correct version might not be published.' );
-        }
-        if ( bTokenized.length !== 3 ) {
-          console.log( 'error', 'Unexpected version ID ', b, ', the correct version might not be published.' );
-        }
         var result = 0;
         for ( var i = 0; i < aTokenized.length; i++ ) {
-          if ( Number.parseInt( aTokenized[ i ] ) < Number.parseInt( bTokenized[ i ] ) ) {
+          if ( parseInt( aTokenized[ i ], 10 ) < parseInt( bTokenized[ i ], 10 ) ) {
             result = -1;
             break;
           }
-          else if ( Number.parseInt( aTokenized[ i ] ) > Number.parseInt( bTokenized[ i ] ) ) {
+          else if ( parseInt( aTokenized[ i ], 10 ) > parseInt( bTokenized[ i ], 10 ) ) {
             result = 1;
             break;
           }
