@@ -203,5 +203,10 @@
     "simTitle": "Atomic Interactions",
     "projectName": "atomic-interactions",
     "testUrl": "https://phet.colorado.edu/sims/html/atomic-interactions/latest/atomic-interactions_en.html"
+  },
+  {
+    "simTitle": "Plinko Probability",
+    "projectName": "plinko-probability",
+    "testUrl": "https://phet.colorado.edu/sims/html/plinko-probability/latest/plinko-probability_en.html"
   }
 ]
