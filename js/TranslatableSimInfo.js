@@ -24,7 +24,7 @@ var SIM_INFO_ARRAY = constants.SIM_INFO_ARRAY;
 /**
  * Get the simulation information given the project name.
  * @param {string} projectName - Project name for the simulation, same as the GitHub repo name.
- * @returns {object} simulation information, see above for structure, null if no match found
+ * @returns {Object} simulation information, see above for structure, null if no match found
  */
 module.exports.getSimInfoByProjectName = function( projectName ) {
   'use strict';

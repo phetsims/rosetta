@@ -27,7 +27,7 @@ for ( var locale in localeInfo ) {
 
 sortedLocaleInfoArray.sort( function( a, b ) {
   'use strict';
-  
+
   if ( a.name > b.name ) {
     return 1;
   }
@@ -52,8 +52,8 @@ module.exports = {
   /**
    * Obtain a string that describes the language associated with the provided locale.  For example, if the caller
    * specified 'es_MX', the string 'Spanish - Mexico' would be returned.
-   * @param {String} locale
-   * @returns {String}
+   * @param {string} locale
+   * @returns {string}
    */
   localeToLanguageString: function( locale ) {
     'use strict';
