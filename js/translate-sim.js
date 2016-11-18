@@ -81,7 +81,10 @@ $( document ).ready( function() {
         if ( repo && translation && translation.length > 0 ) {
           // add rtl embedding markers for rtl strings
           if ( rtl ) {
-            translation = '%E2%80%AB' + translation + '%E2%80%AC';
+            translation = '\u202b' + translation + '\u202c';
+          }
+          else {
+            translation = '\u202a' + translation + '\u202c';
           }
           var stringKey = repo.replace( /-/g, '_' ).toUpperCase() + '/' + row.getAttribute( 'data-string-key' );
           stringsToReplace[ stringKey ] = translation;
