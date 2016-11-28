@@ -208,5 +208,10 @@
     "simTitle": "Plinko Probability",
     "projectName": "plinko-probability",
     "testUrl": "https://phet.colorado.edu/sims/html/plinko-probability/latest/plinko-probability_en.html"
+  },
+  {
+    "simTitle": "Gravity And Orbits",
+    "projectName": "gravity-and-orbits",
+    "testUrl": "https://phet.colorado.edu/sims/html/gravity-and-orbits/latest/gravity-and-orbits_en.html"
   }
 ]
