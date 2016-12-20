@@ -213,5 +213,10 @@
     "simTitle": "Gravity And Orbits",
     "projectName": "gravity-and-orbits",
     "testUrl": "https://phet.colorado.edu/sims/html/gravity-and-orbits/latest/gravity-and-orbits_en.html"
+  },
+  {
+    "simTitle": "States of Matter",
+    "projectName": "states-of-matter",
+    "testUrl": "https://phet.colorado.edu/sims/html/states-of-matter/latest/states-of-matter_en.html"
   }
 ]
