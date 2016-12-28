@@ -73,9 +73,18 @@ module.exports.commitQueue = async.queue( function( task, taskCallback ) {
       var history = translatedString && translatedString.history;
       var oldValue = ( history && history.length ) ? history[ history.length - 1 ].newValue : '';
 
-      // handle special case of multiline string
+      // handle special case of multi-line string
       if ( oldValue.indexOf( '\n' ) > -1 ) {
+        // TODO: temp debug code for issue #144, remove once issue is resolved.
+        winston.log( 'info', 'detected multi-line string' );
+        winston.log( 'info', 'oldValue = ' + oldValue );
+        winston.log( 'info', 'prior to replace operation, oldValue === stringValue = ' + ( oldValue === stringValue ) );
+        // TODO: end of first debug code section
         oldValue = oldValue.replace( /\n/g, '\\n' );
+        // TODO: temp debug code for issue #144, remove once issue is resolved.
+        winston.log( 'info', 'oldValue (after replace operation) = ' + oldValue );
+        winston.log( 'info', 'after the replace operation, oldValue === stringValue = ' + ( oldValue === stringValue ) );
+        // TODO: end of second debug code section
       }
 
       // don't add the string if the value hasn't changed
