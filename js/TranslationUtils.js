@@ -13,7 +13,7 @@ var winston = require( 'winston' );
 var octonode = require( 'octonode' );
 var email = require( 'emailjs/email' );
 
-var _ = require( 'underscore' );
+var _ = require( 'underscore' ); // eslint-disable-line
 
 // globals
 var preferences = global.preferences;

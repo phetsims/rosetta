@@ -11,20 +11,20 @@
 
 // modules
 var https = require( 'https' );
-var query = require( 'pg-query' );
+var query = require( 'pg-query' ); // eslint-disable-line
 var request = require( 'request' );
 var winston = require( 'winston' );
 var fs = require( 'fs' );
 
 var LocaleInfo = require( './LocaleInfo' );
 var TranslatableSimInfo = require( './TranslatableSimInfo' );
-var commitQueue = require( './commitQueue' ).commitQueue;
+var commitQueue = require( './commitQueue' ).commitQueue; // eslint-disable-line
 var TranslationUtils = require( './TranslationUtils' );
 var constants = require( './constants' );
 var escapeHTML = TranslationUtils.escapeHTML;
 var renderError = TranslationUtils.renderError;
 
-var _ = require( 'underscore' );
+var _ = require( 'underscore' ); // eslint-disable-line
 
 // constants
 var GITHUB_URL_BASE = constants.GITHUB_URL_BASE;

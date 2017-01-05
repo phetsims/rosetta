@@ -9,7 +9,7 @@
 
 /* jslint node: true */
 
-var localeInfo = require( '../../chipper/js/data/localeInfo.js' );
+var localeInfo = require( '../../chipper/js/data/localeInfo.js' ); // eslint-disable-line
 
 // get locales into a sorted array
 var sortedLocaleInfoArray = [];

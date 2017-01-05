@@ -11,6 +11,7 @@
  * @param contentEditableElement
  */
 function setEndOfContenteditable( contentEditableElement ) {
+  'use strict';
 
   var range;
 
@@ -38,6 +39,7 @@ function setEndOfContenteditable( contentEditableElement ) {
 }
 
 $( document ).ready( function() {
+  'use strict';
 
   var testButtonTop = document.getElementById( 'testButtonTop' );
   var saveButtonTop = document.getElementById( 'saveButtonTop' );

@@ -14,7 +14,7 @@
 // modules
 var async = require( 'async' );
 var fs = require( 'fs' );
-var query = require( 'pg-query' );
+var query = require( 'pg-query' ); // eslint-disable-line
 var querystring = require( 'querystring' );
 var request = require( 'request' );
 var winston = require( 'winston' );
@@ -26,7 +26,7 @@ var sendEmail = TranslationUtils.sendEmail;
 var commit = TranslationUtils.commit;
 var stringify = TranslationUtils.stringify;
 
-var _ = require( 'underscore' );
+var _ = require( 'underscore' ); // eslint-disable-line
 
 // constants
 var HTML_SIMS_DIRECTORY = global.preferences.htmlSimsDirectory;
