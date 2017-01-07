@@ -96,7 +96,7 @@ for ( var key in parsedCommandLineOptions ) {
   if ( key !== '_' && parsedCommandLineOptions.hasOwnProperty( key ) && !defaultOptions.hasOwnProperty( key ) ) {
     console.log( 'Unrecognized option: ' + key );
     console.log( 'try --help for usage information.' );
-    return;
+    return; // eslint-disable-line
   }
 }
 
