@@ -12,13 +12,13 @@
 
 // modules
 var assert = require( 'assert' );
-var bodyParser = require( 'body-parser' );
+var bodyParser = require( 'body-parser' ); // eslint-disable-line require-statement-match
 var dateformat = require( 'dateformat' );
-var doT = require( 'express-dot' );
+var doT = require( 'express-dot' ); // eslint-disable-line require-statement-match
 var express = require( 'express' );
 var fs = require( 'fs' );
-var parseArgs = require( 'minimist' );
-var query = require( 'pg-query' );
+var parseArgs = require( 'minimist' ); // eslint-disable-line require-statement-match
+var query = require( 'pg-query' ); // eslint-disable-line require-statement-match
 var winston = require( 'winston' );
 
 // constants
@@ -35,7 +35,7 @@ var ENABLED = true;
  * a different approach to get the home directory.
  */
 if ( !/^win/.test( process.platform ) ) {
-  var passwdUser = require( 'passwd-user' );
+  var passwdUser = require( 'passwd-user' ); // eslint-disable-line require-statement-match
   PREFERENCES_FILE = passwdUser.sync( process.getuid() ).homedir + '/.phet/build-local.json';
 }
 else {
