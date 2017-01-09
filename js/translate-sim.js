@@ -5,13 +5,14 @@
  * @author Michael Kauzmann
  * @author Aaron Davis
  */
+/* eslint-env node */
+'use strict';
 
 /**
  * Modified from http://stackoverflow.com/questions/1125292/how-to-move-cursor-to-end-of-contenteditable-entity/3866442#3866442
  * @param contentEditableElement
  */
 function setEndOfContenteditable( contentEditableElement ) {
-  'use strict';
 
   var range;
 
@@ -39,7 +40,6 @@ function setEndOfContenteditable( contentEditableElement ) {
 }
 
 $( document ).ready( function() {
-  'use strict';
 
   var testButtonTop = document.getElementById( 'testButtonTop' );
   var saveButtonTop = document.getElementById( 'saveButtonTop' );

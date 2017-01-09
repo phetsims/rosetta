@@ -6,7 +6,8 @@
  * @author Aaron Davis
  */
 
-/* jslint node: true */
+/* eslint-env node */
+'use strict';
 
 module.exports = {
   GITHUB_URL_BASE: 'https://raw.githubusercontent.com',

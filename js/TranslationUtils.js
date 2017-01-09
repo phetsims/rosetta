@@ -5,8 +5,8 @@
  *
  * @author Aaron Davis
  */
-
-/* jslint node: true */
+/* eslint-env node */
+'use strict';
 
 var https = require( 'https' );
 var winston = require( 'winston' );
@@ -39,7 +39,6 @@ if ( preferences.emailUsername && preferences.emailPassword && preferences.email
  * @param text
  */
 function sendEmail( subject, text ) {
-  'use strict';
 
   if ( emailServer ) {
     emailServer.send( {
@@ -67,7 +66,6 @@ function sendEmail( subject, text ) {
 
 // utility function for presenting escaped HTML, also escapes newline character
 function escapeHTML( s ) {
-  'use strict';
 
   return s.replace( /&/g, '&amp;' )
     .replace( /"/g, '&quot;' )
@@ -77,7 +75,6 @@ function escapeHTML( s ) {
 }
 
 function renderError( res, message, err ) {
-  'use strict';
 
   res.render( 'error.html', {
     title: 'Translation Utility Error',
@@ -88,7 +85,6 @@ function renderError( res, message, err ) {
 }
 
 function extractStrings( data, simName ) {
-  'use strict';
 
   var projects = {};
   var matches = data.match( /string!([\w\.\/-]+)/g );
@@ -137,7 +133,6 @@ function extractStrings( data, simName ) {
  * @param res
  */
 function extractStringsAPI( req, res ) {
-  'use strict';
 
   // included for an easy default test
   var url = req.param( 'simUrl' ) || 'phet-dev.colorado.edu/sims/html/molecules-and-light/latest/molecules-and-light_en.html';
@@ -212,7 +207,6 @@ function extractStringsAPI( req, res ) {
 
 // convenience for a nicer looking stringify, also ensures a sorted JSON string
 function stringify( data ) {
-  'use strict';
 
   var keys = [];
   var key;
@@ -241,7 +235,6 @@ function stringify( data ) {
  * @param {function} callback
  */
 function commit( repo, file, content, message, branch, callback ) {
-  'use strict';
 
   if ( !branch ) {
     branch = 'master';
@@ -302,7 +295,6 @@ function commit( repo, file, content, message, branch, callback ) {
  * @returns {*}
  */
 function getGhClient() {
-  'use strict';
   var username = preferences.githubUsername;
   var pass = preferences.githubPassword;
 

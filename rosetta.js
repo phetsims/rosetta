@@ -7,7 +7,7 @@
  * @author Aaron Davis
  */
 
-/* jslint node: true */
+/* eslint-env node */
 'use strict';
 
 // modules

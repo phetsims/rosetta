@@ -7,7 +7,8 @@
  * @author Aaron Davis
  */
 
-/* jslint node: true */
+/* eslint-env node */
+'use strict';
 
 // modules
 var https = require( 'https' );
@@ -34,7 +35,6 @@ var ASCII_REGEX = /^[ -~]+$/;
 
 // utility function for sending the user to the login page
 function sendUserToLoginPage( res, host, destinationUrl ) {
-  'use strict';
 
   res.render( 'login-required.html', {
     title: 'Login Required',
@@ -45,7 +45,6 @@ function sendUserToLoginPage( res, host, destinationUrl ) {
 
 // utility function that returns the string if printable or a warning message if not
 function getPrintableString( string ) {
-  'use strict';
   return ASCII_REGEX.test( string ) ? string : '(string contains non-printable characters)';
 }
 
@@ -60,7 +59,6 @@ function getPrintableString( string ) {
  * @param next
  */
 module.exports.checkForValidSession = function( req, res, next ) {
-  'use strict';
 
   if ( req.get( 'host' ).indexOf( 'localhost' ) === 0 ) {
 
@@ -175,7 +173,6 @@ module.exports.checkForValidSession = function( req, res, next ) {
 };
 
 module.exports.logout = function( req, res ) {
-  'use strict';
 
   req.session.destroy( function() {
     res.clearCookie( 'JSESSIONID' );
@@ -191,7 +188,6 @@ module.exports.logout = function( req, res ) {
  * @param res
  */
 module.exports.chooseSimulationAndLanguage = function( req, res ) {
-  'use strict';
 
   var simInfoArray = JSON.parse( fs.readFileSync( SIM_INFO_ARRAY, 'utf8' ) );
   simInfoArray.sort( function( a, b ) {
@@ -220,7 +216,6 @@ module.exports.chooseSimulationAndLanguage = function( req, res ) {
  * @param res
  */
 module.exports.translateSimulation = function( req, res ) {
-  'use strict';
 
   var simName = req.param( 'simName' );
   var targetLocale = req.param( 'targetLocale' );
@@ -510,7 +505,6 @@ module.exports.translateSimulation = function( req, res ) {
  * @param res
  */
 module.exports.submitStrings = function( req, res ) {
-  'use strict';
 
   var simName = req.param( 'simName' );
   var targetLocale = req.param( 'targetLocale' );
@@ -531,7 +525,6 @@ module.exports.submitStrings = function( req, res ) {
  * @param res
  */
 module.exports.saveStrings = function( req, res ) {
-  'use strict';
 
   var simName = req.param( 'simName' );
   var targetLocale = req.param( 'targetLocale' );
@@ -593,7 +586,6 @@ module.exports.saveStrings = function( req, res ) {
  * @param res
  */
 module.exports.showOffLinePage = function( req, res ) {
-  'use strict';
 
   winston.log( 'warn', 'Showing the \'Off Line\' page to the user' );
   res.render( 'offline.html', { title: 'Off Line' } );
@@ -606,7 +598,6 @@ module.exports.showOffLinePage = function( req, res ) {
  * @param res
  */
 module.exports.pageNotFound = function( req, res ) {
-  'use strict';
 
   res.send( '<p>Error: Page not found.  URL = ' + req.url + '</p>' );
 };
