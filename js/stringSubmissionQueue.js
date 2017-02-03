@@ -263,12 +263,12 @@ module.exports.stringSubmissionQueue = async.queue( function( task, taskCallback
 
             // Github sometimes returns a 409 error and fails to commit, in this case we'll try again once
             if ( err ) {
-              winston.log( 'error', err + '. Error committing to file ' + file + '. Trying again in 5 seconds...' );
+              winston.log( 'error', err + '. Error updating file ' + file + '. Trying again in 5 seconds...' );
               setTimeout( function() {
                 checkAndUpdateStringFile( babel, file, content, commitMessage, global.preferences.babelBranch, function( err ) {
                   if ( err ) {
-                    errorDetails += err + '. Error committing to file ' + file;
-                    winston.log( 'error', err + '. Error committing to file ' + file );
+                    errorDetails += err + '. Error updating file ' + file;
+                    winston.log( 'error', err + '. Error updating file ' + file );
                     for ( var stringKey in repos[ repository ] ) {
                       var stringValue = repos[ repository ][ stringKey ].value;
                       var translatedString = req.session.translatedStrings[ targetLocale ] &&
