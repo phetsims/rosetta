@@ -321,7 +321,7 @@ module.exports.translateSimulation = function( req, res ) {
               simTitle = strings[ project.projectName + '.title' ] && strings[ project.projectName + '.title' ].value;
               array = currentSimStringsArray;
             }
-            else if ( _.contains( sims, project.projectName ) ) {
+            else if ( _.includes( sims, project.projectName ) ) {
               otherSims.push( project.projectName );
               array = simStringsArray;
             }

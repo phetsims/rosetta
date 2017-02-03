@@ -104,7 +104,7 @@ function extractStrings( data, simName ) {
 
     projects[ projectName ] = projects[ projectName ] || [];
 
-    if ( !_.contains( projects[ projectName ], string ) ) {
+    if ( !_.includes( projects[ projectName ], string ) ) {
       projects[ projectName ].push( string );
     }
   }
