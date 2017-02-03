@@ -1,12 +1,11 @@
 // Copyright 2015, University of Colorado Boulder
 
 /**
- * commitQueue is an async.queue with a concurrency of one, meaning that only one task is executed at a time. This
- * ensures that only one translation can be committing to github concurrently.
- *
- * The queue is responsible for executing the task of committing to github the submitted translation.
+ * 'stringSubmissionQueue' is an asynchronous (async.queue) queue with a concurrency of one (meaning that only one task
+ * is executed at a time) that is used to serialize submissions of strings for a translation.
  *
  * @author Aaron Davis
+ * @author John Blanco
  */
 /* eslint-env node */
 'use strict';
@@ -31,7 +30,7 @@ var _ = require( 'underscore' ); // eslint-disable-line
 // constants
 var HTML_SIMS_DIRECTORY = global.preferences.htmlSimsDirectory;
 
-module.exports.commitQueue = async.queue( function( task, taskCallback ) {
+module.exports.stringSubmissionQueue = async.queue( function( task, taskCallback ) {
 
   var req = task.req;
   var res = task.res;

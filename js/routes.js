@@ -19,7 +19,7 @@ var fs = require( 'fs' );
 
 var LocaleInfo = require( './LocaleInfo' );
 var TranslatableSimInfo = require( './TranslatableSimInfo' );
-var commitQueue = require( './commitQueue' ).commitQueue; // eslint-disable-line
+var stringSubmissionQueue = require( './stringSubmissionQueue' ).stringSubmissionQueue; // eslint-disable-line
 var TranslationUtils = require( './TranslationUtils' );
 var constants = require( './constants' );
 var escapeHTML = TranslationUtils.escapeHTML;
@@ -500,7 +500,7 @@ module.exports.translateSimulation = function( req, res ) {
 /**
  * Route for submitting strings (when the user presses the "Submit" button on a translate sim page).
  * The translation is added to a queue of translations to be committed to github. Logic for this is
- * in the file commitQueue.js.
+ * in the file stringSubmissionQueue.js.
  * @param req
  * @param res
  */
@@ -510,7 +510,7 @@ module.exports.submitStrings = function( req, res ) {
   var targetLocale = req.param( 'targetLocale' );
 
   winston.log( 'info', 'queuing string submission for ' + simName + '_' + targetLocale );
-  commitQueue.push( {
+  stringSubmissionQueue.push( {
     req: req,
     res: res
   }, function() {
