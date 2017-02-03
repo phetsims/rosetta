@@ -22,7 +22,7 @@ var LocaleInfo = require( './LocaleInfo' );
 var TranslationUtils = require( './TranslationUtils' );
 var getGhClient = TranslationUtils.getGhClient;
 var sendEmail = TranslationUtils.sendEmail;
-var commit = TranslationUtils.commit;
+var checkAndUpdateStringFile = TranslationUtils.checkAndUpdateStringFile;
 var stringify = TranslationUtils.stringify;
 
 var _ = require( 'underscore' ); // eslint-disable-line
@@ -259,13 +259,13 @@ module.exports.stringSubmissionQueue = async.queue( function( task, taskCallback
           };
 
           winston.log( 'info', 'attempting update for file = ' + file );
-          commit( babel, file, content, commitMessage, global.preferences.babelBranch, function( err ) {
+          checkAndUpdateStringFile( babel, file, content, commitMessage, global.preferences.babelBranch, function( err ) {
 
             // Github sometimes returns a 409 error and fails to commit, in this case we'll try again once
             if ( err ) {
               winston.log( 'error', err + '. Error committing to file ' + file + '. Trying again in 5 seconds...' );
               setTimeout( function() {
-                commit( babel, file, content, commitMessage, global.preferences.babelBranch, function( err ) {
+                checkAndUpdateStringFile( babel, file, content, commitMessage, global.preferences.babelBranch, function( err ) {
                   if ( err ) {
                     errorDetails += err + '. Error committing to file ' + file;
                     winston.log( 'error', err + '. Error committing to file ' + file );

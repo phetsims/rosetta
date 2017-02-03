@@ -225,16 +225,16 @@ function stringify( data ) {
 }
 
 /**
- * Commit a new file or a change to an existing file on github.
+ * Check if a string files has changed versus the version of it on GitHub and, if so, push the updated version.
  *
- * @param {Object} repo - return value from ghClient.repo()
- * @param {string} file - file to be added or modified (must include the full path from the repo root)
+ * @param {Object} repo - handle to a GitHub repo, return value from ghClient.repo()
+ * @param {string} file - string file to be added or modified (must include the full path from the repo root)
  * @param {string} content - file contents
  * @param {string} message - commit message
  * @param {string} branch - branch of babel, will usually be 'master', but sometimes 'tests'
  * @param {function} callback
  */
-function commit( repo, file, content, message, branch, callback ) {
+function checkAndUpdateStringFile( repo, file, content, message, branch, callback ) {
 
   if ( !branch ) {
     branch = 'master';
@@ -314,6 +314,6 @@ module.exports = {
   extractStrings: extractStrings,
   extractStringsAPI: extractStringsAPI,
   getGhClient: getGhClient,
-  commit: commit,
+  checkAndUpdateStringFile: checkAndUpdateStringFile,
   stringify: stringify
 };
