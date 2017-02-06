@@ -1,8 +1,8 @@
 // Copyright 2015, University of Colorado Boulder
 
 /**
- * 'stringSubmissionQueue' is an asynchronous (async.queue) queue with a concurrency of one (meaning that only one task
- * is executed at a time) that is used to serialize submissions of strings for a translation.
+ * An asynchronous (async.queue) queue with a concurrency of one (meaning that only one task is executed at a time)
+ * that is used to serialize submissions of strings for a translation.
  *
  * @author Aaron Davis
  * @author John Blanco
@@ -44,7 +44,7 @@ module.exports.stringSubmissionQueue = async.queue( function( task, taskCallback
 
   /*
    * Repos will contain an object whose keys are repository names and whose values are of the same form
-   * as the objects stored in babel. Multiple repositories can be committed to at the same time because
+   * as the objects stored in babel. Multiple repositories may be committed to at the same time because
    * common code strings might be submitted as well.
    */
   var repos = {};
@@ -261,7 +261,7 @@ module.exports.stringSubmissionQueue = async.queue( function( task, taskCallback
           winston.log( 'info', 'attempting update for file = ' + file );
           checkAndUpdateStringFile( babel, file, content, commitMessage, global.preferences.babelBranch, function( err ) {
 
-            // Github sometimes returns a 409 error and fails to commit, in this case we'll try again once
+            // GitHub sometimes returns a 409 error and fails to commit, in this case we'll try again once
             if ( err ) {
               winston.log( 'error', err + '. Error updating file ' + file + '. Trying again in 5 seconds...' );
               setTimeout( function() {
