@@ -18,7 +18,6 @@ var doT = require( 'express-dot' ); // eslint-disable-line require-statement-mat
 var express = require( 'express' );
 var fs = require( 'fs' );
 var parseArgs = require( 'minimist' ); // eslint-disable-line require-statement-match
-var query = require( 'pg-query' ); // eslint-disable-line require-statement-match
 var winston = require( 'winston' );
 
 // constants
@@ -68,14 +67,6 @@ global.preferences = preferences;
 
 // must be required after global.preferences has been initialized
 var routes = require( __dirname + '/js/routes' );
-
-// configure postgres connection
-if ( preferences.pgConnectionString ) {
-  query.connectionParameters = preferences.pgConnectionString;
-}
-else {
-  query.connectionParameters = 'postgresql://localhost/rosetta';
-}
 
 // Handle command line input
 // First 2 args provide info about executables, ignore
