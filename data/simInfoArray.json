@@ -223,5 +223,10 @@
     "simTitle": "States of Matter: Basics",
     "projectName": "states-of-matter-basics",
     "testUrl": "https://phet.colorado.edu/sims/html/states-of-matter-basics/latest/states-of-matter-basics_en.html"
+  },
+  {
+    "simTitle": "Make a Ten",
+    "projectName": "make-a-ten",
+    "testUrl": "https://phet.colorado.edu/sims/html/make-a-ten/latest/make-a-ten_en.html"
   }
 ]
