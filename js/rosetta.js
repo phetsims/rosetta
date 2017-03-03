@@ -126,14 +126,14 @@ winston.log( 'info', '---- rosetta starting up, about to create ExpressJS app --
 
 // Create and configure the ExpressJS app
 var app = express();
-app.set( 'views', __dirname + '/html/views' );
+app.set( 'views', __dirname + '../html/views' );
 app.set( 'view engine', 'dot' );
 app.engine( 'html', doT.__express );
 
 // set static directories for css, img, and js
-app.use( '/translate/css', express.static( __dirname + '/css' ) );
-app.use( '/translate/img', express.static( __dirname + '/img' ) );
-app.use( '/translate/js', express.static( __dirname + '/js' ) );
+app.use( '/translate/css', express.static( __dirname + '../css' ) );
+app.use( '/translate/img', express.static( __dirname + '../img' ) );
+app.use( '/translate/js', express.static( __dirname ) );
 
 // need cookieParser middleware before we can do anything with cookies
 app.use( express.cookieParser() );
