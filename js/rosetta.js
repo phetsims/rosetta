@@ -1,4 +1,4 @@
-// Copyright 2002-2015, University of Colorado Boulder
+// Copyright 2017, University of Colorado Boulder
 
 /**
  * Main entry point for PhET translation web app. This is where ExpressJS gets configured and the routes are set up.
@@ -67,7 +67,7 @@ assert( preferences.babelBranch === 'master' || preferences.babelBranch === 'tes
 global.preferences = preferences;
 
 // must be required after global.preferences has been initialized
-var routes = require( __dirname + '/js/routes' );
+var routes = require( __dirname + '/routes' );
 
 // configure postgres connection
 if ( preferences.pgConnectionString ) {
