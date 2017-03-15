@@ -228,5 +228,10 @@
     "simTitle": "Make a Ten",
     "projectName": "make-a-ten",
     "testUrl": "https://phet.colorado.edu/sims/html/make-a-ten/latest/make-a-ten_en.html"
+  },
+  {
+    "simTitle": "Circuit Construction Kit: Black Box Study",
+    "projectName": "circuit-construction-kit-black-box-study",
+    "testUrl": "https://phet.colorado.edu/sims/html/circuit-construction-kit-black-box-study/latest/circuit-construction-kit-black-box-study_en.html"
   }
 ]
