@@ -233,5 +233,10 @@
     "simTitle": "Circuit Construction Kit: Black Box Study",
     "projectName": "circuit-construction-kit-black-box-study",
     "testUrl": "https://phet.colorado.edu/sims/html/circuit-construction-kit-black-box-study/latest/circuit-construction-kit-black-box-study_en.html"
+  },
+  {
+    "simTitle": "Unit Rates",
+    "projectName": "unit-rates",
+    "testUrl": "https://phet.colorado.edu/sims/html/unit-rates/latest/unit-rates_en.html"
   }
 ]
