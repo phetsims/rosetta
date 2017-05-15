@@ -38,7 +38,7 @@ All of the phet repos live on simian, figaro and phet-server under /data/share/p
 Rosetta is run as user "phet-admin". It requires the certain fields filled out in phet-admin's HOME/.phet/build-local.json
 (see assertions in rosetta.js). These fields are already filled out, but they may need to modified or updated.
 
-The Rosetta log file is /data/share/phet/phet-repos/rosetta/rosetta.log
+The Rosetta uses syslog to save output to the winston log.  You can view the logs by typing `sudo journalctl -u rosetta` or to tail the logs type `sudo journalctl -f -u rosetta`
 
 ### Database setup
 
