@@ -233,5 +233,10 @@
     "simTitle": "Unit Rates",
     "projectName": "unit-rates",
     "testUrl": "https://phet.colorado.edu/sims/html/unit-rates/latest/unit-rates_en.html"
+  },
+  {
+    "simTitle": "Proportion Playground",
+    "projectName": "proportion-playground",
+    "testUrl": "https://phet.colorado.edu/sims/html/proportion-playground/latest/proportion-playground_en.html"
   }
 ]
