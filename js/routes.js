@@ -541,7 +541,7 @@ module.exports.saveStrings = function( req, res ) {
 
   var repos = {};
   for ( var string in req.body ) {
-    if ( req.body.hasOwnProperty( string ) ) {
+    if ( Object.hasOwnProperty.call( req.body, string ) ) {
 
       // data submitted is in the form "[repository] [key]", for example "area-builder area-builder.title"
       var repoAndKey = string.split( ' ' );
