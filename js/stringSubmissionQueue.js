@@ -51,7 +51,7 @@ module.exports.stringSubmissionQueue = async.queue( function( task, taskCallback
 
   // req.body contains all of the strings submitted in the POST request from the translation utility
   for ( var string in req.body ) {
-    if ( req.body.hasOwnProperty( string ) ) {
+    if ( Object.hasOwnProperty.call( req.body, string ) ) {
 
       // data submitted is in the form "[repository] [key]", for example "area-builder area-builder.title"
       var repoAndKey = string.split( ' ' );
