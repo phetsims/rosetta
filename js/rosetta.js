@@ -122,7 +122,8 @@ winston.add( winston.transports.Console, {
 } );
 
 // log startup message
-winston.log( 'info', '---- rosetta starting up, about to create ExpressJS app ----' );
+winston.log( 'info', '---- rosetta starting up ----' );
+winston.log( 'info', 'Node version: ' + process.version );
 
 // Create and configure the ExpressJS app
 var app = express();
