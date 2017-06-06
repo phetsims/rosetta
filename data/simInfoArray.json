@@ -238,5 +238,10 @@
     "simTitle": "Proportion Playground",
     "projectName": "proportion-playground",
     "testUrl": "https://phet.colorado.edu/sims/html/proportion-playground/latest/proportion-playground_en.html"
+  },
+  {
+    "simTitle": "Function Builder: Basics",
+    "projectName": "function-builder-basics",
+    "testUrl": "https://phet.colorado.edu/sims/html/function-builder-basics/latest/function-builder-basics_en.html"
   }
 ]
