@@ -243,5 +243,10 @@
     "simTitle": "Function Builder: Basics",
     "projectName": "function-builder-basics",
     "testUrl": "https://phet.colorado.edu/sims/html/function-builder-basics/latest/function-builder-basics_en.html"
+  },
+  {
+    "simTitle": "Graphing Slope-Intercept",
+    "projectName": "graphing-slope-intercept",
+    "testUrl": "https://phet.colorado.edu/sims/html/graphing-slope-intercept/latest/graphing-slope-intercept_en.html"
   }
 ]
