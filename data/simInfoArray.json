@@ -248,5 +248,10 @@
     "simTitle": "Graphing Slope-Intercept",
     "projectName": "graphing-slope-intercept",
     "testUrl": "https://phet.colorado.edu/sims/html/graphing-slope-intercept/latest/graphing-slope-intercept_en.html"
+  },
+  {
+    "simTitle": "Expression Exchange",
+    "projectName": "expression-exchange",
+    "testUrl": "https://phet.colorado.edu/sims/html/expression-exchange/latest/expression-exchange_en.html"
   }
 ]
