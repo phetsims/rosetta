@@ -253,5 +253,10 @@
     "simTitle": "Expression Exchange",
     "projectName": "expression-exchange",
     "testUrl": "https://phet.colorado.edu/sims/html/expression-exchange/latest/expression-exchange_en.html"
+  },
+  {
+    "simTitle": "Molecule Polarity",
+    "projectName": "molecule-polarity",
+    "testUrl": "https://phet.colorado.edu/sims/html/molecule-polarity/latest/molecule-polarity_en.html"
   }
 ]
