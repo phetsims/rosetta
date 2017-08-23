@@ -258,5 +258,10 @@
     "simTitle": "Molecule Polarity",
     "projectName": "molecule-polarity",
     "testUrl": "https://phet.colorado.edu/sims/html/molecule-polarity/latest/molecule-polarity_en.html"
+  },
+  {
+    "simTitle": "Projectile Motion",
+    "projectName": "projectile-motion",
+    "testUrl": "https://phet.colorado.edu/sims/html/projectile-motion/latest/projectile-motion_en.html"
   }
 ]
