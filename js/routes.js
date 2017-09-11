@@ -11,17 +11,17 @@
 'use strict';
 
 // modules
+var fs = require( 'fs' );
 var https = require( 'https' );
 var query = require( 'pg-query' ); // eslint-disable-line
 var request = require( 'request' );
 var winston = require( 'winston' );
-var fs = require( 'fs' );
 
-var LocaleInfo = require( './LocaleInfo' );
-var TranslatableSimInfo = require( './TranslatableSimInfo' );
-var stringSubmissionQueue = require( './stringSubmissionQueue' ).stringSubmissionQueue; // eslint-disable-line
-var TranslationUtils = require( './TranslationUtils' );
 var constants = require( './constants' );
+var LocaleInfo = require( './LocaleInfo' );
+var stringSubmissionQueue = require( './stringSubmissionQueue' ).stringSubmissionQueue; // eslint-disable-line
+var TranslatableSimInfo = require( './TranslatableSimInfo' );
+var TranslationUtils = require( './TranslationUtils' );
 var escapeHTML = TranslationUtils.escapeHTML;
 var renderError = TranslationUtils.renderError;
 

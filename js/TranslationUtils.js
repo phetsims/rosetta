@@ -8,10 +8,10 @@
 /* eslint-env node */
 'use strict';
 
-var https = require( 'https' );
-var winston = require( 'winston' );
-var octonode = require( 'octonode' );
 var email = require( 'emailjs/email' );
+var https = require( 'https' );
+var octonode = require( 'octonode' );
+var winston = require( 'winston' );
 
 var _ = require( 'underscore' ); // eslint-disable-line
 
