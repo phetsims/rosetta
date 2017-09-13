@@ -263,5 +263,10 @@
     "simTitle": "Projectile Motion",
     "projectName": "projectile-motion",
     "testUrl": "https://phet.colorado.edu/sims/html/projectile-motion/latest/projectile-motion_en.html"
+  },
+  {
+    "simTitle": "Pendulum Lab",
+    "projectName": "pendulum-lab",
+    "testUrl": "https://phet.colorado.edu/sims/html/pendulum-lab/latest/pendulum-lab_en.html"
   }
 ]
