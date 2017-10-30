@@ -268,5 +268,10 @@
     "simTitle": "Pendulum Lab",
     "projectName": "pendulum-lab",
     "testUrl": "https://phet.colorado.edu/sims/html/pendulum-lab/latest/pendulum-lab_en.html"
+  },
+  {
+    "simTitle": "Circuit Construction Kit: DC",
+    "projectName": "circuit-construction-kit-dc",
+    "testUrl": "https://phet.colorado.edu/sims/html/circuit-construction-kit-dc/latest/circuit-construction-kit-dc_en.html"
   }
 ]
