@@ -464,7 +464,7 @@ module.exports.translateSimulation = function( req, res ) {
         request( stringsFilePath, function( error, response, body ) {
           if ( !error && response.statusCode === 200 ) {
             englishStrings[ projectName ] = JSON.parse( body );
-            winston.log( 'info', 'request to ' + stringsFilePath + ' returned successfully' );
+            winston.log( 'info', 'request for ' + stringsFilePath + ' returned successfully' );
           }
           else {
             winston.log( 'error', 'request for english strings for project ' + projectName + ' failed. Response code: ' +
@@ -479,7 +479,7 @@ module.exports.translateSimulation = function( req, res ) {
           req.session.translatedStrings[ targetLocale ] = req.session.translatedStrings[ targetLocale ] || {};
           if ( !error && response.statusCode === 200 ) {
             req.session.translatedStrings[ targetLocale ][ projectName ] = JSON.parse( body );
-            winston.log( 'info', 'request to ' + translatedStringsPath + ' returned successfully' );
+            winston.log( 'info', 'request for ' + translatedStringsPath + ' returned successfully' );
           }
           else {
             winston.log( 'info', 'request for translated strings for project ' + projectName +
