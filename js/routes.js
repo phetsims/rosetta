@@ -482,8 +482,9 @@ module.exports.translateSimulation = function( req, res ) {
             winston.log( 'info', 'request to ' + translatedStringsPath + ' returned successfully' );
           }
           else {
-            winston.log( 'error', 'request for translated strings for project ' + projectName + ' failed. Response code: ' +
-                                  response.statusCode + '. URL: ' + translatedStringsPath + '. Error: ' + error );
+            winston.log( 'info', 'request for translated strings for project ' + projectName +
+                                 ' failed, most likely because they don\'t yet exist. Response code: ' +
+                                  response.statusCode + '. URL: ' + translatedStringsPath + '.' );
             req.session.translatedStrings[ targetLocale ][ projectName ] = {}; // add an empty object with the project name key so key lookups don't fail later on
           }
           finished();
