@@ -81,7 +81,7 @@ $( document ).ready( function() {
         var translation = contentEditable.text();
         var repo = row.getAttribute( 'data-string-repo' );
         if ( repo && translation && translation.length > 0 ) {
-          // add rtl embedding markers for rtl strings
+          // add RTL embedding markers for RTL strings
           if ( rtl ) {
             translation = '\u202b' + translation + '\u202c';
           }
@@ -251,7 +251,7 @@ $( document ).ready( function() {
     }
   } );
 
-  // fix dir and text-align for rtl languages
+  // fix dir and text-align for RTL languages
   if ( rtl ) {
     inputs.attr( 'dir', 'rtl' );
     inputs.css( 'text-align', 'right' );
