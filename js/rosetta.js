@@ -13,12 +13,14 @@
 // modules
 var assert = require( 'assert' );
 var bodyParser = require( 'body-parser' ); // eslint-disable-line require-statement-match
+var cookieParser = require( 'cookie-parser' ); // eslint-disable-line require-statement-match
 var dateformat = require( 'dateformat' );
 var doT = require( 'express-dot' ); // eslint-disable-line require-statement-match
 var express = require( 'express' );
 var fs = require( 'fs' );
 var parseArgs = require( 'minimist' ); // eslint-disable-line require-statement-match
 var query = require( 'pg-query' ); // eslint-disable-line require-statement-match
+var session = require( 'express-session' ); // eslint-disable-line require-statement-match
 var winston = require( 'winston' );
 
 // constants
@@ -137,8 +139,12 @@ app.use( '/translate/img', express.static( __dirname + '/../img' ) );
 app.use( '/translate/js', express.static( __dirname ) );
 
 // need cookieParser middleware before we can do anything with cookies
-app.use( express.cookieParser() );
-app.use( express.session( { secret: preferences.rosettaSessionSecret } ) );
+app.use( cookieParser() );
+app.use( session( {
+  secret: preferences.rosettaSessionSecret,
+  resave: false,
+  saveUninitialized: false
+} ) );
 app.use( bodyParser.json() );
 app.use( bodyParser.urlencoded( { extended: false } ) );
 
