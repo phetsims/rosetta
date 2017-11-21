@@ -378,7 +378,7 @@ module.exports.translateSimulation = function( req, res ) {
             // Identify strings that are translated but not used so that they don't get removed from the translation.
             // This is only relevant for shared/common strings.
             for ( var stringKey in previouslyTranslatedStrings ) {
-              if ( previouslyTranslatedStrings.hasOwnProperty( stringKey ) ){
+              if ( previouslyTranslatedStrings.hasOwnProperty( stringKey ) ) {
                 var containsObjectWithKey = false;
                 for ( var index = 0; index < array.length; index++ ) {
                   if ( array[ index ].key === stringKey ) {
@@ -386,7 +386,7 @@ module.exports.translateSimulation = function( req, res ) {
                     break;
                   }
                 }
-                if ( !containsObjectWithKey ){
+                if ( !containsObjectWithKey ) {
                   winston.log( 'info', 'repo: ' + project.projectName + ' key: ' + stringKey + ', ' +
                                        '- translation exists, but unused in this sim, adding to pass-through data' );
                   unusedTranslatedStringsArray.push( {
@@ -484,7 +484,7 @@ module.exports.translateSimulation = function( req, res ) {
           else {
             winston.log( 'info', 'request for translated strings for project ' + projectName +
                                  ' failed, most likely because they don\'t yet exist. Response code: ' +
-                                  response.statusCode + '. URL: ' + translatedStringsPath + '.' );
+                                 response.statusCode + '. URL: ' + translatedStringsPath + '.' );
             req.session.translatedStrings[ targetLocale ][ projectName ] = {}; // add an empty object with the project name key so key lookups don't fail later on
           }
           finished();
@@ -499,9 +499,8 @@ module.exports.translateSimulation = function( req, res ) {
 };
 
 /**
- * Route for submitting strings (when the user presses the "Submit" button on a translate sim page).
- * The translation is added to a queue of translations to be committed to github. Logic for this is
- * in the file stringSubmissionQueue.js.
+ * Route for submitting strings (when the user presses the "Submit" button on a translate sim page). The translation is
+ * added to a queue of translations to be committed to github. Logic for this is in the file stringSubmissionQueue.js.
  * @param req
  * @param res
  */
@@ -511,12 +510,12 @@ module.exports.submitStrings = function( req, res ) {
   var targetLocale = req.params.targetLocale;
 
   winston.log( 'info', 'queuing string submission for ' + simName + '_' + targetLocale );
-  stringSubmissionQueue.push( {
-    req: req,
-    res: res
-  }, function() {
-    winston.log( 'info', 'finished string submission for ' + simName + '_' + targetLocale );
-  } );
+  // stringSubmissionQueue.push(
+  //   { req: req, res: res },
+  //   function() {
+  //     winston.log( 'info', 'finished string submission for ' + simName + '_' + targetLocale );
+  //   }
+  // );
 };
 
 /**

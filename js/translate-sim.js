@@ -4,6 +4,7 @@
  * Javascript for translate-sim.html
  * @author Michael Kauzmann
  * @author Aaron Davis
+ * @author John Blanco
  */
 /* eslint-env node */
 'use strict';
@@ -12,7 +13,7 @@
  * Modified from http://stackoverflow.com/questions/1125292/how-to-move-cursor-to-end-of-contenteditable-entity/3866442#3866442
  * @param contentEditableElement
  */
-function setEndOfContenteditable( contentEditableElement ) {
+function setEndOfContentEditable( contentEditableElement ) {
 
   var range;
 
@@ -169,57 +170,85 @@ $( document ).ready( function() {
    */
   function validateRow( row ) {
     var validated = true;
-    var messageFormatRegexp = /\{\d+\}/g;
+
+    // set up regular expressions for testing strings to see if they contain placeholder patterns
+    // TODO: Consider making these constants.
+    var singleBracePatternRegularExp = /\{\d+\}/g;
+    var doubleBracePatternRegularExp = /\{\{\d+\}\}/g;
+
+    // TODO: Comment.
     var tds = $( row ).find( 'td' );
-    var englishMatches = $( tds[ 1 ] ).text().match( messageFormatRegexp );
-    if ( englishMatches ) {
-      var td = $( tds[ 2 ] );
-      var input = $( td.find( 'div[contenteditable]' ).get( 0 ) );
-      var value = input.text();
+
+    // get the translated string
+    var td = $( tds[ 2 ] );
+    var input = $( td.find( 'div[contenteditable]' ).get( 0 ) );
+    var value = input.text();
+
+    // it is valid for the string to be empty, i.e. no translation submitted, so only validate if it is NOT empty
+    if ( value !== '' ) {
+
+      var singleBraceEnglishMatches = $( tds[ 1 ] ).text().match( singleBracePatternRegularExp );
+      var doubleBraceEnglishMatches = $( tds[ 1 ] ).text().match( doubleBracePatternRegularExp );
       var missingPlaceholders = [];
       var extraPlaceholders = [];
+      var translatedMatches;
 
-      var translatedMatches = value.match( messageFormatRegexp );
+      if ( singleBraceEnglishMatches ) {
 
-      // make sure every MessageFormat placeholder that exists in the English exists in the translation
-      for ( var i = 0; i < englishMatches.length; i++ ) {
-        if ( value.length > 0 && value.indexOf( englishMatches[ i ] ) === -1 ) {
+        // get the single-brace matches from the translated string
+        translatedMatches = value.match( singleBracePatternRegularExp );
+      }
+      else if ( doubleBraceEnglishMatches ) {
+
+        // get the double-brace matches from the translated string
+        translatedMatches = value.match( singleBracePatternRegularExp );
+      }
+
+      // make sure every placeholder that exists in the English string exists in the translation
+      for ( var i = 0; i < singleBraceEnglishMatches.length; i++ ) {
+        if ( value.length > 0 && value.indexOf( singleBraceEnglishMatches[ i ] ) === -1 ) {
           validated = false;
-          missingPlaceholders.push( englishMatches[ i ] );
+          missingPlaceholders.push( singleBraceEnglishMatches[ i ] );
         }
         if ( translatedMatches ) {
-          var index = translatedMatches.indexOf( englishMatches[ i ] );
+          var index = translatedMatches.indexOf( singleBraceEnglishMatches[ i ] );
           if ( index !== -1 ) {
             translatedMatches.splice( index, 1 );
           }
         }
       }
+
+      // make sure that no extra placeholders exist in the translation
       if ( translatedMatches && translatedMatches.length ) {
         validated = false;
         extraPlaceholders = translatedMatches;
       }
-
-      td.find( 'img:last-child' ).remove(); // remove the old error message either way
-      if ( missingPlaceholders.length || extraPlaceholders.length ) {
-        input.css( { outline: '1px solid red' } );
-        var img = $( '<img>', { src: '/translate/img/warning.png', class: 'warning' } );
-        td.append( img );
-
-        img.click( function() {
-          var errorMessage = [ 'Your translation has the following errors:\n' ];
-          if ( missingPlaceholders.length ) {
-            errorMessage.push( 'missing MessageFormat placeholders: ' + missingPlaceholders.join( ', ' ) );
-          }
-          if ( extraPlaceholders.length ) {
-            errorMessage.push( 'extra MessageFormat placeholders: ' + extraPlaceholders.join( ', ' ) );
-          }
-          alert( errorMessage.join( '\n' ) );
-        } );
-      }
-      else {
-        input.css( { outline: 'initial' } );
-      }
     }
+
+    // remove any previous error message that may be present
+    td.find( 'img:last-child' ).remove();
+
+    // if the validation failed, add an error message
+    if ( missingPlaceholders.length || extraPlaceholders.length ) {
+      input.css( { outline: '1px solid red' } );
+      var img = $( '<img>', { src: '/translate/img/warning.png', class: 'warning' } );
+      td.append( img );
+
+      img.click( function() {
+        var errorMessage = [ 'Your translation has the following errors:\n' ];
+        if ( missingPlaceholders.length ) {
+          errorMessage.push( 'missing MessageFormat placeholders: ' + missingPlaceholders.join( ', ' ) );
+        }
+        if ( extraPlaceholders.length ) {
+          errorMessage.push( 'extra MessageFormat placeholders: ' + extraPlaceholders.join( ', ' ) );
+        }
+        alert( errorMessage.join( '\n' ) );
+      } );
+    }
+    else {
+      input.css( { outline: 'initial' } );
+    }
+
     return validated;
   }
 
@@ -237,7 +266,7 @@ $( document ).ready( function() {
     return validated;
   }
 
-  // validate the inputs before submitting the form
+// validate the inputs before submitting the form
   $( '#strings' ).submit( function( event ) {
     if ( !validatePatterns() ) {
       $( '.validation-message' ).text( 'Your translation has MessageFormat errors. Please correct these before submitting' );
@@ -251,18 +280,18 @@ $( document ).ready( function() {
     }
   } );
 
-  // fix dir and text-align for RTL languages
+// fix dir and text-align for RTL languages
   if ( rtl ) {
     inputs.attr( 'dir', 'rtl' );
     inputs.css( 'text-align', 'right' );
   }
 
-  // disable pressing enter in inputs because it complicates things by adding <br> and possibly other html
+// disable pressing enter in inputs because it complicates things by adding <br> and possibly other html
   $( document ).on( 'keypress', inputSelector, function( e ) {
     return e.which !== 13;
   } );
 
-  // on every change, copy the content from the editable div to a hidden input so it gets submitted with the form
+// on every change, copy the content from the editable div to a hidden input so it gets submitted with the form
   $( document ).on( 'keyup paste', inputSelector, function( e ) {
     var contentEditable = $( this );
     var input = contentEditable.next().get( 0 );
@@ -285,14 +314,15 @@ $( document ).ready( function() {
     }
   } );
 
-  // on blur, validate the row to make sure it has the correct patterns
+// on blur, validate the row to make sure it has the correct patterns
   $( document ).on( 'blur', inputSelector, function( e ) {
     var row = this.parentNode.parentNode;
     validateRow( row );
   } );
 
   $( document ).on( 'focus', inputSelector, function( e ) {
-    setEndOfContenteditable( this );
+    setEndOfContentEditable( this );
   } );
 
-} );
+} )
+;

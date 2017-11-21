@@ -39,7 +39,6 @@ module.exports.stringSubmissionQueue = async.queue( function( task, taskCallback
   var simName = req.params.simName;
   var ghClient = getGhClient();
   var babel = ghClient.repo( 'phetsims/babel' );
-
   var userId = ( req.session.userId ) ? req.session.userId : 0;
 
   /*
