@@ -217,8 +217,8 @@ module.exports.chooseSimulationAndLanguage = function( req, res ) {
  */
 module.exports.translateSimulation = function( req, res ) {
 
-  var simName = req.param( 'simName' );
-  var targetLocale = req.param( 'targetLocale' );
+  var simName = req.params.simName;
+  var targetLocale = req.params.targetLocale;
   var activeSimsPath = '/phetsims/chipper/master/data/active-sims';
   var userId = ( req.session.userId ) ? req.session.userId : 0; // use an id of 0 for localhost testing
 
@@ -507,8 +507,8 @@ module.exports.translateSimulation = function( req, res ) {
  */
 module.exports.submitStrings = function( req, res ) {
 
-  var simName = req.param( 'simName' );
-  var targetLocale = req.param( 'targetLocale' );
+  var simName = req.params.simName;
+  var targetLocale = req.params.targetLocale;
 
   winston.log( 'info', 'queuing string submission for ' + simName + '_' + targetLocale );
   stringSubmissionQueue.push( {
@@ -527,8 +527,8 @@ module.exports.submitStrings = function( req, res ) {
  */
 module.exports.saveStrings = function( req, res ) {
 
-  var simName = req.param( 'simName' );
-  var targetLocale = req.param( 'targetLocale' );
+  var simName = req.params.simName;
+  var targetLocale = req.params.targetLocale;
   var userId = ( req.session.userId ) ? req.session.userId : 0;
 
   var error = false;

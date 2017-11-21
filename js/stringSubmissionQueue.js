@@ -35,8 +35,8 @@ module.exports.stringSubmissionQueue = async.queue( function( task, taskCallback
   var req = task.req;
   var res = task.res;
 
-  var targetLocale = req.param( 'targetLocale' );
-  var simName = req.param( 'simName' );
+  var targetLocale = req.params.targetLocale;
+  var simName = req.params.simName;
   var ghClient = getGhClient();
   var babel = ghClient.repo( 'phetsims/babel' );
 

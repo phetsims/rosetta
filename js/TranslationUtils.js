@@ -135,7 +135,7 @@ function extractStrings( data, simName ) {
 function extractStringsAPI( req, res ) {
 
   // included for an easy default test
-  var url = req.param( 'simUrl' ) || 'phet-dev.colorado.edu/sims/html/molecules-and-light/latest/molecules-and-light_en.html';
+  var url = req.params.simUrl || 'phet-dev.colorado.edu/sims/html/molecules-and-light/latest/molecules-and-light_en.html';
   var localhost = ( url.indexOf( 'localhost' ) === 0 );
 
   var slashIndex = url.indexOf( '/' );
