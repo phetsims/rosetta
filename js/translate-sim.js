@@ -9,6 +9,10 @@
 /* eslint-env node */
 'use strict';
 
+// constants
+var SINGLE_BRACE_PATTERN_REGULAR_EXP = /\{\d+\}/g;
+var DOUBLE_BRACE_PATTERN_REGULAR_EXP = /\{\{\d+\}\}/g;
+
 /**
  * Modified from http://stackoverflow.com/questions/1125292/how-to-move-cursor-to-end-of-contenteditable-entity/3866442#3866442
  * @param contentEditableElement
@@ -169,84 +173,99 @@ $( document ).ready( function() {
    * @returns {boolean}
    */
   function validateRow( row ) {
+
     var validated = true;
 
-    // set up regular expressions for testing strings to see if they contain placeholder patterns
-    // TODO: Consider making these constants.
-    var singleBracePatternRegularExp = /\{\d+\}/g;
-    var doubleBracePatternRegularExp = /\{\{\d+\}\}/g;
+    // get the data cells for this row
+    var tableDataCells = $( row ).find( 'td' );
 
-    // TODO: Comment.
-    var tds = $( row ).find( 'td' );
+    // only validate if there is some data (this skips header rows)
+    if ( tableDataCells.length > 0 ){
 
-    // get the translated string
-    var td = $( tds[ 2 ] );
-    var input = $( td.find( 'div[contenteditable]' ).get( 0 ) );
-    var value = input.text();
+      // get the non-translated string
+      var nonTranslatedString = $( tableDataCells[ 1 ] ).text();
 
-    // it is valid for the string to be empty, i.e. no translation submitted, so only validate if it is NOT empty
-    if ( value !== '' ) {
+      // get the user-submitted translated string
+      var tableDataCell = $( tableDataCells[ 2 ] );
+      var input = $( tableDataCell.find( 'div[contenteditable]' ).get( 0 ) );
+      var translatedString = input.text();
 
-      var singleBraceEnglishMatches = $( tds[ 1 ] ).text().match( singleBracePatternRegularExp );
-      var doubleBraceEnglishMatches = $( tds[ 1 ] ).text().match( doubleBracePatternRegularExp );
+      // create lists of the placeholders in the non-translated string
+      var singleBracePlaceHolders = nonTranslatedString.match( SINGLE_BRACE_PATTERN_REGULAR_EXP ) || [];
+      var doubleBracePlaceHolders = nonTranslatedString.match( DOUBLE_BRACE_PATTERN_REGULAR_EXP ) || [];
+
+      // create the arrays where any missing or extra placeholders in the strings will be tracked
       var missingPlaceholders = [];
       var extraPlaceholders = [];
-      var translatedMatches;
 
-      if ( singleBraceEnglishMatches ) {
+      // it is valid for the string to be empty, i.e. no translation submitted, so only validate if it is NOT empty
+      if ( translatedString !== '' ) {
 
-        // get the single-brace matches from the translated string
-        translatedMatches = value.match( singleBracePatternRegularExp );
-      }
-      else if ( doubleBraceEnglishMatches ) {
+        var translatedMatches;
 
-        // get the double-brace matches from the translated string
-        translatedMatches = value.match( singleBracePatternRegularExp );
-      }
+        if ( singleBracePlaceHolders.length > 0 ) {
 
-      // make sure every placeholder that exists in the English string exists in the translation
-      for ( var i = 0; i < singleBraceEnglishMatches.length; i++ ) {
-        if ( value.length > 0 && value.indexOf( singleBraceEnglishMatches[ i ] ) === -1 ) {
-          validated = false;
-          missingPlaceholders.push( singleBraceEnglishMatches[ i ] );
+          // get the single-brace matches from the translated string
+          translatedMatches = translatedString.match( SINGLE_BRACE_PATTERN_REGULAR_EXP );
         }
-        if ( translatedMatches ) {
-          var index = translatedMatches.indexOf( singleBraceEnglishMatches[ i ] );
-          if ( index !== -1 ) {
-            translatedMatches.splice( index, 1 );
+        else if ( doubleBracePlaceHolders.length > 0 ) {
+
+          // get the double-brace matches from the translated string
+          translatedMatches = translatedString.match( DOUBLE_BRACE_PATTERN_REGULAR_EXP );
+        }
+
+        // By design, there should never by any strings that combine both single- and double-brace patterns.  The
+        // following code assumes that this is true, and that this rule is enforced somewhere else in the translation
+        // system.  It does log a message to the console if this situation is ever encountered.
+        if ( singleBracePlaceHolders.length && doubleBracePlaceHolders.length ){
+          console.log( 'Error: strings should never contain both single- and double-brace placeholders - ' + translatedString );
+        }
+        var placeHolders = doubleBracePlaceHolders.concat( singleBracePlaceHolders );
+
+        // make sure every placeholder that exists in the English string exists in the translation
+        for ( var i = 0; i < placeHolders.length; i++ ) {
+          if ( translatedString.length > 0 && translatedString.indexOf( placeHolders[ i ] ) === -1 ) {
+            validated = false;
+            missingPlaceholders.push( placeHolders[ i ] );
+          }
+          if ( translatedMatches ) {
+            var index = translatedMatches.indexOf( placeHolders[ i ] );
+            if ( index !== -1 ) {
+              translatedMatches.splice( index, 1 );
+            }
           }
         }
+
+        // make sure that no extra placeholders exist in the translation
+        if ( translatedMatches && translatedMatches.length ) {
+          validated = false;
+          extraPlaceholders = translatedMatches;
+        }
       }
 
-      // make sure that no extra placeholders exist in the translation
-      if ( translatedMatches && translatedMatches.length ) {
-        validated = false;
-        extraPlaceholders = translatedMatches;
+      // remove any previous error message that may be present
+      tableDataCell.find( 'img:last-child' ).remove();
+
+      // if the validation failed, add an error message
+      if ( missingPlaceholders.length || extraPlaceholders.length ) {
+        input.css( { outline: '1px solid red' } );
+        var img = $( '<img>', { src: '/translate/img/warning.png', class: 'warning' } );
+        tableDataCell.append( img );
+
+        img.click( function() {
+          var errorMessage = [ 'Your translation has the following errors:\n' ];
+          if ( missingPlaceholders.length ) {
+            errorMessage.push( 'missing MessageFormat placeholders: ' + missingPlaceholders.join( ', ' ) );
+          }
+          if ( extraPlaceholders.length ) {
+            errorMessage.push( 'extra MessageFormat placeholders: ' + extraPlaceholders.join( ', ' ) );
+          }
+          alert( errorMessage.join( '\n' ) );
+        } );
       }
-    }
-
-    // remove any previous error message that may be present
-    td.find( 'img:last-child' ).remove();
-
-    // if the validation failed, add an error message
-    if ( missingPlaceholders.length || extraPlaceholders.length ) {
-      input.css( { outline: '1px solid red' } );
-      var img = $( '<img>', { src: '/translate/img/warning.png', class: 'warning' } );
-      td.append( img );
-
-      img.click( function() {
-        var errorMessage = [ 'Your translation has the following errors:\n' ];
-        if ( missingPlaceholders.length ) {
-          errorMessage.push( 'missing MessageFormat placeholders: ' + missingPlaceholders.join( ', ' ) );
-        }
-        if ( extraPlaceholders.length ) {
-          errorMessage.push( 'extra MessageFormat placeholders: ' + extraPlaceholders.join( ', ' ) );
-        }
-        alert( errorMessage.join( '\n' ) );
-      } );
-    }
-    else {
-      input.css( { outline: 'initial' } );
+      else {
+        input.css( { outline: 'initial' } );
+      }
     }
 
     return validated;
@@ -269,7 +288,7 @@ $( document ).ready( function() {
 // validate the inputs before submitting the form
   $( '#strings' ).submit( function( event ) {
     if ( !validatePatterns() ) {
-      $( '.validation-message' ).text( 'Your translation has MessageFormat errors. Please correct these before submitting' );
+      $( '.validation-message' ).text( 'Your translation has MessageFormat errors. Please correct these before submitting.' );
       event.preventDefault();
     }
     else {
