@@ -11,7 +11,7 @@
 
 // constants
 var SINGLE_BRACE_PATTERN_REGULAR_EXP = /\{\d+\}/g;
-var DOUBLE_BRACE_PATTERN_REGULAR_EXP = /\{\{\d+\}\}/g;
+var DOUBLE_BRACE_PATTERN_REGULAR_EXP = /\{\{\w+\}\}/g;
 
 /**
  * Modified from http://stackoverflow.com/questions/1125292/how-to-move-cursor-to-end-of-contenteditable-entity/3866442#3866442
@@ -180,7 +180,7 @@ $( document ).ready( function() {
     var tableDataCells = $( row ).find( 'td' );
 
     // only validate if there is some data (this skips header rows)
-    if ( tableDataCells.length > 0 ){
+    if ( tableDataCells.length > 0 ) {
 
       // get the non-translated string
       var nonTranslatedString = $( tableDataCells[ 1 ] ).text();
@@ -201,45 +201,30 @@ $( document ).ready( function() {
       // it is valid for the string to be empty, i.e. no translation submitted, so only validate if it is NOT empty
       if ( translatedString !== '' ) {
 
-        var translatedMatches;
+        var singleBracePlaceholdersInTranslation = translatedString.match( SINGLE_BRACE_PATTERN_REGULAR_EXP ) || [];
+        var doubleBracePlaceholdersInTranslation = translatedString.match( DOUBLE_BRACE_PATTERN_REGULAR_EXP ) || [];
 
-        if ( singleBracePlaceHolders.length > 0 ) {
-
-          // get the single-brace matches from the translated string
-          translatedMatches = translatedString.match( SINGLE_BRACE_PATTERN_REGULAR_EXP );
-        }
-        else if ( doubleBracePlaceHolders.length > 0 ) {
-
-          // get the double-brace matches from the translated string
-          translatedMatches = translatedString.match( DOUBLE_BRACE_PATTERN_REGULAR_EXP );
-        }
-
-        // By design, there should never by any strings that combine both single- and double-brace patterns.  The
-        // following code assumes that this is true, and that this rule is enforced somewhere else in the translation
-        // system.  It does log a message to the console if this situation is ever encountered.
-        if ( singleBracePlaceHolders.length && doubleBracePlaceHolders.length ){
-          console.log( 'Error: strings should never contain both single- and double-brace placeholders - ' + translatedString );
-        }
         var placeHolders = doubleBracePlaceHolders.concat( singleBracePlaceHolders );
+        var placeHoldersInTranslation = doubleBracePlaceholdersInTranslation.concat( singleBracePlaceholdersInTranslation );
 
-        // make sure every placeholder that exists in the English string exists in the translation
+        // make sure every placeholder that exists in the untranslated string exists in the translation
         for ( var i = 0; i < placeHolders.length; i++ ) {
           if ( translatedString.length > 0 && translatedString.indexOf( placeHolders[ i ] ) === -1 ) {
             validated = false;
             missingPlaceholders.push( placeHolders[ i ] );
           }
-          if ( translatedMatches ) {
-            var index = translatedMatches.indexOf( placeHolders[ i ] );
+          if ( placeHoldersInTranslation ) {
+            var index = placeHoldersInTranslation.indexOf( placeHolders[ i ] );
             if ( index !== -1 ) {
-              translatedMatches.splice( index, 1 );
+              placeHoldersInTranslation.splice( index, 1 );
             }
           }
         }
 
         // make sure that no extra placeholders exist in the translation
-        if ( translatedMatches && translatedMatches.length ) {
+        if ( placeHoldersInTranslation && placeHoldersInTranslation.length ) {
           validated = false;
-          extraPlaceholders = translatedMatches;
+          extraPlaceholders = placeHoldersInTranslation;
         }
       }
 
@@ -255,10 +240,10 @@ $( document ).ready( function() {
         img.click( function() {
           var errorMessage = [ 'Your translation has the following errors:\n' ];
           if ( missingPlaceholders.length ) {
-            errorMessage.push( 'missing MessageFormat placeholders: ' + missingPlaceholders.join( ', ' ) );
+            errorMessage.push( 'missing placeholder(s) in submission: ' + missingPlaceholders.join( ', ' ) );
           }
           if ( extraPlaceholders.length ) {
-            errorMessage.push( 'extra MessageFormat placeholders: ' + extraPlaceholders.join( ', ' ) );
+            errorMessage.push( 'extra placeholder(s) in submission: ' + extraPlaceholders.join( ', ' ) );
           }
           alert( errorMessage.join( '\n' ) );
         } );
@@ -292,10 +277,13 @@ $( document ).ready( function() {
       event.preventDefault();
     }
     else {
-      $( '.validation-message' ).text( '' );
+      // TODO: DO NOT COMMIT CHANGES BELOW
+      // $( '.validation-message' ).text( '' );
+      $( '.validation-message' ).text( 'would submit now if not bypassed' );
 
       // on submit make sure all of the inputs are synced with the content editable divs
-      syncInputs();
+      // syncInputs();
+      event.preventDefault();
     }
   } );
 
