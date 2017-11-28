@@ -69,7 +69,7 @@ assert( preferences.babelBranch === 'master' || preferences.babelBranch === 'tes
 global.preferences = preferences;
 
 // must be required after global.preferences has been initialized
-var routes = require( __dirname + '/routes' );
+var routeHandlers = require( __dirname + '/routeHandlers' );
 
 // configure postgres connection
 if ( preferences.pgConnectionString ) {
@@ -152,29 +152,34 @@ app.use( bodyParser.urlencoded( { extended: false } ) );
 // Set up the routes.  The order matters.
 //----------------------------------------------------------------------------
 
-// route for showing 'down for maintenance' page when needed
+// route for showing the 'down for maintenance' page when needed
 if ( !ENABLED ) {
-  app.get( '/translate', routes.showOffLinePage );
+  app.get( '/translate', routeHandlers.showOffLinePage );
 }
 
 // route that checks whether the user is logged in
-app.get( '/translate*', routes.checkForValidSession );
+app.get( '/translate*', routeHandlers.checkForValidSession );
 
 // landing page for the translation utility
-app.get( '/translate', routes.chooseSimulationAndLanguage );
+app.get( '/translate', routeHandlers.chooseSimulationAndLanguage );
 
 // route for translating a specific sim to a specific language
-app.get( '/translate/sim/:simName?/:targetLocale?', routes.translateSimulation );
-app.post( '/translate/sim/save/:simName?/:targetLocale?', routes.saveStrings );
-app.post( '/translate/sim/:simName?/:targetLocale?', routes.submitStrings );
+app.get( '/translate/sim/:simName?/:targetLocale?', routeHandlers.translateSimulation );
+app.post( '/translate/sim/save/:simName?/:targetLocale?', routeHandlers.saveStrings );
+app.post( '/translate/sim/:simName?/:targetLocale?', routeHandlers.submitStrings );
 
 // route for extracting strings from a sim
-app.get( '/translate/extractStrings', routes.extractStringsAPI );
+app.get( '/translate/extractStrings', routeHandlers.extractStringsAPI );
 
-app.get( '/translate/logout', routes.logout );
+// logout
+app.get( '/translate/logout', routeHandlers.logout );
+
+// test routes - used for testing and debugging
+app.get( '/translate/test/', routeHandlers.test );
+app.get( '/translate/runTest/:testID', routeHandlers.runTest );
 
 // fall through route
-app.get( '/*', routes.pageNotFound );
+app.get( '/*', routeHandlers.pageNotFound );
 
 // start the server
 app.listen( LISTEN_PORT, function() { winston.log( 'info', 'Listening on port ' + LISTEN_PORT ); } );

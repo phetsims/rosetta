@@ -1,7 +1,7 @@
 // Copyright 2015, University of Colorado Boulder
 
 /**
- * ExpressJS-style routes for handling the various URLs for the translation utility.
+ * Handler functions for ExpressJS-style routes that exist in the PhET translation utility.
  *
  * @author John Blanco
  * @author Aaron Davis
@@ -181,8 +181,8 @@ module.exports.logout = function( req, res ) {
 };
 
 /**
- * Route that lets the user choose a simulation and language to translate, and subsequently routes them to the actual
- * translation page.
+ * route hanlder that lets the user choose a simulation and language to translate, and subsequently routes them to the
+ * actual translation page.
  *
  * @param req
  * @param res
@@ -597,9 +597,45 @@ module.exports.showOffLinePage = function( req, res ) {
  * @param req
  * @param res
  */
-module.exports.pageNotFound = function( req, res ) {
+function pageNotFound( req, res ) {
 
   res.send( '<p>Error: Page not found.  URL = ' + req.url + '</p>' );
+}
+module.exports.pageNotFound = pageNotFound;
+
+/**
+ * displays the main test harness page if the user is a PhET team member, used for development
+ *
+ * @param req
+ * @param res
+ */
+module.exports.test = function( req, res ) {
+
+  // only logged in PhET team members can access the test page
+  if ( req.session.teamMember ){
+    winston.log( 'info', 'test page accessed' );
+    res.render( 'test.html', { title: 'Test' } );
+  }
+  else{
+    pageNotFound( req, res );
+  }
+};
+
+/**
+ * runs specific tests
+ *
+ * @param req
+ * @param res
+ */
+module.exports.runTest = function( req, res ) {
+
+  // only logged in PhET team members can run tests
+  if ( req.session.teamMember ){
+    winston.log( 'info', 'test requested: ' + req.params.testID );
+  }
+  else{
+    pageNotFound( req, res );
+  }
 };
 
 /**
