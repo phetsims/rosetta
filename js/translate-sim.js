@@ -277,13 +277,10 @@ $( document ).ready( function() {
       event.preventDefault();
     }
     else {
-      // TODO: DO NOT COMMIT CHANGES BELOW
-      // $( '.validation-message' ).text( '' );
-      $( '.validation-message' ).text( 'would submit now if not bypassed' );
+      $( '.validation-message' ).text( '' );
 
       // on submit make sure all of the inputs are synced with the content editable divs
-      // syncInputs();
-      event.preventDefault();
+      syncInputs();
     }
   } );
 
