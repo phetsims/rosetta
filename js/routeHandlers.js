@@ -16,15 +16,14 @@ var https = require( 'https' );
 var query = require( 'pg-query' ); // eslint-disable-line
 var request = require( 'request' );
 var winston = require( 'winston' );
-
 var constants = require( './constants' );
 var LocaleInfo = require( './LocaleInfo' );
+var LongTermStringStorage = require( './LongTermStringStorage' );
 var stringSubmissionQueue = require( './stringSubmissionQueue' ).stringSubmissionQueue; // eslint-disable-line
 var TranslatableSimInfo = require( './TranslatableSimInfo' );
 var TranslationUtils = require( './TranslationUtils' );
 var escapeHTML = TranslationUtils.escapeHTML;
 var renderError = TranslationUtils.renderError;
-
 var _ = require( 'underscore' ); // eslint-disable-line
 
 // constants
@@ -632,6 +631,8 @@ module.exports.runTest = function( req, res ) {
   // only logged in PhET team members can run tests
   if ( req.session.teamMember ){
     winston.log( 'info', 'test requested: ' + req.params.testID );
+    console.log( 'LongTermStringStorage = ' + JSON.stringify( LongTermStringStorage ) );
+    LongTermStringStorage.stringSetExists( 'ab', 'sun' );
   }
   else{
     pageNotFound( req, res );

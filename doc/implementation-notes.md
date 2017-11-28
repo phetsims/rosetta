@@ -4,6 +4,8 @@ Implementation Notes for the PhET Translation Utility
 TODO: Add explanation of the two ways in which strings can be saved - in the DB for short term storage, and in the
 GitHub repo when submitted.
 
+TODO: Add terms - 'long term string storage', 'short term string storage', 'string set'
+
 The term 'project name' is used throughout the code as a means to reference a simulation or common code library.  This
 is essentially the repository name, but the term 'repository name' was avoided in case another VCS system is adopted
 at some point in the future.  Examples of project names are 'build-an-atom' and 'energy-skate-park-basics' and 
