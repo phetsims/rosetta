@@ -510,12 +510,12 @@ module.exports.submitStrings = function( req, res ) {
   var targetLocale = req.params.targetLocale;
 
   winston.log( 'info', 'queuing string submission for ' + simName + '_' + targetLocale );
-  // stringSubmissionQueue.push(
-  //   { req: req, res: res },
-  //   function() {
-  //     winston.log( 'info', 'finished string submission for ' + simName + '_' + targetLocale );
-  //   }
-  // );
+  stringSubmissionQueue.push(
+    { req: req, res: res },
+    function() {
+      winston.log( 'info', 'finished string submission for ' + simName + '_' + targetLocale );
+    }
+  );
 };
 
 /**
