@@ -27,7 +27,7 @@ var renderError = TranslationUtils.renderError;
 var _ = require( 'underscore' ); // eslint-disable-line
 
 // constants
-var GITHUB_URL_BASE = constants.GITHUB_URL_BASE;
+var GITHUB_RAW_FILE_URL_BASE = constants.GITHUB_RAW_FILE_URL_BASE;
 var SIM_INFO_ARRAY = constants.SIM_INFO_ARRAY;
 var TITLE = 'PhET Translation Utility (HTML5)';
 var ASCII_REGEX = /^[ -~]+$/;
@@ -438,10 +438,10 @@ module.exports.translateSimulation = function( req, res ) {
       } );
 
       // initialize the sims array from the active-sims file in chipper
-      winston.log( 'info', 'sending request to ' + GITHUB_URL_BASE + activeSimsPath );
-      request( GITHUB_URL_BASE + activeSimsPath, function( error, response, body ) {
+      winston.log( 'info', 'sending request to ' + GITHUB_RAW_FILE_URL_BASE + activeSimsPath );
+      request( GITHUB_RAW_FILE_URL_BASE + activeSimsPath, function( error, response, body ) {
         if ( !error && response.statusCode === 200 ) {
-          winston.log( 'info', 'request from ' + GITHUB_URL_BASE + activeSimsPath + ' returned successfully' );
+          winston.log( 'info', 'request from ' + GITHUB_RAW_FILE_URL_BASE + activeSimsPath + ' returned successfully' );
           sims = body.toString().split( '\n' );
         }
         else {
@@ -455,8 +455,8 @@ module.exports.translateSimulation = function( req, res ) {
       extractedStrings.forEach( function( extractedStringObject ) {
         var projectName = extractedStringObject.projectName;
         var repoSha = ( projectName === simName ) ? simSha : 'master';
-        var stringsFilePath = GITHUB_URL_BASE + '/phetsims/' + projectName + '/' + repoSha + '/' + projectName + '-strings_en.json';
-        var translatedStringsPath = GITHUB_URL_BASE + '/phetsims/babel/' + global.preferences.babelBranch + '/' + projectName + '/' + projectName + '-strings_' + targetLocale + '.json';
+        var stringsFilePath = GITHUB_RAW_FILE_URL_BASE + '/phetsims/' + projectName + '/' + repoSha + '/' + projectName + '-strings_en.json';
+        var translatedStringsPath = GITHUB_RAW_FILE_URL_BASE + '/phetsims/babel/' + global.preferences.babelBranch + '/' + projectName + '/' + projectName + '-strings_' + targetLocale + '.json';
 
         // request the English strings from GitHub
         winston.log( 'info', 'sending request to ' + stringsFilePath );
@@ -600,6 +600,7 @@ function pageNotFound( req, res ) {
 
   res.send( '<p>Error: Page not found.  URL = ' + req.url + '</p>' );
 }
+
 module.exports.pageNotFound = pageNotFound;
 
 /**
@@ -611,11 +612,11 @@ module.exports.pageNotFound = pageNotFound;
 module.exports.test = function( req, res ) {
 
   // only logged in PhET team members can access the test page
-  if ( req.session.teamMember ){
+  if ( req.session.teamMember ) {
     winston.log( 'info', 'test page accessed' );
     res.render( 'test.html', { title: 'Test' } );
   }
-  else{
+  else {
     pageNotFound( req, res );
   }
 };
@@ -628,16 +629,63 @@ module.exports.test = function( req, res ) {
  */
 module.exports.runTest = function( req, res ) {
 
+  // TODO: Consider pulling tests into a separate file, especially if this gets to be more than a few lines
+
   // only logged in PhET team members can run tests
-  if ( req.session.teamMember ){
-    winston.log( 'info', 'test requested: ' + req.params.testID );
-    console.log( 'LongTermStringStorage = ' + JSON.stringify( LongTermStringStorage ) );
-    LongTermStringStorage.stringSetExists( 'ab', 'sun' );
+  if ( req.session.teamMember ) {
+
+    var testID = req.params.testID;
+    winston.log( 'info', 'test requested: ' + testID );
+
+    // test where several files are rapidly pulled from GitHub
+    if ( testID === 'testRetrievingMultipleFilesFromGitHub' ) {
+
+      // create a list of the files to retrieve
+      var stringFilesToRetrieve = [
+        // NOTE - use files that are on both master and the 'tests' branch
+        { repoName: 'arithmetic', locale: 'es' },
+        { repoName: 'beers-law-lab', locale: 'cs' },
+        { repoName: 'joist', locale: 'zh_CN' }
+      ];
+      var testSucceeded = true;
+      stringFilesToRetrieve.forEach( function( stringFileSpec ) {
+        LongTermStringStorage.getStrings( stringFileSpec.repoName, stringFileSpec.locale, function( err, strings ) {
+          if ( !err && strings ) {
+            console.log(
+              'attempt to retrieve strings succeeded, name and locale: ',
+              stringFileSpec.repoName,
+              stringFileSpec.locale
+            );
+          }
+          else {
+            console.log(
+              'attempt to retrieve strings failed, name and locale: ',
+              stringFileSpec.repoName,
+              stringFileSpec.locale
+            );
+            testSucceeded = false;
+          }
+        } );
+      } );
+      if ( testSucceeded ){
+        winston.log( 'info', 'test ' + testID + ' succeeded' );
+      }
+      else{
+        winston.log( 'error', 'test ' + testID + ' failed' );
+      }
+    }
+    else if ( testID === 'testCommittingMultipleFilesToGitHub' ) {
+      winston.log( 'info', 'other test' );
+    }
+    else{
+      winston.log( 'error', 'requested test not found' );
+    }
   }
-  else{
+  else {
     pageNotFound( req, res );
   }
-};
+}
+;
 
 /**
  * Route for extracting strings from a build sim, see TranslationUtils.extractStrings.

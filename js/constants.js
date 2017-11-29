@@ -10,7 +10,7 @@
 'use strict';
 
 module.exports = {
-  GITHUB_URL_BASE: 'https://raw.githubusercontent.com',
+  GITHUB_RAW_FILE_URL_BASE: 'https://raw.githubusercontent.com',
   SIM_INFO_ARRAY: '../data/simInfoArray.json'
 };
 

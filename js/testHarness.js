@@ -19,7 +19,6 @@ $( document ).ready( function() {
     (function(){
       var id = button.getAttribute('id');
       button.addEventListener( 'click', function(){
-        console.log( 'would hit URL: ', runTestRUL + id );
         $.get( runTestRUL + id );
       } );
     })();
