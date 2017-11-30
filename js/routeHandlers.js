@@ -680,6 +680,9 @@ module.exports.runTest = function( req, res ) {
     else{
       winston.log( 'error', 'requested test not found' );
     }
+
+    // send back an empty response
+    res.end();
   }
   else {
     pageNotFound( req, res );
