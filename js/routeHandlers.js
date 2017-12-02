@@ -635,21 +635,22 @@ module.exports.runTest = function( req, res ) {
   if ( req.session.teamMember ) {
 
     var testID = req.params.testID;
+    var testPassed;
     winston.log( 'info', 'test requested: ' + testID );
 
-    // test where several files are rapidly pulled from GitHub
+    // test where several files are rapidly retrieved from GitHub
     if ( testID === 'testRetrievingMultipleFilesFromGitHub' ) {
 
       // create a list of the files to retrieve
       var stringFilesToRetrieve = [
         // NOTE - use files that are on both master and the 'tests' branch
         { repoName: 'arithmetic', locale: 'es' },
-        { repoName: 'beers-law-lab', locale: 'cs' },
+        { repoName: 'chains', locale: 'ab' },
         { repoName: 'joist', locale: 'zh_CN' }
       ];
-      var testSucceeded = true;
+      testPassed = true;
       stringFilesToRetrieve.forEach( function( stringFileSpec ) {
-        LongTermStringStorage.getStrings( stringFileSpec.repoName, stringFileSpec.locale, function( err, strings ) {
+        LongTermStringStorage.getStrings( stringFileSpec.repoName, stringFileSpec.locale, function( err, rsp, strings ) {
           if ( !err && strings ) {
             console.log(
               'attempt to retrieve strings succeeded, name and locale: ',
@@ -663,21 +664,66 @@ module.exports.runTest = function( req, res ) {
               stringFileSpec.repoName,
               stringFileSpec.locale
             );
-            testSucceeded = false;
+            testPassed = false;
           }
         } );
       } );
-      if ( testSucceeded ){
+      if ( testPassed ) {
         winston.log( 'info', 'test ' + testID + ' succeeded' );
       }
-      else{
+      else {
         winston.log( 'error', 'test ' + testID + ' failed' );
       }
     }
-    else if ( testID === 'testCommittingMultipleFilesToGitHub' ) {
-      winston.log( 'info', 'other test' );
+    else if ( testID === 'testStringMatch' ) {
+      LongTermStringStorage.getStrings( 'arithmetic', 'es', function( error, response, strings ) {
+        if ( !error ) {
+          LongTermStringStorage.stringsMatch( 'arithmetic', 'es', strings, function( error, match ) {
+            if ( match ) {
+              var firstKey = _.keys( strings )[ 0 ];
+              strings[ firstKey ].value = strings[ firstKey ].value + 'X';
+              LongTermStringStorage.stringsMatch( 'arithmetic', 'es', strings, function( error, match ) {
+                if ( match ) {
+                  winston.log( 'error', 'test ' + testID + ' failed' );
+                }
+                else {
+                  winston.log( 'info', 'test ' + testID + ' succeeded' );
+                }
+              } );
+            }
+          } );
+        }
+      } );
     }
-    else{
+    else if ( testID === 'testCommittingMultipleFilesToGitHub' ) {
+      var simName = 'chains';
+      var locales = [ 'ab', 'cs' ];
+      var changedStrings = [];
+      locales.forEach( function( locale ) {
+        winston.log( 'info', 'changing strings for sim ' + simName + ', locale ' + locale );
+        LongTermStringStorage.getStrings( simName, locale, function( error, response, strings ) {
+          if ( !error ) {
+            var firstKey = _.keys( strings )[ 0 ];
+            var firstStringValue = strings[ firstKey ].value;
+            var dividerIndex = firstStringValue.indexOf( '---' );
+            if ( dividerIndex !== -1 ) {
+              firstStringValue = firstStringValue.substring( 0, dividerIndex );
+            }
+            strings[ firstKey ].value = firstStringValue + '---' + ( new Date().getTime() );
+            changedStrings.push( strings );
+            if ( changedStrings.length === locales.length ){
+              // all modifications complete, save the strings
+              locales.forEach( function( locale, index ) {
+                LongTermStringStorage.saveStrings( simName, locale, changedStrings[ index ], function( result ) {
+                  winston.log( 'info', 'save ' + ( result ? 'succeeded' : 'FAILED' ) );
+                } );
+              } );
+            }
+          }
+        } );
+      } );
+    }
+    else {
       winston.log( 'error', 'requested test not found' );
     }
 
