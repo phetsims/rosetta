@@ -6,7 +6,7 @@
  *
  * TODO: This module is essentially hardcoded as of late January 2015, but at some point should become dynamic,
  * meaning that it will generate the sim list and URLs in some standard way based on the list of active simulations
- * already maintained in GitHub (see chipper/data/active-sims).  The reason that it is hardcoded now is that most sims
+ * already maintained in GitHub (see perennial/data/active-sims).  The reason that it is hardcoded now is that most sims
  * haven't been published with the code that supports the needed approach for query parameter string loading.
  *
  * @author John Blanco
