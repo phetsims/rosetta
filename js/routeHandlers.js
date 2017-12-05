@@ -675,7 +675,7 @@ module.exports.runTest = function( req, res ) {
                     ', locale:',
                     stringFileSpec.locale
                   );
-                  return Promise.reject( 'successful string retrieval not expected' );
+                  return Promise.reject( new Error( 'successful string retrieval not expected' ) );
                 }
               }
             )
@@ -698,7 +698,7 @@ module.exports.runTest = function( req, res ) {
                   ', locale:',
                   stringFileSpec.locale
                 );
-                return Promise.reject( 'unable to retrieve strings' );
+                return Promise.reject( err );
               }
 
             } )
@@ -710,7 +710,7 @@ module.exports.runTest = function( req, res ) {
           winston.log( 'info', 'test ' + testID + ' result: PASS' );
         } )
         .catch( err => {
-          console.log( 'error', 'test ' + testID + ' result: FAIL, error = ' + err.message );
+          winston.log( 'error', 'test ' + testID + ' result: FAIL, error = ' + err );
         } );
     }
     else if ( testID === 'testStringMatch' ) {
