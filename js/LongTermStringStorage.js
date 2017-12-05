@@ -17,6 +17,7 @@
 let constants = require( './constants' );
 let nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 let octonode = require( 'octonode' );
+let Queue = require( 'promise-queue' ); // eslint-disable-line
 let _ = require( 'underscore' ); // eslint-disable-line
 let winston = require( 'winston' );
 
@@ -33,6 +34,9 @@ let ghClient = octonode.client( {
 
 // create a handle to the repo where strings are stored
 let stringStorageRepo = ghClient.repo( 'phetsims/babel' );
+
+// create the queue that will make the promises execute in sequential order
+let promiseQueue = new Queue( 1, 1000 );
 
 // TODO: Document the parameters for the callback functions when they are finalized
 
@@ -90,7 +94,7 @@ function stringsMatch( repoName, locale, strings, callback ) {
 function saveStrings( repoName, locale, strings ) {
   let filePath = repoName + '/' + repoName + '-strings_' + locale + '.json';
   let stringsInJson = JSON.stringify( strings, null, 2 );
-  return saveFileToGitHub( filePath, stringsInJson );
+  return promiseQueue.add( function(){ return saveFileToGitHub( filePath, stringsInJson ); } );
 }
 
 /**

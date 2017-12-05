@@ -765,8 +765,7 @@ module.exports.runTest = function( req, res ) {
       } );
 
       Promise.all( stringChangePromises )
-        .then( data => {
-          // TODO: I'm not exactly sure what happens here
+        .then( () => {
           winston.log( 'info', 'test ' + testID + ' succeeded' );
         } )
         .catch( err => {
