@@ -81,88 +81,67 @@ function stringsMatch( repoName, locale, strings, callback ) {
 }
 
 /**
- * save a set of string to GitHub
+ * save a set of strings for the specified sim/lib and locale to GitHub
  * @param {string} repoName - name of the simulation or common-code repository where the untranslated strings reside
  * @param {string} locale
  * @param {Object} strings
- * @param {function} callback - function to be called once the strings have been saved (or not if there is an error)
+ * @return {Promise}
  */
-function saveStrings( repoName, locale, strings, callback ) {
+function saveStrings( repoName, locale, strings ) {
+  let filePath = repoName + '/' + repoName + '-strings_' + locale + '.json';
+  let stringsInJson = JSON.stringify( strings, null, 2 );
+  return saveFileToGitHub( filePath, stringsInJson );
+}
 
-  getStrings( repoName, locale, function( error, response, stringsFromRepo ) {
-    if ( stringsFromRepo ) {
-      if ( !_.isEqual( stringsFromRepo, strings ) ) {
-        winston.log(
-          'info',
-          'initiating commit of changed string for sim/lib ' + repoName + ', locale ' + locale
-        );
+/**
+ * Save the provided string data to GitHub, returns a Promise.  This is needed because octonode, which is the package
+ * that is being used to interface to GitHub, does not support promises.
+ * @param {string} filePath
+ * @param {string} contents
+ * @returns {Promise}
+ * @private
+ */
+function saveFileToGitHub( filePath, contents ) {
 
-        let filePath = repoName + '/' + repoName + '-strings_' + locale + '.json';
-        let commitMessage = Date.now() + ' automated commit from rosetta for file ' + filePath;
-        let stringsInJson = JSON.stringify( strings, null, 2 );
+  let commitMessage = Date.now() + ' automated commit from rosetta for file ' + filePath;
 
-        // get the current contents via octonode because we need the SHA (there may be a better way to do this)
-        stringStorageRepo.contents( filePath, BRANCH, function( err, data, headers ) {
+  // wrap the async calls that interact with GitHub into a promise
+  return new Promise( function( resolve, reject ) {
 
-          let sha = data.sha;
+    // attempt to get the file and metadata from GitHub
+    stringStorageRepo.contents( filePath, BRANCH, function( err, data ) {
 
+      if ( !err ) {
+
+        // update the existing file in GitHub
+        stringStorageRepo.updateContents( filePath, commitMessage, contents, data.sha, BRANCH, function( err, data ) {
           if ( !err ) {
-
-            // commit the changed string file to the babel repo in GitHub
-            stringStorageRepo.updateContents(
-              filePath,
-              commitMessage,
-              stringsInJson,
-              sha,
-              BRANCH,
-              function( err, data, headers ) {
-                if ( !err ) {
-                  winston.log(
-                    'info',
-                    'successfully committed string changes for sim/lib ' + repoName + ', locale ' + locale
-                  );
-                }
-                else {
-                  winston.log(
-                    'error',
-                    'error committing string changes for sim/lib ' + repoName + ', locale ' + locale + ', error message = ' + err.message
-                  );
-                }
-                callback( err === null );
-              }
-            );
+            winston.log( 'info', 'successfully committed changes for file ' + filePath );
+            resolve( data );
           }
           else {
-            winston.log(
-              'error',
-              'Unexpected error when retrieving string file, error = ' + err.toString()
-            );
-            callback( false );
+            winston.log( 'error', 'unable to commit changes for file ' + filePath, ', err = ' + err );
+            reject( err );
           }
         } );
       }
       else {
 
-        // no need to save strings that already match
-        winston.log(
-          'info',
-          'saveStrings skipping commit because strings already match for sim/lib ' + repoName + ', locale ' + locale
-        );
-        callback( true );
+        // create a new file in GitHub
+        stringStorageRepo.createContents( filePath, commitMessage, contents, BRANCH, function( err, data ) {
+          if ( !err ) {
+            winston.log( 'info', 'successfully created file ' + filePath );
+            resolve( data );
+          }
+          else {
+            winston.log( 'error', 'unable to create file ' + filePath, ', err = ' + err );
+            reject( err );
+          }
+        } );
       }
-    }
-    else {
-      callback( false );
-    }
+    } );
   } );
 }
-
-/**
- * save the specified strings to GitHub
- * @param repo
- * @param locale
- * @param strings
- */
 
 
 // export the functions for getting and setting the strings

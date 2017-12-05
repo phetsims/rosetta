@@ -11,26 +11,26 @@
 'use strict';
 
 // modules
-let fs = require( 'fs' );
-let https = require( 'https' );
-let query = require( 'pg-query' ); // eslint-disable-line
-let request = require( 'request' );
-let winston = require( 'winston' );
-let constants = require( './constants' );
-let LocaleInfo = require( './LocaleInfo' );
-let LongTermStringStorage = require( './LongTermStringStorage' );
-let stringSubmissionQueue = require( './stringSubmissionQueue' ).stringSubmissionQueue; // eslint-disable-line
-let TranslatableSimInfo = require( './TranslatableSimInfo' );
-let TranslationUtils = require( './TranslationUtils' );
-let escapeHTML = TranslationUtils.escapeHTML;
-let renderError = TranslationUtils.renderError;
-let _ = require( 'underscore' ); // eslint-disable-line
+const fs = require( 'fs' );
+const https = require( 'https' );
+const query = require( 'pg-query' ); // eslint-disable-line
+const request = require( 'request' );
+const winston = require( 'winston' );
+const constants = require( './constants' );
+const LocaleInfo = require( './LocaleInfo' );
+const LongTermStringStorage = require( './LongTermStringStorage' );
+const stringSubmissionQueue = require( './stringSubmissionQueue' ).stringSubmissionQueue; // eslint-disable-line
+const TranslatableSimInfo = require( './TranslatableSimInfo' );
+const TranslationUtils = require( './TranslationUtils' );
+const escapeHTML = TranslationUtils.escapeHTML;
+const renderError = TranslationUtils.renderError;
+const _ = require( 'underscore' ); // eslint-disable-line
 
 // constants
-let GITHUB_RAW_FILE_URL_BASE = constants.GITHUB_RAW_FILE_URL_BASE;
-let SIM_INFO_ARRAY = constants.SIM_INFO_ARRAY;
-let TITLE = 'PhET Translation Utility (HTML5)';
-let ASCII_REGEX = /^[ -~]+$/;
+const GITHUB_RAW_FILE_URL_BASE = constants.GITHUB_RAW_FILE_URL_BASE;
+const SIM_INFO_ARRAY = constants.SIM_INFO_ARRAY;
+const TITLE = 'PhET Translation Utility (HTML5)';
+const ASCII_REGEX = /^[ -~]+$/;
 
 // utility function for sending the user to the login page
 function sendUserToLoginPage( res, host, destinationUrl ) {
@@ -734,13 +734,19 @@ module.exports.runTest = function( req, res ) {
       } );
     }
     else if ( testID === 'testCommittingMultipleFilesToGitHub' ) {
+
+      // make a list of the strings to change - be careful here not to ever mess up real translations
       let simName = 'chains';
       let locales = [ 'ab', 'cs' ];
-      let changedStrings = [];
+      let stringChangePromises = [];
+
+      // get the strings, then modify them
       locales.forEach( function( locale ) {
-        winston.log( 'info', 'changing strings for sim ' + simName + ', locale ' + locale );
-        LongTermStringStorage.getStrings( simName, locale, function( error, response, strings ) {
-          if ( !error ) {
+        winston.log( 'info', 'getting strings for sim ' + simName + ', locale ' + locale );
+        let modifyStringsPromise = LongTermStringStorage.getStrings( simName, locale )
+          .then( strings => {
+
+            // modify the first string to have a snapshot of the epoch number at the end, e.g. "My Sim---5409483029"
             let firstKey = _.keys( strings )[ 0 ];
             let firstStringValue = strings[ firstKey ].value;
             let dividerIndex = firstStringValue.indexOf( '---' );
@@ -748,31 +754,37 @@ module.exports.runTest = function( req, res ) {
               firstStringValue = firstStringValue.substring( 0, dividerIndex );
             }
             strings[ firstKey ].value = firstStringValue + '---' + ( new Date().getTime() );
-            changedStrings.push( strings );
-            if ( changedStrings.length === locales.length ) {
-              // all modifications complete, save the strings
-              locales.forEach( function( locale, index ) {
-                LongTermStringStorage.saveStrings( simName, locale, changedStrings[ index ], function( result ) {
-                  winston.log( 'info', 'save ' + ( result ? 'succeeded' : 'FAILED' ) );
-                } );
-              } );
-            }
-          }
-        } );
+            return strings;
+          } )
+          .then( strings => {
+
+            // save the modified strings to the long term storage area
+            return LongTermStringStorage.saveStrings( simName, locale, strings );
+          } );
+        stringChangePromises.push( modifyStringsPromise );
       } );
+
+      Promise.all( stringChangePromises )
+        .then( data => {
+          // TODO: I'm not exactly sure what happens here
+          winston.log( 'info', 'test ' + testID + ' succeeded' );
+        } )
+        .catch( err => {
+          winston.log( 'error', 'test ' + testID + ' failed, error = ' + err );
+        } );
     }
     else {
-      winston.log( 'error', 'requested test not found' );
+      winston.err( 'requested test does not exist, testID = ' + testID );
     }
 
     // send back an empty response
     res.end();
   }
-  else {
-    pageNotFound( req, res );
+  else{
+    // the user is not a team member, renter the "not found" page
+      pageNotFound( req, res );
   }
-}
-;
+};
 
 /**
  * Route for extracting strings from a build sim, see TranslationUtils.extractStrings.
