@@ -14,25 +14,25 @@
 'use strict';
 
 // modules
-var constants = require( './constants' );
-var octonode = require( 'octonode' );
-var request = require( 'request' );
-var _ = require( 'underscore' ); // eslint-disable-line
-var winston = require( 'winston' );
+let constants = require( './constants' );
+let nodeFetch = require( 'node-fetch' ); // eslint-disable-line
+let octonode = require( 'octonode' );
+let _ = require( 'underscore' ); // eslint-disable-line
+let winston = require( 'winston' );
 
 // constants
-var PREFERENCES = global.preferences;
-var BRANCH = global.preferences.babelBranch || 'master';
-var BASE_URL_FOR_RAW_FILES = constants.GITHUB_RAW_FILE_URL_BASE + '/phetsims/babel/' + BRANCH + '/';
+let PREFERENCES = global.preferences;
+let BRANCH = global.preferences.babelBranch || 'master';
+let BASE_URL_FOR_RAW_FILES = constants.GITHUB_RAW_FILE_URL_BASE + '/phetsims/babel/' + BRANCH + '/';
 
 // create a handle to GitHub that will be used for all interactions
-var ghClient = octonode.client( {
+let ghClient = octonode.client( {
   username: PREFERENCES.githubUsername,
   password: PREFERENCES.githubPassword
 } );
 
 // create a handle to the repo where strings are stored
-var stringStorageRepo = ghClient.repo( 'phetsims/babel' );
+let stringStorageRepo = ghClient.repo( 'phetsims/babel' );
 
 // TODO: Document the parameters for the callback functions when they are finalized
 
@@ -40,30 +40,24 @@ var stringStorageRepo = ghClient.repo( 'phetsims/babel' );
  * retrieve the stored strings for the given locale and repo
  * @param {string} repoName - name of the simulation or common-code repository where the untranslated strings reside
  * @param {string} locale
- * @param {function} callback - function to be called once the strings have been obtained
- * @return {Object|null} - map of string keys to the string values
+ * @return {Promise}
  */
-function getStrings( repoName, locale, callback ) {
+function getStrings( repoName, locale ) {
 
   // it is faster and simpler to pull the strings directly from the raw URL than to use the octonode client
-  var rawStringFileURL = BASE_URL_FOR_RAW_FILES + repoName + '/' + repoName + '-strings_' + locale + '.json';
+  let rawStringFileURL = BASE_URL_FOR_RAW_FILES + repoName + '/' + repoName + '-strings_' + locale + '.json';
   winston.log( 'info', 'requesting raw file from GitHub, URL = ' + rawStringFileURL );
 
-  request( rawStringFileURL, function( error, response, body ) {
-    if ( !error && response.statusCode === 200 ) {
-      winston.log( 'info', 'request for strings for repo ' + repoName + ', locale ' + locale + ' succeeded' );
-      callback( error, response, JSON.parse( body ) );
+  return nodeFetch( rawStringFileURL, { compress: false } ).then( response => {
+    if ( response.status === 200 ) {
+      // the file was obtained successfully
+      return response.json();
     }
-    else if ( !error && response.statusCode === 404 ) {
-      winston.log( 'info', 'strings for repo ' + repoName + ', locale ' + locale + ' not found' );
-      callback( error, response, null );
+    else if ( response.status === 404 ) {
+      return Promise.reject( new Error( 'file not found (response.status = ' + response.status ) + ')' );
     }
     else {
-      winston.log(
-        'error',
-        'problem obtaining strings for repo ' + repoName + ', locale ' + locale + ' failed, response code = ' +
-        response.statusCode, ' error = ' + JSON.stringify( error ) );
-      callback( error, response, null );
+      return Promise.reject( new Error( 'error getting strings (response.status = ' + response.status ) + ')' );
     }
   } );
 }
@@ -78,7 +72,7 @@ function getStrings( repoName, locale, callback ) {
 function stringsMatch( repoName, locale, strings, callback ) {
 
   getStrings( repoName, locale, function( error, response, stringsFromRepo ) {
-    var stringsMatch = false;
+    let stringsMatch = false;
     if ( !error ) {
       stringsMatch = _.isEqual( stringsFromRepo, strings );
     }
@@ -97,20 +91,20 @@ function saveStrings( repoName, locale, strings, callback ) {
 
   getStrings( repoName, locale, function( error, response, stringsFromRepo ) {
     if ( stringsFromRepo ) {
-      if ( !_.isEqual( stringsFromRepo, strings )) {
+      if ( !_.isEqual( stringsFromRepo, strings ) ) {
         winston.log(
           'info',
           'initiating commit of changed string for sim/lib ' + repoName + ', locale ' + locale
         );
 
-        var filePath = repoName + '/' + repoName + '-strings_' + locale + '.json';
-        var commitMessage = Date.now() + ' automated commit from rosetta for file ' + filePath;
-        var stringsInJson = JSON.stringify( strings, null, 2 );
+        let filePath = repoName + '/' + repoName + '-strings_' + locale + '.json';
+        let commitMessage = Date.now() + ' automated commit from rosetta for file ' + filePath;
+        let stringsInJson = JSON.stringify( strings, null, 2 );
 
         // get the current contents via octonode because we need the SHA (there may be a better way to do this)
         stringStorageRepo.contents( filePath, BRANCH, function( err, data, headers ) {
 
-        var sha = data.sha;
+          let sha = data.sha;
 
           if ( !err ) {
 
@@ -122,13 +116,13 @@ function saveStrings( repoName, locale, strings, callback ) {
               sha,
               BRANCH,
               function( err, data, headers ) {
-                if ( !err ){
+                if ( !err ) {
                   winston.log(
                     'info',
                     'successfully committed string changes for sim/lib ' + repoName + ', locale ' + locale
                   );
                 }
-                else{
+                else {
                   winston.log(
                     'error',
                     'error committing string changes for sim/lib ' + repoName + ', locale ' + locale + ', error message = ' + err.message
@@ -162,7 +156,6 @@ function saveStrings( repoName, locale, strings, callback ) {
     }
   } );
 }
-
 
 /**
  * save the specified strings to GitHub
