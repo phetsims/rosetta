@@ -18,8 +18,8 @@ const request = require( 'request' );
 const winston = require( 'winston' );
 const constants = require( './constants' );
 const LocaleInfo = require( './LocaleInfo' );
-const LongTermStringStorage = require( './LongTermStringStorage' );
 const stringSubmissionQueue = require( './stringSubmissionQueue' ).stringSubmissionQueue; // eslint-disable-line
+const ServerTests = require( './ServerTests' );
 const TranslatableSimInfo = require( './TranslatableSimInfo' );
 const TranslationUtils = require( './TranslationUtils' );
 const escapeHTML = TranslationUtils.escapeHTML;
@@ -621,217 +621,24 @@ module.exports.test = function( req, res ) {
 };
 
 /**
- * runs specific tests
- *
+ * handle a request to run a test
  * @param req
  * @param res
  */
 module.exports.runTest = function( req, res ) {
 
-  // TODO: Consider pulling tests into a separate file, especially if this gets to be more than a few lines
-
   // only logged in PhET team members can run tests
   if ( req.session.teamMember ) {
 
     let testID = req.params.testID;
-    winston.log( 'info', 'test requested: ' + testID );
-
-    // test where several files are rapidly retrieved from GitHub
-    if ( testID === 'testRetrievingMultipleFilesFromGitHub' ) {
-
-      // create a list of the files to retrieve
-      let stringFilesToRetrieve = [
-        // NOTE - use files that are on both master and the 'tests' branch
-        { repoName: 'arithmetic', locale: 'es', expectedToExist: true },
-        { repoName: 'chains', locale: 'ab', expectedToExist: true },
-        { repoName: 'joist', locale: 'zh_CN', expectedToExist: true },
-        { repoName: 'joist', locale: 'xy', expectedToExist: false },
-        { repoName: 'blah', locale: 'es', expectedToExist: false }
-      ];
-
-      let stringRetrievalPromises = [];
-
-      // create the promises for retrieving the strings
-      stringFilesToRetrieve.forEach( function( stringFileSpec ) {
-
-        stringRetrievalPromises.push(
-          LongTermStringStorage.getStrings( stringFileSpec.repoName, stringFileSpec.locale )
-            .then( () => {
-                if ( stringFileSpec.expectedToExist ) {
-                  winston.log(
-                    'info',
-                    'strings successfully retrieved for sim/lib:',
-                    stringFileSpec.repoName,
-                    ', locale:',
-                    stringFileSpec.locale
-                  );
-                  return Promise.resolve();
-                }
-                else {
-                  winston.log(
-                    'error',
-                    'strings retrieved, but this was not expected - sim/lib:',
-                    stringFileSpec.repoName,
-                    ', locale:',
-                    stringFileSpec.locale
-                  );
-                  return Promise.reject( new Error( 'successful string retrieval not expected' ) );
-                }
-              }
-            )
-            .catch( err => {
-              if ( !stringFileSpec.expectedToExist ) {
-                winston.log(
-                  'info',
-                  'unable to obtain strings, which is the expected result, for sim/lib:',
-                  stringFileSpec.repoName,
-                  ', locale:',
-                  stringFileSpec.locale
-                );
-                return Promise.resolve();
-              }
-              else {
-                winston.log(
-                  'error',
-                  'unable to get strings for sim/lib:',
-                  stringFileSpec.repoName,
-                  ', locale:',
-                  stringFileSpec.locale
-                );
-                return Promise.reject( err );
-              }
-
-            } )
-        );
-      } );
-
-      Promise.all( stringRetrievalPromises )
-        .then( () => {
-          winston.log( 'info', 'test ' + testID + ' result: PASS' );
-        } )
-        .catch( err => {
-          winston.log( 'error', 'test ' + testID + ' result: FAIL, error = ' + err );
-        } );
-    }
-    else if ( testID === 'testStringMatch' ) {
-
-      let stringComparePromises = [];
-
-      // compare the strings with a completely different set, and make sure that they don't match
-      stringComparePromises.push( LongTermStringStorage.getStrings( 'arithmetic', 'es' )
-        .then( strings => {
-
-          return LongTermStringStorage.stringsMatch( 'arithmetic', 'fr', strings )
-            .then( result => {
-              if ( !result ) {
-                winston.log( 'info', 'comparison with known non-equal strings returned false as expected' );
-              }
-              else {
-                winston.log( 'error', 'comparison with known non-equal strings returned true, which is a failure' );
-              }
-              return !result; // return the result - if the match failed, the test passed
-            } );
-        } )
-      );
-
-      // compare the strings with the same ones, and make sure they match
-      stringComparePromises.push( LongTermStringStorage.getStrings( 'arithmetic', 'es' )
-        .then( strings => {
-
-          return LongTermStringStorage.stringsMatch( 'arithmetic', 'es', strings )
-            .then( result => {
-              if ( result ) {
-                winston.log( 'info', 'comparison with same strings returned true as expected' );
-              }
-              else {
-                winston.log( 'error', 'comparison with same strings returned false, which is a failure' );
-              }
-              return result; // return the result - if the match succeeded, so did the test
-            } );
-        } )
-      );
-
-      // make a change to one string, then compare, make sure they don't match
-      stringComparePromises.push( LongTermStringStorage.getStrings( 'arithmetic', 'es' )
-        .then( strings => {
-
-          let firstKey = _.keys( strings )[ 0 ];
-          strings[ firstKey ].value = strings[ firstKey ].value + 'X';
-
-          return LongTermStringStorage.stringsMatch( 'arithmetic', 'es', strings )
-            .then( result => {
-              if ( !result ) {
-                winston.log( 'info', 'comparison with modified strings returned false as expected' );
-              }
-              else {
-                winston.log( 'error', 'comparison with modified strings returned true, which is a failure' );
-              }
-              return !result; // return the result - if the match failed, the test passed
-            } );
-        } )
-      );
-
-      Promise.all( stringComparePromises )
-        .then( results => {
-          if ( _.every( results, result => result ) ) {
-            winston.log( 'info', 'test ' + testID + ' succeeded' );
-          }
-          else {
-            winston.log( 'error', 'test ' + testID + ' FAILED' );
-          }
-        } )
-        .catch( err => {
-          winston.log( 'error', 'test ' + testID + ' FAILED, error = ' + err );
-        } );
-    }
-    else if ( testID === 'testCommittingMultipleFilesToGitHub' ) {
-
-      // make a list of the strings to change - be careful here not to ever mess up real translations
-      let simName = 'chains';
-      let locales = [ 'ab', 'cs' ];
-      let stringChangePromises = [];
-
-      // get the strings, then modify them
-      locales.forEach( function( locale ) {
-        winston.log( 'info', 'getting strings for sim ' + simName + ', locale ' + locale );
-        let modifyStringsPromise = LongTermStringStorage.getStrings( simName, locale )
-          .then( strings => {
-
-            // modify the first string to have a snapshot of the epoch number at the end, e.g. "My Sim---5409483029"
-            let firstKey = _.keys( strings )[ 0 ];
-            let firstStringValue = strings[ firstKey ].value;
-            let dividerIndex = firstStringValue.indexOf( '---' );
-            if ( dividerIndex !== -1 ) {
-              firstStringValue = firstStringValue.substring( 0, dividerIndex );
-            }
-            strings[ firstKey ].value = firstStringValue + '---' + ( new Date().getTime() );
-            return strings;
-          } )
-          .then( strings => {
-
-            // save the modified strings to the long term storage area
-            return LongTermStringStorage.saveStrings( simName, locale, strings );
-          } );
-        stringChangePromises.push( modifyStringsPromise );
-      } );
-
-      Promise.all( stringChangePromises )
-        .then( () => {
-          winston.log( 'info', 'test ' + testID + ' succeeded' );
-        } )
-        .catch( err => {
-          winston.log( 'error', 'test ' + testID + ' failed, error = ' + err );
-        } );
-    }
-    else {
-      winston.err( 'requested test does not exist, testID = ' + testID );
-    }
+    ServerTests.executeTest( testID );
 
     // send back an empty response
     res.end();
   }
   else {
-    // the user is not a team member, renter the "not found" page
+
+    // the user is not a team member, render the "not found" page
     pageNotFound( req, res );
   }
 };
