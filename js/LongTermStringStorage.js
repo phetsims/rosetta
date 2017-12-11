@@ -90,7 +90,8 @@ function stringsMatch( simOrLibName, locale, strings ) {
 function saveStrings( simOrLibName, locale, strings ) {
   let filePath = simOrLibName + '/' + simOrLibName + '-strings_' + locale + '.json';
   let stringsInJson = JSON.stringify( strings, null, 2 );
-  return promiseQueue.add( function(){ return saveFileToGitHub( filePath, stringsInJson ); } );
+  let commitMessage = 'automated commit from rosetta for sim/lib ' + simOrLibName + ', locale ' + locale;
+  return promiseQueue.add( function(){ return saveFileToGitHub( filePath, stringsInJson, commitMessage ); } );
 }
 
 /**
@@ -98,12 +99,11 @@ function saveStrings( simOrLibName, locale, strings ) {
  * that is being used to interface to GitHub, does not support promises.
  * @param {string} filePath
  * @param {string} contents
+ * @param {string} commitMessage
  * @returns {Promise}
  * @private
  */
-function saveFileToGitHub( filePath, contents ) {
-
-  let commitMessage = Date.now() + ' automated commit from rosetta for file ' + filePath;
+function saveFileToGitHub( filePath, contents, commitMessage ) {
 
   // wrap the async calls that interact with GitHub into a promise
   return new Promise( function( resolve, reject ) {
