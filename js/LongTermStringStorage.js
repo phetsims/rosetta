@@ -2,12 +2,12 @@
 
 /**
  * This file defines a singleton object that is used for long term storage of the translated strings.  It is called
- * "long term" to distinguish it from the short term storage that can occur if a user decides to save a translation
- * without submitting it.
+ * "long term" to distinguish it from the short term storage that can occur if a user decides to save an in-progress
+ * translation without submitting it as a completed translation.
  *
  * This implementation uses GitHub as the "back end" where the strings are stored, but it is intended to be a fairly
- * generic interface so that if we ever decide to use something else as the storage medium for strings, this could be
- * rewritten without impacting portions of the code.  That's the idea anyway.
+ * generic interface so that if we ever decide to use something else as the storage medium for strings, this object
+ * could be rewritten with minimal impact on the client code.  That's the idea anyway.
  */
 
 /* eslint-env node */
@@ -71,16 +71,11 @@ function getStrings( repoName, locale ) {
  * @param {string} repoName - name of the simulation or common-code repository where the untranslated strings reside
  * @param {string} locale
  * @param {Object} strings
- * @param {function} callback - function to be called once the strings have been compared
  */
-function stringsMatch( repoName, locale, strings, callback ) {
+function stringsMatch( repoName, locale, strings ) {
 
-  getStrings( repoName, locale, function( error, response, stringsFromRepo ) {
-    let stringsMatch = false;
-    if ( !error ) {
-      stringsMatch = _.isEqual( stringsFromRepo, strings );
-    }
-    callback( error, stringsMatch );
+  return getStrings( repoName, locale ).then( stringsFromStorage => {
+    return _.isEqual( strings, stringsFromStorage );
   } );
 }
 

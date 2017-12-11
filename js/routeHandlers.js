@@ -714,24 +714,75 @@ module.exports.runTest = function( req, res ) {
         } );
     }
     else if ( testID === 'testStringMatch' ) {
-      LongTermStringStorage.getStrings( 'arithmetic', 'es', function( error, response, strings ) {
-        if ( !error ) {
-          LongTermStringStorage.stringsMatch( 'arithmetic', 'es', strings, function( error, match ) {
-            if ( match ) {
-              let firstKey = _.keys( strings )[ 0 ];
-              strings[ firstKey ].value = strings[ firstKey ].value + 'X';
-              LongTermStringStorage.stringsMatch( 'arithmetic', 'es', strings, function( error, match ) {
-                if ( match ) {
-                  winston.log( 'error', 'test ' + testID + ' failed' );
-                }
-                else {
-                  winston.log( 'info', 'test ' + testID + ' succeeded' );
-                }
-              } );
-            }
-          } );
-        }
-      } );
+
+      let stringComparePromises = [];
+
+      // compare the strings with a completely different set, and make sure that they don't match
+      stringComparePromises.push( LongTermStringStorage.getStrings( 'arithmetic', 'es' )
+        .then( strings => {
+
+          return LongTermStringStorage.stringsMatch( 'arithmetic', 'fr', strings )
+            .then( result => {
+              if ( !result ) {
+                winston.log( 'info', 'comparison with known non-equal strings returned false as expected' );
+              }
+              else {
+                winston.log( 'error', 'comparison with known non-equal strings returned true, which is a failure' );
+              }
+              return !result; // return the result - if the match failed, the test passed
+            } );
+        } )
+      );
+
+      // compare the strings with the same ones, and make sure they match
+      stringComparePromises.push( LongTermStringStorage.getStrings( 'arithmetic', 'es' )
+        .then( strings => {
+
+          return LongTermStringStorage.stringsMatch( 'arithmetic', 'es', strings )
+            .then( result => {
+              if ( result ) {
+                winston.log( 'info', 'comparison with same strings returned true as expected' );
+              }
+              else {
+                winston.log( 'error', 'comparison with same strings returned false, which is a failure' );
+              }
+              return result; // return the result - if the match succeeded, so did the test
+            } );
+        } )
+      );
+
+      // make a change to one string, then compare, make sure they don't match
+      stringComparePromises.push( LongTermStringStorage.getStrings( 'arithmetic', 'es' )
+        .then( strings => {
+
+          let firstKey = _.keys( strings )[ 0 ];
+          strings[ firstKey ].value = strings[ firstKey ].value + 'X';
+
+          return LongTermStringStorage.stringsMatch( 'arithmetic', 'es', strings )
+            .then( result => {
+              if ( !result ) {
+                winston.log( 'info', 'comparison with modified strings returned false as expected' );
+              }
+              else {
+                winston.log( 'error', 'comparison with modified strings returned true, which is a failure' );
+              }
+              return !result; // return the result - if the match failed, the test passed
+            } );
+        } )
+      );
+
+      Promise.all( stringComparePromises )
+        .then( results => {
+          if ( _.every( results, result => result ) ) {
+            winston.log( 'info', 'test ' + testID + ' succeeded' );
+          }
+          else {
+            winston.log( 'error', 'test ' + testID + ' FAILED' );
+          }
+        } )
+        .catch( err => {
+          winston.log( 'error', 'test ' + testID + ' FAILED, error = ' + err );
+        } );
     }
     else if ( testID === 'testCommittingMultipleFilesToGitHub' ) {
 
@@ -779,9 +830,9 @@ module.exports.runTest = function( req, res ) {
     // send back an empty response
     res.end();
   }
-  else{
+  else {
     // the user is not a team member, renter the "not found" page
-      pageNotFound( req, res );
+    pageNotFound( req, res );
   }
 };
 
