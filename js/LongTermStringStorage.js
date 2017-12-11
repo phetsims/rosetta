@@ -38,18 +38,17 @@ let stringStorageRepo = ghClient.repo( 'phetsims/babel' );
 // create the queue that will make the promises execute in sequential order
 let promiseQueue = new Queue( 1, 1000 );
 
-// TODO: Document the parameters for the callback functions when they are finalized
-
 /**
  * retrieve the stored strings for the given locale and repo
  * @param {string} repoName - name of the simulation or common-code repository where the untranslated strings reside
  * @param {string} locale
  * @return {Promise}
+ * @public
  */
-function getStrings( repoName, locale ) {
+function getStrings( simOrLibName, locale ) {
 
   // it is faster and simpler to pull the strings directly from the raw URL than to use the octonode client
-  let rawStringFileURL = BASE_URL_FOR_RAW_FILES + repoName + '/' + repoName + '-strings_' + locale + '.json';
+  let rawStringFileURL = BASE_URL_FOR_RAW_FILES + simOrLibName + '/' + simOrLibName + '-strings_' + locale + '.json';
   winston.log( 'info', 'requesting raw file from GitHub, URL = ' + rawStringFileURL );
 
   return nodeFetch( rawStringFileURL, { compress: false } ).then( response => {
@@ -68,26 +67,28 @@ function getStrings( repoName, locale ) {
 
 /**
  * compares the provided set of strings to those on GitHub, returns true if they are the same, false if not
- * @param {string} repoName - name of the simulation or common-code repository where the untranslated strings reside
+ * @param {string} simOrLibName - name of the simulation or common-code repository where the untranslated strings reside
  * @param {string} locale
  * @param {Object} strings
+ * @public
  */
-function stringsMatch( repoName, locale, strings ) {
+function stringsMatch( simOrLibName, locale, strings ) {
 
-  return getStrings( repoName, locale ).then( stringsFromStorage => {
+  return getStrings( simOrLibName, locale ).then( stringsFromStorage => {
     return _.isEqual( strings, stringsFromStorage );
   } );
 }
 
 /**
  * save a set of strings for the specified sim/lib and locale to GitHub
- * @param {string} repoName - name of the simulation or common-code repository where the untranslated strings reside
+ * @param {string} simOrLibName - name of the simulation or common-code repository where the untranslated strings reside
  * @param {string} locale
  * @param {Object} strings
  * @return {Promise}
+ * @public
  */
-function saveStrings( repoName, locale, strings ) {
-  let filePath = repoName + '/' + repoName + '-strings_' + locale + '.json';
+function saveStrings( simOrLibName, locale, strings ) {
+  let filePath = simOrLibName + '/' + simOrLibName + '-strings_' + locale + '.json';
   let stringsInJson = JSON.stringify( strings, null, 2 );
   return promiseQueue.add( function(){ return saveFileToGitHub( filePath, stringsInJson ); } );
 }
