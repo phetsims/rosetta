@@ -104,7 +104,7 @@ function saveStrings( simOrLibName, locale, strings ) {
  * @returns {Promise}
  * @private
  */
-async function saveFileToGitHub( filePath, contents, commitMessage ) {
+function saveFileToGitHub( filePath, contents, commitMessage ) {
 
   // wrap the async calls that interact with GitHub into a promise
   return new Promise( function( resolve, reject ) {
