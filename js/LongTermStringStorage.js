@@ -23,7 +23,7 @@ let winston = require( 'winston' );
 
 // constants
 let PREFERENCES = global.preferences;
-let BRANCH = global.preferences.babelBranch || 'master';
+let BRANCH = PREFERENCES.babelBranch || 'master';
 let BASE_URL_FOR_RAW_FILES = constants.GITHUB_RAW_FILE_URL_BASE + '/phetsims/babel/' + BRANCH + '/';
 
 // create a handle to GitHub that will be used for all interactions

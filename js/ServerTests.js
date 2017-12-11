@@ -171,6 +171,11 @@ let testHandlers = {
    */
   testCommittingMultipleFilesToGitHub: function() {
 
+    // this test alters string files, so it is rejected if the tests branch is not being used
+    if ( global.preferences.babelBranch !== 'tests' ){
+      return Promise.reject( 'this test is only permitted when using the tests branch of the babel repo' );
+    }
+
     // make a list of the strings to change - be careful here not to ever mess up real translations
     let simName = 'chains';
     let locales = [ 'ab', 'cs' ];
@@ -219,14 +224,14 @@ module.exports.executeTest = function executeTest( testID ) {
     testHandlers[ testID ]()
       .then( result => {
         if ( result ) {
-          winston.log( 'info', 'test ' + testID + ' result: PASSED' );
+          winston.log( 'info', 'test ' + testID + ' result: PASS' );
         }
         else {
-          winston.log( 'error', 'test ' + testID + ' result: FAILED' );
+          winston.log( 'error', 'test ' + testID + ' result: FAIL' );
         }
       } )
       .catch( ( err ) => {
-        winston.log( 'error', 'test ' + testID + ' result: FAILED, err = ' + err );
+        winston.log( 'error', 'test ' + testID + ' result: FAIL, err = ' + err );
       } );
   }
   else {
