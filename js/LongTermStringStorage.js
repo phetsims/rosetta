@@ -40,29 +40,32 @@ let promiseQueue = new Queue( 1, 1000 );
 
 /**
  * retrieve the stored strings for the given locale and repo
- * @param {string} repoName - name of the simulation or common-code repository where the untranslated strings reside
+ * @param {string} simOrLibName - name of the simulation or common-code repository where the untranslated strings reside
  * @param {string} locale
  * @return {Promise}
  * @public
  */
-function getStrings( simOrLibName, locale ) {
+async function getStrings( simOrLibName, locale ) {
 
   // it is faster and simpler to pull the strings directly from the raw URL than to use the octonode client
   let rawStringFileURL = BASE_URL_FOR_RAW_FILES + simOrLibName + '/' + simOrLibName + '-strings_' + locale + '.json';
   winston.log( 'info', 'requesting raw file from GitHub, URL = ' + rawStringFileURL );
 
-  return nodeFetch( rawStringFileURL, { compress: false } ).then( response => {
-    if ( response.status === 200 ) {
-      // the file was obtained successfully
-      return response.json();
-    }
-    else if ( response.status === 404 ) {
-      return Promise.reject( new Error( 'file not found (response.status = ' + response.status ) + ')' );
-    }
-    else {
-      return Promise.reject( new Error( 'error getting strings (response.status = ' + response.status ) + ')' );
-    }
-  } );
+  // get the file from GitHub
+  const response = await nodeFetch( rawStringFileURL, { compress: false } );
+
+  // handle the response
+  if ( response.status === 200 ) {
+
+    // the file was obtained successfully
+    return response.json();
+  }
+  else if ( response.status === 404 ) {
+    return Promise.reject( new Error( 'file not found (response.status = ' + response.status ) + ')' );
+  }
+  else {
+    return Promise.reject( new Error( 'error getting strings (response.status = ' + response.status ) + ')' );
+  }
 }
 
 /**
@@ -72,11 +75,9 @@ function getStrings( simOrLibName, locale ) {
  * @param {Object} strings
  * @public
  */
-function stringsMatch( simOrLibName, locale, strings ) {
-
-  return getStrings( simOrLibName, locale ).then( stringsFromStorage => {
-    return _.isEqual( strings, stringsFromStorage );
-  } );
+async function stringsMatch( simOrLibName, locale, strings ) {
+  const retrievedStrings = await getStrings( simOrLibName, locale );
+  return _.isEqual( strings, retrievedStrings );
 }
 
 /**
@@ -103,7 +104,7 @@ function saveStrings( simOrLibName, locale, strings ) {
  * @returns {Promise}
  * @private
  */
-function saveFileToGitHub( filePath, contents, commitMessage ) {
+async function saveFileToGitHub( filePath, contents, commitMessage ) {
 
   // wrap the async calls that interact with GitHub into a promise
   return new Promise( function( resolve, reject ) {
@@ -142,7 +143,6 @@ function saveFileToGitHub( filePath, contents, commitMessage ) {
     } );
   } );
 }
-
 
 // export the functions for getting and setting the strings
 module.exports = {
