@@ -1,6 +1,9 @@
 Implementation Notes for the PhET Translation Utility
 -----------------------------------------------------
 
+TODO: Add note about assuming that it is running on same machine as main PhET server.  This is because it needs to be
+able to see the published sims.
+
 TODO: Add explanation of the two ways in which strings can be saved - in the DB for short term storage, and in the
 GitHub repo when submitted.
 

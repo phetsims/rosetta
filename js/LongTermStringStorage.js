@@ -14,29 +14,29 @@
 'use strict';
 
 // modules
-let constants = require( './constants' );
-let nodeFetch = require( 'node-fetch' ); // eslint-disable-line
-let octonode = require( 'octonode' );
-let Queue = require( 'promise-queue' ); // eslint-disable-line
-let _ = require( 'underscore' ); // eslint-disable-line
-let winston = require( 'winston' );
+const constants = require( './constants' );
+const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
+const octonode = require( 'octonode' );
+const Queue = require( 'promise-queue' ); // eslint-disable-line
+const _ = require( 'underscore' ); // eslint-disable-line
+const winston = require( 'winston' );
 
 // constants
-let PREFERENCES = global.preferences;
-let BRANCH = PREFERENCES.babelBranch || 'master';
-let BASE_URL_FOR_RAW_FILES = constants.GITHUB_RAW_FILE_URL_BASE + '/phetsims/babel/' + BRANCH + '/';
+const PREFERENCES = global.preferences;
+const BRANCH = PREFERENCES.babelBranch || 'master';
+const BASE_URL_FOR_RAW_FILES = constants.GITHUB_RAW_FILE_URL_BASE + '/phetsims/babel/' + BRANCH + '/';
 
 // create a handle to GitHub that will be used for all interactions
-let ghClient = octonode.client( {
+const ghClient = octonode.client( {
   username: PREFERENCES.githubUsername,
   password: PREFERENCES.githubPassword
 } );
 
 // create a handle to the repo where strings are stored
-let stringStorageRepo = ghClient.repo( 'phetsims/babel' );
+const stringStorageRepo = ghClient.repo( 'phetsims/babel' );
 
 // create the queue that will make the promises execute in sequential order
-let promiseQueue = new Queue( 1, 1000 );
+const promiseQueue = new Queue( 1, 1000 );
 
 /**
  * retrieve the stored strings for the given locale and repo
@@ -48,7 +48,7 @@ let promiseQueue = new Queue( 1, 1000 );
 async function getStrings( simOrLibName, locale ) {
 
   // it is faster and simpler to pull the strings directly from the raw URL than to use the octonode client
-  let rawStringFileURL = BASE_URL_FOR_RAW_FILES + simOrLibName + '/' + simOrLibName + '-strings_' + locale + '.json';
+  const rawStringFileURL = BASE_URL_FOR_RAW_FILES + simOrLibName + '/' + simOrLibName + '-strings_' + locale + '.json';
   winston.log( 'info', 'requesting raw file from GitHub, URL = ' + rawStringFileURL );
 
   // get the file from GitHub
@@ -89,9 +89,9 @@ async function stringsMatch( simOrLibName, locale, strings ) {
  * @public
  */
 function saveStrings( simOrLibName, locale, strings ) {
-  let filePath = simOrLibName + '/' + simOrLibName + '-strings_' + locale + '.json';
-  let stringsInJson = JSON.stringify( strings, null, 2 );
-  let commitMessage = 'automated commit from rosetta for sim/lib ' + simOrLibName + ', locale ' + locale;
+  const filePath = simOrLibName + '/' + simOrLibName + '-strings_' + locale + '.json';
+  const stringsInJson = JSON.stringify( strings, null, 2 );
+  const commitMessage = 'automated commit from rosetta for sim/lib ' + simOrLibName + ', locale ' + locale;
   return promiseQueue.add( function(){ return saveFileToGitHub( filePath, stringsInJson, commitMessage ); } );
 }
 

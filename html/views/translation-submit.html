@@ -38,28 +38,6 @@
 
   {{??}}
 
-  <h3>The following strings have been submitted:</h3>
-
-  <table>
-    <tr class="table-header">
-      <td>String key</td>
-      <td>Submitted value</td>
-    </tr>
-    {{~it.strings :value:index}}
-    <tr>
-      <td>
-        {{=value.stringKey}}
-      </td>
-      <td dir={{=it.direction}}>
-        {{=value.stringValue}}
-      </td>
-    </tr>
-    {{~}}
-  </table>
-
-  {{? it.error}}
-  <h3>Error! Some strings have failed to submit:</h3>
-
   <table>
     <tr class="table-header">
       <td>String key</td>
@@ -87,8 +65,6 @@
   </p>
 
   <p>Timestamp: {{=it.timestamp}}</p>
-
-  <p>Details: {{=it.errorDetails}}</p>
 
   {{?}}
   {{?}}
