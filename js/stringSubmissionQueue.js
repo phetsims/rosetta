@@ -16,16 +16,14 @@ const fs = require( 'fs' );
 const LongTermStringStorage = require( './LongTermStringStorage' );
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const query = require( 'pg-query' ); // eslint-disable-line
-const querystring = require( 'querystring' );
 const winston = require( 'winston' );
 const _ = require( 'underscore' ); // eslint-disable-line
 
 // constants
 const HTML_SIMS_DIRECTORY = global.preferences.htmlSimsDirectory;
 const PRODUCTION_SERVER_URL = global.preferences.productionServerURL;
-const SKIP_BUILD_REQUEST = typeof global.preferences.debugRosettaSkipBuildRequest === 'undefined' ?
-                           false :
-                           global.preferences.debugRosettaSkipBuildRequest;
+const SKIP_BUILD_REQUEST = typeof global.preferences.debugRosettaSkipBuildRequest !== 'undefined' &&
+                           global.preferences.debugRosettaSkipBuildRequest === 'true';
 
 /**
  * task queue into which translation request are pushed
@@ -315,25 +313,33 @@ async function requestBuild( simName, userID, locale ) {
   const latestVersionOfSim = await getLatestSimVersion( simName );
   winston.log( 'info', 'latest sim version = ' + latestVersionOfSim );
   const dependencies = await getDependencies( simName, latestVersionOfSim );
-  const queryString = querystring.stringify( {
-    'repos': dependencies,
-    'simName': simName,
-    'version': latestVersionOfSim,
-    'locales': locale,
-    'serverName': global.preferences.productionServerName,
-    'authorizationCode': global.preferences.buildServerAuthorizationCode,
-    'userId': userID
-  } );
+  const requestObject = {
+    api: '2.0',
+    dependencies: dependencies,
+    simName: simName,
+    version: latestVersionOfSim,
+    locales: [ locale ],
+    servers: [ 'production' ],
+    brands: [ 'phet' ],
+    translatorId: userID,
+    authorizationCode: global.preferences.buildServerAuthorizationCode
+  };
 
-  // compose the URL for the build request
-  const url = PRODUCTION_SERVER_URL + '/deploy-html-simulation?' + queryString;
-  winston.log( 'info', 'build request URL = ' + url );
+  const url = PRODUCTION_SERVER_URL + '/deploy-html-simulation';
 
   if ( !SKIP_BUILD_REQUEST ){
 
     // send off the request, and return the resulting promise
-    const buildRequestResponse = await nodeFetch( url );
+    const buildRequestResponse = await nodeFetch( url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify( requestObject )
+    } );
     if ( buildRequestResponse.status === 200 ){
+      winston.log( 'info', 'build request returned status ' + buildRequestResponse.status );
       return true;
     }
     else{

@@ -25,7 +25,8 @@ const winston = require( 'winston' );
 const PREFERENCES = global.preferences;
 const BRANCH = PREFERENCES.babelBranch || 'master';
 const BASE_URL_FOR_RAW_FILES = constants.GITHUB_RAW_FILE_URL_BASE + '/phetsims/babel/' + BRANCH + '/';
-const SKIP_STRING_COMMITS = typeof PREFERENCES.debugRosettaSkipStringCommits === 'undefined' ? false : PREFERENCES.debugRosettaSkipStringCommits;
+const SKIP_STRING_COMMITS = typeof PREFERENCES.debugRosettaSkipStringCommits !== 'undefined' &&
+                            PREFERENCES.debugRosettaSkipStringCommits === 'true';
 
 // create a handle to GitHub that will be used for all interactions
 const ghClient = octonode.client( {
