@@ -221,11 +221,9 @@ let testHandlers = {
   testTemp: function() {
     nodeFetch( 'https://phet.colorado.edu/services/metadata/1.2/simulations?format=json&type=html&locale=en&simulation=neuron&summary' )
       .then( function( res ) {
-        debugger;
         return res.json();
       } )
       .then( function( json ) {
-        debugger;
         console.log( json );
       } );
   }

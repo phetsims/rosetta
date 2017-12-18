@@ -13,7 +13,6 @@
 // modules
 const async = require( 'async' );
 const fs = require( 'fs' );
-const LocaleInfo = require( './LocaleInfo' );
 const LongTermStringStorage = require( './LongTermStringStorage' );
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const query = require( 'pg-query' ); // eslint-disable-line
