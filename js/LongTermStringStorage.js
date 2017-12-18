@@ -25,6 +25,7 @@ const winston = require( 'winston' );
 const PREFERENCES = global.preferences;
 const BRANCH = PREFERENCES.babelBranch || 'master';
 const BASE_URL_FOR_RAW_FILES = constants.GITHUB_RAW_FILE_URL_BASE + '/phetsims/babel/' + BRANCH + '/';
+const SKIP_STRING_COMMITS = typeof PREFERENCES.debugRosettaSkipStringCommits === 'undefined' ? false : PREFERENCES.debugRosettaSkipStringCommits;
 
 // create a handle to GitHub that will be used for all interactions
 const ghClient = octonode.client( {
@@ -110,38 +111,49 @@ function saveFileToGitHub( filePath, contents, commitMessage ) {
   // wrap the async calls that interact with GitHub into a promise
   return new Promise( function( resolve, reject ) {
 
-    // attempt to get the file and metadata from GitHub
-    stringStorageRepo.contents( filePath, BRANCH, function( err, data ) {
+    if ( !SKIP_STRING_COMMITS ){
 
-      if ( !err ) {
+      // attempt to get the file and metadata from GitHub
+      stringStorageRepo.contents( filePath, BRANCH, function( err, data ) {
 
-        // update the existing file in GitHub
-        stringStorageRepo.updateContents( filePath, commitMessage, contents, data.sha, BRANCH, function( err, data ) {
-          if ( !err ) {
-            winston.log( 'info', 'successfully committed changes for file ' + filePath );
-            resolve( data );
-          }
-          else {
-            winston.log( 'error', 'unable to commit changes for file ' + filePath, ', err = ' + err );
-            reject( err );
-          }
-        } );
-      }
-      else {
+        if ( !err ) {
 
-        // create a new file in GitHub
-        stringStorageRepo.createContents( filePath, commitMessage, contents, BRANCH, function( err, data ) {
-          if ( !err ) {
-            winston.log( 'info', 'successfully created file ' + filePath );
-            resolve( data );
-          }
-          else {
-            winston.log( 'error', 'unable to create file ' + filePath, ', err = ' + err );
-            reject( err );
-          }
-        } );
-      }
-    } );
+          // update the existing file in GitHub
+          stringStorageRepo.updateContents( filePath, commitMessage, contents, data.sha, BRANCH, function( err, data ) {
+            if ( !err ) {
+              winston.log( 'info', 'successfully committed changes for file ' + filePath );
+              resolve( data );
+            }
+            else {
+              winston.log( 'error', 'unable to commit changes for file ' + filePath, ', err = ' + err );
+              reject( err );
+            }
+          } );
+        }
+        else {
+
+          // create a new file in GitHub
+          stringStorageRepo.createContents( filePath, commitMessage, contents, BRANCH, function( err, data ) {
+            if ( !err ) {
+              winston.log( 'info', 'successfully created file ' + filePath );
+              resolve( data );
+            }
+            else {
+              winston.log( 'error', 'unable to create file ' + filePath, ', err = ' + err );
+              reject( err );
+            }
+          } );
+        }
+      } );
+    }
+    else{
+
+      // Skip the string commits and just log the information about what would have been done.  This is a debug mode
+      // that was added to prevent excessive commits to GitHub during testing.
+      winston.log( 'warn', 'commits skipped due to setting of a debug flag, file = ' + filePath );
+      resolve( {} );
+    }
+
   } );
 }
 

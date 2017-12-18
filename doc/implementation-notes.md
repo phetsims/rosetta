@@ -9,6 +9,8 @@ GitHub repo when submitted.
 
 TODO: Add terms - 'long term string storage', 'short term string storage', 'string set'
 
+TODO: Add info about debug flags debugRosettaSkipBuildRequest and debugRosettaSkipStringCommits.
+
 The term 'project name' is used throughout the code as a means to reference a simulation or common code library.  This
 is essentially the repository name, but the term 'repository name' was avoided in case another VCS system is adopted
 at some point in the future.  Examples of project names are 'build-an-atom' and 'energy-skate-park-basics' and 

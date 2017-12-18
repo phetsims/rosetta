@@ -23,6 +23,10 @@ const _ = require( 'underscore' ); // eslint-disable-line
 
 // constants
 const HTML_SIMS_DIRECTORY = global.preferences.htmlSimsDirectory;
+const PRODUCTION_SERVER_URL = global.preferences.productionServerURL;
+const SKIP_BUILD_REQUEST = typeof global.preferences.debugRosettaSkipBuildRequest === 'undefined' ?
+                           false :
+                           global.preferences.debugRosettaSkipBuildRequest;
 
 /**
  * task queue into which translation request are pushed
@@ -55,7 +59,7 @@ module.exports.stringSubmissionQueue = async.queue( function( task, taskCallback
     let stringKey = repoAndStringKey[ 1 ];
 
     // if this sim or lib isn't represent yet, add it
-    if ( !stringSets[ repo ] ){
+    if ( !stringSets[ repo ] ) {
       stringSets[ repo ] = {};
     }
 
@@ -99,7 +103,7 @@ module.exports.stringSubmissionQueue = async.queue( function( task, taskCallback
       else {
         history = [ newHistoryEntry ];
       }
-      stringSets[repo][ stringKey ] = {
+      stringSets[ repo ][ stringKey ] = {
         value: stringValue,
         history: history
       };
@@ -110,7 +114,7 @@ module.exports.stringSubmissionQueue = async.queue( function( task, taskCallback
       }
     }
     else if ( translatedString ) {
-      stringSets[repo][ stringKey ] = translatedString;
+      stringSets[ repo ][ stringKey ] = translatedString;
     }
   } );
 
@@ -133,20 +137,20 @@ module.exports.stringSubmissionQueue = async.queue( function( task, taskCallback
       requestBuild( simName, userId, targetLocale )
         .then( () => {
 
+          winston.log( 'info', 'build request successfully submitted to build server' );
+
           // render the page that indicates that the translation was successfully submitted
-          const localeInfo = LocaleInfo.localeInfoObject[ targetLocale ];
           res.render( 'translation-submit.html', {
             title: 'Translation submitted',
-            stringsNotSubmitted: results.length > 0,
-            timestamp: new Date().getTime(),
             simName: simName,
-            targetLocale: targetLocale,
-            direction: localeInfo ? localeInfo.direction : 'ltr'
+            targetLocale: targetLocale
           } );
 
           taskCallback();
         } )
         .catch( ( err ) => {
+
+          winston.log( 'error', 'problem building translation, err = ' + err );
 
           // render an error page
           res.render( 'error.html', {
@@ -178,9 +182,12 @@ module.exports.stringSubmissionQueue = async.queue( function( task, taskCallback
  * delete the strings that are stored in short-term storage
  * @private
  */
-function deleteStringsFromDB( userID, locale, simOrLibNames ) {
+async function deleteStringsFromDB( userID, locale, simOrLibNames ) {
 
-  winston.log( 'info', 'removing strings from short term storage for userID = ' + userID + ', locale = ' + locale );
+  winston.log(
+    'info',
+    'removing strings from short term storage for userID = ' + userID + ', sim/libs = ' + simOrLibNames + ', locale = ' + locale
+  );
 
   const simOrLibNamesString = simOrLibNames.join( ' OR ' );
 
@@ -189,26 +196,60 @@ function deleteStringsFromDB( userID, locale, simOrLibNames ) {
   query( deleteQuery, [ userID, locale ], function( err ) {
     if ( !err ) {
       winston.log( 'info', 'successfully deleted saved strings' );
+      return true;
     }
     else {
-      winston.log( 'error', 'problem while trying to remove strings from short term storage, err = ' + err );
+      winston.log( 'warning', 'problem while trying to remove strings from short term storage, err = ' + err );
+      return false;
     }
   } );
 }
 
 /**
- * get the latest version of the specified simulation by looking at the directory structure of published sims
+ * get the latest version of the specified simulation by getting metadata from server
  * @param simName
  * @return {string}
  * @private
  */
-function getLatestSimVersion( simName ){
+async function getLatestSimVersion( simName ) {
+  const URL = PRODUCTION_SERVER_URL +
+              '/services/metadata/1.2/simulations?format=json&type=html&locale=en&simulation=' +
+              simName +
+              '&summary';
+  const response = await nodeFetch( URL );
+  const responseJSON = await response.json();
+  if ( !responseJSON.projects ) {
+    winston.log( 'warn', 'metadata not found for sim ' + simName + ', attempting to get version info from deployment dirs' );
+    const version = getLatestSimVersionFromFS( simName );
+    if ( version ){
+      return version;
+    }
+    else{
+      throw new Error( 'unable to get version info from file system' );
+    }
+  }
+  else {
+    return responseJSON.projects[ 0 ].version.string;
+  }
+}
+
+/**
+ * Get the latest sim version by looking directly at the directories where the sims are kept, i.e. not through an HTTP
+ * request.  This exists primarily to support testing, since there are some sims that are used for translation testing
+ * (primarily the 'chains' sim at the time of this writing) whose version information is not available through PhET's
+ * metadata API.  For this to work when testing on localhost, a fake directory will need to gbe set up on the local
+ * machine, and the file path to said directory will need to be set up in the build-local.json file.  The version info
+ * for the sims will need to be manually maintained.
+ * @param simName
+ * @return {Promise.<string>}
+ */
+function getLatestSimVersionFromFS( simName ) {
 
   // get the directory names in this sim's directory, should mostly be version numbers
-  let versions = fs.readdirSync( HTML_SIMS_DIRECTORY + '/' + simName );
+  let dirNames = fs.readdirSync( HTML_SIMS_DIRECTORY + '/' + simName );
 
   // filter out anything that doesn't look like a version identifier (example of valid version ID is 1.2.3)
-  versions = versions.filter( function( dirName ) {
+  dirNames = dirNames.filter( function( dirName ) {
     const dirNameTokenized = dirName.split( '.' );
     if ( dirNameTokenized.length !== 3 ) {
       return false;
@@ -222,7 +263,7 @@ function getLatestSimVersion( simName ){
   } );
 
   // sort the list of version identifiers from oldest to newest, necessary because default order is lexicographic
-  versions.sort( function( a, b ) {
+  dirNames.sort( function( a, b ) {
     const aTokenized = a.split( '.' );
     const bTokenized = b.split( '.' );
     let result = 0;
@@ -240,7 +281,28 @@ function getLatestSimVersion( simName ){
   } );
 
   // get the latest version identifier
-  return versions[ versions.length - 1 ];
+  return dirNames[ dirNames.length - 1 ];
+}
+
+/**
+ * @param {string} simName
+ * @param {string} version
+ * @return {Promise.<string>} - JSON data with dependencies
+ */
+async function getDependencies( simName, version ) {
+  const URL = PRODUCTION_SERVER_URL +
+              '/sims/html/' +
+              simName +
+              '/' +
+              version +
+              '/dependencies.json';
+  const response = await nodeFetch( URL );
+  if ( response.status === 200 ){
+    return await response.text();
+  }
+  else{
+    throw new Error( 'unable to get dependencies for sim ' + simName + ', version ' + version + '; response.status = ' + response.status );
+  }
 }
 
 /**
@@ -248,34 +310,41 @@ function getLatestSimVersion( simName ){
  * @return Promise
  * @private
  */
-function requestBuild( simName, userID, locale ){
+async function requestBuild( simName, userID, locale ) {
 
-  try {
+  winston.log( 'info', 'build requested for sim = ' + simName + ', locale = ' + locale );
+  const latestVersionOfSim = await getLatestSimVersion( simName );
+  winston.log( 'info', 'latest sim version = ' + latestVersionOfSim );
+  const dependencies = await getDependencies( simName, latestVersionOfSim );
+  const queryString = querystring.stringify( {
+    'repos': dependencies,
+    'simName': simName,
+    'version': latestVersionOfSim,
+    'locales': locale,
+    'serverName': global.preferences.productionServerName,
+    'authorizationCode': global.preferences.buildServerAuthorizationCode,
+    'userId': userID
+  } );
 
-    // get the latest version identifier
-    const version = getLatestSimVersion( simName );
-    winston.log( 'info', 'latest version found for sim ' + simName + ' = ' + version );
+  // compose the URL for the build request
+  const url = PRODUCTION_SERVER_URL + '/deploy-html-simulation?' + queryString;
+  winston.log( 'info', 'build request URL = ' + url );
 
-    // get the dependencies and turn them into a string
-    // TODO: Why is this a require and not a synchronous read?
-    const dependencies = require( HTML_SIMS_DIRECTORY + simName + '/' + version + '/dependencies.json' );
-    const queryString = querystring.stringify( {
-      'repos': JSON.stringify( dependencies ),
-      'simName': simName,
-      'version': version,
-      'locales': locale,
-      'serverName': global.preferences.productionServerName,
-      'authorizationCode': global.preferences.buildServerAuthorizationCode,
-      'userId': userID
-    } );
-
-    // compose the URL for the build request
-    const url = global.preferences.productionServerURL + '/deploy-html-simulation?' + queryString;
+  if ( !SKIP_BUILD_REQUEST ){
 
     // send off the request, and return the resulting promise
-    return nodeFetch.reqest( url );
+    const buildRequestResponse = await nodeFetch( url );
+    if ( buildRequestResponse.status === 200 ){
+      return true;
+    }
+    else{
+      throw new Error( 'build request unsuccessful, status = ' + buildRequestResponse.status );
+    }
   }
-  catch( e ) {
-    return Promise.reject( 'problem requesting build from build server, error = ' + e );
+  else{
+
+    // The build request is being skipped due to the setting of a debug flag.  This capability was added to allow the
+    // build request to be debugged without sending a bunch of bogus requests to the build server.
+    winston.log( 'warn', 'build request skipped due to setting of debug flag' );
   }
 }

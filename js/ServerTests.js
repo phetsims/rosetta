@@ -9,6 +9,7 @@
 
 // modules
 const LongTermStringStorage = require( './LongTermStringStorage' );
+const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const winston = require( 'winston' );
 const _ = require( 'underscore' ); // eslint-disable-line
 
@@ -172,8 +173,8 @@ let testHandlers = {
   testCommittingMultipleFilesToGitHub: function() {
 
     // this test alters string files, so it is rejected if the tests branch is not being used
-    if ( global.preferences.babelBranch !== 'tests' ){
-      return Promise.reject( 'this test is only permitted when using the tests branch of the babel repo' );
+    if ( global.preferences.babelBranch !== 'tests' ) {
+      return Promise.reject( new Error( 'this test is only permitted when using the tests branch of the babel repo' ) );
     }
 
     // make a list of the strings to change - be careful here not to ever mess up real translations
@@ -211,7 +212,24 @@ let testHandlers = {
         // if all promises return without error the test passed
         return true;
       } );
+  },
+
+  /**
+   * temporary test, put unit tests in here as needed
+   * @return {Promise}
+   */
+  testTemp: function() {
+    nodeFetch( 'https://phet.colorado.edu/services/metadata/1.2/simulations?format=json&type=html&locale=en&simulation=neuron&summary' )
+      .then( function( res ) {
+        debugger;
+        return res.json();
+      } )
+      .then( function( json ) {
+        debugger;
+        console.log( json );
+      } );
   }
+
 };
 
 /**

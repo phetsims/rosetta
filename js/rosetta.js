@@ -68,7 +68,14 @@ assert( preferences.babelBranch === 'master' || preferences.babelBranch === 'tes
 // initialize globals
 global.preferences = preferences;
 
-// must be required after global.preferences has been initialized
+// add a global handler for unhandled promise rejections
+process.on( 'unhandledRejection', error => {
+
+  // generally, this shouldn't happen, so if these are in the log they should be tracked down and fixed
+  winston.log( 'error', 'unhandled rejection, error.message =', error.message );
+} );
+
+// add the route handlers, must be required after global.preferences has been initialized
 var routeHandlers = require( __dirname + '/routeHandlers' );
 
 // configure postgres connection
