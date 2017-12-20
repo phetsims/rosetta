@@ -283,5 +283,10 @@
     "simTitle": "Capacitor Lab: Basics",
     "projectName": "capacitor-lab-basics",
     "testUrl": "https://phet.colorado.edu/sims/html/capacitor-lab-basics/latest/capacitor-lab-basics_en.html"
+  },
+  {
+    "simTitle": "Gene Expression Essentials",
+    "projectName": "gene-expression-essentials",
+    "testUrl": "https://phet.colorado.edu/sims/html/gene-expression-essentials/latest/gene-expression-essentials_en.html"
   }
 ]
