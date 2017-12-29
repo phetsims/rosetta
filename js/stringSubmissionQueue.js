@@ -329,6 +329,8 @@ async function requestBuild( simName, userID, locale ) {
 
   if ( !SKIP_BUILD_REQUEST ){
 
+    winston.log( 'info', 'sending build request to server, URL = ' + url );
+
     // send off the request, and return the resulting promise
     const buildRequestResponse = await nodeFetch( url, {
       method: 'POST',

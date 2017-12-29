@@ -221,7 +221,6 @@ module.exports.translateSimulation = function( req, res ) {
   let activeSimsPath = '/phetsims/chipper/master/data/active-sims';
   let userId = ( req.session.userId ) ? req.session.userId : 0; // use an id of 0 for localhost testing
 
-  winston.log( 'info', 'translateSimulation called' ); // TODO: temporary for testing, remove after Dec 2016
   winston.log( 'info', 'loading page for ' + simName + ' ' + targetLocale );
 
   // get the url of the live sim (from simInfoArray)
@@ -238,6 +237,7 @@ module.exports.translateSimulation = function( req, res ) {
 
   // extract strings from the live sim's html file
   request( simUrl, function( error, response, body ) {
+    debugger;
     if ( !error && response.statusCode === 200 ) {
       let i;
       let sims; // array of all active sims
