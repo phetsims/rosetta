@@ -237,7 +237,6 @@ module.exports.translateSimulation = function( req, res ) {
 
   // extract strings from the live sim's html file
   request( simUrl, function( error, response, body ) {
-    debugger;
     if ( !error && response.statusCode === 200 ) {
       let i;
       let sims; // array of all active sims
