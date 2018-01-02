@@ -58,7 +58,7 @@ $( document ).ready( function() {
   var once = false;
 
   // selector for content-editable divs (where the user input goes)
-  var inputSelector = '.rosetta-table div[contenteditable]';
+  var inputSelector = '.string-translation-table div[contenteditable]';
   var inputs = $( inputSelector );
 
   /**
@@ -77,6 +77,10 @@ $( document ).ready( function() {
    */
   function testTranslationNew() {
 
+    // NOTE TO FUTURE MAINTAINERS: I (jbphet) tried using jQuery's post method for the post performed below, but it
+    // triggered my popup blocker.  The approach used below, which creates a temporory form element and submits it,
+    // didn't trigger the popup blocker, so I went with it.
+
     // create the URL for the post request
     var testTranslationURL = window.location.origin + '/translate/sim/test/' + simData.getAttribute( 'data-sim-name' );
 
@@ -86,14 +90,35 @@ $( document ).ready( function() {
     translatedStringsForm.method = 'POST';
     translatedStringsForm.action = testTranslationURL;
 
-    // create an input
-    var input = document.createElement( 'input' );
-    input.type = 'text';
-    input.name = 'variable';
-    input.value = 'lalalalala';
+    // fill in the fields of this new form with the data from the main strings form
+    var inputs = $( '.string-translation-table tr' );
+    inputs.each( function( i, row ) {
+      var contentEditable = $( $( row ).find( 'div[contenteditable]' ).get( 0 ) );
+      if ( contentEditable ) {
+        var translation = contentEditable.text();
+        var repo = row.getAttribute( 'data-string-repo' );
+        if ( repo && translation && translation.length > 0 ) {
 
-    // add the input to the form
-    translatedStringsForm.appendChild( input );
+          // TODO: In the code from which this was leveraged, RTL markers were explicitly added.  Are they needed here?
+          /*
+          // add RTL embedding markers for RTL strings
+          if ( rtl ) {
+            translation = '\u202b' + translation + '\u202c';
+          }
+          else {
+            translation = '\u202a' + translation + '\u202c';
+          }
+          */
+
+          // create an input field for the translated string
+          var input = document.createElement( 'input' );
+          input.type = 'text';
+          input.name = repo.replace( /-/g, '_' ).toUpperCase() + '/' + row.getAttribute( 'data-string-key' );
+          input.value = translation;
+          translatedStringsForm.appendChild( input );
+        }
+      }
+    } );
 
     // add the form to DOM
     document.body.appendChild( translatedStringsForm );
@@ -101,43 +126,8 @@ $( document ).ready( function() {
     // submit
     translatedStringsForm.submit();
 
-    // remove the form, now that it has done its work
+    // remove the form now that it has been submitted
     document.body.removeChild( translatedStringsForm );
-
-    // TODO: For cleanliness, I should probably remove the new form.
-    /*
-        var simUrl = simData.getAttribute( 'data-sim-url' );
-        var inputs = $( '.rosetta-table tr' );
-
-        // go through the table of translated strings and populate an object with strings that should be replaced in the sim
-        var stringsToReplace = {};
-        inputs.each( function( i, row ) {
-          var contentEditable = $( $( row ).find( 'div[contenteditable]' ).get( 0 ) );
-          if ( contentEditable ) {
-            var translation = contentEditable.text();
-            var repo = row.getAttribute( 'data-string-repo' );
-            if ( repo && translation && translation.length > 0 ) {
-
-              // add RTL embedding markers for RTL strings
-              if ( rtl ) {
-                translation = '\u202b' + translation + '\u202c';
-              }
-              else {
-                translation = '\u202a' + translation + '\u202c';
-              }
-              var stringKey = repo.replace( /-/g, '_' ).toUpperCase() + '/' + row.getAttribute( 'data-string-key' );
-              stringsToReplace[ stringKey ] = translation;
-            }
-          }
-        } );
-
-        // encode the strings in a form that can be used in a URL
-        var encodedStrings = encodeURIComponent( JSON.stringify( stringsToReplace ) );
-        encodedStrings = encodedStrings.replace( /%5C%5Cn/g, '%5Cn' ); // put back newlines
-
-        var win = window.open( simUrl + '?' + 'strings=' + encodedStrings, '_blank' );
-        win.focus();*/
-
   }
 
   /**
@@ -146,7 +136,7 @@ $( document ).ready( function() {
    */
   function testTranslation() {
     var simUrl = simData.getAttribute( 'data-sim-url' );
-    var inputs = $( '.rosetta-table tr' );
+    var inputs = $( '.string-translation-table tr' );
 
     // go through the table of translated strings and populate an object with strings that should be replaced in the sim
     var stringsToReplace = {};
