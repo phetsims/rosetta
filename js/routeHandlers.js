@@ -16,7 +16,6 @@ const https = require( 'https' );
 const query = require( 'pg-query' ); // eslint-disable-line
 const request = require( 'request' );
 const winston = require( 'winston' );
-const constants = require( './constants' );
 const LocaleInfo = require( './LocaleInfo' );
 const stringSubmissionQueue = require( './stringSubmissionQueue' ).stringSubmissionQueue; // eslint-disable-line
 const ServerTests = require( './ServerTests' );
@@ -24,13 +23,15 @@ const TranslatableSimInfo = require( './TranslatableSimInfo' );
 const TranslationUtils = require( './TranslationUtils' );
 const escapeHTML = TranslationUtils.escapeHTML;
 const renderError = TranslationUtils.renderError;
+const RosettaConstants = require( './RosettaConstants' );
 const _ = require( 'underscore' ); // eslint-disable-line
 
 // constants
-const GITHUB_RAW_FILE_URL_BASE = constants.GITHUB_RAW_FILE_URL_BASE;
-const SIM_INFO_ARRAY = constants.SIM_INFO_ARRAY;
+const GITHUB_RAW_FILE_URL_BASE = RosettaConstants.GITHUB_RAW_FILE_URL_BASE;
+const SIM_INFO_ARRAY = RosettaConstants.SIM_INFO_ARRAY;
 const TITLE = 'PhET Translation Utility (HTML5)';
 const ASCII_REGEX = /^[ -~]+$/;
+const STRING_VAR_IN_HTML_FILES = 'window.phet.chipper.strings';
 
 // utility function for sending the user to the login page
 function sendUserToLoginPage( res, host, destinationUrl ) {
@@ -525,14 +526,42 @@ module.exports.submitStrings = function( req, res ) {
  */
 module.exports.testStrings = function( req, res ) {
 
-  let simName = req.params.simName;
+  const simName = req.params.simName;
 
-  winston.log( 'info', 'test strings for ' + simName );
+  winston.log( 'info', 'test-of-strings request received for sim ' + simName );
 
-  // TODO: Temp for testing.
-  res.json( req.body );
+  TranslationUtils.getLatestSimHtml( simName )
+    .then( simHtml => {
 
-  // TODO: fill in the rest
+      // get the string definitions from the HTML file
+      const re = new RegExp( STRING_VAR_IN_HTML_FILES + '.*$', 'm' );
+      const extractedStrings = simHtml.match( re );
+      let extractedStringsJson = extractedStrings[ 0 ]
+        .replace( STRING_VAR_IN_HTML_FILES + ' = ', '' )
+        .replace( /;$/m, '' );
+      const stringsObject = JSON.parse( extractedStringsJson );
+
+      // replace values in the extracted strings with those specified by the user
+      const translatedStringsObject = req.body;
+      _.keys( translatedStringsObject ).forEach( key => {
+        if ( stringsObject.en[ key ] ){
+          stringsObject.en[ key ] = translatedStringsObject[ key ];
+        }
+        else{
+          winston( 'error', 'key missing in extracted strings, key = ' + key );
+        }
+      } );
+      const translatedStrings = STRING_VAR_IN_HTML_FILES + ' = ' + JSON.stringify( stringsObject ) + ';';
+
+      // insert the changed strings into the sim HTML
+      simHtml = simHtml.replace( re, translatedStrings );
+
+      winston.log( 'info', 'successfully replaced strings in published sim with submissions from user, returning result' );
+
+      // return the modified sim HTML as the response to the request
+      res.send( simHtml );
+    } )
+    .catch( err => renderError( res, 'Error testing translation...', err ) );
 };
 
 /**

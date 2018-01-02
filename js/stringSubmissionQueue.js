@@ -17,11 +17,12 @@ const LongTermStringStorage = require( './LongTermStringStorage' );
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const query = require( 'pg-query' ); // eslint-disable-line
 const winston = require( 'winston' );
+const RosettaConstants = require( './RosettaConstants' );
 const _ = require( 'underscore' ); // eslint-disable-line
 
 // constants
 const HTML_SIMS_DIRECTORY = global.preferences.htmlSimsDirectory;
-const PRODUCTION_SERVER_URL = global.preferences.productionServerURL;
+const PRODUCTION_SERVER_URL = RosettaConstants.PRODUCTION_SERVER_URL;
 const SKIP_BUILD_REQUEST = typeof global.preferences.debugRosettaSkipBuildRequest !== 'undefined' &&
                            global.preferences.debugRosettaSkipBuildRequest === 'true';
 

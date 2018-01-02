@@ -16,11 +16,11 @@
 'use strict';
 
 // modules
-var constants = require( './constants' );
-var fs = require( 'fs' );
+const RosettaConstants = require( './RosettaConstants' );
+const fs = require( 'fs' );
 
 // constants
-var SIM_INFO_ARRAY = constants.SIM_INFO_ARRAY;
+const SIM_INFO_ARRAY = RosettaConstants.SIM_INFO_ARRAY;
 
 /**
  * Get the simulation information given the project name.
@@ -30,8 +30,8 @@ var SIM_INFO_ARRAY = constants.SIM_INFO_ARRAY;
 module.exports.getSimInfoByProjectName = function( projectName ) {
 
   // read file every time in case it has changed
-  var simInfoArray = JSON.parse( fs.readFileSync( SIM_INFO_ARRAY, 'utf8' ) );
-  for ( var i = 0; i < simInfoArray.length; i++ ) {
+  const simInfoArray = JSON.parse( fs.readFileSync( SIM_INFO_ARRAY, 'utf8' ) );
+  for ( let i = 0; i < simInfoArray.length; i++ ) {
     if ( projectName === simInfoArray[ i ].projectName ) {
       return simInfoArray[ i ];
     }

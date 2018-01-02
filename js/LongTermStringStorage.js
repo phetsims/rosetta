@@ -14,17 +14,17 @@
 'use strict';
 
 // modules
-const constants = require( './constants' );
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const octonode = require( 'octonode' );
 const Queue = require( 'promise-queue' ); // eslint-disable-line
-const _ = require( 'underscore' ); // eslint-disable-line
+const RosettaConstants = require( './RosettaConstants' );
 const winston = require( 'winston' );
+const _ = require( 'underscore' ); // eslint-disable-line
 
 // constants
 const PREFERENCES = global.preferences;
 const BRANCH = PREFERENCES.babelBranch || 'master';
-const BASE_URL_FOR_RAW_FILES = constants.GITHUB_RAW_FILE_URL_BASE + '/phetsims/babel/' + BRANCH + '/';
+const BASE_URL_FOR_RAW_FILES = RosettaConstants.GITHUB_RAW_FILE_URL_BASE + '/phetsims/babel/' + BRANCH + '/';
 const SKIP_STRING_COMMITS = typeof PREFERENCES.debugRosettaSkipStringCommits !== 'undefined' &&
                             PREFERENCES.debugRosettaSkipStringCommits === 'true';
 
@@ -54,6 +54,7 @@ async function getStrings( simOrLibName, locale ) {
   winston.log( 'info', 'requesting raw file from GitHub, URL = ' + rawStringFileURL );
 
   // get the file from GitHub
+  // TODO: Why is compress set to false?  Try getting rid of that option and see if things still work.
   const response = await nodeFetch( rawStringFileURL, { compress: false } );
 
   // handle the response
