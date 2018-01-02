@@ -167,12 +167,30 @@ if ( !ENABLED ) {
 // route that checks whether the user is logged in
 app.get( '/translate*', routeHandlers.checkForValidSession );
 
+// TODO: the following two routes are for debugging, and should be removed or put behind a "verbose" flag eventually
+app.post( '/translate*', function( req, res, next ){
+  console.log( 'post request received, url = ' + req.url );
+  next();
+} );
+app.get( '/translate*', function( req, res, next ){
+  console.log( 'get request received, url = ' + req.url );
+  next();
+} );
+// end of loggers
+
 // landing page for the translation utility
 app.get( '/translate', routeHandlers.chooseSimulationAndLanguage );
 
 // route for translating a specific sim to a specific language
 app.get( '/translate/sim/:simName?/:targetLocale?', routeHandlers.translateSimulation );
+
+// post route for testing translated strings (does not save them)
+app.post( '/translate/sim/test/:simName?', routeHandlers.testStrings );
+
+// post route for short term storage of strings
 app.post( '/translate/sim/save/:simName?/:targetLocale?', routeHandlers.saveStrings );
+
+// post route for long term storage of strings
 app.post( '/translate/sim/:simName?/:targetLocale?', routeHandlers.submitStrings );
 
 // route for extracting strings from a sim
@@ -187,6 +205,7 @@ app.get( '/translate/runTest/:testID', routeHandlers.runTest );
 
 // fall through route
 app.get( '/*', routeHandlers.pageNotFound );
+app.post( '/*', routeHandlers.pageNotFound );
 
 // start the server
 app.listen( LISTEN_PORT, function() { winston.log( 'info', 'Listening on port ' + LISTEN_PORT ); } );

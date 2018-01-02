@@ -517,6 +517,25 @@ module.exports.submitStrings = function( req, res ) {
 };
 
 /**
+ * Route for testing a translation by replacing strings in the currently published simulation with those provided in the
+ * request.  This does not save the strings.  This method opens a new tab in which the translated simulation will
+ * appear.
+ * @param {Object} req
+ * @param {Object} res
+ */
+module.exports.testStrings = function( req, res ) {
+
+  let simName = req.params.simName;
+
+  winston.log( 'info', 'test strings for ' + simName );
+
+  // TODO: Temp for testing.
+  res.json( req.body );
+
+  // TODO: fill in the rest
+};
+
+/**
  * Route for saving strings (when the user presses the "Save" button on the translate sim page).
  * Strings are added to the postgres database.
  * @param req
@@ -595,7 +614,6 @@ module.exports.showOffLinePage = function( req, res ) {
  * @param res
  */
 function pageNotFound( req, res ) {
-
   res.send( '<p>Error: Page not found.  URL = ' + req.url + '</p>' );
 }
 
