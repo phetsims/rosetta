@@ -99,8 +99,6 @@ $( document ).ready( function() {
         var repo = row.getAttribute( 'data-string-repo' );
         if ( repo && translation && translation.length > 0 ) {
 
-          // TODO: In the code from which this was leveraged, RTL markers were explicitly added.  Are they needed here?
-          /*
           // add RTL embedding markers for RTL strings
           if ( rtl ) {
             translation = '\u202b' + translation + '\u202c';
@@ -108,7 +106,6 @@ $( document ).ready( function() {
           else {
             translation = '\u202a' + translation + '\u202c';
           }
-          */
 
           // create an input field for the translated string
           var input = document.createElement( 'input' );
