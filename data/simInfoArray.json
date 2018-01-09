@@ -157,7 +157,7 @@
   {
     "simTitle": "Chains",
     "projectName": "chains",
-    "testUrl": "https://phet.colorado.edu/sims/html/chains/latest/chains_en.html"
+    "testUrl": "https://ox-dev.colorado.edu/sims/html/chains/latest/chains_en.html"
   },
   {
     "simTitle": "Forces and Motion: Basics",
@@ -283,10 +283,5 @@
     "simTitle": "Capacitor Lab: Basics",
     "projectName": "capacitor-lab-basics",
     "testUrl": "https://phet.colorado.edu/sims/html/capacitor-lab-basics/latest/capacitor-lab-basics_en.html"
-  },
-  {
-    "simTitle": "Gene Expression Essentials",
-    "projectName": "gene-expression-essentials",
-    "testUrl": "https://phet.colorado.edu/sims/html/gene-expression-essentials/latest/gene-expression-essentials_en.html"
   }
 ]

@@ -6,7 +6,7 @@
  *
  * TODO: This module is essentially hardcoded as of late January 2015, but at some point should become dynamic,
  * meaning that it will generate the sim list and URLs in some standard way based on the list of active simulations
- * already maintained in GitHub (see perennial/data/active-sims).  The reason that it is hardcoded now is that most sims
+ * already maintained in GitHub (see chipper/data/active-sims).  The reason that it is hardcoded now is that most sims
  * haven't been published with the code that supports the needed approach for query parameter string loading.
  *
  * @author John Blanco
@@ -16,11 +16,11 @@
 'use strict';
 
 // modules
-const RosettaConstants = require( './RosettaConstants' );
-const fs = require( 'fs' );
+var constants = require( './constants' );
+var fs = require( 'fs' );
 
 // constants
-const SIM_INFO_ARRAY = RosettaConstants.SIM_INFO_ARRAY;
+var SIM_INFO_ARRAY = constants.SIM_INFO_ARRAY;
 
 /**
  * Get the simulation information given the project name.
@@ -30,8 +30,8 @@ const SIM_INFO_ARRAY = RosettaConstants.SIM_INFO_ARRAY;
 module.exports.getSimInfoByProjectName = function( projectName ) {
 
   // read file every time in case it has changed
-  const simInfoArray = JSON.parse( fs.readFileSync( SIM_INFO_ARRAY, 'utf8' ) );
-  for ( let i = 0; i < simInfoArray.length; i++ ) {
+  var simInfoArray = JSON.parse( fs.readFileSync( SIM_INFO_ARRAY, 'utf8' ) );
+  for ( var i = 0; i < simInfoArray.length; i++ ) {
     if ( projectName === simInfoArray[ i ].projectName ) {
       return simInfoArray[ i ];
     }

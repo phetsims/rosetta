@@ -13,14 +13,12 @@
 // modules
 var assert = require( 'assert' );
 var bodyParser = require( 'body-parser' ); // eslint-disable-line require-statement-match
-var cookieParser = require( 'cookie-parser' ); // eslint-disable-line require-statement-match
 var dateformat = require( 'dateformat' );
 var doT = require( 'express-dot' ); // eslint-disable-line require-statement-match
 var express = require( 'express' );
 var fs = require( 'fs' );
 var parseArgs = require( 'minimist' ); // eslint-disable-line require-statement-match
 var query = require( 'pg-query' ); // eslint-disable-line require-statement-match
-var session = require( 'express-session' ); // eslint-disable-line require-statement-match
 var winston = require( 'winston' );
 
 // constants
@@ -68,15 +66,8 @@ assert( preferences.babelBranch === 'master' || preferences.babelBranch === 'tes
 // initialize globals
 global.preferences = preferences;
 
-// add a global handler for unhandled promise rejections
-process.on( 'unhandledRejection', error => {
-
-  // generally, this shouldn't happen, so if these are in the log they should be tracked down and fixed
-  winston.log( 'error', 'unhandled rejection, error.message =', error.message );
-} );
-
-// add the route handlers, must be required after global.preferences has been initialized
-var routeHandlers = require( __dirname + '/routeHandlers' );
+// must be required after global.preferences has been initialized
+var routes = require( __dirname + '/routes' );
 
 // configure postgres connection
 if ( preferences.pgConnectionString ) {
@@ -146,12 +137,8 @@ app.use( '/translate/img', express.static( __dirname + '/../img' ) );
 app.use( '/translate/js', express.static( __dirname ) );
 
 // need cookieParser middleware before we can do anything with cookies
-app.use( cookieParser() );
-app.use( session( {
-  secret: preferences.rosettaSessionSecret,
-  resave: false,
-  saveUninitialized: false
-} ) );
+app.use( express.cookieParser() );
+app.use( express.session( { secret: preferences.rosettaSessionSecret } ) );
 app.use( bodyParser.json() );
 app.use( bodyParser.urlencoded( { extended: false } ) );
 
@@ -159,53 +146,29 @@ app.use( bodyParser.urlencoded( { extended: false } ) );
 // Set up the routes.  The order matters.
 //----------------------------------------------------------------------------
 
-// route for showing the 'down for maintenance' page when needed
+// route for showing 'down for maintenance' page when needed
 if ( !ENABLED ) {
-  app.get( '/translate', routeHandlers.showOffLinePage );
+  app.get( '/translate', routes.showOffLinePage );
 }
 
 // route that checks whether the user is logged in
-app.get( '/translate*', routeHandlers.checkForValidSession );
-
-// TODO: the following two routes are for debugging, and should be removed or put behind a "verbose" flag eventually
-app.post( '/translate*', function( req, res, next ){
-  console.log( 'post request received, url = ' + req.url );
-  next();
-} );
-app.get( '/translate*', function( req, res, next ){
-  console.log( 'get request received, url = ' + req.url );
-  next();
-} );
-// end of loggers
+app.get( '/translate*', routes.checkForValidSession );
 
 // landing page for the translation utility
-app.get( '/translate', routeHandlers.chooseSimulationAndLanguage );
+app.get( '/translate', routes.chooseSimulationAndLanguage );
 
 // route for translating a specific sim to a specific language
-app.get( '/translate/sim/:simName?/:targetLocale?', routeHandlers.translateSimulation );
-
-// post route for testing translated strings (does not save them)
-app.post( '/translate/sim/test/:simName?', routeHandlers.testStrings );
-
-// post route for short term storage of strings
-app.post( '/translate/sim/save/:simName?/:targetLocale?', routeHandlers.saveStrings );
-
-// post route for long term storage of strings
-app.post( '/translate/sim/:simName?/:targetLocale?', routeHandlers.submitStrings );
+app.get( '/translate/sim/:simName?/:targetLocale?', routes.translateSimulation );
+app.post( '/translate/sim/save/:simName?/:targetLocale?', routes.saveStrings );
+app.post( '/translate/sim/:simName?/:targetLocale?', routes.submitStrings );
 
 // route for extracting strings from a sim
-app.get( '/translate/extractStrings', routeHandlers.extractStringsAPI );
+app.get( '/translate/extractStrings', routes.extractStringsAPI );
 
-// logout
-app.get( '/translate/logout', routeHandlers.logout );
-
-// test routes - used for testing and debugging
-app.get( '/translate/test/', routeHandlers.test );
-app.get( '/translate/runTest/:testID', routeHandlers.runTest );
+app.get( '/translate/logout', routes.logout );
 
 // fall through route
-app.get( '/*', routeHandlers.pageNotFound );
-app.post( '/*', routeHandlers.pageNotFound );
+app.get( '/*', routes.pageNotFound );
 
 // start the server
 app.listen( LISTEN_PORT, function() { winston.log( 'info', 'Listening on port ' + LISTEN_PORT ); } );

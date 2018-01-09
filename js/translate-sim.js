@@ -4,20 +4,15 @@
  * Javascript for translate-sim.html
  * @author Michael Kauzmann
  * @author Aaron Davis
- * @author John Blanco
  */
 /* eslint-env node */
 'use strict';
-
-// varants
-var SINGLE_BRACE_PATTERN_REGULAR_EXP = /\{\d+\}/g;
-var DOUBLE_BRACE_PATTERN_REGULAR_EXP = /\{\{\w+\}\}/g;
 
 /**
  * Modified from http://stackoverflow.com/questions/1125292/how-to-move-cursor-to-end-of-contenteditable-entity/3866442#3866442
  * @param contentEditableElement
  */
-function setEndOfContentEditable( contentEditableElement ) {
+function setEndOfContenteditable( contentEditableElement ) {
 
   var range;
 
@@ -54,11 +49,11 @@ $( document ).ready( function() {
   var rtl = simData.getAttribute( 'data-direction' ) === 'rtl';
   var savedSpans = $( '.savedSpan' );
 
-  // flag to help only restore save button once from inputs
+  // Var to help only restore save button once from inputs
   var once = false;
 
   // selector for content-editable divs (where the user input goes)
-  var inputSelector = '.string-translation-table div[contenteditable]';
+  var inputSelector = '.rosetta-table div[contenteditable]';
   var inputs = $( inputSelector );
 
   /**
@@ -73,77 +68,19 @@ $( document ).ready( function() {
   }
 
   /**
-   * handler that will test the strings currently shown in the
-   */
-  function testTranslationNew() {
-
-    // NOTE TO FUTURE MAINTAINERS: I (jbphet) tried using jQuery's post method for the post performed below, but it
-    // triggered my popup blocker.  The approach used below, which creates a temporory form element and submits it,
-    // didn't trigger the popup blocker, so I went with it.
-
-    // create the URL for the post request
-    var testTranslationURL = window.location.origin + '/translate/sim/test/' + simData.getAttribute( 'data-sim-name' );
-
-    // create a form whose response will appear in a new window
-    var translatedStringsForm = document.createElement( 'form' );
-    translatedStringsForm.target = '_blank';
-    translatedStringsForm.method = 'POST';
-    translatedStringsForm.action = testTranslationURL;
-
-    // fill in the fields of this new form with the data from the main strings form
-    var inputs = $( '.string-translation-table tr' );
-    inputs.each( function( i, row ) {
-      var contentEditable = $( $( row ).find( 'div[contenteditable]' ).get( 0 ) );
-      if ( contentEditable ) {
-        var translation = contentEditable.text();
-        var repo = row.getAttribute( 'data-string-repo' );
-        if ( repo && translation && translation.length > 0 ) {
-
-          // add RTL embedding markers for RTL strings
-          if ( rtl ) {
-            translation = '\u202b' + translation + '\u202c';
-          }
-          else {
-            translation = '\u202a' + translation + '\u202c';
-          }
-
-          // create an input field for the translated string
-          var input = document.createElement( 'input' );
-          input.type = 'text';
-          input.name = repo.replace( /-/g, '_' ).toUpperCase() + '/' + row.getAttribute( 'data-string-key' );
-          input.value = translation;
-          translatedStringsForm.appendChild( input );
-        }
-      }
-    } );
-
-    // add the form to DOM
-    document.body.appendChild( translatedStringsForm );
-
-    // submit
-    translatedStringsForm.submit();
-
-    // remove the form now that it has been submitted
-    document.body.removeChild( translatedStringsForm );
-  }
-
-  /**
    * Handler for the "Test" button on the translate page.  This creates a URL with a query parameter that contains all
    * of the translated strings and opens the sim with them so that the user can see how the translation looks.
    */
-  function testTranslation() {
+  function testButtonEventListener() {
     var simUrl = simData.getAttribute( 'data-sim-url' );
-    var inputs = $( '.string-translation-table tr' );
-
-    // go through the table of translated strings and populate an object with strings that should be replaced in the sim
     var stringsToReplace = {};
+    var inputs = $( '.rosetta-table tr' );
     inputs.each( function( i, row ) {
       var contentEditable = $( $( row ).find( 'div[contenteditable]' ).get( 0 ) );
       if ( contentEditable ) {
         var translation = contentEditable.text();
         var repo = row.getAttribute( 'data-string-repo' );
         if ( repo && translation && translation.length > 0 ) {
-
           // add RTL embedding markers for RTL strings
           if ( rtl ) {
             translation = '\u202b' + translation + '\u202c';
@@ -156,8 +93,6 @@ $( document ).ready( function() {
         }
       }
     } );
-
-    // encode the strings in a form that can be used in a URL
     var encodedStrings = encodeURIComponent( JSON.stringify( stringsToReplace ) );
     encodedStrings = encodedStrings.replace( /%5C%5Cn/g, '%5Cn' ); // put back newlines
 
@@ -165,8 +100,8 @@ $( document ).ready( function() {
     win.focus();
   }
 
-  testButtonTop.addEventListener( 'click', testTranslationNew );
-  testButtonBottom.addEventListener( 'click', testTranslation );
+  testButtonTop.addEventListener( 'click', testButtonEventListener );
+  testButtonBottom.addEventListener( 'click', testButtonEventListener );
 
   function saveButtonEventListener() {
     syncInputs();
@@ -233,77 +168,50 @@ $( document ).ready( function() {
    * @returns {boolean}
    */
   function validateRow( row ) {
-
     var validated = true;
-
-    // get the data cells for this row
-    var tableDataCells = $( row ).find( 'td' );
-
-    // only validate if there is some data (this skips header rows)
-    if ( tableDataCells.length > 0 ) {
-
-      // get the non-translated string
-      var nonTranslatedString = $( tableDataCells[ 1 ] ).text();
-
-      // get the user-submitted translated string
-      var tableDataCell = $( tableDataCells[ 2 ] );
-      var input = $( tableDataCell.find( 'div[contenteditable]' ).get( 0 ) );
-      var translatedString = input.text();
-
-      // create lists of the placeholders in the non-translated string
-      var singleBracePlaceHolders = nonTranslatedString.match( SINGLE_BRACE_PATTERN_REGULAR_EXP ) || [];
-      var doubleBracePlaceHolders = nonTranslatedString.match( DOUBLE_BRACE_PATTERN_REGULAR_EXP ) || [];
-
-      // create the arrays where any missing or extra placeholders in the strings will be tracked
+    var messageFormatRegexp = /\{\d+\}/g;
+    var tds = $( row ).find( 'td' );
+    var englishMatches = $( tds[ 1 ] ).text().match( messageFormatRegexp );
+    if ( englishMatches ) {
+      var td = $( tds[ 2 ] );
+      var input = $( td.find( 'div[contenteditable]' ).get( 0 ) );
+      var value = input.text();
       var missingPlaceholders = [];
       var extraPlaceholders = [];
 
-      // it is valid for the string to be empty, i.e. no translation submitted, so only validate if it is NOT empty
-      if ( translatedString !== '' ) {
+      var translatedMatches = value.match( messageFormatRegexp );
 
-        var singleBracePlaceholdersInTranslation = translatedString.match( SINGLE_BRACE_PATTERN_REGULAR_EXP ) || [];
-        var doubleBracePlaceholdersInTranslation = translatedString.match( DOUBLE_BRACE_PATTERN_REGULAR_EXP ) || [];
-
-        var placeHolders = doubleBracePlaceHolders.concat( singleBracePlaceHolders );
-        var placeHoldersInTranslation = doubleBracePlaceholdersInTranslation.concat( singleBracePlaceholdersInTranslation );
-
-        // make sure every placeholder that exists in the untranslated string exists in the translation
-        for ( var i = 0; i < placeHolders.length; i++ ) {
-          if ( translatedString.length > 0 && translatedString.indexOf( placeHolders[ i ] ) === -1 ) {
-            validated = false;
-            missingPlaceholders.push( placeHolders[ i ] );
-          }
-          if ( placeHoldersInTranslation ) {
-            var index = placeHoldersInTranslation.indexOf( placeHolders[ i ] );
-            if ( index !== -1 ) {
-              placeHoldersInTranslation.splice( index, 1 );
-            }
-          }
-        }
-
-        // make sure that no extra placeholders exist in the translation
-        if ( placeHoldersInTranslation && placeHoldersInTranslation.length ) {
+      // make sure every MessageFormat placeholder that exists in the English exists in the translation
+      for ( var i = 0; i < englishMatches.length; i++ ) {
+        if ( value.length > 0 && value.indexOf( englishMatches[ i ] ) === -1 ) {
           validated = false;
-          extraPlaceholders = placeHoldersInTranslation;
+          missingPlaceholders.push( englishMatches[ i ] );
+        }
+        if ( translatedMatches ) {
+          var index = translatedMatches.indexOf( englishMatches[ i ] );
+          if ( index !== -1 ) {
+            translatedMatches.splice( index, 1 );
+          }
         }
       }
+      if ( translatedMatches && translatedMatches.length ) {
+        validated = false;
+        extraPlaceholders = translatedMatches;
+      }
 
-      // remove any previous error message that may be present
-      tableDataCell.find( 'img:last-child' ).remove();
-
-      // if the validation failed, add an error message
+      td.find( 'img:last-child' ).remove(); // remove the old error message either way
       if ( missingPlaceholders.length || extraPlaceholders.length ) {
         input.css( { outline: '1px solid red' } );
         var img = $( '<img>', { src: '/translate/img/warning.png', class: 'warning' } );
-        tableDataCell.append( img );
+        td.append( img );
 
         img.click( function() {
           var errorMessage = [ 'Your translation has the following errors:\n' ];
           if ( missingPlaceholders.length ) {
-            errorMessage.push( 'missing placeholder(s) in submission: ' + missingPlaceholders.join( ', ' ) );
+            errorMessage.push( 'missing MessageFormat placeholders: ' + missingPlaceholders.join( ', ' ) );
           }
           if ( extraPlaceholders.length ) {
-            errorMessage.push( 'extra placeholder(s) in submission: ' + extraPlaceholders.join( ', ' ) );
+            errorMessage.push( 'extra MessageFormat placeholders: ' + extraPlaceholders.join( ', ' ) );
           }
           alert( errorMessage.join( '\n' ) );
         } );
@@ -312,7 +220,6 @@ $( document ).ready( function() {
         input.css( { outline: 'initial' } );
       }
     }
-
     return validated;
   }
 
@@ -330,10 +237,10 @@ $( document ).ready( function() {
     return validated;
   }
 
-// validate the inputs before submitting the form
+  // validate the inputs before submitting the form
   $( '#strings' ).submit( function( event ) {
     if ( !validatePatterns() ) {
-      $( '.validation-message' ).text( 'Your translation has MessageFormat errors. Please correct these before submitting.' );
+      $( '.validation-message' ).text( 'Your translation has MessageFormat errors. Please correct these before submitting' );
       event.preventDefault();
     }
     else {
@@ -344,18 +251,18 @@ $( document ).ready( function() {
     }
   } );
 
-// fix dir and text-align for RTL languages
+  // fix dir and text-align for RTL languages
   if ( rtl ) {
     inputs.attr( 'dir', 'rtl' );
     inputs.css( 'text-align', 'right' );
   }
 
-// disable pressing enter in inputs because it complicates things by adding <br> and possibly other html
+  // disable pressing enter in inputs because it complicates things by adding <br> and possibly other html
   $( document ).on( 'keypress', inputSelector, function( e ) {
     return e.which !== 13;
   } );
 
-// on every change, copy the content from the editable div to a hidden input so it gets submitted with the form
+  // on every change, copy the content from the editable div to a hidden input so it gets submitted with the form
   $( document ).on( 'keyup paste', inputSelector, function( e ) {
     var contentEditable = $( this );
     var input = contentEditable.next().get( 0 );
@@ -378,14 +285,14 @@ $( document ).ready( function() {
     }
   } );
 
-// on blur, validate the row to make sure it has the correct patterns
+  // on blur, validate the row to make sure it has the correct patterns
   $( document ).on( 'blur', inputSelector, function( e ) {
     var row = this.parentNode.parentNode;
     validateRow( row );
   } );
 
   $( document ).on( 'focus', inputSelector, function( e ) {
-    setEndOfContentEditable( this );
+    setEndOfContenteditable( this );
   } );
 
 } );

@@ -155,26 +155,26 @@ h1 {
   margin-top: 1em;
 }
 
-.string-translation-table {
+.rosetta-table {
   border-collapse: collapse;
 }
 
-.string-translation-table td, th {
+.rosetta-table td, th {
   padding: 5px;
   /*border-bottom: 1px solid gray;*/
 }
 
-.string-translation-table td:nth-child(1) {
+.rosetta-table td:nth-child(1) {
   font-size: 12px;
   color: gray;
   text-align: right;
 }
 
-.string-translation-table td:nth-child(2) {
+.rosetta-table td:nth-child(2) {
   max-width: 400px;
 }
 
-.string-translation-table div[contenteditable] {
+.rosetta-table div[contenteditable] {
   width: 300px;
   padding: 3px;
   font-size: 16px;

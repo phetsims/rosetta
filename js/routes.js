@@ -1,7 +1,7 @@
 // Copyright 2015, University of Colorado Boulder
 
 /**
- * Handler functions for ExpressJS-style routes that exist in the PhET translation utility.
+ * ExpressJS-style routes for handling the various URLs for the translation utility.
  *
  * @author John Blanco
  * @author Aaron Davis
@@ -11,27 +11,27 @@
 'use strict';
 
 // modules
-const fs = require( 'fs' );
-const https = require( 'https' );
-const query = require( 'pg-query' ); // eslint-disable-line
-const request = require( 'request' );
-const winston = require( 'winston' );
-const LocaleInfo = require( './LocaleInfo' );
-const stringSubmissionQueue = require( './stringSubmissionQueue' ).stringSubmissionQueue; // eslint-disable-line
-const ServerTests = require( './ServerTests' );
-const TranslatableSimInfo = require( './TranslatableSimInfo' );
-const TranslationUtils = require( './TranslationUtils' );
-const escapeHTML = TranslationUtils.escapeHTML;
-const renderError = TranslationUtils.renderError;
-const RosettaConstants = require( './RosettaConstants' );
-const _ = require( 'underscore' ); // eslint-disable-line
+var fs = require( 'fs' );
+var https = require( 'https' );
+var query = require( 'pg-query' ); // eslint-disable-line
+var request = require( 'request' );
+var winston = require( 'winston' );
+
+var constants = require( './constants' );
+var LocaleInfo = require( './LocaleInfo' );
+var stringSubmissionQueue = require( './stringSubmissionQueue' ).stringSubmissionQueue; // eslint-disable-line
+var TranslatableSimInfo = require( './TranslatableSimInfo' );
+var TranslationUtils = require( './TranslationUtils' );
+var escapeHTML = TranslationUtils.escapeHTML;
+var renderError = TranslationUtils.renderError;
+
+var _ = require( 'underscore' ); // eslint-disable-line
 
 // constants
-const GITHUB_RAW_FILE_URL_BASE = RosettaConstants.GITHUB_RAW_FILE_URL_BASE;
-const SIM_INFO_ARRAY = RosettaConstants.SIM_INFO_ARRAY;
-const TITLE = 'PhET Translation Utility (HTML5)';
-const ASCII_REGEX = /^[ -~]+$/;
-const STRING_VAR_IN_HTML_FILES = 'window.phet.chipper.strings';
+var GITHUB_URL_BASE = constants.GITHUB_URL_BASE;
+var SIM_INFO_ARRAY = constants.SIM_INFO_ARRAY;
+var TITLE = 'PhET Translation Utility (HTML5)';
+var ASCII_REGEX = /^[ -~]+$/;
 
 // utility function for sending the user to the login page
 function sendUserToLoginPage( res, host, destinationUrl ) {
@@ -82,7 +82,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
 
   // check whether the session cookie exists
   winston.log( 'info', 'Checking for login cookie' );
-  let cookie = req.cookies.JSESSIONID;
+  var cookie = req.cookies.JSESSIONID;
   winston.log( 'info', 'user id = ' + req.session.userId );
 
   if ( cookie === undefined ) {
@@ -109,7 +109,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
   else {
 
     // session cookie was present, attempt to obtain session information
-    let options = {
+    var options = {
       host: req.get( 'host' ),
       path: '/services/check-login',
       method: 'GET',
@@ -118,8 +118,8 @@ module.exports.checkForValidSession = function( req, res, next ) {
       }
     };
 
-    let sessionDataRequestCallback = function( response ) {
-      let data = '';
+    var sessionDataRequestCallback = function( response ) {
+      var data = '';
 
       // another chunk of data has been received, so append it
       response.on( 'data', function( chunk ) {
@@ -129,7 +129,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
       // the whole response has been received - see if the credentials are valid
       response.on( 'end', function() {
         winston.log( 'info', 'data received: ' + data );
-        let userData = JSON.parse( data );
+        var userData = JSON.parse( data );
         if ( userData.loggedIn ) {
           winston.log( 'info', 'credentials obtained, user is logged in, moving to next step' );
 
@@ -159,7 +159,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
       } );
     };
 
-    let requestCredentials = https.request( options, sessionDataRequestCallback );
+    var requestCredentials = https.request( options, sessionDataRequestCallback );
 
     // error handling
     requestCredentials.on( 'error', function( err ) {
@@ -181,15 +181,15 @@ module.exports.logout = function( req, res ) {
 };
 
 /**
- * route hanlder that lets the user choose a simulation and language to translate, and subsequently routes them to the
- * actual translation page.
+ * Route that lets the user choose a simulation and language to translate, and subsequently routes them to the actual
+ * translation page.
  *
  * @param req
  * @param res
  */
 module.exports.chooseSimulationAndLanguage = function( req, res ) {
 
-  let simInfoArray = JSON.parse( fs.readFileSync( SIM_INFO_ARRAY, 'utf8' ) );
+  var simInfoArray = JSON.parse( fs.readFileSync( SIM_INFO_ARRAY, 'utf8' ) );
   simInfoArray.sort( function( a, b ) {
     if ( a.simTitle < b.simTitle ) {
       return -1;
@@ -217,17 +217,18 @@ module.exports.chooseSimulationAndLanguage = function( req, res ) {
  */
 module.exports.translateSimulation = function( req, res ) {
 
-  let simName = req.params.simName;
-  let targetLocale = req.params.targetLocale;
-  let activeSimsPath = '/phetsims/chipper/master/data/active-sims';
-  let userId = ( req.session.userId ) ? req.session.userId : 0; // use an id of 0 for localhost testing
+  var simName = req.param( 'simName' );
+  var targetLocale = req.param( 'targetLocale' );
+  var activeSimsPath = '/phetsims/chipper/master/data/active-sims';
+  var userId = ( req.session.userId ) ? req.session.userId : 0; // use an id of 0 for localhost testing
 
+  winston.log( 'info', 'translateSimulation called' ); // TODO: temporary for testing, remove after Dec 2016
   winston.log( 'info', 'loading page for ' + simName + ' ' + targetLocale );
 
   // get the url of the live sim (from simInfoArray)
-  let simUrl;
-  let simInfoArray = JSON.parse( fs.readFileSync( SIM_INFO_ARRAY, 'utf8' ) );
-  for ( let i = 0; i < simInfoArray.length; i++ ) {
+  var simUrl;
+  var simInfoArray = JSON.parse( fs.readFileSync( SIM_INFO_ARRAY, 'utf8' ) );
+  for ( var i = 0; i < simInfoArray.length; i++ ) {
     if ( simInfoArray[ i ].projectName === simName ) {
       simUrl = simInfoArray[ i ].testUrl;
       break;
@@ -239,25 +240,25 @@ module.exports.translateSimulation = function( req, res ) {
   // extract strings from the live sim's html file
   request( simUrl, function( error, response, body ) {
     if ( !error && response.statusCode === 200 ) {
-      let i;
-      let sims; // array of all active sims
+      var i;
+      var sims; // array of all active sims
 
       winston.log( 'info', 'request from ' + simUrl + ' returned successfully' );
 
       // extract strings from the sim's html file and store them in the extractedStrings array
       // extractedStrings in an array of objects of the form { projectName: 'color-vision', stringKeys: [ 'key1', 'key2', ... ] }
-      let result = TranslationUtils.extractStrings( body, simName );
+      var result = TranslationUtils.extractStrings( body, simName );
 
       if ( !result ) {
         renderError( res, 'Tried to extract strings from an invalid URL', 'url: ' + simUrl );
         return;
       }
 
-      let extractedStrings = result.extractedStrings;
-      let simSha = result.sha; // sha of the sim at the time of publication, or 'master' if no sha is found
+      var extractedStrings = result.extractedStrings;
+      var simSha = result.sha; // sha of the sim at the time of publication, or 'master' if no sha is found
       winston.log( 'info', 'sim sha: ' + simSha );
 
-      let englishStrings = {}; // object to hold the English strings
+      var englishStrings = {}; // object to hold the English strings
 
       /*
        * finished() must be called extractedStrings.length * 2 + 1 times. This is the number of http requests to github
@@ -265,17 +266,17 @@ module.exports.translateSimulation = function( req, res ) {
        * strings from the sims or common code repo, and one for the translated strings from babel - plus one more for
        * the request to get the active sims list from chipper.
        */
-      let finished = _.after( extractedStrings.length * 2 + 1, function() {
+      var finished = _.after( extractedStrings.length * 2 + 1, function() {
         winston.log( 'info', 'finished called in translateSimulation' );
 
-        let currentSimStringsArray = [];
-        let simStringsArray = [];
-        let commonStringsArray = [];
-        let unusedTranslatedStringsArray = [];
+        var currentSimStringsArray = [];
+        var simStringsArray = [];
+        var commonStringsArray = [];
+        var unusedTranslatedStringsArray = [];
 
         // create a query for determining if the user has any saved strings
-        let repositories = '';
-        let savedStrings = {};
+        var repositories = '';
+        var savedStrings = {};
         for ( i = 0; i < extractedStrings.length; i++ ) {
           if ( i > 0 ) {
             repositories += ' OR ';
@@ -286,7 +287,7 @@ module.exports.translateSimulation = function( req, res ) {
           // These objects will store string key/value pairs for each repo.
           savedStrings[ extractedStrings[ i ].projectName ] = {};
         }
-        let savedStringsQuery = 'SELECT * from saved_translations where user_id = $1 AND locale = $2 AND (' + repositories + ')';
+        var savedStringsQuery = 'SELECT * from saved_translations where user_id = $1 AND locale = $2 AND (' + repositories + ')';
         winston.log( 'info', 'running query: ' + savedStringsQuery );
 
         // query postgres to see if there are any saved strings for this user
@@ -300,22 +301,22 @@ module.exports.translateSimulation = function( req, res ) {
           if ( rows && rows.length > 0 ) {
             winston.log( 'info', 'using ' + rows.length + ' saved strings' );
             for ( i = 0; i < rows.length; i++ ) {
-              let row = rows[ i ];
+              var row = rows[ i ];
               savedStrings[ row.repository ][ row.stringkey ] = row.stringvalue;
             }
           }
 
-          let simTitle; // sim title gets filled in here (e.g. Area Builder instead of area-builder)
-          let otherSims = []; // other sim dependencies get filled in here (e.g. beers-law-lab when translating concentration)
+          var simTitle; // sim title gets filled in here (e.g. Area Builder instead of area-builder)
+          var otherSims = []; // other sim dependencies get filled in here (e.g. beers-law-lab when translating concentration)
 
           // iterate over all projects from which this sim draws strings
           for ( i = 0; i < extractedStrings.length; i++ ) {
-            let project = extractedStrings[ i ];
-            let strings = englishStrings[ project.projectName ];
-            let previouslyTranslatedStrings = req.session.translatedStrings[ targetLocale ][ project.projectName ];
+            var project = extractedStrings[ i ];
+            var strings = englishStrings[ project.projectName ];
+            var previouslyTranslatedStrings = req.session.translatedStrings[ targetLocale ][ project.projectName ];
 
             // put the strings under common strings, current sim strings, or sim strings depending on which project they are from
-            let array;
+            var array;
             if ( project.projectName === simName ) {
               simTitle = strings[ project.projectName + '.title' ] && strings[ project.projectName + '.title' ].value;
               array = currentSimStringsArray;
@@ -328,20 +329,20 @@ module.exports.translateSimulation = function( req, res ) {
               array = commonStringsArray;
             }
 
-            for ( let j = 0; j < project.stringKeys.length; j++ ) {
-              let key = project.stringKeys[ j ];
+            for ( var j = 0; j < project.stringKeys.length; j++ ) {
+              var key = project.stringKeys[ j ];
 
-              let stringVisible = strings.hasOwnProperty( key ) && ( ( strings[ key ].visible === undefined ) ? true : strings[ key ].visible );
+              var stringVisible = strings.hasOwnProperty( key ) && ( ( strings[ key ].visible === undefined ) ? true : strings[ key ].visible );
               if ( stringVisible ) {
 
                 // data needed to render to the string on the page - the key, the current value, the English value, and the repo
-                let stringRenderInfo = {
+                var stringRenderInfo = {
                   key: key,
                   englishValue: escapeHTML( strings[ key ].value ),
                   repo: project.projectName
                 };
 
-                let savedStringValue = savedStrings[ project.projectName ][ key ];
+                var savedStringValue = savedStrings[ project.projectName ][ key ];
 
                 // use saved string if it exists
                 if ( savedStringValue ) {
@@ -355,7 +356,7 @@ module.exports.translateSimulation = function( req, res ) {
                 else if ( previouslyTranslatedStrings[ key ] ) {
 
                   // use previous translation value obtained from GitHub, if it exists
-                  let translatedString = previouslyTranslatedStrings[ key ];
+                  var translatedString = previouslyTranslatedStrings[ key ];
                   winston.log( 'info', 'using previously translated string ' + key + ': ' +
                                        getPrintableString( translatedString.value ) );
                   stringRenderInfo.value = escapeHTML( translatedString.value );
@@ -376,16 +377,16 @@ module.exports.translateSimulation = function( req, res ) {
 
             // Identify strings that are translated but not used so that they don't get removed from the translation.
             // This is only relevant for shared/common strings.
-            for ( let stringKey in previouslyTranslatedStrings ) {
-              if ( previouslyTranslatedStrings.hasOwnProperty( stringKey ) ) {
-                let containsObjectWithKey = false;
-                for ( let index = 0; index < array.length; index++ ) {
+            for ( var stringKey in previouslyTranslatedStrings ) {
+              if ( previouslyTranslatedStrings.hasOwnProperty( stringKey ) ){
+                var containsObjectWithKey = false;
+                for ( var index = 0; index < array.length; index++ ) {
                   if ( array[ index ].key === stringKey ) {
                     containsObjectWithKey = true;
                     break;
                   }
                 }
-                if ( !containsObjectWithKey ) {
+                if ( !containsObjectWithKey ){
                   winston.log( 'info', 'repo: ' + project.projectName + ' key: ' + stringKey + ', ' +
                                        '- translation exists, but unused in this sim, adding to pass-through data' );
                   unusedTranslatedStringsArray.push( {
@@ -399,7 +400,7 @@ module.exports.translateSimulation = function( req, res ) {
           }
 
           // sort the arrays by the English values
-          let compare = function( a, b ) {
+          var compare = function( a, b ) {
             if ( a.englishValue.toLowerCase() < b.englishValue.toLowerCase() ) {
               return -1;
             }
@@ -411,10 +412,10 @@ module.exports.translateSimulation = function( req, res ) {
           simStringsArray.sort( compare );
           commonStringsArray.sort( compare );
 
-          let locale = LocaleInfo.localeInfoObject[ targetLocale ];
+          var locale = LocaleInfo.localeInfoObject[ targetLocale ];
 
           // Assemble the data that will be supplied to the template.
-          let templateData = {
+          var templateData = {
             title: TITLE,
             subtitle: 'Please enter a translation for each English string:',
             destinationLanguage: locale ? locale.name : 'Non existent locale',
@@ -438,10 +439,10 @@ module.exports.translateSimulation = function( req, res ) {
       } );
 
       // initialize the sims array from the active-sims file in chipper
-      winston.log( 'info', 'sending request to ' + GITHUB_RAW_FILE_URL_BASE + activeSimsPath );
-      request( GITHUB_RAW_FILE_URL_BASE + activeSimsPath, function( error, response, body ) {
+      winston.log( 'info', 'sending request to ' + GITHUB_URL_BASE + activeSimsPath );
+      request( GITHUB_URL_BASE + activeSimsPath, function( error, response, body ) {
         if ( !error && response.statusCode === 200 ) {
-          winston.log( 'info', 'request from ' + GITHUB_RAW_FILE_URL_BASE + activeSimsPath + ' returned successfully' );
+          winston.log( 'info', 'request from ' + GITHUB_URL_BASE + activeSimsPath + ' returned successfully' );
           sims = body.toString().split( '\n' );
         }
         else {
@@ -453,10 +454,10 @@ module.exports.translateSimulation = function( req, res ) {
 
       // send requests to github for the existing strings, both English and previous translations for this locale
       extractedStrings.forEach( function( extractedStringObject ) {
-        let projectName = extractedStringObject.projectName;
-        let repoSha = ( projectName === simName ) ? simSha : 'master';
-        let stringsFilePath = GITHUB_RAW_FILE_URL_BASE + '/phetsims/' + projectName + '/' + repoSha + '/' + projectName + '-strings_en.json';
-        let translatedStringsPath = GITHUB_RAW_FILE_URL_BASE + '/phetsims/babel/' + global.preferences.babelBranch + '/' + projectName + '/' + projectName + '-strings_' + targetLocale + '.json';
+        var projectName = extractedStringObject.projectName;
+        var repoSha = ( projectName === simName ) ? simSha : 'master';
+        var stringsFilePath = GITHUB_URL_BASE + '/phetsims/' + projectName + '/' + repoSha + '/' + projectName + '-strings_en.json';
+        var translatedStringsPath = GITHUB_URL_BASE + '/phetsims/babel/' + global.preferences.babelBranch + '/' + projectName + '/' + projectName + '-strings_' + targetLocale + '.json';
 
         // request the English strings from GitHub
         winston.log( 'info', 'sending request to ' + stringsFilePath );
@@ -483,7 +484,7 @@ module.exports.translateSimulation = function( req, res ) {
           else {
             winston.log( 'info', 'request for translated strings for project ' + projectName +
                                  ' failed, most likely because they don\'t yet exist. Response code: ' +
-                                 response.statusCode + '. URL: ' + translatedStringsPath + '.' );
+                                  response.statusCode + '. URL: ' + translatedStringsPath + '.' );
             req.session.translatedStrings[ targetLocale ][ projectName ] = {}; // add an empty object with the project name key so key lookups don't fail later on
           }
           finished();
@@ -498,70 +499,24 @@ module.exports.translateSimulation = function( req, res ) {
 };
 
 /**
- * Route for submitting strings (when the user presses the "Submit" button on a translate sim page). The translation is
- * added to a queue of translations to be committed to github. Logic for this is in the file stringSubmissionQueue.js.
+ * Route for submitting strings (when the user presses the "Submit" button on a translate sim page).
+ * The translation is added to a queue of translations to be committed to github. Logic for this is
+ * in the file stringSubmissionQueue.js.
  * @param req
  * @param res
  */
 module.exports.submitStrings = function( req, res ) {
 
-  let simName = req.params.simName;
-  let targetLocale = req.params.targetLocale;
+  var simName = req.param( 'simName' );
+  var targetLocale = req.param( 'targetLocale' );
 
   winston.log( 'info', 'queuing string submission for ' + simName + '_' + targetLocale );
-  stringSubmissionQueue.push(
-    { req: req, res: res },
-    function() {
-      winston.log( 'info', 'finished string submission for ' + simName + '_' + targetLocale );
-    }
-  );
-};
-
-/**
- * Route for testing a translation by replacing strings in the currently published simulation with those provided in the
- * request.  This does not save the strings.  This method opens a new tab in which the translated simulation will
- * appear.
- * @param {Object} req
- * @param {Object} res
- */
-module.exports.testStrings = function( req, res ) {
-
-  const simName = req.params.simName;
-
-  winston.log( 'info', 'test-of-strings request received for sim ' + simName );
-
-  TranslationUtils.getLatestSimHtml( simName )
-    .then( simHtml => {
-
-      // get the string definitions from the HTML file
-      const re = new RegExp( STRING_VAR_IN_HTML_FILES + '.*$', 'm' );
-      const extractedStrings = simHtml.match( re );
-      let extractedStringsJson = extractedStrings[ 0 ]
-        .replace( STRING_VAR_IN_HTML_FILES + ' = ', '' )
-        .replace( /;$/m, '' );
-      const stringsObject = JSON.parse( extractedStringsJson );
-
-      // replace values in the extracted strings with those specified by the user
-      const translatedStringsObject = req.body;
-      _.keys( translatedStringsObject ).forEach( key => {
-        if ( stringsObject.en[ key ] ){
-          stringsObject.en[ key ] = translatedStringsObject[ key ];
-        }
-        else{
-          winston( 'error', 'key missing in extracted strings, key = ' + key );
-        }
-      } );
-      const translatedStrings = STRING_VAR_IN_HTML_FILES + ' = ' + JSON.stringify( stringsObject ) + ';';
-
-      // insert the changed strings into the sim HTML
-      simHtml = simHtml.replace( re, translatedStrings );
-
-      winston.log( 'info', 'successfully replaced strings in published sim with submissions from user, returning result' );
-
-      // return the modified sim HTML as the response to the request
-      res.send( simHtml );
-    } )
-    .catch( err => renderError( res, 'Error testing translation...', err ) );
+  stringSubmissionQueue.push( {
+    req: req,
+    res: res
+  }, function() {
+    winston.log( 'info', 'finished string submission for ' + simName + '_' + targetLocale );
+  } );
 };
 
 /**
@@ -572,39 +527,39 @@ module.exports.testStrings = function( req, res ) {
  */
 module.exports.saveStrings = function( req, res ) {
 
-  let simName = req.params.simName;
-  let targetLocale = req.params.targetLocale;
-  let userId = ( req.session.userId ) ? req.session.userId : 0;
+  var simName = req.param( 'simName' );
+  var targetLocale = req.param( 'targetLocale' );
+  var userId = ( req.session.userId ) ? req.session.userId : 0;
 
-  let error = false;
+  var error = false;
 
-  let finished = _.after( Object.keys( req.body ).length, function() {
+  var finished = _.after( Object.keys( req.body ).length, function() {
     winston.log( 'info', 'finished string saving for ' + simName + '_' + targetLocale );
     res.json( {
       'success': !error
     } );
   } );
 
-  let repos = {};
-  for ( let string in req.body ) {
+  var repos = {};
+  for ( var string in req.body ) {
     if ( Object.hasOwnProperty.call( req.body, string ) ) {
 
       // data submitted is in the form "[repository] [key]", for example "area-builder area-builder.title"
-      let repoAndKey = string.split( ' ' );
-      let repo = repoAndKey[ 0 ];
-      let key = repoAndKey[ 1 ];
+      var repoAndKey = string.split( ' ' );
+      var repo = repoAndKey[ 0 ];
+      var key = repoAndKey[ 1 ];
 
       if ( !repos[ repo ] ) {
         repos[ repo ] = {};
       }
 
-      let stringValue = req.body[ string ];
-      let ts = new Date();
+      var stringValue = req.body[ string ];
+      var ts = new Date();
 
       (function( key, stringValue ) {
         if ( key && stringValue && stringValue.length > 0 ) {
           query( 'SELECT upsert_saved_translations' +
-                 '($1::bigint, $2::letchar(255), $3::letchar(255), $4::letchar(8), $5::letchar(255), $6::timestamp)', [ userId, key, repo, targetLocale, stringValue, ts ],
+                 '($1::bigint, $2::varchar(255), $3::varchar(255), $4::varchar(8), $5::varchar(255), $6::timestamp)', [ userId, key, repo, targetLocale, stringValue, ts ],
             function( err, rows, result ) {
               if ( err ) {
                 winston.log( 'error', 'inserting row: (' + userId + ', ' + key + ', ' + stringValue + ', ' + targetLocale + ')' );
@@ -632,6 +587,7 @@ module.exports.saveStrings = function( req, res ) {
  * @param res
  */
 module.exports.showOffLinePage = function( req, res ) {
+
   winston.log( 'warn', 'Showing the \'Off Line\' page to the user' );
   res.render( 'offline.html', { title: 'Off Line' } );
 };
@@ -642,51 +598,9 @@ module.exports.showOffLinePage = function( req, res ) {
  * @param req
  * @param res
  */
-function pageNotFound( req, res ) {
+module.exports.pageNotFound = function( req, res ) {
+
   res.send( '<p>Error: Page not found.  URL = ' + req.url + '</p>' );
-}
-
-module.exports.pageNotFound = pageNotFound;
-
-/**
- * displays the main test harness page if the user is a PhET team member, used for development
- *
- * @param req
- * @param res
- */
-module.exports.test = function( req, res ) {
-
-  // only logged in PhET team members can access the test page
-  if ( req.session.teamMember ) {
-    winston.log( 'info', 'test page accessed' );
-    res.render( 'test.html', { title: 'Test' } );
-  }
-  else {
-    pageNotFound( req, res );
-  }
-};
-
-/**
- * handle a request to run a test
- * @param req
- * @param res
- */
-module.exports.runTest = function( req, res ) {
-
-  // only logged in PhET team members can run tests
-  if ( req.session.teamMember ) {
-
-    let testID = req.params.testID;
-    ServerTests.executeTest( testID );
-
-    // send back an empty response
-    res.end();
-  }
-  else {
-
-    // the user is not a team member, render the "not found" page
-    pageNotFound( req, res );
-  }
 };
 
 /**

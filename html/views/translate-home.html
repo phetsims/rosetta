@@ -31,15 +31,12 @@
   <script>
     var button = document.getElementById( "goButton" );
     button.addEventListener( 'click', function() {
+      console.log( 'go button clicked' );
       var simSelector = document.getElementById( "simSelector" );
       var simulation = simSelector.options[ simSelector.selectedIndex ].value;
       var targetLocaleSelector = document.getElementById( "localeSelector" );
       var targetLocale = targetLocaleSelector.options[ targetLocaleSelector.selectedIndex ].value;
-      var simLiteralString = '/sim/';
-      if ( window.location.href.slice( -1 ) === '/' ){
-        simLiteralString = simLiteralString.slice( 1 );
-      }
-      window.location.href = window.location.href + simLiteralString + simulation + '/' + targetLocale;
+      window.location.href = window.location.href + 'sim/' + simulation + '/' + targetLocale;
     } );
   </script>
 </div>
