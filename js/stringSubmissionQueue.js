@@ -343,7 +343,7 @@ async function requestBuild( simName, userID, locale ) {
       },
       body: JSON.stringify( requestObject )
     } );
-    if ( buildRequestResponse.status === 200 ){
+    if ( buildRequestResponse.status === 200 || buildRequestResponse.status === 202 ){
       winston.log( 'info', 'build request returned status ' + buildRequestResponse.status );
       return true;
     }
