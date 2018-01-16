@@ -195,7 +195,7 @@ module.exports.chooseSimulationAndLanguage = function( req, res ) {
   if ( !req.session.teamMember ){
     // TODO: This list is hard coded.  Once the meta-data is used, this should not be necessary.
     simInfoArray = _.filter( simInfoArray, function( simInfo ){
-      return simInfo.projectName !== 'example-sim' && simInfo.projectName !== 'chains';
+      return simInfo.projectName !== 'example-sim' && simInfo.projectName !== 'chains' && simInfo.projectName !== 'bumper';
     } );
   }
 
