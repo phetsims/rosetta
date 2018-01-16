@@ -1,4 +1,4 @@
-// Copyright 2015, University of Colorado Boulder
+// Copyright 2018, University of Colorado Boulder
 
 /**
  * Handler functions for ExpressJS-style routes that exist in the PhET translation utility.
@@ -635,7 +635,7 @@ module.exports.saveStrings = function( req, res ) {
       (function( key, stringValue ) {
         if ( key && stringValue && stringValue.length > 0 ) {
           query( 'SELECT upsert_saved_translations' +
-                 '($1::bigint, $2::letchar(255), $3::letchar(255), $4::letchar(8), $5::letchar(255), $6::timestamp)', [ userId, key, repo, targetLocale, stringValue, ts ],
+                 '($1::bigint, $2::varchar(255), $3::varchar(255), $4::varchar(8), $5::varchar(255), $6::timestamp)', [ userId, key, repo, targetLocale, stringValue, ts ],
             function( err, rows, result ) {
               if ( err ) {
                 winston.log( 'error', 'inserting row: (' + userId + ', ' + key + ', ' + stringValue + ', ' + targetLocale + ')' );
