@@ -202,6 +202,23 @@ function extractStringsAPI( req, res ) {
   strings.end();
 }
 
+/**
+ * get the metadata for the specified simulation
+ * @param {string} simName
+ * @return {Promise.<string>}
+ */
+async function getSimInfo( simName ){
+
+  const URL = RosettaConstants.PRODUCTION_SERVER_URL +
+              '/services/metadata/1.2/simulations?format=json&type=html&locale=en&simulation=' +
+              simName +
+              '&summary';
+  const response = await fetch( URL );
+  const responseJSON = await response.json();
+  // debugger;
+  return responseJSON;
+}
+
 /*---------------------------------------------------------------------------*
  * Github API functions
  *---------------------------------------------------------------------------*/
@@ -342,6 +359,7 @@ module.exports = {
   extractStrings: extractStrings,
   extractStringsAPI: extractStringsAPI,
   getGhClient: getGhClient,
+  getSimInfo: getSimInfo,
   getLatestSimHtml: getLatestSimHtml,
   checkAndUpdateStringFile: checkAndUpdateStringFile,
   stringify: stringify
