@@ -207,6 +207,7 @@ async function deleteStringsFromDB( userID, locale, simOrLibNames ) {
 
 /**
  * get the latest version of the specified simulation by getting metadata from server
+ * TODO: consider using getSimInfo utility to avoid code duplication
  * @param simName
  * @return {string}
  * @private

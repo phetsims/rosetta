@@ -101,7 +101,7 @@ function saveStrings( simOrLibName, locale, strings ) {
 
 /**
  * Save the provided string data to GitHub, returns a Promise.  This is needed because octonode, which is the package
- * that is being used to interface to GitHub, does not support promises.
+ * that is being used to interface to GitHub, does not directly support promises.
  * @param {string} filePath
  * @param {string} contents
  * @param {string} commitMessage
@@ -115,7 +115,7 @@ function saveFileToGitHub( filePath, contents, commitMessage ) {
 
     if ( !SKIP_STRING_COMMITS ){
 
-      // attempt to get the file and metadata from GitHub
+      // test if the file already exists
       stringStorageRepo.contents( filePath, BRANCH, function( err, data ) {
 
         if ( !err ) {
