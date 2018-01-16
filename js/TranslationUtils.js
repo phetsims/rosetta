@@ -4,26 +4,28 @@
  * This file holds various utilities useful for translation.
  *
  * @author Aaron Davis
+ * @author John Blanco
  */
 /* eslint-env node */
 'use strict';
 
-var email = require( 'emailjs/email' );
-var https = require( 'https' );
-var octonode = require( 'octonode' );
-var winston = require( 'winston' );
-
-var _ = require( 'underscore' ); // eslint-disable-line
+const email = require( 'emailjs/email' );
+const fetch = require( 'node-fetch' ); // eslint-disable-line
+const https = require( 'https' );
+const octonode = require( 'octonode' );
+const RosettaConstants = require( './RosettaConstants' );
+const winston = require( 'winston' );
+const _ = require( 'underscore' ); // eslint-disable-line
 
 // globals
-var preferences = global.preferences;
+const preferences = global.preferences;
 
 /*---------------------------------------------------------------------------*
  * Email utilities
  *---------------------------------------------------------------------------*/
 
 // configure email server if credentials are present
-var emailServer;
+let emailServer;
 if ( preferences.emailUsername && preferences.emailPassword && preferences.emailServer && preferences.emailTo ) {
   emailServer = email.server.connect( {
     user: preferences.emailUsername,
@@ -86,21 +88,21 @@ function renderError( res, message, err ) {
 
 function extractStrings( data, simName ) {
 
-  var projects = {};
-  var matches = data.match( /string!([\w\.\/-]+)/g );
+  const projects = {};
+  const matches = data.match( /string!([\w\.\/-]+)/g );
 
   // if no matches are found, it probably means the sim url was not correct
   if ( matches === null ) {
     return null;
   }
 
-  var simShaInfo = new RegExp( '"' + simName + '": {\\s*"sha": "(\\w*)",\\s*"branch": "(\\w*)"', 'g' ).exec( data );
-  var sha = ( simShaInfo && simShaInfo.length > 1 ) ? simShaInfo[ 1 ] : 'master'; // default to master if no sha is found
+  const simShaInfo = new RegExp( '"' + simName + '": {\\s*"sha": "(\\w*)",\\s*"branch": "(\\w*)"', 'g' ).exec( data );
+  const sha = ( simShaInfo && simShaInfo.length > 1 ) ? simShaInfo[ 1 ] : 'master'; // default to master if no sha is found
 
-  for ( var i = 0; i < matches.length; i++ ) {
-    var projectAndString = matches[ i ].substring( 7 ).split( '/' );
-    var projectName = projectAndString[ 0 ];
-    var string = projectAndString[ 1 ];
+  for ( let i = 0; i < matches.length; i++ ) {
+    const projectAndString = matches[ i ].substring( 7 ).split( '/' );
+    const projectName = projectAndString[ 0 ];
+    const string = projectAndString[ 1 ];
 
     projects[ projectName ] = projects[ projectName ] || [];
 
@@ -109,8 +111,8 @@ function extractStrings( data, simName ) {
     }
   }
 
-  var result = { extractedStrings: [], sha: sha };
-  for ( var project in projects ) {
+  const result = { extractedStrings: [], sha: sha };
+  for ( const project in projects ) {
     result.extractedStrings.push( {
       projectName: project.replace( new RegExp( '_', 'g' ), '-' ).toLowerCase(),
       stringKeys: projects[ project ]
@@ -135,17 +137,17 @@ function extractStrings( data, simName ) {
 function extractStringsAPI( req, res ) {
 
   // included for an easy default test
-  var url = req.param( 'simUrl' ) || 'phet-dev.colorado.edu/sims/html/molecules-and-light/latest/molecules-and-light_en.html';
-  var localhost = ( url.indexOf( 'localhost' ) === 0 );
+  const url = req.params.simUrl || 'phet-dev.colorado.edu/sims/html/molecules-and-light/latest/molecules-and-light_en.html';
+  const localhost = ( url.indexOf( 'localhost' ) === 0 );
 
-  var slashIndex = url.indexOf( '/' );
-  var host = ( localhost ) ? 'localhost' : url.substring( 0, slashIndex );
-  var path = url.substring( slashIndex );
+  const slashIndex = url.indexOf( '/' );
+  const host = ( localhost ) ? 'localhost' : url.substring( 0, slashIndex );
+  const path = url.substring( slashIndex );
 
-  var urlSplit = url.split( '/' );
-  var simName = urlSplit[ urlSplit.length - 1 ].split( '_' )[ 0 ];
+  const urlSplit = url.split( '/' );
+  const simName = urlSplit[ urlSplit.length - 1 ].split( '_' )[ 0 ];
 
-  var options = {
+  const options = {
     host: host,
     path: path,
     method: 'GET'
@@ -153,7 +155,7 @@ function extractStringsAPI( req, res ) {
 
   // if running locally get the port number if it is part of the url
   if ( localhost ) {
-    var colonIndex = url.indexOf( ':' );
+    const colonIndex = url.indexOf( ':' );
     if ( colonIndex > -1 ) {
       options.port = url.substring( colonIndex + 1, slashIndex );
     }
@@ -161,8 +163,8 @@ function extractStringsAPI( req, res ) {
 
   winston.log( 'info', 'requesting sim at host: ' + options.host + ', port: ' + options.port + ', and path: ' + options.path );
 
-  var sessionDataRequestCallback = function( response ) {
-    var data = '';
+  const sessionDataRequestCallback = function( response ) {
+    let data = '';
 
     // another chunk of data has been received, so append it
     response.on( 'data', function( chunk ) {
@@ -171,7 +173,7 @@ function extractStringsAPI( req, res ) {
 
     // the whole response has been received
     response.on( 'end', function() {
-      var result = extractStrings( data, simName );
+      const result = extractStrings( data, simName );
 
       if ( !result ) {
         renderError( res, 'Tried to extract strings from an invalid URL', 'url: ' + host + path );
@@ -183,7 +185,7 @@ function extractStringsAPI( req, res ) {
     } );
   };
 
-  var strings = https.request( options, sessionDataRequestCallback );
+  const strings = https.request( options, sessionDataRequestCallback );
 
   strings.on( 'error', function( err ) {
     winston.log( 'error', 'Error getting sim strings - ' + err );
@@ -200,6 +202,22 @@ function extractStringsAPI( req, res ) {
   strings.end();
 }
 
+/**
+ * get the metadata for the specified simulation
+ * @param {string} simName
+ * @return {Promise.<string>}
+ */
+async function getSimInfo( simName ){
+
+  const URL = RosettaConstants.PRODUCTION_SERVER_URL +
+              '/services/metadata/1.2/simulations?format=json&type=html&locale=en&simulation=' +
+              simName +
+              '&summary';
+  const response = await fetch( URL );
+  const responseJSON = await response.json();
+  // debugger;
+  return responseJSON;
+}
 
 /*---------------------------------------------------------------------------*
  * Github API functions
@@ -208,16 +226,16 @@ function extractStringsAPI( req, res ) {
 // convenience for a nicer looking stringify, also ensures a sorted JSON string
 function stringify( data ) {
 
-  var keys = [];
-  var key;
+  const keys = [];
+  let key;
   if ( data ) {
     for ( key in data ) {
       keys.push( key );
     }
   }
   keys.sort();
-  var sortedData = {};
-  for ( var index in keys ) {
+  const sortedData = {};
+  for ( const index in keys ) {
     key = keys[ index ];
     sortedData[ key ] = data[ key ];
   }
@@ -268,8 +286,8 @@ function checkAndUpdateStringFile( repo, file, content, message, branch, callbac
     else {
       winston.log( 'info', 'found file ' + file + ' in GitHub.  Attempting to update.' );
 
-      var sha = data.sha;
-      var buffer = new Buffer( data.content, data.encoding );
+      const sha = data.sha;
+      const buffer = new Buffer( data.content, data.encoding );
       if ( buffer.toString() !== content ) {
         repo.updateContents( file, message, content, sha, branch, function( err, data, headers ) {
           if ( err ) {
@@ -295,8 +313,8 @@ function checkAndUpdateStringFile( repo, file, content, message, branch, callbac
  * @returns {*}
  */
 function getGhClient() {
-  var username = preferences.githubUsername;
-  var pass = preferences.githubPassword;
+  const username = preferences.githubUsername;
+  const pass = preferences.githubPassword;
 
   winston.log( 'info', 'getting GH client for user ' + username );
 
@@ -304,6 +322,33 @@ function getGhClient() {
     username: username,
     password: pass
   } );
+}
+
+/**
+ * get the HTML of the latest published version of the sim from the sever
+ * @param {string} simName
+ * @return {Promise.<string>} - html of the published simulation
+ * @rejects {Error}
+ */
+async function getLatestSimHtml( simName ){
+
+  // compose the URL for the latest English version of the simulation
+  const simUrl = RosettaConstants.PRODUCTION_SERVER_URL + '/sims/html/' + simName + '/latest/' + simName + '_en.html';
+
+  const response = await fetch( simUrl );
+
+  // handle the response
+  if ( response.status === 200 ) {
+
+    // the sim was obtained successfully
+    return response.text();
+  }
+  else if ( response.status === 404 ) {
+    return Promise.reject( new Error( 'sim not found (response.status = ' + response.status ) + ')' );
+  }
+  else {
+    return Promise.reject( new Error( 'error getting sim (response.status = ' + response.status ) + ')' );
+  }
 }
 
 // export all functions in this file
@@ -314,6 +359,8 @@ module.exports = {
   extractStrings: extractStrings,
   extractStringsAPI: extractStringsAPI,
   getGhClient: getGhClient,
+  getSimInfo: getSimInfo,
+  getLatestSimHtml: getLatestSimHtml,
   checkAndUpdateStringFile: checkAndUpdateStringFile,
   stringify: stringify
 };
