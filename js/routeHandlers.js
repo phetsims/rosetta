@@ -190,6 +190,16 @@ module.exports.logout = function( req, res ) {
 module.exports.chooseSimulationAndLanguage = function( req, res ) {
 
   let simInfoArray = JSON.parse( fs.readFileSync( SIM_INFO_ARRAY, 'utf8' ) );
+
+  // if the user is not a PhET team member, eliminate the test sims from the list of translatable sims
+  if ( !req.session.teamMember ){
+    // TODO: This list is hard coded.  Once the meta-data is used, this should not be necessary.
+    simInfoArray = _.filter( simInfoArray, function( simInfo ){
+      return simInfo.projectName !== 'example-sim' && simInfo.projectName !== 'chains';
+    } );
+  }
+
+  // sort the list of sims to be in alphabetical order by sim title
   simInfoArray.sort( function( a, b ) {
     if ( a.simTitle < b.simTitle ) {
       return -1;
@@ -211,18 +221,39 @@ module.exports.chooseSimulationAndLanguage = function( req, res ) {
 /**
  * Route that creates a page for translating a given simulation to a given language.  The simulation ID and the target
  * language are extracted from the incoming request.
- *
  * @param req
  * @param res
+ * @public
  */
-module.exports.translateSimulation = function( req, res ) {
+module.exports.renderTranslationPageNew = function( req, res ) {
+
+  // let simName = req.params.simName;
+  // let targetLocale = req.params.targetLocale;
+  // let activeSimsPath = '/phetsims/chipper/master/data/active-sims';
+  // let userId = ( req.session.userId ) ? req.session.userId : 0; // use an id of 0 for localhost testing
+  //
+  // winston.log( 'info', 'rendering translation page for ' + simName + ' ' + targetLocale );
+  //
+  // let simInfo = await TranslationUtils.getSimInfo( simName );
+
+
+};
+
+/**
+ * Route that creates a page for translating a given simulation to a given language.  The simulation ID and the target
+ * language are extracted from the incoming request.
+ * @param req
+ * @param res
+ * @public
+ */
+module.exports.renderTranslationPage = function( req, res ) {
 
   let simName = req.params.simName;
   let targetLocale = req.params.targetLocale;
   let activeSimsPath = '/phetsims/chipper/master/data/active-sims';
   let userId = ( req.session.userId ) ? req.session.userId : 0; // use an id of 0 for localhost testing
 
-  winston.log( 'info', 'loading page for ' + simName + ' ' + targetLocale );
+  winston.log( 'info', 'creating translation page for ' + simName + ' ' + targetLocale );
 
   // get the url of the live sim (from simInfoArray)
   let simUrl;
@@ -266,7 +297,7 @@ module.exports.translateSimulation = function( req, res ) {
        * the request to get the active sims list from chipper.
        */
       let finished = _.after( extractedStrings.length * 2 + 1, function() {
-        winston.log( 'info', 'finished called in translateSimulation' );
+        winston.log( 'info', 'finished called in renderTranslationPage' );
 
         let currentSimStringsArray = [];
         let simStringsArray = [];
