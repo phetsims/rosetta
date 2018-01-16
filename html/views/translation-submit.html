@@ -22,74 +22,11 @@
 </script>
 
 <div class="container">
-  <h2>Translation submitted for {{=it.simName}}_{{=it.targetLocale}}</h2>
+  <h1>{{=it.title}}</h1>
 
-  <p>You will see your translation appear on the website within half an hour.</p>
+  <h2>Translation submitted for simulation {{=it.simName}}, locale {{=it.targetLocale}}</h2>
+
+  <p>Your translation should appear on the website within half an hour.</p>
 
   <h4><a href="/translate/">Translate Another Simulation</a></h4>
-
-  <br><br>
-
-  <h4>Debug Info:</h4>
-
-  {{? it.stringsNotSubmitted}}
-
-  <p>No new strings were submitted, did you submit the form without changing anything?</p>
-
-  {{??}}
-
-  <h3>The following strings have been submitted:</h3>
-
-  <table>
-    <tr class="table-header">
-      <td>String key</td>
-      <td>Submitted value</td>
-    </tr>
-    {{~it.strings :value:index}}
-    <tr>
-      <td>
-        {{=value.stringKey}}
-      </td>
-      <td dir={{=it.direction}}>
-        {{=value.stringValue}}
-      </td>
-    </tr>
-    {{~}}
-  </table>
-
-  {{? it.error}}
-  <h3>Error! Some strings have failed to submit:</h3>
-
-  <table>
-    <tr class="table-header">
-      <td>String key</td>
-      <td>Submitted value</td>
-    </tr>
-    {{~it.errorStrings :value:index}}
-    <tr>
-      <td>
-        {{=value.stringKey}}
-      </td>
-      <td dir={{=it.direction}}>
-        {{=value.stringValue}}
-      </td>
-    </tr>
-    {{~}}
-  </table>
-
-  <p>
-    Please try submitting your translation again.
-  </p>
-
-  <p>
-    If this problem has occurred multiple times and is preventing you from working on translations, please contact
-    phethelp@colorado.edu, and include all information on this page.
-  </p>
-
-  <p>Timestamp: {{=it.timestamp}}</p>
-
-  <p>Details: {{=it.errorDetails}}</p>
-
-  {{?}}
-  {{?}}
 </div>
