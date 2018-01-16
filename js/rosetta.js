@@ -11,33 +11,33 @@
 'use strict';
 
 // modules
-var assert = require( 'assert' );
-var bodyParser = require( 'body-parser' ); // eslint-disable-line require-statement-match
-var cookieParser = require( 'cookie-parser' ); // eslint-disable-line require-statement-match
-var dateformat = require( 'dateformat' );
-var doT = require( 'express-dot' ); // eslint-disable-line require-statement-match
-var express = require( 'express' );
-var fs = require( 'fs' );
-var parseArgs = require( 'minimist' ); // eslint-disable-line require-statement-match
-var query = require( 'pg-query' ); // eslint-disable-line require-statement-match
-var session = require( 'express-session' ); // eslint-disable-line require-statement-match
-var winston = require( 'winston' );
+const assert = require( 'assert' );
+const bodyParser = require( 'body-parser' ); // eslint-disable-line require-statement-match
+const cookieParser = require( 'cookie-parser' ); // eslint-disable-line require-statement-match
+const dateformat = require( 'dateformat' );
+const doT = require( 'express-dot' ); // eslint-disable-line require-statement-match
+const express = require( 'express' );
+const fs = require( 'fs' );
+const parseArgs = require( 'minimist' ); // eslint-disable-line require-statement-match
+const query = require( 'pg-query' ); // eslint-disable-line require-statement-match
+const session = require( 'express-session' ); // eslint-disable-line require-statement-match
+const winston = require( 'winston' );
 
 // constants
-var LISTEN_PORT = 16372;
-var PREFERENCES_FILE;
+const LISTEN_PORT = 16372;
+let PREFERENCES_FILE;
 
 // The following flag is used to take this utility off line and show a "down for maintenance" sort of page to users.
 // This is generally set by editing the in situ version, and should never be committed to the code base as false.
-var ENABLED = true;
+const ENABLED = true;
 
 /*
  * Rosetta is run under user "phet-admin" on the dev and production servers. However, "process.env.HOME" will get
  * the user who is starting the process's home directory, not phet-admin's home directory, therefore we need to use
- * a different approach to get the home directory.
+ * the following approach to get the home directory.
  */
 if ( !/^win/.test( process.platform ) ) {
-  var passwdUser = require( 'passwd-user' ); // eslint-disable-line require-statement-match
+  const passwdUser = require( 'passwd-user' ); // eslint-disable-line require-statement-match
   PREFERENCES_FILE = passwdUser.sync( process.getuid() ).homedir + '/.phet/build-local.json';
 }
 else {
@@ -46,7 +46,7 @@ else {
 
 // ensure that the preferences file exists and has the required fields
 assert( fs.existsSync( PREFERENCES_FILE ), 'missing preferences file ' + PREFERENCES_FILE );
-var preferences = require( PREFERENCES_FILE );
+const preferences = require( PREFERENCES_FILE );
 assert( preferences.githubUsername, 'githubUsername is missing from ' + PREFERENCES_FILE );
 assert( preferences.githubPassword, 'githubPassword is missing from ' + PREFERENCES_FILE );
 assert( preferences.buildServerAuthorizationCode, 'buildServerAuthorizationCode is missing from ' + PREFERENCES_FILE );
@@ -76,7 +76,7 @@ process.on( 'unhandledRejection', error => {
 } );
 
 // add the route handlers, must be required after global.preferences has been initialized
-var routeHandlers = require( __dirname + '/routeHandlers' );
+const routeHandlers = require( __dirname + '/routeHandlers' );
 
 // configure postgres connection
 if ( preferences.pgConnectionString ) {
@@ -88,20 +88,20 @@ else {
 
 // Handle command line input
 // First 2 args provide info about executables, ignore
-var commandLineArgs = process.argv.slice( 2 );
+const commandLineArgs = process.argv.slice( 2 );
 
-var parsedCommandLineOptions = parseArgs( commandLineArgs, {
+const parsedCommandLineOptions = parseArgs( commandLineArgs, {
   boolean: true
 } );
 
-var defaultOptions = {
+const defaultOptions = {
 
   // options for supporting help, currently no other options are supported, but this might change
   help: false,
   h: false
 };
 
-for ( var key in parsedCommandLineOptions ) {
+for ( const key in parsedCommandLineOptions ) {
   if ( key !== '_' && parsedCommandLineOptions.hasOwnProperty( key ) && !defaultOptions.hasOwnProperty( key ) ) {
     console.log( 'Unrecognized option: ' + key );
     console.log( 'try --help for usage information.' );
@@ -125,7 +125,7 @@ if ( parsedCommandLineOptions.hasOwnProperty( 'help' ) || parsedCommandLineOptio
 winston.remove( winston.transports.Console );
 winston.add( winston.transports.Console, {
   'timestamp': function() {
-    var now = new Date();
+    const now = new Date();
     return dateformat( now, 'mmm dd yyyy HH:MM:ss Z' );
   }
 } );
@@ -135,7 +135,7 @@ winston.log( 'info', '---- rosetta starting up ----' );
 winston.log( 'info', 'Node version: ' + process.version );
 
 // Create and configure the ExpressJS app
-var app = express();
+const app = express();
 app.set( 'views', __dirname + '/../html/views' );
 app.set( 'view engine', 'dot' );
 app.engine( 'html', doT.__express );
@@ -181,8 +181,8 @@ app.get( '/translate*', function( req, res, next ){
 // landing page for the translation utility
 app.get( '/translate', routeHandlers.chooseSimulationAndLanguage );
 
-// route for translating a specific sim to a specific language
-app.get( '/translate/sim/:simName?/:targetLocale?', routeHandlers.translateSimulation );
+// route for rendering the page where the user can submit their translated string
+app.get( '/translate/sim/:simName?/:targetLocale?', routeHandlers.renderTranslationPage );
 
 // post route for testing translated strings (does not save them)
 app.post( '/translate/sim/test/:simName?', routeHandlers.testStrings );
