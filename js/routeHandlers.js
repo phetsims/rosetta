@@ -82,7 +82,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
 
   // check whether the session cookie exists
   winston.log( 'info', 'Checking for login cookie' );
-  let cookie = req.cookies.JSESSIONID;
+  const cookie = req.cookies.JSESSIONID;
   winston.log( 'info', 'user id = ' + req.session.userId );
 
   if ( cookie === undefined ) {
@@ -109,7 +109,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
   else {
 
     // session cookie was present, attempt to obtain session information
-    let options = {
+    const options = {
       host: req.get( 'host' ),
       path: '/services/check-login',
       method: 'GET',
@@ -118,7 +118,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
       }
     };
 
-    let sessionDataRequestCallback = function( response ) {
+    const sessionDataRequestCallback = function( response ) {
       let data = '';
 
       // another chunk of data has been received, so append it
@@ -129,7 +129,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
       // the whole response has been received - see if the credentials are valid
       response.on( 'end', function() {
         winston.log( 'info', 'data received: ' + data );
-        let userData = JSON.parse( data );
+        const userData = JSON.parse( data );
         if ( userData.loggedIn ) {
           winston.log( 'info', 'credentials obtained, user is logged in, moving to next step' );
 
@@ -159,7 +159,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
       } );
     };
 
-    let requestCredentials = https.request( options, sessionDataRequestCallback );
+    const requestCredentials = https.request( options, sessionDataRequestCallback );
 
     // error handling
     requestCredentials.on( 'error', function( err ) {
@@ -225,9 +225,22 @@ module.exports.chooseSimulationAndLanguage = function( req, res ) {
  * @param res
  * @public
  */
-module.exports.renderTranslationPageNew = function( req, res ) {
+module.exports.renderTranslationPageNew = async function( req, res ) {
 
-  // let simName = req.params.simName;
+  const simName = req.params.simName;
+  const simInfo = await TranslationUtils.getSimInfo( simName );
+
+  // bail if no sim info can be obtained
+  if ( !simInfo ){
+    renderError( res, 'unable to obtain metadata for sim: ' + simName );
+    return;
+  }
+
+  // extract needed data
+  const simTitle = simInfo.projects[0].simulations[ 0 ].localizedSimulations[ 0 ].title;
+
+  res.render( simTitle );
+
   // let targetLocale = req.params.targetLocale;
   // let activeSimsPath = '/phetsims/chipper/master/data/active-sims';
   // let userId = ( req.session.userId ) ? req.session.userId : 0; // use an id of 0 for localhost testing
@@ -536,8 +549,8 @@ module.exports.renderTranslationPage = function( req, res ) {
  */
 module.exports.submitStrings = function( req, res ) {
 
-  let simName = req.params.simName;
-  let targetLocale = req.params.targetLocale;
+  const simName = req.params.simName;
+  const targetLocale = req.params.targetLocale;
 
   winston.log( 'info', 'queuing string submission for ' + simName + '_' + targetLocale );
   stringSubmissionQueue.push(
@@ -567,7 +580,7 @@ module.exports.testStrings = function( req, res ) {
       // get the string definitions from the HTML file
       const re = new RegExp( STRING_VAR_IN_HTML_FILES + '.*$', 'm' );
       const extractedStrings = simHtml.match( re );
-      let extractedStringsJson = extractedStrings[ 0 ]
+      const extractedStringsJson = extractedStrings[ 0 ]
         .replace( STRING_VAR_IN_HTML_FILES + ' = ', '' )
         .replace( /;$/m, '' );
       const stringsObject = JSON.parse( extractedStringsJson );
@@ -603,34 +616,34 @@ module.exports.testStrings = function( req, res ) {
  */
 module.exports.saveStrings = function( req, res ) {
 
-  let simName = req.params.simName;
-  let targetLocale = req.params.targetLocale;
-  let userId = ( req.session.userId ) ? req.session.userId : 0;
+  const simName = req.params.simName;
+  const targetLocale = req.params.targetLocale;
+  const userId = ( req.session.userId ) ? req.session.userId : 0;
 
   let error = false;
 
-  let finished = _.after( Object.keys( req.body ).length, function() {
+  const finished = _.after( Object.keys( req.body ).length, function() {
     winston.log( 'info', 'finished string saving for ' + simName + '_' + targetLocale );
     res.json( {
       'success': !error
     } );
   } );
 
-  let repos = {};
+  const repos = {};
   for ( let string in req.body ) {
     if ( Object.hasOwnProperty.call( req.body, string ) ) {
 
       // data submitted is in the form "[repository] [key]", for example "area-builder area-builder.title"
-      let repoAndKey = string.split( ' ' );
-      let repo = repoAndKey[ 0 ];
-      let key = repoAndKey[ 1 ];
+      const repoAndKey = string.split( ' ' );
+      const repo = repoAndKey[ 0 ];
+      const key = repoAndKey[ 1 ];
 
       if ( !repos[ repo ] ) {
         repos[ repo ] = {};
       }
 
-      let stringValue = req.body[ string ];
-      let ts = new Date();
+      const stringValue = req.body[ string ];
+      const ts = new Date();
 
       (function( key, stringValue ) {
         if ( key && stringValue && stringValue.length > 0 ) {
@@ -707,7 +720,7 @@ module.exports.runTest = function( req, res ) {
   // only logged in PhET team members can run tests
   if ( req.session.teamMember ) {
 
-    let testID = req.params.testID;
+    const testID = req.params.testID;
     ServerTests.executeTest( testID );
 
     // send back an empty response
