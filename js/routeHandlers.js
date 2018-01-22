@@ -228,7 +228,10 @@ module.exports.chooseSimulationAndLanguage = function( req, res ) {
 module.exports.renderTranslationPageNew = async function( req, res ) {
 
   const simName = req.params.simName;
+  let targetLocale = req.params.targetLocale;
   const simInfo = await TranslationUtils.getSimInfo( simName );
+
+  winston.log( 'info', 'request received to render translation page for sim: ' + simName + ', locale: ' + targetLocale );
 
   // bail if no sim info can be obtained
   if ( !simInfo ){
@@ -239,7 +242,9 @@ module.exports.renderTranslationPageNew = async function( req, res ) {
   // extract needed data
   const simTitle = simInfo.projects[0].simulations[ 0 ].localizedSimulations[ 0 ].title;
 
-  res.render( simTitle );
+  const simUrl = TranslationUtils.getPublishedEnglishSimURL( simName );
+
+  renderError( res, 'extracted title: ' + simTitle + ', URL: ' + simUrl );
 
   // let targetLocale = req.params.targetLocale;
   // let activeSimsPath = '/phetsims/chipper/master/data/active-sims';

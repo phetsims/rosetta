@@ -325,6 +325,14 @@ function getGhClient() {
 }
 
 /**
+ * get the URL for this sim, does not check if sim exists
+ * @param simName
+ */
+function getPublishedEnglishSimURL( simName ){
+  return RosettaConstants.PRODUCTION_SERVER_URL + '/sims/html/' + simName + '/latest/' + simName + '_en.html';
+}
+
+/**
  * get the HTML of the latest published version of the sim from the sever
  * @param {string} simName
  * @return {Promise.<string>} - html of the published simulation
@@ -333,7 +341,7 @@ function getGhClient() {
 async function getLatestSimHtml( simName ){
 
   // compose the URL for the latest English version of the simulation
-  const simUrl = RosettaConstants.PRODUCTION_SERVER_URL + '/sims/html/' + simName + '/latest/' + simName + '_en.html';
+  const simUrl = getPublishedEnglishSimURL( simName );
 
   const response = await fetch( simUrl );
 
@@ -359,6 +367,7 @@ module.exports = {
   extractStrings: extractStrings,
   extractStringsAPI: extractStringsAPI,
   getGhClient: getGhClient,
+  getPublishedEnglishSimURL: getPublishedEnglishSimURL,
   getSimInfo: getSimInfo,
   getLatestSimHtml: getLatestSimHtml,
   checkAndUpdateStringFile: checkAndUpdateStringFile,
