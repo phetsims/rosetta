@@ -29,7 +29,7 @@ let PREFERENCES_FILE;
 
 // The following flag is used to take this utility off line and show a "down for maintenance" sort of page to users.
 // This is generally set by editing the in situ version, and should never be committed to the code base as false.
-const ENABLED = false;
+const ENABLED = true;
 
 /*
  * Rosetta is run under user "phet-admin" on the dev and production servers. However, "process.env.HOME" will get
