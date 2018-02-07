@@ -342,7 +342,7 @@ module.exports.renderTranslationPage = function( req, res ) {
         query( savedStringsQuery, [ userId, targetLocale ], function( err, rows ) {
           winston.log( 'info', 'query returned' );
           if ( err ) {
-            winston.log( 'error', err );
+            winston.log( 'error', 'query failed, error = ' + err );
           }
 
           // load saved strings from database to saveStrings object if there are any
@@ -489,12 +489,15 @@ module.exports.renderTranslationPage = function( req, res ) {
       // initialize the sims array from the active-sims file in chipper
       winston.log( 'info', 'sending request to ' + GITHUB_RAW_FILE_URL_BASE + activeSimsPath );
       request( GITHUB_RAW_FILE_URL_BASE + activeSimsPath, function( error, response, body ) {
-        if ( !error && response.statusCode === 200 ) {
+        if ( error ){
+          winston.log( 'error', 'error occurred getting active-sims file, error = ' + error );
+        }
+        else if ( response.statusCode === 200 ) {
           winston.log( 'info', 'request from ' + GITHUB_RAW_FILE_URL_BASE + activeSimsPath + ' returned successfully' );
           sims = body.toString().split( '\n' );
         }
         else {
-          winston.log( 'error', error );
+          winston.log( 'error', 'unexpected status code when requesting active-sims, status = ' + response.statusCode );
         }
 
         finished();
@@ -525,22 +528,31 @@ module.exports.renderTranslationPage = function( req, res ) {
         winston.log( 'info', 'sending request to ' + translatedStringsPath );
         request( translatedStringsPath, function( error, response, body ) {
           req.session.translatedStrings[ targetLocale ] = req.session.translatedStrings[ targetLocale ] || {};
-          if ( !error && response.statusCode === 200 ) {
+          if ( error ){
+            winston.log( 'error', 'request for ' + translatedStringsPath + ' failed, error = ' + error );
+          }
+          else if ( response.statusCode === 200 ) {
             req.session.translatedStrings[ targetLocale ][ projectName ] = JSON.parse( body );
             winston.log( 'info', 'request for ' + translatedStringsPath + ' returned successfully' );
           }
+          else if ( response.statusCode === 404 ){
+
+            // add an empty object with the project name key
+            req.session.translatedStrings[ targetLocale ][ projectName ] = {};
+            winston.log( 'info', 'no strings in GitHub for project = ' + projectName + ', locale = ' + targetLocale );
+          }
           else {
-            winston.log( 'info', 'request for translated strings for project ' + projectName +
-                                 ' failed, most likely because they don\'t yet exist. Response code: ' +
-                                 response.statusCode + '. URL: ' + translatedStringsPath + '.' );
-            req.session.translatedStrings[ targetLocale ][ projectName ] = {}; // add an empty object with the project name key so key lookups don't fail later on
+            winston.log( 'info', 'request for ' + translatedStringsPath + 'failed, response code = ' + response.statusCode );
+
+            // use an empty object, since there aren't many good options in this case
+            req.session.translatedStrings[ targetLocale ][ projectName ] = {};
           }
           finished();
         } );
       } );
     }
     else {
-      winston.log( 'error', error );
+      winston.log( 'error', 'failed to retrieve live sim, error = ' + error );
       res.send( 'Error: Sim data not found' );
     }
   } );
@@ -656,8 +668,10 @@ module.exports.saveStrings = function( req, res ) {
                  '($1::bigint, $2::varchar(255), $3::varchar(255), $4::varchar(8), $5::varchar(255), $6::timestamp)', [ userId, key, repo, targetLocale, stringValue, ts ],
             function( err, rows, result ) {
               if ( err ) {
-                winston.log( 'error', 'inserting row: (' + userId + ', ' + key + ', ' + stringValue + ', ' + targetLocale + ')' );
-                winston.log( 'error', err );
+                winston.log(
+                  'error',
+                  'inserting row: (' + userId + ', ' + key + ', ' + stringValue + ', ' + targetLocale + '), error = ' + err
+                );
                 error = true;
               }
               finished();
