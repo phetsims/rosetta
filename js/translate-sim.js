@@ -73,9 +73,15 @@ $( document ).ready( function() {
   }
 
   /**
-   * handler that will test the strings currently shown in the
+   * Test the translation by popping up the sim in a new window with the English strings replaced with those submitted
+   * on the translation form.
    */
   function testTranslation() {
+
+    // Bail if the patterns don't validate - calling this will cause any errors to be highlighted on the form.
+    if ( !validatePatterns() ){
+      return;
+    }
 
     // NOTE TO FUTURE MAINTAINERS: I (jbphet) tried using jQuery's post method for the post performed below, but it
     // triggered my popup blocker.  The approach used below, which creates a temporary form element and submits it,
@@ -181,7 +187,8 @@ $( document ).ready( function() {
         $( this ).css( {
           background: '#2a326a'
         } );
-      } );
+      }
+    );
   }
 
   // add highlight to '\n' and '{\d}' so users are aware that this is treated specially
@@ -292,7 +299,7 @@ $( document ).ready( function() {
     return validated;
   }
 
-// validate the inputs before submitting the form
+  // validate the inputs before submitting the form
   $( '#strings' ).submit( function( event ) {
     if ( !validatePatterns() ) {
       $( '.validation-message' ).text( 'Your translation has MessageFormat errors. Please correct these before submitting.' );
@@ -306,18 +313,18 @@ $( document ).ready( function() {
     }
   } );
 
-// fix dir and text-align for RTL languages
+  // fix dir and text-align for RTL languages
   if ( rtl ) {
     inputs.attr( 'dir', 'rtl' );
     inputs.css( 'text-align', 'right' );
   }
 
-// disable pressing enter in inputs because it complicates things by adding <br> and possibly other html
+  // disable pressing enter in inputs because it complicates things by adding <br> and possibly other html
   $( document ).on( 'keypress', inputSelector, function( e ) {
     return e.which !== 13;
   } );
 
-// on every change, copy the content from the editable div to a hidden input so it gets submitted with the form
+  // on every change, copy the content from the editable div to a hidden input so it gets submitted with the form
   $( document ).on( 'keyup paste', inputSelector, function( e ) {
     const contentEditable = $( this );
     const input = contentEditable.next().get( 0 );
@@ -340,7 +347,7 @@ $( document ).ready( function() {
     }
   } );
 
-// on blur, validate the row to make sure it has the correct patterns
+  // on blur, validate the row to make sure it has the correct patterns
   $( document ).on( 'blur', inputSelector, function( e ) {
     const row = this.parentNode.parentNode;
     validateRow( row );
