@@ -181,8 +181,8 @@ module.exports.logout = function( req, res ) {
 };
 
 /**
- * route hanlder that lets the user choose a simulation and language to translate, and subsequently routes them to the
- * actual translation page.
+ * route handler that lets the user choose a simulation and language to translate, and subsequently routes them to the
+ * translation page
  *
  * @param req
  * @param res
@@ -268,7 +268,7 @@ module.exports.renderTranslationPage = function( req, res ) {
 
   let simName = req.params.simName;
   let targetLocale = req.params.targetLocale;
-  let activeSimsPath = '/phetsims/chipper/master/data/active-sims';
+  let activeSimsPath = '/phetsims/perennial/master/data/active-sims';
   let userId = ( req.session.userId ) ? req.session.userId : 0; // use an id of 0 for localhost testing
 
   winston.log( 'info', 'creating translation page for ' + simName + ' ' + targetLocale );
