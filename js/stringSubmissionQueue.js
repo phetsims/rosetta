@@ -238,7 +238,7 @@ async function getLatestSimVersion( simName ) {
  * Get the latest sim version by looking directly at the directories where the sims are kept, i.e. not through an HTTP
  * request.  This exists primarily to support testing, since there are some sims that are used for translation testing
  * (primarily the 'chains' sim at the time of this writing) whose version information is not available through PhET's
- * metadata API.  For this to work when testing on localhost, a fake directory will need to gbe set up on the local
+ * metadata API.  For this to work when testing on localhost, a fake directory will need to be set up on the local
  * machine, and the file path to said directory will need to be set up in the build-local.json file.  The version info
  * for the sims will need to be manually maintained.
  * @param simName
