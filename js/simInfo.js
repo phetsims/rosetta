@@ -12,6 +12,7 @@
 
 // imports
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
+const request = require( 'request' );
 const RosettaConstants = require( './RosettaConstants' );
 const _ = require( 'underscore' ); // eslint-disable-line
 const winston = require( 'winston' );
@@ -32,11 +33,43 @@ let inProgressMetadataPromise = null;
 async function updateSimInfo() {
   console.log( 'updateSimInfo called' );
   const url = RosettaConstants.PRODUCTION_SERVER_URL +
-              '/services/metadata/1.2/simulations?format=json&type=html&summary';
-  const response = await nodeFetch( url );
-  const simMetadata = await response.json();
-  if ( !simMetadata.projects ) {
-    winston.error( 'unable to obtain metadata' );
+              '/services/metadata/1.2/simulations?format=json&type=html&include-unpublished=true&summary';
+
+  //-------------
+  let simMetadata;
+  try {
+    simMetadata = await new Promise( ( resolve, reject ) => {
+      request( url, async ( error, response, body ) => {
+        try {
+          body = JSON.parse( body );
+        }
+          // the JSON object wasn't formatted right, reject
+        catch( e ) {
+          reject( e );
+        }
+        // there was some error in the request, reject
+        if ( error ) {
+          reject( error );
+        }
+        // there was an error processing the request
+        else if ( body.error ) {
+          reject( new Error( body.error ) );
+        }
+        // it's all good, resolve the promise
+        else {
+          resolve( body );
+        }
+      } ).auth( 'token', global.preferences.serverToken, true );
+    } );
+  }
+  catch( err ) {
+    winston.error( ' failed, err = ' + err );
+    return Promise.reject( err );
+    // TODO: test this, make sure it's really what I want to do
+  }
+
+  if ( !simMetadata || !simMetadata.projects ) {
+    winston.error( 'unable to obtain metadata, sim info not updated' );
   }
   else {
     // console.log( 'JSON.stringify( simMetadata ) = ' + JSON.stringify( simMetadata ) );
