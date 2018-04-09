@@ -3,7 +3,6 @@
 /**
  * A singleton object that contains information about the published simulations.  The specific information contained is
  * that which is needed by Rosetta, the PhET translation utility, to do its job.
- *
  * @author John Blanco
  */
 
@@ -11,11 +10,10 @@
 'use strict';
 
 // imports
-const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const request = require( 'request' );
 const RosettaConstants = require( './RosettaConstants' );
-const _ = require( 'underscore' ); // eslint-disable-line
 const winston = require( 'winston' );
+const _ = require( 'underscore' ); // eslint-disable-line
 
 // constants
 const CACHED_DATA_VALID_TIME = 1800; // in seconds
@@ -35,7 +33,6 @@ async function updateSimInfo() {
   const url = RosettaConstants.PRODUCTION_SERVER_URL +
               '/services/metadata/1.2/simulations?format=json&type=html&include-unpublished=true&summary';
 
-  //-------------
   let simMetadata;
   try {
     simMetadata = await new Promise( ( resolve, reject ) => {
@@ -63,7 +60,7 @@ async function updateSimInfo() {
     } );
   }
   catch( err ) {
-    winston.error( ' failed, err = ' + err );
+    winston.error( 'metadata retrieval  failed, err = ' + err );
     return Promise.reject( err );
     // TODO: test this, make sure it's really what I want to do
   }
@@ -72,7 +69,6 @@ async function updateSimInfo() {
     winston.error( 'unable to obtain metadata, sim info not updated' );
   }
   else {
-    // console.log( 'JSON.stringify( simMetadata ) = ' + JSON.stringify( simMetadata ) );
     simMetadata.projects.forEach( projectInfo => {
       projectInfo.simulations.forEach( simInfo => {
         const simName = simInfo.name;
@@ -90,11 +86,6 @@ async function updateSimInfo() {
           testUrl: RosettaConstants.PRODUCTION_SERVER_URL + '/sims/html/' + simName + '/latest/' + simName + '_en.html',
           translationLocales: translationLocales
         };
-        // console.log( '--------' );
-        // console.log( 'simName = ' + simName );
-        // console.log( 'englishTitle = ' + englishTitle );
-        // console.log( 'translationLocales = ' + translationLocales );
-        // console.log( 'simInfoObject[ simName ].testURL = ' + simInfoObject[ simName ].testUrl );
       } );
     } );
     timeOfLastUpdate = Date.now();
@@ -130,6 +121,7 @@ module.exports = {
 
   getListOfSimNames: async function( includeUnpublished ) {
     await checkAndUpdateSimInfo();
+    // TBD - exclude unpublished sims once that information is available
     return _.keys( simInfoObject );
   },
 
