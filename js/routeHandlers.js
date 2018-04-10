@@ -21,7 +21,7 @@ const _ = require( 'underscore' ); // eslint-disable-line
 const LocaleInfo = require( './LocaleInfo' );
 const RosettaConstants = require( './RosettaConstants' );
 const ServerTests = require( './ServerTests' );
-const simInfo = require( './simInfo' );
+const simData = require( './simData' );
 const stringSubmissionQueue = require( './stringSubmissionQueue' ).stringSubmissionQueue; // eslint-disable-line
 const TranslationUtils = require( './TranslationUtils' );
 const escapeHTML = TranslationUtils.escapeHTML;
@@ -188,7 +188,7 @@ module.exports.logout = function( req, res ) {
  */
 module.exports.chooseSimulationAndLanguage = async function( req, res ) {
 
-  let simInfoArray = await simInfo.getSimTranslationPageInfo( req.session.teamMember );
+  let simInfoArray = await simData.getSimTranslationPageInfo( req.session.teamMember );
 
   // sort the list of sims to be in alphabetical order by sim title
   simInfoArray.sort( function( a, b ) {
@@ -220,18 +220,18 @@ module.exports.renderTranslationPageNew = async function( req, res ) {
 
   const simName = req.params.simName;
   let targetLocale = req.params.targetLocale;
-  const simInfo = await TranslationUtils.getSimInfo( simName );
+  const simData = await TranslationUtils.getSimInfo( simName );
 
   winston.log( 'info', 'request received to render translation page for sim: ' + simName + ', locale: ' + targetLocale );
 
   // bail if no sim info can be obtained
-  if ( !simInfo ){
+  if ( !simData ) {
     renderError( res, 'unable to obtain metadata for sim: ' + simName );
     return;
   }
 
   // extract needed data
-  const simTitle = simInfo.projects[0].simulations[ 0 ].localizedSimulations[ 0 ].title;
+  const simTitle = simData.projects[ 0 ].simulations[ 0 ].localizedSimulations[ 0 ].title;
 
   const simUrl = TranslationUtils.getPublishedEnglishSimURL( simName );
 
@@ -243,7 +243,7 @@ module.exports.renderTranslationPageNew = async function( req, res ) {
   //
   // winston.log( 'info', 'rendering translation page for ' + simName + ' ' + targetLocale );
   //
-  // let simInfo = await TranslationUtils.getSimInfo( simName );
+  // let simData = await TranslationUtils.getSimInfo( simName );
 
 
 };
@@ -265,7 +265,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
   winston.log( 'info', 'creating translation page for ' + simName + ' ' + targetLocale );
 
   // get the URL of the live sim
-  const simUrl = await simInfo.getLiveSimUrl( simName );
+  const simUrl = await simData.getLiveSimUrl( simName );
   winston.log( 'info', 'sending request to ' + simUrl );
 
   // extract strings from the live sim's html file
@@ -459,7 +459,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
             otherSimNames: otherSims.join( ', ' ),
             localeName: targetLocale,
             direction: locale ? locale.direction : 'ltr',
-            simUrl: await simInfo.getLiveSimUrl( simName ),
+            simUrl: await simData.getLiveSimUrl( simName ),
             username: req.session.email || 'not logged in',
             trustedTranslator: ( req.session.trustedTranslator ) ? req.session.trustedTranslator : false
           };

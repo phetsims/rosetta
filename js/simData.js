@@ -22,14 +22,13 @@ const CACHED_DATA_VALID_TIME = 1800; // in seconds
 let timeOfLastUpdate = 0;
 
 // sim info object - populated by obtaining metadata from the PhET website, used as a cache, updated when needed
-const simInfoObject = {};
+const simDataObject = {};
 
 // outstanding promise for getting metadata, used to avoid creating duplicate requests if once is already in progress
 let inProgressMetadataPromise = null;
 
 // function that updates the local copy of the sim info by retrieving and interpreting metadata from the PhET site
-async function updateSimInfo() {
-  console.log( 'updateSimInfo called' );
+async function updateSimData() {
   const url = RosettaConstants.PRODUCTION_SERVER_URL +
               '/services/metadata/1.2/simulations?format=json&type=html&include-unpublished=true&summary';
 
@@ -69,22 +68,25 @@ async function updateSimInfo() {
     winston.error( 'unable to obtain metadata, sim info not updated' );
   }
   else {
+
+    // extract the subset of the metadata needed by the translation utility and save it in the sim info object
     simMetadata.projects.forEach( projectInfo => {
-      projectInfo.simulations.forEach( simInfo => {
-        const simName = simInfo.name;
+      projectInfo.simulations.forEach( simData => {
+        const simName = simData.name;
         const translationLocales = [];
         let englishTitle = '';
-        simInfo.localizedSimulations.forEach( localizedSimInfo => {
-          translationLocales.push( localizedSimInfo.locale );
-          if ( localizedSimInfo.locale === 'en' ) {
-            englishTitle = localizedSimInfo.title;
+        simData.localizedSimulations.forEach( localizedSimData => {
+          translationLocales.push( localizedSimData.locale );
+          if ( localizedSimData.locale === 'en' ) {
+            englishTitle = localizedSimData.title;
           }
         } );
 
-        simInfoObject[ simName ] = {
+        simDataObject[ simName ] = {
           englishTitle: englishTitle,
-          publishedSimUrl: RosettaConstants.PRODUCTION_SERVER_URL + '/sims/html/' + simName + '/latest/' + simName + '_en.html',
-          translationLocales: translationLocales
+          simUrl: RosettaConstants.PRODUCTION_SERVER_URL + '/sims/html/' + simName + '/latest/' + simName + '_en.html',
+          translationLocales: translationLocales,
+          visible: simData.visible
         };
       } );
     } );
@@ -93,7 +95,7 @@ async function updateSimInfo() {
 }
 
 // function that updates cached data if it is time to do so
-async function checkAndUpdateSimInfo() {
+async function checkAndUpdateSimData() {
 
   // if a request is already in progress, return that promise
   if ( inProgressMetadataPromise ) {
@@ -102,7 +104,7 @@ async function checkAndUpdateSimInfo() {
   }
   else if ( (Date.now() - timeOfLastUpdate) / 1000 > CACHED_DATA_VALID_TIME ) {
     winston.info( 'sim info data was stale, initiating a new request' );
-    inProgressMetadataPromise = updateSimInfo();
+    inProgressMetadataPromise = updateSimData();
     await inProgressMetadataPromise;
     inProgressMetadataPromise = null; // clear out the promise when it's done
   }
@@ -112,17 +114,40 @@ async function checkAndUpdateSimInfo() {
 }
 
 // kick off the initial population of the sim data
-checkAndUpdateSimInfo()
-  .then( () => { winston.info( 'initial population of simInfo object complete' ); } )
-  .catch( ( err ) => winston.info( 'initial population of simInfo object failed, err = ' + err ) );
+checkAndUpdateSimData()
+  .then( () => { winston.info( 'initial population of simData object complete' ); } )
+  .catch( ( err ) => winston.info( 'initial population of simData object failed, err = ' + err ) );
 
 // exported singleton object
 module.exports = {
 
+  /**
+   * get a list of the HTML5 sims that are available on the PhET website
+   * @param {boolean} includeUnpublished
+   * @return {Promise.<Array.<string>>}
+   */
   getListOfSimNames: async function( includeUnpublished ) {
-    await checkAndUpdateSimInfo();
-    // TBD - exclude unpublished sims once that information is available
-    return _.keys( simInfoObject );
+
+    await checkAndUpdateSimData();
+
+    // get a list of all sims (remember that we are only working with HTML5 sims here)
+    let simNames = _.keys( simDataObject );
+
+    // Unpublished (AKA invisible) sims are present by default, so if the flag says that they should NOT be included,
+    // they need to be removed.
+    if ( !includeUnpublished ) {
+      console.log( 'EXCLUDING' );
+      const simNamesToExclude = [];
+      simNames.forEach( sim => {
+        if ( !simDataObject[ sim ].visible ) {
+          simNamesToExclude.push( sim );
+        }
+      } );
+      console.log( 'simNamesToExclude = ' + simNamesToExclude );
+      simNames = _.difference( simNames, simNamesToExclude );
+    }
+
+    return simNames;
   },
 
   /**
@@ -130,37 +155,50 @@ module.exports = {
    * that are available on the website.  The format is that which is needed to render the main translation selection
    * page, and is a bit historic, if background is needed please see https://github.com/phetsims/rosetta/issues/123.
    * @param {boolean} includeUnpublished
-   * @return {Promise<Object>}
+   * @return {Promise.<Array>}
    * @public
    */
   getSimTranslationPageInfo: async function( includeUnpublished ) {
-    await checkAndUpdateSimInfo();
+    await checkAndUpdateSimData();
     const simInfoArray = [];
-    // TBD - exclude unpublished sims once that information is available
-    _.keys( simInfoObject ).forEach( projectName => {
-      simInfoArray.push( {
-        projectName: projectName,
-        simTitle: simInfoObject[ projectName ].englishTitle,
-        testUrl: simInfoObject[ projectName ].publishedSimUrl
-      } );
+    _.keys( simDataObject ).forEach( projectName => {
+      if ( simDataObject[ projectName ].visible || includeUnpublished ) {
+        simInfoArray.push( {
+          projectName: projectName,
+          simTitle: simDataObject[ projectName ].englishTitle,
+          testUrl: simDataObject[ projectName ].simUrl
+        } );
+      }
     } );
     return simInfoArray;
   },
 
+  /**
+   * get the URL where the simulation is available from the website
+   * @param {string} simName
+   * @return {Promise.<string|null>}
+   */
   getLiveSimUrl: async function( simName ) {
-    await checkAndUpdateSimInfo();
-    if ( !simInfoObject[ simName ] ) {
+    await checkAndUpdateSimData();
+    if ( !simDataObject[ simName ] ) {
       winston.error( 'sim not found in metadata, simName = ' + simName );
+      return null;
     }
-    return simInfoObject[ simName ].publishedSimUrl;
+    return simDataObject[ simName ].simUrl;
   },
 
+  /**
+   * get the English translation of the title for the specified simulation
+   * @param {string} simName
+   * @return {Promise.<string>}
+   */
   getEnglishTitle: async function( simName ) {
-    await checkAndUpdateSimInfo();
-    if ( !simInfoObject[ simName ] ) {
+    await checkAndUpdateSimData();
+    if ( !simDataObject[ simName ] ) {
       winston.error( 'sim not found in metadata, simName = ' + simName );
+      return '';
     }
-    return simInfoObject[ simName ].englishTitle;
+    return simDataObject[ simName ].englishTitle;
   }
 };
 
