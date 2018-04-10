@@ -83,7 +83,7 @@ async function updateSimInfo() {
 
         simInfoObject[ simName ] = {
           englishTitle: englishTitle,
-          testUrl: RosettaConstants.PRODUCTION_SERVER_URL + '/sims/html/' + simName + '/latest/' + simName + '_en.html',
+          publishedSimUrl: RosettaConstants.PRODUCTION_SERVER_URL + '/sims/html/' + simName + '/latest/' + simName + '_en.html',
           translationLocales: translationLocales
         };
       } );
@@ -125,12 +125,34 @@ module.exports = {
     return _.keys( simInfoObject );
   },
 
-  getTestUrl: async function( simName ) {
+  /**
+   * Get an array of objects where each object contains the project-name, title, and published URL of the simulations
+   * that are available on the website.  The format is that which is needed to render the main translation selection
+   * page, and is a bit historic, if background is needed please see https://github.com/phetsims/rosetta/issues/123.
+   * @param {boolean} includeUnpublished
+   * @return {Promise<Object>}
+   * @public
+   */
+  getSimTranslationPageInfo: async function( includeUnpublished ) {
+    await checkAndUpdateSimInfo();
+    const simInfoArray = [];
+    // TBD - exclude unpublished sims once that information is available
+    _.keys( simInfoObject ).forEach( projectName => {
+      simInfoArray.push( {
+        projectName: projectName,
+        simTitle: simInfoObject[ projectName ].englishTitle,
+        testUrl: simInfoObject[ projectName ].publishedSimUrl
+      } );
+    } );
+    return simInfoArray;
+  },
+
+  getLiveSimUrl: async function( simName ) {
     await checkAndUpdateSimInfo();
     if ( !simInfoObject[ simName ] ) {
       winston.error( 'sim not found in metadata, simName = ' + simName );
     }
-    return simInfoObject[ simName ].testUrl;
+    return simInfoObject[ simName ].publishedSimUrl;
   },
 
   getEnglishTitle: async function( simName ) {

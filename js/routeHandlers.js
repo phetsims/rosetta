@@ -10,25 +10,25 @@
 /* eslint-env node */
 'use strict';
 
-// modules
-const fs = require( 'fs' );
+// node modules
 const https = require( 'https' );
 const query = require( 'pg-query' ); // eslint-disable-line
 const request = require( 'request' );
 const winston = require( 'winston' );
+const _ = require( 'underscore' ); // eslint-disable-line
+
+// server modules
 const LocaleInfo = require( './LocaleInfo' );
-const stringSubmissionQueue = require( './stringSubmissionQueue' ).stringSubmissionQueue; // eslint-disable-line
+const RosettaConstants = require( './RosettaConstants' );
 const ServerTests = require( './ServerTests' );
-const TranslatableSimInfo = require( './TranslatableSimInfo' );
+const simInfo = require( './simInfo' );
+const stringSubmissionQueue = require( './stringSubmissionQueue' ).stringSubmissionQueue; // eslint-disable-line
 const TranslationUtils = require( './TranslationUtils' );
 const escapeHTML = TranslationUtils.escapeHTML;
 const renderError = TranslationUtils.renderError;
-const RosettaConstants = require( './RosettaConstants' );
-const _ = require( 'underscore' ); // eslint-disable-line
 
 // constants
 const GITHUB_RAW_FILE_URL_BASE = RosettaConstants.GITHUB_RAW_FILE_URL_BASE;
-const SIM_INFO_ARRAY = RosettaConstants.SIM_INFO_ARRAY;
 const TITLE = 'PhET Translation Utility (HTML5)';
 const ASCII_REGEX = /^[ -~]+$/;
 const STRING_VAR_IN_HTML_FILES = 'window.phet.chipper.strings';
@@ -183,21 +183,12 @@ module.exports.logout = function( req, res ) {
 /**
  * route handler that lets the user choose a simulation and language to translate, and subsequently routes them to the
  * translation page
- *
  * @param req
  * @param res
  */
-module.exports.chooseSimulationAndLanguage = function( req, res ) {
+module.exports.chooseSimulationAndLanguage = async function( req, res ) {
 
-  let simInfoArray = JSON.parse( fs.readFileSync( SIM_INFO_ARRAY, 'utf8' ) );
-
-  // if the user is not a PhET team member, eliminate the test sims from the list of translatable sims
-  if ( !req.session.teamMember ){
-    // TODO: This list is hard coded.  Once the meta-data is used, this should not be necessary.
-    simInfoArray = _.filter( simInfoArray, function( simInfo ){
-      return simInfo.projectName !== 'example-sim' && simInfo.projectName !== 'chains' && simInfo.projectName !== 'bumper';
-    } );
-  }
+  let simInfoArray = await simInfo.getSimTranslationPageInfo( req.session.teamMember );
 
   // sort the list of sims to be in alphabetical order by sim title
   simInfoArray.sort( function( a, b ) {
@@ -258,13 +249,13 @@ module.exports.renderTranslationPageNew = async function( req, res ) {
 };
 
 /**
- * Route that creates a page for translating a given simulation to a given language.  The simulation ID and the target
+ * A route that creates a page for translating a given simulation to a given language.  The simulation ID and the target
  * language are extracted from the incoming request.
  * @param req
  * @param res
  * @public
  */
-module.exports.renderTranslationPage = function( req, res ) {
+module.exports.renderTranslationPage = async function( req, res ) {
 
   let simName = req.params.simName;
   let targetLocale = req.params.targetLocale;
@@ -273,20 +264,12 @@ module.exports.renderTranslationPage = function( req, res ) {
 
   winston.log( 'info', 'creating translation page for ' + simName + ' ' + targetLocale );
 
-  // get the url of the live sim (from simInfoArray)
-  let simUrl;
-  let simInfoArray = JSON.parse( fs.readFileSync( SIM_INFO_ARRAY, 'utf8' ) );
-  for ( let i = 0; i < simInfoArray.length; i++ ) {
-    if ( simInfoArray[ i ].projectName === simName ) {
-      simUrl = simInfoArray[ i ].testUrl;
-      break;
-    }
-  }
-
+  // get the URL of the live sim
+  const simUrl = await simInfo.getLiveSimUrl( simName );
   winston.log( 'info', 'sending request to ' + simUrl );
 
   // extract strings from the live sim's html file
-  request( simUrl, function( error, response, body ) {
+  request( simUrl, async function( error, response, body ) {
     if ( !error && response.statusCode === 200 ) {
       let i;
       let sims; // array of all active sims
@@ -339,7 +322,7 @@ module.exports.renderTranslationPage = function( req, res ) {
         winston.log( 'info', 'running query: ' + savedStringsQuery );
 
         // query postgres to see if there are any saved strings for this user
-        query( savedStringsQuery, [ userId, targetLocale ], function( err, rows ) {
+        query( savedStringsQuery, [ userId, targetLocale ], async function( err, rows ) {
           winston.log( 'info', 'query returned' );
           if ( err ) {
             winston.log( 'error', 'query failed, error = ' + err );
@@ -476,7 +459,7 @@ module.exports.renderTranslationPage = function( req, res ) {
             otherSimNames: otherSims.join( ', ' ),
             localeName: targetLocale,
             direction: locale ? locale.direction : 'ltr',
-            simUrl: TranslatableSimInfo.getSimInfoByProjectName( simName ).testUrl,
+            simUrl: await simInfo.getLiveSimUrl( simName ),
             username: req.session.email || 'not logged in',
             trustedTranslator: ( req.session.trustedTranslator ) ? req.session.trustedTranslator : false
           };
