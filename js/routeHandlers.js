@@ -210,45 +210,6 @@ module.exports.chooseSimulationAndLanguage = async function( req, res ) {
 };
 
 /**
- * Route that creates a page for translating a given simulation to a given language.  The simulation ID and the target
- * language are extracted from the incoming request.
- * @param req
- * @param res
- * @public
- */
-module.exports.renderTranslationPageNew = async function( req, res ) {
-
-  const simName = req.params.simName;
-  let targetLocale = req.params.targetLocale;
-  const simData = await TranslationUtils.getSimInfo( simName );
-
-  winston.log( 'info', 'request received to render translation page for sim: ' + simName + ', locale: ' + targetLocale );
-
-  // bail if no sim info can be obtained
-  if ( !simData ) {
-    renderError( res, 'unable to obtain metadata for sim: ' + simName );
-    return;
-  }
-
-  // extract needed data
-  const simTitle = simData.projects[ 0 ].simulations[ 0 ].localizedSimulations[ 0 ].title;
-
-  const simUrl = TranslationUtils.getPublishedEnglishSimURL( simName );
-
-  renderError( res, 'extracted title: ' + simTitle + ', URL: ' + simUrl );
-
-  // let targetLocale = req.params.targetLocale;
-  // let activeSimsPath = '/phetsims/chipper/master/data/active-sims';
-  // let userId = ( req.session.userId ) ? req.session.userId : 0; // use an id of 0 for localhost testing
-  //
-  // winston.log( 'info', 'rendering translation page for ' + simName + ' ' + targetLocale );
-  //
-  // let simData = await TranslationUtils.getSimInfo( simName );
-
-
-};
-
-/**
  * A route that creates a page for translating a given simulation to a given language.  The simulation ID and the target
  * language are extracted from the incoming request.
  * @param req

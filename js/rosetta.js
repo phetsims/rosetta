@@ -184,9 +184,6 @@ app.get( '/translate', routeHandlers.chooseSimulationAndLanguage );
 // route for rendering the page where the user can submit their translated string
 app.get( '/translate/sim/:simName?/:targetLocale?', routeHandlers.renderTranslationPage );
 
-// TODO: Temporary route for testing new async rendering method, added 1/18/2018, shouldn't live long after that.
-app.get( '/translate/simz/:simName?/:targetLocale?', routeHandlers.renderTranslationPageNew );
-
 // post route for testing translated strings (does not save them)
 app.post( '/translate/sim/test/:simName?', routeHandlers.testStrings );
 
