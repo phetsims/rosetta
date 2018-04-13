@@ -59,7 +59,7 @@ async function updateSimData() {
     } );
   }
   catch( err ) {
-    winston.error( 'metadata retrieval  failed, err = ' + err );
+    winston.error( 'metadata retrieval failed, err = ' + err );
     return Promise.reject( err );
     // TODO: test this, make sure it's really what I want to do
   }

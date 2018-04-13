@@ -50,6 +50,7 @@ const preferences = require( PREFERENCES_FILE );
 assert( preferences.githubUsername, 'githubUsername is missing from ' + PREFERENCES_FILE );
 assert( preferences.githubPassword, 'githubPassword is missing from ' + PREFERENCES_FILE );
 assert( preferences.buildServerAuthorizationCode, 'buildServerAuthorizationCode is missing from ' + PREFERENCES_FILE );
+assert( preferences.serverToken, 'serverToken is missing from ' + PREFERENCES_FILE );
 assert( preferences.rosettaSessionSecret, 'rosettaSessionSecret is missing from ' + PREFERENCES_FILE +
                                           '. To set this up for local testing add any string as the value for "rosettaSessionSecret"' );
 
