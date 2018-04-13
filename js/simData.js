@@ -86,7 +86,8 @@ async function updateSimData() {
           englishTitle: englishTitle,
           simUrl: RosettaConstants.PRODUCTION_SERVER_URL + '/sims/html/' + simName + '/latest/' + simName + '_en.html',
           translationLocales: translationLocales,
-          visible: simData.visible
+          visible: simData.visible,
+          version: projectInfo.version.string
         };
       } );
     } );
@@ -102,7 +103,7 @@ async function checkAndUpdateSimData() {
     winston.info( 'a request for metadata is in progress, waiting on that promise' );
     await inProgressMetadataPromise;
   }
-  else if ( (Date.now() - timeOfLastUpdate) / 1000 > CACHED_DATA_VALID_TIME ) {
+  else if ( ( Date.now() - timeOfLastUpdate ) / 1000 > CACHED_DATA_VALID_TIME ) {
     winston.info( 'sim info data was stale, initiating a new request' );
     inProgressMetadataPromise = updateSimData();
     await inProgressMetadataPromise;
@@ -125,6 +126,7 @@ module.exports = {
    * get a list of the HTML5 sims that are available on the PhET website
    * @param {boolean} includeUnpublished
    * @return {Promise.<Array.<string>>}
+   * @public
    */
   getListOfSimNames: async function( includeUnpublished ) {
 
@@ -177,6 +179,7 @@ module.exports = {
    * get the URL where the simulation is available from the website
    * @param {string} simName
    * @return {Promise.<string|null>}
+   * @public
    */
   getLiveSimUrl: async function( simName ) {
     await checkAndUpdateSimData();
@@ -191,6 +194,7 @@ module.exports = {
    * get the English translation of the title for the specified simulation
    * @param {string} simName
    * @return {Promise.<string>}
+   * @public
    */
   getEnglishTitle: async function( simName ) {
     await checkAndUpdateSimData();
@@ -199,6 +203,21 @@ module.exports = {
       return '';
     }
     return simDataObject[ simName ].englishTitle;
+  },
+
+  /**
+   * Get the latest version for a simulation
+   * @param {string} simName
+   * @returns {Promise<string>}
+   * @public
+   */
+  getLatestSimVersion: async function( simName ) {
+    await checkAndUpdateSimData();
+    if ( !simDataObject[ simName ] ) {
+      winston.error( 'sim not found in metadata, simName = ' + simName );
+      return '';
+    }
+    return simDataObject[ simName ].version;
   }
 };
 

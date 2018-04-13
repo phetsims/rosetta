@@ -52,7 +52,6 @@ assert( preferences.githubPassword, 'githubPassword is missing from ' + PREFEREN
 assert( preferences.buildServerAuthorizationCode, 'buildServerAuthorizationCode is missing from ' + PREFERENCES_FILE );
 assert( preferences.rosettaSessionSecret, 'rosettaSessionSecret is missing from ' + PREFERENCES_FILE +
                                           '. To set this up for local testing add any string as the value for "rosettaSessionSecret"' );
-assert( preferences.htmlSimsDirectory, 'Missing htmlSimsDirectory from ' + PREFERENCES_FILE );
 
 preferences.productionServerURL = preferences.productionServerURL || 'https://phet.colorado.edu';
 preferences.productionServerName = preferences.productionServerName || 'phet-server.int.colorado.edu';
