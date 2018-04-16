@@ -18,7 +18,7 @@ const winston = require( 'winston' );
 const _ = require( 'underscore' ); // eslint-disable-line
 
 // server modules
-const LocaleInfo = require( './LocaleInfo' );
+const localeInfoGithub = require( './localeInfoGithub' );
 const RosettaConstants = require( './RosettaConstants' );
 const ServerTests = require( './ServerTests' );
 const simData = require( './simData' );
@@ -204,7 +204,7 @@ module.exports.chooseSimulationAndLanguage = async function( req, res ) {
   res.render( 'translate-home.html', {
     title: TITLE,
     simInfoArray: simInfoArray,
-    localeInfoArray: LocaleInfo.sortedLocaleInfoArray,
+    localeInfoArray: await localeInfoGithub.getSortedLocaleInfoArray(),
     username: req.session.email || 'not logged in'
   } );
 };
@@ -404,7 +404,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
           simStringsArray.sort( compare );
           commonStringsArray.sort( compare );
 
-          let locale = LocaleInfo.localeInfoObject[ targetLocale ];
+          let locale = await localeInfoGithub.getLocaleInfoObject()[ targetLocale ];
 
           // Assemble the data that will be supplied to the template.
           let templateData = {
@@ -433,7 +433,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
       // initialize the sims array from the active-sims file in chipper
       winston.log( 'info', 'sending request to ' + GITHUB_RAW_FILE_URL_BASE + activeSimsPath );
       request( GITHUB_RAW_FILE_URL_BASE + activeSimsPath, function( error, response, body ) {
-        if ( error ){
+        if ( error ) {
           winston.log( 'error', 'error occurred getting active-sims file, error = ' + error );
         }
         else if ( response.statusCode === 200 ) {
@@ -472,14 +472,14 @@ module.exports.renderTranslationPage = async function( req, res ) {
         winston.log( 'info', 'sending request to ' + translatedStringsPath );
         request( translatedStringsPath, function( error, response, body ) {
           req.session.translatedStrings[ targetLocale ] = req.session.translatedStrings[ targetLocale ] || {};
-          if ( error ){
+          if ( error ) {
             winston.log( 'error', 'request for ' + translatedStringsPath + ' failed, error = ' + error );
           }
           else if ( response.statusCode === 200 ) {
             req.session.translatedStrings[ targetLocale ][ projectName ] = JSON.parse( body );
             winston.log( 'info', 'request for ' + translatedStringsPath + ' returned successfully' );
           }
-          else if ( response.statusCode === 404 ){
+          else if ( response.statusCode === 404 ) {
 
             // add an empty object with the project name key
             req.session.translatedStrings[ targetLocale ][ projectName ] = {};
@@ -549,10 +549,10 @@ module.exports.testStrings = function( req, res ) {
       // replace values in the extracted strings with those specified by the user
       const translatedStringsObject = req.body;
       _.keys( translatedStringsObject ).forEach( key => {
-        if ( stringsObject.en[ key ] ){
+        if ( stringsObject.en[ key ] ) {
           stringsObject.en[ key ] = translatedStringsObject[ key ];
         }
-        else{
+        else {
           winston( 'error', 'key missing in extracted strings, key = ' + key );
         }
       } );
@@ -606,7 +606,7 @@ module.exports.saveStrings = function( req, res ) {
       const stringValue = req.body[ string ];
       const ts = new Date();
 
-      (function( key, stringValue ) {
+      ( function( key, stringValue ) {
         if ( key && stringValue && stringValue.length > 0 ) {
           query( 'SELECT upsert_saved_translations' +
                  '($1::bigint, $2::varchar(255), $3::varchar(255), $4::varchar(8), $5::varchar(255), $6::timestamp)', [ userId, key, repo, targetLocale, stringValue, ts ],
@@ -624,7 +624,7 @@ module.exports.saveStrings = function( req, res ) {
         else {
           finished();
         }
-      })( key, stringValue );
+      } )( key, stringValue );
     }
     else {
       finished();
