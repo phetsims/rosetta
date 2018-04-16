@@ -18,7 +18,7 @@ const winston = require( 'winston' );
 const _ = require( 'underscore' ); // eslint-disable-line
 
 // server modules
-const localeInfoGithub = require( './localeInfoGithub' );
+const localeInfo = require( './localeInfo' );
 const RosettaConstants = require( './RosettaConstants' );
 const ServerTests = require( './ServerTests' );
 const simData = require( './simData' );
@@ -204,7 +204,7 @@ module.exports.chooseSimulationAndLanguage = async function( req, res ) {
   res.render( 'translate-home.html', {
     title: TITLE,
     simInfoArray: simInfoArray,
-    localeInfoArray: await localeInfoGithub.getSortedLocaleInfoArray(),
+    localeInfoArray: await localeInfo.getSortedLocaleInfoArray(),
     username: req.session.email || 'not logged in'
   } );
 };
@@ -404,7 +404,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
           simStringsArray.sort( compare );
           commonStringsArray.sort( compare );
 
-          let locale = await localeInfoGithub.getLocaleInfoObject()[ targetLocale ];
+          let locale = await localeInfo.getLocaleInfoObject()[ targetLocale ];
 
           // Assemble the data that will be supplied to the template.
           let templateData = {
