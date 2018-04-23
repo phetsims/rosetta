@@ -33,7 +33,8 @@ To check if rosetta is running (note the lack of sudo):
 
 ### Rosetta configuration on simian, figaro, and phet-server.
 
-All of the phet repos live on simian, figaro and phet-server under /data/share/phet/phet-repos. Rosetta lives in /data/share/phet/phet-repos/rosetta.
+Rosetta lives in /data/share/phet/rosetta. It is designed to work as a stand alone repo, and shouldn't
+need any other repos cloned as siblings
 
 Rosetta is run as user "phet-admin". It requires the certain fields filled out in phet-admin's HOME/.phet/build-local.json
 (see assertions in rosetta.js). These fields are already filled out, but they may need to modified or updated.
