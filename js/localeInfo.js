@@ -64,6 +64,8 @@ async function updateLocaleInfo() {
       }
       return 0;
     } );
+
+    timeOfLastUpdate = Date.now();
   }
 
   else {
