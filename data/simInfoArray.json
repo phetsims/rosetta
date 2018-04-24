@@ -288,5 +288,15 @@
     "simTitle": "Gene Expression Essentials",
     "projectName": "gene-expression-essentials",
     "testUrl": "https://phet.colorado.edu/sims/html/gene-expression-essentials/latest/gene-expression-essentials_en.html"
+  },
+  {
+    "simTitle": "Bumper",
+    "projectName": "bumper",
+    "testUrl": "https://phet.colorado.edu/sims/html/bumper/latest/bumper_en.html"
+  },
+  {
+    "simTitle": "Area Model Introduction",
+    "projectName": "area-model-introduction",
+    "testUrl": "https://phet.colorado.edu/sims/html/area-model-introduction/latest/area-model-introduction_en.html"
   }
 ]
