@@ -298,5 +298,10 @@
     "simTitle": "Area Model Introduction",
     "projectName": "area-model-introduction",
     "testUrl": "https://phet.colorado.edu/sims/html/area-model-introduction/latest/area-model-introduction_en.html"
+  },
+  {
+    "simTitle": "Area Model Multiplication",
+    "projectName": "area-model-multiplication",
+    "testUrl": "https://phet.colorado.edu/sims/html/area-model-multiplication/latest/area-model-multiplication_en.html"
   }
 ]
