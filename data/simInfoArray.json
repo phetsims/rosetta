@@ -303,5 +303,10 @@
     "simTitle": "Area Model Multiplication",
     "projectName": "area-model-multiplication",
     "testUrl": "https://phet.colorado.edu/sims/html/area-model-multiplication/latest/area-model-multiplication_en.html"
+  },
+  {
+    "simTitle": "Area Model Decimals",
+    "projectName": "area-model-decimals",
+    "testUrl": "https://phet.colorado.edu/sims/html/area-model-decimals/latest/area-model-decimals_en.html"
   }
 ]
