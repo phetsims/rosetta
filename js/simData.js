@@ -61,7 +61,6 @@ async function updateSimData() {
   catch( err ) {
     winston.error( 'metadata retrieval failed, err = ' + err );
     return Promise.reject( err );
-    // TODO: test this, make sure it's really what I want to do
   }
 
   if ( !simMetadata || !simMetadata.projects ) {
@@ -101,13 +100,29 @@ async function checkAndUpdateSimData() {
   // if a request is already in progress, return that promise
   if ( inProgressMetadataPromise ) {
     winston.info( 'a request for metadata is in progress, waiting on that promise' );
-    await inProgressMetadataPromise;
+
+    try {
+      await inProgressMetadataPromise;
+    }
+    catch( error ) {
+      winston.error( 'promise returned by updateSimData failed (secondary await path)' );
+    }
   }
   else if ( ( Date.now() - timeOfLastUpdate ) / 1000 > CACHED_DATA_VALID_TIME ) {
-    winston.info( 'sim info data was stale, initiating a new request' );
+    winston.info( 'sim data was stale, initiating a new request' );
+
+    // Use the promise explicitly so that if other requests are received before this is resolved, they can also wait
+    // on it.
     inProgressMetadataPromise = updateSimData();
-    await inProgressMetadataPromise;
-    inProgressMetadataPromise = null; // clear out the promise when it's done
+    try {
+      await inProgressMetadataPromise;
+    }
+    catch( error ) {
+
+      // there really isn't much that can be done here other than to hope that the next attempt succeeds
+      winston.error( 'promise returned by updateSimData failed, error = ' + error );
+    }
+    inProgressMetadataPromise = null; // clear out the promise for the next attempt
   }
   else {
     winston.info( 'using cached sim info' );
