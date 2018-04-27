@@ -43,7 +43,6 @@ async function updateLocaleInfo() {
     const fileContent = await response.text();
 
     localeInfoObject = requireFromString( fileContent, 'chipperLocalInfo' );
-    console.log( 'JSON.stringify( localeInfoObject ) = ' + JSON.stringify( localeInfoObject ) );
 
     // update the sorted locale info array
     sortedLocaleInfoArray = [];
@@ -129,8 +128,6 @@ module.exports = {
    */
   getLocaleInfoObject: async function() {
     await checkAndUpdateLocaleInfo();
-    console.log( '======================' );
-    console.log( 'JSON.stringify( localeInfoObject ) = ' + JSON.stringify( localeInfoObject ) );
     return localeInfoObject;
   },
 

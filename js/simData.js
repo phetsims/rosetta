@@ -153,14 +153,12 @@ module.exports = {
     // Unpublished (AKA invisible) sims are present by default, so if the flag says that they should NOT be included,
     // they need to be removed.
     if ( !includeUnpublished ) {
-      console.log( 'EXCLUDING' );
       const simNamesToExclude = [];
       simNames.forEach( sim => {
         if ( !simDataObject[ sim ].visible ) {
           simNamesToExclude.push( sim );
         }
       } );
-      console.log( 'simNamesToExclude = ' + simNamesToExclude );
       simNames = _.difference( simNames, simNamesToExclude );
     }
 
