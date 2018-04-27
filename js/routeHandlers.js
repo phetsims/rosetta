@@ -83,9 +83,9 @@ module.exports.checkForValidSession = function( req, res, next ) {
   // check whether the session cookie exists
   winston.log( 'info', 'Checking for login cookie' );
   const cookie = req.cookies.JSESSIONID;
-  winston.log( 'info', 'user id = ' + req.session.userId );
 
   if ( cookie === undefined ) {
+
     // no session cookie present, the user must log in
     winston.log( 'info', 'session cookie not found, sending to login page' );
     winston.log( 'info', 'host = ' + req.get( 'host' ) );
@@ -93,6 +93,10 @@ module.exports.checkForValidSession = function( req, res, next ) {
     sendUserToLoginPage( res, req.get( 'host' ), req.url );
   }
   else if ( req.session.jSessionId && req.session.jSessionId !== cookie ) {
+
+    // the user's session has expired, clear it and go to login page
+    winston.log( 'info', 'session expired, forcing user to log in again' );
+
     req.session.destroy( function() {
       renderError( res,
         '<h1>Your session has expired</h1>' +
@@ -100,15 +104,18 @@ module.exports.checkForValidSession = function( req, res, next ) {
         '' );
     } );
   }
-
-  // If the session already has trustedTranslator defined, and it is true, then the user must be a trusted translator
-  // who has already logged in.
   else if ( req.session.trustedTranslator || req.session.teamMember ) {
+
+    // The session already has trustedTranslator defined, and it is true, so the user must be a trusted translator who
+    // has already logged in.
     next();
   }
   else {
 
-    // session cookie was present, attempt to obtain session information
+    // session cookie was present
+    winston.log( 'info', 'valid session cookie existed, userID = ' + req.session.userId );
+
+    // attempt to obtain session information
     const options = {
       host: req.get( 'host' ),
       path: '/services/check-login',
@@ -129,8 +136,17 @@ module.exports.checkForValidSession = function( req, res, next ) {
       // the whole response has been received - see if the credentials are valid
       response.on( 'end', function() {
         winston.log( 'info', 'data received: ' + data );
-        const userData = JSON.parse( data );
-        if ( userData.loggedIn ) {
+        let userData;
+        try {
+          userData = JSON.parse( data );
+        }
+        catch( error ) {
+
+          // this happens sometimes, not sure why, see https://github.com/phetsims/rosetta/issues/188
+          winston.error( 'error parsing user data, error = ' + error );
+          userData = null;
+        }
+        if ( userData && userData.loggedIn ) {
           winston.log( 'info', 'credentials obtained, user is logged in, moving to next step' );
 
           if ( !userData.trustedTranslator && !userData.teamMember ) {
@@ -153,6 +169,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
           }
         }
         else {
+
           // user is not logged in, send them to the login page
           sendUserToLoginPage( res, req.get( 'host' ), req.url );
         }
