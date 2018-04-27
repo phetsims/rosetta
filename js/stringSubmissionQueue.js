@@ -264,8 +264,14 @@ async function requestBuild( simName, userID, locale ) {
       body: JSON.stringify( requestObject )
     } );
     if ( buildRequestResponse.status === 200 || buildRequestResponse.status === 202 ) {
-      winston.log( 'info', 'build request returned status ' + buildRequestResponse.status );
+      winston.log( 'info', 'build request accepted, status = ' + buildRequestResponse.status );
       return true;
+    }
+    else if ( buildRequestResponse.status === 400 ) {
+      throw new Error( 'build request unsuccessful, probably due to missing info, status = ' + buildRequestResponse.status );
+    }
+    else if ( buildRequestResponse.status === 401 ) {
+      throw new Error( 'build request unsuccessful, probably due to bad auth code, status = ' + buildRequestResponse.status );
     }
     else {
       throw new Error( 'build request unsuccessful, status = ' + buildRequestResponse.status );
