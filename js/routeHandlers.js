@@ -421,13 +421,17 @@ module.exports.renderTranslationPage = async function( req, res ) {
           simStringsArray.sort( compare );
           commonStringsArray.sort( compare );
 
-          let locale = await localeInfo.getLocaleInfoObject()[ targetLocale ];
+          // get the locale-specific information needed to render the translation page
+          const localeInfoObject = await localeInfo.getLocaleInfoObject();
+          const targetLocaleInfo = localeInfoObject[ targetLocale ];
+          const languageName = targetLocaleInfo ? targetLocaleInfo.name : 'Nonexistent locale';
+          const languageDirection = targetLocaleInfo ? targetLocaleInfo.direction : 'ltr';
 
-          // Assemble the data that will be supplied to the template.
+          // assemble the data that will be supplied to the template
           let templateData = {
             title: TITLE,
             subtitle: 'Please enter a translation for each English string:',
-            destinationLanguage: locale ? locale.name : 'Non existent locale',
+            destinationLanguage: languageName,
             currentSimStringsArray: currentSimStringsArray,
             simStringsArray: simStringsArray,
             commonStringsArray: commonStringsArray,
@@ -436,7 +440,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
             simTitle: simTitle ? simTitle : simName,
             otherSimNames: otherSims.join( ', ' ),
             localeName: targetLocale,
-            direction: locale ? locale.direction : 'ltr',
+            direction: languageDirection,
             simUrl: await simData.getLiveSimUrl( simName ),
             username: req.session.email || 'not logged in',
             trustedTranslator: ( req.session.trustedTranslator ) ? req.session.trustedTranslator : false

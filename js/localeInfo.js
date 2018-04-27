@@ -1,6 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 /**
  * A singleton object that contains information about the locales into which sims can be translated.
+ *
  * @author John Blanco
  * @author Michael Kauzmann
  */
@@ -10,7 +11,7 @@
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const RosettaConstants = require( './RosettaConstants' );
 const winston = require( 'winston' );
-const _ = require( 'lodash' ) // eslint-disable-line
+const _ = require( 'lodash' ); // eslint-disable-line
 
 // constants
 const CACHED_DATA_VALID_TIME = 86400; // in seconds
@@ -42,6 +43,7 @@ async function updateLocaleInfo() {
     const fileContent = await response.text();
 
     localeInfoObject = requireFromString( fileContent, 'chipperLocalInfo' );
+    console.log( 'JSON.stringify( localeInfoObject ) = ' + JSON.stringify( localeInfoObject ) );
 
     // update the sorted locale info array
     sortedLocaleInfoArray = [];
@@ -103,7 +105,7 @@ async function checkAndUpdateLocaleInfo() {
   }
   else if ( ( Date.now() - timeOfLastUpdate ) / 1000 > CACHED_DATA_VALID_TIME ) {
     winston.info( 'locale info data was stale, initiating a new request' );
-    inProgressFileRetrievalPromise = await updateLocaleInfo();
+    inProgressFileRetrievalPromise = updateLocaleInfo();
     await inProgressFileRetrievalPromise;
     inProgressFileRetrievalPromise = null; // clear out the promise when it's done
   }
@@ -127,8 +129,13 @@ module.exports = {
    */
   getLocaleInfoObject: async function() {
     await checkAndUpdateLocaleInfo();
+    console.log( '======================' );
+    console.log( 'JSON.stringify( localeInfoObject ) = ' + JSON.stringify( localeInfoObject ) );
     return localeInfoObject;
   },
+
+  // TODO: temp for debug
+  localeInfoObject: localeInfoObject,
 
   /**
    * get the locale info as an array sorted by locale
