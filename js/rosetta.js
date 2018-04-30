@@ -13,6 +13,7 @@
 // modules
 const assert = require( 'assert' );
 const bodyParser = require( 'body-parser' ); // eslint-disable-line require-statement-match
+const childProcess = require( 'child_process' ); // eslint-disable-line require-statement-match
 const cookieParser = require( 'cookie-parser' ); // eslint-disable-line require-statement-match
 const dateformat = require( 'dateformat' );
 const doT = require( 'express-dot' ); // eslint-disable-line require-statement-match
@@ -33,7 +34,7 @@ const ENABLED = true;
 
 /*
  * Rosetta is run under user "phet-admin" on the dev and production servers. However, "process.env.HOME" will get
- * the user who is starting the process's home directory, not phet-admin's home directory, therefore we need to use
+ * the home directory of the user who is starting the process, not phet-admin's home directory, therefore we need to use
  * the following approach to get the home directory.
  */
 if ( !/^win/.test( process.platform ) ) {
@@ -75,7 +76,30 @@ process.on( 'unhandledRejection', error => {
   winston.log( 'error', 'unhandled rejection, error.message =', error.message );
 } );
 
-// add the route handlers, must be required after global.preferences has been initialized
+// configure the logger
+winston.remove( winston.transports.Console );
+winston.add( winston.transports.Console, {
+  'timestamp': function() {
+    const now = new Date();
+    return dateformat( now, 'mmm dd yyyy HH:MM:ss Z' );
+  }
+} );
+
+// log startup message
+winston.log( 'info', '---- rosetta starting up ----' );
+winston.log( 'info', 'Node version: ' + process.version );
+
+// log the SHA of rosetta - this may make it easier to duplicate and track down problems
+childProcess.exec( 'git rev-parse HEAD', function( err, stdout ) {
+  if ( !err ) {
+    winston.info( 'current SHA: ', stdout );
+  }
+  else {
+    winston.warn( 'not running from a git repo, unable to log SHA' );
+  }
+} );
+
+// add the route handlers, must be required after global.preferences has been initialized and logger configured
 const routeHandlers = require( __dirname + '/routeHandlers' );
 
 // configure postgres connection
@@ -121,19 +145,6 @@ if ( parsedCommandLineOptions.hasOwnProperty( 'help' ) || parsedCommandLineOptio
   return;
 }
 
-// add timestamps
-winston.remove( winston.transports.Console );
-winston.add( winston.transports.Console, {
-  'timestamp': function() {
-    const now = new Date();
-    return dateformat( now, 'mmm dd yyyy HH:MM:ss Z' );
-  }
-} );
-
-// log startup message
-winston.log( 'info', '---- rosetta starting up ----' );
-winston.log( 'info', 'Node version: ' + process.version );
-
 // Create and configure the ExpressJS app
 const app = express();
 app.set( 'views', __dirname + '/../html/views' );
@@ -168,11 +179,11 @@ if ( !ENABLED ) {
 app.get( '/translate*', routeHandlers.checkForValidSession );
 
 // TODO: the following two routes are for debugging, and should be removed or put behind a "verbose" flag eventually
-app.post( '/translate*', function( req, res, next ){
+app.post( '/translate*', function( req, res, next ) {
   console.log( 'post request received, url = ' + req.url );
   next();
 } );
-app.get( '/translate*', function( req, res, next ){
+app.get( '/translate*', function( req, res, next ) {
   console.log( 'get request received, url = ' + req.url );
   next();
 } );
