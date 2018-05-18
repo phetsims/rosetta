@@ -695,20 +695,21 @@ module.exports.test = function( req, res ) {
 };
 
 /**
- * handle a request to run a test
+ * Handle a request to run a test.
+ * for team members only
  * @param req
  * @param res
  */
-module.exports.runTest = function( req, res ) {
+module.exports.runTest = async function( req, res ) {
 
   // only logged in PhET team members can run tests
   if ( req.session.teamMember ) {
 
     const testID = req.params.testID;
-    ServerTests.executeTest( testID );
+    let result = await ServerTests.executeTest( testID );
 
     // send back an empty response
-    res.end();
+    res.send( result );
   }
   else {
 
@@ -716,6 +717,29 @@ module.exports.runTest = function( req, res ) {
     pageNotFound( req, res );
   }
 };
+
+/**
+ * Handle a request to run all rosetta server side tests.
+ * for team members only
+ * @param req
+ * @param res
+ */
+module.exports.runTests = async function( req, res ) {
+
+  // only logged in PhET team members can run tests
+  if ( req.session.teamMember ) {
+
+    const result = await ServerTests.runTests();
+
+    res.send( result );
+  }
+  else {
+
+    // the user is not a team member, render the "not found" page
+    pageNotFound( req, res );
+  }
+};
+
 
 /**
  * Route for extracting strings from a build sim, see TranslationUtils.extractStrings.

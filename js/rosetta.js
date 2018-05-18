@@ -98,8 +98,9 @@ app.get( '/translate/extractStrings', routeHandlers.extractStringsAPI );
 app.get( '/translate/logout', routeHandlers.logout );
 
 // test routes - used for testing and debugging
-app.get( '/translate/test/', routeHandlers.test );
-app.get( '/translate/runTest/:testID', routeHandlers.runTest );
+app.get( '/translate/test/', routeHandlers.test ); // display a test html page
+app.get( '/translate/runTest/:testID', routeHandlers.runTest ); // run specific server test
+app.get( '/translate/runTests/', routeHandlers.runTests ); // run all server tests
 
 // fall through route
 app.get( '/*', routeHandlers.pageNotFound );

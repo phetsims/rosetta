@@ -13,14 +13,19 @@ const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const winston = require( 'winston' );
 const _ = require( 'underscore' ); // eslint-disable-line
 
+// constants
+const PASS = true;
+const FAIL = false;
+
 /**
- * test handler object - each test is a method on this object
+ * test handler object - each test is a method on this object. Use "executeTest" in this module to test these handlers.
+ * To write a handler, create a function that will return truthy if the test passes, or falsey/throw error is fails.
  */
 let testHandlers = {
 
   /**
    * test rapidly requesting several string files
-   * @return {Promise}
+   * @return {Promise.<boolean>}
    */
   testRetrievingMultipleFilesFromGitHub: function() {
 
@@ -100,7 +105,7 @@ let testHandlers = {
 
   /**
    * test the function that compares a set of strings to those in long-term storage
-   * @return {Promise}
+   * @return {Promise.<boolean>}
    */
   testStringMatch: function() {
 
@@ -168,7 +173,7 @@ let testHandlers = {
 
   /**
    * test committing several files at once to GitHub
-   * @return {Promise}
+   * @returns {Promise.<boolean>}
    */
   testCommittingMultipleFilesToGitHub: function() {
 
@@ -216,16 +221,13 @@ let testHandlers = {
 
   /**
    * temporary test, put unit tests in here as needed
-   * @return {Promise}
+   * @return {Object}
    */
-  testTemp: function() {
-    nodeFetch( 'https://phet.colorado.edu/services/metadata/1.2/simulations?format=json&type=html&locale=en&simulation=neuron&summary' )
-      .then( function( res ) {
-        return res.json();
-      } )
-      .then( function( json ) {
-        console.log( json );
-      } );
+  testTemp: async function() {
+    let res = await nodeFetch( 'https://phet.colorado.edu/services/metadata/1.2/simulations?format=json&type=html&locale=en&simulation=neuron&summary' );
+    let json = await res.json();
+    console.log( json );
+    return json;
   }
 
 };
@@ -233,24 +235,64 @@ let testHandlers = {
 /**
  * function that executes the requested test if present and output the result
  * @param {string} testID
+ * @returns {Object} - {boolean} `testPass` and {string|Error} [err]
  */
-module.exports.executeTest = function executeTest( testID ) {
+module.exports.executeTest = async function executeTest( testID ) {
   if ( testHandlers[ testID ] ) {
     winston.log( 'info', 'initiating test ' + testID );
-    testHandlers[ testID ]()
-      .then( result => {
-        if ( result ) {
-          winston.log( 'info', 'test ' + testID + ' result: PASS' );
-        }
-        else {
-          winston.log( 'error', 'test ' + testID + ' result: FAIL' );
-        }
-      } )
-      .catch( ( err ) => {
-        winston.log( 'error', 'test ' + testID + ' result: FAIL, err = ' + err );
-      } );
+
+    try {
+      const result = await testHandlers[ testID ]();
+      if ( result ) {
+        return { testPass: PASS };
+      }
+      else {
+        return { testPass: FAIL };
+      }
+    }
+    catch( err ) {
+      return { testPass: FAIL, err: err };
+    }
   }
   else {
-    winston.log( 'error', 'requested test not defined, testID = ' + testID );
+    let errorMessage = 'requested test not defined, testID = ' + testID;
+    winston.log( 'error', errorMessage );
+    return { err: errorMessage };
   }
+};
+
+/**
+ * Run all server tests, using the `executeTest method`
+ * @returns {Object}
+ */
+module.exports.runTests = async function() {
+
+  let testSummary = {
+    passed: 0,
+    failed: 0
+  };
+  for ( let testName of Object.keys( testHandlers ) ) {
+    winston.info( `\n\n\nRunning test ${testName}` );
+
+    let { testPass, err } = await this.executeTest( testName );
+
+    if ( testPass ) {
+      winston.log( 'info', 'test ' + testName + ' result: PASS' );
+      testSummary.passed += 1;
+    }
+    else {
+      let errMessage = err ? `, err = ${err}` : '';
+      winston.log( 'info', 'test ' + testName + ' result: PASS' + errMessage );
+      testSummary.failed += 1;
+    }
+
+  }
+
+  let numberOfTests = Object.keys( testHandlers ).length;
+  let summary = `Tests completed, ran ${numberOfTests} tests, ${testSummary.passed} passed, ${testSummary.failed} failed.`;
+
+  winston.log( 'info', summary );
+
+  return { result: summary };
+
 };
