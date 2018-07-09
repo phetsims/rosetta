@@ -10,7 +10,7 @@
 'use strict';
 
 const email = require( 'emailjs/email' );
-const fetch = require( 'node-fetch' ); // eslint-disable-line
+const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const https = require( 'https' );
 const octonode = require( 'octonode' );
 const RosettaConstants = require( './RosettaConstants' );
@@ -207,15 +207,14 @@ function extractStringsAPI( req, res ) {
  * @param {string} simName
  * @return {Promise.<string>}
  */
-async function getSimInfo( simName ){
+async function getSimInfo( simName ) {
 
   const URL = RosettaConstants.PRODUCTION_SERVER_URL +
               '/services/metadata/1.2/simulations?format=json&type=html&locale=en&simulation=' +
               simName +
               '&summary';
-  const response = await fetch( URL );
+  const response = await nodeFetch( URL );
   const responseJSON = await response.json();
-  // debugger;
   return responseJSON;
 }
 
@@ -308,6 +307,37 @@ function checkAndUpdateStringFile( repo, file, content, message, branch, callbac
 }
 
 /**
+ * request the strings from Github
+ * @param {string} Url
+ * @param {array} strings
+ * @param {string} projectName
+ * @return {Promise.<string>}
+ */
+async function getGhStrings( Url, strings, projectName, isEnglishStrings ) {
+  winston.log( 'info', 'sending request to ' + Url );
+  const response = await nodeFetch( Url );
+
+  return response.text().then( ( body ) => {
+    if ( response.status === 200 ) {
+      strings[ projectName ] = JSON.parse( body );
+      winston.log( 'info', 'request for ' + Url + ' returned successfully' );
+    }
+    else if ( response.status === 404 && !isEnglishStrings ) {
+      strings[ projectName ] = {};
+      //winston.log( 'info', 'no strings in GitHub for project = ' + projectName + ', locale = ' + targetLocale );
+    }
+    else if ( !isEnglishStrings ) {
+      strings[ projectName ] = {};
+      winston.log( 'info', 'request for ' + Url + 'failed, response code = ' + response.status );
+    }
+    else {
+      winston.log( 'error', 'request for english strings for project ' + projectName + ' failed. Response code: ' +
+                            response.status + '. URL: ' + Url + '. Error: ' + response.error );
+    }
+  } );
+}
+
+/**
  * Return an octonode github client using the credentials in config.json.
  * Use config.json.template as an example for creating a config.json file with your github credentials
  * @returns {*}
@@ -328,7 +358,7 @@ function getGhClient() {
  * get the URL for this sim, does not check if sim exists
  * @param simName
  */
-function getPublishedEnglishSimURL( simName ){
+function getPublishedEnglishSimURL( simName ) {
   return RosettaConstants.PRODUCTION_SERVER_URL + '/sims/html/' + simName + '/latest/' + simName + '_en.html';
 }
 
@@ -338,12 +368,12 @@ function getPublishedEnglishSimURL( simName ){
  * @return {Promise.<string>} - html of the published simulation
  * @rejects {Error}
  */
-async function getLatestSimHtml( simName ){
+async function getLatestSimHtml( simName ) {
 
   // compose the URL for the latest English version of the simulation
   const simUrl = getPublishedEnglishSimURL( simName );
 
-  const response = await fetch( simUrl );
+  const response = await nodeFetch( simUrl );
 
   // handle the response
   if ( response.status === 200 ) {
@@ -367,6 +397,7 @@ module.exports = {
   extractStrings: extractStrings,
   extractStringsAPI: extractStringsAPI,
   getGhClient: getGhClient,
+  getGhStrings: getGhStrings,
   getPublishedEnglishSimURL: getPublishedEnglishSimURL,
   getSimInfo: getSimInfo,
   getLatestSimHtml: getLatestSimHtml,
