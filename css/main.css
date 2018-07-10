@@ -180,7 +180,7 @@ h1 {
   font-size: 16px;
   border: 1px solid lightgrey;
   display: inline-block;
-  height: 18px;
+  min-height: 18px;
 }
 
 .highlight {
