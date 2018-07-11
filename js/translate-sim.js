@@ -191,9 +191,10 @@ $( document ).ready( function() {
     );
   }
 
-  // add highlight to '\n' and '{\d}' so users are aware that this is treated specially
+  // add highlight to '\n', '{\d}', and '{{\w+}}' so users are aware that this is treated specially
   $( 'td:nth-child(2)' ).each( function( index, element ) {
     $( element ).html( $( element ).html().replace( /(\{\d\}|\\n)/g, '<span class=\'highlight\'>$1</span>' ) );
+    $( element ).html( $( element ).html().replace( DOUBLE_BRACE_PATTERN_REGULAR_EXP, '<span class=\'highlight\'>$&</span>' ) );
   } );
 
   /**
