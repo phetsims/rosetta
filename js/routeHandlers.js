@@ -307,6 +307,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
     ) );
   } );
 
+  // wait until all string files have been retrieved before moving to the next step
   return Promise.all( stringPromises ).then( results => {
     winston.log( 'info', 'finished called in renderTranslationPage' );
 
