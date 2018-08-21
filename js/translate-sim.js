@@ -79,7 +79,7 @@ $( document ).ready( function() {
   function testTranslation() {
 
     // Bail if the patterns don't validate - calling this will cause any errors to be highlighted on the form.
-    if ( !validatePatterns() ){
+    if ( !validatePatterns() ) {
       return;
     }
 
@@ -228,12 +228,15 @@ $( document ).ready( function() {
       const missingPlaceholders = [];
       let extraPlaceholders = [];
 
+      // error message for tags
+      let badTagMessage;
+
       // it is valid for the string to be empty, i.e. no translation submitted, so only validate if it is NOT empty
       if ( translatedString !== '' ) {
 
+        // verify placeholders
         const singleBracePlaceholdersInTranslation = translatedString.match( SINGLE_BRACE_PATTERN_REGULAR_EXP ) || [];
         const doubleBracePlaceholdersInTranslation = translatedString.match( DOUBLE_BRACE_PATTERN_REGULAR_EXP ) || [];
-
         const placeHolders = doubleBracePlaceHolders.concat( singleBracePlaceHolders );
         const placeHoldersInTranslation = doubleBracePlaceholdersInTranslation.concat( singleBracePlaceholdersInTranslation );
 
@@ -256,13 +259,38 @@ $( document ).ready( function() {
           validated = false;
           extraPlaceholders = placeHoldersInTranslation;
         }
+
+        // verify tags
+        const openTags = ( nonTranslatedString.match( /\<[a-zA-Z0-9]+/g ) || [] ).map( s => s.slice( 1 ) );
+        const closedTags = ( nonTranslatedString.match( /\<\/[a-zA-Z0-9]+/g ) || [] ).map( s => s.slice( 2 ) );
+        const tags = openTags.filter( tag => closedTags.includes( tag ) );
+
+        for ( let tag of tags ) {
+          const openMatch = translatedString.match( new RegExp( `<${tag}[\\s\\>]` ) );
+          const closedMatch = translatedString.match( new RegExp( `</${tag}[\\s\\>]` ) );
+
+          const openIndex = openMatch ? openMatch.index : -1;
+          const closedIndex = closedMatch ? closedMatch.index : -1;
+
+          const hasOpen = openIndex >= 0;
+          const hasClosed = closedIndex >= 0;
+
+          if ( hasOpen ^ hasClosed ) {
+            validated = false;
+            badTagMessage = `Tag is missing opening or closing for: ${tag}`;
+          }
+          else if ( hasOpen && hasClosed && closedIndex < openIndex ) {
+            validated = false;
+            badTagMessage = `Tag is out of order: ${tag}`;
+          }
+        }
       }
 
       // remove any previous error message that may be present
       tableDataCell.find( 'img:last-child' ).remove();
 
       // if the validation failed, add an error message
-      if ( missingPlaceholders.length || extraPlaceholders.length ) {
+      if ( !validated ) {
         input.css( { outline: '1px solid red' } );
         const img = $( '<img>', { src: '/translate/img/warning.png', class: 'warning' } );
         tableDataCell.append( img );
@@ -274,6 +302,9 @@ $( document ).ready( function() {
           }
           if ( extraPlaceholders.length ) {
             errorMessage.push( 'extra placeholder(s) in submission: ' + extraPlaceholders.join( ', ' ) );
+          }
+          if ( badTagMessage ) {
+            errorMessage.push( badTagMessage );
           }
           alert( errorMessage.join( '\n' ) );
         } );
