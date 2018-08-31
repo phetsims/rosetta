@@ -11,7 +11,7 @@
 'use strict';
 
 // modules
-const async = require( 'async' );
+// const async = require( 'async' );
 const LongTermStringStorage = require( './LongTermStringStorage' );
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const query = require( 'pg-query' ); // eslint-disable-line
@@ -31,12 +31,9 @@ const SKIP_BUILD_REQUEST = typeof global.preferences.debugRosettaSkipBuildReques
  * task queue into which translation request are pushed
  * @public
  */
-module.exports.stringSubmissionQueue = async.queue( function( task, taskCallback ) {
-
-  const req = task.req;
-  const res = task.res;
-  const targetLocale = req.params.targetLocale;
-  const simName = req.params.simName;
+module.exports.stringSubmissionQueue = async ( req, res ) => {
+  const { targetLocale } = req.params;
+  const { simName } = req.params;
   const userId = ( req.session.userId ) ? req.session.userId : 0;
 
   // Define an object that will contain the sets of strings that need to be stored.  The keys for this object will be
@@ -50,7 +47,7 @@ module.exports.stringSubmissionQueue = async.queue( function( task, taskCallback
   // Extract the string sets from the submitted translation.  The body of the request (req.body) contains an object with
   // all of the strings submitted through the POST request from the translation utility. The keys are in the form
   // "[repository] [key]" and the values are the strings, for example: "chains chains.title": "Chains".
-  _.keys( req.body ).forEach( function( submittedStringKey ) {
+  _.keys( await req.body ).forEach( submittedStringKey => {
 
     // data submitted is in the form "[repository] [key]", for example "area-builder area-builder.title"
     let repoAndStringKey = submittedStringKey.split( ' ' );
@@ -122,14 +119,14 @@ module.exports.stringSubmissionQueue = async.queue( function( task, taskCallback
 
   // save the modified strings to long-term storage
   let stringSavePromises = [];
-  _.keys( changedStringSets ).forEach( function( simOrLibName ) {
+  _.keys( await changedStringSets ).forEach( simOrLibName => {
     stringSavePromises.push(
       LongTermStringStorage.saveStrings( simOrLibName, targetLocale, changedStringSets[ simOrLibName ] )
     );
   } );
 
   // when all the save operations are complete, build the new or updated translation
-  Promise.all( stringSavePromises )
+  return Promise.all( stringSavePromises )
     .then( results => {
 
       // request the build from the build server
@@ -144,8 +141,6 @@ module.exports.stringSubmissionQueue = async.queue( function( task, taskCallback
             simName: simName,
             targetLocale: targetLocale
           } );
-
-          taskCallback();
         } )
         .catch( ( err ) => {
 
@@ -158,12 +153,10 @@ module.exports.stringSubmissionQueue = async.queue( function( task, taskCallback
             errorDetails: err,
             timestamp: new Date().getTime()
           } );
-
-          taskCallback();
         } );
 
       // clear out short-term storage, since these strings were successfully stored in the long-term area
-      deleteStringsFromDB( userId, targetLocale, _.keys( stringSets ) );
+      deleteStringsFromDB( userId, targetLocale, _.keys( stringSets ) ).catch(  );
     } )
     .catch( err => {
 
@@ -175,7 +168,7 @@ module.exports.stringSubmissionQueue = async.queue( function( task, taskCallback
         timestamp: new Date().getTime()
       } );
     } );
-}, 1 );
+};
 
 /**
  * delete the strings that are stored in short-term storage
