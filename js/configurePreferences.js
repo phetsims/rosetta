@@ -11,6 +11,7 @@
 
 const assert = require( 'assert' );
 const fs = require( 'fs' );
+const { Client } = require( 'pg' ); //eslint-disable-line
 
 module.exports = function() {
 
@@ -41,6 +42,37 @@ module.exports = function() {
 
   preferences.productionServerURL = preferences.productionServerURL || 'https://phet.colorado.edu';
   preferences.productionServerName = preferences.productionServerName || 'phet-server.int.colorado.edu';
+
+  // if we're in a development environment
+  if ( process.env.ENV === 'dev' ) {
+    // assert appropriate params are set in build-local.json
+    assert( preferences.rosettaDevDbHost, `rosettaDevDbHost is missing from ${PREFERENCES_FILE}` );
+    assert( preferences.rosettaDevDbPort, `rosettaDevDbPort is missing from ${PREFERENCES_FILE}` );
+    assert( preferences.rosettaDevDbName, `rosettaDevDbName is missing from ${PREFERENCES_FILE}` );
+    assert( preferences.rosettaDevDbUser, `rosettaDevDbUser is missing from ${PREFERENCES_FILE}` );
+    assert( preferences.rosettaDevDbPass, `rosettaDevDbPass is missing from ${PREFERENCES_FILE}` );
+
+    // 'pg' module uses env variables to establish the db connection
+    process.env = {
+      ...process.env,
+      PGUSER: preferences.rosettaDevDbUser,
+      PGHOST: preferences.rosettaDevDbHost,
+      PGPASSWORD: preferences.rosettaDevDbPass,
+      PGDATABASE: preferences.rosettaDevDbName,
+      PGPORT: preferences.rosettaDevDbPort
+    }
+
+    // assert that the server is running and that there is a successful database connection
+    const client = new Client();
+    client.connect().catch( () => {
+        assert( false, 'There was an error connecting to the dev server' );
+      } )
+      .then( () => client.query('SELECT NOW()') )
+      .catch( () => {
+        assert( false, 'There was an error connection to the database' );
+      } )
+      .then( () => { client.end(); } );
+  }
 
   /*
    * Add "babelBranch": "tests" in build-local.json for rosetta testing, so that commits will change the 'tests' branch

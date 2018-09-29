@@ -17,7 +17,6 @@ const childProcess = require( 'child_process' ); // eslint-disable-line require-
 const configurePreferences = require( './configurePreferences' );
 const dateformat = require( 'dateformat' );
 const parseArgs = require( 'minimist' ); // eslint-disable-line require-statement-match
-const query = require( 'pg-query' ); // eslint-disable-line require-statement-match
 const winston = require( 'winston' );
 
 
@@ -56,12 +55,9 @@ module.exports = function() {
     }
   } );
 
-  // configure postgres connection
-  if ( global.preferences.pgConnectionString ) {
-    query.connectionParameters = global.preferences.pgConnectionString;
-  }
-  else {
-    query.connectionParameters = 'postgresql://localhost/rosetta';
+  if ( process.env.ENV === 'dev' ) {
+    debugger;
+    process.env = { ...process.env, ...global.preferences.devDbOptions };
   }
 
   // Handle command line input

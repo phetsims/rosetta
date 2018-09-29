@@ -13,7 +13,8 @@
 // node modules
 const https = require( 'https' );
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
-const query = require( 'pg-query' ); // eslint-disable-line
+const { Client } = require( 'pg' ); // eslint-disable-line
+// const query = require( 'pg-query' ); // eslint-disable-line
 const winston = require( 'winston' );
 const _ = require( 'underscore' ); // eslint-disable-line
 
@@ -235,6 +236,8 @@ module.exports.chooseSimulationAndLanguage = async function( req, res ) {
  */
 module.exports.renderTranslationPage = async function( req, res ) {
 
+  const client = new Client();
+
   let simName = req.params.simName;
   let targetLocale = req.params.targetLocale;
   let activeSimsPath = '/phetsims/perennial/master/data/active-sims';
@@ -308,7 +311,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
   } );
 
   // wait until all string files have been retrieved before moving to the next step
-  return Promise.all( stringPromises ).then( results => {
+  return Promise.all( stringPromises ).then( async results => {
     winston.log( 'info', 'finished called in renderTranslationPage' );
 
     let currentSimStringsArray = [];
@@ -332,11 +335,14 @@ module.exports.renderTranslationPage = async function( req, res ) {
     let savedStringsQuery = 'SELECT * from saved_translations where user_id = $1 AND locale = $2 AND (' + repositories + ')';
     winston.log( 'info', 'running query: ' + savedStringsQuery );
 
+    await client.connect();
+
     // query postgres to see if there are any saved strings for this user
-    query( savedStringsQuery, [ userId, targetLocale ], async function( err, rows ) {
+    client.query( savedStringsQuery, [ userId, targetLocale ], async function( err, rows ) {
       winston.log( 'info', 'query returned' );
       if ( err ) {
         winston.log( 'error', 'query failed, error = ' + err );
+        return;
       }
 
       // load saved strings from database to saveStrings object if there are any
@@ -347,6 +353,8 @@ module.exports.renderTranslationPage = async function( req, res ) {
           savedStrings[ row.repository ][ row.stringkey ] = row.stringvalue;
         }
       }
+
+      client.end();
 
       let simTitle; // sim title gets filled in here (e.g. Area Builder instead of area-builder)
       let otherSims = []; // other sim dependencies get filled in here (e.g. beers-law-lab when translating concentration)
@@ -588,9 +596,12 @@ module.exports.saveStrings = function( req, res ) {
       const ts = new Date();
 
       ( function( key, stringValue ) {
+        const client = new Client();
+
         if ( key && stringValue && stringValue.length > 0 ) {
-          query( 'SELECT upsert_saved_translations' +
-                 '($1::bigint, $2::varchar(255), $3::varchar(255), $4::varchar(8), $5::varchar(255), $6::timestamp)', [ userId, key, repo, targetLocale, stringValue, ts ],
+          client.query( 'SELECT upsert_saved_translations' +
+                 '($1::bigint, $2::varchar(255), $3::varchar(255), $4::varchar(8), $5::varchar(255), $6::timestamp)',
+                 [ userId, key, repo, targetLocale, stringValue, ts ],
             function( err, rows, result ) {
               if ( err ) {
                 winston.log(
@@ -605,6 +616,7 @@ module.exports.saveStrings = function( req, res ) {
         else {
           finished();
         }
+
       } )( key, stringValue );
     }
     else {

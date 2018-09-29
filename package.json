@@ -9,7 +9,7 @@
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
     "dateformat": "^3.0.2",
-    "emailjs": "^1.0.12",
+    "emailjs": "^2.2.0",
     "express": "^4.16.2",
     "express-dot": "^0.1.0",
     "express-session": "^1.15.6",
@@ -17,7 +17,7 @@
     "node-fetch": "^1.7.3",
     "octonode": "^0.9.1",
     "passwd-user": "^2.1.0",
-    "pg": "^4.5.7",
+    "pg": "^7.4.0",
     "pg-query": "^0.11.0",
     "promise-queue": "^2.2.3",
     "request": "^2.83.0",
@@ -29,7 +29,8 @@
     "grunt": "~1.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "ENV=dev node js/rosetta.js"
   },
   "repository": {
     "type": "git",
