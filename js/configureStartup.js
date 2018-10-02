@@ -55,11 +55,6 @@ module.exports = function() {
     }
   } );
 
-  if ( process.env.ENV === 'dev' ) {
-    debugger;
-    process.env = { ...process.env, ...global.preferences.devDbOptions };
-  }
-
   // Handle command line input
   // First 2 args provide info about executables, ignore
   const commandLineArgs = process.argv.slice( 2 );

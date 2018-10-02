@@ -53,14 +53,13 @@ module.exports = function() {
     assert( preferences.rosettaDevDbPass, `rosettaDevDbPass is missing from ${PREFERENCES_FILE}` );
 
     // 'pg' module uses env variables to establish the db connection
-    process.env = {
-      ...process.env,
+    process.env = Object.assign( process.env, {
       PGUSER: preferences.rosettaDevDbUser,
       PGHOST: preferences.rosettaDevDbHost,
       PGPASSWORD: preferences.rosettaDevDbPass,
       PGDATABASE: preferences.rosettaDevDbName,
       PGPORT: preferences.rosettaDevDbPort
-    }
+    } );
 
     // assert that the server is running and that there is a successful database connection
     const client = new Client();
