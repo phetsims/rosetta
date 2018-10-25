@@ -14,12 +14,12 @@
 'use strict';
 
 // modules
+const _ = require( 'underscore' ); // eslint-disable-line
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const octonode = require( 'octonode' );
 const Queue = require( 'promise-queue' ); // eslint-disable-line
 const RosettaConstants = require( './RosettaConstants' );
 const winston = require( 'winston' );
-const _ = require( 'underscore' ); // eslint-disable-line
 
 // constants
 const PREFERENCES = global.preferences;

@@ -12,13 +12,13 @@
 
 // modules
 // const async = require( 'async' );
+const _ = require( 'underscore' ); // eslint-disable-line
 const LongTermStringStorage = require( './LongTermStringStorage' );
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const query = require( 'pg-query' ); // eslint-disable-line
-const winston = require( 'winston' );
 const RosettaConstants = require( './RosettaConstants' );
-const _ = require( 'underscore' ); // eslint-disable-line
 const simData = require( './simData' );
+const winston = require( 'winston' );
 
 // constants
 const PRODUCTION_SERVER_URL = RosettaConstants.PRODUCTION_SERVER_URL;

@@ -8,10 +8,10 @@
 'use strict';
 
 // modules
+const _ = require( 'underscore' ); // eslint-disable-line
 const LongTermStringStorage = require( './LongTermStringStorage' );
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const winston = require( 'winston' );
-const _ = require( 'underscore' ); // eslint-disable-line
 
 // constants
 const PASS = true;

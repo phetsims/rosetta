@@ -8,10 +8,10 @@
 /* eslint-env node */
 'use strict';
 // imports
+const _ = require( 'lodash' ); // eslint-disable-line
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const RosettaConstants = require( './RosettaConstants' );
 const winston = require( 'winston' );
-const _ = require( 'lodash' ); // eslint-disable-line
 
 // constants
 const CACHED_DATA_VALID_TIME = 86400; // in seconds

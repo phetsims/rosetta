@@ -10,10 +10,10 @@
 'use strict';
 
 // imports
+const _ = require( 'underscore' ); // eslint-disable-line
 const request = require( 'request' );
 const RosettaConstants = require( './RosettaConstants' );
 const winston = require( 'winston' );
-const _ = require( 'underscore' ); // eslint-disable-line
 
 // constants
 const CACHED_DATA_VALID_TIME = 1800; // in seconds

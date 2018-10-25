@@ -11,12 +11,12 @@
 'use strict';
 
 // node modules
+// const query = require( 'pg-query' ); // eslint-disable-line
+const _ = require( 'underscore' ); // eslint-disable-line
 const https = require( 'https' );
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
-const { Client } = require( 'pg' ); // eslint-disable-line
-// const query = require( 'pg-query' ); // eslint-disable-line
 const winston = require( 'winston' );
-const _ = require( 'underscore' ); // eslint-disable-line
+const { Client } = require( 'pg' ); // eslint-disable-line
 
 // server modules
 const localeInfo = require( './localeInfo' );
