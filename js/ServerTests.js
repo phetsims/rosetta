@@ -271,7 +271,7 @@ module.exports.runTests = async function() {
     passed: 0,
     failed: 0
   };
-  for ( let testName of Object.keys( testHandlers ) ) {
+  for ( let testName of Object.keys( testHandlers ) ) { // eslint-disable-line no-restricted-syntax
     winston.info( `\n\n\nRunning test ${testName}` );
 
     let { testPass, err } = await this.executeTest( testName );
