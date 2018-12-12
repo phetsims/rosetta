@@ -46,7 +46,7 @@ async function updateLocaleInfo() {
 
     // update the sorted locale info array
     sortedLocaleInfoArray = [];
-    for ( let locale in localeInfoObject ) {
+    for ( const locale in localeInfoObject ) {
       if ( locale !== 'en' && localeInfoObject.hasOwnProperty( locale ) ) {
         sortedLocaleInfoArray.push( {
           code: locale,
@@ -88,8 +88,8 @@ async function updateLocaleInfo() {
  * @returns {Module} - the module
  */
 function requireFromString( src, filename ) {
-  let Module = module.constructor;
-  let m = new Module();
+  const Module = module.constructor;
+  const m = new Module();
   m._compile( src, filename );
   return m.exports;
 }

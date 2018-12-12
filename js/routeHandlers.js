@@ -206,7 +206,7 @@ module.exports.logout = function( req, res ) {
  */
 module.exports.chooseSimulationAndLanguage = async function( req, res ) {
 
-  let simInfoArray = await simData.getSimTranslationPageInfo( req.session.teamMember );
+  const simInfoArray = await simData.getSimTranslationPageInfo( req.session.teamMember );
 
   // sort the list of sims to be in alphabetical order by sim title
   simInfoArray.sort( function( a, b ) {
@@ -238,10 +238,10 @@ module.exports.renderTranslationPage = async function( req, res ) {
 
   const client = new Client();
 
-  let simName = req.params.simName;
-  let targetLocale = req.params.targetLocale;
-  let activeSimsPath = '/phetsims/perennial/master/data/active-sims';
-  let userId = ( req.session.userId ) ? req.session.userId : 0; // use an id of 0 for localhost testing
+  const simName = req.params.simName;
+  const targetLocale = req.params.targetLocale;
+  const activeSimsPath = '/phetsims/perennial/master/data/active-sims';
+  const userId = ( req.session.userId ) ? req.session.userId : 0; // use an id of 0 for localhost testing
 
   winston.log( 'info', 'creating translation page for ' + simName + ' ' + targetLocale );
 
@@ -266,19 +266,19 @@ module.exports.renderTranslationPage = async function( req, res ) {
 
   // extract strings from the sim's html file and store them in the extractedStrings array
   // extractedStrings in an array of objects of the form { projectName: 'color-vision', stringKeys: [ 'key1', 'key2', ... ] }
-  let result = TranslationUtils.extractStrings( body, simName );
+  const result = TranslationUtils.extractStrings( body, simName );
 
   if ( !result ) {
     renderError( res, 'Tried to extract strings from an invalid URL', 'url: ' + simUrl );
     return;
   }
 
-  let extractedStrings = result.extractedStrings;
-  let simSha = result.sha; // sha of the sim at the time of publication, or 'master' if no sha is found
+  const extractedStrings = result.extractedStrings;
+  const simSha = result.sha; // sha of the sim at the time of publication, or 'master' if no sha is found
   winston.log( 'info', 'sim sha: ' + simSha );
 
-  let englishStrings = {}; // object to hold the English strings
-  let stringPromises = [];
+  const englishStrings = {}; // object to hold the English strings
+  const stringPromises = [];
 
   // initialize the sims array from the active-sims file in chipper
   winston.log( 'info', 'sending request to ' + GITHUB_RAW_FILE_URL_BASE + activeSimsPath );
@@ -290,11 +290,11 @@ module.exports.renderTranslationPage = async function( req, res ) {
   );
 
   extractedStrings.forEach( async function( extractedStringObject ) {
-    let projectName = extractedStringObject.projectName;
-    let repoSha = ( projectName === simName ) ? simSha : 'master';
-    let stringsFilePath = GITHUB_RAW_FILE_URL_BASE + '/phetsims/' + projectName + '/' + repoSha + '/' + projectName +
+    const projectName = extractedStringObject.projectName;
+    const repoSha = ( projectName === simName ) ? simSha : 'master';
+    const stringsFilePath = GITHUB_RAW_FILE_URL_BASE + '/phetsims/' + projectName + '/' + repoSha + '/' + projectName +
                           '-strings_en.json';
-    let translatedStringsPath = GITHUB_RAW_FILE_URL_BASE + '/phetsims/babel/' + global.preferences.babelBranch + '/' +
+    const translatedStringsPath = GITHUB_RAW_FILE_URL_BASE + '/phetsims/babel/' + global.preferences.babelBranch + '/' +
                                 projectName + '/' + projectName + '-strings_' + targetLocale + '.json';
 
     // request the english strings
@@ -314,14 +314,14 @@ module.exports.renderTranslationPage = async function( req, res ) {
   return Promise.all( stringPromises ).then( async results => {
     winston.log( 'info', 'finished called in renderTranslationPage' );
 
-    let currentSimStringsArray = [];
-    let simStringsArray = [];
-    let commonStringsArray = [];
-    let unusedTranslatedStringsArray = [];
+    const currentSimStringsArray = [];
+    const simStringsArray = [];
+    const commonStringsArray = [];
+    const unusedTranslatedStringsArray = [];
 
     // create a query for determining if the user has any saved strings
     let repositories = '';
-    let savedStrings = {};
+    const savedStrings = {};
     for ( i = 0; i < extractedStrings.length; i++ ) {
       if ( i > 0 ) {
         repositories += ' OR ';
@@ -332,7 +332,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
       // These objects will store string key/value pairs for each repo.
       savedStrings[ extractedStrings[ i ].projectName ] = {};
     }
-    let savedStringsQuery = 'SELECT * from saved_translations where user_id = $1 AND locale = $2 AND (' + repositories + ')';
+    const savedStringsQuery = 'SELECT * from saved_translations where user_id = $1 AND locale = $2 AND (' + repositories + ')';
     winston.log( 'info', 'running query: ' + savedStringsQuery );
 
     await client.connect();
@@ -349,7 +349,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
       if ( rows && rows.length > 0 ) {
         winston.log( 'info', 'using ' + rows.length + ' saved strings' );
         for ( i = 0; i < rows.length; i++ ) {
-          let row = rows[ i ];
+          const row = rows[ i ];
           savedStrings[ row.repository ][ row.stringkey ] = row.stringvalue;
         }
       }
@@ -357,13 +357,13 @@ module.exports.renderTranslationPage = async function( req, res ) {
       client.end();
 
       let simTitle; // sim title gets filled in here (e.g. Area Builder instead of area-builder)
-      let otherSims = []; // other sim dependencies get filled in here (e.g. beers-law-lab when translating concentration)
+      const otherSims = []; // other sim dependencies get filled in here (e.g. beers-law-lab when translating concentration)
 
       // iterate over all projects from which this sim draws strings
       for ( i = 0; i < extractedStrings.length; i++ ) {
-        let project = extractedStrings[ i ];
-        let strings = englishStrings[ project.projectName ];
-        let previouslyTranslatedStrings = req.session.translatedStrings[ targetLocale ][ project.projectName ];
+        const project = extractedStrings[ i ];
+        const strings = englishStrings[ project.projectName ];
+        const previouslyTranslatedStrings = req.session.translatedStrings[ targetLocale ][ project.projectName ];
 
         // put the strings under common strings, current sim strings, or sim strings depending on which project they are from
         let array;
@@ -380,19 +380,19 @@ module.exports.renderTranslationPage = async function( req, res ) {
         }
 
         for ( let j = 0; j < project.stringKeys.length; j++ ) {
-          let key = project.stringKeys[ j ];
+          const key = project.stringKeys[ j ];
 
-          let stringVisible = strings.hasOwnProperty( key ) && ( ( strings[ key ].visible === undefined ) ? true : strings[ key ].visible );
+          const stringVisible = strings.hasOwnProperty( key ) && ( ( strings[ key ].visible === undefined ) ? true : strings[ key ].visible );
           if ( stringVisible ) {
 
             // data needed to render to the string on the page - the key, the current value, the English value, and the repo
-            let stringRenderInfo = {
+            const stringRenderInfo = {
               key: key,
               englishValue: escapeHTML( strings[ key ].value ),
               repo: project.projectName
             };
 
-            let savedStringValue = savedStrings[ project.projectName ][ key ];
+            const savedStringValue = savedStrings[ project.projectName ][ key ];
 
             // use saved string if it exists
             if ( savedStringValue ) {
@@ -406,7 +406,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
             else if ( previouslyTranslatedStrings[ key ] ) {
 
               // use previous translation value obtained from GitHub, if it exists
-              let translatedString = previouslyTranslatedStrings[ key ];
+              const translatedString = previouslyTranslatedStrings[ key ];
               winston.log( 'info', 'using previously translated string ' + key + ': ' +
                                    getPrintableString( translatedString.value ) );
               stringRenderInfo.value = escapeHTML( translatedString.value );
@@ -427,7 +427,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
 
         // Identify strings that are translated but not used so that they don't get removed from the translation.
         // This is only relevant for shared/common strings.
-        for ( let stringKey in previouslyTranslatedStrings ) {
+        for ( const stringKey in previouslyTranslatedStrings ) {
           if ( previouslyTranslatedStrings.hasOwnProperty( stringKey ) ) {
             let containsObjectWithKey = false;
             for ( let index = 0; index < array.length; index++ ) {
@@ -450,7 +450,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
       }
 
       // sort the arrays by the English values
-      let compare = function( a, b ) {
+      const compare = function( a, b ) {
         if ( a.englishValue.toLowerCase() < b.englishValue.toLowerCase() ) {
           return -1;
         }
@@ -469,7 +469,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
       const languageDirection = targetLocaleInfo ? targetLocaleInfo.direction : 'ltr';
 
       // assemble the data that will be supplied to the template
-      let templateData = {
+      const templateData = {
         title: TITLE,
         subtitle: 'Please enter a translation for each English string:',
         destinationLanguage: languageName,
@@ -580,7 +580,7 @@ module.exports.saveStrings = function( req, res ) {
   } );
 
   const repos = {};
-  for ( let string in req.body ) {
+  for ( const string in req.body ) {
     if ( Object.hasOwnProperty.call( req.body, string ) ) {
 
       // data submitted is in the form "[repository] [key]", for example "area-builder area-builder.title"
@@ -678,7 +678,7 @@ module.exports.runTest = async function( req, res ) {
   if ( req.session.teamMember ) {
 
     const testID = req.params.testID;
-    let result = await ServerTests.executeTest( testID );
+    const result = await ServerTests.executeTest( testID );
 
     // send back an empty response
     res.send( result );

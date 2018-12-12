@@ -265,7 +265,7 @@ $( document ).ready( function() {
         const closedTags = ( nonTranslatedString.match( /\<\/[a-zA-Z0-9]+/g ) || [] ).map( s => s.slice( 2 ) );
         const tags = openTags.filter( tag => closedTags.includes( tag ) );
 
-        for ( let tag of tags ) { // eslint-disable-line no-restricted-syntax
+        for ( const tag of tags ) { // eslint-disable-line no-restricted-syntax
           const openMatch = translatedString.match( new RegExp( `<${tag}[\\s\\>]` ) );
           const closedMatch = translatedString.match( new RegExp( `</${tag}[\\s\\>]` ) );
 

@@ -50,9 +50,9 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
   _.keys( await req.body ).forEach( submittedStringKey => {
 
     // data submitted is in the form "[repository] [key]", for example "area-builder area-builder.title"
-    let repoAndStringKey = submittedStringKey.split( ' ' );
-    let repo = repoAndStringKey[ 0 ];
-    let stringKey = repoAndStringKey[ 1 ];
+    const repoAndStringKey = submittedStringKey.split( ' ' );
+    const repo = repoAndStringKey[ 0 ];
+    const stringKey = repoAndStringKey[ 1 ];
 
     // if this sim or lib isn't represent yet, add it
     if ( !stringSets[ repo ] ) {
@@ -60,10 +60,10 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
     }
 
     // get the value of the string
-    let stringValue = req.body[ submittedStringKey ];
+    const stringValue = req.body[ submittedStringKey ];
 
     // check if the string is already in translatedStrings to get the history if it exists
-    let translatedString = req.session.translatedStrings[ targetLocale ] &&
+    const translatedString = req.session.translatedStrings[ targetLocale ] &&
                            req.session.translatedStrings[ targetLocale ][ repo ] &&
                            req.session.translatedStrings[ targetLocale ][ repo ][ stringKey ];
     let history = translatedString && translatedString.history;
@@ -85,7 +85,7 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
 
     // only add the update if the value has changed
     if ( oldValue !== stringValue ) {
-      let newHistoryEntry = {
+      const newHistoryEntry = {
         userId: ( req.session.userId ) ? req.session.userId : 'phet-test',
         timestamp: Date.now(),
         oldValue: oldValue,
@@ -118,7 +118,7 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
   const changedStringSets = _.pick( stringSets, _.keys( stringsChangedFlags ) );
 
   // save the modified strings to long-term storage
-  let stringSavePromises = [];
+  const stringSavePromises = [];
   _.keys( await changedStringSets ).forEach( simOrLibName => {
     stringSavePromises.push(
       LongTermStringStorage.saveStrings( simOrLibName, targetLocale, changedStringSets[ simOrLibName ] )

@@ -21,7 +21,7 @@ const FAIL = false;
  * test handler object - each test is a method on this object. Use "executeTest" in this module to test these handlers.
  * To write a handler, create a function that will return truthy if the test passes, or falsey/throw error is fails.
  */
-let testHandlers = {
+const testHandlers = {
 
   /**
    * test rapidly requesting several string files
@@ -30,7 +30,7 @@ let testHandlers = {
   testRetrievingMultipleFilesFromGitHub: function() {
 
     // create a list of the files to retrieve
-    let stringFilesToRetrieve = [
+    const stringFilesToRetrieve = [
       // NOTE - use files that are on both master and the 'tests' branch
       { repoName: 'arithmetic', locale: 'es', expectedToExist: true },
       { repoName: 'chains', locale: 'ab', expectedToExist: true },
@@ -39,7 +39,7 @@ let testHandlers = {
       { repoName: 'blah', locale: 'es', expectedToExist: false }
     ];
 
-    let stringRetrievalPromises = [];
+    const stringRetrievalPromises = [];
 
     // create the promises for retrieving the strings
     stringFilesToRetrieve.forEach( function( stringFileSpec ) {
@@ -109,7 +109,7 @@ let testHandlers = {
    */
   testStringMatch: function() {
 
-    let stringComparePromises = [];
+    const stringComparePromises = [];
 
     // compare the strings with a completely different set, and make sure that they don't match
     stringComparePromises.push( LongTermStringStorage.getStrings( 'arithmetic', 'es' )
@@ -149,7 +149,7 @@ let testHandlers = {
     stringComparePromises.push( LongTermStringStorage.getStrings( 'arithmetic', 'es' )
       .then( strings => {
 
-        let firstKey = _.keys( strings )[ 0 ];
+        const firstKey = _.keys( strings )[ 0 ];
         strings[ firstKey ].value = strings[ firstKey ].value + 'X';
 
         return LongTermStringStorage.stringsMatch( 'arithmetic', 'es', strings )
@@ -183,20 +183,20 @@ let testHandlers = {
     }
 
     // make a list of the strings to change - be careful here not to ever mess up real translations
-    let simName = 'chains';
-    let locales = [ 'ab', 'cs' ];
-    let stringChangePromises = [];
+    const simName = 'chains';
+    const locales = [ 'ab', 'cs' ];
+    const stringChangePromises = [];
 
     // get the strings, then modify them
     locales.forEach( function( locale ) {
       winston.log( 'info', 'getting strings for sim ' + simName + ', locale ' + locale );
-      let modifyStringsPromise = LongTermStringStorage.getStrings( simName, locale )
+      const modifyStringsPromise = LongTermStringStorage.getStrings( simName, locale )
         .then( strings => {
 
           // modify the first string to have a snapshot of the epoch number at the end, e.g. "My Sim---5409483029"
-          let firstKey = _.keys( strings )[ 0 ];
+          const firstKey = _.keys( strings )[ 0 ];
           let firstStringValue = strings[ firstKey ].value;
-          let dividerIndex = firstStringValue.indexOf( '---' );
+          const dividerIndex = firstStringValue.indexOf( '---' );
           if ( dividerIndex !== -1 ) {
             firstStringValue = firstStringValue.substring( 0, dividerIndex );
           }
@@ -224,8 +224,8 @@ let testHandlers = {
    * @return {Object}
    */
   testTemp: async function() {
-    let res = await nodeFetch( 'https://phet.colorado.edu/services/metadata/1.2/simulations?format=json&type=html&locale=en&simulation=neuron&summary' );
-    let json = await res.json();
+    const res = await nodeFetch( 'https://phet.colorado.edu/services/metadata/1.2/simulations?format=json&type=html&locale=en&simulation=neuron&summary' );
+    const json = await res.json();
     console.log( json );
     return json;
   }
@@ -255,7 +255,7 @@ module.exports.executeTest = async function executeTest( testID ) {
     }
   }
   else {
-    let errorMessage = 'requested test not defined, testID = ' + testID;
+    const errorMessage = 'requested test not defined, testID = ' + testID;
     winston.log( 'error', errorMessage );
     return { err: errorMessage };
   }
@@ -267,29 +267,29 @@ module.exports.executeTest = async function executeTest( testID ) {
  */
 module.exports.runTests = async function() {
 
-  let testSummary = {
+  const testSummary = {
     passed: 0,
     failed: 0
   };
-  for ( let testName of Object.keys( testHandlers ) ) { // eslint-disable-line no-restricted-syntax
+  for ( const testName of Object.keys( testHandlers ) ) { // eslint-disable-line no-restricted-syntax
     winston.info( `\n\n\nRunning test ${testName}` );
 
-    let { testPass, err } = await this.executeTest( testName );
+    const { testPass, err } = await this.executeTest( testName );
 
     if ( testPass ) {
       winston.log( 'info', 'test ' + testName + ' result: PASS' );
       testSummary.passed += 1;
     }
     else {
-      let errMessage = err ? `, err = ${err}` : '';
+      const errMessage = err ? `, err = ${err}` : '';
       winston.log( 'info', 'test ' + testName + ' result: PASS' + errMessage );
       testSummary.failed += 1;
     }
 
   }
 
-  let numberOfTests = Object.keys( testHandlers ).length;
-  let summary = `Tests completed, ran ${numberOfTests} tests, ${testSummary.passed} passed, ${testSummary.failed} failed.`;
+  const numberOfTests = Object.keys( testHandlers ).length;
+  const summary = `Tests completed, ran ${numberOfTests} tests, ${testSummary.passed} passed, ${testSummary.failed} failed.`;
 
   winston.log( 'info', summary );
 
