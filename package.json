@@ -35,5 +35,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/phetsims/rosetta.git"
+  },
+  "eslintConfig": {
+    "extends": "../chipper/eslint/node_eslintrc.js"
   }
 }
