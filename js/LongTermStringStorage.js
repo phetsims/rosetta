@@ -10,7 +10,6 @@
  * could be rewritten with minimal impact on the client code.  That's the idea anyway.
  */
 
-/* eslint-env node */
 'use strict';
 
 // modules

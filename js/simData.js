@@ -6,7 +6,6 @@
  * @author John Blanco
  */
 
-/* eslint-env node */
 'use strict';
 
 // imports

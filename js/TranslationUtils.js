@@ -6,7 +6,7 @@
  * @author Aaron Davis
  * @author John Blanco
  */
-/* eslint-env node */
+
 'use strict';
 
 const _ = require( 'underscore' ); // eslint-disable-line

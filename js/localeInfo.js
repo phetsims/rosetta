@@ -5,7 +5,7 @@
  * @author John Blanco
  * @author Michael Kauzmann
  */
-/* eslint-env node */
+
 'use strict';
 // imports
 const _ = require( 'lodash' ); // eslint-disable-line

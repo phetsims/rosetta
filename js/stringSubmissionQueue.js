@@ -7,7 +7,7 @@
  * @author Aaron Davis
  * @author John Blanco
  */
-/* eslint-env node */
+
 'use strict';
 
 // modules

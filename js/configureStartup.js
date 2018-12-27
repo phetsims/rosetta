@@ -10,7 +10,6 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-/* eslint-env node */
 'use strict';
 
 const childProcess = require( 'child_process' ); // eslint-disable-line require-statement-match

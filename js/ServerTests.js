@@ -4,7 +4,6 @@
  * This file contains the server-side code for handling test requests.
  */
 
-/* eslint-env node */
 'use strict';
 
 // modules

@@ -5,7 +5,6 @@
  * This code runs on the client and generally stimulates the server by sending URLs to it.
  */
 
-/* eslint-env node */
 'use strict';
 
 $( document ).ready( function() {
