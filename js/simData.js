@@ -139,7 +139,7 @@ module.exports = {
   /**
    * get a list of the HTML5 sims that are available on the PhET website
    * @param {boolean} includeUnpublished
-   * @return {Promise.<Array.<string>>}
+   * @returns {Promise.<Array.<string>>}
    * @public
    */
   getListOfSimNames: async function( includeUnpublished ) {
@@ -169,7 +169,7 @@ module.exports = {
    * that are available on the website.  The format is that which is needed to render the main translation selection
    * page, and is a bit historic, if background is needed please see https://github.com/phetsims/rosetta/issues/123.
    * @param {boolean} includeUnpublished
-   * @return {Promise.<Array>}
+   * @returns {Promise.<Array>}
    * @public
    */
   getSimTranslationPageInfo: async function( includeUnpublished ) {
@@ -190,7 +190,7 @@ module.exports = {
   /**
    * get the URL where the simulation is available from the website
    * @param {string} simName
-   * @return {Promise.<string|null>}
+   * @returns {Promise.<string|null>}
    * @public
    */
   getLiveSimUrl: async function( simName ) {
@@ -205,7 +205,7 @@ module.exports = {
   /**
    * get the English translation of the title for the specified simulation
    * @param {string} simName
-   * @return {Promise.<string>}
+   * @returns {Promise.<string>}
    * @public
    */
   getEnglishTitle: async function( simName ) {

@@ -43,7 +43,7 @@ const promiseQueue = new Queue( 1, 1000 );
  * retrieve the stored strings for the given locale and repo
  * @param {string} simOrLibName - name of the simulation or common-code repository where the untranslated strings reside
  * @param {string} locale
- * @return {Promise.<string>}
+ * @returns {Promise.<string>}
  * @public
  */
 async function getStrings( simOrLibName, locale ) {
@@ -75,7 +75,7 @@ async function getStrings( simOrLibName, locale ) {
  * @param {string} simOrLibName - name of the simulation or common-code repository where the untranslated strings reside
  * @param {string} locale
  * @param {Object} strings
- * @return {Promise.<boolean>}
+ * @returns {Promise.<boolean>}
  * @public
  */
 async function stringsMatch( simOrLibName, locale, strings ) {
@@ -88,7 +88,7 @@ async function stringsMatch( simOrLibName, locale, strings ) {
  * @param {string} simOrLibName - name of the simulation or common-code repository where the untranslated strings reside
  * @param {string} locale
  * @param {Object} strings
- * @return {Promise.<Object>}
+ * @returns {Promise.<Object>}
  * @public
  */
 function saveStrings( simOrLibName, locale, strings ) {

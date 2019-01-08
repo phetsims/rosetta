@@ -205,7 +205,7 @@ function extractStringsAPI( req, res ) {
 /**
  * get the metadata for the specified simulation
  * @param {string} simName
- * @return {Promise.<string>}
+ * @returns {Promise.<string>}
  */
 async function getSimInfo( simName ) {
 
@@ -311,7 +311,7 @@ function checkAndUpdateStringFile( repo, file, content, message, branch, callbac
  * @param {string} Url
  * @param {array} strings
  * @param {string} projectName
- * @return {Promise.<string>}
+ * @returns {Promise.<string>}
  */
 async function getGhStrings( Url, strings, projectName, isEnglishStrings ) {
   winston.log( 'info', 'sending request to ' + Url );
@@ -365,7 +365,7 @@ function getPublishedEnglishSimURL( simName ) {
 /**
  * get the HTML of the latest published version of the sim from the sever
  * @param {string} simName
- * @return {Promise.<string>} - html of the published simulation
+ * @returns {Promise.<string>} - html of the published simulation
  * @rejects {Error}
  */
 async function getLatestSimHtml( simName ) {

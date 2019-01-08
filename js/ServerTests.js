@@ -24,7 +24,7 @@ const testHandlers = {
 
   /**
    * test rapidly requesting several string files
-   * @return {Promise.<boolean>}
+   * @returns {Promise.<boolean>}
    */
   testRetrievingMultipleFilesFromGitHub: function() {
 
@@ -104,7 +104,7 @@ const testHandlers = {
 
   /**
    * test the function that compares a set of strings to those in long-term storage
-   * @return {Promise.<boolean>}
+   * @returns {Promise.<boolean>}
    */
   testStringMatch: function() {
 
@@ -220,7 +220,7 @@ const testHandlers = {
 
   /**
    * temporary test, put unit tests in here as needed
-   * @return {Object}
+   * @returns {Object}
    */
   testTemp: async function() {
     const res = await nodeFetch( 'https://phet.colorado.edu/services/metadata/1.2/simulations?format=json&type=html&locale=en&simulation=neuron&summary' );

@@ -200,7 +200,7 @@ async function deleteStringsFromDB( userID, locale, simOrLibNames ) {
 /**
  * @param {string} simName
  * @param {string} version
- * @return {Promise.<string>} - JSON data with dependencies
+ * @returns {Promise.<string>} - JSON data with dependencies
  */
 async function getDependencies( simName, version ) {
   const URL = PRODUCTION_SERVER_URL +
@@ -220,7 +220,7 @@ async function getDependencies( simName, version ) {
 
 /**
  * request a build from the build server
- * @return Promise
+ * @returns {Promise}
  * @private
  */
 async function requestBuild( simName, userID, locale ) {

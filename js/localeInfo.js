@@ -123,7 +123,7 @@ module.exports = {
 
   /**
    * get the locale information as an object that matches how it is stored in chipper
-   * @return {Promise.<Object>}
+   * @returns {Promise.<Object>}
    * @public
    */
   getLocaleInfoObject: async function() {
@@ -136,7 +136,7 @@ module.exports = {
 
   /**
    * get the locale info as an array sorted by locale
-   * @return {Promise.<Array<Object>>}
+   * @returns {Promise.<Array<Object>>}
    * @public
    */
   getSortedLocaleInfoArray: async function() {
