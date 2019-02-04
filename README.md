@@ -73,7 +73,7 @@ Another option is to use [Docker](https://docs.docker.com/). Follow the [install
 
 `docker pull postgres`
 
-If you have the latest version of the repo and this is your first time running the container, you can simply execute `start_pg_docker.sh` script within the `docker` directory at the repo's root. The script will start the container with the following attributes:
+If you have the latest version of the repo and this is your first time running the container, you can simply execute `start_pg_docker.sh` script within the `dev` directory at the repo's root. The script will start the container with the following attributes:
 - container name: `rosettadb`
 - db network address: `0.0.0.0:5432` or `localhost:5432`
 - db username: `phet`
