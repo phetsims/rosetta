@@ -14,19 +14,20 @@ const bodyParser = require( 'body-parser' ); // eslint-disable-line require-stat
 const configureStartup = require( './configureStartup' );
 const cookieParser = require( 'cookie-parser' ); // eslint-disable-line require-statement-match
 const doT = require( 'express-dot' ); // eslint-disable-line require-statement-match
+const dotenv = require( 'dotenv' );
 const express = require( 'express' );
 const session = require( 'express-session' ); // eslint-disable-line require-statement-match
 const winston = require( 'winston' );
 
-// set up environment variables
-require( 'dotenv' ).config(); // eslint-disable-line
+// set up environment variables defined in /rosetta/.env
+const config = dotenv.config();
 
 // constants
 const LISTEN_PORT = 16372;
 
 // The following flag is used to take this utility off line and show a "down for maintenance" sort of page to users.
 // This is generally set by editing the in situ version, and should never be committed to the code base as false.
-const ENABLED = process.env.ENABLED;
+const ENABLED = config.error ? true : process.env.ENABLED;
 
 // Configuration boiler plate like logger setup, preferences file validation, and command line argument parsing
 configureStartup();
