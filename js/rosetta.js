@@ -18,12 +18,15 @@ const express = require( 'express' );
 const session = require( 'express-session' ); // eslint-disable-line require-statement-match
 const winston = require( 'winston' );
 
+// set up environment variables
+require( 'dotenv' ).config(); // eslint-disable-line
+
 // constants
 const LISTEN_PORT = 16372;
 
 // The following flag is used to take this utility off line and show a "down for maintenance" sort of page to users.
 // This is generally set by editing the in situ version, and should never be committed to the code base as false.
-const ENABLED = true;
+const ENABLED = process.env.ENABLED;
 
 // Configuration boiler plate like logger setup, preferences file validation, and command line argument parsing
 configureStartup();
@@ -56,6 +59,9 @@ app.use( bodyParser.urlencoded( { extended: false } ) );
 // Set up the routes.  The order matters.
 //----------------------------------------------------------------------------
 
+const translate = require( __dirname + '/translate' );
+
+app.use( '/translate', translate );
 // route for showing the 'down for maintenance' page when needed
 if ( !ENABLED ) {
   app.get( '/translate', routeHandlers.showOffLinePage );
