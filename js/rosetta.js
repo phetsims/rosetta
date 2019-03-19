@@ -60,9 +60,6 @@ app.use( bodyParser.urlencoded( { extended: false } ) );
 // Set up the routes.  The order matters.
 //----------------------------------------------------------------------------
 
-const translate = require( __dirname + '/translate' );
-
-app.use( '/translate', translate );
 // route for showing the 'down for maintenance' page when needed
 if ( !ENABLED ) {
   app.get( '/translate', routeHandlers.showOffLinePage );
