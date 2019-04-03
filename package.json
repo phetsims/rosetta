@@ -38,6 +38,9 @@
     "url": "https://github.com/phetsims/rosetta.git"
   },
   "eslintConfig": {
-    "extends": "../chipper/eslint/node_eslintrc.js"
+    "extends": "../chipper/eslint/node_eslintrc.js",
+    "globals": {
+      "alert": false
+    }
   }
 }
