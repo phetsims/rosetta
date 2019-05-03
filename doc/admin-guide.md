@@ -4,6 +4,15 @@ Administration Guide for the PhET Translation Utility
 Note: This isn't very complete at this time, but it seemed important to have a place where some information is kept that
 would enable PhET developers to administer this utility.
 
+Background
+==========
+Rosetta, also known as the translation utility, is a node server that runs on phet-server.  As of this writing, the code
+on phet-server is kept in the directory /data/share/phet/rosetta, and git is used to pull updates.  When an update is
+pulled, the rosetta process needs to be restarted before the change will take effect (see below).
+
+Starting and Stopping
+=====================
+
 Restart:
 ```sudo systemctl restart rosetta```
 
