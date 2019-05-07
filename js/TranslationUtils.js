@@ -286,7 +286,7 @@ function checkAndUpdateStringFile( repo, file, content, message, branch, callbac
       winston.log( 'info', 'found file ' + file + ' in GitHub.  Attempting to update.' );
 
       const sha = data.sha;
-      const buffer = new Buffer( data.content, data.encoding );
+      const buffer = Buffer.from( data.content, data.encoding );
       if ( buffer.toString() !== content ) {
         repo.updateContents( file, message, content, sha, branch, function( err, data, headers ) {
           if ( err ) {
