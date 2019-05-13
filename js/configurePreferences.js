@@ -18,8 +18,8 @@ module.exports = function() {
 
   /**
    * Rosetta is run under user "phet-admin" on the dev and production servers. However, "process.env.HOME" will get
-   * the home directory of the user who is starting the process, not phet-admin's home directory, therefore we need to use
-   * the following approach to get the home directory.
+   * the home directory of the user who is starting the process, not phet-admin's home directory, therefore we need to
+   * use the following approach to get the home directory.
    */
   if ( !/^win/.test( process.platform ) ) {
     const passwdUser = require( 'passwd-user' ); // eslint-disable-line require-statement-match
@@ -29,7 +29,7 @@ module.exports = function() {
     PREFERENCES_FILE = process.env.HOME + '/.phet/build-local.json';
   }
 
-// ensure that the preferences file exists and has the required fields
+  // ensure that the preferences file exists and has the required fields
   assert( fs.existsSync( PREFERENCES_FILE ), 'missing preferences file ' + PREFERENCES_FILE );
   const preferences = require( PREFERENCES_FILE );
   assert( preferences.githubUsername, 'githubUsername is missing from ' + PREFERENCES_FILE );
@@ -63,9 +63,9 @@ module.exports = function() {
     // assert that the server is running and that there is a successful database connection
     const client = new Client();
     client.connect().catch( () => {
-        assert( false, 'There was an error connecting to the dev server' );
-      } )
-      .then( () => client.query('SELECT NOW()') )
+      assert( false, 'There was an error connecting to the dev server' );
+    } )
+      .then( () => client.query( 'SELECT NOW()' ) )
       .catch( () => {
         assert( false, 'There was an error connection to the database' );
       } )

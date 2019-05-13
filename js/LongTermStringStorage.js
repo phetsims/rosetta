@@ -8,6 +8,8 @@
  * This implementation uses GitHub as the "back end" where the strings are stored, but it is intended to be a fairly
  * generic interface so that if we ever decide to use something else as the storage medium for strings, this object
  * could be rewritten with minimal impact on the client code.  That's the idea anyway.
+ *
+ * @author John Blanco
  */
 
 'use strict';
