@@ -17,9 +17,9 @@ module.exports = function() {
   let PREFERENCES_FILE;
 
   /**
-   * Rosetta is run under user "phet-admin" on the dev and production servers. However, "process.env.HOME" will get
-   * the home directory of the user who is starting the process, not phet-admin's home directory, therefore we need to
-   * use the following approach to get the home directory.
+   * Rosetta is run under user "phet-admin" on the dev and production servers. However, "process.env.HOME" will get the
+   * home directory of the user who is starting the process, not phet-admin's home directory, therefore we need to use
+   * the following approach to get the home directory.
    */
   if ( !/^win/.test( process.platform ) ) {
     const passwdUser = require( 'passwd-user' ); // eslint-disable-line require-statement-match
