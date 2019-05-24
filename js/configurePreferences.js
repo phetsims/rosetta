@@ -43,6 +43,7 @@ module.exports = function() {
   preferences.productionServerName = preferences.productionServerName || 'phet-server.int.colorado.edu';
 
   // if we're in a development environment
+  // TODO: This if clause can probably be removed
   if ( process.env.ENV === 'dev' ) {
     // assert appropriate params are set in build-local.json
     assert( preferences.rosettaDevDbHost, `rosettaDevDbHost is missing from ${PREFERENCES_FILE}` );
