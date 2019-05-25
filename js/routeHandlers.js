@@ -340,20 +340,18 @@ module.exports.renderTranslationPage = async function( req, res ) {
   // create a query for retrieving the strings
   const savedStringsQuery = 'SELECT * from saved_translations where user_id = $1 AND locale = $2 AND (' + repositories + ')';
 
-  await client.connect();
-
-  // query the database for saved strings corresponding to this user and sim
-  winston.log( 'info', 'running query: ' + savedStringsQuery );
+  // connect to the database and query for saved strings corresponding to this user and sim
   let rows = null;
   try {
+    await client.connect();
+    winston.log( 'info', 'running query: ' + savedStringsQuery );
     const queryResponse = await client.query( savedStringsQuery, [ userId, targetLocale ] );
     rows = queryResponse.rows;
+    client.end();
   }
   catch( err ) {
-    winston.error( 'query of strings database failed, err = ' + err );
+    winston.error( 'unable to retrieve saved strings from database, err = ' + err );
   }
-
-  client.end();
 
   // load saved strings from database to saveStrings object if there are any
   if ( rows && rows.length > 0 ) {
