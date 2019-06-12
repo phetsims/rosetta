@@ -19,10 +19,7 @@ const parseArgs = require( 'minimist' ); // eslint-disable-line require-statemen
 const winston = require( 'winston' );
 
 
-module.exports = function() {
-
-  // Assign preferences to a global, after validation that proper credentials have been supplied.
-  configurePreferences();
+module.exports = async function() {
 
   // add a global handler for unhandled promise rejections
   process.on( 'unhandledRejection', error => {
@@ -45,7 +42,7 @@ module.exports = function() {
   winston.log( 'info', 'Node version: ' + process.version );
 
   // log the SHA of rosetta - this may make it easier to duplicate and track down problems
-  childProcess.exec( 'git rev-parse HEAD', function( err, stdout ) {
+  childProcess.execSync( 'git rev-parse HEAD', function( err, stdout ) {
     if ( !err ) {
       winston.info( 'current SHA: ', stdout );
     }
@@ -54,8 +51,7 @@ module.exports = function() {
     }
   } );
 
-  // Handle command line input
-  // First 2 args provide info about executables, ignore
+  // handle command line input (first 2 args provide info about executables, ignore)
   const commandLineArgs = process.argv.slice( 2 );
 
   const parsedCommandLineOptions = parseArgs( commandLineArgs, {
@@ -90,4 +86,6 @@ module.exports = function() {
     process.exit();
   }
 
+  // assign preferences to a global, after validation that proper credentials have been supplied
+  await configurePreferences();
 };

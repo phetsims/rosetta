@@ -4,6 +4,7 @@
  * Compile and validate a preferences object to be used throughout the app.
  *
  * @author Michael Kauzmann (PhET Interactive Simulations)
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 'use strict';
@@ -11,8 +12,9 @@
 const assert = require( 'assert' );
 const fs = require( 'fs' );
 const { Client } = require( 'pg' ); //eslint-disable-line
+const winston = require( 'winston' );
 
-module.exports = function() {
+module.exports = async function() {
 
   let PREFERENCES_FILE;
 
@@ -29,6 +31,8 @@ module.exports = function() {
     PREFERENCES_FILE = process.env.HOME + '/.phet/build-local.json';
   }
 
+  winston.log( 'info', 'obtaining configuration information from ' + PREFERENCES_FILE );
+
   // ensure that the preferences file exists and has the required fields
   assert( fs.existsSync( PREFERENCES_FILE ), 'missing preferences file ' + PREFERENCES_FILE );
   const preferences = require( PREFERENCES_FILE );
@@ -42,35 +46,34 @@ module.exports = function() {
   preferences.productionServerURL = preferences.productionServerURL || 'https://phet.colorado.edu';
   preferences.productionServerName = preferences.productionServerName || 'phet-server.int.colorado.edu';
 
-  // if we're in a development environment
-  // TODO: This if clause can probably be removed
-  if ( process.env.ENV === 'dev' ) {
-    // assert appropriate params are set in build-local.json
-    assert( preferences.rosettaDevDbHost, `rosettaDevDbHost is missing from ${PREFERENCES_FILE}` );
-    assert( preferences.rosettaDevDbPort, `rosettaDevDbPort is missing from ${PREFERENCES_FILE}` );
-    assert( preferences.rosettaDevDbName, `rosettaDevDbName is missing from ${PREFERENCES_FILE}` );
-    assert( preferences.rosettaDevDbUser, `rosettaDevDbUser is missing from ${PREFERENCES_FILE}` );
-    assert( preferences.rosettaDevDbPass, `rosettaDevDbPass is missing from ${PREFERENCES_FILE}` );
+  // verify that the information necessary for connecting to the short-term-string-storage database is available
+  assert( preferences.rosettaDbHost, `rosettaDbHost is missing from ${PREFERENCES_FILE}` );
+  assert( preferences.rosettaDbPort, `rosettaDbPort is missing from ${PREFERENCES_FILE}` );
+  assert( preferences.rosettaDbName, `rosettaDbName is missing from ${PREFERENCES_FILE}` );
+  assert( preferences.rosettaDbUser, `rosettaDbUser is missing from ${PREFERENCES_FILE}` );
+  assert( preferences.rosettaDbPass, `rosettaDbPass is missing from ${PREFERENCES_FILE}` );
 
-    // 'pg' module uses env variables to establish the db connection
-    process.env = Object.assign( process.env, {
-      PGUSER: preferences.rosettaDevDbUser,
-      PGHOST: preferences.rosettaDevDbHost,
-      PGPASSWORD: preferences.rosettaDevDbPass,
-      PGDATABASE: preferences.rosettaDevDbName,
-      PGPORT: preferences.rosettaDevDbPort
-    } );
+  // set up the environment variables used by the 'pg' module to interact with the DB
+  process.env = Object.assign( process.env, {
+    PGUSER: preferences.rosettaDbUser,
+    PGHOST: preferences.rosettaDbHost,
+    PGPASSWORD: preferences.rosettaDbPass,
+    PGDATABASE: preferences.rosettaDbName,
+    PGPORT: preferences.rosettaDbPort
+  } );
 
-    // assert that the server is running and that there is a successful database connection
-    const client = new Client();
-    client.connect().catch( () => {
-      assert( false, 'There was an error connecting to the dev server' );
-    } )
-      .then( () => client.query( 'SELECT NOW()' ) )
-      .catch( () => {
-        assert( false, 'There was an error connection to the database' );
-      } )
-      .then( () => { client.end(); } );
+  // check that the DB server is running and that a connection can be successfully established
+  winston.log( 'info', 'testing database connection' );
+  const client = new Client();
+  try {
+    await client.connect();
+    winston.log( 'info', 'successfully connected to the database, trying a query...' );
+    const res = await client.query( 'SELECT NOW()' );
+    // TODO: Figure out what to put here when the connection is succeeding
+    winston.log( 'res = ' + JSON.stringify( res ) );
+  }
+  catch( err ) {
+    winston.log( 'warn', 'error connecting to the database server, short term string storage will not work, err = ' + err );
   }
 
   /*
