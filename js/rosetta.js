@@ -1,4 +1,4 @@
-// Copyright 2017-2018, University of Colorado Boulder
+// Copyright 2015-2019, University of Colorado Boulder
 
 /**
  * Main entry point for PhET translation web app. This is where ExpressJS gets configured and the routes are set up.

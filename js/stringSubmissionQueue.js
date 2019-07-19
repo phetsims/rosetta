@@ -1,4 +1,4 @@
-// Copyright 2015, University of Colorado Boulder
+// Copyright 2015-2019, University of Colorado Boulder
 
 /**
  * An asynchronous (async.queue) queue with a concurrency of one (meaning that only one task is executed at a time)
