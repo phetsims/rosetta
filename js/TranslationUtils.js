@@ -89,7 +89,7 @@ function renderError( res, message, err ) {
 function extractStrings( data, simName ) {
 
   const projects = {};
-  const matches = data.match( /string!([\w\.\/-]+)/g );
+  const matches = data.match( /string!([\w./-]+)/g );
 
   // if no matches are found, it probably means the sim url was not correct
   if ( matches === null ) {

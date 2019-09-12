@@ -261,8 +261,8 @@ $( document ).ready( function() {
         }
 
         // verify tags
-        const openTags = ( nonTranslatedString.match( /\<[a-zA-Z0-9]+/g ) || [] ).map( s => s.slice( 1 ) );
-        const closedTags = ( nonTranslatedString.match( /\<\/[a-zA-Z0-9]+/g ) || [] ).map( s => s.slice( 2 ) );
+        const openTags = ( nonTranslatedString.match( /<[a-zA-Z0-9]+/g ) || [] ).map( s => s.slice( 1 ) );
+        const closedTags = ( nonTranslatedString.match( /<\/[a-zA-Z0-9]+/g ) || [] ).map( s => s.slice( 2 ) );
         const tags = openTags.filter( tag => closedTags.includes( tag ) );
 
         for ( const tag of tags ) {
