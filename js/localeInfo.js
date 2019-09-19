@@ -116,7 +116,7 @@ async function checkAndUpdateLocaleInfo() {
 // kick off the initial population of the sim data
 checkAndUpdateLocaleInfo()
   .then( () => { winston.info( 'initial population of localeInfo object complete' ); } )
-  .catch( ( err ) => winston.info( 'initial population of localeInfo object failed, err = ' + err ) );
+  .catch( err => winston.info( 'initial population of localeInfo object failed, err = ' + err ) );
 
 // exported singleton object
 module.exports = {

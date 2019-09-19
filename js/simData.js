@@ -131,7 +131,7 @@ async function checkAndUpdateSimData() {
 // kick off the initial population of the sim data
 checkAndUpdateSimData()
   .then( () => { winston.info( 'initial population of simData object complete' ); } )
-  .catch( ( err ) => winston.info( 'initial population of simData object failed, err = ' + err ) );
+  .catch( err => winston.info( 'initial population of simData object failed, err = ' + err ) );
 
 // exported singleton object
 module.exports = {

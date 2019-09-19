@@ -317,7 +317,7 @@ async function getGhStrings( Url, strings, projectName, isEnglishStrings ) {
   winston.log( 'info', 'sending request to ' + Url );
   const response = await nodeFetch( Url );
 
-  return response.text().then( ( body ) => {
+  return response.text().then( body => {
     if ( response.status === 200 ) {
       strings[ projectName ] = JSON.parse( body );
       winston.log( 'info', 'request for ' + Url + ' returned successfully' );

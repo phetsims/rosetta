@@ -142,7 +142,7 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
             targetLocale: targetLocale
           } );
         } )
-        .catch( ( err ) => {
+        .catch( err => {
 
           winston.log( 'error', 'problem building translation, err = ' + err );
 

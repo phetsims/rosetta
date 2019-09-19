@@ -284,7 +284,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
   winston.log( 'info', 'sending request to ' + GITHUB_RAW_FILE_URL_BASE + activeSimsPath );
   const response = await nodeFetch( GITHUB_RAW_FILE_URL_BASE + activeSimsPath );
 
-  fileRetrievalPromises.push( response.text().then( ( body ) => {
+  fileRetrievalPromises.push( response.text().then( body => {
       sims = body.toString().split( '\n' );
     } )
   );
