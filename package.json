@@ -18,7 +18,7 @@
     "node-fetch": "^1.7.3",
     "octonode": "^0.9.1",
     "passwd-user": "^2.1.0",
-    "pg": "^7.4.0",
+    "pg": "^7.14.0",
     "pg-query": "^0.11.0",
     "promise-queue": "^2.2.3",
     "request": "^2.83.0",
