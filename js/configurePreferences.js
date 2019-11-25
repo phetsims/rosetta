@@ -11,7 +11,7 @@
 
 // modules
 const assert = require( 'assert' );
-const { Client } = require( 'pg' ); //eslint-disable-line
+const { Pool } = require( 'pg' ); //eslint-disable-line
 const fs = require( 'fs' );
 const passwdUser = require( 'passwd-user' ); // eslint-disable-line require-statement-match
 const winston = require( 'winston' );
@@ -76,12 +76,23 @@ module.exports = async function() {
   preferences.productionServerName = preferences.productionServerName || 'phet-server.int.colorado.edu';
 
   // check that the DB server is running and that a connection can be successfully established
-  winston.log( 'info', 'testing database connection...' );
-  const client = new Client();
-  client.connect();
-  client.query( 'SELECT NOW()', ( err, res ) => {
-    console.log( err, res );
-    client.end();
+  winston.log( 'info', 'testing database connection (results will likely be several log entries after this one)' );
+  // const client = new Client();
+  // client.connect();
+  // client.query( 'SELECT NOW()', ( err, res ) => {
+  //   console.log( err, res );
+  //   client.end();
+  // } );
+
+  const pool = new Pool();
+  pool.query( 'SELECT NOW()', ( err, res ) => {
+    if ( err ) {
+      winston.log( 'error', 'database connection failed, short term string storage will not work, err = ' + err );
+    }
+    else {
+      console.log( 'err = ' + err );
+      console.log( 'res = ' + res );
+    }
   } );
 
   // try {
