@@ -10,12 +10,11 @@
 'use strict';
 
 // node modules
-// const query = require( 'pg-query' ); // eslint-disable-line
 const _ = require( 'underscore' ); // eslint-disable-line
 const https = require( 'https' );
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const winston = require( 'winston' );
-const { Client } = require( 'pg' ); // eslint-disable-line
+const { Pool } = require( 'pg' ); // eslint-disable-line
 
 // server modules
 const localeInfo = require( './localeInfo' );
@@ -235,12 +234,11 @@ module.exports.chooseSimulationAndLanguage = async function( req, res ) {
  */
 module.exports.renderTranslationPage = async function( req, res ) {
 
-  const client = new Client();
+  const pool = new Pool();
 
   const simName = req.params.simName;
   const targetLocale = req.params.targetLocale;
   const activeSimsPath = '/phetsims/perennial/master/data/active-sims';
-  const userId = ( req.session.userId ) ? req.session.userId : 0; // use an id of 0 for localhost testing
 
   winston.log( 'info', 'creating translation page for sim = ' + simName + ', locale = ' + targetLocale );
 
@@ -343,11 +341,15 @@ module.exports.renderTranslationPage = async function( req, res ) {
   // connect to the database and query for saved strings corresponding to this user and sim
   let rows = null;
   try {
-    await client.connect();
-    winston.log( 'info', 'running query: ' + savedStringsQuery );
-    const queryResponse = await client.query( savedStringsQuery, [ userId, targetLocale ] );
-    rows = queryResponse.rows;
-    client.end();
+    winston.log( 'info', 'retrieving any previously-saved-but-not-submitted strings, query = ' + savedStringsQuery );
+    try {
+      const queryResponse = await pool.query( savedStringsQuery );
+      rows = queryResponse.rows;
+      winston.log( 'info', 'retrieval of strings succeeded' );
+    }
+    catch( err ) {
+      winston.error( 'retrieval of strings failed, err = ' + err );
+    }
   }
   catch( err ) {
     winston.error( 'unable to retrieve saved strings from database, err = ' + err );
@@ -563,8 +565,8 @@ module.exports.testStrings = function( req, res ) {
 };
 
 /**
- * Route for saving strings (when the user presses the "Save" button on the translate sim page).
- * Strings are added to the postgres database.
+ * Route for saving strings to the short-term storage area (when the user presses the "Save" button on the translate sim
+ * page). Strings are added to the postgres database, and NOT to the GitHub long term storage area.
  * @param req
  * @param res
  */
@@ -600,11 +602,11 @@ module.exports.saveStrings = function( req, res ) {
       const ts = new Date();
 
       ( function( key, stringValue ) {
-        const client = new Client();
+        const pool = new Pool();
 
         if ( key && stringValue && stringValue.length > 0 ) {
-          client.query( 'SELECT upsert_saved_translations' +
-                        '($1::bigint, $2::varchar(255), $3::varchar(255), $4::varchar(8), $5::varchar(255), $6::timestamp)',
+          pool.query( 'SELECT upsert_saved_translations' +
+                      '($1::bigint, $2::varchar(255), $3::varchar(255), $4::varchar(8), $5::varchar(255), $6::timestamp)',
             [ userId, key, repo, targetLocale, stringValue, ts ],
             function( err, rows, result ) {
               if ( err ) {

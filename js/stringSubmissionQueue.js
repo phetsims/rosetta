@@ -15,7 +15,7 @@
 const _ = require( 'underscore' ); // eslint-disable-line
 const LongTermStringStorage = require( './LongTermStringStorage' );
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
-const query = require( 'pg-query' ); // eslint-disable-line
+const { Pool } = require( 'pg' ); // eslint-disable-line
 const RosettaConstants = require( './RosettaConstants' );
 const simData = require( './simData' );
 const winston = require( 'winston' );
@@ -184,17 +184,15 @@ async function deleteStringsFromDB( userID, locale, simOrLibNames ) {
   const simOrLibNamesString = simOrLibNames.join( ' OR ' );
 
   const deleteQuery = 'DELETE FROM saved_translations WHERE user_id = $1 AND locale = $2 AND (' + simOrLibNamesString + ')';
-  winston.log( 'info', 'running SQL command: ' + deleteQuery );
-  query( deleteQuery, [ userID, locale ], function( err ) {
-    if ( !err ) {
-      winston.log( 'info', 'successfully deleted saved strings' );
-      return true;
-    }
-    else {
-      winston.log( 'warning', 'problem while trying to remove strings from short term storage, err = ' + err );
-      return false;
-    }
-  } );
+  const pool = new Pool();
+  try {
+    winston( 'info', 'attempting query: ' + deleteQuery );
+    await pool.query( deleteQuery );
+    winston.log( 'info', 'deletion of strings succeeded' );
+  }
+  catch( err ) {
+    winston.error( 'deletion of strings failed, err = ' + err );
+  }
 }
 
 /**

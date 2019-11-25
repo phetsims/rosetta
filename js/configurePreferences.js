@@ -76,7 +76,7 @@ module.exports = async function() {
   preferences.productionServerName = preferences.productionServerName || 'phet-server.int.colorado.edu';
 
   // check that the DB server is running and that a basic query can be performed
-  winston.log( 'info', 'testing database connection (results may be several log entries after this one)' );
+  winston.log( 'info', 'testing database connection' );
   const pool = new Pool();
   try {
     const { rows } = await pool.query( 'SELECT NOW()' );
