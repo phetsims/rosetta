@@ -90,8 +90,8 @@ module.exports = async function() {
       winston.log( 'error', 'database connection failed, short term string storage will not work, err = ' + err );
     }
     else {
-      console.log( 'err = ' + err );
-      console.log( 'res = ' + res );
+      winston.log( 'info', 'database test succeeded' );
+      console.log( 'res = ' + JSON.stringify( res ) );
     }
   } );
 
