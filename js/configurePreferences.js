@@ -78,16 +78,22 @@ module.exports = async function() {
   // check that the DB server is running and that a connection can be successfully established
   winston.log( 'info', 'testing database connection...' );
   const client = new Client();
-  try {
-    await client.connect();
-    winston.log( 'info', 'successfully connected to the database, trying a query...' );
-    const res = await client.query( 'SELECT NOW()' );
-    // TODO: Figure out what to put here when the connection is succeeding
-    winston.log( 'res = ' + JSON.stringify( res ) );
-  }
-  catch( err ) {
-    winston.log( 'warn', 'error connecting to the database server, short term string storage will not work, err = ' + err );
-  }
+  client.connect();
+  client.query( 'SELECT NOW()', ( err, res ) => {
+    console.log( err, res )
+    client.end()
+  } );
+
+  // try {
+  //   await client.connect();
+  //   winston.log( 'info', 'successfully connected to the database, trying a query...' );
+  //   const res = await client.query( 'SELECT NOW()' );
+  //   // TODO: Figure out what to put here when the connection is succeeding
+  //   winston.log( 'res = ' + JSON.stringify( res ) );
+  // }
+  // catch( err ) {
+  //   winston.log( 'warn', 'error connecting to the database server, short term string storage will not work, err = ' + err );
+  // }
 
   /*
    * Add "babelBranch": "tests" in build-local.json for rosetta testing, so that commits will change the 'tests' branch
