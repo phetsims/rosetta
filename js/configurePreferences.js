@@ -75,35 +75,28 @@ module.exports = async function() {
   preferences.productionServerURL = preferences.productionServerURL || 'https://phet.colorado.edu';
   preferences.productionServerName = preferences.productionServerName || 'phet-server.int.colorado.edu';
 
-  // check that the DB server is running and that a connection can be successfully established
+  // check that the DB server is running and that a basic query can be performed
   winston.log( 'info', 'testing database connection (results will likely be several log entries after this one)' );
-  // const client = new Client();
-  // client.connect();
-  // client.query( 'SELECT NOW()', ( err, res ) => {
-  //   console.log( err, res );
-  //   client.end();
+  // !!! THIS WORKS
+  // const pool = new Pool();
+  // pool.query( 'SELECT NOW()', ( err, res ) => {
+  //   if ( err ) {
+  //     winston.log( 'error', 'database connection failed, short term string storage will not work, err = ' + err );
+  //   }
+  //   else {
+  //     winston.log( 'info', 'database test using SELECT NOW() succeeded, now = ' + res.rows[ 0 ].now );
+  //   }
   // } );
 
   const pool = new Pool();
-  pool.query( 'SELECT NOW()', ( err, res ) => {
-    if ( err ) {
-      winston.log( 'error', 'database connection failed, short term string storage will not work, err = ' + err );
-    }
-    else {
-      winston.log( 'info', 'database test using SELECT NOW() succeeded, now = ' + res.rows[ 0 ].now );
-    }
-  } );
 
-  // try {
-  //   await client.connect();
-  //   winston.log( 'info', 'successfully connected to the database, trying a query...' );
-  //   const res = await client.query( 'SELECT NOW()' );
-  //   // TODO: Figure out what to put here when the connection is succeeding
-  //   winston.log( 'res = ' + JSON.stringify( res ) );
-  // }
-  // catch( err ) {
-  //   winston.log( 'warn', 'error connecting to the database server, short term string storage will not work, err = ' + err );
-  // }
+  try {
+    const { rows } = await pool.query( 'SELECT NOW()' );
+    winston.log( 'info', 'database test using SELECT NOW() succeeded, now = ' + rows[ 0 ].now );
+  }
+  catch( err ) {
+    winston.log( 'error', 'database connection failed, short term string storage will not work, err = ' + err );
+  }
 
   /*
    * Add "babelBranch": "tests" in build-local.json for rosetta testing, so that commits will change the 'tests' branch
