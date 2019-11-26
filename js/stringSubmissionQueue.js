@@ -25,10 +25,8 @@ const PRODUCTION_SERVER_URL = RosettaConstants.PRODUCTION_SERVER_URL;
 const SKIP_BUILD_REQUEST = typeof global.preferences.debugRosettaSkipBuildRequest !== 'undefined' &&
                            global.preferences.debugRosettaSkipBuildRequest === 'true';
 
-// TODO: Remove this comment (it's a change that was committed to the new chipper-2.0 branch to test it out).
-
 /**
- * task queue into which translation request are pushed
+ * task queue into which translation requests are pushed
  * @public
  */
 module.exports.stringSubmissionQueue = async ( req, res ) => {

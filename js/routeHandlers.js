@@ -565,70 +565,65 @@ module.exports.testStrings = function( req, res ) {
 };
 
 /**
- * Route for saving strings to the short-term storage area (when the user presses the "Save" button on the translate sim
- * page). Strings are added to the postgres database, and NOT to the GitHub long term storage area.
+ * Route handler for saving strings to the short-term storage area (when the user presses the "Save" button on the
+ * translate sim page). Strings are added to the postgres database, and NOT to the GitHub long term storage area.
  * @param req
  * @param res
  */
-module.exports.saveStrings = function( req, res ) {
+module.exports.saveStrings = async function( req, res ) {
 
   const simName = req.params.simName;
   const targetLocale = req.params.targetLocale;
   const userId = ( req.session.userId ) ? req.session.userId : 0;
-
+  const pool = new Pool();
+  const repos = {};
   let error = false;
 
-  const finished = _.after( Object.keys( req.body ).length, function() {
-    winston.log( 'info', 'finished string saving for ' + simName + '_' + targetLocale );
-    res.json( {
-      'success': !error
-    } );
-  } );
+  // loop through the string descriptions in the post request, saving each one
+  for ( const stringDescription in req.body ) {
 
-  const repos = {};
-  for ( const string in req.body ) {
-    if ( Object.hasOwnProperty.call( req.body, string ) ) {
-
-      // data submitted is in the form "[repository] [key]", for example "area-builder area-builder.title"
-      const repoAndKey = string.split( ' ' );
-      const repo = repoAndKey[ 0 ];
-      const key = repoAndKey[ 1 ];
-
-      if ( !repos[ repo ] ) {
-        repos[ repo ] = {};
-      }
-
-      const stringValue = req.body[ string ];
-      const ts = new Date();
-
-      ( function( key, stringValue ) {
-        const pool = new Pool();
-
-        if ( key && stringValue && stringValue.length > 0 ) {
-          pool.query( 'SELECT upsert_saved_translations' +
-                      '($1::bigint, $2::varchar(255), $3::varchar(255), $4::varchar(8), $5::varchar(255), $6::timestamp)',
-            [ userId, key, repo, targetLocale, stringValue, ts ],
-            function( err, rows, result ) {
-              if ( err ) {
-                winston.log(
-                  'error',
-                  'inserting row: (' + userId + ', ' + key + ', ' + stringValue + ', ' + targetLocale + '), error = ' + err
-                );
-                error = true;
-              }
-              finished();
-            } );
-        }
-        else {
-          finished();
-        }
-
-      } )( key, stringValue );
+    if ( !Object.hasOwnProperty.call( req.body, stringDescription ) ) {
+      continue;
     }
-    else {
-      finished();
+
+    // string descriptions should be in the form "[repository] [key]", for example "area-builder area-builder.title"
+    const repoAndKey = stringDescription.split( ' ' );
+    const repo = repoAndKey[ 0 ];
+    const key = repoAndKey[ 1 ];
+
+    // if this repo hasn't been encountered yet, add it to our repos object
+    if ( !repos[ repo ] ) {
+      repos[ repo ] = {};
+    }
+
+    const stringValue = req.body[ stringDescription ];
+    const timestamp = new Date();
+
+    if ( key && stringValue && stringValue.length > 0 ) {
+      try {
+        const queryResponse = await pool.query(
+          'SELECT upsert_saved_translations' +
+          '($1::bigint, $2::varchar(255), $3::varchar(255), $4::varchar(8), $5::varchar(255), $6::timestamp)',
+          [ userId, key, repo, targetLocale, stringValue, timestamp ]
+        );
+        console.log( 'JSON.stringify( queryResponse ) = ' + JSON.stringify( queryResponse ) );
+      }
+      catch( err ) {
+        winston.error( 'error saving string values to DB, err = ' + err );
+        error = true;
+        break;
+      }
     }
   }
+
+  if ( !error ) {
+    winston.log( 'info', 'finished string saving for ' + simName + '_' + targetLocale );
+  }
+
+  // send the response
+  res.json( {
+    'success': !error
+  } );
 };
 
 /**
