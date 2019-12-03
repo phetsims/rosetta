@@ -590,13 +590,18 @@ module.exports.saveStrings = async function( req, res ) {
     const repoAndKey = stringDescription.split( ' ' );
     const repo = repoAndKey[ 0 ];
     const key = repoAndKey[ 1 ];
+    const stringValue = req.body[ stringDescription ];
+
+    winston.info( '-------- saveStrings called --------------' );
+    winston.info( 'repo = ' + repo );
+    winston.info( 'key = ' + key );
+    winston.info( 'stringValue = ' + stringValue );
 
     // if this repo hasn't been encountered yet, add it to our repos object
     if ( !repos[ repo ] ) {
       repos[ repo ] = {};
     }
 
-    const stringValue = req.body[ stringDescription ];
     const timestamp = new Date();
 
     if ( key && stringValue && stringValue.length > 0 ) {
@@ -606,7 +611,7 @@ module.exports.saveStrings = async function( req, res ) {
           '($1::bigint, $2::varchar(255), $3::varchar(255), $4::varchar(8), $5::varchar(255), $6::timestamp)',
           [ userId, key, repo, targetLocale, stringValue, timestamp ]
         );
-        console.log( 'JSON.stringify( queryResponse ) = ' + JSON.stringify( queryResponse ) );
+        winston.info( 'JSON.stringify( queryResponse ) = ' + JSON.stringify( queryResponse ) );
       }
       catch( err ) {
         winston.error( 'error saving string values to DB, err = ' + err );
