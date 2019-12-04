@@ -550,7 +550,7 @@ module.exports.testStrings = function( req, res ) {
           stringsObject.en[ key ] = translatedStringsObject[ key ];
         }
         else {
-          winston( 'error', 'key missing in extracted strings, key = ' + key );
+          winston.error( 'key missing in extracted strings, key = ' + key );
         }
       } );
       const translatedStrings = STRING_VAR_IN_HTML_FILES + ' = ' + JSON.stringify( stringsObject ) + ';';
@@ -611,6 +611,8 @@ module.exports.saveStrings = async function( req, res ) {
 
     if ( key && stringValue && stringValue.length > 0 ) {
       try {
+
+        // execute the query that will save the string to the DB
         const queryResponse = await pool.query(
           'SELECT upsert_saved_translations' +
           '($1::bigint, $2::varchar(255), $3::varchar(255), $4::varchar(8), $5::varchar(255), $6::timestamp)',
