@@ -70,11 +70,11 @@ configureStartup().then( () => {
 
   // TODO: the following two routes are for debugging, and should be removed or put behind a "verbose" flag eventually
   app.post( '/translate*', function( req, res, next ) {
-    console.log( 'post request received, url = ' + req.url );
+    winston.info( 'post request received, url = ' + req.url );
     next();
   } );
   app.get( '/translate*', function( req, res, next ) {
-    console.log( 'get request received, url = ' + req.url );
+    winston.info( 'get request received, url = ' + req.url );
     next();
   } );
   // end of loggers

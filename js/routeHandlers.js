@@ -572,15 +572,19 @@ module.exports.testStrings = function( req, res ) {
  */
 module.exports.saveStrings = async function( req, res ) {
 
+  winston.info( '-------- saveStrings called --------------' );
   const simName = req.params.simName;
   const targetLocale = req.params.targetLocale;
   const userId = ( req.session.userId ) ? req.session.userId : 0;
   const pool = new Pool();
   const repos = {};
   let error = false;
+  winston.info( 'JSON.stringify( req.body ) = ' + JSON.stringify( req.body ) );
 
   // loop through the string descriptions in the post request, saving each one
   for ( const stringDescription in req.body ) {
+
+    winston.info( 'top of loop through req.body properties, stringDescription = ' + stringDescription );
 
     if ( !Object.hasOwnProperty.call( req.body, stringDescription ) ) {
       continue;
@@ -592,7 +596,6 @@ module.exports.saveStrings = async function( req, res ) {
     const key = repoAndKey[ 1 ];
     const stringValue = req.body[ stringDescription ];
 
-    winston.info( '-------- saveStrings called --------------' );
     winston.info( 'repo = ' + repo );
     winston.info( 'key = ' + key );
     winston.info( 'stringValue = ' + stringValue );
