@@ -70,14 +70,14 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
     // handle special case of multi-line string
     if ( oldValue.indexOf( '\n' ) > -1 ) {
       // TODO: temp debug code for issue #144, remove once issue is resolved.
-      winston.log( 'info', 'detected multi-line string' );
-      winston.log( 'info', 'oldValue = ' + oldValue );
-      winston.log( 'info', 'prior to replace operation, oldValue === stringValue = ' + ( oldValue === stringValue ) );
+      winston.info( 'detected multi-line string' );
+      winston.info( 'oldValue = ' + oldValue );
+      winston.info( 'prior to replace operation, oldValue === stringValue = ' + ( oldValue === stringValue ) );
       // TODO: end of first debug code section
       oldValue = oldValue.replace( /\n/g, '\\n' );
       // TODO: temp debug code for issue #144, remove once issue is resolved.
-      winston.log( 'info', 'oldValue (after replace operation) = ' + oldValue );
-      winston.log( 'info', 'after the replace operation, oldValue === stringValue = ' + ( oldValue === stringValue ) );
+      winston.info( 'oldValue (after replace operation) = ' + oldValue );
+      winston.info( 'after the replace operation, oldValue === stringValue = ' + ( oldValue === stringValue ) );
       // TODO: end of second debug code section
     }
 
@@ -131,7 +131,7 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
       requestBuild( simName, userId, targetLocale )
         .then( () => {
 
-          winston.log( 'info', 'build request successfully submitted to build server' );
+          winston.info( 'build request successfully submitted to build server' );
 
           // render the page that indicates that the translation was successfully submitted
           res.render( 'translation-submit.html', {
@@ -142,7 +142,7 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
         } )
         .catch( err => {
 
-          winston.log( 'error', 'problem building translation, err = ' + err );
+          winston.error( 'problem building translation, err = ' + err );
 
           // render an error page
           res.render( 'error.html', {
@@ -186,7 +186,7 @@ async function deleteStringsFromDB( userID, locale, simOrLibNames ) {
   try {
     winston( 'info', 'attempting query: ' + deleteQuery );
     await pool.query( deleteQuery );
-    winston.log( 'info', 'deletion of strings succeeded' );
+    winston.info( 'deletion of strings succeeded' );
   }
   catch( err ) {
     winston.error( 'deletion of strings failed, err = ' + err );
@@ -221,9 +221,9 @@ async function getDependencies( simName, version ) {
  */
 async function requestBuild( simName, userID, locale ) {
 
-  winston.log( 'info', 'build requested for sim = ' + simName + ', locale = ' + locale );
+  winston.info( 'build requested for sim = ' + simName + ', locale = ' + locale );
   const latestVersionOfSim = await simData.getLatestSimVersion( simName );
-  winston.log( 'info', 'latest sim version = ' + latestVersionOfSim );
+  winston.info( 'latest sim version = ' + latestVersionOfSim );
   const dependencies = await getDependencies( simName, latestVersionOfSim );
   const requestObject = {
     api: '2.0',
@@ -241,7 +241,7 @@ async function requestBuild( simName, userID, locale ) {
 
   if ( !SKIP_BUILD_REQUEST ) {
 
-    winston.log( 'info', 'sending build request to server, URL = ' + url );
+    winston.info( 'sending build request to server, URL = ' + url );
 
     // send off the request, and return the resulting promise
     const buildRequestResponse = await nodeFetch( url, {
@@ -253,7 +253,7 @@ async function requestBuild( simName, userID, locale ) {
       body: JSON.stringify( requestObject )
     } );
     if ( buildRequestResponse.status === 200 || buildRequestResponse.status === 202 ) {
-      winston.log( 'info', 'build request accepted, status = ' + buildRequestResponse.status );
+      winston.info( 'build request accepted, status = ' + buildRequestResponse.status );
       return true;
     }
     else if ( buildRequestResponse.status === 400 ) {
@@ -270,6 +270,6 @@ async function requestBuild( simName, userID, locale ) {
 
     // The build request is being skipped due to the setting of a debug flag.  This capability was added to allow the
     // build request to be debugged without sending a bunch of bogus requests to the build server.
-    winston.log( 'warn', 'build request skipped due to setting of debug flag' );
+    winston.warn( 'build request skipped due to setting of debug flag' );
   }
 }

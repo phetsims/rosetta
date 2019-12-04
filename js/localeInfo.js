@@ -32,7 +32,7 @@ let inProgressFileRetrievalPromise = null;
 async function updateLocaleInfo() {
   const urlOfLocalInfoFile = RosettaConstants.GITHUB_RAW_FILE_URL_BASE + '/phetsims/chipper/master/js/data/localeInfo.js';
 
-  winston.log( 'info', 'requesting locale info file from GitHub, URL = ' + urlOfLocalInfoFile );
+  winston.info( 'requesting locale info file from GitHub, URL = ' + urlOfLocalInfoFile );
 
   const response = await nodeFetch( urlOfLocalInfoFile );
 

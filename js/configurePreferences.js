@@ -26,7 +26,7 @@ module.exports = async function() {
    */
   let preferencesFileName;
   const platform = process.platform;
-  winston.log( 'info', 'platform = ' + platform );
+  winston.info( 'platform = ' + platform );
   if ( platform.indexOf( 'win' ) === 0 ) {
 
     // windows
@@ -40,7 +40,7 @@ module.exports = async function() {
     preferencesFileName = passwdUser.sync( process.getuid() ).homedir + PREFERENCES_FILE_PATH_FROM_DIR;
   }
 
-  winston.log( 'info', 'preferences file full path and name: ' + preferencesFileName );
+  winston.info( 'preferences file full path and name: ' + preferencesFileName );
 
   // ensure that the preferences file exists
   assert( fs.existsSync( preferencesFileName ), 'preferences file not found: ' + preferencesFileName );
@@ -76,14 +76,14 @@ module.exports = async function() {
   preferences.productionServerName = preferences.productionServerName || 'phet-server.int.colorado.edu';
 
   // check that the DB server is running and that a basic query can be performed
-  winston.log( 'info', 'testing database connection' );
+  winston.info( 'testing database connection' );
   const pool = new Pool();
   try {
     const { rows } = await pool.query( 'SELECT NOW()' );
-    winston.log( 'info', 'database test using SELECT NOW() succeeded, now = ' + rows[ 0 ].now );
+    winston.info( 'database test using SELECT NOW() succeeded, now = ' + rows[ 0 ].now );
   }
   catch( err ) {
-    winston.log( 'error', 'database connection failed, short term string storage will not work, err = ' + err );
+    winston.error( 'database connection failed, short term string storage will not work, err = ' + err );
   }
 
   /*

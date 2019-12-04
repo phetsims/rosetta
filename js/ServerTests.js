@@ -117,10 +117,10 @@ const testHandlers = {
         return LongTermStringStorage.stringsMatch( 'arithmetic', 'fr', strings )
           .then( result => {
             if ( !result ) {
-              winston.log( 'info', 'comparison with known non-equal strings returned false as expected' );
+              winston.info( 'comparison with known non-equal strings returned false as expected' );
             }
             else {
-              winston.log( 'error', 'comparison with known non-equal strings returned true, which is a failure' );
+              winston.error( 'comparison with known non-equal strings returned true, which is a failure' );
             }
             return !result; // return the result - if the match failed, the test passed
           } );
@@ -134,10 +134,10 @@ const testHandlers = {
         return LongTermStringStorage.stringsMatch( 'arithmetic', 'es', strings )
           .then( result => {
             if ( result ) {
-              winston.log( 'info', 'comparison with same strings returned true as expected' );
+              winston.info( 'comparison with same strings returned true as expected' );
             }
             else {
-              winston.log( 'error', 'comparison with same strings returned false, which is a failure' );
+              winston.error( 'comparison with same strings returned false, which is a failure' );
             }
             return result; // return the result - if the match succeeded, so did the test
           } );
@@ -154,10 +154,10 @@ const testHandlers = {
         return LongTermStringStorage.stringsMatch( 'arithmetic', 'es', strings )
           .then( result => {
             if ( !result ) {
-              winston.log( 'info', 'comparison with modified strings returned false as expected' );
+              winston.info( 'comparison with modified strings returned false as expected' );
             }
             else {
-              winston.log( 'error', 'comparison with modified strings returned true, which is a failure' );
+              winston.error( 'comparison with modified strings returned true, which is a failure' );
             }
             return !result; // return the result - if the match failed, the test passed
           } );
@@ -188,7 +188,7 @@ const testHandlers = {
 
     // get the strings, then modify them
     locales.forEach( function( locale ) {
-      winston.log( 'info', 'getting strings for sim ' + simName + ', locale ' + locale );
+      winston.info( 'getting strings for sim ' + simName + ', locale ' + locale );
       const modifyStringsPromise = LongTermStringStorage.getStrings( simName, locale )
         .then( strings => {
 
@@ -238,7 +238,7 @@ const testHandlers = {
  */
 module.exports.executeTest = async function executeTest( testID ) {
   if ( testHandlers[ testID ] ) {
-    winston.log( 'info', 'initiating test ' + testID );
+    winston.info( 'initiating test ' + testID );
 
     try {
       const result = await testHandlers[ testID ]();
@@ -255,7 +255,7 @@ module.exports.executeTest = async function executeTest( testID ) {
   }
   else {
     const errorMessage = 'requested test not defined, testID = ' + testID;
-    winston.log( 'error', errorMessage );
+    winston.error( errorMessage );
     return { err: errorMessage };
   }
 };
@@ -276,12 +276,12 @@ module.exports.runTests = async function() {
     const { testPass, err } = await this.executeTest( testName );
 
     if ( testPass ) {
-      winston.log( 'info', 'test ' + testName + ' result: PASS' );
+      winston.info( 'test ' + testName + ' result: PASS' );
       testSummary.passed += 1;
     }
     else {
       const errMessage = err ? `, err = ${err}` : '';
-      winston.log( 'info', 'test ' + testName + ' result: PASS' + errMessage );
+      winston.info( 'test ' + testName + ' result: PASS' + errMessage );
       testSummary.failed += 1;
     }
 
@@ -290,7 +290,7 @@ module.exports.runTests = async function() {
   const numberOfTests = Object.keys( testHandlers ).length;
   const summary = `Tests completed, ran ${numberOfTests} tests, ${testSummary.passed} passed, ${testSummary.failed} failed.`;
 
-  winston.log( 'info', summary );
+  winston.info( summary );
 
   return { result: summary };
 

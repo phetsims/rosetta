@@ -58,7 +58,7 @@ function sendEmail( subject, text ) {
     } );
   }
   else {
-    winston.log( 'warn', 'email not sent because server credentials were not present in preferences file' );
+    winston.warn( 'email not sent because server credentials were not present in preferences file' );
   }
 }
 
@@ -161,7 +161,7 @@ function extractStringsAPI( req, res ) {
     }
   }
 
-  winston.log( 'info', 'requesting sim at host: ' + options.host + ', port: ' + options.port + ', and path: ' + options.path );
+  winston.info( 'requesting sim at host: ' + options.host + ', port: ' + options.port + ', and path: ' + options.path );
 
   const sessionDataRequestCallback = function( response ) {
     let data = '';
@@ -188,7 +188,7 @@ function extractStringsAPI( req, res ) {
   const strings = https.request( options, sessionDataRequestCallback );
 
   strings.on( 'error', function( err ) {
-    winston.log( 'error', 'Error getting sim strings - ' + err );
+    winston.error( 'Error getting sim strings - ' + err );
     res.render( 'error.html', {
         title: 'Translation Utility Error',
         message: 'Unable to obtain sim strings',
@@ -262,10 +262,10 @@ function checkAndUpdateStringFile( repo, file, content, message, branch, callbac
 
     // if the file is not found, create a new one
     if ( err ) {
-      winston.log( 'info', 'no file found: ' + file + '. Attempting to create.' );
+      winston.info( 'no file found: ' + file + '. Attempting to create.' );
 
       if ( content !== '{}' ) {
-        winston.log( 'info', 'calling createContents' );
+        winston.info( 'calling createContents' );
         repo.createContents( file, message, content, branch, function( err, data, headers ) {
           if ( err ) {
             callback( err );
@@ -276,14 +276,14 @@ function checkAndUpdateStringFile( repo, file, content, message, branch, callbac
         } );
       }
       else {
-        winston.log( 'info', 'no commit attempted for ' + file + ' because there are no strings' );
+        winston.info( 'no commit attempted for ' + file + ' because there are no strings' );
         callback();
       }
     }
 
     // otherwise, update the file using its SHA
     else {
-      winston.log( 'info', 'found file ' + file + ' in GitHub.  Attempting to update.' );
+      winston.info( 'found file ' + file + ' in GitHub.  Attempting to update.' );
 
       const sha = data.sha;
       const buffer = Buffer.from( data.content, data.encoding );
@@ -293,13 +293,13 @@ function checkAndUpdateStringFile( repo, file, content, message, branch, callbac
             callback( err );
           }
           else {
-            winston.log( 'info', 'commit: "' + message + '" committed successfully' );
+            winston.info( 'commit: "' + message + '" committed successfully' );
             callback();
           }
         } );
       }
       else {
-        winston.log( 'info', 'no commit attempted for ' + file + ' because the contents haven\'t changed' );
+        winston.info( 'no commit attempted for ' + file + ' because the contents haven\'t changed' );
         callback();
       }
     }
@@ -314,25 +314,25 @@ function checkAndUpdateStringFile( repo, file, content, message, branch, callbac
  * @returns {Promise.<string>}
  */
 async function getGhStrings( Url, strings, projectName, isEnglishStrings ) {
-  winston.log( 'info', 'sending request to ' + Url );
+  winston.info( 'sending request to ' + Url );
   const response = await nodeFetch( Url );
 
   return response.text().then( body => {
     if ( response.status === 200 ) {
       strings[ projectName ] = JSON.parse( body );
-      winston.log( 'info', 'request for ' + Url + ' returned successfully' );
+      winston.info( 'request for ' + Url + ' returned successfully' );
     }
     else if ( response.status === 404 && !isEnglishStrings ) {
       strings[ projectName ] = {};
-      //winston.log( 'info', 'no strings in GitHub for project = ' + projectName + ', locale = ' + targetLocale );
+      //winston.info( 'no strings in GitHub for project = ' + projectName + ', locale = ' + targetLocale );
     }
     else if ( !isEnglishStrings ) {
       strings[ projectName ] = {};
-      winston.log( 'info', 'request for ' + Url + 'failed, response code = ' + response.status );
+      winston.info( 'request for ' + Url + 'failed, response code = ' + response.status );
     }
     else {
-      winston.log( 'error', 'request for english strings for project ' + projectName + ' failed. Response code: ' +
-                            response.status + '. URL: ' + Url + '. Error: ' + response.error );
+      winston.error( 'request for english strings for project ' + projectName + ' failed. Response code: ' +
+                     response.status + '. URL: ' + Url + '. Error: ' + response.error );
     }
   } );
 }
@@ -346,7 +346,7 @@ function getGhClient() {
   const username = preferences.githubUsername;
   const pass = preferences.githubPassword;
 
-  winston.log( 'info', 'getting GH client for user ' + username );
+  winston.info( 'getting GH client for user ' + username );
 
   return octonode.client( {
     username: username,

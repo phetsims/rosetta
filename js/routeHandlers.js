@@ -62,7 +62,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
   if ( req.get( 'host' ).indexOf( 'localhost' ) === 0 ) {
 
     // the app is running on localhost, so session validation is bypassed
-    winston.log( 'warn', 'Bypassing session validation to allow testing on localhost' );
+    winston.warn( 'Bypassing session validation to allow testing on localhost' );
 
     // set up fake session data
     req.session.teamMember = true;
@@ -80,21 +80,21 @@ module.exports.checkForValidSession = function( req, res, next ) {
   }
 
   // check whether the session cookie exists
-  winston.log( 'info', 'Checking for login cookie' );
+  winston.info( 'Checking for login cookie' );
   const cookie = req.cookies.JSESSIONID;
 
   if ( cookie === undefined ) {
 
     // no session cookie present, the user must log in
-    winston.log( 'info', 'session cookie not found, sending to login page' );
-    winston.log( 'info', 'host = ' + req.get( 'host' ) );
-    winston.log( 'info', 'req.url = ' + req.url );
+    winston.info( 'session cookie not found, sending to login page' );
+    winston.info( 'host = ' + req.get( 'host' ) );
+    winston.info( 'req.url = ' + req.url );
     sendUserToLoginPage( res, req.get( 'host' ), req.url );
   }
   else if ( req.session.jSessionId && req.session.jSessionId !== cookie ) {
 
     // the user's session has expired, clear it and go to login page
-    winston.log( 'info', 'session expired, forcing user to log in again' );
+    winston.info( 'session expired, forcing user to log in again' );
 
     req.session.destroy( function() {
       renderError( res,
@@ -112,7 +112,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
   else {
 
     // session cookie was present
-    winston.log( 'info', 'valid session cookie existed, userID = ' + req.session.userId );
+    winston.info( 'valid session cookie existed, userID = ' + req.session.userId );
 
     // attempt to obtain session information
     const options = {
@@ -134,7 +134,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
 
       // the whole response has been received - see if the credentials are valid
       response.on( 'end', function() {
-        winston.log( 'info', 'data received: ' + data );
+        winston.info( 'data received: ' + data );
         let userData;
         try {
           userData = JSON.parse( data );
@@ -146,7 +146,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
           userData = null;
         }
         if ( userData && userData.loggedIn ) {
-          winston.log( 'info', 'credentials obtained, user is logged in, moving to next step' );
+          winston.info( 'credentials obtained, user is logged in, moving to next step' );
 
           if ( !userData.trustedTranslator && !userData.teamMember ) {
             renderError( res, 'You must be a trusted translator to use the PhET translation utility. ' +
@@ -162,7 +162,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
             req.session.jSessionId = cookie; // to verify user is still logged in
             req.session.cookie.expires = null; // browser session
 
-            winston.log( 'info', 'updating user id to ' + req.session.userId );
+            winston.info( 'updating user id to ' + req.session.userId );
 
             next(); // send to next route
           }
@@ -179,7 +179,7 @@ module.exports.checkForValidSession = function( req, res, next ) {
 
     // error handling
     requestCredentials.on( 'error', function( err ) {
-      winston.log( 'error', 'error retrieving session data: ' + err );
+      winston.error( 'error retrieving session data: ' + err );
       renderError( res, 'Unable to obtain user credentials', err );
     } );
 
@@ -240,17 +240,17 @@ module.exports.renderTranslationPage = async function( req, res ) {
   const activeSimsPath = '/phetsims/perennial/master/data/active-sims';
   const userId = ( req.session.userId ) ? req.session.userId : 0; // use an id of 0 for localhost testing
 
-  winston.log( 'info', 'creating translation page for sim = ' + simName + ', locale = ' + targetLocale );
+  winston.info( 'creating translation page for sim = ' + simName + ', locale = ' + targetLocale );
 
   // get the URL of the live sim
   const simUrl = await simData.getLiveSimUrl( simName );
-  winston.log( 'info', 'sending request to ' + simUrl );
+  winston.info( 'sending request to ' + simUrl );
 
   // get the HTML file that represents the sim
   const UrlResponse = await nodeFetch( simUrl );
 
   if ( UrlResponse.error || UrlResponse.status !== 200 ) {
-    winston.log( 'error', 'failed to retrieve live sim, error = ' + UrlResponse.error );
+    winston.error( 'failed to retrieve live sim, error = ' + UrlResponse.error );
     res.send( 'Error: Sim data not found' );
     return; // bail
   }
@@ -259,7 +259,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
   let i;
   let sims; // array of all active sims
 
-  winston.log( 'info', 'request from ' + simUrl + ' returned successfully' );
+  winston.info( 'request from ' + simUrl + ' returned successfully' );
 
   // Extract the translatable strings from the sim's html file and store them in an array.  The format of the objects in
   // the array consists of a project name and list of keys, e.g:
@@ -273,13 +273,13 @@ module.exports.renderTranslationPage = async function( req, res ) {
 
   const extractedStrings = result.extractedStrings;
   const simSha = result.sha; // sha of the sim at the time of publication, or 'master' if no sha is found
-  winston.log( 'info', 'sim sha: ' + simSha );
+  winston.info( 'sim sha: ' + simSha );
 
   const englishStrings = {}; // object to hold the English strings
   const fileRetrievalPromises = [];
 
   // initialize the sims array from the active-sims file in chipper
-  winston.log( 'info', 'sending request to ' + GITHUB_RAW_FILE_URL_BASE + activeSimsPath );
+  winston.info( 'sending request to ' + GITHUB_RAW_FILE_URL_BASE + activeSimsPath );
   const response = await nodeFetch( GITHUB_RAW_FILE_URL_BASE + activeSimsPath );
 
   fileRetrievalPromises.push( response.text().then( body => {
@@ -312,7 +312,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
   // wait until all files have been retrieved before moving to the next step
   await Promise.all( fileRetrievalPromises );
 
-  winston.log( 'info', 'files needed for rendering the translation page retrieved from GitHub' );
+  winston.info( 'files needed for rendering the translation page retrieved from GitHub' );
 
   const currentSimStringsArray = [];
   const simStringsArray = [];
@@ -341,13 +341,13 @@ module.exports.renderTranslationPage = async function( req, res ) {
   // connect to the database and query for saved strings corresponding to this user and sim
   let rows = null;
   try {
-    winston.log( 'info', 'retrieving any previously-saved-but-not-submitted strings, query template = ' + savedStringsQuery );
+    winston.info( 'retrieving any previously-saved-but-not-submitted strings, query template = ' + savedStringsQuery );
     try {
 
       // execute the query using the template query string and parameters for user ID and target locale
       const queryResponse = await pool.query( savedStringsQuery, [ userId, targetLocale ] );
       rows = queryResponse.rows;
-      winston.log( 'info', 'retrieval of strings succeeded' );
+      winston.info( 'retrieval of strings succeeded' );
     }
     catch( err ) {
       winston.error( 'retrieval of strings failed, err = ' + err );
@@ -359,7 +359,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
 
   // load saved strings from database to saveStrings object if there are any
   if ( rows && rows.length > 0 ) {
-    winston.log( 'info', 'using ' + rows.length + ' saved strings' );
+    winston.info( 'using ' + rows.length + ' saved strings' );
     for ( i = 0; i < rows.length; i++ ) {
       const row = rows[ i ];
       savedStrings[ row.repository ][ row.stringkey ] = row.stringvalue;
@@ -408,7 +408,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
         if ( savedStringValue ) {
 
           // log info about the retrieved string
-          winston.log( 'info', 'using saved string ' + key + ': ' + getPrintableString( savedStringValue ) );
+          winston.info( 'using saved string ' + key + ': ' + getPrintableString( savedStringValue ) );
 
           // set the retrieved value
           stringRenderInfo.value = escapeHTML( savedStringValue );
@@ -417,21 +417,21 @@ module.exports.renderTranslationPage = async function( req, res ) {
 
           // use previous translation value obtained from GitHub, if it exists
           const translatedString = previouslyTranslatedStrings[ key ];
-          winston.log( 'info', 'using previously translated string ' + key + ': ' +
-                               getPrintableString( translatedString.value ) );
+          winston.info( 'using previously translated string ' + key + ': ' +
+                        getPrintableString( translatedString.value ) );
           stringRenderInfo.value = escapeHTML( translatedString.value );
         }
         else {
 
           // there is no saved or previously translated string
-          winston.log( 'info', 'no saved or previously translated values found for string key ' + key );
+          winston.info( 'no saved or previously translated values found for string key ' + key );
           stringRenderInfo.value = '';
         }
 
         array.push( stringRenderInfo );
       }
       else {
-        winston.log( 'info', 'String key ' + project.stringKeys[ j ] + ' not found or not visible' );
+        winston.info( 'String key ' + project.stringKeys[ j ] + ' not found or not visible' );
       }
     }
 
@@ -447,8 +447,8 @@ module.exports.renderTranslationPage = async function( req, res ) {
           }
         }
         if ( !containsObjectWithKey ) {
-          winston.log( 'info', 'repo: ' + project.projectName + ' key: ' + stringKey + ', ' +
-                               '- translation exists, but unused in this sim, adding to pass-through data' );
+          winston.info( 'repo: ' + project.projectName + ' key: ' + stringKey + ', ' +
+                        '- translation exists, but unused in this sim, adding to pass-through data' );
           unusedTranslatedStringsArray.push( {
             repo: project.projectName,
             key: stringKey,
@@ -512,10 +512,10 @@ module.exports.submitStrings = function( req, res ) {
   const simName = req.params.simName;
   const targetLocale = req.params.targetLocale;
 
-  winston.log( 'info', 'queuing string submission for ' + simName + '_' + targetLocale );
+  winston.info( 'queuing string submission for ' + simName + '_' + targetLocale );
   stringSubmissionQueue( req, res )
     .then( () => {
-      winston.log( 'info', 'finished string submission for ' + simName + '_' + targetLocale );
+      winston.info( 'finished string submission for ' + simName + '_' + targetLocale );
     } );
 };
 
@@ -530,7 +530,7 @@ module.exports.testStrings = function( req, res ) {
 
   const simName = req.params.simName;
 
-  winston.log( 'info', 'test-of-strings request received for sim ' + simName );
+  winston.info( 'test-of-strings request received for sim ' + simName );
 
   TranslationUtils.getLatestSimHtml( simName )
     .then( simHtml => {
@@ -558,7 +558,7 @@ module.exports.testStrings = function( req, res ) {
       // insert the changed strings into the sim HTML
       simHtml = simHtml.replace( re, translatedStrings );
 
-      winston.log( 'info', 'successfully replaced strings in published sim with submissions from user, returning result' );
+      winston.info( 'successfully replaced strings in published sim with submissions from user, returning result' );
 
       // return the modified sim HTML as the response to the request
       res.send( simHtml );
@@ -619,7 +619,7 @@ module.exports.saveStrings = async function( req, res ) {
         winston.info( 'JSON.stringify( queryResponse ) = ' + JSON.stringify( queryResponse ) );
       }
       catch( err ) {
-        winston.error( 'error saving string values to DB, err = ' + err );
+        winston.error( 'error saving string values to DB, aborting save operation, err = ' + err );
         error = true;
         break;
       }
@@ -627,7 +627,7 @@ module.exports.saveStrings = async function( req, res ) {
   }
 
   if ( !error ) {
-    winston.log( 'info', 'finished string saving for ' + simName + '_' + targetLocale );
+    winston.info( 'finished string saving for ' + simName + '_' + targetLocale );
   }
 
   // send the response
@@ -643,7 +643,7 @@ module.exports.saveStrings = async function( req, res ) {
  * @param res
  */
 module.exports.showOffLinePage = function( req, res ) {
-  winston.log( 'warn', 'Showing the \'Off Line\' page to the user' );
+  winston.warn( 'Showing the \'Off Line\' page to the user' );
   res.render( 'offline.html', { title: 'Off Line' } );
 };
 
@@ -669,7 +669,7 @@ module.exports.test = function( req, res ) {
 
   // only logged in PhET team members can access the test page
   if ( req.session.teamMember ) {
-    winston.log( 'info', 'test page accessed' );
+    winston.info( 'test page accessed' );
     res.render( 'test.html', { title: 'Test' } );
   }
   else {

@@ -110,7 +110,7 @@ configureStartup().then( () => {
   app.post( '/*', routeHandlers.pageNotFound );
 
   // start the server
-  app.listen( LISTEN_PORT, function() { winston.log( 'info', 'Listening on port ' + LISTEN_PORT ); } );
+  app.listen( LISTEN_PORT, function() { winston.info( 'Listening on port ' + LISTEN_PORT ); } );
 } );
 
 

@@ -52,7 +52,7 @@ async function getStrings( simOrLibName, locale ) {
 
   // it is faster and simpler to pull the strings directly from the raw URL than to use the octonode client
   const rawStringFileURL = BASE_URL_FOR_RAW_FILES + simOrLibName + '/' + simOrLibName + '-strings_' + locale + '.json';
-  winston.log( 'info', 'requesting raw file from GitHub, URL = ' + rawStringFileURL );
+  winston.info( 'requesting raw file from GitHub, URL = ' + rawStringFileURL );
 
   // get the file from GitHub
   // TODO: Why is compress set to false?  Try getting rid of that option and see if things still work.
@@ -124,11 +124,11 @@ function saveFileToGitHub( filePath, contents, commitMessage ) {
           // update the existing file in GitHub
           stringStorageRepo.updateContents( filePath, commitMessage, contents, data.sha, BRANCH, function( err, data ) {
             if ( !err ) {
-              winston.log( 'info', 'successfully committed changes for file ' + filePath );
+              winston.info( 'successfully committed changes for file ' + filePath );
               resolve( data );
             }
             else {
-              winston.log( 'error', 'unable to commit changes for file ' + filePath, ', err = ' + err );
+              winston.error( 'unable to commit changes for file ' + filePath, ', err = ' + err );
               reject( err );
             }
           } );
@@ -138,11 +138,11 @@ function saveFileToGitHub( filePath, contents, commitMessage ) {
           // create a new file in GitHub
           stringStorageRepo.createContents( filePath, commitMessage, contents, BRANCH, function( err, data ) {
             if ( !err ) {
-              winston.log( 'info', 'successfully created file ' + filePath );
+              winston.info( 'successfully created file ' + filePath );
               resolve( data );
             }
             else {
-              winston.log( 'error', 'unable to create file ' + filePath, ', err = ' + err );
+              winston.error( 'unable to create file ' + filePath, ', err = ' + err );
               reject( err );
             }
           } );
@@ -153,7 +153,7 @@ function saveFileToGitHub( filePath, contents, commitMessage ) {
 
       // Skip the string commits and just log the information about what would have been done.  This is a debug mode
       // that was added to prevent excessive commits to GitHub during testing.
-      winston.log( 'warn', 'commits skipped due to setting of a debug flag, file = ' + filePath );
+      winston.warn( 'commits skipped due to setting of a debug flag, file = ' + filePath );
       resolve( {} );
     }
 

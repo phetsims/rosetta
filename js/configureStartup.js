@@ -25,7 +25,7 @@ module.exports = async function() {
   process.on( 'unhandledRejection', error => {
 
     // generally, this shouldn't happen, so if these are in the log they should be tracked down and fixed
-    winston.log( 'error', 'unhandled rejection, error.message =', error.message );
+    winston.error( 'unhandled rejection, error.message =', error.message );
   } );
 
   // configure the logger
@@ -38,8 +38,8 @@ module.exports = async function() {
   } );
 
   // log startup message
-  winston.log( 'info', '---- rosetta starting up ----' );
-  winston.log( 'info', 'Node version: ' + process.version );
+  winston.info( '---- rosetta starting up ----' );
+  winston.info( 'Node version: ' + process.version );
 
   // log the SHA of rosetta - this may make it easier to duplicate and track down problems
   childProcess.execSync( 'git rev-parse HEAD', function( err, stdout ) {
