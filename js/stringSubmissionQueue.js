@@ -170,6 +170,9 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
 
 /**
  * delete the strings that are stored in short-term storage
+ * {string} userID
+ * {string} locale
+ * {string[]} simOrLibNames
  * @private
  */
 async function deleteStringsFromDB( userID, locale, simOrLibNames ) {
@@ -178,7 +181,14 @@ async function deleteStringsFromDB( userID, locale, simOrLibNames ) {
     'removing strings from short term storage for userID = ' + userID + ', sim/libs = ' + simOrLibNames + ', locale = ' + locale
   );
 
-  const simOrLibNamesString = simOrLibNames.join( ' OR ' );
+  // create a string with all the repo names that can be used in the SQL query
+  let simOrLibNamesString = '';
+  simOrLibNames.forEach( ( simOrLibName, index ) => {
+    simOrLibNamesString += 'repository = ' + '\'' + simOrLibName + '\'';
+    if ( index < simOrLibNames.length - 1 ) {
+      simOrLibNamesString += ' OR ';
+    }
+  } );
 
   const deleteQuery = 'DELETE FROM saved_translations WHERE user_id = $1 AND locale = $2 AND (' + simOrLibNamesString + ')';
   const pool = new Pool();
