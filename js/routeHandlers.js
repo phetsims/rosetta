@@ -235,10 +235,10 @@ module.exports.chooseSimulationAndLanguage = async function( req, res ) {
 module.exports.renderTranslationPage = async function( req, res ) {
 
   const pool = new Pool();
-
   const simName = req.params.simName;
   const targetLocale = req.params.targetLocale;
   const activeSimsPath = '/phetsims/perennial/master/data/active-sims';
+  const userId = ( req.session.userId ) ? req.session.userId : 0; // use an id of 0 for localhost testing
 
   winston.log( 'info', 'creating translation page for sim = ' + simName + ', locale = ' + targetLocale );
 
@@ -335,15 +335,17 @@ module.exports.renderTranslationPage = async function( req, res ) {
     savedStrings[ extractedStrings[ i ].projectName ] = {};
   } );
 
-  // create a query for retrieving the strings
+  // create a parameterized query string for retrieving the user's previously saved strings
   const savedStringsQuery = 'SELECT * from saved_translations where user_id = $1 AND locale = $2 AND (' + repositories + ')';
 
   // connect to the database and query for saved strings corresponding to this user and sim
   let rows = null;
   try {
-    winston.log( 'info', 'retrieving any previously-saved-but-not-submitted strings, query = ' + savedStringsQuery );
+    winston.log( 'info', 'retrieving any previously-saved-but-not-submitted strings, query template = ' + savedStringsQuery );
     try {
-      const queryResponse = await pool.query( savedStringsQuery );
+
+      // execute the query using the template query string and parameters for user ID and target locale
+      const queryResponse = await pool.query( savedStringsQuery, [ userId, targetLocale ] );
       rows = queryResponse.rows;
       winston.log( 'info', 'retrieval of strings succeeded' );
     }
