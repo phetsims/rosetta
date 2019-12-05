@@ -21,13 +21,18 @@ const winston = require( 'winston' );
 
 // set up environment variables defined in /rosetta/.env
 const config = dotenv.config();
+if ( config.error ) {
+  winston.warn( 'config error: ' + config.error );
+  winston.warn( 'config errors are not fatal, and probably just means no .env file is present' );
+}
 
 // constants
 const LISTEN_PORT = 16372;
 
-// The following flag is used to take this utility off line and show a "down for maintenance" sort of page to users.
-// This is generally set by editing the in situ version, and should never be committed to the code base as false.
-const ENABLED = config.error ? true : process.env.ENABLED;
+// The following flag is used to take this utility off line and show a "down for maintenance" sort of page to users.  It
+// is configured by setting the ENABLED value in the .env file in the home directory from whence Rosetta is run.
+const ENABLED = config.error ? true : ( process.env.ENABLED === 'true' );
+winston.info( 'ENABLED=' + ENABLED );
 
 // Configuration boiler plate like logger setup, preferences file validation, and command line argument parsing
 configureStartup().then( () => {
