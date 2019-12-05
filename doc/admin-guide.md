@@ -40,10 +40,13 @@ the comment in the file), then restart rosetta using the command above.
 Configuration
 =============
 
-There are a small number of configuration parameters that are used by rosetta, and these are generally stored in the
+There are a number of configuration parameters that are used by rosetta, and these are generally stored in the
 ```~/.phet/build-local.json``` file along with a number of other configuration parameters used by PhET processes (such
 as the build server).  The directories used on phet-server-dev are the same as those used on phet-server.  The URL to
 access the utility from phet-server-dev is https://ox-dev.colorado.edu/translate.
+
+NOTE 12/4/2019 - I (jbphet) am investigating using the `dotenv` package for some config vars, and should update this
+section when the approach is finalized.
 
 Test and Debug Support
 ======================
