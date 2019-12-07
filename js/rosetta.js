@@ -103,7 +103,7 @@ app.use( bodyParser.urlencoded( { extended: false } ) );
 //----------------------------------------------------------------------------
 
 // route for showing the 'down for maintenance' page when needed
-if ( !global.config.rosettaEnabled ) {
+if ( !global.config.enabled ) {
   app.get( '/translate', routeHandlers.showOffLinePage );
 }
 

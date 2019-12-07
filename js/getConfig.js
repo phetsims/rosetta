@@ -115,7 +115,7 @@ module.exports = function() {
   );
 
   // log a warning if Rosetta is disabled
-  if ( !config.rosettaEnabled ) {
+  if ( !config.enabled ) {
     winston.warn( 'the translation utility is disabled, no interaction will be possible' );
   }
 
