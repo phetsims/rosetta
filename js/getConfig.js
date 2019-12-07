@@ -42,10 +42,12 @@ module.exports = function() {
   const commonConfigFileName = configDirPath + COMMON_CONFIG_FILE_NAME;
   const rosettaConfigFileName = configDirPath + ROSETTA_CONFIG_FILE_NAME;
 
-  winston.info( 'config file full path and name: ' + commonConfigFileName );
+  winston.info( 'common config file full path and name: ' + commonConfigFileName );
+  winston.info( 'rosetta-specific config file full path and name: ' + commonConfigFileName );
 
-  // ensure that the common config file exists
+  // ensure that the config files exist
   assert( fs.existsSync( commonConfigFileName ), 'config file not found: ' + commonConfigFileName );
+  assert( fs.existsSync( rosettaConfigFileName ), 'config file not found: ' + rosettaConfigFileName );
 
   // read the common config file and verify that the needed information is present
   const configJSON = fs.readFileSync( commonConfigFileName );
