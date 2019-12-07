@@ -95,11 +95,11 @@ module.exports = function() {
   // stored in process variables, but that's what was done in the example code, and apparently this is fairly common in
   // apps the interface to databases.  So, when in Rome...
   process.env = Object.assign( process.env, {
-    PGUSER: config.rosettaDbUser,
-    PGHOST: config.rosettaDbHost,
-    PGPASSWORD: config.rosettaDbPass,
-    PGDATABASE: config.rosettaDbName,
-    PGPORT: config.rosettaDbPort
+    PGUSER: config.stringStorageDbUser,
+    PGHOST: config.stringStorageDbHost,
+    PGPASSWORD: config.stringStorageDbPass,
+    PGDATABASE: config.stringStorageDbName,
+    PGPORT: config.stringStorageDbPort
   } );
 
   // use the default logging level if none provided

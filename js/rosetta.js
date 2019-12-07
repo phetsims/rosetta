@@ -56,7 +56,7 @@ catch( err ) {
   winston.warn( 'unable to get SHA from git, err: ' + err );
 }
 
-// get the configuration information and assign it to a global
+// get the configuration information and assign it to a global, this also sets up some process variables
 global.config = getConfig();
 
 // update the logging level in case it was set in the config info
