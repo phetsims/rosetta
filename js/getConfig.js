@@ -37,7 +37,7 @@ module.exports = function() {
     // The following somewhat odd looking code gets the config file from the home directory when running under a
     // Unix variant.  This was necessary because rosetta is generally run under phet-admin, but "process.env.HOME" was
     // returning the home directory of the user who is starting the process, not phet-admin's home directory.
-    configDirPath = passwdUser.sync( process.getuid() ).homedir + +CONFIG_DIR + '/';
+    configDirPath = passwdUser.sync( process.getuid() ).homedir + CONFIG_DIR + '/';
   }
   const commonConfigFileName = configDirPath + COMMON_CONFIG_FILE_NAME;
   const rosettaConfigFileName = configDirPath + ROSETTA_CONFIG_FILE_NAME;
