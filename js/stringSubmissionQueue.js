@@ -11,7 +11,6 @@
 'use strict';
 
 // modules
-// const async = require( 'async' );
 const _ = require( 'underscore' ); // eslint-disable-line
 const LongTermStringStorage = require( './LongTermStringStorage' );
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
@@ -22,8 +21,8 @@ const winston = require( 'winston' );
 
 // constants
 const PRODUCTION_SERVER_URL = RosettaConstants.PRODUCTION_SERVER_URL;
-const SKIP_BUILD_REQUEST = typeof global.preferences.debugRosettaSkipBuildRequest !== 'undefined' &&
-                           global.preferences.debugRosettaSkipBuildRequest === 'true';
+const SKIP_BUILD_REQUEST = typeof global.config.debugRosettaSkipBuildRequest !== 'undefined' &&
+                           global.config.debugRosettaSkipBuildRequest === 'true';
 
 /**
  * task queue into which translation requests are pushed
@@ -243,7 +242,7 @@ async function requestBuild( simName, userID, locale ) {
     servers: [ 'production' ],
     brands: [ 'phet' ],
     translatorId: userID,
-    authorizationCode: global.preferences.buildServerAuthorizationCode
+    authorizationCode: global.config.buildServerAuthorizationCode
   };
 
   const url = PRODUCTION_SERVER_URL + '/deploy-html-simulation';

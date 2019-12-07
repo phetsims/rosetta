@@ -11,111 +11,146 @@
 
 // modules
 const bodyParser = require( 'body-parser' ); // eslint-disable-line require-statement-match
-const configureStartup = require( './configureStartup' );
+const childProcess = require( 'child_process' ); // eslint-disable-line require-statement-match
+const getConfig = require( './getConfig' );
 const cookieParser = require( 'cookie-parser' ); // eslint-disable-line require-statement-match
 const doT = require( 'express-dot' ); // eslint-disable-line require-statement-match
-const dotenv = require( 'dotenv' );
 const express = require( 'express' );
+const { Pool } = require( 'pg' ); //eslint-disable-line
 const session = require( 'express-session' ); // eslint-disable-line require-statement-match
 const winston = require( 'winston' );
 
-// set up environment variables defined in /rosetta/.env
-const config = dotenv.config();
-if ( config.error ) {
-  winston.warn( 'config error: ' + config.error );
-  winston.warn( 'config errors are not fatal, and probably just means no .env file is present' );
-}
-
 // constants
 const LISTEN_PORT = 16372;
+const { format } = winston;
 
-// The following flag is used to take this utility off line and show a "down for maintenance" sort of page to users.  It
-// is configured by setting the ENABLED value in the .env file in the home directory from whence Rosetta is run.
-const ENABLED = config.error ? true : ( process.env.ENABLED === 'true' );
-winston.info( 'ENABLED=' + ENABLED );
+// add a global handler for unhandled promise rejections
+process.on( 'unhandledRejection', error => {
 
-// Configuration boiler plate like logger setup, preferences file validation, and command line argument parsing
-configureStartup().then( () => {
-
-  // add the route handlers, must be required after global.preferences has been initialized and logger configured
-  const routeHandlers = require( __dirname + '/routeHandlers' );
-
-  // Create and configure the ExpressJS app
-  const app = express();
-  app.set( 'views', __dirname + '/../html/views' );
-  app.set( 'view engine', 'dot' );
-  app.engine( 'html', doT.__express );
-
-  // set static directories for css, img, and js
-  app.use( '/translate/css', express.static( __dirname + '/../css' ) );
-  app.use( '/translate/img', express.static( __dirname + '/../img' ) );
-  app.use( '/translate/js', express.static( __dirname ) );
-
-  // need cookieParser middleware before we can do anything with cookies
-  app.use( cookieParser() );
-  app.use( session( {
-    secret: global.preferences.rosettaSessionSecret,
-    resave: false,
-    saveUninitialized: false
-  } ) );
-  app.use( bodyParser.json() );
-  app.use( bodyParser.urlencoded( { extended: false } ) );
-
-  //----------------------------------------------------------------------------
-  // Set up the routes.  The order matters.
-  //----------------------------------------------------------------------------
-
-  // route for showing the 'down for maintenance' page when needed
-  if ( !ENABLED ) {
-    app.get( '/translate', routeHandlers.showOffLinePage );
-  }
-
-  // route that checks whether the user is logged in
-  app.get( '/translate*', routeHandlers.checkForValidSession );
-
-  // TODO: the following two routes are for debugging, and should be removed or put behind a "verbose" flag eventually
-  app.post( '/translate*', function( req, res, next ) {
-    winston.info( 'post request received, url = ' + req.url );
-    next();
-  } );
-  app.get( '/translate*', function( req, res, next ) {
-    winston.info( 'get request received, url = ' + req.url );
-    next();
-  } );
-  // end of loggers
-
-  // landing page for the translation utility
-  app.get( '/translate', routeHandlers.chooseSimulationAndLanguage );
-
-  // route for rendering the page where the user can submit their translated string
-  app.get( '/translate/sim/:simName?/:targetLocale?', routeHandlers.renderTranslationPage );
-
-  // post route for testing translated strings (does not save them)
-  app.post( '/translate/sim/test/:simName?', routeHandlers.testStrings );
-
-  // post route for short term storage of strings
-  app.post( '/translate/sim/save/:simName?/:targetLocale?', routeHandlers.saveStrings );
-
-  // post route for long term storage of strings
-  app.post( '/translate/sim/:simName?/:targetLocale?', routeHandlers.submitStrings );
-
-  // route for extracting strings from a sim
-  app.get( '/translate/extractStrings', routeHandlers.extractStringsAPI );
-
-  // logout
-  app.get( '/translate/logout', routeHandlers.logout );
-
-  // test routes - used for testing and debugging
-  app.get( '/translate/test/', routeHandlers.test ); // display a test html page
-  app.get( '/translate/runTest/:testID', routeHandlers.runTest ); // run specific server test
-  app.get( '/translate/runTests/', routeHandlers.runTests ); // run all server tests
-
-  // fall through route
-  app.get( '/*', routeHandlers.pageNotFound );
-  app.post( '/*', routeHandlers.pageNotFound );
-
-  // start the server
-  app.listen( LISTEN_PORT, function() { winston.info( 'Listening on port ' + LISTEN_PORT ); } );
+  // generally, this shouldn't happen, so if these are in the log they should be tracked down and fixed
+  winston.error( 'unhandled rejection, error.message =', error.message );
 } );
+
+// configure the logger - this uses the default logging level, which may be updated once the configuration is read
+// winston.remove( winston.transports.Console );
+const consoleTransport = new winston.transports.Console( {
+  format: format.combine(
+    format.timestamp( {
+      format: 'YYYY-MM-DD HH:mm:ss'
+    } ),
+    format.printf( i => `${i.timestamp} | ${i.message}` )
+  )
+} );
+winston.add( consoleTransport );
+
+// log startup message now that we have a logger
+winston.info( '---- rosetta starting up ----' );
+winston.info( 'Node version: ' + process.version );
+
+// log the SHA of rosetta - this may make it easier to duplicate and track down problems
+try {
+  const sha = childProcess.execSync( 'git rev-parse HEAD' );
+  winston.info( 'current SHA: ' + sha.toString() );
+}
+catch( err ) {
+  winston.warn( 'unable to get SHA from git, err: ' + err );
+}
+
+// get the configuration information and assign it to a global
+global.config = getConfig();
+
+// update the logging level in case it was set in the config info
+consoleTransport.level = global.config.loggingLevel;
+
+// check that the DB server is running and that a basic query can be performed
+// TODO: consider moving this into the shortTermStorage object once it exists
+winston.info( 'testing database connection' );
+const pool = new Pool();
+pool.query( 'SELECT NOW()' )
+  .then( response => {
+    winston.info( 'database test using SELECT NOW() succeeded, now = ' + response.rows[ 0 ].now );
+  } )
+  .catch( err => {
+    winston.error( 'database connection test failed, short term string storage will probably not work, err = ' + err );
+  } );
+
+// add the route handlers, must be required after global.config has been initialized and logger configured
+const routeHandlers = require( __dirname + '/routeHandlers' );
+
+// create and configure the ExpressJS app
+const app = express();
+app.set( 'views', __dirname + '/../html/views' );
+app.set( 'view engine', 'dot' );
+app.engine( 'html', doT.__express );
+
+// set static directories for css, img, and js
+app.use( '/translate/css', express.static( __dirname + '/../css' ) );
+app.use( '/translate/img', express.static( __dirname + '/../img' ) );
+app.use( '/translate/js', express.static( __dirname ) );
+
+// set up handling for cookies
+app.use( cookieParser() );
+app.use( session( {
+  secret: global.config.rosettaSessionSecret,
+  resave: false,
+  saveUninitialized: false
+} ) );
+app.use( bodyParser.json() );
+app.use( bodyParser.urlencoded( { extended: false } ) );
+
+//----------------------------------------------------------------------------
+// Set up the routes.  The order matters.
+//----------------------------------------------------------------------------
+
+// route for showing the 'down for maintenance' page when needed
+if ( !global.config.rosettaEnabled ) {
+  app.get( '/translate', routeHandlers.showOffLinePage );
+}
+
+// route that checks whether the user is logged in
+app.get( '/translate*', routeHandlers.checkForValidSession );
+
+// the following two routes are for debugging and serve no other purpose
+app.post( '/translate*', function( req, res, next ) {
+  winston.debug( 'post request received, url = ' + req.url );
+  next();
+} );
+app.get( '/translate*', function( req, res, next ) {
+  winston.debug( 'get request received, url = ' + req.url );
+  next();
+} );
+
+// landing page for the translation utility
+app.get( '/translate', routeHandlers.chooseSimulationAndLanguage );
+
+// route for rendering the page where the user can submit their translated string
+app.get( '/translate/sim/:simName?/:targetLocale?', routeHandlers.renderTranslationPage );
+
+// post route for testing translated strings (does not save them)
+app.post( '/translate/sim/test/:simName?', routeHandlers.testStrings );
+
+// post route for short term storage of strings
+app.post( '/translate/sim/save/:simName?/:targetLocale?', routeHandlers.saveStrings );
+
+// post route for long term storage of strings
+app.post( '/translate/sim/:simName?/:targetLocale?', routeHandlers.submitStrings );
+
+// route for extracting strings from a sim
+app.get( '/translate/extractStrings', routeHandlers.extractStringsAPI );
+
+// logout
+app.get( '/translate/logout', routeHandlers.logout );
+
+// test routes - used for testing and debugging
+app.get( '/translate/test/', routeHandlers.test ); // display a test html page
+app.get( '/translate/runTest/:testID', routeHandlers.runTest ); // run specific server test
+app.get( '/translate/runTests/', routeHandlers.runTests ); // run all server tests
+
+// fall through route
+app.get( '/*', routeHandlers.pageNotFound );
+app.post( '/*', routeHandlers.pageNotFound );
+
+// start the server
+app.listen( LISTEN_PORT, function() { winston.info( 'Listening on port ' + LISTEN_PORT ); } );
 
 

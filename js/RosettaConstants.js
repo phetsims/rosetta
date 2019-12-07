@@ -10,6 +10,6 @@
 
 module.exports = {
   GITHUB_RAW_FILE_URL_BASE: 'https://raw.githubusercontent.com',
-  PRODUCTION_SERVER_URL: global.preferences.productionServerURL
+  PRODUCTION_SERVER_URL: global.config.productionServerURL
 };
 

@@ -177,7 +177,7 @@ const testHandlers = {
   testCommittingMultipleFilesToGitHub: function() {
 
     // this test alters string files, so it is rejected if the tests branch is not being used
-    if ( global.preferences.babelBranch !== 'tests' ) {
+    if ( global.config.babelBranch !== 'tests' ) {
       return Promise.reject( new Error( 'this test is only permitted when using the tests branch of the babel repo' ) );
     }
 

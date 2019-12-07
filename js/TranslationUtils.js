@@ -18,7 +18,7 @@ const RosettaConstants = require( './RosettaConstants' );
 const winston = require( 'winston' );
 
 // globals
-const preferences = global.preferences;
+const preferences = global.config;
 
 /*---------------------------------------------------------------------------*
  * Email utilities
@@ -262,7 +262,7 @@ function checkAndUpdateStringFile( repo, file, content, message, branch, callbac
 
     // if the file is not found, create a new one
     if ( err ) {
-      winston.info( 'no file found: ' + file + '. Attempting to create.' );
+      winston.info( 'no file found: ' + file + ', attempting to create.' );
 
       if ( content !== '{}' ) {
         winston.info( 'calling createContents' );
@@ -283,7 +283,7 @@ function checkAndUpdateStringFile( repo, file, content, message, branch, callbac
 
     // otherwise, update the file using its SHA
     else {
-      winston.info( 'found file ' + file + ' in GitHub.  Attempting to update.' );
+      winston.info( 'found file ' + file + ' in GitHub, attempting to update.' );
 
       const sha = data.sha;
       const buffer = Buffer.from( data.content, data.encoding );
@@ -308,31 +308,31 @@ function checkAndUpdateStringFile( repo, file, content, message, branch, callbac
 
 /**
  * request the strings from Github
- * @param {string} Url
- * @param {array} strings
+ * @param {string} url - URL at GitHub where the string file is stored in JSON format
+ * @param {Object} stringsObject - object where the strings will be stored
  * @param {string} projectName
+ * @param {boolean} isEnglishStrings
  * @returns {Promise.<string>}
  */
-async function getGhStrings( Url, strings, projectName, isEnglishStrings ) {
-  winston.info( 'sending request to ' + Url );
-  const response = await nodeFetch( Url );
+async function getGhStrings( url, stringsObject, projectName, isEnglishStrings ) {
+  winston.info( 'sending request to ' + url );
+  const response = await nodeFetch( url );
 
   return response.text().then( body => {
     if ( response.status === 200 ) {
-      strings[ projectName ] = JSON.parse( body );
-      winston.info( 'request for ' + Url + ' returned successfully' );
+      stringsObject[ projectName ] = JSON.parse( body );
+      winston.info( 'request for ' + url + ' returned successfully' );
     }
     else if ( response.status === 404 && !isEnglishStrings ) {
-      strings[ projectName ] = {};
-      //winston.info( 'no strings in GitHub for project = ' + projectName + ', locale = ' + targetLocale );
+      stringsObject[ projectName ] = {};
     }
     else if ( !isEnglishStrings ) {
-      strings[ projectName ] = {};
-      winston.info( 'request for ' + Url + 'failed, response code = ' + response.status );
+      stringsObject[ projectName ] = {};
+      winston.info( 'request for ' + url + 'failed, response code = ' + response.status );
     }
     else {
       winston.error( 'request for english strings for project ' + projectName + ' failed. Response code: ' +
-                     response.status + '. URL: ' + Url + '. Error: ' + response.error );
+                     response.status + '. URL: ' + url + '. Error: ' + response.error );
     }
   } );
 }

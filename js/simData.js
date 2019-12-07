@@ -54,7 +54,7 @@ async function updateSimData() {
         else {
           resolve( body );
         }
-      } ).auth( 'token', global.preferences.serverToken, true );
+      } ).auth( 'token', global.config.serverToken, true );
     } );
   }
   catch( err ) {

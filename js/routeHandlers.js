@@ -244,7 +244,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
 
   // get the URL of the live sim
   const simUrl = await simData.getLiveSimUrl( simName );
-  winston.info( 'sending request to ' + simUrl );
+  winston.debug( 'sending request to ' + simUrl );
 
   // get the HTML file that represents the sim
   const UrlResponse = await nodeFetch( simUrl );
@@ -259,7 +259,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
   let i;
   let sims; // array of all active sims
 
-  winston.info( 'request from ' + simUrl + ' returned successfully' );
+  winston.debug( 'request from ' + simUrl + ' returned successfully' );
 
   // Extract the translatable strings from the sim's html file and store them in an array.  The format of the objects in
   // the array consists of a project name and list of keys, e.g:
@@ -273,13 +273,13 @@ module.exports.renderTranslationPage = async function( req, res ) {
 
   const extractedStrings = result.extractedStrings;
   const simSha = result.sha; // sha of the sim at the time of publication, or 'master' if no sha is found
-  winston.info( 'sim sha: ' + simSha );
+  winston.debug( 'sim sha: ' + simSha );
 
   const englishStrings = {}; // object to hold the English strings
   const fileRetrievalPromises = [];
 
   // initialize the sims array from the active-sims file in chipper
-  winston.info( 'sending request to ' + GITHUB_RAW_FILE_URL_BASE + activeSimsPath );
+  winston.debug( 'sending request to ' + GITHUB_RAW_FILE_URL_BASE + activeSimsPath );
   const response = await nodeFetch( GITHUB_RAW_FILE_URL_BASE + activeSimsPath );
 
   fileRetrievalPromises.push( response.text().then( body => {
@@ -293,7 +293,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
     const repoSha = ( projectName === simName ) ? simSha : 'master';
     const stringsFilePath = GITHUB_RAW_FILE_URL_BASE + '/phetsims/' + projectName + '/' + repoSha + '/' + projectName +
                             '-strings_en.json';
-    const translatedStringsPath = GITHUB_RAW_FILE_URL_BASE + '/phetsims/babel/' + global.preferences.babelBranch + '/' +
+    const translatedStringsPath = GITHUB_RAW_FILE_URL_BASE + '/phetsims/babel/' + global.config.babelBranch + '/' +
                                   projectName + '/' + projectName + '-strings_' + targetLocale + '.json';
 
     // request the english strings from GitHub
@@ -408,7 +408,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
         if ( savedStringValue ) {
 
           // log info about the retrieved string
-          winston.info( 'using saved string ' + key + ': ' + getPrintableString( savedStringValue ) );
+          winston.debug( 'using saved string ' + key + ': ' + getPrintableString( savedStringValue ) );
 
           // set the retrieved value
           stringRenderInfo.value = escapeHTML( savedStringValue );
@@ -417,21 +417,21 @@ module.exports.renderTranslationPage = async function( req, res ) {
 
           // use previous translation value obtained from GitHub, if it exists
           const translatedString = previouslyTranslatedStrings[ key ];
-          winston.info( 'using previously translated string ' + key + ': ' +
-                        getPrintableString( translatedString.value ) );
+          winston.debug( 'using previously translated string ' + key + ': ' +
+                         getPrintableString( translatedString.value ) );
           stringRenderInfo.value = escapeHTML( translatedString.value );
         }
         else {
 
           // there is no saved or previously translated string
-          winston.info( 'no saved or previously translated values found for string key ' + key );
+          winston.debug( 'no saved or previously translated values found for string key ' + key );
           stringRenderInfo.value = '';
         }
 
         array.push( stringRenderInfo );
       }
       else {
-        winston.info( 'String key ' + project.stringKeys[ j ] + ' not found or not visible' );
+        winston.debug( 'String key ' + project.stringKeys[ j ] + ' not found or not visible' );
       }
     }
 
@@ -447,8 +447,8 @@ module.exports.renderTranslationPage = async function( req, res ) {
           }
         }
         if ( !containsObjectWithKey ) {
-          winston.info( 'repo: ' + project.projectName + ' key: ' + stringKey + ', ' +
-                        '- translation exists, but unused in this sim, adding to pass-through data' );
+          winston.debug( 'repo: ' + project.projectName + ' key: ' + stringKey + ', ' +
+                         '- translation exists, but unused in this sim, adding to pass-through data' );
           unusedTranslatedStringsArray.push( {
             repo: project.projectName,
             key: stringKey,
@@ -574,19 +574,16 @@ module.exports.testStrings = function( req, res ) {
  */
 module.exports.saveStrings = async function( req, res ) {
 
-  winston.info( '-------- saveStrings called --------------' );
+  winston.debug( 'saveStrings called' );
   const simName = req.params.simName;
   const targetLocale = req.params.targetLocale;
   const userId = ( req.session.userId ) ? req.session.userId : 0;
   const pool = new Pool();
   const repos = {};
   let error = false;
-  winston.info( 'JSON.stringify( req.body ) = ' + JSON.stringify( req.body ) );
 
   // loop through the string descriptions in the post request, saving each one
   for ( const stringDescription in req.body ) {
-
-    winston.info( 'top of loop through req.body properties, stringDescription = ' + stringDescription );
 
     if ( !Object.hasOwnProperty.call( req.body, stringDescription ) ) {
       continue;
@@ -597,10 +594,6 @@ module.exports.saveStrings = async function( req, res ) {
     const repo = repoAndKey[ 0 ];
     const key = repoAndKey[ 1 ];
     const stringValue = req.body[ stringDescription ];
-
-    winston.info( 'repo = ' + repo );
-    winston.info( 'key = ' + key );
-    winston.info( 'stringValue = ' + stringValue );
 
     // if this repo hasn't been encountered yet, add it to our repos object
     if ( !repos[ repo ] ) {
@@ -613,12 +606,12 @@ module.exports.saveStrings = async function( req, res ) {
       try {
 
         // execute the query that will save the string to the DB
-        const queryResponse = await pool.query(
+        await pool.query(
           'SELECT upsert_saved_translations' +
           '($1::bigint, $2::varchar(255), $3::varchar(255), $4::varchar(8), $5::varchar(255), $6::timestamp)',
           [ userId, key, repo, targetLocale, stringValue, timestamp ]
         );
-        winston.info( 'JSON.stringify( queryResponse ) = ' + JSON.stringify( queryResponse ) );
+        winston.info( 'successfully saved strings to DB' );
       }
       catch( err ) {
         winston.error( 'error saving string values to DB, aborting save operation, err = ' + err );

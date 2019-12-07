@@ -23,7 +23,7 @@ const RosettaConstants = require( './RosettaConstants' );
 const winston = require( 'winston' );
 
 // constants
-const PREFERENCES = global.preferences;
+const PREFERENCES = global.config;
 const BRANCH = PREFERENCES.babelBranch || 'master';
 const BASE_URL_FOR_RAW_FILES = RosettaConstants.GITHUB_RAW_FILE_URL_BASE + '/phetsims/babel/' + BRANCH + '/';
 const SKIP_STRING_COMMITS = typeof PREFERENCES.debugRosettaSkipStringCommits !== 'undefined' &&
