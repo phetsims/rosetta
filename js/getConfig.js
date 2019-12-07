@@ -44,7 +44,6 @@ module.exports = function() {
 
   winston.info( 'common config file full path and name: ' + commonConfigFileName );
   winston.info( 'rosetta-specific config file full path and name: ' + rosettaConfigFileName );
-  f
 
   // ensure that the config files exist
   assert( fs.existsSync( commonConfigFileName ), 'config file not found: ' + commonConfigFileName );
