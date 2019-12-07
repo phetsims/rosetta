@@ -44,6 +44,7 @@ module.exports = function() {
 
   winston.info( 'common config file full path and name: ' + commonConfigFileName );
   winston.info( 'rosetta-specific config file full path and name: ' + rosettaConfigFileName );
+  f
 
   // ensure that the config files exist
   assert( fs.existsSync( commonConfigFileName ), 'config file not found: ' + commonConfigFileName );
@@ -74,7 +75,7 @@ module.exports = function() {
     config.enabled = true;
   }
   else {
-    assert( typeof config.rosettaEnabled === 'boolean', 'rosettaEnabled must be a boolean value if defined' );
+    assert( typeof config.enabled === 'boolean', 'enabled must be a boolean value if defined' );
   }
 
   assert(
