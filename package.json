@@ -5,10 +5,8 @@
   "description": "PhET simulation translation utility",
   "main": "rosetta.js",
   "dependencies": {
-    "async": "^2.6.0",
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
-    "dateformat": "^3.0.2",
     "emailjs": "^2.2.0",
     "express": "^4.16.2",
     "express-dot": "^0.1.0",
@@ -18,12 +16,10 @@
     "octonode": "^0.9.1",
     "passwd-user": "^2.1.0",
     "pg": "^7.14.0",
-    "pg-query": "^0.11.0",
     "promise-queue": "^2.2.3",
     "request": "^2.83.0",
     "underscore": "^1.8.3",
-    "winston": "^3.2.1",
-    "xml2js": "^0.4.19"
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "grunt": "~1.0.0"
