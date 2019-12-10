@@ -202,22 +202,6 @@ function extractStringsAPI( req, res ) {
   strings.end();
 }
 
-/**
- * get the metadata for the specified simulation
- * @param {string} simName
- * @returns {Promise.<string>}
- */
-async function getSimInfo( simName ) {
-
-  const URL = RosettaConstants.PRODUCTION_SERVER_URL +
-              '/services/metadata/1.2/simulations?format=json&type=html&locale=en&simulation=' +
-              simName +
-              '&summary';
-  const response = await nodeFetch( URL );
-  const responseJSON = await response.json();
-  return responseJSON;
-}
-
 /*---------------------------------------------------------------------------*
  * Github API functions
  *---------------------------------------------------------------------------*/
@@ -239,71 +223,6 @@ function stringify( data ) {
     sortedData[ key ] = data[ key ];
   }
   return JSON.stringify( sortedData, null, 2 );
-}
-
-/**
- * Check if a string files has changed versus the version of it on GitHub and, if so, push the updated version.
- *
- * @param {Object} repo - handle to a GitHub repo, return value from ghClient.repo()
- * @param {string} file - string file to be added or modified (must include the full path from the repo root)
- * @param {string} content - file contents
- * @param {string} message - commit message
- * @param {string} branch - branch of babel, will usually be 'master', but sometimes 'tests'
- * @param {function} callback
- */
-function checkAndUpdateStringFile( repo, file, content, message, branch, callback ) {
-
-  if ( !branch ) {
-    branch = 'master';
-  }
-
-  // get the current contents of the file from github
-  repo.contents( file, branch, function( err, data, headers ) {
-
-    // if the file is not found, create a new one
-    if ( err ) {
-      winston.info( 'no file found: ' + file + ', attempting to create.' );
-
-      if ( content !== '{}' ) {
-        winston.info( 'calling createContents' );
-        repo.createContents( file, message, content, branch, function( err, data, headers ) {
-          if ( err ) {
-            callback( err );
-          }
-          else {
-            callback();
-          }
-        } );
-      }
-      else {
-        winston.info( 'no commit attempted for ' + file + ' because there are no strings' );
-        callback();
-      }
-    }
-
-    // otherwise, update the file using its SHA
-    else {
-      winston.info( 'found file ' + file + ' in GitHub, attempting to update.' );
-
-      const sha = data.sha;
-      const buffer = Buffer.from( data.content, data.encoding );
-      if ( buffer.toString() !== content ) {
-        repo.updateContents( file, message, content, sha, branch, function( err, data, headers ) {
-          if ( err ) {
-            callback( err );
-          }
-          else {
-            winston.info( 'commit: "' + message + '" committed successfully' );
-            callback();
-          }
-        } );
-      }
-      else {
-        winston.info( 'no commit attempted for ' + file + ' because the contents haven\'t changed' );
-        callback();
-      }
-    }
-  } );
 }
 
 /**
@@ -334,23 +253,6 @@ async function getGhStrings( url, stringsObject, projectName, isEnglishStrings )
       winston.error( 'request for english strings for project ' + projectName + ' failed. Response code: ' +
                      response.status + '. URL: ' + url + '. Error: ' + response.error );
     }
-  } );
-}
-
-/**
- * Return an octonode github client using the credentials in config.json.
- * Use config.json.template as an example for creating a config.json file with your github credentials
- * @returns {*}
- */
-function getGhClient() {
-  const username = preferences.githubUsername;
-  const pass = preferences.githubPassword;
-
-  winston.info( 'getting GH client for user ' + username );
-
-  return octonode.client( {
-    username: username,
-    password: pass
   } );
 }
 
@@ -396,11 +298,7 @@ module.exports = {
   sendEmail: sendEmail,
   extractStrings: extractStrings,
   extractStringsAPI: extractStringsAPI,
-  getGhClient: getGhClient,
   getGhStrings: getGhStrings,
-  getPublishedEnglishSimURL: getPublishedEnglishSimURL,
-  getSimInfo: getSimInfo,
   getLatestSimHtml: getLatestSimHtml,
-  checkAndUpdateStringFile: checkAndUpdateStringFile,
   stringify: stringify
 };
