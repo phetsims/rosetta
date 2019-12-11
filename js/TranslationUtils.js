@@ -13,7 +13,6 @@ const _ = require( 'underscore' ); // eslint-disable-line
 const email = require( 'emailjs/email' );
 const https = require( 'https' );
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
-const octonode = require( 'octonode' );
 const RosettaConstants = require( './RosettaConstants' );
 const winston = require( 'winston' );
 
