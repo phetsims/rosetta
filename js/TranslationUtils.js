@@ -11,7 +11,6 @@
 
 const _ = require( 'underscore' ); // eslint-disable-line
 const email = require( 'emailjs/email' );
-const https = require( 'https' );
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const RosettaConstants = require( './RosettaConstants' );
 const winston = require( 'winston' );
@@ -65,7 +64,11 @@ function sendEmail( subject, text ) {
  * Utility functions
  *---------------------------------------------------------------------------*/
 
-// utility function for presenting escaped HTML, also escapes newline character
+/**
+ * utility function for presenting escaped HTML, also escapes newline character
+ * @param {String} s
+ * @returns {String}
+ */
 function escapeHTML( s ) {
 
   return s.replace( /&/g, '&amp;' )
@@ -75,6 +78,12 @@ function escapeHTML( s ) {
     .replace( /\n/g, '&#92;n' );
 }
 
+/**
+ * render an error page
+ * @param {Object} res - response object, used for rendering the response
+ * @param {String} message
+ * @param {String} err
+ */
 function renderError( res, message, err ) {
 
   res.render( 'error.html', {
@@ -85,19 +94,36 @@ function renderError( res, message, err ) {
   } );
 }
 
-function extractStrings( data, simName ) {
+/**
+ * extract the SHA of this sim from the built HTML file
+ * @param {string} simHtml - HTML of the built sim
+ * @param {string} simName - sim name in "repo" format, e.g. "acid-base-solutions"
+ * @returns {string} SHA of this built sim
+ */
+function extractSimSha( simHtml, simName ) {
 
-  const projects = {};
-  const matches = data.match( /string!([\w./-]+)/g );
+  // get the SHA of this version of the sim
+  const simShaInfo = new RegExp( '"' + simName + '": {\\s*"sha": "(\\w*)",\\s*"branch": "(\\w*)"', 'g' ).exec( simHtml );
+  return ( simShaInfo && simShaInfo.length > 1 ) ? simShaInfo[ 1 ] : 'master'; // default to master if no sha is found
+}
+
+/**
+ * extract all sim keys used in the provided built sim HTML and format them into a structured object
+ * @param {string} simHtml - HTML of the built sim
+ * @returns {Object[]|null} - an array of objects of the form { projectName: {string}, stringKeys: {string[]}} that list
+ * the strings used for each string-containing repo used by the sim, null if no strings found
+ */
+function extractStringKeys( simHtml ) {
+
+  // use a regular expression to extract all the string keys by matching uses of the string plugin
+  const matches = simHtml.match( /string!([\w./-]+)/g );
 
   // if no matches are found, it probably means the sim url was not correct
   if ( matches === null ) {
     return null;
   }
 
-  const simShaInfo = new RegExp( '"' + simName + '": {\\s*"sha": "(\\w*)",\\s*"branch": "(\\w*)"', 'g' ).exec( data );
-  const sha = ( simShaInfo && simShaInfo.length > 1 ) ? simShaInfo[ 1 ] : 'master'; // default to master if no sha is found
-
+  const projects = {};
   for ( let i = 0; i < matches.length; i++ ) {
     const projectAndString = matches[ i ].substring( 7 ).split( '/' );
     const projectName = projectAndString[ 0 ];
@@ -110,95 +136,18 @@ function extractStrings( data, simName ) {
     }
   }
 
-  const result = { extractedStrings: [], sha: sha };
+  const extractedStrings = [];
   for ( const project in projects ) {
-    result.extractedStrings.push( {
+
+    if ( !projects.hasOwnProperty( project ) ) { continue; }
+
+    extractedStrings.push( {
       projectName: project.replace( new RegExp( '_', 'g' ), '-' ).toLowerCase(),
       stringKeys: projects[ project ]
     } );
   }
 
-  return result;
-}
-
-/**
- * Route that extracts strings from a built sim. Expects query parameter 'simUrl', the url of the built sim to
- * extract the strings from. Requests are made via https. Do not include to protocol in the simUrl parameter.
- *
- * Example simUrl values:
- * - www.colorado.edu/physics/phet/dev/html/arithmetic/1.0.0-dev.13/arithmetic_en.html
- * - localhost:8000/color-vision/build/color-vision_en.html
- * - phet.colorado.edu/sims/html/energy-skate-park-basics/latest/energy-skate-park-basics_en.html
- *
- * @param req
- * @param res
- */
-function extractStringsAPI( req, res ) {
-
-  // included for an easy default test
-  const url = req.params.simUrl || 'phet-dev.colorado.edu/sims/html/molecules-and-light/latest/molecules-and-light_en.html';
-  const localhost = ( url.indexOf( 'localhost' ) === 0 );
-
-  const slashIndex = url.indexOf( '/' );
-  const host = ( localhost ) ? 'localhost' : url.substring( 0, slashIndex );
-  const path = url.substring( slashIndex );
-
-  const urlSplit = url.split( '/' );
-  const simName = urlSplit[ urlSplit.length - 1 ].split( '_' )[ 0 ];
-
-  const options = {
-    host: host,
-    path: path,
-    method: 'GET'
-  };
-
-  // if running locally get the port number if it is part of the url
-  if ( localhost ) {
-    const colonIndex = url.indexOf( ':' );
-    if ( colonIndex > -1 ) {
-      options.port = url.substring( colonIndex + 1, slashIndex );
-    }
-  }
-
-  winston.info( 'requesting sim at host: ' + options.host + ', port: ' + options.port + ', and path: ' + options.path );
-
-  const sessionDataRequestCallback = function( response ) {
-    let data = '';
-
-    // another chunk of data has been received, so append it
-    response.on( 'data', function( chunk ) {
-      data += chunk;
-    } );
-
-    // the whole response has been received
-    response.on( 'end', function() {
-      const result = extractStrings( data, simName );
-
-      if ( !result ) {
-        renderError( res, 'Tried to extract strings from an invalid URL', 'url: ' + host + path );
-      }
-      else {
-        res.setHeader( 'Content-Type', 'application/json' );
-        res.end( JSON.stringify( result, null, 2 ) );
-      }
-    } );
-  };
-
-  const strings = https.request( options, sessionDataRequestCallback );
-
-  strings.on( 'error', function( err ) {
-    winston.error( 'Error getting sim strings - ' + err );
-    res.render( 'error.html', {
-        title: 'Translation Utility Error',
-        message: 'Unable to obtain sim strings',
-        errorDetails: err,
-        timestamp: new Date().getTime()
-      }
-    );
-  } );
-
-  // send the request
-  strings.end();
+  return extractedStrings;
 }
 
 /*---------------------------------------------------------------------------*
@@ -293,11 +242,11 @@ async function getLatestSimHtml( simName ) {
 // export all functions in this file
 module.exports = {
   escapeHTML: escapeHTML,
-  renderError: renderError,
-  sendEmail: sendEmail,
-  extractStrings: extractStrings,
-  extractStringsAPI: extractStringsAPI,
+  extractSimSha: extractSimSha,
+  extractStringKeys: extractStringKeys,
   getGhStrings: getGhStrings,
   getLatestSimHtml: getLatestSimHtml,
+  renderError: renderError,
+  sendEmail: sendEmail,
   stringify: stringify
 };

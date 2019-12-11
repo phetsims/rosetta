@@ -41,6 +41,7 @@ all of the string keys. The keys are extracted into an object of this form:
             stringKeys: [ 'check', 'keepTrying' ]
           }
         ]
+        
 2. For every repository in the extracted strings list, Rosetta sends 2 requests to github, one for the english string 
 values and one for the translated string values for the locale being translated. It also sends a request to get the 
 active-sims list from chipper, so it can tell if a repository is sim code or common code. All of these strings are 

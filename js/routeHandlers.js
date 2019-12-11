@@ -12,7 +12,7 @@
 // node modules
 const _ = require( 'underscore' ); // eslint-disable-line
 const https = require( 'https' );
-const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
+const fetch = require( 'node-fetch' ); // eslint-disable-line
 const winston = require( 'winston' );
 const { Pool } = require( 'pg' ); // eslint-disable-line
 
@@ -247,32 +247,30 @@ module.exports.renderTranslationPage = async function( req, res ) {
   winston.debug( 'sending request to ' + simUrl );
 
   // get the HTML file that represents the sim
-  const UrlResponse = await nodeFetch( simUrl );
+  const simFetchResponse = await fetch( simUrl );
 
-  if ( UrlResponse.error || UrlResponse.status !== 200 ) {
-    winston.error( 'failed to retrieve live sim, error = ' + UrlResponse.error );
+  if ( simFetchResponse.error || simFetchResponse.status !== 200 ) {
+    winston.error( 'failed to retrieve live sim, error = ' + simFetchResponse.error );
     res.send( 'Error: Sim data not found' );
     return; // bail
   }
 
-  const body = await UrlResponse.text();
+  const simHtml = await simFetchResponse.text();
   let i;
   let sims; // array of all active sims
 
   winston.debug( 'request from ' + simUrl + ' returned successfully' );
 
-  // Extract the translatable strings from the sim's html file and store them in an array.  The format of the objects in
-  // the array consists of a project name and list of keys, e.g:
-  //    { projectName: 'color-vision', stringKeys: [ 'key1', 'key2', ... ] }
-  const result = TranslationUtils.extractStrings( body, simName );
+  // extract the translatable string keys from the sim's html file
+  const extractedStringKeySets = TranslationUtils.extractStringKeys( simHtml );
 
-  if ( !result ) {
+  if ( !extractedStringKeySets ) {
     renderError( res, 'Tried to extract strings from an invalid URL', 'url: ' + simUrl );
     return;
   }
 
-  const extractedStrings = result.extractedStrings;
-  const simSha = result.sha; // sha of the sim at the time of publication, or 'master' if no sha is found
+  // get the SHA of this sim
+  const simSha = TranslationUtils.extractSimSha( simHtml, simName );
   winston.debug( 'sim sha: ' + simSha );
 
   const englishStrings = {}; // object to hold the English strings
@@ -280,16 +278,16 @@ module.exports.renderTranslationPage = async function( req, res ) {
 
   // initialize the sims array from the active-sims file in chipper
   winston.debug( 'sending request to ' + GITHUB_RAW_FILE_URL_BASE + activeSimsPath );
-  const response = await nodeFetch( GITHUB_RAW_FILE_URL_BASE + activeSimsPath );
+  const response = await fetch( GITHUB_RAW_FILE_URL_BASE + activeSimsPath );
 
   fileRetrievalPromises.push( response.text().then( body => {
       sims = body.toString().split( '\n' );
     } )
   );
 
-  // create a request to retrieve each of the needed string files
-  extractedStrings.forEach( async function( extractedStringObject ) {
-    const projectName = extractedStringObject.projectName;
+  // create a request to retrieve each of the needed English string files
+  extractedStringKeySets.forEach( function( extractedStringKeysObject ) {
+    const projectName = extractedStringKeysObject.projectName;
     const repoSha = ( projectName === simName ) ? simSha : 'master';
     const stringsFilePath = GITHUB_RAW_FILE_URL_BASE + '/phetsims/' + projectName + '/' + repoSha + '/' + projectName +
                             '-strings_en.json';
@@ -324,15 +322,15 @@ module.exports.renderTranslationPage = async function( req, res ) {
   // TODO: There should by a simple call to get the saved strings, and the code should be in a separate file.
   let repositories = '';
   const savedStrings = {};
-  _.times( extractedStrings.length, i => {
+  _.times( extractedStringKeySets.length, i => {
     if ( i > 0 ) {
       repositories += ' OR ';
     }
-    repositories += 'repository = \'' + extractedStrings[ i ].projectName + '\'';
+    repositories += 'repository = \'' + extractedStringKeySets[ i ].projectName + '\'';
 
     // Initialize saved strings for every repo to an empty object. These objects will store string key/value pairs for
     // each repo.
-    savedStrings[ extractedStrings[ i ].projectName ] = {};
+    savedStrings[ extractedStringKeySets[ i ].projectName ] = {};
   } );
 
   // create a parameterized query string for retrieving the user's previously saved strings
@@ -370,8 +368,8 @@ module.exports.renderTranslationPage = async function( req, res ) {
   const otherSims = []; // other sim dependencies get filled in here (e.g. beers-law-lab when translating concentration)
 
   // iterate over all projects from which this sim draws strings
-  _.times( extractedStrings.length, i => {
-    const project = extractedStrings[ i ];
+  _.times( extractedStringKeySets.length, i => {
+    const project = extractedStringKeySets[ i ];
     const strings = englishStrings[ project.projectName ];
     const previouslyTranslatedStrings = req.session.translatedStrings[ targetLocale ][ project.projectName ];
 
@@ -392,7 +390,8 @@ module.exports.renderTranslationPage = async function( req, res ) {
     for ( let j = 0; j < project.stringKeys.length; j++ ) {
       const key = project.stringKeys[ j ];
 
-      const stringVisible = strings.hasOwnProperty( key ) && ( ( strings[ key ].visible === undefined ) ? true : strings[ key ].visible );
+      const stringVisible = strings.hasOwnProperty( key ) &&
+                            ( ( strings[ key ].visible === undefined ) ? true : strings[ key ].visible );
       if ( stringVisible ) {
 
         // data needed to render to the string on the page - the key, the current value, the English value, and the repo
@@ -717,9 +716,3 @@ module.exports.runTests = async function( req, res ) {
     pageNotFound( req, res );
   }
 };
-
-
-/**
- * Route for extracting strings from a build sim, see TranslationUtils.extractStrings.
- */
-module.exports.extractStringsAPI = TranslationUtils.extractStringsAPI;

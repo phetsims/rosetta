@@ -135,9 +135,6 @@ app.post( '/translate/sim/save/:simName?/:targetLocale?', routeHandlers.saveStri
 // post route for long term storage of strings
 app.post( '/translate/sim/:simName?/:targetLocale?', routeHandlers.submitStrings );
 
-// route for extracting strings from a sim
-app.get( '/translate/extractStrings', routeHandlers.extractStringsAPI );
-
 // logout
 app.get( '/translate/logout', routeHandlers.logout );
 
