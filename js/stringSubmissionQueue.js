@@ -12,7 +12,7 @@
 
 // modules
 const _ = require( 'lodash' ); // eslint-disable-line
-const LongTermStringStorage = require( './LongTermStringStorage' );
+const longTermStringStorage = require( './longTermStringStorage' );
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const { Pool } = require( 'pg' ); // eslint-disable-line
 const RosettaConstants = require( './RosettaConstants' );
@@ -118,7 +118,7 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
   const stringSavePromises = [];
   _.keys( changedStringSets ).forEach( simOrLibName => {
     stringSavePromises.push(
-      LongTermStringStorage.saveTranslatedStrings( simOrLibName, targetLocale, changedStringSets[ simOrLibName ] )
+      longTermStringStorage.saveTranslatedStrings( simOrLibName, targetLocale, changedStringSets[ simOrLibName ] )
     );
   } );
 

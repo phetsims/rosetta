@@ -13,7 +13,7 @@
 const _ = require( 'lodash' ); // eslint-disable-line
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const https = require( 'https' );
-const LongTermStringStorage = require( './LongTermStringStorage' );
+const longTermStringStorage = require( './longTermStringStorage' );
 const winston = require( 'winston' );
 const { Pool } = require( 'pg' ); // eslint-disable-line
 
@@ -289,14 +289,14 @@ module.exports.renderTranslationPage = async function( req, res ) {
 
     // get the English strings
     // TODO: This should be using a SHA for the common code strings, see https://github.com/phetsims/rosetta/issues/219
-    englishStrings[ projectName ] = await LongTermStringStorage.getEnglishStrings(
+    englishStrings[ projectName ] = await longTermStringStorage.getEnglishStrings(
       projectName,
       ( projectName === simName ) ? simSha : 'master'
     );
 
     // get the previously translated strings for the target locale, if any
     req.session.translatedStrings[ targetLocale ][ projectName ] =
-      await LongTermStringStorage.getTranslatedStrings( projectName, targetLocale );
+      await longTermStringStorage.getTranslatedStrings( projectName, targetLocale );
   } );
 
   winston.info( 'files needed for rendering the translation page retrieved from long term storage' );

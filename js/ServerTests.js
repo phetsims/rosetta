@@ -8,7 +8,7 @@
 
 // modules
 const _ = require( 'lodash' ); // eslint-disable-line
-const LongTermStringStorage = require( './LongTermStringStorage' );
+const longTermStringStorage = require( './longTermStringStorage' );
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const winston = require( 'winston' );
 
@@ -44,7 +44,7 @@ const testHandlers = {
     stringFilesToRetrieve.forEach( function( stringFileSpec ) {
 
       stringRetrievalPromises.push(
-        LongTermStringStorage.getTranslatedStrings( stringFileSpec.repoName, stringFileSpec.locale )
+        longTermStringStorage.getTranslatedStrings( stringFileSpec.repoName, stringFileSpec.locale )
           .then( () => {
               if ( stringFileSpec.expectedToExist ) {
                 winston.log(
@@ -111,10 +111,10 @@ const testHandlers = {
     const stringComparePromises = [];
 
     // compare the strings with a completely different set, and make sure that they don't match
-    stringComparePromises.push( LongTermStringStorage.getTranslatedStrings( 'arithmetic', 'es' )
+    stringComparePromises.push( longTermStringStorage.getTranslatedStrings( 'arithmetic', 'es' )
       .then( strings => {
 
-        return LongTermStringStorage.stringsMatch( 'arithmetic', 'fr', strings )
+        return longTermStringStorage.stringsMatch( 'arithmetic', 'fr', strings )
           .then( result => {
             if ( !result ) {
               winston.info( 'comparison with known non-equal strings returned false as expected' );
@@ -128,10 +128,10 @@ const testHandlers = {
     );
 
     // compare the strings with the same ones, and make sure they match
-    stringComparePromises.push( LongTermStringStorage.getTranslatedStrings( 'arithmetic', 'es' )
+    stringComparePromises.push( longTermStringStorage.getTranslatedStrings( 'arithmetic', 'es' )
       .then( strings => {
 
-        return LongTermStringStorage.stringsMatch( 'arithmetic', 'es', strings )
+        return longTermStringStorage.stringsMatch( 'arithmetic', 'es', strings )
           .then( result => {
             if ( result ) {
               winston.info( 'comparison with same strings returned true as expected' );
@@ -145,13 +145,13 @@ const testHandlers = {
     );
 
     // make a change to one string, then compare, make sure they don't match
-    stringComparePromises.push( LongTermStringStorage.getTranslatedStrings( 'arithmetic', 'es' )
+    stringComparePromises.push( longTermStringStorage.getTranslatedStrings( 'arithmetic', 'es' )
       .then( strings => {
 
         const firstKey = _.keys( strings )[ 0 ];
         strings[ firstKey ].value = strings[ firstKey ].value + 'X';
 
-        return LongTermStringStorage.stringsMatch( 'arithmetic', 'es', strings )
+        return longTermStringStorage.stringsMatch( 'arithmetic', 'es', strings )
           .then( result => {
             if ( !result ) {
               winston.info( 'comparison with modified strings returned false as expected' );
@@ -189,7 +189,7 @@ const testHandlers = {
     // get the strings, then modify them
     locales.forEach( function( locale ) {
       winston.info( 'getting strings for sim ' + simName + ', locale ' + locale );
-      const modifyStringsPromise = LongTermStringStorage.getTranslatedStrings( simName, locale )
+      const modifyStringsPromise = longTermStringStorage.getTranslatedStrings( simName, locale )
         .then( strings => {
 
           // modify the first string to have a snapshot of the epoch number at the end, e.g. "My Sim---5409483029"
@@ -205,7 +205,7 @@ const testHandlers = {
         .then( strings => {
 
           // save the modified strings to the long term storage area
-          return LongTermStringStorage.saveTranslatedStrings( simName, locale, strings );
+          return longTermStringStorage.saveTranslatedStrings( simName, locale, strings );
         } );
       stringChangePromises.push( modifyStringsPromise );
     } );
