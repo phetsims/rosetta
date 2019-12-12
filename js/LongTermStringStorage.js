@@ -3,10 +3,11 @@
 /**
  * This file defines a singleton object that is used for long term storage of the translated strings.  It is called
  * "long term" to distinguish it from the short term storage that can occur if a user decides to save an in-progress
- * translation without submitting it as a completed translation.
+ * translation without submitting it as a completed translation.  Strings that are saved to long-term storage are used
+ * when translated sims are built, whereas string saved to short term storage are not.
  *
- * This implementation uses GitHub as the "back end" where the strings are stored, but it is intended to be a fairly
- * generic interface so that if we ever decide to use something else as the storage medium for strings, this object
+ * This implementation uses GitHub as the "back end" where the strings are stored, but it is intended to have a fairly
+ * generic API so that if we ever decide to use something else as the long-term storage medium for strings, this object
  * could be rewritten with minimal impact on the client code.  That's the idea anyway.
  *
  * @author John Blanco
