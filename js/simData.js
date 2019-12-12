@@ -9,7 +9,7 @@
 'use strict';
 
 // imports
-const _ = require( 'underscore' ); // eslint-disable-line
+const _ = require( 'lodash' ); // eslint-disable-line
 const request = require( 'request' );
 const RosettaConstants = require( './RosettaConstants' );
 const winston = require( 'winston' );

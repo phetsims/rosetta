@@ -1,7 +1,7 @@
 // Copyright 2015-2019, University of Colorado Boulder
 
 /**
- * this file holds constants used across rosetta
+ * this file holds constants used across Rosetta
  *
  * @author Aaron Davis
  */

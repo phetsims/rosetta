@@ -10,9 +10,10 @@
 'use strict';
 
 // node modules
-const _ = require( 'underscore' ); // eslint-disable-line
+const _ = require( 'lodash' ); // eslint-disable-line
+const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const https = require( 'https' );
-const fetch = require( 'node-fetch' ); // eslint-disable-line
+const LongTermStringStorage = require( './LongTermStringStorage' );
 const winston = require( 'winston' );
 const { Pool } = require( 'pg' ); // eslint-disable-line
 
@@ -234,7 +235,6 @@ module.exports.chooseSimulationAndLanguage = async function( req, res ) {
  */
 module.exports.renderTranslationPage = async function( req, res ) {
 
-  const pool = new Pool();
   const simName = req.params.simName;
   const targetLocale = req.params.targetLocale;
   const activeSimsPath = '/phetsims/perennial/master/data/active-sims';
@@ -247,19 +247,20 @@ module.exports.renderTranslationPage = async function( req, res ) {
   winston.debug( 'sending request to ' + simUrl );
 
   // get the HTML file that represents the sim
-  const simFetchResponse = await fetch( simUrl );
+  const simFetchResponse = await nodeFetch( simUrl );
 
   if ( simFetchResponse.error || simFetchResponse.status !== 200 ) {
     winston.error( 'failed to retrieve live sim, error = ' + simFetchResponse.error );
+
+    // this will display a simple error page to the user
     res.send( 'Error: Sim data not found' );
     return; // bail
   }
 
+  // extract the HTML for the sim
   const simHtml = await simFetchResponse.text();
-  let i;
-  let sims; // array of all active sims
 
-  winston.debug( 'request from ' + simUrl + ' returned successfully' );
+  winston.debug( 'request for ' + simUrl + ' returned successfully' );
 
   // extract the translatable string keys from the sim's html file
   const extractedStringKeySets = TranslationUtils.extractStringKeys( simHtml );
@@ -273,44 +274,32 @@ module.exports.renderTranslationPage = async function( req, res ) {
   const simSha = TranslationUtils.extractSimSha( simHtml, simName );
   winston.debug( 'sim sha: ' + simSha );
 
-  const englishStrings = {}; // object to hold the English strings
-  const fileRetrievalPromises = [];
-
   // initialize the sims array from the active-sims file in chipper
   winston.debug( 'sending request to ' + GITHUB_RAW_FILE_URL_BASE + activeSimsPath );
-  const response = await fetch( GITHUB_RAW_FILE_URL_BASE + activeSimsPath );
+  const activeSimsFileFetchResponse = await nodeFetch( GITHUB_RAW_FILE_URL_BASE + activeSimsPath );
+  const activeSimsFileContents = await activeSimsFileFetchResponse.text();
+  const activeSims = activeSimsFileContents.toString().split( '\n' );
 
-  fileRetrievalPromises.push( response.text().then( body => {
-      sims = body.toString().split( '\n' );
-    } )
-  );
+  // retrieve all of the English and previously translated strings for this this sim from long-term storage
+  const englishStrings = {}; // object to hold the English strings
+  req.session.translatedStrings[ targetLocale ] = req.session.translatedStrings[ targetLocale ] || {};
+  extractedStringKeySets.forEach( async extractedStringKeysObject => {
 
-  // create a request to retrieve each of the needed English string files
-  extractedStringKeySets.forEach( function( extractedStringKeysObject ) {
     const projectName = extractedStringKeysObject.projectName;
-    const repoSha = ( projectName === simName ) ? simSha : 'master';
-    const stringsFilePath = GITHUB_RAW_FILE_URL_BASE + '/phetsims/' + projectName + '/' + repoSha + '/' + projectName +
-                            '-strings_en.json';
-    const translatedStringsPath = GITHUB_RAW_FILE_URL_BASE + '/phetsims/babel/' + global.config.babelBranch + '/' +
-                                  projectName + '/' + projectName + '-strings_' + targetLocale + '.json';
 
-    // request the english strings from GitHub
-    fileRetrievalPromises.push( TranslationUtils.getGhStrings( stringsFilePath, englishStrings, projectName, true ) );
-
-    // request the already existing translated strings from GitHub, which may or may not exist
-    req.session.translatedStrings[ targetLocale ] = req.session.translatedStrings[ targetLocale ] || {};
-    fileRetrievalPromises.push( TranslationUtils.getGhStrings(
-      translatedStringsPath,
-      req.session.translatedStrings[ targetLocale ],
+    // get the English strings
+    // TODO: This should be using a SHA for the common code strings, see https://github.com/phetsims/rosetta/issues/219
+    englishStrings[ projectName ] = await LongTermStringStorage.getEnglishStrings(
       projectName,
-      false
-    ) );
+      ( projectName === simName ) ? simSha : 'master'
+    );
+
+    // get the previously translated strings for the target locale, if any
+    req.session.translatedStrings[ targetLocale ][ projectName ] =
+      await LongTermStringStorage.getTranslatedStrings( projectName, targetLocale );
   } );
 
-  // wait until all files have been retrieved before moving to the next step
-  await Promise.all( fileRetrievalPromises );
-
-  winston.info( 'files needed for rendering the translation page retrieved from GitHub' );
+  winston.info( 'files needed for rendering the translation page retrieved from long term storage' );
 
   const currentSimStringsArray = [];
   const simStringsArray = [];
@@ -320,6 +309,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
   // The user may have previously saved uncommitted strings and, if so, they are stored in a postgres database.  Start
   // checking for this by initializing an empty object with this information.
   // TODO: There should by a simple call to get the saved strings, and the code should be in a separate file.
+  const pool = new Pool();
   let repositories = '';
   const savedStrings = {};
   _.times( extractedStringKeySets.length, i => {
@@ -358,7 +348,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
   // load saved strings from database to saveStrings object if there are any
   if ( rows && rows.length > 0 ) {
     winston.info( 'using ' + rows.length + ' saved strings' );
-    for ( i = 0; i < rows.length; i++ ) {
+    for ( let i = 0; i < rows.length; i++ ) {
       const row = rows[ i ];
       savedStrings[ row.repository ][ row.stringkey ] = row.stringvalue;
     }
@@ -367,7 +357,8 @@ module.exports.renderTranslationPage = async function( req, res ) {
   let simTitle; // sim title gets filled in here (e.g. Area Builder instead of area-builder)
   const otherSims = []; // other sim dependencies get filled in here (e.g. beers-law-lab when translating concentration)
 
-  // iterate over all projects from which this sim draws strings
+  // Iterate over all projects from which this sim draws strings and start organizing the strings into the format needed
+  // by the HTML template that will present the strings to the user.
   _.times( extractedStringKeySets.length, i => {
     const project = extractedStringKeySets[ i ];
     const strings = englishStrings[ project.projectName ];
@@ -379,7 +370,9 @@ module.exports.renderTranslationPage = async function( req, res ) {
       simTitle = strings[ project.projectName + '.title' ] && strings[ project.projectName + '.title' ].value;
       array = currentSimStringsArray;
     }
-    else if ( _.includes( sims, project.projectName ) ) {
+    else if ( _.includes( activeSims, project.projectName ) ) {
+
+      // if this is another sim an not a common code repo, it is presented to the user somewhat differently
       otherSims.push( project.projectName );
       array = simStringsArray;
     }

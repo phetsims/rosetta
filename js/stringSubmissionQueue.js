@@ -11,7 +11,7 @@
 'use strict';
 
 // modules
-const _ = require( 'underscore' ); // eslint-disable-line
+const _ = require( 'lodash' ); // eslint-disable-line
 const LongTermStringStorage = require( './LongTermStringStorage' );
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const { Pool } = require( 'pg' ); // eslint-disable-line
@@ -116,9 +116,9 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
 
   // save the modified strings to long-term storage
   const stringSavePromises = [];
-  _.keys( await changedStringSets ).forEach( simOrLibName => {
+  _.keys( changedStringSets ).forEach( simOrLibName => {
     stringSavePromises.push(
-      LongTermStringStorage.saveStrings( simOrLibName, targetLocale, changedStringSets[ simOrLibName ] )
+      LongTermStringStorage.saveTranslatedStrings( simOrLibName, targetLocale, changedStringSets[ simOrLibName ] )
     );
   } );
 

@@ -11,6 +11,7 @@
     "express": "^4.16.2",
     "express-dot": "^0.1.0",
     "express-session": "^1.15.6",
+    "lodash": "^4.17.15",
     "minimist": "^1.2.0",
     "node-fetch": "^1.7.3",
     "octonode": "^0.9.1",
@@ -18,7 +19,6 @@
     "pg": "^7.14.0",
     "promise-queue": "^2.2.3",
     "request": "^2.83.0",
-    "underscore": "^1.8.3",
     "winston": "^3.2.1"
   },
   "devDependencies": {

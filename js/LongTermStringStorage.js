@@ -15,7 +15,8 @@
 'use strict';
 
 // modules
-const _ = require( 'underscore' ); // eslint-disable-line
+const _ = require( 'lodash' ); // eslint-disable-line
+const assert = require( 'assert' );
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const octonode = require( 'octonode' );
 const Queue = require( 'promise-queue' ); // eslint-disable-line
@@ -23,16 +24,16 @@ const RosettaConstants = require( './RosettaConstants' );
 const winston = require( 'winston' );
 
 // constants
-const PREFERENCES = global.config;
-const BRANCH = PREFERENCES.babelBranch || 'master';
-const BASE_URL_FOR_RAW_FILES = RosettaConstants.GITHUB_RAW_FILE_URL_BASE + '/phetsims/babel/' + BRANCH + '/';
-const SKIP_STRING_COMMITS = typeof PREFERENCES.debugRosettaSkipStringCommits !== 'undefined' &&
-                            PREFERENCES.debugRosettaSkipStringCommits === 'true';
+const CONFIG = global.config;
+const BABEL_BRANCH = global.config.babelBranch || 'master';
+const BASE_URL_FOR_TRANSLATED_STRINGS = RosettaConstants.GITHUB_RAW_FILE_URL_BASE + '/phetsims/babel/' + BABEL_BRANCH + '/';
+const SKIP_STRING_COMMITS = typeof CONFIG.debugRosettaSkipStringCommits !== 'undefined' &&
+                            CONFIG.debugRosettaSkipStringCommits === 'true';
 
 // create a handle to GitHub that will be used for all interactions
 const ghClient = octonode.client( {
-  username: PREFERENCES.githubUsername,
-  password: PREFERENCES.githubPassword
+  username: CONFIG.githubUsername,
+  password: CONFIG.githubPassword
 } );
 
 // create a handle to the repo where strings are stored
@@ -42,29 +43,66 @@ const stringStorageRepo = ghClient.repo( 'phetsims/babel' );
 const promiseQueue = new Queue( 1, 1000 );
 
 /**
- * retrieve the stored strings for the given locale and repo
- * @param {string} simOrLibName - name of the simulation or common-code repository where the untranslated strings reside
+ * retrieve the translated strings, if any, for the given locale and repo
+ * @param {string} simOrLibName - name of the simulation or common-code repository where the translated strings reside
  * @param {string} locale
  * @returns {Promise.<string>}
- * @public
  */
-async function getStrings( simOrLibName, locale ) {
+async function getTranslatedStrings( simOrLibName, locale ) {
 
-  // it is faster and simpler to pull the strings directly from the raw URL than to use the octonode client
-  const rawStringFileURL = BASE_URL_FOR_RAW_FILES + simOrLibName + '/' + simOrLibName + '-strings_' + locale + '.json';
+  // parameter checking
+  assert( locale !== 'en', 'this function should not be used for retrieving English strings' );
+
+  const rawStringFileURL = BASE_URL_FOR_TRANSLATED_STRINGS + simOrLibName + '/' + simOrLibName + '-strings_' + locale + '.json';
   winston.info( 'requesting raw file from GitHub, URL = ' + rawStringFileURL );
 
   // get the file from GitHub
-  // TODO: Why is compress set to false?  Try getting rid of that option and see if things still work.
+  // TODO: Try enabling compression, see https://github.com/phetsims/rosetta/issues/220
   const response = await nodeFetch( rawStringFileURL, { compress: false } );
 
   // handle the response
   if ( response.status === 200 ) {
 
     // the file was obtained successfully
+    winston.debug( 'successfully retrieved raw file ' + rawStringFileURL );
     return response.json();
   }
   else if ( response.status === 404 ) {
+
+    // This is okay, it just means that no translation exists yet.  Return an empty object.
+    winston.debug( 'no string file found for translation, returning empty object, filename = ' + rawStringFileURL );
+    return Promise.resolve( {} );
+  }
+  else {
+    return Promise.reject( new Error( 'error getting strings (response.status = ' + response.status ) + ')' );
+  }
+}
+
+/**
+ * retrieve the English strings for a simulation or common-code library
+ * @param {string} simOrLibName - name of the simulation or common-code repository where the untranslated strings reside
+ * @param {string} shaOrBranch
+ * @returns {Promise.<string>}
+ */
+async function getEnglishStrings( simOrLibName, shaOrBranch = 'master' ) {
+
+  const rawStringFileURL = RosettaConstants.GITHUB_RAW_FILE_URL_BASE + '/phetsims/' + simOrLibName + '/' +
+                           shaOrBranch + '/' + simOrLibName + '-strings_en.json';
+  winston.info( 'requesting English strings file from GitHub, URL = ' + rawStringFileURL );
+
+  // get the file from GitHub
+  // TODO: Try enabling compression, see https://github.com/phetsims/rosetta/issues/220
+  const response = await nodeFetch( rawStringFileURL, { compress: false } );
+
+  // handle the response
+  if ( response.status === 200 ) {
+
+    // the file was obtained successfully
+    winston.debug( 'successfully retrieved raw file ' + rawStringFileURL );
+    return response.json();
+  }
+  else if ( response.status === 404 ) {
+    winston.debug( 'error retrieving raw file ' + rawStringFileURL );
     return Promise.reject( new Error( 'file not found (response.status = ' + response.status ) + ')' );
   }
   else {
@@ -81,7 +119,7 @@ async function getStrings( simOrLibName, locale ) {
  * @public
  */
 async function stringsMatch( simOrLibName, locale, strings ) {
-  const retrievedStrings = await getStrings( simOrLibName, locale );
+  const retrievedStrings = await getTranslatedStrings( simOrLibName, locale );
   return _.isEqual( strings, retrievedStrings );
 }
 
@@ -93,11 +131,16 @@ async function stringsMatch( simOrLibName, locale, strings ) {
  * @returns {Promise.<Object>}
  * @public
  */
-function saveStrings( simOrLibName, locale, strings ) {
+function saveTranslatedStrings( simOrLibName, locale, strings ) {
+
+  // the locale should never be English, since this is saving strings to GitHub
+  assert( locale !== 'en', 'this function should not be used for saving English strings' );
+
+  winston.debug( 'saveTranslatedStrings called, simOrLibName = ' + simOrLibName + ', locale = ' + locale );
   const filePath = simOrLibName + '/' + simOrLibName + '-strings_' + locale + '.json';
   const stringsInJson = JSON.stringify( strings, null, 2 );
   const commitMessage = 'automated commit from rosetta for sim/lib ' + simOrLibName + ', locale ' + locale;
-  return promiseQueue.add( function(){ return saveFileToGitHub( filePath, stringsInJson, commitMessage ); } );
+  return promiseQueue.add( () => saveFileToGitHub( filePath, stringsInJson, commitMessage ) );
 }
 
 /**
@@ -117,12 +160,12 @@ function saveFileToGitHub( filePath, contents, commitMessage ) {
     if ( !SKIP_STRING_COMMITS ){
 
       // test if the file already exists
-      stringStorageRepo.contents( filePath, BRANCH, function( err, data ) {
+      stringStorageRepo.contents( filePath, BABEL_BRANCH, function( err, data ) {
 
         if ( !err ) {
 
           // update the existing file in GitHub
-          stringStorageRepo.updateContents( filePath, commitMessage, contents, data.sha, BRANCH, function( err, data ) {
+          stringStorageRepo.updateContents( filePath, commitMessage, contents, data.sha, BABEL_BRANCH, function( err, data ) {
             if ( !err ) {
               winston.info( 'successfully committed changes for file ' + filePath );
               resolve( data );
@@ -136,7 +179,7 @@ function saveFileToGitHub( filePath, contents, commitMessage ) {
         else {
 
           // create a new file in GitHub
-          stringStorageRepo.createContents( filePath, commitMessage, contents, BRANCH, function( err, data ) {
+          stringStorageRepo.createContents( filePath, commitMessage, contents, BABEL_BRANCH, function( err, data ) {
             if ( !err ) {
               winston.info( 'successfully created file ' + filePath );
               resolve( data );
@@ -162,7 +205,8 @@ function saveFileToGitHub( filePath, contents, commitMessage ) {
 
 // export the functions for getting and setting the strings
 module.exports = {
-  getStrings: getStrings,
+  getEnglishStrings: getEnglishStrings,
+  getTranslatedStrings: getTranslatedStrings,
   stringsMatch: stringsMatch,
-  saveStrings: saveStrings
+  saveTranslatedStrings: saveTranslatedStrings
 };

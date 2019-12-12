@@ -9,7 +9,7 @@
 
 'use strict';
 
-const _ = require( 'underscore' ); // eslint-disable-line
+const _ = require( 'lodash' ); // eslint-disable-line
 const email = require( 'emailjs/email' );
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const RosettaConstants = require( './RosettaConstants' );
@@ -174,37 +174,6 @@ function stringify( data ) {
 }
 
 /**
- * request the strings from Github
- * @param {string} url - URL at GitHub where the string file is stored in JSON format
- * @param {Object} stringsObject - object where the strings will be stored
- * @param {string} projectName
- * @param {boolean} isEnglishStrings
- * @returns {Promise.<string>}
- */
-async function getGhStrings( url, stringsObject, projectName, isEnglishStrings ) {
-  winston.info( 'sending request to ' + url );
-  const response = await nodeFetch( url );
-
-  return response.text().then( body => {
-    if ( response.status === 200 ) {
-      stringsObject[ projectName ] = JSON.parse( body );
-      winston.info( 'request for ' + url + ' returned successfully' );
-    }
-    else if ( response.status === 404 && !isEnglishStrings ) {
-      stringsObject[ projectName ] = {};
-    }
-    else if ( !isEnglishStrings ) {
-      stringsObject[ projectName ] = {};
-      winston.info( 'request for ' + url + 'failed, response code = ' + response.status );
-    }
-    else {
-      winston.error( 'request for english strings for project ' + projectName + ' failed. Response code: ' +
-                     response.status + '. URL: ' + url + '. Error: ' + response.error );
-    }
-  } );
-}
-
-/**
  * get the URL for this sim, does not check if sim exists
  * @param simName
  */
@@ -244,7 +213,6 @@ module.exports = {
   escapeHTML: escapeHTML,
   extractSimSha: extractSimSha,
   extractStringKeys: extractStringKeys,
-  getGhStrings: getGhStrings,
   getLatestSimHtml: getLatestSimHtml,
   renderError: renderError,
   sendEmail: sendEmail,

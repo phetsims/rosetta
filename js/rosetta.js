@@ -38,7 +38,7 @@ const consoleTransport = new winston.transports.Console( {
     format.timestamp( {
       format: 'YYYY-MM-DD HH:mm:ss'
     } ),
-    format.printf( i => `${i.timestamp} | ${i.message}` )
+    format.printf( i => `${i.timestamp} | ${i.level} - ${i.message}` )
   )
 } );
 winston.add( consoleTransport );

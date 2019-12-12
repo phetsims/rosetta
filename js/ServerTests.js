@@ -7,7 +7,7 @@
 'use strict';
 
 // modules
-const _ = require( 'underscore' ); // eslint-disable-line
+const _ = require( 'lodash' ); // eslint-disable-line
 const LongTermStringStorage = require( './LongTermStringStorage' );
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const winston = require( 'winston' );
@@ -44,7 +44,7 @@ const testHandlers = {
     stringFilesToRetrieve.forEach( function( stringFileSpec ) {
 
       stringRetrievalPromises.push(
-        LongTermStringStorage.getStrings( stringFileSpec.repoName, stringFileSpec.locale )
+        LongTermStringStorage.getTranslatedStrings( stringFileSpec.repoName, stringFileSpec.locale )
           .then( () => {
               if ( stringFileSpec.expectedToExist ) {
                 winston.log(
@@ -111,7 +111,7 @@ const testHandlers = {
     const stringComparePromises = [];
 
     // compare the strings with a completely different set, and make sure that they don't match
-    stringComparePromises.push( LongTermStringStorage.getStrings( 'arithmetic', 'es' )
+    stringComparePromises.push( LongTermStringStorage.getTranslatedStrings( 'arithmetic', 'es' )
       .then( strings => {
 
         return LongTermStringStorage.stringsMatch( 'arithmetic', 'fr', strings )
@@ -128,7 +128,7 @@ const testHandlers = {
     );
 
     // compare the strings with the same ones, and make sure they match
-    stringComparePromises.push( LongTermStringStorage.getStrings( 'arithmetic', 'es' )
+    stringComparePromises.push( LongTermStringStorage.getTranslatedStrings( 'arithmetic', 'es' )
       .then( strings => {
 
         return LongTermStringStorage.stringsMatch( 'arithmetic', 'es', strings )
@@ -145,7 +145,7 @@ const testHandlers = {
     );
 
     // make a change to one string, then compare, make sure they don't match
-    stringComparePromises.push( LongTermStringStorage.getStrings( 'arithmetic', 'es' )
+    stringComparePromises.push( LongTermStringStorage.getTranslatedStrings( 'arithmetic', 'es' )
       .then( strings => {
 
         const firstKey = _.keys( strings )[ 0 ];
@@ -189,7 +189,7 @@ const testHandlers = {
     // get the strings, then modify them
     locales.forEach( function( locale ) {
       winston.info( 'getting strings for sim ' + simName + ', locale ' + locale );
-      const modifyStringsPromise = LongTermStringStorage.getStrings( simName, locale )
+      const modifyStringsPromise = LongTermStringStorage.getTranslatedStrings( simName, locale )
         .then( strings => {
 
           // modify the first string to have a snapshot of the epoch number at the end, e.g. "My Sim---5409483029"
@@ -205,7 +205,7 @@ const testHandlers = {
         .then( strings => {
 
           // save the modified strings to the long term storage area
-          return LongTermStringStorage.saveStrings( simName, locale, strings );
+          return LongTermStringStorage.saveTranslatedStrings( simName, locale, strings );
         } );
       stringChangePromises.push( modifyStringsPromise );
     } );
