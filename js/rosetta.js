@@ -59,6 +59,8 @@ catch( err ) {
 // get the configuration information and assign it to a global, this also sets up some process variables
 global.config = getConfig();
 
+winston.info( 'config = ' + JSON.stringify( global.config, null, 2 ) );
+
 // update the logging level in case it was set in the config info
 consoleTransport.level = global.config.loggingLevel;
 

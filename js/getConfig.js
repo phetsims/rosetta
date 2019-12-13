@@ -114,6 +114,10 @@ module.exports = function() {
     'babelBranch must be set to either master or tests'
   );
 
+  // set values of some parameters that are used for debug and test
+  config.performStringCommits = config.performStringCommits === undefined ? true : config.performStringCommits;
+  config.sendBuildRequests = config.sendBuildRequests === undefined ? true : config.sendBuildRequests;
+
   // log a warning if Rosetta is disabled
   if ( !config.enabled ) {
     winston.warn( 'the translation utility is disabled, no interaction will be possible' );

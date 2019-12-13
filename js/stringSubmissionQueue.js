@@ -21,8 +21,9 @@ const winston = require( 'winston' );
 
 // constants
 const PRODUCTION_SERVER_URL = RosettaConstants.PRODUCTION_SERVER_URL;
-const SKIP_BUILD_REQUEST = typeof global.config.debugRosettaSkipBuildRequest !== 'undefined' &&
-                           global.config.debugRosettaSkipBuildRequest === 'true';
+
+// for debug purposes, it is possible to configure Rosetta to skip sending build requests to the build server
+const SEND_BUILD_REQUESTS = global.config.sendBuildRequests === undefined ? true : global.config.sendBuildRequests;
 
 /**
  * task queue into which translation requests are pushed
@@ -57,28 +58,23 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
     }
 
     // get the value of the string
-    const stringValue = req.body[ submittedStringKey ];
+    let stringValue = req.body[ submittedStringKey ];
+
+    // Handle any embedded line feeds.  There is some history here, please see
+    // https://github.com/phetsims/rosetta/issues/144 and https://github.com/phetsims/rosetta/issues/207.  The best
+    // thing to do going forward is to always use <br> in multi-line strings instead of '\n', this code is here to
+    // handle older sims in which '\n' was used in multi-line strings.
+    if ( stringValue.indexOf( '\\n' ) !== -1 ) {
+      winston.info( 'replacing line feed sequence in string from repo ' + repo + ' with key ' + stringKey );
+      stringValue = stringValue.replace( /\\n/g, '\n' );
+    }
 
     // check if the string is already in translatedStrings to get the history if it exists
     const translatedString = req.session.translatedStrings[ targetLocale ] &&
                            req.session.translatedStrings[ targetLocale ][ repo ] &&
                            req.session.translatedStrings[ targetLocale ][ repo ][ stringKey ];
     let history = translatedString && translatedString.history;
-    let oldValue = ( history && history.length ) ? history[ history.length - 1 ].newValue : '';
-
-    // handle special case of multi-line string
-    if ( oldValue.indexOf( '\n' ) > -1 ) {
-      // TODO: temp debug code for issue #144, remove once issue is resolved.
-      winston.info( 'detected multi-line string' );
-      winston.info( 'oldValue = ' + oldValue );
-      winston.info( 'prior to replace operation, oldValue === stringValue = ' + ( oldValue === stringValue ) );
-      // TODO: end of first debug code section
-      oldValue = oldValue.replace( /\n/g, '\\n' );
-      // TODO: temp debug code for issue #144, remove once issue is resolved.
-      winston.info( 'oldValue (after replace operation) = ' + oldValue );
-      winston.info( 'after the replace operation, oldValue === stringValue = ' + ( oldValue === stringValue ) );
-      // TODO: end of second debug code section
-    }
+    const oldValue = ( history && history.length ) ? history[ history.length - 1 ].newValue : '';
 
     // only add the update if the value has changed
     if ( oldValue !== stringValue ) {
@@ -129,8 +125,6 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
       // request the build from the build server
       requestBuild( simName, userId, targetLocale )
         .then( () => {
-
-          winston.info( 'build request successfully submitted to build server' );
 
           // render the page that indicates that the translation was successfully submitted
           res.render( 'translation-submit.html', {
@@ -247,7 +241,7 @@ async function requestBuild( simName, userID, locale ) {
 
   const url = PRODUCTION_SERVER_URL + '/deploy-html-simulation';
 
-  if ( !SKIP_BUILD_REQUEST ) {
+  if ( SEND_BUILD_REQUESTS ) {
 
     winston.info( 'sending build request to server, URL = ' + url );
 

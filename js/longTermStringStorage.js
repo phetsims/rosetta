@@ -28,8 +28,9 @@ const winston = require( 'winston' );
 const CONFIG = global.config;
 const BABEL_BRANCH = global.config.babelBranch || 'master';
 const BASE_URL_FOR_TRANSLATED_STRINGS = RosettaConstants.GITHUB_RAW_FILE_URL_BASE + '/phetsims/babel/' + BABEL_BRANCH + '/';
-const SKIP_STRING_COMMITS = typeof CONFIG.debugRosettaSkipStringCommits !== 'undefined' &&
-                            CONFIG.debugRosettaSkipStringCommits === 'true';
+
+// for debug purposes, it is possible to set up the config file such that strings are not actually committed
+const PERFORM_STRING_COMMITS = CONFIG.performStringCommits;
 
 // create a handle to GitHub that will be used for all interactions
 const ghClient = octonode.client( {
@@ -158,7 +159,7 @@ function saveFileToGitHub( filePath, contents, commitMessage ) {
   // wrap the async calls that interact with GitHub into a promise
   return new Promise( function( resolve, reject ) {
 
-    if ( !SKIP_STRING_COMMITS ){
+    if ( PERFORM_STRING_COMMITS ) {
 
       // test if the file already exists
       stringStorageRepo.contents( filePath, BABEL_BRANCH, function( err, data ) {
