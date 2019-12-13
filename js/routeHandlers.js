@@ -364,7 +364,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
     const strings = englishStrings[ project.projectName ];
     const previouslyTranslatedStrings = req.session.translatedStrings[ targetLocale ][ project.projectName ];
 
-    // compile and organize the string information as needed so that it can be presented to the user
+    // put the strings into different arrays depending on whether they are from the sim, a shared sim, or common code
     let array;
     if ( project.projectName === simName ) {
       simTitle = strings[ project.projectName + '.title' ] && strings[ project.projectName + '.title' ].value;
@@ -380,8 +380,18 @@ module.exports.renderTranslationPage = async function( req, res ) {
       array = commonStringsArray;
     }
 
+    // Loop through the strings, deciding whether they should be presented to the user and, if so, set up the
+    // appropriate information for the HTML template.
     for ( let j = 0; j < project.stringKeys.length; j++ ) {
       const key = project.stringKeys[ j ];
+
+      // If this is an accessibility (a11y) string, skip it so that it is not presented to the user.  The translation of
+      // accessibility strings will be supported someday, just not quite yes. Please see
+      // https://github.com/phetsims/rosetta/issues/214 for more information.
+      if ( key.indexOf( 'a11y.' ) === 0 ) {
+        winston.info( 'intentionally skipping a11y string (will not be presented to user): ' + key );
+        continue;
+      }
 
       const stringVisible = strings.hasOwnProperty( key ) &&
                             ( ( strings[ key ].visible === undefined ) ? true : strings[ key ].visible );
