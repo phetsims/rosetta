@@ -83,7 +83,7 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
         timestamp: Date.now(),
         oldValue: oldValue,
         newValue: stringValue,
-        explanation: null // TODO
+        explanation: null // TODO - add support for explanations to Rosetta
       };
 
       if ( history ) {
@@ -118,47 +118,34 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
     );
   } );
 
-  // when all the save operations are complete, build the new or updated translation
-  return Promise.all( stringSavePromises )
-    .then( results => {
+  try {
 
-      // request the build from the build server
-      requestBuild( simName, userId, targetLocale )
-        .then( () => {
+    // wait for all the save operations to complete
+    await Promise.all( stringSavePromises );
 
-          // render the page that indicates that the translation was successfully submitted
-          res.render( 'translation-submit.html', {
-            title: 'Translation submitted',
-            simName: simName,
-            targetLocale: targetLocale
-          } );
-        } )
-        .catch( err => {
+    // request a build of the new translation
+    await requestBuild( simName, userId, targetLocale );
 
-          winston.error( 'problem building translation, err = ' + err );
+    // clear out short-term storage, since these strings have now been successfully stored in the long-term area
+    await deleteStringsFromDB( userId, targetLocale, _.keys( stringSets ) ).catch();
 
-          // render an error page
-          res.render( 'error.html', {
-            title: 'Translation Utility Error',
-            message: 'An error occurred when trying to build and deploy the translation.',
-            errorDetails: err,
-            timestamp: new Date().getTime()
-          } );
-        } );
-
-      // clear out short-term storage, since these strings were successfully stored in the long-term area
-      deleteStringsFromDB( userId, targetLocale, _.keys( stringSets ) ).catch(  );
-    } )
-    .catch( err => {
-
-      // render an error page
-      res.render( 'error.html', {
-        title: 'Translation Utility Error',
-        message: 'An error occurred when trying to save the translated strings.',
-        errorDetails: err,
-        timestamp: new Date().getTime()
-      } );
+    // render the page that indicates that the translation was successfully submitted
+    res.render( 'translation-submit.html', {
+      title: 'Translation submitted',
+      simName: simName,
+      targetLocale: targetLocale
     } );
+  }
+  catch( err ) {
+
+    // render an error page
+    res.render( 'error.html', {
+      title: 'Translation Utility Error',
+      message: 'An error occurred when trying to save the translated strings.',
+      errorDetails: err,
+      timestamp: new Date().getTime()
+    } );
+  }
 };
 
 /**
