@@ -213,13 +213,20 @@ async function deleteStringsFromDB( userID, locale, simOrLibNames ) {
  * @returns {Promise.<string>} - JSON data with dependencies
  */
 async function getDependencies( simName, version ) {
-  const URL = PRODUCTION_SERVER_URL +
+
+  // compose the URL where the dependencies should be
+  const url = PRODUCTION_SERVER_URL +
               '/sims/html/' +
               simName +
               '/' +
               version +
               '/dependencies.json';
-  const response = await nodeFetch( URL );
+
+  // get the dependencies
+  winston.info( 'fetching dependencies from ' + url );
+  const response = await nodeFetch( url );
+
+  // return the results or throw an error
   if ( response.status === 200 ) {
     return await response.text();
   }
