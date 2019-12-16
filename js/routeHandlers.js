@@ -283,7 +283,8 @@ module.exports.renderTranslationPage = async function( req, res ) {
   // retrieve all of the English and previously translated strings for this this sim from long-term storage
   const englishStrings = {}; // object to hold the English strings
   req.session.translatedStrings[ targetLocale ] = req.session.translatedStrings[ targetLocale ] || {};
-  extractedStringKeySets.forEach( async extractedStringKeysObject => {
+  for ( let i = 0; i < extractedStringKeySets.length; i++ ) {
+    const extractedStringKeysObject = extractedStringKeySets[ i ];
 
     const projectName = extractedStringKeysObject.projectName;
 
@@ -294,10 +295,9 @@ module.exports.renderTranslationPage = async function( req, res ) {
       ( projectName === simName ) ? simSha : 'master'
     );
 
-    // get the previously translated strings for the target locale, if any
     req.session.translatedStrings[ targetLocale ][ projectName ] =
       await longTermStringStorage.getTranslatedStrings( projectName, targetLocale );
-  } );
+  }
 
   winston.info( 'files needed for rendering the translation page retrieved from long term storage' );
 
@@ -335,7 +335,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
       // execute the query using the template query string and parameters for user ID and target locale
       const queryResponse = await pool.query( savedStringsQuery, [ userId, targetLocale ] );
       rows = queryResponse.rows;
-      winston.info( 'retrieval of strings succeeded' );
+      winston.info( 'retrieval of previously-saved-but-not-submitted strings succeeded' );
     }
     catch( err ) {
       winston.error( 'retrieval of previously-saved-but-not-submitted strings failed, err = ' + err );
