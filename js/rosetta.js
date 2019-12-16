@@ -28,7 +28,8 @@ const { format } = winston;
 process.on( 'unhandledRejection', error => {
 
   // generally, this shouldn't happen, so if these are in the log they should be tracked down and fixed
-  winston.error( 'unhandled rejection, error.message =', error.message );
+  winston.error( 'unhandled rejection, error.message = ' + error.message );
+  winston.error( 'stack = ' + error.stack );
 } );
 
 // configure the logger - this uses the default logging level, which may be updated once the configuration is read

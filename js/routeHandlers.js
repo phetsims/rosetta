@@ -338,7 +338,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
       winston.info( 'retrieval of strings succeeded' );
     }
     catch( err ) {
-      winston.error( 'retrieval of strings failed, err = ' + err );
+      winston.error( 'retrieval of previously-saved-but-not-submitted strings failed, err = ' + err );
     }
   }
   catch( err ) {
