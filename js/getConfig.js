@@ -18,7 +18,6 @@ const winston = require( 'winston' );
 
 // constants
 const CONFIG_DIR = '/.phet';
-const COMMON_CONFIG_FILE_NAME = 'build-local.json';
 const ROSETTA_CONFIG_FILE_NAME = 'rosetta-config.json';
 
 module.exports = function() {
@@ -39,34 +38,29 @@ module.exports = function() {
     // returning the home directory of the user who is starting the process, not phet-admin's home directory.
     configDirPath = passwdUser.sync( process.getuid() ).homedir + CONFIG_DIR + '/';
   }
-  const commonConfigFileName = configDirPath + COMMON_CONFIG_FILE_NAME;
   const rosettaConfigFileName = configDirPath + ROSETTA_CONFIG_FILE_NAME;
 
-  winston.info( 'common config file full path and name: ' + commonConfigFileName );
-  winston.info( 'rosetta-specific config file full path and name: ' + rosettaConfigFileName );
+  winston.info( 'rosetta config file full path and name: ' + rosettaConfigFileName );
 
   // ensure that the config files exist
-  assert( fs.existsSync( commonConfigFileName ), 'config file not found: ' + commonConfigFileName );
   assert( fs.existsSync( rosettaConfigFileName ), 'config file not found: ' + rosettaConfigFileName );
 
-  // read the common config file and verify that the needed information is present
-  const configJSON = fs.readFileSync( commonConfigFileName );
+  // read the config file and verify that the needed information is present
+  const configJSON = fs.readFileSync( rosettaConfigFileName );
   const config = JSON.parse( configJSON );
-  assert( config.githubUsername, 'githubUsername is missing from ' + commonConfigFileName );
-  assert( config.githubPassword, 'githubPassword is missing from ' + commonConfigFileName );
-  assert( config.buildServerAuthorizationCode, 'buildServerAuthorizationCode is missing from ' + commonConfigFileName );
-  assert( config.serverToken, 'serverToken is missing from ' + commonConfigFileName );
 
-  // use default server info if not supplied
+  // credentials needed to save files to GitHub, must be preset
+  assert( config.githubUsername, 'githubUsername is missing from ' + rosettaConfigFileName );
+  assert( config.githubPassword, 'githubPassword is missing from ' + rosettaConfigFileName );
+
+  // credentials needed to request builds and retrieve metadata, must be present
+  assert( config.buildServerAuthorizationCode, 'buildServerAuthorizationCode is missing from ' + rosettaConfigFileName );
+  assert( config.serverToken, 'serverToken is missing from ' + rosettaConfigFileName );
+
+  // The "production server" is the server from which sims and sim metadata are retrieved as well as the place where
+  // build requests are sent once a new translation has been submitted.  Default to the main server if no value is
+  // provided.
   config.productionServerURL = config.productionServerURL || 'https://phet.colorado.edu';
-  config.productionServerName = config.productionServerName || 'phet-server.int.colorado.edu';
-
-  // read the rosetta-specific config file
-  const rosettaSpecificConfigJSON = fs.readFileSync( rosettaConfigFileName );
-  const rosettaSpecificConfig = JSON.parse( rosettaSpecificConfigJSON );
-
-  // merge the rosetta-specific configuration fields with the common configuration field
-  _.merge( config, rosettaSpecificConfig );
 
   // The enabled field isn't required in the config file, and its default value is true.  It can be set to 'false' in
   // the file in order to put up a sort of "Translation not available" message.
@@ -83,7 +77,7 @@ module.exports = function() {
     '. To set this up for local testing add any string as the value for "rosettaSessionSecret"'
   );
 
-  // verify that the information necessary for connecting to the short-term-string-storage database is available
+  // verify that the information necessary for connecting to the short-term-string-storage database is present
   assert( config.stringStorageDbHost, `stringStorageDbHost is missing from ${rosettaConfigFileName}` );
   assert( config.stringStorageDbPort, `stringStorageDbPort is missing from ${rosettaConfigFileName}` );
   assert( config.stringStorageDbName, `stringStorageDbName is missing from ${rosettaConfigFileName}` );
@@ -102,11 +96,12 @@ module.exports = function() {
     PGPORT: config.stringStorageDbPort
   } );
 
-  // use the default logging level if none provided
+  // set the logging level, use the 'info' level if no value is provided
   config.loggingLevel = config.loggingLevel || 'info';
 
-  // Use the master branch if none is specified.  The branch "tests" can be specified to enable testing that doesn't
-  // affect existing translations or create ones that will get published.
+  // Set the branch of babel where translations will be stored and from whence they will be retrieved.  The value
+  // "master" is the default if nothing is explicitly specified.  The branch "tests" can be specified to enable testing
+  // that doesn't affect existing translations.
   config.babelBranch = config.babelBranch || 'master';
 
   assert(
@@ -114,8 +109,15 @@ module.exports = function() {
     'babelBranch must be set to either master or tests'
   );
 
-  // set values of some parameters that are used for debug and test
+  // It is sometimes desirable when debugging to turn off all commits of translated strings to GitHub, especially if a
+  // lot of testing is being done and having all the resulting commits in GitHub would be more distracting than truly
+  // valuable.  This configuration parameter allows string commits to be skipped, and the information about them will
+  // just be logged instead.
   config.performStringCommits = config.performStringCommits === undefined ? true : config.performStringCommits;
+
+  // It is sometimes desirable when debugging to turn off the build requests that are sent to the build server when a
+  // translation is successfully submitted.  This configuration parameter can be used to tell the code to skip sending
+  // the build requests.
   config.sendBuildRequests = config.sendBuildRequests === undefined ? true : config.sendBuildRequests;
 
   // log a warning if Rosetta is disabled
