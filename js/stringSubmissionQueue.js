@@ -71,8 +71,8 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
 
     // check if the string is already in translatedStrings to get the history if it exists
     const translatedString = req.session.translatedStrings[ targetLocale ] &&
-                           req.session.translatedStrings[ targetLocale ][ repo ] &&
-                           req.session.translatedStrings[ targetLocale ][ repo ][ stringKey ];
+                             req.session.translatedStrings[ targetLocale ][ repo ] &&
+                             req.session.translatedStrings[ targetLocale ][ repo ][ stringKey ];
     let history = translatedString && translatedString.history;
     const oldValue = ( history && history.length ) ? history[ history.length - 1 ].newValue : '';
 
@@ -118,10 +118,31 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
     );
   } );
 
+  // wait for all the save operations to complete
   try {
 
     // wait for all the save operations to complete
     await Promise.all( stringSavePromises );
+
+  }
+  catch( err ) {
+
+    winston.error( 'error while submitting strings, err = ' + err );
+    winston.info( 'rendering error page' );
+
+    // render an error page
+    res.render( 'error.html', {
+      title: 'Translation Utility Error',
+      message: 'An error occurred when trying to save the translated strings.',
+      errorDetails: err,
+      timestamp: new Date().getTime()
+    } );
+
+    // bail out
+    return;
+  }
+
+  try {
 
     // request a build of the new translation
     await requestBuild( simName, userId, targetLocale );
@@ -138,14 +159,18 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
   }
   catch( err ) {
 
+    winston.error( 'error while requesting build and clearing out DB, err = ' + err );
+    winston.info( 'rendering error page' );
+
     // render an error page
     res.render( 'error.html', {
       title: 'Translation Utility Error',
-      message: 'An error occurred when trying to save the translated strings.',
+      message: 'An error occurred when trying to build the new simulation.',
       errorDetails: err,
       timestamp: new Date().getTime()
     } );
   }
+
 };
 
 /**
