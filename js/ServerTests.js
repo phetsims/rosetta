@@ -10,6 +10,7 @@
 const _ = require( 'lodash' ); // eslint-disable-line
 const longTermStringStorage = require( './longTermStringStorage' );
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
+const simData = require( './simData' );
 const winston = require( 'winston' );
 
 // constants
@@ -219,6 +220,21 @@ const testHandlers = {
   },
 
   /**
+   * test retrieval of the sim data
+   * @returns {Object}
+   */
+  testSimData: async function() {
+    winston.info( 'testing simData' );
+
+    // Note - there is a lot of sim data, so the code below can be changed as desired to test whatever you'd like
+    const simUrl = await simData.getLiveSimUrl( 'chains' );
+    winston.info( "simUrl = " + simUrl );
+    const version = await simData.getLatestSimVersion( 'chains' );
+    winston.info( "latest version = " + version );
+    return 'success';
+  },
+
+  /**
    * temporary test, put unit tests in here as needed
    * @returns {Object}
    */
@@ -232,7 +248,7 @@ const testHandlers = {
 };
 
 /**
- * function that executes the requested test if present and output the result
+ * function that executes the requested test if present and outputs the result
  * @param {string} testID
  * @returns {Object} - {boolean} `testPass` and {string|Error} [err]
  */

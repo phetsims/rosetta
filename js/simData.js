@@ -2,13 +2,14 @@
 
 /**
  * A singleton object that contains information about the published simulations.  The specific information contained is
- * that which is needed by Rosetta, the PhET translation utility, to do its job.
+ * that which is needed by Rosetta, the PhET translation utility, to do its job.  This object is populated by obtaining
+ * sim metadata from the server where the simulations reside.
+ *
  * @author John Blanco
  */
-
 'use strict';
 
-// imports
+// modules
 const _ = require( 'lodash' ); // eslint-disable-line
 const request = require( 'request' );
 const RosettaConstants = require( './RosettaConstants' );
@@ -31,6 +32,8 @@ async function updateSimData() {
   const url = RosettaConstants.PRODUCTION_SERVER_URL +
               '/services/metadata/1.2/simulations?format=json&type=html&include-unpublished=true&summary';
 
+  winston.debug( 'updating sim data using metadata URL = ' + url );
+
   let simMetadata;
   try {
     simMetadata = await new Promise( ( resolve, reject ) => {
@@ -38,18 +41,22 @@ async function updateSimData() {
         try {
           body = JSON.parse( body );
         }
-          // the JSON object wasn't formatted right, reject
         catch( e ) {
+
+          // the JSON object wasn't formatted right, reject
           reject( e );
         }
+
         // there was some error in the request, reject
         if ( error ) {
           reject( error );
         }
+
         // there was an error processing the request
         else if ( body.error ) {
           reject( new Error( body.error ) );
         }
+
         // it's all good, resolve the promise
         else {
           resolve( body );
@@ -98,7 +105,7 @@ async function checkAndUpdateSimData() {
 
   // if a request is already in progress, return that promise
   if ( inProgressMetadataPromise ) {
-    winston.info( 'a request for metadata is in progress, waiting on that promise' );
+    winston.debug( 'a request for metadata is in progress, waiting on that promise' );
 
     try {
       await inProgressMetadataPromise;
@@ -108,7 +115,7 @@ async function checkAndUpdateSimData() {
     }
   }
   else if ( ( Date.now() - timeOfLastUpdate ) / 1000 > CACHED_DATA_VALID_TIME ) {
-    winston.info( 'sim data was stale, initiating a new request' );
+    winston.debug( 'sim data was stale, initiating a new request' );
 
     // Use the promise explicitly so that if other requests are received before this is resolved, they can also wait
     // on it.
@@ -124,7 +131,7 @@ async function checkAndUpdateSimData() {
     inProgressMetadataPromise = null; // clear out the promise for the next attempt
   }
   else {
-    winston.info( 'using cached sim info' );
+    winston.debug( 'using cached sim info' );
   }
 }
 
