@@ -228,9 +228,9 @@ const testHandlers = {
 
     // Note - there is a lot of sim data, so the code below can be changed as desired to test whatever you'd like
     const simUrl = await simData.getLiveSimUrl( 'chains' );
-    winston.info( "simUrl = " + simUrl );
+    winston.info( 'simUrl = ' + simUrl );
     const version = await simData.getLatestSimVersion( 'chains' );
-    winston.info( "latest version = " + version );
+    winston.info( 'latest version = ' + version );
     return 'success';
   },
 
