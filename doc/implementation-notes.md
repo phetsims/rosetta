@@ -60,16 +60,19 @@ updated translation.
 
 ####Debugging Notes
 
-There is a branch called 'tests' that is set up in the babel repo and is used for submitting translations without
-affecting any of the "real" translations in the master branch.  This is set using the "babelBranch" value in the
-`build-local.json` file.  It is in `build-local.json` rather than `rosetta-config.json` because this value is also used
-by the build server when building translations.
-
 When testing and debugging, it generally works best to run it on a local machine and work out major issues, then test
 on phet-server-dev, then deploy it to phet-server.  When running locally, the "Save" function is hard to get working
-since it requires a DB, so that is often just skipped.
+since it requires a DB, so that is often just skipped.  To get it to work correctly on phet-server-dev, it may be
+necessary to sync phet-server-dev to phet-dev.  As of this writing, this is done by contacting @mattpen and asking him
+to do it (see https://github.com/phetsims/website/issues/974).
 
 It can be useful to disable certain steps in the translation process while debugging so as to prevent excessive commits
 to GitHub and to prevent unneeded build requests to the build server.  The configuration parameters 
 `performStringCommits` and `sendBuildRequests` are supported.  Please look through the code to see how these are used.
 They are considered to be true if not present, so they may not be present in the configuration files on the servers.
+
+There is a branch called 'tests' that is set up in the babel repo and is used for submitting translations without
+affecting any of the "real" translations in the master branch.  This is set using the "babelBranch" value in the
+`build-local.json` file.  It is in `build-local.json` rather than `rosetta-config.json` because this value is also used
+by the build server when building translations.
+
