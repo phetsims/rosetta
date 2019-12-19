@@ -23,7 +23,7 @@ const ROSETTA_CONFIG_FILE_NAME = 'rosetta-config.json';
 
 /**
  * read configuration from the file system
- * @return {string} - runtime configuration for Rosetta
+ * @returns {string} - runtime configuration for Rosetta
  */
 module.exports = function() {
 
