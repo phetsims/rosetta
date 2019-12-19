@@ -12,7 +12,7 @@
 // modules
 const bodyParser = require( 'body-parser' ); // eslint-disable-line require-statement-match
 const childProcess = require( 'child_process' ); // eslint-disable-line require-statement-match
-const getConfig = require( './getConfig' );
+const getRosettaConfig = require( './getRosettaConfig' );
 const cookieParser = require( 'cookie-parser' ); // eslint-disable-line require-statement-match
 const doT = require( 'express-dot' ); // eslint-disable-line require-statement-match
 const express = require( 'express' );
@@ -58,7 +58,7 @@ catch( err ) {
 }
 
 // get the configuration information and assign it to a global, this also sets up some process variables
-global.config = getConfig();
+global.config = getRosettaConfig();
 
 winston.info( 'config = ' + JSON.stringify( global.config, null, 2 ) );
 
