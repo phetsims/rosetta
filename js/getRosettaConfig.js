@@ -1,10 +1,11 @@
 // Copyright 2019, University of Colorado Boulder
 
 /**
- * Read configuration information and create return an object that contains it.
+ * Read configuration information from the file system, using defaults for non-required values and throwing assertions
+ * if required information is missing, and return an object that contains the resulting configuration.
  *
- * @author Michael Kauzmann (PhET Interactive Simulations)
  * @author John Blanco (PhET Interactive Simulations)
+ * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
 'use strict';
@@ -20,6 +21,10 @@ const winston = require( 'winston' );
 const CONFIG_DIR = '/.phet';
 const ROSETTA_CONFIG_FILE_NAME = 'rosetta-config.json';
 
+/**
+ * read configuration from the file system
+ * @return {string} - runtime configuration for Rosetta
+ */
 module.exports = function() {
 
   // locate and read the config files
