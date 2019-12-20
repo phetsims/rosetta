@@ -12,7 +12,7 @@
 const _ = require( 'lodash' ); // eslint-disable-line
 const email = require( 'emailjs/email' );
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
-const RosettaConstants = require( './RosettaConstants' );
+const simData = require( './simData' );
 const winston = require( 'winston' );
 
 // globals
@@ -174,14 +174,6 @@ function stringify( data ) {
 }
 
 /**
- * get the URL for this sim, does not check if sim exists
- * @param simName
- */
-function getPublishedEnglishSimURL( simName ) {
-  return RosettaConstants.PRODUCTION_SERVER_URL + '/sims/html/' + simName + '/latest/' + simName + '_en.html';
-}
-
-/**
  * get the HTML of the latest published version of the sim from the sever
  * @param {string} simName
  * @returns {Promise.<string>} - html of the published simulation
@@ -190,7 +182,7 @@ function getPublishedEnglishSimURL( simName ) {
 async function getLatestSimHtml( simName ) {
 
   // compose the URL for the latest English version of the simulation
-  const simUrl = getPublishedEnglishSimURL( simName );
+  const simUrl = await simData.getLiveSimUrl( simName );
 
   const response = await nodeFetch( simUrl );
 
