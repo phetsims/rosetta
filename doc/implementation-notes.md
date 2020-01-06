@@ -22,7 +22,7 @@ commit can happen at a time.
 Rosetta uses a postgres database to support temporarily saving strings. Strings are saved in a table with primary key:
 userid, stringkey, repository, locale. Strings are deleted from the table after the sim is submitted to babel.
 
-####Basic Steps
+####Basic Operation
 
 1. When a user goes to translate a sim, rosetta first sends a request to the published version of the sim and extracts
 all of the string keys. The keys are extracted into an object of this form:
@@ -48,7 +48,10 @@ active-sims list from chipper, so it can tell if a repository is sim code or com
 rendered into a form where users can input their translations.
 3. If a user presses "Save", strings are saved in postgres and automatically loaded the next time the user goes to
 translate that sim and locale. When the translation for that sim and locale is finally submitted, the saved strings are
-deleted from postgres.
+deleted from postgres.  It's important to note that the databases that support string saving on phet-server and
+phet-server-dev are not available through the firewall, so the Rosetta instances are generally configured to use a
+`localhost` URL to reach the DB.  This makes it challenging to verify the DB behavior if running Rosetta locally (more
+on this in the "Debugging" section).
 4. If a user presses "Test", the strings are fed into a published sim via query parameters, so the user can see what the
 translation will look like once they submit.
 5. When a user submits, the strings are committed to github. Submissions are queued so that only one can happen at a
@@ -62,9 +65,9 @@ updated translation.
 
 When testing and debugging, it generally works best to run it on a local machine and work out major issues, then test
 on phet-server-dev, then deploy it to phet-server.  When running locally, the "Save" function is hard to get working
-since it requires a DB, so that is often just skipped.  To get it to work correctly on phet-server-dev, it may be
-necessary to sync phet-server-dev to phet-dev.  As of this writing, this is done by contacting @mattpen and asking him
-to do it (see https://github.com/phetsims/website/issues/974).
+since it requires a DB, so that is often just allowed to error out.  To get it to work correctly on phet-server-dev, it
+may be necessary to sync phet-server-dev to phet-dev.  As of this writing, this is done by contacting @mattpen and
+asking him to do it (see https://github.com/phetsims/website/issues/974).
 
 It can be useful to disable certain steps in the translation process while debugging so as to prevent excessive commits
 to GitHub and to prevent unneeded build requests to the build server.  The configuration parameters 
