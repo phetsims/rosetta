@@ -42,10 +42,12 @@ all of the string keys. The keys are extracted into an object of this form:
           }
         ]
         
-2. For every repository in the extracted strings list, Rosetta sends 2 requests to github, one for the english string 
+2. For every repository in the extracted strings list, Rosetta sends 2 requests to github, one for the English string 
 values and one for the translated string values for the locale being translated. It also sends a request to get the 
 active-sims list from chipper, so it can tell if a repository is sim code or common code. All of these strings are 
-rendered into a form where users can input their translations.
+rendered into a form where users can input their translations.  It is important to note that the translated string
+values for common code strings are obtained from the master branch so that Rosetta doesn't have to try to merge changes
+from branches.  This means that common code strings need to remain pretty stable.K 
 3. If a user presses "Save", strings are saved in postgres and automatically loaded the next time the user goes to
 translate that sim and locale. When the translation for that sim and locale is finally submitted, the saved strings are
 deleted from postgres.  It's important to note that the databases that support string saving on phet-server and
