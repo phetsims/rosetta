@@ -7,7 +7,8 @@
  */
 
 'use strict';
-// imports
+
+// modules
 const _ = require( 'lodash' ); // eslint-disable-line
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const RosettaConstants = require( './RosettaConstants' );
