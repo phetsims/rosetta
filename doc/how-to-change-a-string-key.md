@@ -61,9 +61,17 @@ keys, and several can be changed at once if necessary.
 translation (bonus points for doing multiple translations)
 - [ ] Put Rosetta into maintenance mode to avoid any translation submissions while this is in progress (see the Admin
 Guide for information on how to do this).
-- [ ] Change the value of the string key on master.
-- [ ] Change the value of the string key on the release branch.
+- [ ] Change the value of the string key on master.  This will need to be done in the string file and at all usage
+sites.
+- [ ] Build the sim and verify that there are no string errors, then test the built sim and verify the string looks
+correct.
+- [ ] Change the value of the string key on the release branch.  Again his will need to be done in the string file and
+at all usage sites.
+- [ ] Build the sim and verify that there are no string errors, then test the built sim and verify the string looks
+correct.
 - [ ] Change the value of the string key in all translations on the master branch in babel.
+- [ ] Use the `locale=x` to test a couple of locales for which translations have been submitted and make sure the string
+looks correct.
 - [ ] Create a new RC on the release branch.
 - [ ] Check if there are any unverified changes on this branch.  If there are, make sure that the appropriate amount of
 testing is performed on the RC before publishing (the details of what is "appropriate" is beyond the scope of this
@@ -91,8 +99,10 @@ keys, and several can be changed at once if necessary.
 translation and simulation (bonus points for doing multiple translations)
 - [ ] Put Rosetta into maintenance mode to avoid any translation submissions while this is in progress (see the Admin
 Guide for information on how to do this).
-- [ ] Change the value of the string key on master.
-- [ ] Change the value of the string key in all translations on the master branch in babel.
+- [ ] Change the value of the string key on master.  This will need to be changed in the string file and in all usage
+sites.
+- [ ] Change the value of the string key in all translations on the master branch in babel.  This can generally be done
+using search-and-replace.
 - [ ] Do a maintenance release for every simulation that is currently using this string.  This can be quite an
 involved process, and is well beyond the scope of this document, so please refer to 
 https://github.com/phetsims/perennial/blob/master/doc/automated-maintenance-process.md, and you'll also probably need to
