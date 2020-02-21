@@ -1,19 +1,22 @@
 Implementation Notes for the PhET Translation Utility
------------------------------------------------------
+=====================================================
 
-#####Intro
+Intro
+-----
 
 This document provide an overview of the way the translation utility works.  The intended audience is developers who
 need to understand the utility, and want to get some "big picture" information before jumping into the code.
 
-#####Terminology
+Terminology
+-----------
 
 The term 'project name' is used throughout the code as a means to reference a simulation or common code library.  This
 is essentially the repository name, but the term 'repository name' was avoided in case another VCS system is adopted
 at some point in the future.  Examples of project names are 'build-an-atom' and 'energy-skate-park-basics' and 
 'scenery'.
 
-#####Dependencies
+Dependencies
+------------
 
 The utility relies on the node module "octonode" for commits to github via the github API. Rosetta does not write or 
 read from disk, it always interacts directly with files on github. Any commits to github are queued so that only one
@@ -22,7 +25,8 @@ commit can happen at a time.
 Rosetta uses a postgres database to support temporarily saving strings. Strings are saved in a table with primary key:
 userid, stringkey, repository, locale. Strings are deleted from the table after the sim is submitted to babel.
 
-####Basic Operation
+Basic Operation
+---------------
 
 1. When a user goes to translate a sim, rosetta first sends a request to the published version of the sim and extracts
 all of the string keys. The keys are extracted into an object of this form:
@@ -63,7 +67,8 @@ octonode.
 6. When the submissions of changed strings are complete, a request is made to the build server to build and publish the
 updated translation.
 
-####Debugging Notes
+Debugging Notes
+---------------
 
 When testing and debugging, it generally works best to run it on a local machine and work out major issues, then test
 on phet-server-dev, then deploy it to phet-server.  When running locally, the "Save" function is hard to get working

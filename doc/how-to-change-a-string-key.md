@@ -77,7 +77,8 @@ for all locales for which values were recorded above.
 
 If the verification fails, you'll need to figure out why and fix it (obviously).
 
-##Changing a String Key for a Common Code Repository
+Changing a String Key for a Common Code Repository
+--------------------------------------------------
 
 Below are the steps for changing a string in a common code repository (as opposed to in a simulation).  This is done as
 a checklist so that it can be easily pasted into a GitHub issue.

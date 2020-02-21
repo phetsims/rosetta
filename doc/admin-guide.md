@@ -1,11 +1,11 @@
 Administration Guide for the PhET Translation Utility
------------------------------------------------------
+=====================================================
 
 Note: This isn't very complete at this time, but it seemed important to have a place where some information is kept that
 would enable PhET developers to administer this utility.
 
 Background
-==========
+----------
 Rosetta, also known as the translation utility, is a NodeJS-based server app that runs on phet-server.  As of this
 writing, the code on phet-server is kept in the directory /data/share/phet/rosetta, and git is used to pull updates.  
 When an update is pulled, the rosetta process needs to be restarted before the change will take effect (see below).
@@ -15,7 +15,7 @@ The process is run under the phet-admin account on phet-server.
 The utility is accessed at the URL https://phet.colorado.edu/translate
 
 Starting, Stopping, and Checking
-=====================
+---------------------
 
 You must have sudo privileges to execute the following commands.
 
@@ -38,7 +38,7 @@ in flux, but the way to do it is edit the ENABLED flag in the version of rosetta
 the comment in the file), then restart rosetta using the command above.
 
 Configuration
-=============
+-------------
 
 There are a number of configuration parameters that are used by rosetta, and these are generally stored in the
 ```~/.phet/build-local.json``` file along with a number of other configuration parameters used by PhET processes (such
@@ -49,7 +49,7 @@ NOTE 12/4/2019 - I (jbphet) am investigating using the `dotenv` package for some
 section when the approach is finalized.
 
 Test and Debug Support
-======================
+----------------------
 
 Since rosetta can be used at any time, we generally try to avoid taking it down for testing.  It is set up to also run
 on phet-server-dev.  The directory structure is the same as that used on phet-server.
