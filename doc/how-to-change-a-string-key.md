@@ -1,7 +1,8 @@
 How to Change a String Key
---------------------------
+==========================
 
-#####Intro
+Intro
+-----
 
 Rosetta, aka "the translation utility", has never had much of a budget supporting it.  As a result, it is very basic,
 and lacks support for a number of features that would be nice to have.  One such feature is the ability to change a
@@ -9,7 +10,8 @@ string key after a simulation has been published and translation of it have been
 do this - it just requires a number of manual steps.  This document describes these steps, and also provide important
 background for understanding why the steps are necessary. 
 
-#####Background
+Background
+----------
 
 The basic steps through which Rosetta creates and maintains a translation for a given sim are as follows:
 + Extract a list of the used strings from the published version of the sim, including the repository and key for each
@@ -46,7 +48,8 @@ in babel, then do a maintenance release that rolls in this change to every publi
 In some cases, such as a commonly used joist string, this could literally be every single simulation.  Yeah, yikes, I
 know.
 
-#####Changing a String Key for a Simulation
+Changing a String Key for a Simulation
+--------------------------------------
 
 Below are the steps for changing a string in a simulation (as opposed to common code).  This is done as a checklist so
 that it can be easily pasted into a GitHub issue.
@@ -74,7 +77,7 @@ for all locales for which values were recorded above.
 
 If the verification fails, you'll need to figure out why and fix it (obviously).
 
-#####Changing a String Key for a Common Code Repository
+##Changing a String Key for a Common Code Repository
 
 Below are the steps for changing a string in a common code repository (as opposed to in a simulation).  This is done as
 a checklist so that it can be easily pasted into a GitHub issue.
