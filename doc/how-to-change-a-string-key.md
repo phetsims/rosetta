@@ -85,7 +85,7 @@ made and then updating the dependencies list for the dependant simulation.  You'
 release for this sim as well.
 - [ ] Take Rosetta out of maintenance mode (again, see the Admin Guide for information on how to do this).
 - [ ] Verify that the string key change worked by going to Rosetta (https://phet.colorado.edu/translate/), selecting the
-simulation for which the update or updates were made, chossing a locale for which a translation exists, pressing "Go",
+simulation for which the update or updates were made, choosing a locale for which a translation exists, pressing "Go",
 and verifying that the old string key is gone, the new one is shown, and the value of the new one is correct.  Do this
 for all locales for which values were recorded above.
 
