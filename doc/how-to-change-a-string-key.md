@@ -59,6 +59,8 @@ keys, and several can be changed at once if necessary.
 
 - [ ] For later verification, make a record of the string key that is changing and its value for at least one
 translation (bonus points for doing multiple translations)
+- [ ] Determine all places where the string is used.  If it is used in another sim, you'll need to do a maintenance
+release.
 - [ ] Put Rosetta into maintenance mode to avoid any translation submissions while this is in progress (see the Admin
 Guide for information on how to do this).
 - [ ] Change the value of the string key on master.  This will need to be done in the string file and at all usage
@@ -76,7 +78,11 @@ looks correct.
 - [ ] Check if there are any unverified changes on this branch.  If there are, make sure that the appropriate amount of
 testing is performed on the RC before publishing (the details of what is "appropriate" is beyond the scope of this
 document).  If there are no such changes, it is generally fine to move forward with publication without verification.
-- [ ] Publish the simulation.  Don't move to the next step until this is complete.
+- [ ] Publish the simulation.
+- [ ] If the string is used by another simulation, you'll need to update the version of the repo where the change
+occurred that is used by the sim.  Usually this means creating or updating a branch of the repo where the change was
+made and then updating the dependencies list for the dependant simulation.  You'll need to do an RC and production
+release for this sim as well.
 - [ ] Take Rosetta out of maintenance mode (again, see the Admin Guide for information on how to do this).
 - [ ] Verify that the string key change worked by going to Rosetta (https://phet.colorado.edu/translate/), selecting the
 simulation for which the update or updates were made, chossing a locale for which a translation exists, pressing "Go",
