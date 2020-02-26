@@ -263,10 +263,10 @@ module.exports.renderTranslationPage = async function( req, res ) {
   winston.debug( 'request for ' + simUrl + ' returned successfully' );
 
   // extract the translatable string keys from the sim's html file
-  const extractedStringKeySets = TranslationUtils.extractStringKeys( simHtml );
+  const extractedStringKeysMap = TranslationUtils.extractStringKeys( simHtml );
 
-  if ( !extractedStringKeySets ) {
-    renderError( res, 'Tried to extract strings from an invalid URL', 'url: ' + simUrl );
+  if ( extractedStringKeysMap.size === 0 ) {
+    renderError( res, 'Unable to retrieve string keys from URL', 'url: ' + simUrl );
     return;
   }
 
@@ -280,21 +280,19 @@ module.exports.renderTranslationPage = async function( req, res ) {
   const activeSimsFileContents = await activeSimsFileFetchResponse.text();
   const activeSims = activeSimsFileContents.toString().split( '\n' );
 
-  // retrieve all of the English and previously translated strings for this this sim from long-term storage
   const englishStrings = {}; // object to hold the English strings
   req.session.translatedStrings[ targetLocale ] = req.session.translatedStrings[ targetLocale ] || {};
-  for ( let i = 0; i < extractedStringKeySets.length; i++ ) {
-    const extractedStringKeysObject = extractedStringKeySets[ i ];
 
-    const projectName = extractedStringKeysObject.projectName;
+  // retrieve all of the English and translated strings for this sim from long-term storage
+  for ( const projectName of extractedStringKeysMap.keys() ) {
 
     // get the English strings
-    // TODO: This should be using a SHA for the common code strings, see https://github.com/phetsims/rosetta/issues/219
     englishStrings[ projectName ] = await longTermStringStorage.getEnglishStrings(
       projectName,
       ( projectName === simName ) ? simSha : 'master'
     );
 
+    // get the previously translated strings for the target locale
     req.session.translatedStrings[ targetLocale ][ projectName ] =
       await longTermStringStorage.getTranslatedStrings( projectName, targetLocale );
   }
@@ -312,16 +310,17 @@ module.exports.renderTranslationPage = async function( req, res ) {
   const pool = new Pool();
   let repositories = '';
   const savedStrings = {};
-  _.times( extractedStringKeySets.length, i => {
-    if ( i > 0 ) {
+
+  for ( const projectName of extractedStringKeysMap.keys() ) {
+    if ( repositories.length > 0 ) {
       repositories += ' OR ';
     }
-    repositories += 'repository = \'' + extractedStringKeySets[ i ].projectName + '\'';
+    repositories += 'repository = \'' + projectName + '\'';
 
     // Initialize saved strings for every repo to an empty object. These objects will store string key/value pairs for
     // each repo.
-    savedStrings[ extractedStringKeySets[ i ].projectName ] = {};
-  } );
+    savedStrings[ projectName ] = {};
+  }
 
   // create a parameterized query string for retrieving the user's previously saved strings
   const savedStringsQuery = 'SELECT * FROM saved_translations WHERE user_id = $1 AND locale = $2 AND (' + repositories + ')';
@@ -359,21 +358,20 @@ module.exports.renderTranslationPage = async function( req, res ) {
 
   // Iterate over all projects from which this sim draws strings and start organizing the strings into the format needed
   // by the HTML template that will present the strings to the user.
-  _.times( extractedStringKeySets.length, i => {
-    const project = extractedStringKeySets[ i ];
-    const strings = englishStrings[ project.projectName ];
-    const previouslyTranslatedStrings = req.session.translatedStrings[ targetLocale ][ project.projectName ];
+  for ( const projectName of extractedStringKeysMap.keys() ) {
+    const strings = englishStrings[ projectName ];
+    const previouslyTranslatedStrings = req.session.translatedStrings[ targetLocale ][ projectName ];
 
     // put the strings into different arrays depending on whether they are from the sim, a shared sim, or common code
     let array;
-    if ( project.projectName === simName ) {
-      simTitle = strings[ project.projectName + '.title' ] && strings[ project.projectName + '.title' ].value;
+    if ( projectName === simName ) {
+      simTitle = strings[ projectName + '.title' ] && strings[ projectName + '.title' ].value;
       array = currentSimStringsArray;
     }
-    else if ( _.includes( activeSims, project.projectName ) ) {
+    else if ( _.includes( activeSims, projectName ) ) {
 
       // if this is another sim an not a common code repo, it is presented to the user somewhat differently
-      otherSims.push( project.projectName );
+      otherSims.push( projectName );
       array = simStringsArray;
     }
     else {
@@ -382,8 +380,9 @@ module.exports.renderTranslationPage = async function( req, res ) {
 
     // Loop through the strings, deciding whether they should be presented to the user and, if so, set up the
     // appropriate information for the HTML template.
-    for ( let j = 0; j < project.stringKeys.length; j++ ) {
-      const key = project.stringKeys[ j ];
+    const stringKeys = extractedStringKeysMap.get( projectName );
+    for ( let j = 0; j < stringKeys.length; j++ ) {
+      const key = stringKeys[ j ];
 
       // If this is an accessibility (a11y) string, skip it so that it is not presented to the user.  The translation of
       // accessibility strings will be supported someday, just not quite yes. Please see
@@ -401,10 +400,10 @@ module.exports.renderTranslationPage = async function( req, res ) {
         const stringRenderInfo = {
           key: key,
           englishValue: escapeHTML( strings[ key ].value ),
-          repo: project.projectName
+          repo: projectName
         };
 
-        const savedStringValue = savedStrings[ project.projectName ][ key ];
+        const savedStringValue = savedStrings[ projectName ][ key ];
 
         // use saved string if it exists
         if ( savedStringValue ) {
@@ -433,7 +432,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
         array.push( stringRenderInfo );
       }
       else {
-        winston.debug( 'String key ' + project.stringKeys[ j ] + ' not found or not visible' );
+        winston.debug( 'String key ' + stringKeys[ j ] + ' not found or not visible' );
       }
     }
 
@@ -449,17 +448,17 @@ module.exports.renderTranslationPage = async function( req, res ) {
           }
         }
         if ( !containsObjectWithKey ) {
-          winston.debug( 'repo: ' + project.projectName + ' key: ' + stringKey + ', ' +
+          winston.debug( 'repo: ' + projectName + ' key: ' + stringKey + ', ' +
                          '- translation exists, but unused in this sim, adding to pass-through data' );
           unusedTranslatedStringsArray.push( {
-            repo: project.projectName,
+            repo: projectName,
             key: stringKey,
             value: previouslyTranslatedStrings[ stringKey ].value
           } );
         }
       }
     }
-  } );
+  }
 
   // sort the arrays by the English values
   const compare = function( a, b ) {

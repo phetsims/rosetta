@@ -115,27 +115,26 @@ function extractSimSha( simHtml, simName ) {
 /**
  * extract all sim keys used in the provided built sim HTML and format them into a structured object
  * @param {string} simHtml - HTML of the built sim
- * @returns {Object[]|null} - an array of objects of the form { projectName: {string}, stringKeys: {string[]}} that list
- * the strings used for each string-containing repo used by the sim, null if no strings found
+ * @returns {Map<{String,String[]}>} - a map with project names for keys (e.g. 'build-an-atom') and an array of all the
+ * string keys used for that project
  */
 function extractStringKeys( simHtml ) {
 
-  // extract the line from the HTML file that assigns the value of the global string variable
+  // extract the line from the HTML file that defines the value of the global strings variable
   const regEx = new RegExp( STRING_VAR_IN_HTML_FILES + '.*$', 'm' );
   const stringVariableAssignmentStatement = simHtml.match( regEx );
 
-  // extract the JSON portion of this assignment statement, which should consist of string keys and values
+  // extract the value (i.e. right side) of this assignment statement, which should consist of JSON string keys and values
   const stringsVariableJson = stringVariableAssignmentStatement[ 0 ]
     .replace( STRING_VAR_IN_HTML_FILES + ' = ', '' )
     .replace( /;$/m, '' );
 
-  // convert the JSON data to a string
+  // convert the JSON string to an object
   const stringsVariableValue = JSON.parse( stringsVariableJson );
 
-  // return value, will be populated below
-  const extractedStringInfo = [];
+  // create the Map that will be returned, it will be populated below
+  const extractedStringsMap = new Map();
 
-  // TODO Make this whole thing return a map
   // make sure the English string values are present, and use only those
   if ( stringsVariableValue.en ) {
 
@@ -146,29 +145,21 @@ function extractStringKeys( simHtml ) {
       const projectName = splitProjectAndStringKey[ 0 ].replace( new RegExp( '_', 'g' ), '-' ).toLowerCase();
       const stringKey = splitProjectAndStringKey[ 1 ];
 
-      // find or create the object for the project associated with this string
-      let projectStringObject = extractedStringInfo.find( projectAndStringObject => {
-        return projectAndStringObject.projectName === projectName;
-      } );
-
-      // no object found for this project, so create one
-      if ( !projectStringObject ) {
-        projectStringObject = {
-          projectName: projectName,
-          stringKeys: []
-        };
-        extractedStringInfo.push( projectStringObject );
+      // find or create the string key array for this project
+      let stringKeys = extractedStringsMap.get( projectName );
+      if ( !stringKeys ) {
+        stringKeys = [];
+        extractedStringsMap.set( projectName, stringKeys );
       }
 
-      projectStringObject.stringKeys.push( stringKey );
+      stringKeys.push( stringKey );
     } );
-
   }
   else {
     winston.error( 'no English string keys found in provided sim HTML' );
   }
 
-  return extractedStringInfo;
+  return extractedStringsMap;
 }
 
 /*---------------------------------------------------------------------------*
