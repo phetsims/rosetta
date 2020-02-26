@@ -380,80 +380,78 @@ module.exports.renderTranslationPage = async function( req, res ) {
 
     // Loop through the strings, deciding whether they should be presented to the user and, if so, set up the
     // appropriate information for the HTML template.
-    const stringKeys = extractedStringKeysMap.get( projectName );
-    for ( let j = 0; j < stringKeys.length; j++ ) {
-      const key = stringKeys[ j ];
+    extractedStringKeysMap.get( projectName ).forEach( stringKey => {
 
       // If this is an accessibility (a11y) string, skip it so that it is not presented to the user.  The translation of
       // accessibility strings will be supported someday, just not quite yes. Please see
       // https://github.com/phetsims/rosetta/issues/214 for more information.
-      if ( key.indexOf( 'a11y.' ) === 0 ) {
-        winston.info( 'intentionally skipping a11y string (will not be presented to user): ' + key );
-        continue;
+      if ( stringKey.indexOf( 'a11y.' ) === 0 ) {
+        winston.info( 'intentionally skipping a11y string (will not be presented to user): ' + stringKey );
+        return;
       }
 
-      const stringVisible = strings.hasOwnProperty( key ) &&
-                            ( ( strings[ key ].visible === undefined ) ? true : strings[ key ].visible );
+      const stringVisible = strings.hasOwnProperty( stringKey ) &&
+                            ( ( strings[ stringKey ].visible === undefined ) ? true : strings[ stringKey ].visible );
       if ( stringVisible ) {
 
         // data needed to render to the string on the page - the key, the current value, the English value, and the repo
         const stringRenderInfo = {
-          key: key,
-          englishValue: escapeHTML( strings[ key ].value ),
+          key: stringKey,
+          englishValue: escapeHTML( strings[ stringKey ].value ),
           repo: projectName
         };
 
-        const savedStringValue = savedStrings[ projectName ][ key ];
+        const savedStringValue = savedStrings[ projectName ][ stringKey ];
 
         // use saved string if it exists
         if ( savedStringValue ) {
 
           // log info about the retrieved string
-          winston.debug( 'using saved string ' + key + ': ' + getPrintableString( savedStringValue ) );
+          winston.debug( 'using saved string ' + stringKey + ': ' + getPrintableString( savedStringValue ) );
 
           // set the retrieved value
           stringRenderInfo.value = escapeHTML( savedStringValue );
         }
-        else if ( previouslyTranslatedStrings[ key ] ) {
+        else if ( previouslyTranslatedStrings[ stringKey ] ) {
 
           // use previous translation value obtained from GitHub, if it exists
-          const translatedString = previouslyTranslatedStrings[ key ];
-          winston.debug( 'using previously translated string ' + key + ': ' +
+          const translatedString = previouslyTranslatedStrings[ stringKey ];
+          winston.debug( 'using previously translated string ' + stringKey + ': ' +
                          getPrintableString( translatedString.value ) );
           stringRenderInfo.value = escapeHTML( translatedString.value );
         }
         else {
 
           // there is no saved or previously translated string
-          winston.debug( 'no saved or previously translated values found for string key ' + key );
+          winston.debug( 'no saved or previously translated values found for string key ' + stringKey );
           stringRenderInfo.value = '';
         }
 
         array.push( stringRenderInfo );
       }
       else {
-        winston.debug( 'String key ' + stringKeys[ j ] + ' not found or not visible' );
+        winston.debug( 'String key ' + stringKey + ' not found or not visible' );
       }
-    }
+    } );
 
     // Identify strings that are translated but not used so that they don't get removed from the translation. This is
     // only relevant for shared/common strings.
-    for ( const stringKey in previouslyTranslatedStrings ) {
-      if ( previouslyTranslatedStrings.hasOwnProperty( stringKey ) ) {
+    for ( const previouslyTranslatedStringKey in previouslyTranslatedStrings ) {
+      if ( previouslyTranslatedStrings.hasOwnProperty( previouslyTranslatedStringKey ) ) {
         let containsObjectWithKey = false;
         for ( let index = 0; index < array.length; index++ ) {
-          if ( array[ index ].key === stringKey ) {
+          if ( array[ index ].key === previouslyTranslatedStringKey ) {
             containsObjectWithKey = true;
             break;
           }
         }
         if ( !containsObjectWithKey ) {
-          winston.debug( 'repo: ' + projectName + ' key: ' + stringKey + ', ' +
+          winston.debug( 'repo: ' + projectName + ' key: ' + previouslyTranslatedStringKey + ', ' +
                          '- translation exists, but unused in this sim, adding to pass-through data' );
           unusedTranslatedStringsArray.push( {
             repo: projectName,
-            key: stringKey,
-            value: previouslyTranslatedStrings[ stringKey ].value
+            key: previouslyTranslatedStringKey,
+            value: previouslyTranslatedStrings[ previouslyTranslatedStringKey ].value
           } );
         }
       }
