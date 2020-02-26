@@ -9,14 +9,19 @@
 
 'use strict';
 
+// node modules
 const _ = require( 'lodash' ); // eslint-disable-line
 const email = require( 'emailjs/email' );
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const simData = require( './simData' );
 const winston = require( 'winston' );
 
-// globals
+// server modules
+const RosettaConstants = require( './RosettaConstants' );
+
+// constants
 const preferences = global.config;
+const STRING_VAR_IN_HTML_FILES = RosettaConstants.STRING_VAR_IN_HTML_FILES;
 
 /*---------------------------------------------------------------------------*
  * Email utilities
@@ -115,39 +120,55 @@ function extractSimSha( simHtml, simName ) {
  */
 function extractStringKeys( simHtml ) {
 
-  // use a regular expression to extract all the string keys by matching uses of the string plugin
-  const matches = simHtml.match( /string!([\w./-]+)/g );
+  // extract the line from the HTML file that assigns the value of the global string variable
+  const regEx = new RegExp( STRING_VAR_IN_HTML_FILES + '.*$', 'm' );
+  const stringVariableAssignmentStatement = simHtml.match( regEx );
 
-  // if no matches are found, it probably means the sim url was not correct
-  if ( matches === null ) {
-    return null;
-  }
+  // extract the JSON portion of this assignment statement, which should consist of string keys and values
+  const stringsVariableJson = stringVariableAssignmentStatement[ 0 ]
+    .replace( STRING_VAR_IN_HTML_FILES + ' = ', '' )
+    .replace( /;$/m, '' );
 
-  const projects = {};
-  for ( let i = 0; i < matches.length; i++ ) {
-    const projectAndString = matches[ i ].substring( 7 ).split( '/' );
-    const projectName = projectAndString[ 0 ];
-    const string = projectAndString[ 1 ];
+  // convert the JSON data to a string
+  const stringsVariableValue = JSON.parse( stringsVariableJson );
 
-    projects[ projectName ] = projects[ projectName ] || [];
+  // return value, will be populated below
+  const extractedStringInfo = [];
 
-    if ( !_.includes( projects[ projectName ], string ) ) {
-      projects[ projectName ].push( string );
-    }
-  }
+  // TODO Make this whole thing return a map
+  // make sure the English string values are present, and use only those
+  if ( stringsVariableValue.en ) {
 
-  const extractedStrings = [];
-  for ( const project in projects ) {
+    _.keys( stringsVariableValue.en ).forEach( projectAndStringKey => {
 
-    if ( !projects.hasOwnProperty( project ) ) { continue; }
+      // separate the project name and string key from the combined key, convert string key to the "repo name" format
+      const splitProjectAndStringKey = projectAndStringKey.split( '/' );
+      const projectName = splitProjectAndStringKey[ 0 ].replace( new RegExp( '_', 'g' ), '-' ).toLowerCase();
+      const stringKey = splitProjectAndStringKey[ 1 ];
 
-    extractedStrings.push( {
-      projectName: project.replace( new RegExp( '_', 'g' ), '-' ).toLowerCase(),
-      stringKeys: projects[ project ]
+      // find or create the object for the project associated with this string
+      let projectStringObject = extractedStringInfo.find( projectAndStringObject => {
+        return projectAndStringObject.projectName === projectName;
+      } );
+
+      // no object found for this project, so create one
+      if ( !projectStringObject ) {
+        projectStringObject = {
+          projectName: projectName,
+          stringKeys: []
+        };
+        extractedStringInfo.push( projectStringObject );
+      }
+
+      projectStringObject.stringKeys.push( stringKey );
     } );
+
+  }
+  else {
+    winston.error( 'no English string keys found in provided sim HTML' );
   }
 
-  return extractedStrings;
+  return extractedStringInfo;
 }
 
 /*---------------------------------------------------------------------------*

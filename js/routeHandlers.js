@@ -31,7 +31,7 @@ const renderError = TranslationUtils.renderError;
 const GITHUB_RAW_FILE_URL_BASE = RosettaConstants.GITHUB_RAW_FILE_URL_BASE;
 const TITLE = 'PhET Translation Utility (HTML5)';
 const ASCII_REGEX = /^[ -~]+$/;
-const STRING_VAR_IN_HTML_FILES = 'window.phet.chipper.strings';
+const STRING_VAR_IN_HTML_FILES = RosettaConstants.STRING_VAR_IN_HTML_FILES;
 
 // utility function for sending the user to the login page
 function sendUserToLoginPage( res, host, destinationUrl ) {
