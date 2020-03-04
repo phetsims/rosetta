@@ -31,7 +31,7 @@ let inProgressFileRetrievalPromise = null;
 
 // function that updates the local copy of the sim info by retrieving and interpreting file from GitHub
 async function updateLocaleInfo() {
-  const urlOfLocalInfoFile = RosettaConstants.GITHUB_RAW_FILE_URL_BASE + '/phetsims/chipper/master/js/data/localeInfo.js';
+  const urlOfLocalInfoFile = RosettaConstants.GITHUB_RAW_FILE_URL_BASE + '/phetsims/chipper/master/data/localeInfo.json';
 
   winston.info( 'requesting locale info file from GitHub, URL = ' + urlOfLocalInfoFile );
 
@@ -40,10 +40,8 @@ async function updateLocaleInfo() {
   // handle the response
   if ( response.status === 200 ) {
 
-    // The file was obtained successfully.  This particular file is JavaScript, not JSON, so it needs to be interpreted.
-    const fileContent = await response.text();
-
-    localeInfoObject = requireFromString( fileContent, 'chipperLocalInfo' );
+    // The file was obtained successfully.  Interpret the contents.
+    localeInfoObject = JSON.parse( await response.text() );
 
     // update the sorted locale info array
     sortedLocaleInfoArray = [];
@@ -81,21 +79,9 @@ async function updateLocaleInfo() {
 }
 
 /**
- * To get chipper's locale info, we need it loaded as a module. This function supports requiring a module
- * from a string. Although thoroughly tested, it seems a bit strange to reach into a private (_compile) function.
- * This function was found at https://stackoverflow.com/questions/17581830/load-node-js-module-from-string-in-memory
- * @param {string} src - the source code of the module
- * @param {string} filename - the name of the module
- * @returns {Module} - the module
+ * update cached data if it is time to do so
+ * @returns {Promise<void>}
  */
-function requireFromString( src, filename ) {
-  const Module = module.constructor;
-  const m = new Module();
-  m._compile( src, filename );
-  return m.exports;
-}
-
-// function that updates cached data if it is time to do so
 async function checkAndUpdateLocaleInfo() {
 
   // if a request is already in progress, return that promise
