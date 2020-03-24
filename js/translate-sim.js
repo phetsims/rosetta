@@ -357,7 +357,7 @@ $( document ).ready( function() {
   // validate the inputs before submitting the form
   $( '#strings' ).submit( function( event ) {
     if ( countTranslatedStringsForSim() === 0 ) {
-      $( '.validation-message' ).text( 'No strings have been translated.  Please translate at least one string before submitting.' );
+      $( '.validation-message' ).text( 'No simulation strings have been translated.  Please translate at least one string before submitting.' );
       event.preventDefault();
     }
     else if ( !validatePatterns() ) {
