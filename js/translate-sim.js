@@ -318,7 +318,7 @@ $( document ).ready( function() {
   }
 
   /**
-   * Make sure every row has the required patterns
+   * make sure every row has the required patterns
    * @returns {boolean}
    */
   function validatePatterns() {
@@ -331,9 +331,36 @@ $( document ).ready( function() {
     return validated;
   }
 
+  /**
+   * count the number of strings that have translated values for this sim (does NOT count common/shared strings)
+   * @returns {number}
+   */
+  function countTranslatedStringsForSim() {
+
+    let numberOfTranslatedStrings = 0;
+
+    // get the first table, which is the one that has the strings that are unique to the sim
+    const simStringsTable = $( 'table' )[ 0 ];
+
+    // The first row of the table contains the header, so skip that one and analyze the rest.
+    for ( let i = 1; i < simStringsTable.rows.length; i++ ) {
+
+      // if there is anything other than a zero-length string for this table entry, it is considered a translated string
+      if ( simStringsTable.rows[ i ].cells[ 2 ].innerText.length > 0 ) {
+        numberOfTranslatedStrings++;
+      }
+    }
+
+    return numberOfTranslatedStrings;
+  }
+
   // validate the inputs before submitting the form
   $( '#strings' ).submit( function( event ) {
-    if ( !validatePatterns() ) {
+    if ( countTranslatedStringsForSim() === 0 ) {
+      $( '.validation-message' ).text( 'No strings have been translated.  Please translate at least one string before submitting.' );
+      event.preventDefault();
+    }
+    else if ( !validatePatterns() ) {
       $( '.validation-message' ).text( 'Your translation has MessageFormat errors. Please correct these before submitting.' );
       event.preventDefault();
     }
