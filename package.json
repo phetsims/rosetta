@@ -12,6 +12,7 @@
     "express-dot": "^0.1.0",
     "express-session": "^1.15.6",
     "lodash": "^4.17.15",
+    "memorystore": "^1.6.2",
     "minimist": "^1.2.0",
     "node-fetch": "^1.7.3",
     "octonode": "^0.9.1",

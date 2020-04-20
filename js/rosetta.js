@@ -18,6 +18,7 @@ const doT = require( 'express-dot' ); // eslint-disable-line require-statement-m
 const express = require( 'express' );
 const { Pool } = require( 'pg' ); //eslint-disable-line
 const session = require( 'express-session' ); // eslint-disable-line require-statement-match
+const MemoryStore = require( 'memorystore' )( session );
 const winston = require( 'winston' );
 
 // constants
@@ -96,7 +97,10 @@ app.use( cookieParser() );
 app.use( session( {
   secret: global.config.rosettaSessionSecret,
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  store: new MemoryStore( {
+    checkPeriod: 86400000 // in milliseconds, set to 1 day
+  } )
 } ) );
 app.use( bodyParser.json() );
 app.use( bodyParser.urlencoded( { extended: false } ) );
