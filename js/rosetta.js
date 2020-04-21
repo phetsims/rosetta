@@ -34,7 +34,6 @@ process.on( 'unhandledRejection', error => {
 } );
 
 // configure the logger - this uses the default logging level, which may be updated once the configuration is read
-// winston.remove( winston.transports.Console );
 const consoleTransport = new winston.transports.Console( {
   format: format.combine(
     format.timestamp( {
