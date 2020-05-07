@@ -3,7 +3,7 @@
 Rosetta is PhET's translation utility for its HTML5 simulations. This repository contains the code for Rosetta's
 user interface and the server-side support needed for translating PhET HTML5 simulations.
 
-Rosetta uses [Node.js](https://nodejs.org/en/), [Express.js])(https://expressjs.com/), and the [doT.js templating engine](https://olado.github.io/doT/index.html).
+Rosetta uses [Node.js](https://nodejs.org/en/), [Express.js](https://expressjs.com/), and the [doT.js templating engine](https://olado.github.io/doT/index.html).
 
 ### Starting and Stopping Rosetta on PhET-Server
 
