@@ -30,7 +30,7 @@ let sortedLocaleInfoArray = [];
 let inProgressFileRetrievalPromise = null;
 
 // function that updates the local copy of the sim info by retrieving and interpreting file from GitHub
-async function updateLocaleInfo() {
+async function updateLocaleInfo() { // Liam's Note: This function is kinda long. Maybe shorten if possible.
   const urlOfLocalInfoFile = RosettaConstants.GITHUB_RAW_FILE_URL_BASE + '/phetsims/chipper/master/data/localeInfo.json';
 
   winston.info( 'requesting locale info file from GitHub, URL = ' + urlOfLocalInfoFile );
@@ -85,11 +85,11 @@ async function updateLocaleInfo() {
 async function checkAndUpdateLocaleInfo() {
 
   // if a request is already in progress, return that promise
-  if ( inProgressFileRetrievalPromise ) {
+  if ( inProgressFileRetrievalPromise ) { // Liam's Note: I think this boolean should be renamed.
     winston.info( 'a request for locale info file is in progress, waiting on that promise' );
     await inProgressFileRetrievalPromise;
   }
-  else if ( ( Date.now() - timeOfLastUpdate ) / 1000 > CACHED_DATA_VALID_TIME ) {
+  else if ( ( Date.now() - timeOfLastUpdate ) / 1000 > CACHED_DATA_VALID_TIME ) { // Liam's Note: Maybe create a boolean for this to increase readability.
     winston.info( 'locale info data was stale, initiating a new request' );
     inProgressFileRetrievalPromise = updateLocaleInfo();
     await inProgressFileRetrievalPromise;
@@ -118,7 +118,8 @@ module.exports = {
     return localeInfoObject;
   },
 
-  // TODO: temp for debug
+  // TODO: temp for debug 
+  // Liam's Note: This ^ is vague. Ask John what this is.
   localeInfoObject: localeInfoObject,
 
   /**
@@ -132,7 +133,7 @@ module.exports = {
   },
 
   /**
-   * Obtain a string that describes the language associated with the provided locale.  For example, if the caller
+   * Obtain a string that describes the language associated with the provided locale. For example, if the caller
    * specified 'es_MX', the string 'Spanish - Mexico' would be returned.
    * @param {string} locale
    * @returns {string}

@@ -9,6 +9,8 @@
 
 'use strict';
 
+// Liam's Note: This is an absolute monster of a file. It would be great to split into multiple files.
+
 // node modules
 const _ = require( 'lodash' ); // eslint-disable-line
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
@@ -52,13 +54,13 @@ function getPrintableString( string ) {
  * Route that checks whether the user has a valid session in progress. This works by looking for the cookie set when
  * the user logs in to the main web site and, if said cookie is present, uses it to obtain user information from the
  * 'main' web site. This check is run on every page, but if the user has already been confirmed as a trusted
- * translator from the main site, it is just a single if statement instead of a call to the main web site.
+ * translator from the main site, it is just a single if statement instead of a call to the main website.
  *
  * @param req
  * @param res
  * @param next
  */
-module.exports.checkForValidSession = function( req, res, next ) {
+module.exports.checkForValidSession = function( req, res, next ) { // Liam's Note: I generally prefer using 'request' and 'response' as opposed to 'req' and 'res'.
 
   if ( req.get( 'host' ).indexOf( 'localhost' ) === 0 ) {
 
@@ -227,13 +229,13 @@ module.exports.chooseSimulationAndLanguage = async function( req, res ) {
 };
 
 /**
- * A route that creates a page for translating a given simulation to a given language.  The simulation ID and the target
+ * A route that creates a page for translating a given simulation to a given language. The simulation ID and the target
  * language are extracted from the incoming request.
  * @param req
  * @param res
  * @public
  */
-module.exports.renderTranslationPage = async function( req, res ) {
+module.exports.renderTranslationPage = async function( req, res ) { // Liam's Note: Again, not a fan of req and res.
 
   const simName = req.params.simName;
   const targetLocale = req.params.targetLocale;
@@ -249,7 +251,7 @@ module.exports.renderTranslationPage = async function( req, res ) {
   // get the HTML file that represents the sim
   const simFetchResponse = await nodeFetch( simUrl );
 
-  if ( simFetchResponse.error || simFetchResponse.status !== 200 ) {
+  if ( simFetchResponse.error || simFetchResponse.status !== 200 ) { // Liam's Note: Maybe create a boolean for readability. Get rid of that "bail" comment.
     winston.error( 'failed to retrieve live sim, error = ' + simFetchResponse.error );
 
     // this will display a simple error page to the user
@@ -631,7 +633,7 @@ module.exports.saveStrings = async function( req, res ) {
 };
 
 /**
- * Route used when translation utility is off line.
+ * Route used when translation utility is offline.
  *
  * @param req
  * @param res

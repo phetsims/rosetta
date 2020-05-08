@@ -84,7 +84,7 @@ $( document ).ready( function() {
     }
 
     // NOTE TO FUTURE MAINTAINERS: I (jbphet) tried using jQuery's post method for the post performed below, but it
-    // triggered my popup blocker.  The approach used below, which creates a temporary form element and submits it,
+    // triggered my popup blocker. The approach used below, which creates a temporary form element and submits it,
     // didn't trigger the popup blocker, so I went with it.
 
     // create the URL for the post request

@@ -1,4 +1,4 @@
-// Copyright 2015-2019, University of Colorado Boulder
+// Copyright 2015-2020, University of Colorado Boulder
 
 /**
  * An asynchronous (async.queue) queue with a concurrency of one (meaning that only one task is executed at a time)
@@ -60,8 +60,8 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
     // get the value of the string
     let stringValue = req.body[ submittedStringKey ];
 
-    // Handle any embedded line feeds.  There is some history here, please see
-    // https://github.com/phetsims/rosetta/issues/144 and https://github.com/phetsims/rosetta/issues/207.  The best
+    // Handle any embedded line feeds. There is some history here, please see
+    // https://github.com/phetsims/rosetta/issues/144 and https://github.com/phetsims/rosetta/issues/207. The best
     // thing to do going forward is to always use <br> in multi-line strings instead of '\n', this code is here to
     // handle older sims in which '\n' was used in multi-line strings.
     if ( stringValue.indexOf( '\\n' ) !== -1 ) {
@@ -289,7 +289,7 @@ async function requestBuild( simName, userID, locale ) {
   }
   else {
 
-    // The build request is being skipped due to the setting of a debug flag.  This capability was added to allow the
+    // The build request is being skipped due to the setting of a debug flag. This capability was added to allow the
     // build request to be debugged without sending a bunch of bogus requests to the build server.
     winston.warn( 'build request skipped due to setting of debug flag' );
   }

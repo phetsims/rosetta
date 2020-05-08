@@ -1,4 +1,4 @@
-// Copyright 2018, University of Colorado Boulder
+// Copyright 2018-2020, University of Colorado Boulder
 
 /**
  * JavaScript that implements the test harness behavior, which is used to debug and verify the PhET translation utility.

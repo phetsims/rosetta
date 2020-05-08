@@ -1,8 +1,8 @@
-// Copyright 2018-2019, University of Colorado Boulder
+// Copyright 2018-2020, University of Colorado Boulder
 
 /**
- * A singleton object that contains information about the published simulations.  The specific information contained is
- * that which is needed by Rosetta, the PhET translation utility, to do its job.  This object is populated by obtaining
+ * A singleton object that contains information about the published simulations. The specific information contained is
+ * that which is needed by Rosetta, the PhET translation utility, to do its job. This object is populated by obtaining
  * sim metadata from the server where the simulations reside.
  *
  * @author John Blanco
@@ -239,4 +239,3 @@ module.exports = {
     return simDataObject[ simName ].version;
   }
 };
-

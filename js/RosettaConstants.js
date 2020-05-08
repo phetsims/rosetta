@@ -15,4 +15,3 @@ module.exports = {
   // the name of the variable in the HTML5 sims where the string information is stored
   STRING_VAR_IN_HTML_FILES: 'window.phet.chipper.strings'
 };
-

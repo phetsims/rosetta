@@ -1,7 +1,7 @@
 // Copyright 2015-2020, University of Colorado Boulder
 
 /**
- * Main entry point for PhET translation web app. This is where ExpressJS gets configured and the routes are set up.
+ * Main entry point for PhET translation web app. This is where Express.js gets configured and the routes are set up.
  *
  * @author John Blanco
  * @author Aaron Davis
@@ -16,7 +16,7 @@ const getRosettaConfig = require( './getRosettaConfig' );
 const cookieParser = require( 'cookie-parser' ); // eslint-disable-line require-statement-match
 const doT = require( 'express-dot' ); // eslint-disable-line require-statement-match
 const express = require( 'express' );
-const { Pool } = require( 'pg' ); //eslint-disable-line
+const { Pool } = require( 'pg' ); // eslint-disable-line
 const session = require( 'express-session' ); // eslint-disable-line require-statement-match
 const MemoryStore = require( 'memorystore' )( session );
 const winston = require( 'winston' );
@@ -155,5 +155,3 @@ app.post( '/*', routeHandlers.pageNotFound );
 
 // start the server
 app.listen( LISTEN_PORT, function() { winston.info( 'Listening on port ' + LISTEN_PORT ); } );
-
-

@@ -1,14 +1,14 @@
-// Copyright 2017-2019, University of Colorado Boulder
+// Copyright 2017-2020, University of Colorado Boulder
 
 /**
- * This file defines a singleton object that is used for long term storage of the translated strings.  It is called
+ * This file defines a singleton object that is used for long term storage of the translated strings. It is called
  * "long term" to distinguish it from the short term storage that can occur if a user decides to save an in-progress
- * translation without submitting it as a completed translation.  Strings that are saved to long-term storage are used
+ * translation without submitting it as a completed translation. Strings that are saved to long-term storage are used
  * when translated sims are built, whereas string saved to short term storage are not.
  *
  * This implementation uses GitHub as the "back end" where the strings are stored, but it is intended to have a fairly
  * generic API so that if we ever decide to use something else as the long-term storage medium for strings, this object
- * could be rewritten with minimal impact on the client code.  That's the idea anyway.
+ * could be rewritten with minimal impact on the client code. That's the idea anyway.
  *
  * @author John Blanco
  */
@@ -71,7 +71,7 @@ async function getTranslatedStrings( simOrLibName, locale ) {
   }
   else if ( response.status === 404 ) {
 
-    // This is okay, it just means that no translation exists yet.  Return an empty object.
+    // This is okay, it just means that no translation exists yet. Return an empty object.
     winston.debug( 'no string file found for translation, returning empty object, filename = ' + rawStringFileURL );
     return Promise.resolve( {} );
   }

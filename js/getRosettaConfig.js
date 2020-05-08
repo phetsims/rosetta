@@ -1,4 +1,4 @@
-// Copyright 2019, University of Colorado Boulder
+// Copyright 2002-2020, University of Colorado Boulder
 
 /**
  * Read configuration information from the file system, using defaults for non-required values and throwing assertions
@@ -25,7 +25,7 @@ const ROSETTA_CONFIG_FILE_NAME = 'rosetta-config.json';
  * read configuration from the file system
  * @returns {string} - runtime configuration for Rosetta
  */
-module.exports = function() {
+module.exports = function() { // Liam's Note: This function is super long. Might be nice to break it up and shorten it.
 
   // locate and read the config files
   const platform = process.platform;
@@ -39,7 +39,7 @@ module.exports = function() {
   else {
 
     // The following somewhat odd looking code gets the config file from the home directory when running under a
-    // Unix variant.  This was necessary because rosetta is generally run under phet-admin, but "process.env.HOME" was
+    // Unix variant. This was necessary because rosetta is generally run under phet-admin, but "process.env.HOME" was
     // returning the home directory of the user who is starting the process, not phet-admin's home directory.
     configDirPath = passwdUser.sync( process.getuid() ).homedir + CONFIG_DIR + '/';
   }
@@ -63,7 +63,7 @@ module.exports = function() {
   assert( config.serverToken, 'serverToken is missing from ' + rosettaConfigFileName );
 
   // The "production server" is the server from which sims and sim metadata are retrieved as well as the place where
-  // build requests are sent once a new translation has been submitted.  Default to the main server if no value is
+  // build requests are sent once a new translation has been submitted. Default to the main server if no value is
   // provided.
   config.productionServerURL = config.productionServerURL || 'https://phet.colorado.edu';
 
@@ -90,9 +90,9 @@ module.exports = function() {
   assert( config.stringStorageDbPass, `stringStorageDbPass is missing from ${rosettaConfigFileName}` );
 
   // Set up the environment variables used by the 'pg' module to interact with the DB used for short-term string
-  // storage.  I (jbphet) had never encountered this sort of approach before, where the configuration information is
+  // storage. I (jbphet) had never encountered this sort of approach before, where the configuration information is
   // stored in process variables, but that's what was done in the example code, and apparently this is fairly common in
-  // apps the interface to databases.  So, when in Rome...
+  // apps the interface to databases. So, when in Rome...
   process.env = Object.assign( process.env, {
     PGUSER: config.stringStorageDbUser,
     PGHOST: config.stringStorageDbHost,
@@ -105,7 +105,7 @@ module.exports = function() {
   config.loggingLevel = config.loggingLevel || 'info';
 
   // Set the branch of babel where translations will be stored and from whence they will be retrieved.  The value
-  // "master" is the default if nothing is explicitly specified.  The branch "tests" can be specified to enable testing
+  // "master" is the default if nothing is explicitly specified. The branch "tests" can be specified to enable testing
   // that doesn't affect existing translations.
   config.babelBranch = config.babelBranch || 'master';
 
@@ -116,12 +116,12 @@ module.exports = function() {
 
   // It is sometimes desirable when debugging to turn off all commits of translated strings to GitHub, especially if a
   // lot of testing is being done and having all the resulting commits in GitHub would be more distracting than truly
-  // valuable.  This configuration parameter allows string commits to be skipped, and the information about them will
+  // valuable. This configuration parameter allows string commits to be skipped, and the information about them will
   // just be logged instead.
   config.performStringCommits = config.performStringCommits === undefined ? true : config.performStringCommits;
 
   // It is sometimes desirable when debugging to turn off the build requests that are sent to the build server when a
-  // translation is successfully submitted.  This configuration parameter can be used to tell the code to skip sending
+  // translation is successfully submitted. This configuration parameter can be used to tell the code to skip sending
   // the build requests.
   config.sendBuildRequests = config.sendBuildRequests === undefined ? true : config.sendBuildRequests;
 
