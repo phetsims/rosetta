@@ -1,4 +1,4 @@
-// Copyright 2016, University of Colorado Boulder
+// Copyright 2002-2020, University of Colorado Boulder
 
 'use strict';
 
