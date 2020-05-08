@@ -5,6 +5,8 @@ user interface and the server-side support needed for translating PhET HTML5 sim
 
 Rosetta uses [Node.js](https://nodejs.org/en/), [Express.js](https://expressjs.com/), and the [doT.js templating engine](https://olado.github.io/doT/index.html).
 
+## Running Rosetta
+
 ### Starting and Stopping Rosetta on PhET-Server
 
 Start:
@@ -72,7 +74,8 @@ If those don't work for your setup, you can set them in your `build-local.json` 
 
 #### Docker
 
-Another option is to use [Docker](https://docs.docker.com/). Follow the [installation instructions](https://docs.docker.com/install/) to get access to the `docker` command and execute the following:
+Another option is to use [Docker](https://docs.docker.com/). Follow the
+[installation instructions](https://docs.docker.com/install/) to get access to the `docker` command and execute the following:
 
 `docker pull postgres`
 
