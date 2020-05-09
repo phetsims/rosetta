@@ -1,4 +1,4 @@
-// Copyright 2002-2020, University of Colorado Boulder
+// Copyright 2019-2020, University of Colorado Boulder
 
 /**
  * Read configuration information from the file system, using defaults for non-required values and throwing assertions
