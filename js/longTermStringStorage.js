@@ -194,7 +194,7 @@ function saveFileToGitHub( filePath, contents, commitMessage ) {
         }
       } );
     }
-    else{
+    else {
 
       // Skip the string commits and just log the information about what would have been done.  This is a debug mode
       // that was added to prevent excessive commits to GitHub during testing.
