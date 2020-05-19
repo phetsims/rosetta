@@ -1,3 +1,5 @@
+# :construction: THIS README AND THE DOCUMENTATION ARE UNDER CONSTRUCTION :construction:
+
 # Rosetta
 
 Rosetta is PhET's translation utility for its HTML5 simulations. This repository contains the code for Rosetta's
