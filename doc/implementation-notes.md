@@ -76,10 +76,10 @@ since it requires a database, so that is often just allowed to error out. To get
 may be necessary to sync phet-server-dev to phet-dev. As of this writing, this is done by contacting @mattpen and
 asking him to do it (see https://github.com/phetsims/website/issues/974).
 
-It can be useful to disable certain steps in the translation process while debugging so as to prevent excessive commits
+It can be useful to disable certain steps in the translation process while debugging to prevent excessive commits
 to GitHub and to prevent unneeded build requests to the build server. The configuration parameters 
 `performStringCommits` and `sendBuildRequests` are supported. Please look through the code to see how these are used.
-They are considered to be true if not present, so they may not be present in the configuration files on the servers.
+They are considered true if not present, so they may not be present in the configuration files on the servers.
 
 There is a branch called 'tests' that is set up in the babel repo and is used for submitting translations without
 affecting any of the "real" translations in the master branch. This is set using the "babelBranch" value in the

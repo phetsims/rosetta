@@ -73,7 +73,9 @@ This guide was made by @muedli on 2020-05-15.
   "sendBuildRequests": false
 }
 ```
-13. In the rosetta directory, run `npm run dev`.
+13. In the rosetta directory, run `npm run dev`. (For some reason, as of this writing, Git Bash doesn't let you kill the 
+    process with ctrl + c. Thus, I've been using `taskkill /F /IM node.exe` in cmd. There's probably
+    a more graceful way to do this.)
 14. Open your browser to the port specified by `LISTEN_PORT` in rosetta.js, which, as of
     this writing, is 16372. (http://localhost:16372.)
 
@@ -140,7 +142,7 @@ The Rosetta uses syslog to save output to the Winston log. You can view the logs
 * Stop: `sudo /etc/init.d/rosetta stop`
 * Check if Rosetta is running (note the lack of sudo): `/etc/init.d/rosetta status`
 
-### PhET-Server
+### PhET Server
 
 * Start: `sudo systemctl start rosetta`
 * Stop: `sudo systemctl stop rosetta`

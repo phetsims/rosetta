@@ -22,27 +22,37 @@ const CONFIG_DIR = '/.phet';
 const ROSETTA_CONFIG_FILE_NAME = 'rosetta-config.json';
 
 /**
- * read configuration from the file system
- * @returns {string} - runtime configuration for Rosetta
+ * gets Rosetta's configuration directory path depending on platform (Windows or UNIX)
+ * @returns {string} - directory in which Rosetta's configuration resides
  */
-module.exports = function() { // Liam's Note: This function is super long. Might be nice to break it up and shorten it.
-
-  // locate and read the config files
-  const platform = process.platform;
-  winston.info( 'platform = ' + platform );
+function getConfigDirPath() {
   let configDirPath;
-  if ( platform.indexOf( 'win' ) === 0 ) {
-
-    // windows
+  const platformIsWindows = process.platform === 'win32' ? true : false;
+  if ( platformIsWindows ) {
     configDirPath = process.env.HOME + CONFIG_DIR + '/';
   }
   else {
 
-    // The following somewhat odd looking code gets the config file from the home directory when running under a
-    // Unix variant. This was necessary because rosetta is generally run under phet-admin, but "process.env.HOME" was
+    // The following somewhat odd-looking code gets the config file from the home directory when running under a
+    // UNIX variant. This was necessary because Rosetta is generally run under phet-admin, but "process.env.HOME" was
     // returning the home directory of the user who is starting the process, not phet-admin's home directory.
     configDirPath = passwdUser.sync( process.getuid() ).homedir + CONFIG_DIR + '/';
   }
+  return configDirPath;
+}
+
+// NEEDS A FIX! SEE COMMENT(S).
+/**
+ * read configuration from the file system
+ * @returns {string} - runtime configuration for Rosetta
+ */
+module.exports = function() {
+  // PhET Convention: https://github.com/phetsims/phet-info/blob/master/doc/best-practices-for-modules.md#do-not-
+  // Can we use the new ES6 export here?
+  // This function is long. It would be nice to break it up.
+
+  winston.info( 'platform = ' + process.platform );
+  const configDirPath = getConfigDirPath();
   const rosettaConfigFileName = configDirPath + ROSETTA_CONFIG_FILE_NAME;
 
   winston.info( 'rosetta config file full path and name: ' + rosettaConfigFileName );

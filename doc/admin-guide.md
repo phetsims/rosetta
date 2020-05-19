@@ -13,7 +13,7 @@ When an update is pulled, the rosetta process needs to be restarted before the c
 
 The process is run under the phet-admin account on phet-server.
 
-The utility is accessed at the URL https://phet.colorado.edu/translate
+The utility is accessed at the URL https://phet.colorado.edu/translate.
 
 Starting, Stopping, and Checking
 --------------------------------
