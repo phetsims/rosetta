@@ -54,23 +54,23 @@ This guide was made by @muedli on 2020-05-15.
 Windows 10 (1909) + Git 2.26.2 + Node.js v12.16.3 + PostgreSQL 12.2
 -------------------------------------------------------------------
 1. Get your GitHub account set up with phetsims.
-* Install and set up Git. Default installation options should be fine.
+2. Install and set up Git. Default installation options should be fine.
   (I used [Chocolatey](https://chocolatey.org/).)
-* Install Node.js. Default installation options should be fine.
+3. Install Node.js. Default installation options should be fine.
   (Again, I used [Chocolatey](https://chocolatey.org/).)
-* Install PostgreSQL. Defualt installation options should be fine. Make sure
+4. Install PostgreSQL. Defualt installation options should be fine. Make sure
   you have the password that you set or was set for you during installation.
   (Again, I used [Chocolatey](https://chocolatey.org/).)
-* Clone the phetsims/rosetta repository.
-* In the rosetta directory on your machine, run `npm install`.
-* Open the SQL shell. (In my case, an SQL shell was installed when I installed PostgreSQL.)
-* Make a database for Rosetta by running `CREATE DATABASE rosetta;`.
-* Switch to the rosetta database.
-* Run the rosetta/dev/init.sql script with `\i '{path-to-your-copy-of-rosetta}/rosetta/dev/init.sql';` .
-  (Note how the file path is in single quotes and the slashes are forward slashes, not
-  backward slashes.
-* In the correct directory (`C:\Users\{username}\` on Windows), `mkdir .phet/`.
-* In `.phet/`, make `rosetta-config.json` with the following:
+5. Clone the phetsims/rosetta repository.
+6. In the rosetta directory on your machine, run `npm install`.
+7. Open the SQL shell. (In my case, an SQL shell was installed when I installed PostgreSQL.)
+8. Make a database for Rosetta by running `CREATE DATABASE rosetta;`.
+9. Switch to the rosetta database.
+10. Run the rosetta/dev/init.sql script with `\i '{path-to-your-copy-of-rosetta}/rosetta/dev/init.sql';` .
+    (Note how the file path is in single quotes and the slashes are forward slashes, not
+    backward slashes.
+11. In the correct directory (`C:\Users\{username}\` on Windows), `mkdir .phet/`.
+12. In `.phet/`, make `rosetta-config.json` with the following:
 ```
 {
   "githubUsername": "phet-dev",
@@ -91,26 +91,26 @@ Windows 10 (1909) + Git 2.26.2 + Node.js v12.16.3 + PostgreSQL 12.2
   "sendBuildRequests": false
 }
 ```
-* In the rosetta directory, run `npm run dev`.
-* Open your browser to the port specified by `LISTEN_PORT` in rosetta.js, which, as of
-  this writing, is 16372. (http://localhost:16372.)
+13. In the rosetta directory, run `npm run dev`.
+14. Open your browser to the port specified by `LISTEN_PORT` in rosetta.js, which, as of
+    this writing, is 16372. (http://localhost:16372.)
 
 macOS 10.15.4 + Git 2.24.2 + Node.js v14.2.0 + PostgreSQL 12.2
 --------------------------------------------------------------
 1. Get your GitHub account set up with phetsims.
-* You should have Git pre-installed.
-* Install Node.js. (I reccommend using [Homebrew](https://brew.sh/).)
-* Install PostgreSQL. (Again, I reccommend using [Homebrew](https://brew.sh/).)
-* Clone the phetsims/rosetta repository.
-* In the rosetta directory on your machine, run `npm install`.
-* Start your server using `pg_ctl -D /usr/local/var/postgres start`.
-* To enter the SQL shell, run `psql {username-for-database}`.
-* Create the rosetta database, `createdb rosetta`.
-* Connect to the database by running `\connect rosetta`.
-* Run the rosetta/dev/init.sql script with `\i {path-to-your-copy-of-rosetta}/rosetta/dev/init.sql;` .
+2. You should have Git pre-installed.
+3. Install Node.js. (I reccommend using [Homebrew](https://brew.sh/).)
+4. Install PostgreSQL. (Again, I reccommend using [Homebrew](https://brew.sh/).)
+5. Clone the phetsims/rosetta repository.
+6. In the rosetta directory on your machine, run `npm install`.
+7. Start your server using `pg_ctl -D /usr/local/var/postgres start`.
+8. To enter the SQL shell, run `psql {username-for-database}`.
+9. Create the rosetta database, `createdb rosetta`.
+10. Connect to the database by running `\connect rosetta`.
+11. Run the rosetta/dev/init.sql script with `\i {path-to-your-copy-of-rosetta}/rosetta/dev/init.sql;` .
   (I don't think macOS needs the single quotes that are necessary on Windows.)
-* In the correct directory (`/Users/{username}/` on macOS), `mkdir .phet/`.
-* In `.phet/`, make rosetta-config.json with the following:
+12. In the correct directory (`/Users/{username}/` on macOS), `mkdir .phet/`.
+13. In `.phet/`, make rosetta-config.json with the following:
 ```
 {
   "githubUsername": "phet-dev",
@@ -131,11 +131,11 @@ macOS 10.15.4 + Git 2.24.2 + Node.js v14.2.0 + PostgreSQL 12.2
   "sendBuildRequests": false
 }
 ```
-* Make sure your database username and password are correct in the config. In my
+14. Make sure your database username and password are correct in the config. In my
   case, the username was "liam" (my computer username) and I didn't set a password,
   so I just put "dummyString."
-* In the rosetta directory, run `npm run dev`.
-* Open your browser to the port specified by `LISTEN_PORT` in rosetta.js, which, as of
+15. In the rosetta directory, run `npm run dev`.
+16. Open your browser to the port specified by `LISTEN_PORT` in rosetta.js, which, as of
   this writing, is 16372. (http://localhost:16372.)
 
 ### Local Development Setup (In Progress)
