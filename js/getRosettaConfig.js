@@ -18,8 +18,9 @@ const passwdUser = require( 'passwd-user' ); // eslint-disable-line require-stat
 const winston = require( 'winston' );
 
 // constants
-const CONFIG_DIR = '/.phet';
-const ROSETTA_CONFIG_FILE_NAME = 'rosetta-config.json';
+const UNIX_CONFIG_DIR = '/.phet';
+const WIN_CONFIG_DIR = '\\.phet';
+const CONFIG_FILENAME = 'rosetta-config.json';
 
 /**
  * gets Rosetta's configuration directory path depending on platform (Windows or UNIX)
@@ -29,48 +30,67 @@ function getConfigDirPath() {
   let configDirPath;
   const platformIsWindows = process.platform === 'win32' ? true : false;
   if ( platformIsWindows ) {
-    configDirPath = process.env.HOME + CONFIG_DIR + '/';
+    configDirPath = process.env.HOME + WIN_CONFIG_DIR + '\\';
   }
   else {
 
     // The following somewhat odd-looking code gets the config file from the home directory when running under a
     // UNIX variant. This was necessary because Rosetta is generally run under phet-admin, but "process.env.HOME" was
     // returning the home directory of the user who is starting the process, not phet-admin's home directory.
-    configDirPath = passwdUser.sync( process.getuid() ).homedir + CONFIG_DIR + '/';
+    // Liam: I'm wondering if this is still necessary or if there's a way I can make this more elegant.
+    // Liam: Perhaps test this out on macOS and/or Linux. Maybe you can figure something out that way.
+    // Liam: It would be really nice if this function didn't have to exist. Then you could just set a constant.
+    configDirPath = passwdUser.sync( process.getuid() ).homedir + UNIX_CONFIG_DIR + '/';
   }
   return configDirPath;
 }
 
-// NEEDS A FIX! SEE COMMENT(S).
+/**
+ * asserts that each necessary value in the config file exists
+ * @param {Object} config -
+ * @param {string} configPathWithFilename - full path with filename to config
+ */
+function assertConfigValuesExist(config, configPathWithFilename ) {
+
+  // The GitHub credentials for phet-dev must be in the config.
+  assert( config.githubUsername, `githubUsername is missing from ${configPathWithFilename}.` );
+  assert( config.githubPassword, `githubPassword is missing from ${configPathWithFilename}.` );
+
+  // The credentials for build requests and metadata retrieval must be in the config.
+  assert( config.buildServerAuthorizationCode, `buildServerAuthorizationCode is missing from ${configPathWithFilename}.` );
+  assert( config.serverToken, `serverToken is missing from ${configPathWithFilename}.` );
+}
+
+// TODO: Convert the string concatenation to ES6 if possible.
+// TODO: Add proper capitalization to asserts.
 /**
  * read configuration from the file system
  * @returns {string} - runtime configuration for Rosetta
  */
 module.exports = function() {
   // PhET Convention: https://github.com/phetsims/phet-info/blob/master/doc/best-practices-for-modules.md#do-not-
-  // Can we use the new ES6 export here?
+  // Use the new export instead. Need to figure out what other files need from this file.
   // This function is long. It would be nice to break it up.
 
-  winston.info( 'platform = ' + process.platform );
   const configDirPath = getConfigDirPath();
-  const rosettaConfigFileName = configDirPath + ROSETTA_CONFIG_FILE_NAME;
+  const configPathWithFilename = configDirPath + CONFIG_FILENAME;
 
-  winston.info( 'rosetta config file full path and name: ' + rosettaConfigFileName );
+  winston.info( `Your platform is ${process.platform}.` );
+  winston.info( `Config should be ${configPathWithFilename}.` );
 
-  // ensure that the config files exist
-  assert( fs.existsSync( rosettaConfigFileName ), 'config file not found: ' + rosettaConfigFileName );
-
-  // read the config file and verify that the needed information is present
-  const configJSON = fs.readFileSync( rosettaConfigFileName );
+  // Read and parse the config file.
+  const configJSON = fs.readFileSync( configPathWithFilename );
   const config = JSON.parse( configJSON );
 
-  // credentials needed to save files to GitHub, must be preset
-  assert( config.githubUsername, 'githubUsername is missing from ' + rosettaConfigFileName );
-  assert( config.githubPassword, 'githubPassword is missing from ' + rosettaConfigFileName );
-
-  // credentials needed to request builds and retrieve metadata, must be present
-  assert( config.buildServerAuthorizationCode, 'buildServerAuthorizationCode is missing from ' + rosettaConfigFileName );
-  assert( config.serverToken, 'serverToken is missing from ' + rosettaConfigFileName );
+  // If the config file exists, assert that necessary values exist.
+  // TODO: Test this out.
+  const configExists = fs.existsSync( configPathWithFilename );
+  if ( configExists ) {
+    assertConfigValuesExist(config, configPathWithFilename);
+  }
+  else {
+    assert(`Config file not found in ${configPathWithFilename}.`);
+  }
 
   // The "production server" is the server from which sims and sim metadata are retrieved as well as the place where
   // build requests are sent once a new translation has been submitted. Default to the main server if no value is
@@ -88,16 +108,16 @@ module.exports = function() {
 
   assert(
     config.rosettaSessionSecret,
-    'rosettaSessionSecret is missing from ' + rosettaConfigFileName +
+    'rosettaSessionSecret is missing from ' + configPathWithFilename +
     '. To set this up for local testing add any string as the value for "rosettaSessionSecret"'
   );
 
   // verify that the information necessary for connecting to the short-term-string-storage database is present
-  assert( config.stringStorageDbHost, `stringStorageDbHost is missing from ${rosettaConfigFileName}` );
-  assert( config.stringStorageDbPort, `stringStorageDbPort is missing from ${rosettaConfigFileName}` );
-  assert( config.stringStorageDbName, `stringStorageDbName is missing from ${rosettaConfigFileName}` );
-  assert( config.stringStorageDbUser, `stringStorageDbUser is missing from ${rosettaConfigFileName}` );
-  assert( config.stringStorageDbPass, `stringStorageDbPass is missing from ${rosettaConfigFileName}` );
+  assert( config.stringStorageDbHost, `stringStorageDbHost is missing from ${configPathWithFilename}` );
+  assert( config.stringStorageDbPort, `stringStorageDbPort is missing from ${configPathWithFilename}` );
+  assert( config.stringStorageDbName, `stringStorageDbName is missing from ${configPathWithFilename}` );
+  assert( config.stringStorageDbUser, `stringStorageDbUser is missing from ${configPathWithFilename}` );
+  assert( config.stringStorageDbPass, `stringStorageDbPass is missing from ${configPathWithFilename}` );
 
   // Set up the environment variables used by the 'pg' module to interact with the DB used for short-term string
   // storage. I (jbphet) had never encountered this sort of approach before, where the configuration information is
