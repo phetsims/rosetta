@@ -1,6 +1,7 @@
 // Copyright 2002-2020, University of Colorado Boulder
 
 /**
+ * // TODO: Reword this maybe when you're done? It should be the same, but you might want to reword.
  * Read configuration information from the file system, using defaults for non-required values and throwing assertions
  * if required information is missing, and return an object that contains the resulting configuration.
  *
@@ -10,27 +11,27 @@
 
 'use strict';
 
-// modules
+// Modules
 const _ = require( 'lodash' ); // eslint-disable-line
 const assert = require( 'assert' );
 const fs = require( 'fs' );
 const passwdUser = require( 'passwd-user' ); // eslint-disable-line require-statement-match
 const winston = require( 'winston' );
 
-// constants
+// Constants
 const UNIX_CONFIG_DIR = '/.phet';
-const WIN_CONFIG_DIR = '\\.phet';
+const WINDOWS_CONFIG_DIR = '\\.phet';
 const CONFIG_FILENAME = 'rosetta-config.json';
 
 /**
- * gets Rosetta's configuration directory path depending on platform (Windows or UNIX)
+ * Get Rosetta's configuration directory path depending on platform (Windows or UNIX).
  * @returns {string} - directory in which Rosetta's configuration resides
  */
 function getConfigDirPath() {
   let configDirPath;
   const platformIsWindows = process.platform === 'win32' ? true : false;
   if ( platformIsWindows ) {
-    configDirPath = process.env.HOME + WIN_CONFIG_DIR + '\\';
+    configDirPath = process.env.HOME + WINDOWS_CONFIG_DIR + '\\';
   }
   else {
 
@@ -46,31 +47,57 @@ function getConfigDirPath() {
 }
 
 /**
- * asserts that each necessary value in the config file exists
- * @param {Object} config -
- * @param {string} configPathWithFilename - full path with filename to config
+ * If the config file exists, read it, parse it, and return it.
+ * @param {string} configPathWithFilename - full path with filename to Rosetta config
+ * @returns {Object} config - parsed JSON config for Rosetta
  */
-function assertConfigValuesExist(config, configPathWithFilename ) {
+function readAndParseConfig( configPathWithFilename ) {
+  const configExists = fs.existsSync( configPathWithFilename );
+  let configJSON;
+  let config;
+  if ( configExists ) {
+    configJSON = fs.readFileSync( configPathWithFilename );
+    config = JSON.parse( configJSON );
+    return config;
+  }
+  else {
+    assert(`Config file not found in ${configPathWithFilename}.`);
+  }
+}
 
-  // The GitHub credentials for phet-dev must be in the config.
+/**
+ * Assert that each necessary value in the config file exists.
+ * @param {Object} config - parsed JSON config for Rosetta
+ * @param {string} configPathWithFilename - full path with filename to Rosetta config
+ */
+function assertConfigValuesExist( config, configPathWithFilename ) {
+
+  // The GitHub credentials for phet-dev must exist.
   assert( config.githubUsername, `githubUsername is missing from ${configPathWithFilename}.` );
   assert( config.githubPassword, `githubPassword is missing from ${configPathWithFilename}.` );
 
-  // The credentials for build requests and metadata retrieval must be in the config.
+  // The credentials for build requests and metadata retrieval must exist.
   assert( config.buildServerAuthorizationCode, `buildServerAuthorizationCode is missing from ${configPathWithFilename}.` );
   assert( config.serverToken, `serverToken is missing from ${configPathWithFilename}.` );
+
+  // The items for connecting to the short-term-string-storage database must exist.
+  assert( config.stringStorageDbHost, `stringStorageDbHost is missing from ${configPathWithFilename}.` );
+  assert( config.stringStorageDbPort, `stringStorageDbPort is missing from ${configPathWithFilename}.` );
+  assert( config.stringStorageDbName, `stringStorageDbName is missing from ${configPathWithFilename}.` );
+  assert( config.stringStorageDbUser, `stringStorageDbUser is missing from ${configPathWithFilename}.` );
+  assert( config.stringStorageDbPass, `stringStorageDbPass is missing from ${configPathWithFilename}.` );
 }
 
 // TODO: Convert the string concatenation to ES6 if possible.
 // TODO: Add proper capitalization to asserts.
+// TODO: Break this up.
+// TODO: Use new export! See https://github.com/phetsims/phet-info/blob/master/doc/best-practices-for-modules.md#do-not-.
+// TODO: I think the only thing used from this is the config (big if true), so just export that.
 /**
- * read configuration from the file system
+ * TODO: Hmm... How to describe this function?
  * @returns {string} - runtime configuration for Rosetta
  */
 module.exports = function() {
-  // PhET Convention: https://github.com/phetsims/phet-info/blob/master/doc/best-practices-for-modules.md#do-not-
-  // Use the new export instead. Need to figure out what other files need from this file.
-  // This function is long. It would be nice to break it up.
 
   const configDirPath = getConfigDirPath();
   const configPathWithFilename = configDirPath + CONFIG_FILENAME;
@@ -78,19 +105,12 @@ module.exports = function() {
   winston.info( `Your platform is ${process.platform}.` );
   winston.info( `Config should be ${configPathWithFilename}.` );
 
-  // Read and parse the config file.
-  const configJSON = fs.readFileSync( configPathWithFilename );
-  const config = JSON.parse( configJSON );
-
-  // If the config file exists, assert that necessary values exist.
   // TODO: Test this out.
-  const configExists = fs.existsSync( configPathWithFilename );
-  if ( configExists ) {
-    assertConfigValuesExist(config, configPathWithFilename);
-  }
-  else {
-    assert(`Config file not found in ${configPathWithFilename}.`);
-  }
+  let config = readAndParseConfig( configPathWithFilename );
+
+  assertConfigValuesExist(config, configPathWithFilename);
+
+  //  config = setDefaultConfigValues(config);
 
   // The "production server" is the server from which sims and sim metadata are retrieved as well as the place where
   // build requests are sent once a new translation has been submitted. Default to the main server if no value is
@@ -111,13 +131,6 @@ module.exports = function() {
     'rosettaSessionSecret is missing from ' + configPathWithFilename +
     '. To set this up for local testing add any string as the value for "rosettaSessionSecret"'
   );
-
-  // verify that the information necessary for connecting to the short-term-string-storage database is present
-  assert( config.stringStorageDbHost, `stringStorageDbHost is missing from ${configPathWithFilename}` );
-  assert( config.stringStorageDbPort, `stringStorageDbPort is missing from ${configPathWithFilename}` );
-  assert( config.stringStorageDbName, `stringStorageDbName is missing from ${configPathWithFilename}` );
-  assert( config.stringStorageDbUser, `stringStorageDbUser is missing from ${configPathWithFilename}` );
-  assert( config.stringStorageDbPass, `stringStorageDbPass is missing from ${configPathWithFilename}` );
 
   // Set up the environment variables used by the 'pg' module to interact with the DB used for short-term string
   // storage. I (jbphet) had never encountered this sort of approach before, where the configuration information is
