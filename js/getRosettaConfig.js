@@ -1,5 +1,9 @@
 // Copyright 2002-2020, University of Colorado Boulder
 
+// TODO: Go through the JSDoc comments and make sure they're accurate and consistent.
+// TODO: Take out console logs when done testing.
+// TODO: Do or write tests for each function.
+
 /**
  * // TODO: Reword this maybe when you're done? It should be the same, but you might want to reword.
  * Read configuration information from the file system, using defaults for non-required values and throwing assertions
@@ -23,11 +27,15 @@ const UNIX_CONFIG_DIR = '/.phet';
 const WINDOWS_CONFIG_DIR = '\\.phet';
 const CONFIG_FILENAME = 'rosetta-config.json';
 
+// TODO: This has been tested on Windows, but needs testing on macOS and Linux if it's not too much trouble.
 /**
  * Get Rosetta's configuration directory path depending on platform (Windows or UNIX).
  * @returns {string} - directory in which Rosetta's configuration resides
  */
 function getConfigDirPath() {
+
+  console.log('getConfigDirPath was called.');
+
   let configDirPath;
   const platformIsWindows = process.platform === 'win32' ? true : false;
   if ( platformIsWindows ) {
@@ -52,6 +60,9 @@ function getConfigDirPath() {
  * @returns {Object} config - parsed JSON config for Rosetta
  */
 function readAndParseConfig( configPathWithFilename ) {
+
+  console.log('readAndParseConfig was called.');
+
   const configExists = fs.existsSync( configPathWithFilename );
   let configJSON;
   let config;
@@ -72,70 +83,82 @@ function readAndParseConfig( configPathWithFilename ) {
  */
 function assertConfigValuesExist( config, configPathWithFilename ) {
 
+  console.log('assertConfigValuesExist was called.');
+
   // The GitHub credentials for phet-dev must exist.
-  assert( config.githubUsername, `githubUsername is missing from ${configPathWithFilename}.` );
-  assert( config.githubPassword, `githubPassword is missing from ${configPathWithFilename}.` );
+  assert( config.githubUsername, `githubUsername is missing from ${ configPathWithFilename }.` );
+  assert( config.githubPassword, `githubPassword is missing from ${ configPathWithFilename }.` );
 
   // The credentials for build requests and metadata retrieval must exist.
-  assert( config.buildServerAuthorizationCode, `buildServerAuthorizationCode is missing from ${configPathWithFilename}.` );
-  assert( config.serverToken, `serverToken is missing from ${configPathWithFilename}.` );
+  assert(
+    config.buildServerAuthorizationCode,
+    `buildServerAuthorizationCode is missing from ${ configPathWithFilename }.`
+  );
+  assert( config.serverToken, `serverToken is missing from ${ configPathWithFilename }.` );
 
   // The items for connecting to the short-term-string-storage database must exist.
-  assert( config.stringStorageDbHost, `stringStorageDbHost is missing from ${configPathWithFilename}.` );
-  assert( config.stringStorageDbPort, `stringStorageDbPort is missing from ${configPathWithFilename}.` );
-  assert( config.stringStorageDbName, `stringStorageDbName is missing from ${configPathWithFilename}.` );
-  assert( config.stringStorageDbUser, `stringStorageDbUser is missing from ${configPathWithFilename}.` );
-  assert( config.stringStorageDbPass, `stringStorageDbPass is missing from ${configPathWithFilename}.` );
+  assert( config.stringStorageDbHost, `stringStorageDbHost is missing from ${ configPathWithFilename }.` );
+  assert( config.stringStorageDbPort, `stringStorageDbPort is missing from ${ configPathWithFilename }.` );
+  assert( config.stringStorageDbName, `stringStorageDbName is missing from ${ configPathWithFilename }.` );
+  assert( config.stringStorageDbUser, `stringStorageDbUser is missing from ${ configPathWithFilename }.` );
+  assert( config.stringStorageDbPass, `stringStorageDbPass is missing from ${ configPathWithFilename }.` );
+
+  // The Rosetta session secret must exist, but for local testing it can be a dummy string.
+  assert(
+    config.rosettaSessionSecret,
+    `rosettaSessionSecret is missing from ${ configPathWithFilename }. For local testing, simply supply a dummy string.`
+  );
+
+  // Babel has only two branches: (1) "master" and (2) "tests".
+  assert(
+    config.babelBranch === 'master' || config.babelBranch === 'tests',
+    'babelBranch must be either "master" or "tests".'
+  );
 }
 
-// TODO: Convert the string concatenation to ES6 if possible.
-// TODO: Add proper capitalization to asserts.
-// TODO: Break this up.
-// TODO: Use new export! See https://github.com/phetsims/phet-info/blob/master/doc/best-practices-for-modules.md#do-not-.
-// TODO: I think the only thing used from this is the config (big if true), so just export that.
-/**
- * TODO: Hmm... How to describe this function?
- * @returns {string} - runtime configuration for Rosetta
- */
-module.exports = function() {
+// TODO: Add JSDoc comment.
+function setDefaultConfigValues ( config ) {
 
-  const configDirPath = getConfigDirPath();
-  const configPathWithFilename = configDirPath + CONFIG_FILENAME;
-
-  winston.info( `Your platform is ${process.platform}.` );
-  winston.info( `Config should be ${configPathWithFilename}.` );
-
-  // TODO: Test this out.
-  let config = readAndParseConfig( configPathWithFilename );
-
-  assertConfigValuesExist(config, configPathWithFilename);
-
-  //  config = setDefaultConfigValues(config);
+  console.log('setDefaultConfigValues was called.');
 
   // The "production server" is the server from which sims and sim metadata are retrieved as well as the place where
   // build requests are sent once a new translation has been submitted. Default to the main server if no value is
   // provided.
   config.productionServerURL = config.productionServerURL || 'https://phet.colorado.edu';
 
-  // The enabled field isn't required in the config file, and its default value is true.  It can be set to 'false' in
-  // the file in order to put up a sort of "Translation not available" message.
+  // The enabled field isn't required in the config file, and its default value is true. It can be set to false
+  // to put up a "translation not available" message.
   if ( config.enabled === undefined ) {
     config.enabled = true;
   }
   else {
-    assert( typeof config.enabled === 'boolean', 'enabled must be a boolean value if defined' );
+    assert( typeof config.enabled === 'boolean', 'enabled must be a boolean if defined.' );
   }
 
-  assert(
-    config.rosettaSessionSecret,
-    'rosettaSessionSecret is missing from ' + configPathWithFilename +
-    '. To set this up for local testing add any string as the value for "rosettaSessionSecret"'
-  );
+  // Set the logging level. Default is 'info' level.
+  config.loggingLevel = config.loggingLevel || 'info';
 
-  // Set up the environment variables used by the 'pg' module to interact with the DB used for short-term string
-  // storage. I (jbphet) had never encountered this sort of approach before, where the configuration information is
-  // stored in process variables, but that's what was done in the example code, and apparently this is fairly common in
-  // apps the interface to databases. So, when in Rome...
+  // Set Babel branch where Rosetta stores and retrieves translations. The default branch is "master."
+  // Use the "tests" branch of Babel to test without affecting existing translations.
+  config.babelBranch = config.babelBranch || 'master';
+
+  // If, for testing purposes, you want to turn off all commits of translated strings GitHub, you can set
+  // performStringCommits to false. (Lots of translated string commits are usually more distracting than useful.) If
+  // set to false, the information about the translated string commits will be logged instead.
+  config.performStringCommits = config.performStringCommits === undefined ? true : config.performStringCommits;
+
+  // When debugging, it's sometimes desirable to turn off build requests that are sent to the build server when a
+  // translation is successfully submitted. This configuration parameter can be used to tell the code to skip sending
+  // the build requests.
+  config.sendBuildRequests = config.sendBuildRequests === undefined ? true : config.sendBuildRequests;
+}
+
+/**
+ * Set variables used by the "pg" module (short-term string storage in a PostgreSQL database).
+ * @param {Object} config - parsed JSON config for Rosetta
+ */
+function setPostgresVariables( config ) {
+  console.log('assignPostgresVariables was called.');
   process.env = Object.assign( process.env, {
     PGUSER: config.stringStorageDbUser,
     PGHOST: config.stringStorageDbHost,
@@ -143,35 +166,30 @@ module.exports = function() {
     PGDATABASE: config.stringStorageDbName,
     PGPORT: config.stringStorageDbPort
   } );
+}
 
-  // set the logging level, use the 'info' level if no value is provided
-  config.loggingLevel = config.loggingLevel || 'info';
+// TODO: Add JSDoc comment.
+function getRosettaConfig() {
 
-  // Set the branch of babel where translations will be stored and from whence they will be retrieved.  The value
-  // "master" is the default if nothing is explicitly specified. The branch "tests" can be specified to enable testing
-  // that doesn't affect existing translations.
-  config.babelBranch = config.babelBranch || 'master';
+  const configDirPath = getConfigDirPath();
+  const configPathWithFilename = configDirPath + CONFIG_FILENAME;
 
-  assert(
-    config.babelBranch === 'master' || config.babelBranch === 'tests',
-    'babelBranch must be set to either master or tests'
-  );
+  winston.info( `Your platform is ${ process.platform }.` );
+  winston.info( `Config should be ${ configPathWithFilename }.` );
 
-  // It is sometimes desirable when debugging to turn off all commits of translated strings to GitHub, especially if a
-  // lot of testing is being done and having all the resulting commits in GitHub would be more distracting than truly
-  // valuable. This configuration parameter allows string commits to be skipped, and the information about them will
-  // just be logged instead.
-  config.performStringCommits = config.performStringCommits === undefined ? true : config.performStringCommits;
+  let config = readAndParseConfig( configPathWithFilename );
 
-  // It is sometimes desirable when debugging to turn off the build requests that are sent to the build server when a
-  // translation is successfully submitted. This configuration parameter can be used to tell the code to skip sending
-  // the build requests.
-  config.sendBuildRequests = config.sendBuildRequests === undefined ? true : config.sendBuildRequests;
+  assertConfigValuesExist( config, configPathWithFilename );
 
-  // log a warning if Rosetta is disabled
+  setDefaultConfigValues( config );
+
+  setPostgresVariables( config );
+
   if ( !config.enabled ) {
-    winston.warn( 'the translation utility is disabled, no interaction will be possible' );
+    winston.warn( 'The translation utility is disabled, no interaction will be possible.' );
   }
 
   return config;
-};
+}
+
+module.exports = getRosettaConfig;
