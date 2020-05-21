@@ -1,9 +1,5 @@
 // Copyright 2002-2020, University of Colorado Boulder
 
-// TODO: - [ ] Do or write tests for each function.
-// TODO: - [ ] Take out console logs when done testing.
-// TODO: - [ ] Take out all TODO's when done.
-
 /**
  * If Rosetta's configuration file exists, read it and parse it. Assert that necessary values exist. Set default values
  * if they haven't been set. Set variables used by the "pg" module (the short-term storage PostgreSQL database).
@@ -27,15 +23,11 @@ const UNIX_CONFIG_DIR = '/.phet';
 const WINDOWS_CONFIG_DIR = '\\.phet';
 const CONFIG_FILENAME = 'rosetta-config.json';
 
-// TODO: - [ ] This has been tested on Windows, but needs testing on macOS and Linux if it's not too much trouble.
 /**
  * Get Rosetta's configuration directory path depending on platform (Windows or UNIX).
  * @returns {string} - The directory in which Rosetta's configuration resides.
  */
 function getConfigDirPath() {
-
-  console.log( 'getConfigDirPath was called.' );
-
   let configDirPath;
   const platformIsWindows = process.platform === 'win32' ? true : false;
   if ( platformIsWindows ) {
@@ -57,9 +49,6 @@ function getConfigDirPath() {
  * @returns {Object} config - The parsed JSON configuration for Rosetta.
  */
 function readAndParseConfig( configPathWithFilename ) {
-
-  console.log( 'readAndParseConfig was called.' );
-
   const configExists = fs.existsSync( configPathWithFilename );
   let configJSON;
   let config;
@@ -79,9 +68,6 @@ function readAndParseConfig( configPathWithFilename ) {
  * @param {string} configPathWithFilename - The full path with filename for Rosetta configuration.
  */
 function assertConfigValuesExist( config, configPathWithFilename ) {
-
-  console.log( 'assertConfigValuesExist was called.' );
-  console.log( `type of config is ${typeof config}.` );
 
   // The GitHub credentials for phet-dev must exist.
   assert( config.githubUsername, `githubUsername is missing from ${configPathWithFilename}.` );
@@ -120,8 +106,6 @@ function assertConfigValuesExist( config, configPathWithFilename ) {
  */
 function setDefaultConfigValues( config ) {
 
-  console.log( 'setDefaultConfigValues was called.' );
-
   // The "production server" is the server from which sims and sim metadata are retrieved as well as the place where
   // build requests are sent once a new translation has been submitted. Default to PhET Server.
   config.productionServerURL = config.productionServerURL || 'https://phet.colorado.edu';
@@ -158,7 +142,6 @@ function setDefaultConfigValues( config ) {
  * @param {Object} config - The parsed JSON configuration for Rosetta.
  */
 function setPostgresVariables( config ) {
-  console.log( 'assignPostgresVariables was called.' );
   process.env = Object.assign( process.env, {
     PGUSER: config.stringStorageDbUser,
     PGHOST: config.stringStorageDbHost,
