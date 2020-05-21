@@ -25,7 +25,7 @@ const CONFIG_FILENAME = 'rosetta-config.json';
 
 /**
  * Get Rosetta's configuration directory path depending on platform (Windows or UNIX).
- * @returns {string} - The directory in which Rosetta's configuration resides.
+ * @returns {string} configDirPath - The directory in which Rosetta's configuration resides.
  */
 function getConfigDirPath() {
   let configDirPath;
@@ -102,7 +102,7 @@ function assertConfigValuesExist( config, configPathWithFilename ) {
 
 /**
  * Set default Rosetta configuration values if they haven't been set.
- * @param config {Object} - The parsed JSON configuration for Rosetta.
+ * @param {Object} config - The parsed JSON configuration for Rosetta.
  */
 function setDefaultConfigValues( config ) {
 
@@ -153,7 +153,7 @@ function setPostgresVariables( config ) {
 
 /**
  * Driver code for getting Rosetta configuration.
- * @returns {Object} - The parsed JSON configuration for Rosetta that has necessary values.
+ * @returns {Object} config - The parsed JSON configuration for Rosetta that has necessary values.
  */
 function getRosettaConfig() {
 
