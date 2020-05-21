@@ -146,7 +146,7 @@ function saveTranslatedStrings( simOrLibName, locale, strings ) {
 }
 
 /**
- * Save the provided string data to GitHub, returns a Promise.  This is needed because octonode, which is the package
+ * Save the provided string data to GitHub, returns a Promise. This is needed because octonode, which is the package
  * that is being used to interface to GitHub, does not directly support promises.
  * @param {string} filePath
  * @param {string} contents

@@ -1,13 +1,13 @@
 // Copyright 2002-2020, University of Colorado Boulder
 
-// TODO: Go through the JSDoc comments and make sure they're accurate and consistent.
-// TODO: Take out console logs when done testing.
-// TODO: Do or write tests for each function.
+// TODO: - [ ] Do or write tests for each function.
+// TODO: - [ ] Take out console logs when done testing.
+// TODO: - [ ] Take out all TODO's when done.
 
 /**
- * // TODO: Reword this maybe when you're done? It should be the same, but you might want to reword.
- * Read configuration information from the file system, using defaults for non-required values and throwing assertions
- * if required information is missing, and return an object that contains the resulting configuration.
+ * If Rosetta's configuration file exists, read it and parse it. Assert that necessary values exist. Set default values
+ * if they haven't been set. Set variables used by the "pg" module (the short-term storage PostgreSQL database).
+ * Finally, return the resulting configuration as an object.
  *
  * @author John Blanco (PhET Interactive Simulations)
  * @author Michael Kauzmann (PhET Interactive Simulations)
@@ -27,14 +27,14 @@ const UNIX_CONFIG_DIR = '/.phet';
 const WINDOWS_CONFIG_DIR = '\\.phet';
 const CONFIG_FILENAME = 'rosetta-config.json';
 
-// TODO: This has been tested on Windows, but needs testing on macOS and Linux if it's not too much trouble.
+// TODO: - [ ] This has been tested on Windows, but needs testing on macOS and Linux if it's not too much trouble.
 /**
  * Get Rosetta's configuration directory path depending on platform (Windows or UNIX).
- * @returns {string} - directory in which Rosetta's configuration resides
+ * @returns {string} - The directory in which Rosetta's configuration resides.
  */
 function getConfigDirPath() {
 
-  console.log('getConfigDirPath was called.');
+  console.log( 'getConfigDirPath was called.' );
 
   let configDirPath;
   const platformIsWindows = process.platform === 'win32' ? true : false;
@@ -46,22 +46,19 @@ function getConfigDirPath() {
     // The following somewhat odd-looking code gets the config file from the home directory when running under a
     // UNIX variant. This was necessary because Rosetta is generally run under phet-admin, but "process.env.HOME" was
     // returning the home directory of the user who is starting the process, not phet-admin's home directory.
-    // Liam: I'm wondering if this is still necessary or if there's a way I can make this more elegant.
-    // Liam: Perhaps test this out on macOS and/or Linux. Maybe you can figure something out that way.
-    // Liam: It would be really nice if this function didn't have to exist. Then you could just set a constant.
     configDirPath = passwdUser.sync( process.getuid() ).homedir + UNIX_CONFIG_DIR + '/';
   }
   return configDirPath;
 }
 
 /**
- * If the config file exists, read it, parse it, and return it.
- * @param {string} configPathWithFilename - full path with filename to Rosetta config
- * @returns {Object} config - parsed JSON config for Rosetta
+ * If the configuration file exists, read it, parse it, and return it. Otherwise, assert that it exists.
+ * @param {string} configPathWithFilename - The full path with filename for Rosetta configuration.
+ * @returns {Object} config - The parsed JSON configuration for Rosetta.
  */
 function readAndParseConfig( configPathWithFilename ) {
 
-  console.log('readAndParseConfig was called.');
+  console.log( 'readAndParseConfig was called.' );
 
   const configExists = fs.existsSync( configPathWithFilename );
   let configJSON;
@@ -72,41 +69,42 @@ function readAndParseConfig( configPathWithFilename ) {
     return config;
   }
   else {
-    assert(`Config file not found in ${configPathWithFilename}.`);
+    assert( `Config file not found in ${configPathWithFilename}.` );
   }
 }
 
 /**
- * Assert that each necessary value in the config file exists.
- * @param {Object} config - parsed JSON config for Rosetta
- * @param {string} configPathWithFilename - full path with filename to Rosetta config
+ * Assert that each necessary value in the configuration file exists.
+ * @param {Object} config - The parsed JSON configuration for Rosetta.
+ * @param {string} configPathWithFilename - The full path with filename for Rosetta configuration.
  */
 function assertConfigValuesExist( config, configPathWithFilename ) {
 
-  console.log('assertConfigValuesExist was called.');
+  console.log( 'assertConfigValuesExist was called.' );
+  console.log( `type of config is ${typeof config}.` );
 
   // The GitHub credentials for phet-dev must exist.
-  assert( config.githubUsername, `githubUsername is missing from ${ configPathWithFilename }.` );
-  assert( config.githubPassword, `githubPassword is missing from ${ configPathWithFilename }.` );
+  assert( config.githubUsername, `githubUsername is missing from ${configPathWithFilename}.` );
+  assert( config.githubPassword, `githubPassword is missing from ${configPathWithFilename}.` );
 
   // The credentials for build requests and metadata retrieval must exist.
   assert(
     config.buildServerAuthorizationCode,
-    `buildServerAuthorizationCode is missing from ${ configPathWithFilename }.`
+    `buildServerAuthorizationCode is missing from ${configPathWithFilename}.`
   );
-  assert( config.serverToken, `serverToken is missing from ${ configPathWithFilename }.` );
+  assert( config.serverToken, `serverToken is missing from ${configPathWithFilename}.` );
 
   // The items for connecting to the short-term-string-storage database must exist.
-  assert( config.stringStorageDbHost, `stringStorageDbHost is missing from ${ configPathWithFilename }.` );
-  assert( config.stringStorageDbPort, `stringStorageDbPort is missing from ${ configPathWithFilename }.` );
-  assert( config.stringStorageDbName, `stringStorageDbName is missing from ${ configPathWithFilename }.` );
-  assert( config.stringStorageDbUser, `stringStorageDbUser is missing from ${ configPathWithFilename }.` );
-  assert( config.stringStorageDbPass, `stringStorageDbPass is missing from ${ configPathWithFilename }.` );
+  assert( config.stringStorageDbHost, `stringStorageDbHost is missing from ${configPathWithFilename}.` );
+  assert( config.stringStorageDbPort, `stringStorageDbPort is missing from ${configPathWithFilename}.` );
+  assert( config.stringStorageDbName, `stringStorageDbName is missing from ${configPathWithFilename}.` );
+  assert( config.stringStorageDbUser, `stringStorageDbUser is missing from ${configPathWithFilename}.` );
+  assert( config.stringStorageDbPass, `stringStorageDbPass is missing from ${configPathWithFilename}.` );
 
   // The Rosetta session secret must exist, but for local testing it can be a dummy string.
   assert(
     config.rosettaSessionSecret,
-    `rosettaSessionSecret is missing from ${ configPathWithFilename }. For local testing, simply supply a dummy string.`
+    `rosettaSessionSecret is missing from ${configPathWithFilename}. For local testing, simply supply a dummy string.`
   );
 
   // Babel has only two branches: (1) "master" and (2) "tests".
@@ -116,14 +114,16 @@ function assertConfigValuesExist( config, configPathWithFilename ) {
   );
 }
 
-// TODO: Add JSDoc comment.
-function setDefaultConfigValues ( config ) {
+/**
+ * Set default Rosetta configuration values if they haven't been set.
+ * @param config {Object} - The parsed JSON configuration for Rosetta.
+ */
+function setDefaultConfigValues( config ) {
 
-  console.log('setDefaultConfigValues was called.');
+  console.log( 'setDefaultConfigValues was called.' );
 
   // The "production server" is the server from which sims and sim metadata are retrieved as well as the place where
-  // build requests are sent once a new translation has been submitted. Default to the main server if no value is
-  // provided.
+  // build requests are sent once a new translation has been submitted. Default to PhET Server.
   config.productionServerURL = config.productionServerURL || 'https://phet.colorado.edu';
 
   // The enabled field isn't required in the config file, and its default value is true. It can be set to false
@@ -135,7 +135,7 @@ function setDefaultConfigValues ( config ) {
     assert( typeof config.enabled === 'boolean', 'enabled must be a boolean if defined.' );
   }
 
-  // Set the logging level. Default is 'info' level.
+  // Set the logging level. Default is 'info' level. Set to debug for testing.
   config.loggingLevel = config.loggingLevel || 'info';
 
   // Set Babel branch where Rosetta stores and retrieves translations. The default branch is "master."
@@ -154,11 +154,11 @@ function setDefaultConfigValues ( config ) {
 }
 
 /**
- * Set variables used by the "pg" module (short-term string storage in a PostgreSQL database).
- * @param {Object} config - parsed JSON config for Rosetta
+ * Set variables used by the "pg" module (short-term string storage PostgreSQL database).
+ * @param {Object} config - The parsed JSON configuration for Rosetta.
  */
 function setPostgresVariables( config ) {
-  console.log('assignPostgresVariables was called.');
+  console.log( 'assignPostgresVariables was called.' );
   process.env = Object.assign( process.env, {
     PGUSER: config.stringStorageDbUser,
     PGHOST: config.stringStorageDbHost,
@@ -168,14 +168,17 @@ function setPostgresVariables( config ) {
   } );
 }
 
-// TODO: Add JSDoc comment.
+/**
+ * Driver code for getting Rosetta configuration.
+ * @returns {Object} - The parsed JSON configuration for Rosetta that has necessary values.
+ */
 function getRosettaConfig() {
 
   const configDirPath = getConfigDirPath();
   const configPathWithFilename = configDirPath + CONFIG_FILENAME;
 
-  winston.info( `Your platform is ${ process.platform }.` );
-  winston.info( `Config should be ${ configPathWithFilename }.` );
+  winston.info( `Your platform is ${process.platform}.` );
+  winston.info( `Config should be ${configPathWithFilename}.` );
 
   let config = readAndParseConfig( configPathWithFilename );
 
