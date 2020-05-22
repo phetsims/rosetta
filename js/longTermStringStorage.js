@@ -1,8 +1,8 @@
 // Copyright 2017-2020, University of Colorado Boulder
 
 /**
- * This file defines a singleton object that is used for long term storage of the translated strings. It is called
- * "long term" to distinguish it from the short term storage that can occur if a user decides to save an in-progress
+ * This file defines a singleton object that is used for long-term storage of the translated strings. It is called
+ * "long-term" to distinguish it from the short-term storage that can occur if a user decides to save an in-progress
  * translation without submitting it as a completed translation. Strings that are saved to long-term storage are used
  * when translated sims are built, whereas string saved to short term storage are not.
  *
