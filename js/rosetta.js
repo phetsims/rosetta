@@ -13,19 +13,24 @@
 // Modules
 const bodyParser = require( 'body-parser' ); // eslint-disable-line require-statement-match
 const childProcess = require( 'child_process' ); // eslint-disable-line require-statement-match
-const getRosettaConfig = require( './getRosettaConfig' );
 const cookieParser = require( 'cookie-parser' ); // eslint-disable-line require-statement-match
 const doT = require( 'express-dot' ); // eslint-disable-line require-statement-match
 const express = require( 'express' );
+const getRosettaConfig = require( './getRosettaConfig' );
+const MemoryStore = require( 'memorystore' )( session );
 const { Pool } = require( 'pg' ); // eslint-disable-line
 const session = require( 'express-session' ); // eslint-disable-line require-statement-match
-const MemoryStore = require( 'memorystore' )( session );
 const winston = require( 'winston' );
 
 // Constants
 const LISTEN_PORT = 16372;
 const { format } = winston;
 
+//===========================================================================//
+// Configure Winston (the logger). Use Winston to display information.       //
+//===========================================================================//
+
+// TODO: Why is this before the logger gets set up?
 // Add a global handler for unhandled promise rejections.
 process.on( 'unhandledRejection', error => {
 
@@ -47,7 +52,7 @@ winston.add( consoleTransport );
 
 // Log startup message.
 winston.info( '========== Rosetta is starting up! ==========' );
-winston.info( `Node Version: ${process.version}.` );
+winston.info( `Node Version ${process.version}.` );
 
 // Log Rosetta's SHA. This might make it easier to duplicate issues and track them down.
 try {
@@ -58,6 +63,8 @@ catch( error ) {
   winston.warn( `Unable to get SHA from Git. Error: ${error}.` );
 }
 
+// TODO: Can this be put before logger set up?
+// TODO: This doesn't have anything to do with the logger.
 // TODO: Are these "process variables" the variables used by the "pg" module? This is vague.
 // Get configuration and assign it to a global. This also sets up some process variables.
 global.config = getRosettaConfig();
@@ -66,8 +73,8 @@ global.config = getRosettaConfig();
 // Log the config.
 winston.info( 'config = ' + JSON.stringify( global.config, null, 2 ) );
 
-// TODO: Why don't we just get the config before this so we don't have to update it?
-// update the logging level in case it was set in the config info
+// TODO: Why don't we just get the config before setting up the logger so we don't have to update it?
+// Update the logging level in case it was set in the config info.
 consoleTransport.level = global.config.loggingLevel;
 
 // TODO: Consider moving this into the shortTermStorage object once it exists.
@@ -84,6 +91,10 @@ pool.query( 'SELECT NOW()' )
 
 // Add route handlers. Must be required after global.config has been initialized and logger configured.
 const routeHandlers = require( __dirname + '/routeHandlers' );
+
+//===========================================================================//
+// Set up the app.                                                           //
+//===========================================================================//
 
 // Create and configure the Express.js app.
 const app = express();
@@ -109,9 +120,9 @@ app.use( session( {
 app.use( bodyParser.json() );
 app.use( bodyParser.urlencoded( { extended: false } ) );
 
-//================================================================//
-// Set up the routes. The order in which they are set up matters! //
-//================================================================//
+//===========================================================================//
+// Set up the routes. The order in which they are set up matters!            //
+//===========================================================================//
 
 // TODO: "Offline" is one word, and thus "showOffLinePage" should be "showOfflinePage".
 // Set up route for the 'down for maintenance' page.
