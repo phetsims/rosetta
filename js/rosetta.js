@@ -17,10 +17,12 @@ const cookieParser = require( 'cookie-parser' ); // eslint-disable-line require-
 const doT = require( 'express-dot' ); // eslint-disable-line require-statement-match
 const express = require( 'express' );
 const getRosettaConfig = require( './getRosettaConfig' );
-const MemoryStore = require( 'memorystore' )( session );
 const { Pool } = require( 'pg' ); // eslint-disable-line
-const session = require( 'express-session' ); // eslint-disable-line require-statement-match
 const winston = require( 'winston' );
+
+// Order-Dependent Modules
+const session = require( 'express-session' ); // eslint-disable-line require-statement-match
+const MemoryStore = require( 'memorystore' )( session );
 
 // Constants
 const LISTEN_PORT = 16372;
@@ -29,15 +31,6 @@ const { format } = winston;
 //===========================================================================//
 // Configure Winston (the logger). Use Winston to display information.       //
 //===========================================================================//
-
-// TODO: Why is this before the logger gets set up?
-// Add a global handler for unhandled promise rejections.
-process.on( 'unhandledRejection', error => {
-
-  // If these are logged, issues should be tracked down and fixed.
-  winston.error( `Unhandled rejection. Error Message: ${error.message}.` );
-  winston.error( `Error Stack: ${error.stack}.` );
-} );
 
 // Configure the logger. Uses default logging level, which can be updated once configuration is read.
 const consoleTransport = new winston.transports.Console( {
@@ -50,14 +43,26 @@ const consoleTransport = new winston.transports.Console( {
 } );
 winston.add( consoleTransport );
 
+// Add a global handler for unhandled promise rejections.
+process.on( 'unhandledRejection', error => {
+
+  // If these are logged, issues should be tracked down and fixed.
+  winston.error( `Unhandled rejection. Error Message: ${error.message}.` );
+  winston.error( `Error Stack: ${error.stack}.` );
+} );
+
 // Log startup message.
 winston.info( '========== Rosetta is starting up! ==========' );
 winston.info( `Node Version ${process.version}.` );
 
 // Log Rosetta's SHA. This might make it easier to duplicate issues and track them down.
 try {
+
+  // For some reason, "sha.toString()" has a newline. I want the log to look nice, so I'm taking it out.
   const sha = childProcess.execSync( 'git rev-parse HEAD' );
-  winston.info( `Current SHA: ${sha.toString()}.` );
+  let shaString = sha.toString();
+  shaString = shaString.replace( /\r?\n|\r/, '' );
+  winston.info( `Current SHA is ${shaString}.` );
 }
 catch( error ) {
   winston.warn( `Unable to get SHA from Git. Error: ${error}.` );
@@ -66,12 +71,13 @@ catch( error ) {
 // TODO: Can this be put before logger set up?
 // TODO: This doesn't have anything to do with the logger.
 // TODO: Are these "process variables" the variables used by the "pg" module? This is vague.
+// TODO: getRosettaConfig really shouldn't be doing multiple things.
 // Get configuration and assign it to a global. This also sets up some process variables.
 global.config = getRosettaConfig();
 
-// TODO: Use new string concatenation. Also, try to give it a newline so it looks nicer.
 // Log the config.
-winston.info( 'config = ' + JSON.stringify( global.config, null, 2 ) );
+winston.info( 'Check your config below and make sure it looks correct!' );
+winston.info( JSON.stringify( global.config, null, 2 ) );
 
 // TODO: Why don't we just get the config before setting up the logger so we don't have to update it?
 // Update the logging level in case it was set in the config info.
@@ -79,18 +85,14 @@ consoleTransport.level = global.config.loggingLevel;
 
 // TODO: Consider moving this into the shortTermStorage object once it exists.
 // Check that the database is running and that a basic query can be performed.
-winston.info( 'Testing database connection...' );
+winston.info( 'Testing database connection...' ); // TODO: The rest of this doesn't work on macOS (?).
 const pool = new Pool();
-pool.query( 'SELECT NOW()' )
-  .then( response => {
-    winston.info( 'Database test using SELECT NOW() succeeded. Now: ' + response.rows[ 0 ].now );
-  } )
-  .catch( error => {
-    winston.error( `Database connection test failed, short-term string storage won't work. Error: ${error}.` );
-  } );
-
-// Add route handlers. Must be required after global.config has been initialized and logger configured.
-const routeHandlers = require( __dirname + '/routeHandlers' );
+pool.query('SELECT NOW()', (error, result) => {
+  if ( error ) {
+    winston.error( `Database test using "SELECT NOW()" failed. Error Stack: ${error.stack}.` );
+  }
+  winston.info( `Database test using "SELECT NOW()" succeeded. Now: ${result.rows[ 0 ].now}.` );
+});
 
 //===========================================================================//
 // Set up the app.                                                           //
@@ -124,10 +126,12 @@ app.use( bodyParser.urlencoded( { extended: false } ) );
 // Set up the routes. The order in which they are set up matters!            //
 //===========================================================================//
 
-// TODO: "Offline" is one word, and thus "showOffLinePage" should be "showOfflinePage".
+// Add route handlers. Must be after global.config has been initialized and logger configured.
+const routeHandlers = require( __dirname + '/routeHandlers' );
+
 // Set up route for the 'down for maintenance' page.
 if ( !global.config.enabled ) {
-  app.get( '/translate', routeHandlers.showOffLinePage );
+  app.get( '/translate', routeHandlers.showOfflinePage );
 }
 
 // Set up route for checking if a user is logged in.
@@ -143,10 +147,10 @@ app.get( '/translate*', function( request, response, next ) {
   next();
 } );
 
-// landing page for the translation utility
+// Set up landing page for the translation utility.
 app.get( '/translate', routeHandlers.chooseSimulationAndLanguage );
 
-// route for rendering the page where the user can submit their translated string
+// Set up page where user can submit their translated strings.
 app.get( '/translate/sim/:simName?/:targetLocale?', routeHandlers.renderTranslationPage );
 
 // Set up post route for testing translated strings. This doesn't save the translated strings.
@@ -158,10 +162,11 @@ app.post( '/translate/sim/save/:simName?/:targetLocale?', routeHandlers.saveStri
 // Set up post route for long-term storage of strings.
 app.post( '/translate/sim/:simName?/:targetLocale?', routeHandlers.submitStrings );
 
-// Set up logout route.
+// Set up logout.
 app.get( '/translate/logout', routeHandlers.logout );
 
 // TODO: The comments at the end of the lines are vague, and those methods should be renamed.
+// TODO: (The methods are in the routeHandlers.js file.)
 // Set up testing routes.
 app.get( '/translate/test/', routeHandlers.test ); // Display a test HTML page.
 app.get( '/translate/runTest/:testID', routeHandlers.runTest ); // Run specific server test.
@@ -172,4 +177,4 @@ app.get( '/*', routeHandlers.pageNotFound );
 app.post( '/*', routeHandlers.pageNotFound );
 
 // Start the server.
-app.listen( LISTEN_PORT, function() { winston.info( 'Listening on port ' + LISTEN_PORT ); } );
+app.listen( LISTEN_PORT, () => { winston.info( `Listening on port ${LISTEN_PORT}.` ); } );
