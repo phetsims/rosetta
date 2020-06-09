@@ -25,9 +25,6 @@ const winston = require( 'winston' );
 const LISTEN_PORT = 16372;
 const { format } = winston;
 
-// TODO: The following is a temporary workaround for expired intermediate certificates, see https://github.com/phetsims/website/issues/1069.
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-
 // add a global handler for unhandled promise rejections
 process.on( 'unhandledRejection', error => {
 
