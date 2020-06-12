@@ -13,14 +13,9 @@
 // modules
 const _ = require( 'lodash' ); // eslint-disable-line
 const longTermStringStorage = require( './longTermStringStorage' );
-const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const { Pool } = require( 'pg' ); // eslint-disable-line
-const RosettaConstants = require( './RosettaConstants' );
-const simData = require( './simData' );
+const requestBuild = require( './requestBuild' );
 const winston = require( 'winston' );
-
-// constants
-const PRODUCTION_SERVER_URL = RosettaConstants.PRODUCTION_SERVER_URL;
 
 // for debug purposes, it is possible to configure Rosetta to skip sending build requests to the build server
 const SEND_BUILD_REQUESTS = global.config.sendBuildRequests === undefined ? true : global.config.sendBuildRequests;
@@ -144,8 +139,13 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
 
   try {
 
-    // request a build of the new translation
-    await requestBuild( simName, userId, targetLocale );
+    // request a build of the new translation (if enabled)
+    if ( SEND_BUILD_REQUESTS ) {
+      await requestBuild( simName, userId, targetLocale );
+    }
+    else {
+      winston.info( 'build requests for translations are disabled, skipping' );
+    }
 
     // clear out short-term storage, since these strings have now been successfully stored in the long-term area
     await deleteStringsFromDB( userId, targetLocale, _.keys( stringSets ) ).catch();
@@ -204,93 +204,5 @@ async function deleteStringsFromDB( userID, locale, simOrLibNames ) {
   }
   catch( err ) {
     winston.error( 'deletion of strings failed, err = ' + err );
-  }
-}
-
-/**
- * @param {string} simName
- * @param {string} version
- * @returns {Promise.<string>} - JSON data with dependencies
- */
-async function getDependencies( simName, version ) {
-
-  // compose the URL where the dependencies should be
-  const url = PRODUCTION_SERVER_URL +
-              '/sims/html/' +
-              simName +
-              '/' +
-              version +
-              '/dependencies.json';
-
-  // get the dependencies
-  winston.info( 'fetching dependencies from ' + url );
-  const response = await nodeFetch( url );
-
-  // return the results or throw an error
-  if ( response.status === 200 ) {
-    return await response.text();
-  }
-  else {
-    throw new Error( 'unable to get dependencies for sim ' + simName + ', version ' + version + '; response.status = ' + response.status );
-  }
-}
-
-/**
- * request a build from the build server
- * @returns {Promise}
- * @private
- */
-async function requestBuild( simName, userID, locale ) {
-
-  winston.info( 'build requested for sim = ' + simName + ', locale = ' + locale );
-  const latestVersionOfSim = await simData.getLatestSimVersion( simName );
-  winston.info( 'latest sim version = ' + latestVersionOfSim );
-  const dependencies = await getDependencies( simName, latestVersionOfSim );
-  const requestObject = {
-    api: '2.0',
-    dependencies: dependencies,
-    simName: simName,
-    version: latestVersionOfSim,
-    locales: [ locale ],
-    servers: [ 'production' ],
-    brands: [ 'phet' ],
-    translatorId: userID,
-    authorizationCode: global.config.buildServerAuthorizationCode
-  };
-
-  const url = PRODUCTION_SERVER_URL + '/deploy-html-simulation';
-
-  if ( SEND_BUILD_REQUESTS ) {
-
-    winston.info( 'sending build request to server, URL = ' + url );
-
-    // send off the request, and return the resulting promise
-    const buildRequestResponse = await nodeFetch( url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify( requestObject )
-    } );
-    if ( buildRequestResponse.status === 200 || buildRequestResponse.status === 202 ) {
-      winston.info( 'build request accepted, status = ' + buildRequestResponse.status );
-      return true;
-    }
-    else if ( buildRequestResponse.status === 400 ) {
-      throw new Error( 'build request unsuccessful, probably due to missing info, status = ' + buildRequestResponse.status );
-    }
-    else if ( buildRequestResponse.status === 401 ) {
-      throw new Error( 'build request unsuccessful, probably due to bad auth code, status = ' + buildRequestResponse.status );
-    }
-    else {
-      throw new Error( 'build request unsuccessful, status = ' + buildRequestResponse.status );
-    }
-  }
-  else {
-
-    // The build request is being skipped due to the setting of a debug flag. This capability was added to allow the
-    // build request to be debugged without sending a bunch of bogus requests to the build server.
-    winston.warn( 'build request skipped due to setting of debug flag' );
   }
 }

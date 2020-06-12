@@ -144,6 +144,9 @@ app.post( '/translate/sim/:simName?/:targetLocale?', routeHandlers.submitStrings
 // logout
 app.get( '/translate/logout', routeHandlers.logout );
 
+// trigger the build of a simulation for a given sim, locale, and user ID, only used by team members to fix problems
+app.get( '/translate/trigger-build/:simName?/:targetLocale?/:userID?', routeHandlers.triggerBuild );
+
 // test routes - used for testing and debugging
 app.get( '/translate/test/', routeHandlers.test ); // display a test html page
 app.get( '/translate/runTest/:testID', routeHandlers.runTest ); // run specific server test

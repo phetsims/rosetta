@@ -28,6 +28,7 @@ const stringSubmissionQueue = require( './stringSubmissionQueue' ).stringSubmiss
 const TranslationUtils = require( './TranslationUtils' );
 const escapeHTML = TranslationUtils.escapeHTML;
 const renderError = TranslationUtils.renderError;
+const requestBuild = require( './requestBuild' );
 
 // constants
 const GITHUB_RAW_FILE_URL_BASE = RosettaConstants.GITHUB_RAW_FILE_URL_BASE;
@@ -669,6 +670,45 @@ module.exports.test = function( req, res ) {
     res.render( 'test.html', { title: 'Test' } );
   }
   else {
+    pageNotFound( req, res );
+  }
+};
+
+/**
+ * Handle a request to trigger a build. For team members only.
+ * @param req
+ * @param res
+ */
+module.exports.triggerBuild = async function( req, res ) {
+
+  // Only logged in PhET team members can trigger a build through this route.
+  if ( req.session.teamMember ) {
+
+    // extract the parameters from the request
+    const simName = req.params.simName;
+    const targetLocale = req.params.targetLocale;
+    const userID = req.params.userID;
+
+    winston.info( 'triggerBuild called for sim ' + simName + ', locale ' + targetLocale + ', and userID ' + userID );
+
+    // Send the request to the build server.
+    const status = requestBuild( simName, userID, targetLocale );
+
+    // Create a simple response message that can be shown to the user in the browser window.
+    let response = simName + ', locale ' + targetLocale + ', and userID ' + userID;
+    if ( status ) {
+      response = 'Successfully triggered build for ' + response;
+    }
+    else {
+      response = 'Error when attempting to trigger build for ' + response;
+    }
+
+    // Send back the response.
+    res.send( response );
+  }
+  else {
+
+    // the user is not a team member, render the "not found" page
     pageNotFound( req, res );
   }
 };
