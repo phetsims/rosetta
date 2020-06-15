@@ -1,4 +1,5 @@
 // Copyright 2018-2020, University of Colorado Boulder
+
 /**
  * A singleton object that contains information about the locales into which sims can be translated.
  *
@@ -8,13 +9,13 @@
 
 'use strict';
 
-// modules
+// Modules
 const _ = require( 'lodash' ); // eslint-disable-line
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const RosettaConstants = require( './RosettaConstants' );
 const winston = require( 'winston' );
 
-// constants
+// Constants
 const CACHED_DATA_VALID_TIME = 86400; // in seconds
 
 // timestamp when the sim info was last updated, used to determine whether to use cached data

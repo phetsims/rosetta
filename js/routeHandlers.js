@@ -639,8 +639,8 @@ module.exports.saveStrings = async function( req, res ) {
  * @param req
  * @param res
  */
-module.exports.showOffLinePage = function( req, res ) {
-  winston.warn( 'Showing the \'Off Line\' page to the user' );
+module.exports.showOfflinePage = function( req, res ) {
+  winston.warn( 'Showing the \'Offline\' page to the user' );
   res.render( 'offline.html', { title: 'Off Line' } );
 };
 

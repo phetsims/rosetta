@@ -1,8 +1,8 @@
 // Copyright 2017-2020, University of Colorado Boulder
 
 /**
- * This file defines a singleton object that is used for long term storage of the translated strings. It is called
- * "long term" to distinguish it from the short term storage that can occur if a user decides to save an in-progress
+ * This file defines a singleton object that is used for long-term storage of the translated strings. It is called
+ * "long-term" to distinguish it from the short-term storage that can occur if a user decides to save an in-progress
  * translation without submitting it as a completed translation. Strings that are saved to long-term storage are used
  * when translated sims are built, whereas string saved to short term storage are not.
  *
@@ -146,7 +146,7 @@ function saveTranslatedStrings( simOrLibName, locale, strings ) {
 }
 
 /**
- * Save the provided string data to GitHub, returns a Promise.  This is needed because octonode, which is the package
+ * Save the provided string data to GitHub, returns a Promise. This is needed because octonode, which is the package
  * that is being used to interface to GitHub, does not directly support promises.
  * @param {string} filePath
  * @param {string} contents
@@ -194,7 +194,7 @@ function saveFileToGitHub( filePath, contents, commitMessage ) {
         }
       } );
     }
-    else{
+    else {
 
       // Skip the string commits and just log the information about what would have been done.  This is a debug mode
       // that was added to prevent excessive commits to GitHub during testing.

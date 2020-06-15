@@ -7,7 +7,7 @@ Intro
 Rosetta, AKA "the translation utility," has never had much of a budget supporting it. As a result, it's very basic,
 and lacks support for a number of features that would be nice to have. One such feature is the ability to change a
 string key after a simulation has been published and one or more translations of it have been submitted. It is, however,
-possible to do this &mdash; it just requires a number of manual steps. This document describes these steps, and also provides
+possible to do this &mdash; it just requires a number of manual steps. This document describes these steps, and provides
 background information for understanding why the steps are necessary.
 
 Background
@@ -23,11 +23,12 @@ string,
 + construct a page with the string keys, English values, and previously submitted translated values, and present this
 to the translator.
 
-At this point, the traslator can input or revise values for all of the strings used in the simulation. It's possible
+At this point, the translator can input or revise values for all of the strings used in the simulation. It's possible
 to test the sim with the new values without submitting them, but that feature isn't particularly relevant to this
-docment. Once the translator is ready, they submit their translated strings. At that point, Rosetta:
+document. Once the translator is ready, they submit their translated strings. At that point, Rosetta:
 
-+ commits and pushes the translated strings for both the simulation and the common code repost to the babel repository, and
++ commits and pushes the translated strings for both the simulation and the common code re-post to the babel repository,
+and
 + commands the build server to build a new version of the sim for the locale for which the translation was submitted.
 
 Given this process, and the fact that some of the string files are maintained on master and some on branches, changing
@@ -42,7 +43,7 @@ which doesn't cause any bad behavior, but adds clutter. So, in this case, the st
 and on the release branch, and every instance of the key should be updated in babel, and then a maintenance release
 should be made for the simulation, which will cause all translations to be rebuilt.
 
-For common code, the behavior would be similar but the solution is a bit different. As in the case with a sim string,
+For common code, the behavior would be similar, but the solution is a bit different. As in the case with a sim string,
 a string key that was changed on master would never be presented to the translator, since it wouldn't be used in the
 published version of any sim.  The solution in this case is to change the key on master, change it in all translations
 in babel, then do a maintenance release that rolls in this change to every published simulation that uses the string.
@@ -119,7 +120,7 @@ consult with @jonathanolson.
 - [ ] Take Rosetta out of maintenance mode (again, see the
 [Admin Guide](https://github.com/phetsims/rosetta/blob/master/doc/admin-guide.md) for information on how to do this).
 - [ ] Verify that the string key change worked by going to Rosetta (https://phet.colorado.edu/translate/), selecting a
-simulation that used the changed key, chossing a locale for which a translation exists, pressing "Go", and verifying
+simulation that used the changed key, choosing a locale for which a translation exists, pressing "Go", and verifying
 that the old string key is gone, the new one is shown, and the value of the new one is correct. Do this for all locale
 and simulation combinations for which values were recorded above.
 
