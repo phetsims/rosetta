@@ -1,4 +1,4 @@
-# :construction: THIS README AND THE DOCUMENTATION ARE UNDER CONSTRUCTION :construction:
+# :construction: Documentation is under construction. :construction:
 
 # Rosetta
 
@@ -121,8 +121,10 @@ This guide was made by @muedli on 2020-05-15.
 }
 ```
 14. Make sure your database username and password are correct in the config. In my
-    case, the username was "liam" (my computer username) and I didn't set a password,
-    so I just put "dummyString."
+    case, the username was "liam" (my computer username). As of this writing the default
+    behavior is to use the computer username and not to set a password. You'll need to set
+    a password because there is code asserting that a password exists. To create a password,
+    type `ALTER USER your-username WITH PASSWORD 'password'`.
 15. In the rosetta directory, run `npm run dev`.
 16. Open your browser to the port specified by `LISTEN_PORT` in rosetta.js, which, as of
     this writing, is 16372. (http://localhost:16372.)

@@ -58,6 +58,7 @@ winston.info( `Node Version ${process.version}.` );
 // Log Rosetta's SHA. This might make it easier to duplicate issues and track them down.
 try {
 
+  // TODO: This can be done without two variables.
   // For some reason, "sha.toString()" has a newline. I want the log to look nice, so I'm taking it out.
   const sha = childProcess.execSync( 'git rev-parse HEAD' );
   let shaString = sha.toString();
@@ -72,6 +73,8 @@ catch( error ) {
 // TODO: This doesn't have anything to do with the logger.
 // TODO: Are these "process variables" the variables used by the "pg" module? This is vague.
 // TODO: getRosettaConfig really shouldn't be doing multiple things.
+// TODO: I don't think using "require('./getRosettaConfig.js')" in each file would be an issue.
+// TODO: See https://nodejs.org/docs/latest/api/modules.html#modules_caching.
 // Get configuration and assign it to a global. This also sets up some process variables.
 global.config = getRosettaConfig();
 
@@ -87,17 +90,25 @@ consoleTransport.level = global.config.loggingLevel;
 // Check that the database is running and that a basic query can be performed.
 winston.info( 'Testing database connection...' ); // TODO: The rest of this doesn't work on macOS (?).
 const pool = new Pool();
-pool.query('SELECT NOW()', (error, result) => {
+pool.query( 'SELECT NOW();', ( error, result ) => {
+  console.log('Wow, we actually got to this part.');
   if ( error ) {
     winston.error( `Database test using "SELECT NOW()" failed. Error Stack: ${error.stack}.` );
   }
   winston.info( `Database test using "SELECT NOW()" succeeded. Now: ${result.rows[ 0 ].now}.` );
-});
+} );
 
 //===========================================================================//
 // Set up the app.                                                           //
 //===========================================================================//
 
+// TODO: The use of "__dirname" seems inconsistent. It might also be wrong.
+// TODO: Read https://stackoverflow.com/questions/8131344/what-is-the-difference-between-dirname-and-in-node-js.
+// TODO: . is wherever "node rosetta.js" is run from. But the dev script does "node js/rosetta.js". Maybe the root directory?
+// TODO: __dirname is the directory in which rosetta.js lives.
+// const path = require("path");
+// console.log(". = %s", path.resolve("."));
+// console.log("__dirname = %s", path.resolve(__dirname));
 // Create and configure the Express.js app.
 const app = express();
 app.set( 'views', __dirname + '/../html/views' );
