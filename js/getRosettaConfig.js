@@ -1,4 +1,4 @@
-// Copyright 2002-2020, University of Colorado Boulder
+// Copyright 2019-2020, University of Colorado Boulder
 
 /**
  * If Rosetta's configuration file exists, read it and parse it. Assert that necessary values exist. Set default values
