@@ -163,7 +163,7 @@ function getRosettaConfig() {
   winston.info( `Your platform is ${process.platform}.` );
   winston.info( `Config should be ${configPathWithFilename}.` );
 
-  let config = readAndParseConfig( configPathWithFilename );
+  const config = readAndParseConfig( configPathWithFilename );
 
   assertConfigValuesExist( config, configPathWithFilename );
 
