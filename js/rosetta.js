@@ -91,7 +91,6 @@ consoleTransport.level = global.config.loggingLevel;
 winston.info( 'Testing database connection...' ); // TODO: The rest of this doesn't work on macOS (?).
 const pool = new Pool();
 pool.query( 'SELECT NOW();', ( error, result ) => {
-  console.log('Wow, we actually got to this part.');
   if ( error ) {
     winston.error( `Database test using "SELECT NOW()" failed. Error Stack: ${error.stack}.` );
   }
