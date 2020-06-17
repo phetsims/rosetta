@@ -7,74 +7,82 @@
  *
  * @author John Blanco
  */
+
 'use strict';
 
-// modules
+// Modules
 const _ = require( 'lodash' ); // eslint-disable-line
-const request = require( 'request' );
+const https = require( 'https' );
 const RosettaConstants = require( './RosettaConstants' );
 const winston = require( 'winston' );
 
-// constants
-const CACHED_DATA_VALID_TIME = 1800; // in seconds
+// Constants
+const CACHED_DATA_VALID_TIME = 1800; // This is 1.8 seconds in milliseconds.
 
-// timestamp when the sim info was last updated, used to determine whether to use cached data
+//===========================================================================//
+// Set up variables for later use.                                           //
+//===========================================================================//
+
+// Timestamp when the sim info was last updated. Used to determine whether to use cached data.
 let timeOfLastUpdate = 0;
 
-// sim info object - populated by obtaining metadata from the PhET website, used as a cache, updated when needed
-const simDataObject = {};
+// Populated by obtaining metadata from the PhET website. Used as a cache. Updated when needed.
+const simInfoObject = {};
 
-// outstanding promise for getting metadata, used to avoid creating duplicate requests if once is already in progress
+// Outstanding promise for getting metadata. Used to avoid creating duplicate requests if one is already in progress.
 let inProgressMetadataPromise = null;
 
-// function that updates the local copy of the sim info by retrieving and interpreting metadata from the PhET site
-async function updateSimData() {
-  const url = RosettaConstants.PRODUCTION_SERVER_URL +
-              '/services/metadata/1.2/simulations?format=json&type=html&include-unpublished=true&summary';
+//===========================================================================//
+// Set up main functions for metadata retrieval and update.                  //
+//===========================================================================//
 
-  winston.debug( 'updating sim data using metadata URL = ' + url );
-
-  let simMetadata;
-  try {
-    simMetadata = await new Promise( ( resolve, reject ) => {
-      request( url, async ( error, response, body ) => {
-        try {
-          body = JSON.parse( body );
-        }
-        catch( e ) {
-
-          // the JSON object wasn't formatted right, reject
-          reject( e );
-        }
-
-        // there was some error in the request, reject
-        if ( error ) {
-          reject( error );
-        }
-
-        // there was an error processing the request
-        else if ( body.error ) {
-          reject( new Error( body.error ) );
-        }
-
-        // it's all good, resolve the promise
-        else {
-          resolve( body );
-        }
-      } ).auth( 'token', global.config.serverToken, true );
+// Gets the sim metadata from the PhET site.
+async function getSimMetadata() {
+  const options = {
+    hostname: RosettaConstants.PRODUCTION_SERVER_URL,
+    port: 443,
+    path: '/services/metadata/1.2/simulations?format=json&type=html&include-unpublished=true&summary',
+    method: 'GET',
+    auth: {
+      user: 'token',
+      pass: global.config.serverToken
+    }
+  };
+  const request = https.request( options, response => {
+    console.log( 'statusCode:', response.statusCode );
+    console.log( 'headers:', response.headers );
+    response.on( 'data', data => {
+      return data;
     } );
-  }
-  catch( err ) {
-    winston.error( 'metadata retrieval failed, err = ' + err );
-    return Promise.reject( err );
-  }
+  } );
+  request.on( 'error', error => {
+    console.error( error );
+  } );
+  request.end();
+}
 
-  if ( !simMetadata || !simMetadata.projects ) {
-    winston.error( 'unable to obtain metadata, sim info not updated' );
+// Updates the local copy of the sim metadata (the sim info).
+async function updateSimInfo() {
+
+  // Log the URL used to get the metadata.
+  const url = `${RosettaConstants.PRODUCTION_SERVER_URL}
+              /services/metadata/1.2/simulations?format=json&type=html&include-unpublished=true&summary`;
+  winston.debug( `Updating sim info using metadata URL: ${url}.` );
+
+  // Get the metadata.
+  const simMetadata = await getSimMetadata();
+
+  // If any part of simMetadata is undefined, throw an error. Otherwise, update sim info.
+  if ( !simMetadata ) {
+    winston.error( 'Unable to obtain "simMetadata". Sim info not updated.' );
+  }
+  else if ( !simMetadata.projects ) {
+    winston.error( 'Unable to obtain "simMetadata.projects". Sim info not updated.' );
   }
   else {
 
-    // extract the subset of the metadata needed by the translation utility and save it in the sim info object
+    // TODO: This might not be correct. We might need to reset the simMetadata variable.
+    // Extract subset of metadata needed by the translation utility and save it in the sim info object.
     simMetadata.projects.forEach( projectInfo => {
       projectInfo.simulations.forEach( simData => {
         const simName = simData.name;
@@ -87,7 +95,7 @@ async function updateSimData() {
           }
         } );
 
-        simDataObject[ simName ] = {
+        simInfoObject[ simName ] = {
           englishTitle: englishTitle,
           simUrl: RosettaConstants.PRODUCTION_SERVER_URL + '/sims/html/' + simName + '/latest/' + simName + '_en.html',
           translationLocales: translationLocales,
@@ -100,18 +108,18 @@ async function updateSimData() {
   }
 }
 
-// function that updates cached data if it is time to do so
-async function checkAndUpdateSimData() {
+// Update cached data if it is time to do so.
+async function checkAndUpdateSimInfo() {
 
-  // if a request is already in progress, return that promise
+  // If a request is already in progress, return that promise.
   if ( inProgressMetadataPromise ) {
-    winston.debug( 'a request for metadata is in progress, waiting on that promise' );
+    winston.debug( 'A request for metadata is in progress. Waiting on that promise.' );
 
     try {
       await inProgressMetadataPromise;
     }
     catch( error ) {
-      winston.error( 'promise returned by updateSimData failed (secondary await path)' );
+      winston.error( 'Promise returned by updateSimInfo failed (secondary await path).' );
     }
   }
   else if ( ( Date.now() - timeOfLastUpdate ) / 1000 > CACHED_DATA_VALID_TIME ) {
@@ -119,75 +127,79 @@ async function checkAndUpdateSimData() {
 
     // Use the promise explicitly so that if other requests are received before this is resolved, they can also wait
     // on it.
-    inProgressMetadataPromise = updateSimData();
+    inProgressMetadataPromise = updateSimInfo();
     try {
       await inProgressMetadataPromise;
     }
     catch( error ) {
 
-      // there really isn't much that can be done here other than to hope that the next attempt succeeds
-      winston.error( 'promise returned by updateSimData failed, error = ' + error );
+      // There really isn't much that can be done here other than to hope that the next attempt succeeds.
+      winston.error( `Promise returned by updateSimInfo failed. Error: ${error}.` );
     }
-    inProgressMetadataPromise = null; // clear out the promise for the next attempt
+
+    // Clear out the promise for the next attempt.
+    inProgressMetadataPromise = null;
   }
   else {
-    winston.debug( 'using cached sim info' );
+    winston.debug( 'Using cached sim info.' );
   }
 }
 
-// kick off the initial population of the sim data
-checkAndUpdateSimData()
-  .then( () => { winston.info( 'initial population of simData object complete' ); } )
-  .catch( err => winston.info( 'initial population of simData object failed, err = ' + err ) );
+// Kick off the initial population of the sim data.
+checkAndUpdateSimInfo()
+  .then( () => { winston.info( 'Initial population of "simInfoObject" complete.' ); } )
+  .catch( error => winston.info( `Initial population of "simInfoObject" failed. Error: ${error}.` ) );
 
-// exported singleton object
+//===========================================================================//
+// Export singleton object.                                                  //
+//===========================================================================//
+
 module.exports = {
 
   /**
-   * get a list of the HTML5 sims that are available on the PhET website
+   * Get a list of the HTML5 sims that are available on the PhET website.
    * @param {boolean} includeUnpublished
    * @returns {Promise.<Array.<string>>}
    * @public
    */
   getListOfSimNames: async function( includeUnpublished ) {
 
-    await checkAndUpdateSimData();
+    await checkAndUpdateSimInfo();
 
-    // get a list of all sims (remember that we are only working with HTML5 sims here)
-    let simNames = _.keys( simDataObject );
+    // Get a list of all sims. (Remember that we are only working with HTML5 sims here.)
+    let simNames = _.keys( simInfoObject );
 
     // Unpublished (AKA invisible) sims are present by default, so if the flag says that they should NOT be included,
     // they need to be removed.
     if ( !includeUnpublished ) {
       const simNamesToExclude = [];
       simNames.forEach( sim => {
-        if ( !simDataObject[ sim ].visible ) {
+        if ( !simInfoObject[ sim ].visible ) {
           simNamesToExclude.push( sim );
         }
       } );
       simNames = _.difference( simNames, simNamesToExclude );
     }
-
     return simNames;
   },
 
   /**
    * Get an array of objects where each object contains the project-name, title, and published URL of the simulations
-   * that are available on the website.  The format is that which is needed to render the main translation selection
+   * that are available on the website. The format is that which is needed to render the main translation selection
    * page, and is a bit historic, if background is needed please see https://github.com/phetsims/rosetta/issues/123.
    * @param {boolean} includeUnpublished
    * @returns {Promise.<Array>}
    * @public
    */
   getSimTranslationPageInfo: async function( includeUnpublished ) {
-    await checkAndUpdateSimData();
+    await checkAndUpdateSimInfo();
     const simInfoArray = [];
-    _.keys( simDataObject ).forEach( projectName => {
-      if ( simDataObject[ projectName ].visible || includeUnpublished ) {
+    _.keys( simInfoObject ).forEach( projectName => {
+      if ( simInfoObject[ projectName ].visible || includeUnpublished ) {
         simInfoArray.push( {
           projectName: projectName,
-          simTitle: simDataObject[ projectName ].englishTitle,
-          testUrl: simDataObject[ projectName ].simUrl
+          simTitle: simInfoObject[ projectName ].englishTitle,
+          testUrl: simInfoObject[ projectName ].simUrl
         } );
       }
     } );
@@ -195,47 +207,47 @@ module.exports = {
   },
 
   /**
-   * get the URL where the simulation is available from the website
+   * Get the URL where the simulation is available from the website.
    * @param {string} simName
    * @returns {Promise.<string|null>}
    * @public
    */
   getLiveSimUrl: async function( simName ) {
-    await checkAndUpdateSimData();
-    if ( !simDataObject[ simName ] ) {
+    await checkAndUpdateSimInfo();
+    if ( !simInfoObject[ simName ] ) {
       winston.error( 'sim not found in metadata, simName = ' + simName );
       return null;
     }
-    return simDataObject[ simName ].simUrl;
+    return simInfoObject[ simName ].simUrl;
   },
 
   /**
-   * get the English translation of the title for the specified simulation
+   * Get the English translation of the title for the specified simulation.
    * @param {string} simName
    * @returns {Promise.<string>}
    * @public
    */
   getEnglishTitle: async function( simName ) {
-    await checkAndUpdateSimData();
-    if ( !simDataObject[ simName ] ) {
+    await checkAndUpdateSimInfo();
+    if ( !simInfoObject[ simName ] ) {
       winston.error( 'sim not found in metadata, simName = ' + simName );
       return '';
     }
-    return simDataObject[ simName ].englishTitle;
+    return simInfoObject[ simName ].englishTitle;
   },
 
   /**
-   * Get the latest version for a simulation
+   * Get the latest version for a simulation.
    * @param {string} simName
    * @returns {Promise<string>}
    * @public
    */
   getLatestSimVersion: async function( simName ) {
-    await checkAndUpdateSimData();
-    if ( !simDataObject[ simName ] ) {
+    await checkAndUpdateSimInfo();
+    if ( !simInfoObject[ simName ] ) {
       winston.error( 'sim not found in metadata, simName = ' + simName );
       return '';
     }
-    return simDataObject[ simName ].version;
+    return simInfoObject[ simName ].version;
   }
 };
