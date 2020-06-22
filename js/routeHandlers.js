@@ -160,7 +160,7 @@ module.exports.checkForValidSession = function( request, response, next ) {
 
           if ( !userData.trustedTranslator && !userData.teamMember ) {
             renderError( response, 'You must be a trusted translator to use the PhET translation utility. ' +
-                              'Email phethelp@colorado.edu for more information.', '' );
+                                   'Email phethelp@colorado.edu for more information.', '' );
           }
           else {
             request.session.teamMember = userData.teamMember;
@@ -189,9 +189,9 @@ module.exports.checkForValidSession = function( request, response, next ) {
     const requestCredentials = https.request( options, sessionDataRequestCallback );
 
     // Handle errors.
-    requestCredentials.on( 'error', function( err ) {
-      winston.error( 'error retrieving session data: ' + err );
-      renderError( response, 'Unable to obtain user credentials', err );
+    requestCredentials.on( 'error', function( error ) {
+      winston.error( `Unable to receive session data. Error: ${error}.` );
+      renderError( response, `Unable to obtain user credentials. Error: ${error}.` );
     } );
 
     // Send the request.
@@ -291,10 +291,10 @@ module.exports.renderTranslationPage = async function( request, response ) {
 
   // Get the SHA of this sim.
   const simSha = TranslationUtils.extractSimSha( simHtml, simName );
-  winston.debug( 'sim sha: ' + simSha );
+  winston.debug( `Sim SHA: ${simSha}.` );
 
   // Initialize the sims array from the active-sims file in the phetsims/chipper repository.
-  winston.debug( 'sending request to ' + GITHUB_RAW_FILE_URL_BASE + activeSimsPath );
+  winston.debug( 'Sending request to ' + GITHUB_RAW_FILE_URL_BASE + activeSimsPath + '.' );
   const activeSimsFileFetchResponse = await nodeFetch( GITHUB_RAW_FILE_URL_BASE + activeSimsPath );
   const activeSimsFileContents = await activeSimsFileFetchResponse.text();
   const activeSims = activeSimsFileContents.toString().split( '\n' );
@@ -365,23 +365,26 @@ module.exports.renderTranslationPage = async function( request, response ) {
 
   // Load saved strings from database to "savedStrings" object if there are any.
   if ( rows && rows.length > 0 ) {
-    winston.info( 'using ' + rows.length + ' saved strings' );
+    winston.info( `Using ${rows.length} saved strings.` );
     for ( let i = 0; i < rows.length; i++ ) {
       const row = rows[ i ];
       savedStrings[ row.repository ][ row.stringkey ] = row.stringvalue;
     }
   }
 
-  let simTitle; // sim title gets filled in here (e.g. Area Builder instead of area-builder)
-  const otherSims = []; // other sim dependencies get filled in here (e.g. beers-law-lab when translating concentration)
+  // Sim title gets filled in here (For example, "Area Builder" instead of "area-builder".)
+  let simTitle;
 
-  // Iterate over all projects from which this sim draws strings and start organizing the strings into the format needed
-  // by the HTML template that will present the strings to the user.
+  // Other sim dependencies get filled in here. (For example, "beers-law-lab" when translating Concentration.)
+  const otherSims = [];
+
+  // Iterate over all projects from which this sim draws strings and start organizing the strings into the format
+  // needed by the HTML template that will present the strings to the user.
   for ( const projectName of extractedStringKeysMap.keys() ) {
     const strings = englishStrings[ projectName ];
     const previouslyTranslatedStrings = request.session.translatedStrings[ targetLocale ][ projectName ];
 
-    // put the strings into different arrays depending on whether they are from the sim, a shared sim, or common code
+    // Put the strings into different arrays depending on whether they are from the sim, a shared sim, or common code.
     let array;
     if ( projectName === simName ) {
       simTitle = strings[ projectName + '.title' ] && strings[ projectName + '.title' ].value;
@@ -389,7 +392,7 @@ module.exports.renderTranslationPage = async function( request, response ) {
     }
     else if ( _.includes( activeSims, projectName ) ) {
 
-      // if this is another sim an not a common code repo, it is presented to the user somewhat differently
+      // If this is another sim an not a common code repo, it is presented to the user somewhat differently.
       otherSims.push( projectName );
       array = simStringsArray;
     }
@@ -401,11 +404,12 @@ module.exports.renderTranslationPage = async function( request, response ) {
     // appropriate information for the HTML template.
     extractedStringKeysMap.get( projectName ).forEach( stringKey => {
 
-      // If this is an accessibility (a11y) string, skip it so that it is not presented to the user.  The translation of
+      // If this is an accessibility (a11y) string, skip it so that it is not presented to the user. The translation of
       // accessibility strings will be supported someday, just not quite yes. Please see
       // https://github.com/phetsims/rosetta/issues/214 for more information.
       if ( stringKey.indexOf( 'a11y.' ) === 0 ) {
-        winston.info( 'intentionally skipping a11y string (will not be presented to user): ' + stringKey );
+        winston.info( 'Intentionally skipping accessibility string. (It will not be presented to the user.)' );
+        winston.info( `String Key: ${stringKey}.` );
         return;
       }
 
@@ -413,7 +417,7 @@ module.exports.renderTranslationPage = async function( request, response ) {
                             ( ( strings[ stringKey ].visible === undefined ) ? true : strings[ stringKey ].visible );
       if ( stringVisible ) {
 
-        // data needed to render to the string on the page - the key, the current value, the English value, and the repo
+        // Data needed to render to the string on the page: the key, the current value, the English value, and the repo.
         const stringRenderInfo = {
           key: stringKey,
           englishValue: escapeHtml( strings[ stringKey ].value ),
@@ -422,34 +426,34 @@ module.exports.renderTranslationPage = async function( request, response ) {
 
         const savedStringValue = savedStrings[ projectName ][ stringKey ];
 
-        // use saved string if it exists
+        // Use saved string if it exists.
         if ( savedStringValue ) {
 
-          // log info about the retrieved string
-          winston.debug( 'using saved string ' + stringKey + ': ' + getPrintableString( savedStringValue ) );
+          // Log info about the retrieved string.
+          winston.debug( `Using saved string ${stringKey}: ${getPrintableString( savedStringValue )}.` );
 
-          // set the retrieved value
+          // Set the retrieved value.
           stringRenderInfo.value = escapeHtml( savedStringValue );
         }
         else if ( previouslyTranslatedStrings[ stringKey ] ) {
 
-          // use previous translation value obtained from GitHub, if it exists
+          // Use previous translation value obtained from GitHub, if it exists.
           const translatedString = previouslyTranslatedStrings[ stringKey ];
-          winston.debug( 'using previously translated string ' + stringKey + ': ' +
+          winston.debug( 'Using previously translated string ' + stringKey + ': ' +
                          getPrintableString( translatedString.value ) );
           stringRenderInfo.value = escapeHtml( translatedString.value );
         }
         else {
 
-          // there is no saved or previously translated string
-          winston.debug( 'no saved or previously translated values found for string key ' + stringKey );
+          // There is no saved or previously translated string.
+          winston.debug( `No saved or previously translated values found for string key ${stringKey}.` );
           stringRenderInfo.value = '';
         }
 
         array.push( stringRenderInfo );
       }
       else {
-        winston.debug( 'String key ' + stringKey + ' not found or not visible' );
+        winston.debug( `String key ${stringKey} not found or not visible.` );
       }
     } );
 
@@ -477,7 +481,7 @@ module.exports.renderTranslationPage = async function( request, response ) {
     }
   }
 
-  // sort the arrays by the English values
+  // Sort the arrays by the English values.
   const compare = function( a, b ) {
     if ( a.englishValue.toLowerCase() < b.englishValue.toLowerCase() ) {
       return -1;
@@ -490,13 +494,13 @@ module.exports.renderTranslationPage = async function( request, response ) {
   simStringsArray.sort( compare );
   commonStringsArray.sort( compare );
 
-  // get the locale-specific information needed to render the translation page
+  // Get the locale-specific information needed to render the translation page.
   const localeInfoObject = await localeInfo.getLocaleInfoObject();
   const targetLocaleInfo = localeInfoObject[ targetLocale ];
   const languageName = targetLocaleInfo ? targetLocaleInfo.name : 'Nonexistent locale';
   const languageDirection = targetLocaleInfo ? targetLocaleInfo.direction : 'ltr';
 
-  // assemble the data that will be supplied to the template
+  // Assemble the data that will be supplied to the template.
   const templateData = {
     title: TITLE,
     subtitle: 'Please enter a translation for each English string:',
@@ -515,13 +519,14 @@ module.exports.renderTranslationPage = async function( request, response ) {
     trustedTranslator: ( request.session.trustedTranslator ) ? request.session.trustedTranslator : false
   };
 
-  // render the translation page
+  // Render the translation page.
   response.render( 'translate-sim.html', templateData );
 };
 
 /**
  * Route for submitting strings (when the user presses the "Submit" button on a translate sim page). The translation is
- * added to a queue of translations to be committed to github. Logic for this is in the file stringSubmissionQueue.js.
+ * added to a queue of translations to be committed to GitHub. Logic for this is in the file stringSubmissionQueue.js.
+ *
  * @param request
  * @param response
  */
@@ -539,8 +544,8 @@ module.exports.submitStrings = function( request, response ) {
 
 /**
  * Route for testing a translation by replacing strings in the currently published simulation with those provided in the
- * request.  This does not save the strings.  This method opens a new tab in which the translated simulation will
- * appear.
+ * request. This does not save the strings. This method opens a new tab in which the translated simulation will appear.
+ *
  * @param {Object} request
  * @param {Object} response
  */
@@ -548,12 +553,12 @@ module.exports.testStrings = function( request, response ) {
 
   const simName = request.params.simName;
 
-  winston.info( 'test-of-strings request received for sim ' + simName );
+  winston.info( `"test-of-strings" request received for ${simName}.` );
 
   TranslationUtils.getLatestSimHtml( simName )
     .then( simHtml => {
 
-      // get the string definitions from the HTML file
+      // Get the string definitions from the HTML file.
       const re = new RegExp( STRING_VAR_IN_HTML_FILES + '.*$', 'm' );
       const extractedStrings = simHtml.match( re );
       const extractedStringsJson = extractedStrings[ 0 ]
@@ -561,59 +566,60 @@ module.exports.testStrings = function( request, response ) {
         .replace( /;$/m, '' );
       const stringsObject = JSON.parse( extractedStringsJson );
 
-      // replace values in the extracted strings with those specified by the user
+      // Replace values in the extracted strings with those specified by the user.
       const translatedStringsObject = request.body;
       _.keys( translatedStringsObject ).forEach( key => {
         if ( stringsObject.en[ key ] ) {
           stringsObject.en[ key ] = translatedStringsObject[ key ];
         }
         else {
-          winston.error( 'key missing in extracted strings, key = ' + key );
+          winston.error( `Key missing in extracted strings. Key: ${key}.` );
         }
       } );
       const translatedStrings = STRING_VAR_IN_HTML_FILES + ' = ' + JSON.stringify( stringsObject ) + ';';
 
-      // insert the changed strings into the sim HTML
+      // Insert the changed strings into the sim HTML.
       simHtml = simHtml.replace( re, translatedStrings );
 
-      winston.info( 'successfully replaced strings in published sim with submissions from user, returning result' );
+      winston.info( 'Successfully replaced strings in published sim with submissions from user. Returning result.' );
 
-      // return the modified sim HTML as the response to the request
+      // Return the modified sim HTML as the response to the request.
       response.send( simHtml );
     } )
-    .catch( err => renderError( response, 'Error testing translation...', err ) );
+    .catch( error => renderError( response, 'Error testing translation...', error ) );
 };
 
 /**
  * Route handler for saving strings to the short-term storage area (when the user presses the "Save" button on the
- * translate sim page). Strings are added to the postgres database, and NOT to the GitHub long term storage area.
+ * translate sim page). Strings are added to the postgres database, and not to the GitHub long-term storage area.
+ *
  * @param request
  * @param response
  */
 module.exports.saveStrings = async function( request, response ) {
 
-  winston.debug( 'saveStrings called' );
+  winston.debug( '"saveStrings" called.' );
   const simName = request.params.simName;
   const targetLocale = request.params.targetLocale;
   const userId = ( request.session.userId ) ? request.session.userId : 0;
   const pool = new Pool();
   const repos = {};
-  let error = false;
+  let saveError = false;
 
-  // loop through the string descriptions in the post request, saving each one
+  // Loop through the string descriptions in the post request, saving each one.
   for ( const stringDescription in request.body ) {
 
     if ( !Object.hasOwnProperty.call( request.body, stringDescription ) ) {
       continue;
     }
 
-    // string descriptions should be in the form "[repository] [key]", for example "area-builder area-builder.title"
+    // String descriptions should be in the form "[repository] [key]", for example "area-builder area-builder.title".
     const repoAndKey = stringDescription.split( ' ' );
     const repo = repoAndKey[ 0 ];
     const key = repoAndKey[ 1 ];
     const stringValue = request.body[ stringDescription ];
 
-    // if this repo hasn't been encountered yet, add it to our repos object
+    // If this repo hasn't been encountered yet, add it to our repos object.
     if ( !repos[ repo ] ) {
       repos[ repo ] = {};
     }
@@ -623,29 +629,29 @@ module.exports.saveStrings = async function( request, response ) {
     if ( key && stringValue && stringValue.length > 0 ) {
       try {
 
-        // execute the query that will save the string to the DB
+        // Execute the query that will save the string to the DB.
         await pool.query(
           'SELECT upsert_saved_translations' +
           '($1::bigint, $2::varchar(255), $3::varchar(255), $4::varchar(8), $5::varchar(255), $6::timestamp)',
           [ userId, key, repo, targetLocale, stringValue, timestamp ]
         );
-        winston.info( 'successfully saved strings to DB' );
+        winston.info( 'Successfully saved strings to DB.' );
       }
-      catch( err ) {
-        winston.error( 'error saving string values to DB, aborting save operation, err = ' + err );
-        error = true;
+      catch( error ) {
+        winston.error( `Error saving string values to DB. Aborting save operation. Error: ${error}.` );
+        saveError = true;
         break;
       }
     }
   }
 
-  if ( !error ) {
-    winston.info( 'finished string saving for ' + simName + '_' + targetLocale );
+  if ( !saveError ) {
+    winston.info( `Finished string saving for ${simName}_${targetLocale}.` );
   }
 
-  // send the response
+  // Send the response.
   response.json( {
-    'success': !error
+    'success': !saveError
   } );
 };
 
@@ -656,7 +662,7 @@ module.exports.saveStrings = async function( request, response ) {
  * @param response
  */
 module.exports.showOfflinePage = function( request, response ) {
-  winston.warn( 'Showing the \'Offline\' page to the user' );
+  winston.warn( 'Showing the \'Offline\' page to the user.' );
   response.render( 'offline.html', { title: 'Off Line' } );
 };
 
@@ -674,6 +680,7 @@ module.exports.pageNotFound = pageNotFound;
 
 /**
  * Handle a request to trigger a build. For team members only.
+ *
  * @param request
  * @param response
  */
@@ -682,46 +689,47 @@ module.exports.triggerBuild = async function( request, response ) {
   // Only logged in PhET team members can trigger a build through this route.
   if ( request.session.teamMember ) {
 
-    // extract the parameters from the request
+    // Extract the parameters from the request.
     const simName = request.params.simName;
     const targetLocale = request.params.targetLocale;
     const userID = request.params.userID;
 
     winston.info( 'triggerBuild called for sim ' + simName + ', locale ' + targetLocale + ', and userID ' + userID );
+    let message = `Sim Name: ${simName}, Locale: ${targetLocale}, User ID: ${userID}`;
+    winston.info(`"triggerBuild" called for ${message}.`);
 
     // Send the request to the build server.
     const status = requestBuild( simName, userID, targetLocale );
 
     // Create a simple response message that can be shown to the user in the browser window.
-    let response = simName + ', locale ' + targetLocale + ', and userID ' + userID;
     if ( status ) {
-      response = 'Successfully triggered build for ' + response;
+      message = `Successfully triggered build for ${message}.`;
     }
     else {
-      response = 'Error when attempting to trigger build for ' + response;
+      message = `Error when attempting to trigger build for ${message}.`;
     }
 
     // Send back the response.
-    response.send( response );
+    response.send( message );
   }
   else {
 
-    // the user is not a team member, render the "not found" page
+    // The user is not a team member; render the "not found" page.
     pageNotFound( request, response );
   }
 };
 
 /**
- * displays the main test harness page if the user is a PhET team member, used for development
+ * Displays the main test harness page if the user is a PhET team member. Used for development.
  *
  * @param request
  * @param response
  */
 module.exports.displayTestPage = function( request, response ) {
 
-  // only logged in PhET team members can access the test page
+  // Only logged in PhET team members can access the test page.
   if ( request.session.teamMember ) {
-    winston.info( 'test page accessed' );
+    winston.info( 'Test page accessed.' );
     response.render( 'test.html', { title: 'Test' } );
   }
   else {
@@ -730,38 +738,38 @@ module.exports.displayTestPage = function( request, response ) {
 };
 
 /**
- * Handle a request to run a test.
- * for team members only
+ * Handle a request to run a test. For team members only.
+ *
  * @param request
  * @param response
  */
 module.exports.runSpecificTest = async function( request, response ) {
 
-  // only logged in PhET team members can run tests
+  // Only logged in PhET team members can run tests.
   if ( request.session.teamMember ) {
 
     const testID = request.params.testID;
     const result = await ServerTests.executeTest( testID );
 
-    // send back an empty response
+    // Send back an empty response.
     response.send( result );
   }
   else {
 
-    // the user is not a team member, render the "not found" page
+    // The user is not a team member; render the "not found" page.
     pageNotFound( request, response );
   }
 };
 
 /**
- * Handle a request to run all rosetta server side tests.
- * for team members only
+ * Handle a request to run all rosetta server side tests. For team members only.
+ *
  * @param request
  * @param response
  */
 module.exports.runAllTests = async function( request, response ) {
 
-  // only logged in PhET team members can run tests
+  // Only logged in PhET team members can run tests.
   if ( request.session.teamMember ) {
 
     const result = await ServerTests.runTests();
@@ -770,7 +778,7 @@ module.exports.runAllTests = async function( request, response ) {
   }
   else {
 
-    // the user is not a team member, render the "not found" page
+    // The user is not a team member; render the "not found" page.
     pageNotFound( request, response );
   }
 };
