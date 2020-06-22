@@ -43,7 +43,7 @@ const options = {
 // Set up main functions for metadata retrieval and update.                  //
 //===========================================================================//
 
-// Gets the sim metadata from the PhET site.
+// Get the sim metadata from the PhET site.
 function getSimMetadata() {
   return new Promise( ( resolve, reject ) => {
     const request = https.request( url, options, response => {
@@ -85,7 +85,7 @@ function getSimMetadata() {
       } );
     } );
 
-    // Reject errors and end the request.
+    // Reject errors and finish sending the request.
     request.on( 'error', error => {
       reject( error );
     } );
@@ -93,7 +93,7 @@ function getSimMetadata() {
   } );
 }
 
-// Updates the local copy of the sim metadata (the sim info).
+// Update the local copy of the sim metadata (the sim info).
 async function updateSimInfo() {
 
   // Get metadata.

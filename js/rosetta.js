@@ -1,7 +1,8 @@
 // Copyright 2015-2020, University of Colorado Boulder
 
 /**
- * TODO: This description is generic and vague.
+ * TODO: Relocate code in this file that doesn't have to do with configuring the app, setting up routes, etc.
+ * TODO: Write a less generic and vague description once Rosetta has undergone modularization.
  * Main entry point for PhET translation web app. This is where Express.js gets configured and the routes are set up.
  *
  * @author John Blanco
@@ -58,23 +59,18 @@ winston.info( `Node Version ${process.version}.` );
 // Log Rosetta's SHA. This might make it easier to duplicate issues and track them down.
 try {
 
-  // TODO: This can be done without two variables.
   // For some reason, "sha.toString()" has a newline. I want the log to look nice, so I'm taking it out.
-  const sha = childProcess.execSync( 'git rev-parse HEAD' );
-  let shaString = sha.toString();
-  shaString = shaString.replace( /\r?\n|\r/, '' );
-  winston.info( `Current SHA is ${shaString}.` );
+  let sha = childProcess.execSync( 'git rev-parse HEAD' );
+  sha = sha.toString();
+  sha = sha.replace( /\r?\n|\r/, '' );
+  winston.info( `Current SHA is ${sha}.` );
 }
 catch( error ) {
   winston.warn( `Unable to get SHA from Git. Error: ${error}.` );
 }
 
-// TODO: Can this be put before logger set up?
-// TODO: This doesn't have anything to do with the logger.
-// TODO: Are these "process variables" the variables used by the "pg" module? This is vague.
-// TODO: getRosettaConfig really shouldn't be doing multiple things.
-// TODO: I don't think using "require('./getRosettaConfig.js')" in each file would be an issue.
-// TODO: See https://nodejs.org/docs/latest/api/modules.html#modules_caching.
+// TODO: Move this to a more appropriate location.
+// TODO: Determine if setting a variable for the config is preferable to this approach.
 // Get configuration and assign it to a global. This also sets up some process variables.
 global.config = getRosettaConfig();
 
@@ -82,13 +78,13 @@ global.config = getRosettaConfig();
 winston.info( 'Check your config below and make sure it looks correct!' );
 winston.info( JSON.stringify( global.config, null, 2 ) );
 
-// TODO: Why don't we just get the config before setting up the logger so we don't have to update it?
+// TODO: Determine if it's possible to get the config before setting up the logger. (So we don't have to update it.)
 // Update the logging level in case it was set in the config info.
 consoleTransport.level = global.config.loggingLevel;
 
-// TODO: Consider moving this into the shortTermStorage object once it exists.
+// TODO: Move this into the "shortTermStorage" object once it exists.
 // Check that the database is running and that a basic query can be performed.
-winston.info( 'Testing database connection...' ); // TODO: The rest of this doesn't work on macOS (?).
+winston.info( 'Testing database connection...' );
 const pool = new Pool();
 pool.query( 'SELECT NOW();', ( error, result ) => {
   if ( error ) {
@@ -101,13 +97,7 @@ pool.query( 'SELECT NOW();', ( error, result ) => {
 // Set up the app.                                                           //
 //===========================================================================//
 
-// TODO: The use of "__dirname" seems inconsistent. It might also be wrong.
-// TODO: Read https://stackoverflow.com/questions/8131344/what-is-the-difference-between-dirname-and-in-node-js.
-// TODO: . is wherever "node rosetta.js" is run from. But the dev script does "node js/rosetta.js". Maybe the root directory?
-// TODO: __dirname is the directory in which rosetta.js lives.
-// const path = require("path");
-// console.log(". = %s", path.resolve("."));
-// console.log("__dirname = %s", path.resolve(__dirname));
+// TODO: Determine if the use of "__dirname" is correct.
 // Create and configure the Express.js app.
 const app = express();
 app.set( 'views', __dirname + '/../html/views' );
@@ -149,11 +139,11 @@ app.get( '/translate*', routeHandlers.checkForValidSession );
 
 // Set up routes for debugging.
 app.post( '/translate*', function( request, response, next ) {
-  winston.debug( 'post request received, url = ' + request.url );
+  winston.debug( `Post request received. URL: ${request.url}.` );
   next();
 } );
 app.get( '/translate*', function( request, response, next ) {
-  winston.debug( 'get request received, url = ' + request.url );
+  winston.debug( `Get request received. URL: ${request.url}.`);
   next();
 } );
 
@@ -175,16 +165,13 @@ app.post( '/translate/sim/:simName?/:targetLocale?', routeHandlers.submitStrings
 // Set up logout.
 app.get( '/translate/logout', routeHandlers.logout );
 
-// TODO: We might want to move this.
 // Trigger the build of a simulation for a given sim, locale, and user ID. Only used by team members to fix problems.
 app.get( '/translate/trigger-build/:simName?/:targetLocale?/:userID?', routeHandlers.triggerBuild );
 
-// TODO: The comments at the end of the lines are vague, and those methods should be renamed.
-// TODO: (The methods are in the routeHandlers.js file.)
 // Set up testing routes.
-app.get( '/translate/test/', routeHandlers.test ); // Display a test HTML page.
-app.get( '/translate/runTest/:testID', routeHandlers.runTest ); // Run specific server test.
-app.get( '/translate/runTests/', routeHandlers.runTests ); // Run all server tests.
+app.get( '/translate/test/', routeHandlers.displayTestPage );
+app.get( '/translate/runSpecificTest/:testID', routeHandlers.runSpecificTest );
+app.get( '/translate/runAllTests/', routeHandlers.runAllTests );
 
 // Set up routes for incorrect URL patterns.
 app.get( '/*', routeHandlers.pageNotFound );

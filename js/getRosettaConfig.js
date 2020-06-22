@@ -1,6 +1,7 @@
 // Copyright 2019-2020, University of Colorado Boulder
 
 /**
+ * // TODO: Relocate code in this file that doesn't have to do with getting the Rosetta configuration file.
  * If Rosetta's configuration file exists, read it and parse it. Assert that necessary values exist. Set default values
  * if they haven't been set. Set variables used by the "pg" module (the short-term storage PostgreSQL database).
  * Finally, return the resulting configuration as an object.
@@ -25,6 +26,7 @@ const CONFIG_FILENAME = 'rosetta-config.json';
 
 /**
  * Get Rosetta's configuration directory path depending on platform (Windows or UNIX).
+ *
  * @returns {string} configDirPath - The directory in which Rosetta's configuration resides.
  */
 function getConfigDirPath() {
@@ -45,6 +47,7 @@ function getConfigDirPath() {
 
 /**
  * If the configuration file exists, read it, parse it, and return it. Otherwise, assert that it exists.
+ *
  * @param {string} configPathWithFilename - The full path with filename for Rosetta configuration.
  * @returns {Object} config - The parsed JSON configuration for Rosetta.
  */
@@ -64,6 +67,7 @@ function readAndParseConfig( configPathWithFilename ) {
 
 /**
  * Assert that each necessary value in the configuration file exists.
+ *
  * @param {Object} config - The parsed JSON configuration for Rosetta.
  * @param {string} configPathWithFilename - The full path with filename for Rosetta configuration.
  */
@@ -102,6 +106,7 @@ function assertConfigValuesExist( config, configPathWithFilename ) {
 
 /**
  * Set default Rosetta configuration values if they haven't been set.
+ *
  * @param {Object} config - The parsed JSON configuration for Rosetta.
  */
 function setDefaultConfigValues( config ) {
@@ -138,7 +143,9 @@ function setDefaultConfigValues( config ) {
 }
 
 /**
+ * // TODO: Put this function in a more appropriate file.
  * Set variables used by the "pg" module (short-term string storage PostgreSQL database).
+ *
  * @param {Object} config - The parsed JSON configuration for Rosetta.
  */
 function setPostgresVariables( config ) {
@@ -153,6 +160,7 @@ function setPostgresVariables( config ) {
 
 /**
  * Driver code for getting Rosetta configuration.
+ *
  * @returns {Object} config - The parsed JSON configuration for Rosetta that has necessary values.
  */
 function getRosettaConfig() {
