@@ -88,9 +88,12 @@ winston.info( 'Testing database connection...' );
 const pool = new Pool();
 pool.query( 'SELECT NOW();', ( error, result ) => {
   if ( error ) {
-    winston.error( `Database test using "SELECT NOW()" failed. Error Stack: ${error.stack}.` );
+    winston.error( 'Database test using "SELECT NOW()" failed. Error: ' + JSON.stringify( error ) );
+    winston.error( 'Short term storage will be unavailable.' );
   }
-  winston.info( `Database test using "SELECT NOW()" succeeded. Now: ${result.rows[ 0 ].now}.` );
+  else {
+    winston.info( `Database test using "SELECT NOW()" succeeded. Now: ${result.rows[ 0 ].now}.` );
+  }
 } );
 
 //===========================================================================//
