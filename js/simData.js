@@ -32,44 +32,71 @@ const simInfoObject = {};
 // Outstanding promise for getting metadata. Used to avoid creating duplicate requests if one is already in progress.
 let inProgressMetadataPromise = null;
 
+// Used for metadata request.
+const url = RosettaConstants.PRODUCTION_SERVER_URL +
+            '/services/metadata/1.2/simulations?format=json&type=html&include-unpublished=true&summary';
+const options = {
+  auth: `token:${global.config.serverToken}`
+};
+
 //===========================================================================//
 // Set up main functions for metadata retrieval and update.                  //
 //===========================================================================//
 
 // Gets the sim metadata from the PhET site.
-async function getSimMetadata() {
-  const options = {
-    hostname: RosettaConstants.PRODUCTION_SERVER_URL,
-    port: 443,
-    path: '/services/metadata/1.2/simulations?format=json&type=html&include-unpublished=true&summary',
-    method: 'GET',
-    auth: {
-      user: 'token',
-      pass: global.config.serverToken
-    }
-  };
-  const request = https.request( options, response => {
-    console.log( 'statusCode:', response.statusCode );
-    console.log( 'headers:', response.headers );
-    response.on( 'data', data => {
-      return data;
+function getSimMetadata() {
+  return new Promise( ( resolve, reject ) => {
+    const request = https.request( url, options, response => {
+
+      // Set up variables for error logging.
+      const { statusCode } = response;
+      const contentType = response.headers[ 'content-type' ];
+
+      // Log incorrect return codes or incorrect metadata type.
+      if ( statusCode !== 200 ) {
+        winston.error( 'Metadata request failed.\n' +
+                       `Status Code: ${statusCode}` );
+        return;
+      }
+      else if ( !/^text\/html/.test( contentType ) ) {
+        winston.error( 'Invalid content-type.\n' +
+                       `Expected text/html but received ${contentType}.` );
+        return;
+      }
+
+      // Set encoding and variable for metadata.
+      response.setEncoding( 'utf-8' );
+      let rawData = '';
+
+      // Add metadata.
+      response.on( 'data', chunk => {
+        rawData += chunk;
+      } );
+
+      // Resolve metadata.
+      response.on( 'end', () => {
+        try {
+          const parsedData = JSON.parse( rawData );
+          resolve( parsedData );
+        }
+        catch( error ) {
+          winston.error( `Parsing metadata failed. Error: ${error}.` );
+        }
+      } );
     } );
+
+    // Reject errors and end the request.
+    request.on( 'error', error => {
+      reject( error );
+    } );
+    request.end();
   } );
-  request.on( 'error', error => {
-    console.error( error );
-  } );
-  request.end();
 }
 
 // Updates the local copy of the sim metadata (the sim info).
 async function updateSimInfo() {
 
-  // Log the URL used to get the metadata.
-  const url = `${RosettaConstants.PRODUCTION_SERVER_URL}
-              /services/metadata/1.2/simulations?format=json&type=html&include-unpublished=true&summary`;
-  winston.debug( `Updating sim info using metadata URL: ${url}.` );
-
-  // Get the metadata.
+  // Get metadata.
   const simMetadata = await getSimMetadata();
 
   // If any part of simMetadata is undefined, throw an error. Otherwise, update sim info.
@@ -81,7 +108,6 @@ async function updateSimInfo() {
   }
   else {
 
-    // TODO: This might not be correct. We might need to reset the simMetadata variable.
     // Extract subset of metadata needed by the translation utility and save it in the sim info object.
     simMetadata.projects.forEach( projectInfo => {
       projectInfo.simulations.forEach( simData => {
