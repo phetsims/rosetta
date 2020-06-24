@@ -81,6 +81,7 @@ function getSimMetadata() {
         }
         catch( error ) {
           winston.error( `Parsing metadata failed. Error: ${error}.` );
+          reject( error );
         }
       } );
     } );
@@ -149,7 +150,7 @@ async function checkAndUpdateSimInfo() {
     }
   }
   else if ( ( Date.now() - timeOfLastUpdate ) / 1000 > CACHED_DATA_VALID_TIME ) {
-    winston.debug( 'sim data was stale, initiating a new request' );
+    winston.debug( 'Sim data was stale. Initiating a new request.' );
 
     // Use the promise explicitly so that if other requests are received before this is resolved, they can also wait
     // on it.
