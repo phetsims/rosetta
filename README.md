@@ -1,5 +1,3 @@
-# :construction: Documentation is under construction. :construction:
-
 # Rosetta
 
 Rosetta is PhET's translation utility for its HTML5 simulations. This repository contains the code for Rosetta's
@@ -30,8 +28,8 @@ Rosetta uses [Node.js](https://nodejs.org/en/), [Express.js](https://expressjs.c
 
 This guide was made by @muedli on 2020-05-15.
 
-#### Windows 10 (1909) + Git 2.26.2 + Node.js v12.16.3 + PostgreSQL 12.2
-
+<details>
+<summary><b>Windows 10 (1909) + Git 2.26.2 + Node.js v12.16.3 + PostgreSQL 12.2</b></summary>
 1. Get your GitHub account set up with phetsims.
 2. Install and set up Git. Default installation options should be fine.
   (I used [Chocolatey](https://chocolatey.org/).)
@@ -83,9 +81,10 @@ This guide was made by @muedli on 2020-05-15.
     a more graceful way to do this.)
 15. Open your browser to the port specified by `LISTEN_PORT` in rosetta.js, which, as of
     this writing, is 16372. (http://localhost:16372.)
+</details>
 
-#### macOS 10.15.4 + Git 2.24.2 + Node.js v14.2.0 + PostgreSQL 12.2
-
+<details>
+<summary><b>macOS 10.15.4 + Git 2.24.2 + Node.js v14.2.0 + PostgreSQL 12.2</b></summary>
 1. Get your GitHub account set up with phetsims.
 2. You should have Git pre-installed.
 3. Install Node.js. (I recommend using [Homebrew](https://brew.sh/).)
@@ -128,6 +127,7 @@ This guide was made by @muedli on 2020-05-15.
 15. In the rosetta directory, run `npm run dev`.
 16. Open your browser to the port specified by `LISTEN_PORT` in rosetta.js, which, as of
     this writing, is 16372. (http://localhost:16372.)
+</details>
 
 ### Running Rosetta Remotely With PhET's Servers
 
