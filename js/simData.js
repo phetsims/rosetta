@@ -97,6 +97,7 @@ function getSimMetadata() {
 // Update the local copy of the sim metadata (the sim info).
 async function updateSimInfo() {
 
+  // TODO: We might want to put a try/catch in here.
   // Get metadata.
   const simMetadata = await getSimMetadata();
 
@@ -162,6 +163,7 @@ async function checkAndUpdateSimInfo() {
 
       // There really isn't much that can be done here other than to hope that the next attempt succeeds.
       winston.error( `Promise returned by updateSimInfo failed. Error: ${error}.` );
+      throw Error( error );
     }
 
     // Clear out the promise for the next attempt.
@@ -175,7 +177,7 @@ async function checkAndUpdateSimInfo() {
 // Kick off the initial population of the sim data.
 checkAndUpdateSimInfo()
   .then( () => { winston.info( 'Initial population of "simInfoObject" complete.' ); } )
-  .catch( error => winston.info( `Initial population of "simInfoObject" failed. Error: ${error}.` ) );
+  .catch( error => winston.error( `Initial population of "simInfoObject" failed. Error: ${error}.` ) );
 
 //===========================================================================//
 // Export singleton object.                                                  //
