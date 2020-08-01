@@ -6,6 +6,7 @@
  * sim metadata from the server where the simulations reside.
  *
  * @author John Blanco
+ * @author Liam Mulhall
  */
 
 'use strict';
@@ -97,19 +98,25 @@ function getSimMetadata() {
 // Update the local copy of the sim metadata (the sim info).
 async function updateSimInfo() {
 
-  // TODO: We might want to put a try/catch in here.
   // Get metadata.
-  const simMetadata = await getSimMetadata();
+  let simMetadata = null;
+  try {
+    simMetadata = await getSimMetadata();
+  }
+  catch( error ) {
+    throw winston.error( `The "getSimMetadata" function call failed. Error: ${error}.` );
+  }
 
   // If any part of simMetadata is undefined, throw an error. Otherwise, update sim info.
   if ( !simMetadata ) {
-    winston.error( 'Unable to obtain "simMetadata". Sim info not updated.' );
+    throw winston.error( 'Unable to obtain "simMetadata". Sim info not updated.' );
   }
   else if ( !simMetadata.projects ) {
-    winston.error( 'Unable to obtain "simMetadata.projects". Sim info not updated.' );
+    throw winston.error( 'Unable to obtain "simMetadata.projects". Sim info not updated.' );
   }
   else {
 
+    // TODO: Come up with better names for "simMetadata" and "simData". They are too similar.
     // Extract subset of metadata needed by the translation utility and save it in the sim info object.
     simMetadata.projects.forEach( projectInfo => {
       projectInfo.simulations.forEach( simData => {
