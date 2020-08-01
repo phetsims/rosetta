@@ -146,7 +146,7 @@ app.post( '/translate*', function( request, response, next ) {
   next();
 } );
 app.get( '/translate*', function( request, response, next ) {
-  winston.debug( `Get request received. URL: ${request.url}.`);
+  winston.debug( `Get request received. URL: ${request.url}.` );
   next();
 } );
 
@@ -181,4 +181,7 @@ app.get( '/*', routeHandlers.pageNotFound );
 app.post( '/*', routeHandlers.pageNotFound );
 
 // Start the server.
-app.listen( LISTEN_PORT, () => { winston.info( `Listening on port ${LISTEN_PORT}.` ); } );
+app.listen( LISTEN_PORT, () => {
+  winston.info( `Listening on port ${LISTEN_PORT}.` );
+  winston.info( `Open your browser to http://localhost:${LISTEN_PORT}/translate.` );
+} );
