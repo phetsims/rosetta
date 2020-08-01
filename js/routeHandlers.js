@@ -34,6 +34,7 @@ const GITHUB_RAW_FILE_URL_BASE = RosettaConstants.GITHUB_RAW_FILE_URL_BASE;
 const TITLE = 'PhET Translation Utility (HTML5)';
 const ASCII_REGEX = /^[ -~]+$/;
 const STRING_VAR_IN_HTML_FILES = RosettaConstants.STRING_VAR_IN_HTML_FILES;
+const SEND_BUILD_REQUESTS = global.config.sendBuildRequests === undefined ? true : global.config.sendBuildRequests;
 
 //===========================================================================//
 // Utility functions below.                                                  //
@@ -699,7 +700,10 @@ module.exports.triggerBuild = async function( request, response ) {
     winston.info(`"triggerBuild" called for ${message}.`);
 
     // Send the request to the build server.
-    const status = requestBuild( simName, userID, targetLocale );
+    let status = null;
+    if ( SEND_BUILD_REQUESTS ) {
+      status = requestBuild( simName, userID, targetLocale );
+    }
 
     // Create a simple response message that can be shown to the user in the browser window.
     if ( status ) {
