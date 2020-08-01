@@ -687,17 +687,37 @@ module.exports.pageNotFound = pageNotFound;
  */
 module.exports.triggerBuild = async function( request, response ) {
 
-  // Only logged in PhET team members can trigger a build through this route.
+  // Only a logged-in PhET team member can trigger a build through this route.
   if ( request.session.teamMember ) {
 
+    // Get list of sim names so that we can validate our "simName" parameter.
+    const listOfSimNames = simData.getListOfSimNames( false );
+
+    // Get list of locales so that we can validate our "targetLocale" parameter.
+    const listOfLocales = localeInfo.getSortedLocaleInfoArray();
+
     // Extract the parameters from the request.
-    const simName = request.params.simName;
-    const targetLocale = request.params.targetLocale;
-    const userID = request.params.userID;
+    let simName = '';
+    if ( typeof request.params.simName === 'string' ) {
+      if ( listOfSimNames.includes( request.params.simName ) ) {
+        simName = request.params.simName;
+      }
+    }
+    let userID = null;
+    if ( typeof request.params.userID === 'number' ) {
+      // TODO: If "params.userID" is a valid user ID, proceed with setting the "userID" variable.
+      userID = request.params.userID;
+    }
+    let targetLocale = '';
+    if ( typeof request.params.targetLocale === 'string' ) {
+      if ( listOfLocales.includes( request.params.targetLocale ) ) {
+        targetLocale = request.params.targetLocale;
+      }
+    }
 
     winston.info( 'triggerBuild called for sim ' + simName + ', locale ' + targetLocale + ', and userID ' + userID );
     let message = `Sim Name: ${simName}, Locale: ${targetLocale}, User ID: ${userID}`;
-    winston.info(`"triggerBuild" called for ${message}.`);
+    winston.info( `"triggerBuild" called for ${message}.` );
 
     // Send the request to the build server.
     let status = null;
