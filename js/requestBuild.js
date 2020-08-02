@@ -1,20 +1,21 @@
 // Copyright 2020, University of Colorado Boulder
 
 /**
- * Submit a request to the build server to build and deploy a translation.
+ * Submits a request to the build server to build and deploy a translation.
  *
- * @author John Blanco (PhET Interactive Simulations)
+ * @author John Blanco
+ * @author Liam Mulhall
  */
 
 'use strict';
 
-// modules
+// Modules
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const RosettaConstants = require( './RosettaConstants' );
 const simData = require( './simData' );
 const winston = require( 'winston' );
 
-// constants
+// Constants
 const PRODUCTION_SERVER_URL = RosettaConstants.PRODUCTION_SERVER_URL;
 
 /**
@@ -23,11 +24,11 @@ const PRODUCTION_SERVER_URL = RosettaConstants.PRODUCTION_SERVER_URL;
  * @param {string} locale
  * @returns {Promise<boolean>}
  */
-module.exports = async function( simName, userID, locale ) {
+module.exports = async function( simName, locale, userID ) {
 
-  winston.info( 'initiating build request for sim = ' + simName + ', locale = ' + locale );
+  winston.info( `Initiating build request for sim: ${simName}, locale: ${locale}.` );
   const latestVersionOfSim = await simData.getLatestSimVersion( simName );
-  winston.info( 'latest sim version = ' + latestVersionOfSim );
+  winston.info( `Latest version of the sim: ${latestVersionOfSim}.` );
   const dependencies = await getDependencies( simName, latestVersionOfSim );
   const requestObject = {
     api: '2.0',
@@ -42,9 +43,9 @@ module.exports = async function( simName, userID, locale ) {
   };
 
   const url = PRODUCTION_SERVER_URL + '/deploy-html-simulation';
-  winston.info( 'sending build request to server, URL = ' + url );
+  winston.info( `Sending build request to server. URL: ${url}.` );
 
-  // send off the request, and return the resulting promise
+  // Send off the request and return the resulting promise.
   const buildRequestResponse = await nodeFetch( url, {
     method: 'POST',
     headers: {
@@ -54,45 +55,41 @@ module.exports = async function( simName, userID, locale ) {
     body: JSON.stringify( requestObject )
   } );
   if ( buildRequestResponse.status === 200 || buildRequestResponse.status === 202 ) {
-    winston.info( 'build request accepted, status = ' + buildRequestResponse.status );
+    winston.info( `Build request accepted. Status: ${buildRequestResponse.status}.` );
     return true;
   }
   else if ( buildRequestResponse.status === 400 ) {
-    throw new Error( 'build request unsuccessful, probably due to missing info, status = ' + buildRequestResponse.status );
+    throw new Error( `Build request unsuccessful. Probably due to missing info. Status: ${buildRequestResponse.status}.` );
   }
   else if ( buildRequestResponse.status === 401 ) {
-    throw new Error( 'build request unsuccessful, probably due to bad auth code, status = ' + buildRequestResponse.status );
+    throw new Error( `Build request unsuccessful. Probably due to bad authorization code. Status: ${buildRequestResponse.status}.` );
   }
   else {
-    throw new Error( 'build request unsuccessful, status = ' + buildRequestResponse.status );
+    throw new Error( `Build request unsuccessful. Status: ${buildRequestResponse.status}.` );
   }
 };
 
 /**
- * Get the dependencies for the specified simulation and version
+ * Get the dependencies for the specified simulation and version.
+ *
  * @param {string} simName
  * @param {string} version
  * @returns {Promise.<string>} - JSON data with dependencies
  */
 async function getDependencies( simName, version ) {
 
-  // compose the URL where the dependencies should be
-  const url = PRODUCTION_SERVER_URL +
-              '/sims/html/' +
-              simName +
-              '/' +
-              version +
-              '/dependencies.json';
+  // Compose the URL where the dependencies should be.
+  const url = `${PRODUCTION_SERVER_URL}/sims/html/${simName}/${version}/dependencies.json`;
 
-  // get the dependencies
-  winston.info( 'fetching dependencies from ' + url );
+  // Get the dependencies.
+  winston.info( `Fetching dependencies from ${url}.` );
   const response = await nodeFetch( url );
 
-  // return the results or throw an error
+  // Return the results or throw an error.
   if ( response.status === 200 ) {
     return await response.text();
   }
   else {
-    throw new Error( 'unable to get dependencies for sim ' + simName + ', version ' + version + '; response.status = ' + response.status );
+    throw new Error( `Unable to get dependencies for sim: ${simName}, version: ${version}. Status: ${response.status}.` );
   }
 }

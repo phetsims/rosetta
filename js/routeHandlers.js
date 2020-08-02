@@ -729,7 +729,7 @@ module.exports.triggerBuild = async function( request, response ) {
     // Send the request to the build server.
     let status = null;
     if ( SEND_BUILD_REQUESTS ) {
-      status = requestBuild( simName, userID, targetLocale );
+      status = requestBuild( simName, targetLocale, userID );
     }
 
     // Create a simple response message that can be shown to the user in the browser window.

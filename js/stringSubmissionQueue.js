@@ -141,7 +141,7 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
 
     // request a build of the new translation (if enabled)
     if ( SEND_BUILD_REQUESTS ) {
-      await requestBuild( simName, userId, targetLocale );
+      await requestBuild( simName, targetLocale, userId );
     }
     else {
       winston.info( 'build requests for translations are disabled, skipping' );
