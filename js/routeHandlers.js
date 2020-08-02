@@ -676,6 +676,7 @@ module.exports.showOfflinePage = function( request, response ) {
 function pageNotFound( request, response ) {
   response.send( '<p>Error: Page not found.  URL = ' + request.url + '</p>' );
 }
+
 module.exports.pageNotFound = pageNotFound;
 
 /**
@@ -687,11 +688,12 @@ module.exports.pageNotFound = pageNotFound;
 function renderErrorPage( request, response, message, errorDetails ) {
   response.render( 'error.html', {
     title: 'Translation Utility Error',
-    message,
-    errorDetails,
+    message: message,
+    errorDetails: errorDetails,
     timestamp: new Date().getTime()
-  });
+  } );
 }
+
 module.exports.renderErrorPage = renderErrorPage;
 
 /**
@@ -706,45 +708,45 @@ module.exports.triggerBuild = async function( request, response ) {
   if ( request.session.teamMember ) {
 
     // Get list of sim names so that we can validate our "simName" parameter.
-    const listOfSimNames = await simData.getListOfSimNames( false );
+    const arrayOfSimNames = await simData.getListOfSimNames( false );
 
     // Get list of locales so that we can validate our "targetLocale" parameter.
-    const listOfLocales = await localeInfo.getSortedLocaleInfoArray();
+    const arrayOfLocales = await localeInfo.getSortedLocaleInfoArray();
 
     // Extract the sim name from the request.
     let simName = '';
     if ( typeof request.params.simName === 'string' ) {
-      if ( listOfSimNames.includes( request.params.simName ) ) {
+      if ( arrayOfSimNames.includes( request.params.simName ) ) {
         simName = request.params.simName;
       }
       else {
         const message = 'Invalid simulation name.';
         const errorDetails = 'Sim name not found in array made with "simData.getListOfSimNames".';
-        renderErrorPage(request, response, message, errorDetails);
+        renderErrorPage( request, response, message, errorDetails );
       }
     }
     else {
       const message = 'Invalid simulation name.';
       const errorDetails = 'Sim name is not a string.';
-      renderErrorPage(request, response, message, errorDetails);
+      renderErrorPage( request, response, message, errorDetails );
     }
 
     // Extract the target locale from the request.
     let targetLocale = '';
     if ( typeof request.params.targetLocale === 'string' ) {
-      if ( listOfLocales.includes( request.params.targetLocale ) ) {
+      if ( arrayOfLocales.includes( request.params.targetLocale ) ) {
         targetLocale = request.params.targetLocale;
       }
       else {
         const message = 'Invalid locale.';
         const errorDetails = 'Locale not found in array made with "localeInfo.getSortedLocaleInfoArray".';
-        renderErrorPage(request, response, message, errorDetails);
+        renderErrorPage( request, response, message, errorDetails );
       }
     }
     else {
       const message = 'Invalid locale.';
       const errorDetails = 'Locale is not a string.';
-      renderErrorPage(request, response, message, errorDetails);
+      renderErrorPage( request, response, message, errorDetails );
     }
 
     // Extract the user ID from the request.
