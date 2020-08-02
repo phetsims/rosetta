@@ -696,18 +696,17 @@ module.exports.triggerBuild = async function( request, response ) {
     // Get list of locales so that we can validate our "targetLocale" parameter.
     const listOfLocales = localeInfo.getSortedLocaleInfoArray();
 
-    // Extract the parameters from the request.
+    // Extract the sim name from the request.
     let simName = '';
+    // TODO: If either of the two conditions below are false, render the error page.
     if ( typeof request.params.simName === 'string' ) {
       if ( listOfSimNames.includes( request.params.simName ) ) {
         simName = request.params.simName;
       }
     }
-    let userID = null;
-    if ( typeof request.params.userID === 'number' ) {
-      // TODO: If "params.userID" is a valid user ID, proceed with setting the "userID" variable.
-      userID = request.params.userID;
-    }
+
+    // Extract the target locale from the request.
+    // TODO: If either of the two conditions below are false, render the error page.
     let targetLocale = '';
     if ( typeof request.params.targetLocale === 'string' ) {
       if ( listOfLocales.includes( request.params.targetLocale ) ) {
@@ -715,9 +714,17 @@ module.exports.triggerBuild = async function( request, response ) {
       }
     }
 
-    winston.info( 'triggerBuild called for sim ' + simName + ', locale ' + targetLocale + ', and userID ' + userID );
-    let message = `Sim Name: ${simName}, Locale: ${targetLocale}, User ID: ${userID}`;
-    winston.info( `"triggerBuild" called for ${message}.` );
+    // Extract the user ID from the request.
+    // TODO: If either of the two conditions below are false, render the error page.
+    let userID = null;
+    if ( typeof request.params.userID === 'number' ) {
+      // TODO: If "params.userID" is a valid user ID, proceed with setting the "userID" variable.
+      userID = request.params.userID;
+    }
+
+    // Log message about "triggerBuild" being called.
+    const simLocaleAndID = `Sim Name: ${simName}, Locale: ${targetLocale}, User ID: ${userID}`;
+    winston.info( `"triggerBuild" called for ${simLocaleAndID}.` );
 
     // Send the request to the build server.
     let status = null;
@@ -726,11 +733,12 @@ module.exports.triggerBuild = async function( request, response ) {
     }
 
     // Create a simple response message that can be shown to the user in the browser window.
+    let message = '';
     if ( status ) {
-      message = `Successfully triggered build for ${message}.`;
+      message = `Successfully triggered build for ${simLocaleAndID}.`;
     }
     else {
-      message = `Error when attempting to trigger build for ${message}.`;
+      message = `Error when attempting to trigger build for ${simLocaleAndID}.`;
     }
 
     // Send back the response.
