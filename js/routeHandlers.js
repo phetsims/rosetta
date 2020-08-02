@@ -676,8 +676,23 @@ module.exports.showOfflinePage = function( request, response ) {
 function pageNotFound( request, response ) {
   response.send( '<p>Error: Page not found.  URL = ' + request.url + '</p>' );
 }
-
 module.exports.pageNotFound = pageNotFound;
+
+/**
+ * Route for rendering the error page.
+ *
+ * @param request
+ * @param response
+ */
+function renderErrorPage( request, response, message, errorDetails ) {
+  response.render( 'error.html', {
+    title: 'Translation Utility Error',
+    message,
+    errorDetails,
+    timestamp: new Date().getTime()
+  });
+}
+module.exports.renderErrorPage = renderErrorPage;
 
 /**
  * Handle a request to trigger a build. For team members only.
@@ -691,27 +706,45 @@ module.exports.triggerBuild = async function( request, response ) {
   if ( request.session.teamMember ) {
 
     // Get list of sim names so that we can validate our "simName" parameter.
-    const listOfSimNames = simData.getListOfSimNames( false );
+    const listOfSimNames = await simData.getListOfSimNames( false );
 
     // Get list of locales so that we can validate our "targetLocale" parameter.
-    const listOfLocales = localeInfo.getSortedLocaleInfoArray();
+    const listOfLocales = await localeInfo.getSortedLocaleInfoArray();
 
     // Extract the sim name from the request.
     let simName = '';
-    // TODO: If either of the two conditions below are false, render the error page.
     if ( typeof request.params.simName === 'string' ) {
       if ( listOfSimNames.includes( request.params.simName ) ) {
         simName = request.params.simName;
       }
+      else {
+        const message = 'Invalid simulation name.';
+        const errorDetails = 'Sim name not found in array made with "simData.getListOfSimNames".';
+        renderErrorPage(request, response, message, errorDetails);
+      }
+    }
+    else {
+      const message = 'Invalid simulation name.';
+      const errorDetails = 'Sim name is not a string.';
+      renderErrorPage(request, response, message, errorDetails);
     }
 
     // Extract the target locale from the request.
-    // TODO: If either of the two conditions below are false, render the error page.
     let targetLocale = '';
     if ( typeof request.params.targetLocale === 'string' ) {
       if ( listOfLocales.includes( request.params.targetLocale ) ) {
         targetLocale = request.params.targetLocale;
       }
+      else {
+        const message = 'Invalid locale.';
+        const errorDetails = 'Locale not found in array made with "localeInfo.getSortedLocaleInfoArray".';
+        renderErrorPage(request, response, message, errorDetails);
+      }
+    }
+    else {
+      const message = 'Invalid locale.';
+      const errorDetails = 'Locale is not a string.';
+      renderErrorPage(request, response, message, errorDetails);
     }
 
     // Extract the user ID from the request.
@@ -723,7 +756,7 @@ module.exports.triggerBuild = async function( request, response ) {
     }
 
     // Log message about "triggerBuild" being called.
-    const simLocaleAndID = `Sim Name: ${simName}, Locale: ${targetLocale}, User ID: ${userID}`;
+    const simLocaleAndID = `sim: ${simName}, locale: ${targetLocale}, ID: ${userID}`;
     winston.info( `"triggerBuild" called for ${simLocaleAndID}.` );
 
     // Send the request to the build server.
