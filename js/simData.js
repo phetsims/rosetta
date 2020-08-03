@@ -81,7 +81,7 @@ function getSimMetadata() {
           resolve( parsedData );
         }
         catch( error ) {
-          winston.error( `Parsing metadata failed. Error: ${error}.` );
+          winston.error( 'Parsing metadata failed.' );
           reject( error );
         }
       } );
@@ -104,26 +104,31 @@ async function updateSimInfo() {
     simMetadata = await getSimMetadata();
   }
   catch( error ) {
-    throw winston.error( `The "getSimMetadata" function call failed. Error: ${error}.` );
+    const errorToThrow = new Error( `The "getSimMetadata" function call failed. Error: ${error}.` );
+    winston.error( errorToThrow.message );
+    throw errorToThrow;
   }
 
   // If any part of simMetadata is undefined, throw an error. Otherwise, update sim info.
   if ( !simMetadata ) {
-    throw winston.error( 'Unable to obtain "simMetadata". Sim info not updated.' );
+    const errorToThrow = new Error( 'Unable to obtain "simMetadata". Sim info not updated.' );
+    winston.error( errorToThrow.message );
+    throw errorToThrow;
   }
   else if ( !simMetadata.projects ) {
-    throw winston.error( 'Unable to obtain "simMetadata.projects". Sim info not updated.' );
+    const errorToThrow = new Error( 'Unable to obtain "simMetadata.projects". Sim info not updated.' );
+    winston.error( errorToThrow.message );
+    throw errorToThrow;
   }
   else {
 
-    // TODO: Come up with better names for "simMetadata" and "simData". They are too similar.
     // Extract subset of metadata needed by the translation utility and save it in the sim info object.
     simMetadata.projects.forEach( projectInfo => {
-      projectInfo.simulations.forEach( simData => {
-        const simName = simData.name;
+      projectInfo.simulations.forEach( simulationInfo => {
+        const simName = simulationInfo.name;
         const translationLocales = [];
         let englishTitle = '';
-        simData.localizedSimulations.forEach( localizedSimData => {
+        simulationInfo.localizedSimulations.forEach( localizedSimData => {
           translationLocales.push( localizedSimData.locale );
           if ( localizedSimData.locale === 'en' ) {
             englishTitle = localizedSimData.title;
@@ -134,7 +139,7 @@ async function updateSimInfo() {
           englishTitle: englishTitle,
           simUrl: RosettaConstants.PRODUCTION_SERVER_URL + '/sims/html/' + simName + '/latest/' + simName + '_en.html',
           translationLocales: translationLocales,
-          visible: simData.visible,
+          visible: simulationInfo.visible,
           version: projectInfo.version.string
         };
       } );
