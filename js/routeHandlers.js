@@ -723,12 +723,14 @@ module.exports.triggerBuild = async function( request, response ) {
         const message = 'Invalid simulation name.';
         const errorDetails = 'Sim name not found in array made with "simData.getListOfSimNames".';
         renderErrorPage( request, response, message, errorDetails );
+        // TODO: John thinks we may need to return at this point.
       }
     }
     else {
       const message = 'Invalid simulation name.';
       const errorDetails = 'Sim name is not a string.';
       renderErrorPage( request, response, message, errorDetails );
+      // TODO: John thinks we may need to return at this point.
     }
 
     // Extract the target locale from the request.
@@ -741,19 +743,24 @@ module.exports.triggerBuild = async function( request, response ) {
         const message = 'Invalid locale.';
         const errorDetails = 'Locale not found in array made with "localeInfo.getSortedLocaleInfoArray".';
         renderErrorPage( request, response, message, errorDetails );
+        // TODO: John thinks we may need to return at this point.
       }
     }
     else {
       const message = 'Invalid locale.';
       const errorDetails = 'Locale is not a string.';
       renderErrorPage( request, response, message, errorDetails );
+      // TODO: John thinks we may need to return at this point.
     }
 
     // Extract the user ID from the request.
-    // TODO: If either of the two conditions below are false, render the error page.
+    // TODO: If either of the two conditions below are false, render the error page and probably return.
     let userID = null;
     if ( typeof request.params.userID === 'number' ) {
       // TODO: If "params.userID" is a valid user ID, proceed with setting the "userID" variable.
+      // TODO: We don't want a dev's user ID. We want the most recent translator's ID, we think.
+      // TODO: Take a look at the code that validates login to see if there's anything you can use.
+      // TODO: Log who is getting credit for the translation.
       userID = request.params.userID;
     }
 
