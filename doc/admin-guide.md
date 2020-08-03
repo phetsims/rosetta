@@ -58,6 +58,25 @@ like "The PhET translation utility is down for maintenance, please try again lat
 
 Set the value of `enabled` back to true and perform another restart to set Rosetta back to normal operation.
 
+Triggering a Rebuild Without Being Credited
+-------------------------------------------
+
+There have been times when a need has arisen to build (or rebuild) a simulation for a non-English locale. While one
+might be tempted to do this via the normal translation interface by making and submitting a small change and then
+reverting it and submitting again, this will unfortunately cause the submitter to be listed on the website as one of
+the credited translators for that simulation.  Issue https://github.com/phetsims/perennial/issues/178 describes a
+scenario where the need to trigger builds without being credited arose. To fill this need, a route was added through
+which a PhET team member can trigger a build of a simulation for a given locale.  There are three parameters for this
+route: the sim name, the locale, and the userID that should be credited.  The userID can be obtained by looking in babel
+for the userID of the most recent translator.  The route will then look something like this:
+
+```
+https://ox-dev.colorado.edu/translate/trigger-build/build-an-atom/de/1234
+```
+
+To use this, enter this URL in a browser window and then check some time later that the translation was rebuilt.  You
+can monitor rosetta and/or the build server log if desired.
+
 Test and Debug Support
 ----------------------
 
