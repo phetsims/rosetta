@@ -104,19 +104,19 @@ async function updateSimInfo() {
     simMetadata = await getSimMetadata();
   }
   catch( error ) {
-    const errorToThrow = new Error( `The "getSimMetadata" function call failed. Error: ${error}.` );
+    const errorToThrow = new Error( `The getSimMetadata function call failed. Error: ${error}.` );
     winston.error( errorToThrow.message );
     throw errorToThrow;
   }
 
   // If any part of simMetadata is undefined, throw an error. Otherwise, update sim info.
   if ( !simMetadata ) {
-    const errorToThrow = new Error( 'Unable to obtain "simMetadata". Sim info not updated.' );
+    const errorToThrow = new Error( 'Unable to obtain simMetadata. Sim info not updated.' );
     winston.error( errorToThrow.message );
     throw errorToThrow;
   }
   else if ( !simMetadata.projects ) {
-    const errorToThrow = new Error( 'Unable to obtain "simMetadata.projects". Sim info not updated.' );
+    const errorToThrow = new Error( 'Unable to obtain simMetadata.projects. Sim info not updated.' );
     winston.error( errorToThrow.message );
     throw errorToThrow;
   }
@@ -188,8 +188,8 @@ async function checkAndUpdateSimInfo() {
 
 // Kick off the initial population of the sim data.
 checkAndUpdateSimInfo()
-  .then( () => { winston.info( 'Initial population of "simInfoObject" complete.' ); } )
-  .catch( error => winston.error( `Initial population of "simInfoObject" failed. Error: ${error}.` ) );
+  .then( () => { winston.info( 'Initial population of simInfoObject complete.' ); } )
+  .catch( error => winston.error( `Initial population of simInfoObject failed. Error: ${error}.` ) );
 
 //===========================================================================//
 // Export singleton object.                                                  //
