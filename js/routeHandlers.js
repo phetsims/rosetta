@@ -74,7 +74,7 @@ module.exports.checkForValidSession = function( request, response, next ) {
   if ( request.get( 'host' ).indexOf( 'localhost' ) === 0 ) {
 
     // The app is running on localhost, so session validation is bypassed.
-    winston.warn( 'Bypassing session validation to allow testing on localhost' );
+    winston.warn( 'Bypassing session validation to allow testing on localhost.' );
 
     // Set up fake session data.
     request.session.teamMember = true;
@@ -123,7 +123,7 @@ module.exports.checkForValidSession = function( request, response, next ) {
   else {
 
     // Session cookie was present.
-    winston.info( `Valid session cookie exists. UserID is ${request.session.userId}.` );
+    winston.info( `Valid session cookie exists. User ID is ${request.session.userId}.` );
 
     // Attempt to obtain session information.
     const options = {
@@ -471,7 +471,7 @@ module.exports.renderTranslationPage = async function( request, response ) {
         }
         if ( !containsObjectWithKey ) {
           winston.debug( 'repo: ' + projectName + ' key: ' + previouslyTranslatedStringKey + ', ' +
-                         '- translation exists, but unused in this sim, adding to pass-through data' );
+                         '- translation exists, but unused in this sim, adding to pass-through data.' );
           unusedTranslatedStringsArray.push( {
             repo: projectName,
             key: previouslyTranslatedStringKey,
@@ -554,7 +554,7 @@ module.exports.testStrings = function( request, response ) {
 
   const simName = request.params.simName;
 
-  winston.info( `"test-of-strings" request received for ${simName}.` );
+  winston.info( `test-of-strings request received for ${simName}.` );
 
   TranslationUtils.getLatestSimHtml( simName )
     .then( simHtml => {
@@ -766,7 +766,7 @@ module.exports.triggerBuild = async function( request, response ) {
 
     // Log message about "triggerBuild" being called.
     const simLocaleAndID = `sim: ${simName}, locale: ${targetLocale}, ID: ${userID}`;
-    winston.info( `"triggerBuild" called for ${simLocaleAndID}.` );
+    winston.info( `triggerBuild called for ${simLocaleAndID}.` );
 
     // Send the request to the build server.
     let status = null;
