@@ -62,7 +62,7 @@ function sendEmail( subject, text ) {
     } );
   }
   else {
-    winston.warn( '"emailServer" evaluated false. Email not sent!' );
+    winston.warn( 'emailServer evaluated false. Email not sent!' );
   }
 }
 

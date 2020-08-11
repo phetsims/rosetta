@@ -721,7 +721,7 @@ module.exports.triggerBuild = async function( request, response ) {
       }
       else {
         const message = 'Invalid simulation name.';
-        const errorDetails = 'Sim name not found in array made with "simData.getListOfSimNames".';
+        const errorDetails = 'Sim name not found in array made with simData.getListOfSimNames.';
         renderErrorPage( request, response, message, errorDetails );
         // TODO: John thinks we may need to return at this point.
       }
@@ -741,7 +741,7 @@ module.exports.triggerBuild = async function( request, response ) {
       }
       else {
         const message = 'Invalid locale.';
-        const errorDetails = 'Locale not found in array made with "localeInfo.getSortedLocaleInfoArray".';
+        const errorDetails = 'Locale not found in array made with localeInfo.getSortedLocaleInfoArray.';
         renderErrorPage( request, response, message, errorDetails );
         // TODO: John thinks we may need to return at this point.
       }
