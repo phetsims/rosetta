@@ -12,7 +12,7 @@
 // Modules
 // const nodeFetch = require('node-fetch');
 
-// TODO: Finish rewriting the old code below.
+// // TODO: Finish rewriting the old code below.
 // document.addEventListener( "DOMContentLoaded", () => {
 //
 //   // Get all buttons on the page.
@@ -28,6 +28,8 @@
 //     // The button's ID should be the testID for the runSpecificTest route.
 //     const testID = button.getAttribute( 'id' );
 //     button.addEventListener( 'click', () => {
+//
+//       // TODO: Use node-fetch as in localeInfo.js line 39.
 //       fetch( runSpecificTestUrl + testID )
 //         .then( data => {
 //           console.log( data );
