@@ -9,6 +9,9 @@
 
 'use strict';
 
+// Modules
+// const nodeFetch = require('node-fetch');
+
 // TODO: Finish rewriting the old code below.
 // document.addEventListener( "DOMContentLoaded", () => {
 //
@@ -17,19 +20,20 @@
 //
 //   // Form the beginning of the runSpecificTest route.
 //   const runSpecificTestUrl = window.location.href.replace( 'test', 'runSpecificTest' );
+//   console.log(runSpecificTestUrl);
 //
 //   // Make it so that when a button is clicked, the test associated with the button is requested.
-//   for ( let button of buttons ) {
+//   for ( const button of buttons ) {
 //
 //     // The button's ID should be the testID for the runSpecificTest route.
 //     const testID = button.getAttribute( 'id' );
 //     button.addEventListener( 'click', () => {
-//       fetch( `${runSpecificTestUrl}/${testID}` )
+//       fetch( runSpecificTestUrl + testID )
 //         .then( data => {
 //           console.log( data );
 //         } )
 //         .catch( error => {
-//           console.log( `Fetch for ${runSpecificTestUrl}/${testID} failed. Error: ${error}.` )
+//           console.log( `Fetch for ${runSpecificTestUrl + testID} failed. Error: ${error}.` );
 //         } );
 //     } );
 //   }

@@ -48,21 +48,19 @@ const testHandlers = {
         longTermStringStorage.getTranslatedStrings( stringFileSpec.repoName, stringFileSpec.locale )
           .then( () => {
               if ( stringFileSpec.expectedToExist ) {
-                winston.log(
-                  'info',
-                  'strings successfully retrieved for sim/lib:',
-                  stringFileSpec.repoName + ',',
-                  'locale:',
+                winston.info(
+                  'strings successfully retrieved for sim/lib:' +
+                  stringFileSpec.repoName + ',' +
+                  'locale:' +
                   stringFileSpec.locale
                 );
                 return Promise.resolve();
               }
               else {
-                winston.log(
-                  'error',
-                  'strings retrieved, but this was not expected - sim/lib:',
-                  stringFileSpec.repoName + ',',
-                  'locale:',
+                winston.error(
+                  'strings retrieved, but this was not expected - sim/lib:' +
+                  stringFileSpec.repoName + ',' +
+                  'locale:' +
                   stringFileSpec.locale
                 );
                 return Promise.reject( new Error( 'successful string retrieval not expected' ) );
@@ -71,26 +69,23 @@ const testHandlers = {
           )
           .catch( err => {
             if ( !stringFileSpec.expectedToExist ) {
-              winston.log(
-                'info',
-                'unable to obtain strings, which is the expected result, for sim/lib:',
-                stringFileSpec.repoName + ',',
-                'locale:',
+              winston.info(
+                'unable to obtain strings, which is the expected result, for sim/lib:' +
+                stringFileSpec.repoName + ',' +
+                'locale:' +
                 stringFileSpec.locale
               );
               return Promise.resolve();
             }
             else {
-              winston.log(
-                'error',
-                'unable to get strings for sim/lib:',
-                stringFileSpec.repoName + ',',
-                'locale:',
+              winston.error(
+                'unable to get strings for sim/lib:' +
+                stringFileSpec.repoName + ',' +
+                'locale:' +
                 stringFileSpec.locale
               );
               return Promise.reject( err );
             }
-
           } )
       );
     } );
