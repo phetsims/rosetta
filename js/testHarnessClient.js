@@ -9,9 +9,10 @@
 
 'use strict';
 
+// TODO: This suppresses a lint error, and thus allows us to use fetch. It is temporary.
+// See https://github.com/phetsims/chipper/issues/970.
 /*global fetch:false*/
 
-// TODO: Finish rewriting the old code below.
 document.addEventListener( 'DOMContentLoaded', () => {
 
   // Get all buttons on the page.
@@ -27,10 +28,6 @@ document.addEventListener( 'DOMContentLoaded', () => {
     // The button's ID should be the testID for the runSpecificTest route.
     const testID = button.getAttribute( 'id' );
     button.addEventListener( 'click', () => {
-
-      // It seems I can't use fetch (basically new and improved XHR) because Grunt complains about it.
-      // I can't use node-fetch because the browser complains about it. (Require isn't defined.)
-      // I'd like to be able to use fetch, but I might try using XMLHttpRequest instead.
       const fullTestUrl = runSpecificTestUrl + '/' + testID;
       fetch( fullTestUrl )
         .then( data => {
