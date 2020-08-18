@@ -9,8 +9,8 @@
 
 'use strict';
 
-// TODO: This suppresses a lint error, and thus allows us to use fetch. It is temporary.
-// See https://github.com/phetsims/chipper/issues/970.
+// TODO: Find a more elegant, permanent solution for this. It suppresses a lint error, and thus allows us to use fetch.
+// TODO: See https://github.com/phetsims/chipper/issues/970.
 /*global fetch:false*/
 
 document.addEventListener( 'DOMContentLoaded', () => {
@@ -20,7 +20,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
   // Form the beginning of the runSpecificTest route.
   const runSpecificTestUrl = window.location.href.replace( 'test', 'runSpecificTest' );
-  console.log(runSpecificTestUrl);
+  console.log( `runSpecificTestUrl: ${runSpecificTestUrl}` );
 
   // Make it so that when a button is clicked, the test associated with the button is requested.
   for ( const button of buttons ) {
@@ -31,11 +31,11 @@ document.addEventListener( 'DOMContentLoaded', () => {
       const fullTestUrl = runSpecificTestUrl + '/' + testID;
       fetch( fullTestUrl )
         .then( data => {
-          console.log( `URL: ${fullTestUrl}.` );
+          console.log( `fullTestUrl: ${fullTestUrl}` );
           console.log( data );
         } )
         .catch( error => {
-          console.log( `Fetch for ${fullTestUrl} failed. Error: ${error}.` );
+          console.log( `Fetch for ${fullTestUrl} failed. Error: ${error}` );
         } );
     } );
   }
