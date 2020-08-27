@@ -1,7 +1,6 @@
 // Copyright 2015-2020, University of Colorado Boulder
 
 /**
- * TODO: Make this file shorter by breaking it up into smaller files.
  * Handler functions for Express.js-style routes that exist in the PhET translation utility.
  *
  * @author John Blanco
@@ -59,7 +58,6 @@ function getPrintableString( string ) {
 //===========================================================================//
 
 /**
- * TODO: Make this function shorter by breaking it up into smaller functions.
  * Route that checks whether the user has a valid session in progress. This works by looking for the cookie set when
  * the user logs in to the main website and, if said cookie is present, uses it to obtain user information from the
  * 'main' website. This check is run on every page, but if the user has already been confirmed as a trusted
@@ -245,7 +243,6 @@ module.exports.chooseSimulationAndLanguage = async function( request, response )
 };
 
 /**
- * TODO: Make this function shorter by breaking it up into smaller functions.
  * A route that creates a page for translating a given simulation to a given language. The simulation ID and the target
  * language are extracted from the incoming request.
  *
@@ -326,7 +323,7 @@ module.exports.renderTranslationPage = async function( request, response ) {
 
   // The user may have previously saved uncommitted strings and, if so, they are stored in a postgres database. Start
   // checking for this by initializing an empty object with this information.
-  // TODO: Create a separate file that contains code to get the saved strings. Then simply call that code here.
+  // TODO: Create a separate file that contains code to get the saved strings. Then simply call that code here. See https://github.com/phetsims/rosetta/issues/190#issuecomment-682169944.
   const pool = new Pool();
   let repositories = '';
   const savedStrings = {};
@@ -722,11 +719,17 @@ module.exports.triggerBuild = async function( request, response ) {
   // Only a logged-in PhET team member can trigger a build through this route.
   if ( request.session.teamMember ) {
 
-    // Get list of sim names so that we can validate our "simName" parameter.
+    // Get list of sim names so that we can validate our simName parameter.
     const arrayOfSimNames = await simData.getListOfSimNames( false );
 
-    // Get list of locales so that we can validate our "targetLocale" parameter.
-    const arrayOfLocales = await localeInfo.getSortedLocaleInfoArray();
+    // Get list of locale info.
+    const localeInfoObjectArray = await localeInfo.getSortedLocaleInfoArray();
+
+    // Put locales in a new array so that we can validate our targetLocale parameter.
+    const localeArray = [];
+    for ( let i = 0; i < localeInfoObjectArray.length; i++ ) {
+      localeArray[ i ] = localeInfoObjectArray[ i ].code;
+    }
 
     // Extract the sim name from the request.
     let simName = '';
@@ -751,7 +754,7 @@ module.exports.triggerBuild = async function( request, response ) {
     // Extract the target locale from the request.
     let targetLocale = '';
     if ( typeof request.params.targetLocale === 'string' ) {
-      if ( arrayOfLocales.includes( request.params.targetLocale ) ) {
+      if ( localeArray.includes( request.params.targetLocale ) ) {
         targetLocale = request.params.targetLocale;
       }
       else {
@@ -803,7 +806,10 @@ module.exports.triggerBuild = async function( request, response ) {
       message = `Successfully triggered build for ${simLocaleAndID}.`;
     }
     else {
-      message = `Error when attempting to trigger build for ${simLocaleAndID}.`;
+      winston.info( `requestBuild status: ${status}.` );
+      winston.warn( 'If requestBuild status is null, you probably have sendBuildRequests = false in your config file.' );
+      winston.warn( 'If you\'re trying to trigger a build, you should set sendBuildRequests = true in your config file.' );
+      message = `Error when attempting to trigger build for ${simLocaleAndID}. See the log for more details.`;
     }
 
     // Send back the response.

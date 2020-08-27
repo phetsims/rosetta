@@ -1,8 +1,7 @@
 // Copyright 2015-2020, University of Colorado Boulder
 
 /**
- * TODO: Relocate code in this file that doesn't have to do with configuring the app, setting up routes, etc.
- * TODO: Write a less generic and vague description once Rosetta has undergone modularization.
+ * TODO: Relocate code in this file that doesn't have to do with configuring the app, setting up routes, etc. See https://github.com/phetsims/rosetta/issues/190#issuecomment-682169944.
  * Main entry point for PhET translation web app. This is where Express.js gets configured and the routes are set up.
  *
  * @author John Blanco
@@ -69,8 +68,8 @@ catch( error ) {
   winston.warn( `Unable to get SHA from Git. Error: ${error}.` );
 }
 
-// TODO: Move this to a more appropriate location.
-// TODO: Determine if setting a variable for the config is preferable to this approach.
+// TODO: Move this to a more appropriate location. See https://github.com/phetsims/rosetta/issues/190#issuecomment-682169944.
+// TODO: Determine if setting a variable for the config is preferable to this approach. See https://github.com/phetsims/rosetta/issues/190#issuecomment-682169944.
 // Get configuration and assign it to a global. This also sets up some process variables.
 global.config = getRosettaConfig();
 
@@ -78,11 +77,11 @@ global.config = getRosettaConfig();
 winston.info( 'Check your config below and make sure it looks correct!' );
 winston.info( JSON.stringify( global.config, null, 2 ) );
 
-// TODO: Determine if it's possible to get the config before setting up the logger. (So we don't have to update it.)
+// TODO: Determine if it's possible to get the config before setting up the logger. (So we don't have to update it.) See https://github.com/phetsims/rosetta/issues/190#issuecomment-682169944.
 // Update the logging level in case it was set in the config info.
 consoleTransport.level = global.config.loggingLevel;
 
-// TODO: Move this into the "shortTermStorage" object once it exists.
+// TODO: Move this into its own file. See https://github.com/phetsims/rosetta/issues/190#issuecomment-682169944.
 // Check that the database is running and that a basic query can be performed.
 winston.info( 'Testing database connection...' );
 const pool = new Pool();
@@ -100,7 +99,6 @@ pool.query( 'SELECT NOW();', ( error, result ) => {
 // Set up the app.                                                           //
 //===========================================================================//
 
-// TODO: Determine if the use of "__dirname" is correct.
 // Create and configure the Express.js app.
 const app = express();
 app.set( 'views', __dirname + '/../html/views' );
