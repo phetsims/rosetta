@@ -18,6 +18,7 @@ const doT = require( 'express-dot' ); // eslint-disable-line require-statement-m
 const express = require( 'express' );
 const getRosettaConfig = require( './getRosettaConfig' );
 const { Pool } = require( 'pg' ); // eslint-disable-line
+const RosettaConstants = require( './RosettaConstants' );
 const winston = require( 'winston' );
 
 // Order-Dependent Modules
@@ -84,8 +85,8 @@ consoleTransport.level = global.config.loggingLevel;
 // TODO: Move this into its own file. See https://github.com/phetsims/rosetta/issues/190#issuecomment-682169944.
 // Check that the database is running and that a basic query can be performed.
 winston.info( 'Testing database connection...' );
-const pool = new Pool({
-  connectionTimeoutMillis: 2000
+const pool = new Pool( {
+  connectionTimeoutMillis: RosettaConstants.DATABASE_QUERY_TIMEOUT
 } );
 pool.query( 'SELECT NOW();', ( error, result ) => {
   if ( error ) {

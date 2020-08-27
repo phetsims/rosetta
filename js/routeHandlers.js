@@ -325,7 +325,7 @@ module.exports.renderTranslationPage = async function( request, response ) {
   // checking for this by initializing an empty object with this information.
   // TODO: Create a separate file that contains code to get the saved strings. Then simply call that code here. See https://github.com/phetsims/rosetta/issues/190#issuecomment-682169944.
   const pool = new Pool( {
-    connectionTimeoutMillis: 2000
+    connectionTimeoutMillis: RosettaConstants.DATABASE_QUERY_TIMEOUT
   } );
   let repositories = '';
   const savedStrings = {};
@@ -603,7 +603,7 @@ module.exports.saveStrings = async function( request, response ) {
   const targetLocale = request.params.targetLocale;
   const userId = ( request.session.userId ) ? request.session.userId : 0;
   const pool = new Pool( {
-    connectionTimeoutMillis: 2000
+    connectionTimeoutMillis: RosettaConstants.DATABASE_QUERY_TIMEOUT
   } );
   const repos = {};
   let saveError = false;
@@ -703,13 +703,9 @@ module.exports.renderErrorPage = renderErrorPage;
  * @param string
  * @returns {boolean}
  */
-function isNumber( string ) {
-  if ( !isNaN( string ) ) {
-    return true;
-  }
-  else {
-    return false;
-  }
+function isStringNumber( stringToTest ) {
+  // TODO: Make sure it's a string, log an error, but try to handle it.
+  return !isNaN( stringToTest );
 }
 
 /**
@@ -730,10 +726,7 @@ module.exports.triggerBuild = async function( request, response ) {
     const localeInfoObjectArray = await localeInfo.getSortedLocaleInfoArray();
 
     // Put locales in a new array so that we can validate our targetLocale parameter.
-    const localeArray = [];
-    for ( let i = 0; i < localeInfoObjectArray.length; i++ ) {
-      localeArray[ i ] = localeInfoObjectArray[ i ].code;
-    }
+    const localeArray = localeInfoObjectArray.map( localeInfo => localeInfo.code );
 
     // Extract the sim name from the request.
     let simName = '';
@@ -777,7 +770,7 @@ module.exports.triggerBuild = async function( request, response ) {
 
     // Extract the user ID from the request.
     let userID = null;
-    if ( isNumber( request.params.userID ) ) {
+    if ( isStringNumber( request.params.userID ) ) {
       // TODO: If "params.userID" is a valid user ID, proceed with setting the "userID" variable. See https://github.com/phetsims/rosetta/issues/231.
       // We don't want a dev's user ID. We want the most recent translator's ID, we think.
       // Take a look at the code that validates login to see if there's anything you can use.

@@ -11,12 +11,11 @@
 
 // Modules
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
-const RosettaConstants = require( './RosettaConstants' );
 const simData = require( './simData' );
 const winston = require( 'winston' );
 
 // Constants
-const PRODUCTION_SERVER_URL = RosettaConstants.PRODUCTION_SERVER_URL;
+const PRODUCTION_SERVER_URL = global.config.productionServerURL;
 
 /**
  * @param {string} simName

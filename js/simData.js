@@ -14,11 +14,11 @@
 // Modules
 const _ = require( 'lodash' ); // eslint-disable-line
 const https = require( 'https' );
-const RosettaConstants = require( './RosettaConstants' );
 const winston = require( 'winston' );
 
 // Constants
 const CACHED_DATA_VALID_TIME = 1800; // This is 1.8 seconds in milliseconds.
+const PRODUCTION_SERVER_URL = global.config.productionServerURL;
 
 //===========================================================================//
 // Set up variables for later use.                                           //
@@ -34,7 +34,7 @@ const simInfoObject = {};
 let inProgressMetadataPromise = null;
 
 // Used for metadata request.
-const url = RosettaConstants.PRODUCTION_SERVER_URL +
+const url = PRODUCTION_SERVER_URL +
             '/services/metadata/1.2/simulations?format=json&type=html&include-unpublished=true&summary';
 const options = {
   auth: `token:${global.config.serverToken}`
@@ -62,6 +62,7 @@ function getSimMetadata() {
       else if ( !/^text\/html/.test( contentType ) ) {
         winston.error( 'Invalid content-type.\n' +
                        `Expected text/html but received ${contentType}.` );
+        winston.debug( contentType );
         return;
       }
 
@@ -137,7 +138,7 @@ async function updateSimInfo() {
 
         simInfoObject[ simName ] = {
           englishTitle: englishTitle,
-          simUrl: RosettaConstants.PRODUCTION_SERVER_URL + '/sims/html/' + simName + '/latest/' + simName + '_en.html',
+          simUrl: PRODUCTION_SERVER_URL + '/sims/html/' + simName + '/latest/' + simName + '_en.html',
           translationLocales: translationLocales,
           visible: simulationInfo.visible,
           version: projectInfo.version.string

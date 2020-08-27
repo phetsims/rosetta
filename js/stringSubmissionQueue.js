@@ -15,6 +15,7 @@ const _ = require( 'lodash' ); // eslint-disable-line
 const longTermStringStorage = require( './longTermStringStorage' );
 const { Pool } = require( 'pg' ); // eslint-disable-line
 const requestBuild = require( './requestBuild' );
+const RosettaConstants = require( './RosettaConstants' );
 const winston = require( 'winston' );
 
 // for debug purposes, it is possible to configure Rosetta to skip sending build requests to the build server
@@ -198,7 +199,7 @@ async function deleteStringsFromDB( userID, locale, simOrLibNames ) {
 
   const deleteQuery = 'DELETE FROM saved_translations WHERE user_id = $1 AND locale = $2 AND (' + simOrLibNamesString + ')';
   const pool = new Pool( {
-    connectionTimeoutMillis: 2000
+    connectionTimeoutMillis: RosettaConstants.DATABASE_QUERY_TIMEOUT
   } );
   try {
     winston.info( 'attempting query: ' + deleteQuery );
