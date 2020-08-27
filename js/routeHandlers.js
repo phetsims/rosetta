@@ -697,6 +697,21 @@ function renderErrorPage( request, response, message, errorDetails ) {
 module.exports.renderErrorPage = renderErrorPage;
 
 /**
+ * Helper function. !isNaN is confusing, hence this function.
+ *
+ * @param string
+ * @returns {boolean}
+ */
+function isNumber( string ) {
+  if ( !isNaN( string ) ) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+/**
  * Handle a request to trigger a build. For team members only.
  *
  * @param request
@@ -723,14 +738,14 @@ module.exports.triggerBuild = async function( request, response ) {
         const message = 'Invalid simulation name.';
         const errorDetails = 'Sim name not found in array made with simData.getListOfSimNames.';
         renderErrorPage( request, response, message, errorDetails );
-        // TODO: John thinks we may need to return at this point.
+        return;
       }
     }
     else {
       const message = 'Invalid simulation name.';
       const errorDetails = 'Sim name is not a string.';
       renderErrorPage( request, response, message, errorDetails );
-      // TODO: John thinks we may need to return at this point.
+      return;
     }
 
     // Extract the target locale from the request.
@@ -743,28 +758,33 @@ module.exports.triggerBuild = async function( request, response ) {
         const message = 'Invalid locale.';
         const errorDetails = 'Locale not found in array made with localeInfo.getSortedLocaleInfoArray.';
         renderErrorPage( request, response, message, errorDetails );
-        // TODO: John thinks we may need to return at this point.
+        return;
       }
     }
     else {
       const message = 'Invalid locale.';
       const errorDetails = 'Locale is not a string.';
       renderErrorPage( request, response, message, errorDetails );
-      // TODO: John thinks we may need to return at this point.
+      return;
     }
 
     // Extract the user ID from the request.
-    // TODO: If either of the two conditions below are false, render the error page and probably return.
     let userID = null;
-    if ( typeof request.params.userID === 'number' ) {
-      // TODO: If "params.userID" is a valid user ID, proceed with setting the "userID" variable.
-      // TODO: We don't want a dev's user ID. We want the most recent translator's ID, we think.
-      // TODO: Take a look at the code that validates login to see if there's anything you can use.
-      // TODO: Log who is getting credit for the translation.
+    if ( isNumber( request.params.userID ) ) {
+      // TODO: If "params.userID" is a valid user ID, proceed with setting the "userID" variable. See https://github.com/phetsims/rosetta/issues/231.
+      // We don't want a dev's user ID. We want the most recent translator's ID, we think.
+      // Take a look at the code that validates login to see if there's anything you can use.
+      // Log who is getting credit for the translation.
       userID = request.params.userID;
     }
+    else {
+      const message = 'Invalid user ID.';
+      const errorDetails = '!isNaN( userID ) (checks if your user ID is a number) returned false.';
+      renderErrorPage( request, response, message, errorDetails );
+      return;
+    }
 
-    // Log message about "triggerBuild" being called.
+    // Log message about triggerBuild being called.
     const simLocaleAndID = `sim: ${simName}, locale: ${targetLocale}, ID: ${userID}`;
     winston.info( `triggerBuild called for ${simLocaleAndID}.` );
 
@@ -772,6 +792,9 @@ module.exports.triggerBuild = async function( request, response ) {
     let status = null;
     if ( SEND_BUILD_REQUESTS ) {
       status = requestBuild( simName, targetLocale, userID );
+    }
+    else {
+      winston.warn( 'global.config.sendBuildRequests is set to false. You might want to set it to true.' );
     }
 
     // Create a simple response message that can be shown to the user in the browser window.
