@@ -39,7 +39,6 @@ if ( preferences.emailUsername && preferences.emailPassword && preferences.email
 }
 
 /**
- * TODO: I'm not entirely sure what this function is for. It notifies developers that a push to Babel failed?
  * Send an email if server is defined. Used to notify developers push to Babel (the string repo) fails.
  *
  * @param subject

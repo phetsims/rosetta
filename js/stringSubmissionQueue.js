@@ -79,6 +79,7 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
         oldValue: oldValue,
         newValue: stringValue,
         explanation: null // TODO - add support for explanations to Rosetta
+                          // This needs an issue link.
       };
 
       if ( history ) {

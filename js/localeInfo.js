@@ -119,8 +119,8 @@ module.exports = {
     return localeInfoObject;
   },
 
-  // TODO: temp for debug 
-  // Liam's Note: This ^ is vague. Ask John what this is.
+  // TODO: temp for debug
+  // This needs an issue link.
   localeInfoObject: localeInfoObject,
 
   /**

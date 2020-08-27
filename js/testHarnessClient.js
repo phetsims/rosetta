@@ -9,8 +9,7 @@
 
 'use strict';
 
-// TODO: Find a more elegant, permanent solution for this. It suppresses a lint error, and thus allows us to use fetch.
-// TODO: See https://github.com/phetsims/chipper/issues/970.
+// TODO: Find a more elegant, permanent solution for this. It suppresses a lint error, and thus allows us to use fetch. See https://github.com/phetsims/chipper/issues/970.
 /*global fetch:false*/
 
 document.addEventListener( 'DOMContentLoaded', () => {
