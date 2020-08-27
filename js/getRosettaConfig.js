@@ -1,7 +1,7 @@
 // Copyright 2019-2020, University of Colorado Boulder
 
 /**
- * // TODO: Relocate code in this file that doesn't have to do with getting the Rosetta configuration file.
+ * // TODO: Relocate code in this file that doesn't have to do with getting the Rosetta configuration file. See https://github.com/phetsims/rosetta/issues/190#issuecomment-682169944.
  * If Rosetta's configuration file exists, read it and parse it. Assert that necessary values exist. Set default values
  * if they haven't been set. Set variables used by the "pg" module (the short-term storage PostgreSQL database).
  * Finally, return the resulting configuration as an object.
@@ -143,7 +143,7 @@ function setDefaultConfigValues( config ) {
 }
 
 /**
- * // TODO: Put this function in a more appropriate file.
+ * // TODO: Put this function in a more appropriate file. See https://github.com/phetsims/rosetta/issues/190#issuecomment-682169944.
  * Set variables used by the "pg" module (short-term string storage PostgreSQL database).
  *
  * @param {Object} config - The parsed JSON configuration for Rosetta.
