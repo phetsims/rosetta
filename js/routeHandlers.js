@@ -324,7 +324,9 @@ module.exports.renderTranslationPage = async function( request, response ) {
   // The user may have previously saved uncommitted strings and, if so, they are stored in a postgres database. Start
   // checking for this by initializing an empty object with this information.
   // TODO: Create a separate file that contains code to get the saved strings. Then simply call that code here. See https://github.com/phetsims/rosetta/issues/190#issuecomment-682169944.
-  const pool = new Pool();
+  const pool = new Pool( {
+    connectionTimeoutMillis: 2000
+  } );
   let repositories = '';
   const savedStrings = {};
 
@@ -596,11 +598,13 @@ module.exports.testStrings = function( request, response ) {
  */
 module.exports.saveStrings = async function( request, response ) {
 
-  winston.debug( '"saveStrings" called.' );
+  winston.debug( 'saveStrings called.' );
   const simName = request.params.simName;
   const targetLocale = request.params.targetLocale;
   const userId = ( request.session.userId ) ? request.session.userId : 0;
-  const pool = new Pool();
+  const pool = new Pool( {
+    connectionTimeoutMillis: 2000
+  } );
   const repos = {};
   let saveError = false;
 

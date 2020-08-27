@@ -84,7 +84,9 @@ consoleTransport.level = global.config.loggingLevel;
 // TODO: Move this into its own file. See https://github.com/phetsims/rosetta/issues/190#issuecomment-682169944.
 // Check that the database is running and that a basic query can be performed.
 winston.info( 'Testing database connection...' );
-const pool = new Pool();
+const pool = new Pool({
+  connectionTimeoutMillis: 2000
+} );
 pool.query( 'SELECT NOW();', ( error, result ) => {
   if ( error ) {
     winston.error( 'Database test using SELECT NOW() failed. Error: ' + JSON.stringify( error ) );

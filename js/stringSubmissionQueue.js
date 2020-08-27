@@ -196,7 +196,9 @@ async function deleteStringsFromDB( userID, locale, simOrLibNames ) {
   } );
 
   const deleteQuery = 'DELETE FROM saved_translations WHERE user_id = $1 AND locale = $2 AND (' + simOrLibNamesString + ')';
-  const pool = new Pool();
+  const pool = new Pool( {
+    connectionTimeoutMillis: 2000
+  } );
   try {
     winston.info( 'attempting query: ' + deleteQuery );
     await pool.query( deleteQuery, [ userID, locale ] );
