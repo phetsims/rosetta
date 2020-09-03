@@ -119,10 +119,6 @@ module.exports = {
     return localeInfoObject;
   },
 
-  // TODO: temp for debug
-  // This needs an issue link.
-  localeInfoObject: localeInfoObject,
-
   /**
    * get the locale info as an array sorted by locale
    * @returns {Promise.<Array<Object>>}

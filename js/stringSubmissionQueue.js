@@ -79,8 +79,7 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
         timestamp: Date.now(),
         oldValue: oldValue,
         newValue: stringValue,
-        explanation: null // TODO - add support for explanations to Rosetta
-                          // This needs an issue link.
+        explanation: null // TODO: Add support for explanations to Rosetta. See https://github.com/phetsims/rosetta/issues/239.
       };
 
       if ( history ) {

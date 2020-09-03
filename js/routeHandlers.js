@@ -704,8 +704,13 @@ module.exports.renderErrorPage = renderErrorPage;
  * @returns {boolean}
  */
 function isStringNumber( stringToTest ) {
-  // TODO: Make sure it's a string, log an error, but try to handle it.
-  return !isNaN( stringToTest );
+  if ( typeof stringToTest === 'string' ) {
+    return !isNaN( stringToTest );
+  }
+  else {
+    winston.error( `isStringNumber was called with parameter type ${typeof stringToTest}. Returning false.` );
+    return false;
+  }
 }
 
 /**

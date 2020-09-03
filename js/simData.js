@@ -55,15 +55,14 @@ function getSimMetadata() {
 
       // Log incorrect return codes or incorrect metadata type.
       if ( statusCode !== 200 ) {
-        winston.error( 'Metadata request failed.\n' +
-                       `Status Code: ${statusCode}` );
-        return;
+        const badStatusCodeError = new Error( `Metadata request failed. Status code: ${statusCode}.` );
+        winston.error( badStatusCodeError.message );
+        reject( badStatusCodeError );
       }
       else if ( !/^text\/html/.test( contentType ) ) {
-        winston.error( 'Invalid content-type.\n' +
-                       `Expected text/html but received ${contentType}.` );
-        winston.debug( contentType );
-        return;
+        const badContentTypeError = new Error( `Invalid content type. Expected text/html but received ${contentType}.` );
+        winston.error( badContentTypeError.message );
+        reject( badContentTypeError );
       }
 
       // Set encoding and variable for metadata.
@@ -82,8 +81,9 @@ function getSimMetadata() {
           resolve( parsedData );
         }
         catch( error ) {
-          winston.error( 'Parsing metadata failed.' );
-          reject( error );
+          const cantParseMetadataError = new Error( `Parsing metadata failed. ${error.message}` );
+          winston.error( cantParseMetadataError.message );
+          reject( cantParseMetadataError );
         }
       } );
     } );
@@ -105,7 +105,7 @@ async function updateSimInfo() {
     simMetadata = await getSimMetadata();
   }
   catch( error ) {
-    const getSimMetadataError = new Error( `The getSimMetadata function call failed. Error: ${error}.` );
+    const getSimMetadataError = new Error( `The getSimMetadata function call failed. ${error.message}` );
     winston.error( getSimMetadataError.message );
     throw getSimMetadataError;
   }
@@ -160,7 +160,13 @@ async function checkAndUpdateSimInfo() {
       await inProgressMetadataPromise;
     }
     catch( error ) {
-      winston.error( 'Promise returned by updateSimInfo failed (secondary await path).' );
+      const promiseFailedError = new Error( `Promise returned by updateSimInfo failed (secondary await path). ${error.message}` );
+      winston.error( promiseFailedError.message );
+
+      // Clear out the promise for the next attempt.
+      inProgressMetadataPromise = null;
+
+      throw promiseFailedError;
     }
   }
   else if ( ( Date.now() - timeOfLastUpdate ) / 1000 > CACHED_DATA_VALID_TIME ) {
@@ -175,8 +181,13 @@ async function checkAndUpdateSimInfo() {
     catch( error ) {
 
       // There really isn't much that can be done here other than to hope that the next attempt succeeds.
-      winston.error( `Promise returned by updateSimInfo failed. Error: ${error}.` );
-      throw Error( error );
+      const promiseFailedError = new Error( `Promise returned by updateSimInfo failed. ${error.message}` );
+      winston.error( promiseFailedError.message );
+
+      // Clear out the promise for the next attempt.
+      inProgressMetadataPromise = null;
+
+      throw promiseFailedError;
     }
 
     // Clear out the promise for the next attempt.
@@ -190,7 +201,7 @@ async function checkAndUpdateSimInfo() {
 // Kick off the initial population of the sim data.
 checkAndUpdateSimInfo()
   .then( () => { winston.info( 'Initial population of simInfoObject complete.' ); } )
-  .catch( error => winston.error( `Initial population of simInfoObject failed. Error: ${error}.` ) );
+  .catch( error => winston.error( `Initial population of simInfoObject failed. ${error.message}` ) );
 
 //===========================================================================//
 // Export singleton object.                                                  //
