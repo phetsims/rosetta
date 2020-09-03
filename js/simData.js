@@ -105,21 +105,21 @@ async function updateSimInfo() {
     simMetadata = await getSimMetadata();
   }
   catch( error ) {
-    const errorToThrow = new Error( `The getSimMetadata function call failed. Error: ${error}.` );
-    winston.error( errorToThrow.message );
-    throw errorToThrow;
+    const getSimMetadataError = new Error( `The getSimMetadata function call failed. Error: ${error}.` );
+    winston.error( getSimMetadataError.message );
+    throw getSimMetadataError;
   }
 
   // If any part of simMetadata is undefined, throw an error. Otherwise, update sim info.
   if ( !simMetadata ) {
-    const errorToThrow = new Error( 'Unable to obtain simMetadata. Sim info not updated.' );
-    winston.error( errorToThrow.message );
-    throw errorToThrow;
+    const noSimMetadataError = new Error( 'Unable to obtain simMetadata. Sim info not updated.' );
+    winston.error( noSimMetadataError.message );
+    throw noSimMetadataError;
   }
   else if ( !simMetadata.projects ) {
-    const errorToThrow = new Error( 'Unable to obtain simMetadata.projects. Sim info not updated.' );
-    winston.error( errorToThrow.message );
-    throw errorToThrow;
+    const noProjectsError = new Error( 'Unable to obtain simMetadata.projects. Sim info not updated.' );
+    winston.error( noProjectsError.message );
+    throw noProjectsError;
   }
   else {
 
