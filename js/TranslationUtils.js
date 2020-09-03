@@ -72,12 +72,12 @@ function sendEmail( subject, text ) {
 /**
  * For presenting escaped HTML. Also escapes newline character.
  *
- * @param {String} string
+ * @param {String} htmlString
  * @returns {String}
  */
-function escapeHtml( string ) {
+function escapeHtml( htmlString ) {
 
-  return string.replace( /&/g, '&amp;' )
+  return htmlString.replace( /&/g, '&amp;' )
     .replace( /"/g, '&quot;' )
     .replace( /</g, '&lt;' )
     .replace( />/g, '&gt;' )
@@ -204,6 +204,9 @@ async function getLatestSimHtml( simName ) {
 
   if ( response.status === 200 ) {
     return response.text();
+  }
+  else if ( response.status === 404 ) {
+    return Promise.reject( new Error( 'sim not found (response.status = ' + response.status ) + ')' );
   }
   else {
     return Promise.reject( new Error( 'error getting sim (response.status = ' + response.status ) + ')' );
