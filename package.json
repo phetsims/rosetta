@@ -14,7 +14,7 @@
     "lodash": "^4.17.20",
     "memorystore": "^1.6.2",
     "minimist": "^1.2.0",
-    "node-fetch": "^1.7.3",
+    "node-fetch": "^2.6.1",
     "octonode": "^0.9.1",
     "passwd-user": "^2.1.0",
     "pg": "^8.2.1",
