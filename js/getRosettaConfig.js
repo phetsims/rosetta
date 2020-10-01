@@ -8,6 +8,7 @@
  *
  * @author John Blanco (PhET Interactive Simulations)
  * @author Michael Kauzmann (PhET Interactive Simulations)
+ * @author Liam Mulhall (PhET Interactive Simulations)
  */
 
 'use strict';

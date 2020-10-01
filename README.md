@@ -96,8 +96,8 @@ This guide was made by @muedli on 2020-05-15.
 6. In the rosetta directory on your machine, run `npm install`.
 7. Start your server using `pg_ctl -D /usr/local/var/postgres start`.
 8. To enter the SQL shell, run `psql {username-for-database}`.
-9. Create the rosetta database, `createdb rosetta`.
-10. Connect to the database by running `\connect rosetta`.
+9. Create the rosetta database, `create database rosetta;`.
+10. Connect to the database by running `\connect rosetta;`.
 11. Run the rosetta/dev/init.sql script with `\i {path-to-your-copy-of-rosetta}/rosetta/dev/init.sql;` .
     (I don't think macOS needs the single quotes that are necessary on Windows.)
 12. In the correct directory (`/Users/{username}/` on macOS), `mkdir .phet/`.
@@ -126,7 +126,7 @@ This guide was made by @muedli on 2020-05-15.
     case, the username was "liam" (my computer username). As of this writing the default
     behavior is to use the computer username and not to set a password. You'll need to set
     a password because there is code asserting that a password exists. To create a password,
-    type `ALTER USER your-username WITH PASSWORD 'password'`.
+    type `ALTER USER your-username WITH PASSWORD 'password';`.
 15. In the rosetta directory, run `npm run dev`.
 16. Open your browser to the port specified by `LISTEN_PORT` in rosetta.js, which, as of
     this writing, is 16372. (http://localhost:16372.)

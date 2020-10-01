@@ -14,7 +14,7 @@
     "lodash": "^4.17.20",
     "memorystore": "^1.6.2",
     "minimist": "^1.2.0",
-    "node-fetch": "^1.7.3",
+    "node-fetch": "^2.6.1",
     "octonode": "^0.9.1",
     "passwd-user": "^2.1.0",
     "pg": "^8.2.1",
@@ -23,10 +23,11 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
-    "grunt": "~1.1.0"
+    "grunt": "~1.1.0",
+    "qunit": "^2.11.2"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "qunit",
     "dev": "ENV=dev node js/rosetta.js"
   },
   "repository": {

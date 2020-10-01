@@ -31,7 +31,7 @@ let sortedLocaleInfoArray = [];
 let inProgressFileRetrievalPromise = null;
 
 // function that updates the local copy of the sim info by retrieving and interpreting file from GitHub
-async function updateLocaleInfo() { // Liam's Note: This function is kinda long. Maybe shorten if possible.
+async function updateLocaleInfo() {
   const urlOfLocalInfoFile = RosettaConstants.GITHUB_RAW_FILE_URL_BASE + '/phetsims/chipper/master/data/localeInfo.json';
 
   winston.info( 'requesting locale info file from GitHub, URL = ' + urlOfLocalInfoFile );
@@ -86,7 +86,7 @@ async function updateLocaleInfo() { // Liam's Note: This function is kinda long.
 async function checkAndUpdateLocaleInfo() {
 
   // if a request is already in progress, return that promise
-  if ( inProgressFileRetrievalPromise ) { // Liam's Note: I think this boolean should be renamed.
+  if ( inProgressFileRetrievalPromise ) {
     winston.info( 'a request for locale info file is in progress, waiting on that promise' );
     await inProgressFileRetrievalPromise;
   }

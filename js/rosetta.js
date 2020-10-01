@@ -40,7 +40,8 @@ const consoleTransport = new winston.transports.Console( {
       format: 'YYYY-MM-DD HH:mm:ss'
     } ),
     format.printf( i => `${i.timestamp} | ${i.level} - ${i.message}` )
-  )
+  ),
+  silent: true
 } );
 winston.add( consoleTransport );
 
@@ -48,13 +49,13 @@ winston.add( consoleTransport );
 process.on( 'unhandledRejection', error => {
 
   // If these are logged, issues should be tracked down and fixed.
-  winston.error( `Unhandled rejection. Error Message: ${error.message}.` );
-  winston.error( `Error Stack: ${error.stack}.` );
+  winston.error( `Unhandled rejection. Error Message: ${error.message}` );
+  winston.error( `Error Stack: ${error.stack}` );
 } );
 
 // Log startup message.
 winston.info( '========== Rosetta is starting up! ==========' );
-winston.info( `Node Version ${process.version}.` );
+winston.info( `Node Version ${process.version}` );
 
 // Log Rosetta's SHA. This might make it easier to duplicate issues and track them down.
 try {
@@ -63,10 +64,10 @@ try {
   let sha = childProcess.execSync( 'git rev-parse HEAD' );
   sha = sha.toString();
   sha = sha.replace( /\r?\n|\r/, '' );
-  winston.info( `Current SHA is ${sha}.` );
+  winston.info( `Current SHA is ${sha}` );
 }
 catch( error ) {
-  winston.warn( `Unable to get SHA from Git. Error: ${error}.` );
+  winston.warn( `Unable to get SHA from Git. Error: ${error}` );
 }
 
 // TODO: Move this to a more appropriate location. See https://github.com/phetsims/rosetta/issues/190#issuecomment-682169944.
@@ -80,6 +81,7 @@ winston.info( JSON.stringify( global.config, null, 2 ) );
 
 // TODO: Determine if it's possible to get the config before setting up the logger. (So we don't have to update it.) See https://github.com/phetsims/rosetta/issues/190#issuecomment-682169944.
 // Update the logging level in case it was set in the config info.
+// If you want to use QUnit, you should set the loggingLevel in your config to emerg
 consoleTransport.level = global.config.loggingLevel;
 
 // TODO: Move this into its own file. See https://github.com/phetsims/rosetta/issues/190#issuecomment-682169944.
@@ -94,7 +96,7 @@ pool.query( 'SELECT NOW();', ( error, result ) => {
     winston.error( 'Short term storage will be unavailable.' );
   }
   else {
-    winston.info( `Database test using SELECT NOW() succeeded. Now: ${result.rows[ 0 ].now}.` );
+    winston.info( `Database test using SELECT NOW() succeeded. Now: ${result.rows[ 0 ].now}` );
   }
 } );
 
@@ -184,5 +186,5 @@ app.post( '/*', routeHandlers.pageNotFound );
 // Start the server.
 app.listen( LISTEN_PORT, () => {
   winston.info( `Listening on port ${LISTEN_PORT}.` );
-  winston.info( `Open your browser to http://localhost:${LISTEN_PORT}/translate.` );
+  winston.info( `Open your browser to http://localhost:${LISTEN_PORT}/translate` );
 } );
