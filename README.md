@@ -18,6 +18,7 @@ Rosetta uses [Node.js](https://nodejs.org/en/), [Express.js](https://expressjs.c
     * [Legacy Servers]()
     * [PhET Server]()
 * [Documentation]()
+  * [Code Style]()
   * [Admin Guide]()
   * [Implementation Notes]()
   * [How to Change a String Key]()
@@ -162,6 +163,52 @@ The Rosetta uses syslog to save output to the Winston log. You can view the logs
 * Check status (method 2): `sudo journalctl -u rosetta`
 
 ## Documentation
+
+### Code Style
+
+1. If you're using the JetBrains IntelliJ IDEA IDE, you should use the
+`phetsims/phet-info/ide/idea/phet-idea-codestyle.xml` file. [This page](https://www.jetbrains.com/help/idea/configuring-code-style.html)
+has info on how to set up the PhET code style with IntelliJ.
+2. We like to follow the conventions outlined in [Idomatic.js](https://github.com/rwaldron/idiomatic.js/).
+3. Each file should have a copyright and a JSDoc-style file description with the author(s) at the top:
+```
+// Copyright 20xx-20yy, University of Colorado Boulder
+
+/**
+ * Try to explain what the file does succinctly without using too much jargon. The description should consist of
+ * complete sentences with proper punctuation. There should be a blank line after the description.
+ * 
+ * @author Firstname Lastname (PhET Interactive Simulations)
+ */
+```
+4. We like to `'use strict';`.
+5. List your `// Modules` and `// Order-Dependent Modules`.
+6. List your (symbolic) `// Constants`. These constants should never change. They are things like numbers and strings.
+They should be `C_STYLE_CONSTANT_CASE`.
+  * It is possible to have constants in the global scope that are regular `camelCase`. An
+  example can be found in `js/simData.js`. It is a variable that needs to be populated. It's never reassigned.
+  ```
+  // Populated by obtaining metadata from the PhET website. Used as a cache. Updated when needed.
+  const simInfoObject = {};
+  ```
+7. For each function in the file, there needs to be a JSDoc-style description above it:
+```
+/**
+ * Describe the function using a verb at the beginning of the sentence. This should be a complete sentence. There
+ * should be a blank line after the description.
+ *
+ * @param {type} param1Name - concise parameter description <-- these shouldn't be complete sentences and don't need capitalization or punctuation
+ * @param {type} param2Name - concise parameter description
+ * @returns {type} returnVariableName - concise return variable description
+ */
+```
+8. Regular comments in the code should be complete sentences that describe code that isn't sufficiently self-describing
+or complete sentences that explain why the code is the way it is. Not having a comment is preferable to having a
+cryptic or potentially stale comment.
+9. All TODO comments need to have a link to an issue.
+10. Log messages should have proper capitalization, but there shouldn't be a period at the end of log messages because
+log messages and error messages sometimes insert a period.
+11. Function names and variable names shouldn't have quotes around them in comments or log messages.
 
 * Read the [Admin Guide]().
 * Read the [Implementation Notes]().

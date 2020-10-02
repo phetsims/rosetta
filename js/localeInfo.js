@@ -127,23 +127,5 @@ module.exports = {
   getSortedLocaleInfoArray: async function() {
     await checkAndUpdateLocaleInfo();
     return sortedLocaleInfoArray;
-  },
-
-  /**
-   * Obtain a string that describes the language associated with the provided locale. For example, if the caller
-   * specified 'es_MX', the string 'Spanish - Mexico' would be returned.
-   * @param {string} locale
-   * @returns {string}
-   * @public
-   */
-  localeToLanguageString: function( locale ) {
-    // since this happens a lot, and locale info rarely changes, the cached data is always used, i.e. no update is made.
-    if ( localeInfoObject.hasOwnProperty( locale ) ) {
-      return localeInfoObject[ locale ].name;
-    }
-    else {
-      winston.error( 'request received for locale that is not in the locale info object' );
-      return '';
-    }
   }
 };
