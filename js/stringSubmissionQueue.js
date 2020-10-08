@@ -78,8 +78,7 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
         userId: ( req.session.userId ) ? req.session.userId : 'phet-test',
         timestamp: Date.now(),
         oldValue: oldValue,
-        newValue: stringValue,
-        explanation: null // TODO: Add support for explanations to Rosetta. See https://github.com/phetsims/rosetta/issues/239.
+        newValue: stringValue
       };
 
       if ( history ) {
