@@ -13,12 +13,18 @@
 
 // Modules
 const _ = require( 'lodash' ); // eslint-disable-line
-const https = require( 'https' );
+const getJsonObject = require( './getJsonObject' );
 const winston = require( 'winston' );
 
 // Constants
+// (One is order-dependent. Thus, this list is not in alphabetical order.)
 const CACHED_DATA_VALID_TIME = 1800; // This is 1.8 seconds in milliseconds.
+const METADATA_REQUEST_OPTIONS = {
+  auth: `token:${global.config.serverToken}`
+};
 const PRODUCTION_SERVER_URL = global.config.productionServerURL;
+const METADATA_URL = PRODUCTION_SERVER_URL +
+                     '/services/metadata/1.2/simulations?format=json&type=html&include-unpublished=true&summary';
 
 //===========================================================================//
 // Set up variables for later use.                                           //
@@ -33,68 +39,9 @@ const simInfoObject = {};
 // Outstanding promise for getting metadata. Used to avoid creating duplicate requests if one is already in progress.
 let inProgressMetadataPromise = null;
 
-// Used for metadata request.
-const url = PRODUCTION_SERVER_URL +
-            '/services/metadata/1.2/simulations?format=json&type=html&include-unpublished=true&summary';
-const options = {
-  auth: `token:${global.config.serverToken}`
-};
-
 //===========================================================================//
 // Set up main functions for metadata retrieval and update.                  //
 //===========================================================================//
-
-// Get the sim metadata from the PhET site.
-function getSimMetadata() {
-  return new Promise( ( resolve, reject ) => {
-    const request = https.request( url, options, response => {
-
-      // Set up variables for error logging.
-      const { statusCode } = response;
-      const contentType = response.headers[ 'content-type' ];
-
-      // Log incorrect return codes or incorrect metadata type.
-      if ( statusCode !== 200 ) {
-        const badStatusCodeError = new Error( `Metadata request failed. Status code: ${statusCode}.` );
-        winston.error( badStatusCodeError.message );
-        reject( badStatusCodeError );
-      }
-      else if ( !/^text\/html/.test( contentType ) ) {
-        const badContentTypeError = new Error( `Invalid content type. Expected text/html but received ${contentType}.` );
-        winston.error( badContentTypeError.message );
-        reject( badContentTypeError );
-      }
-
-      // Set encoding and variable for metadata.
-      response.setEncoding( 'utf-8' );
-      let rawData = '';
-
-      // Add metadata.
-      response.on( 'data', chunk => {
-        rawData += chunk;
-      } );
-
-      // Resolve metadata.
-      response.on( 'end', () => {
-        try {
-          const parsedData = JSON.parse( rawData );
-          resolve( parsedData );
-        }
-        catch( error ) {
-          const cantParseMetadataError = new Error( `Parsing metadata failed. ${error.message}` );
-          winston.error( cantParseMetadataError.message );
-          reject( cantParseMetadataError );
-        }
-      } );
-    } );
-
-    // Reject errors and finish sending the request.
-    request.on( 'error', error => {
-      reject( error );
-    } );
-    request.end();
-  } );
-}
 
 // Update the local copy of the sim metadata (the sim info).
 async function updateSimInfo() {
@@ -102,10 +49,10 @@ async function updateSimInfo() {
   // Get metadata.
   let simMetadata = null;
   try {
-    simMetadata = await getSimMetadata();
+    simMetadata = await getJsonObject( METADATA_URL, METADATA_REQUEST_OPTIONS, /^text\/html/ );
   }
   catch( error ) {
-    const getSimMetadataError = new Error( `The getSimMetadata function call failed. ${error.message}` );
+    const getSimMetadataError = new Error( `Unable to get sim metadata. ${error.message}` );
     winston.error( getSimMetadataError.message );
     throw getSimMetadataError;
   }
