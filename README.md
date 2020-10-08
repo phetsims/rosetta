@@ -9,19 +9,17 @@ Rosetta uses [Node.js](https://nodejs.org/en/), [Express.js](https://expressjs.c
 
 ## Contents
 
-* [Getting Started]()
-  * [Running Rosetta Locally With PostgreSQL]()
-    * [Windows Setup]()
-    * [macOS Setup]()
-  * [Running Rosetta Remotely With PhET's Servers]()
-    * [Configuration]()
-    * [Legacy Servers]()
-    * [PhET Server]()
-* [Documentation]()
-  * [Code Style]()
-  * [Admin Guide]()
-  * [Implementation Notes]()
-  * [How to Change a String Key]()
+* [Getting Started](https://github.com/phetsims/rosetta#getting-started)
+  * [Running Rosetta Locally With PostgreSQL](https://github.com/phetsims/rosetta#running-rosetta-locally-with-postgresql)
+  * [Running Rosetta Remotely With PhET's Servers](https://github.com/phetsims/rosetta#running-rosetta-remotely-with-phets-servers)
+    * [Configuration](https://github.com/phetsims/rosetta#rosettas-configuration-on-legacy-servers-and-phet-server)
+    * [Legacy Servers](https://github.com/phetsims/rosetta#legacy-servers-simian-and-figaro)
+    * [PhET Server](https://github.com/phetsims/rosetta#phet-server)
+* [Documentation](https://github.com/phetsims/rosetta#documentation)
+  * [Code Style](https://github.com/phetsims/rosetta#code-style)
+  * [Admin Guide](https://github.com/phetsims/rosetta/blob/master/doc/admin-guide.md)
+  * [Implementation Notes](https://github.com/phetsims/rosetta/blob/master/doc/implementation-notes.md)
+  * [How to Change a String Key](https://github.com/phetsims/rosetta/blob/master/doc/how-to-change-a-string-key.md)
 
 ## Getting Started
 
@@ -210,6 +208,6 @@ cryptic or potentially stale comment.
 log messages and error messages sometimes insert a period.
 11. Function names and variable names shouldn't have quotes around them in comments or log messages.
 
-* Read the [Admin Guide]().
-* Read the [Implementation Notes]().
-* Read [How to Change a String Key]().
+* Read the [Admin Guide](https://github.com/phetsims/rosetta/blob/master/doc/admin-guide.md).
+* Read the [Implementation Notes](https://github.com/phetsims/rosetta/blob/master/doc/implementation-notes.md).
+* Read [How to Change a String Key](https://github.com/phetsims/rosetta/blob/master/doc/how-to-change-a-string-key.md).
