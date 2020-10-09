@@ -171,7 +171,7 @@ app.post( '/translate/sim/:simName?/:targetLocale?', routeHandlers.submitStrings
 app.get( '/translate/logout', routeHandlers.logout );
 
 // Trigger the build of a simulation for a given sim, locale, and user ID. Only used by team members to fix problems.
-app.get( '/translate/trigger-build/:simName?/:targetLocale?/:userID?', routeHandlers.triggerBuild );
+app.get( '/translate/trigger-build/:simName?/:targetLocale?/:userId?', routeHandlers.triggerBuild );
 
 // Set up testing routes.
 app.get( '/translate/test/', routeHandlers.displayTestPage );

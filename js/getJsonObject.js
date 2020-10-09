@@ -15,14 +15,14 @@ const winston = require( 'winston' );
 
 /**
  * This function accepts a URL, an options object, and a regular expression for the expected content type. It should
- * return a JSON object. It does a fair amount of error checking.
+ * return a promise to return a JSON object.
  *
  * @param url - the location of the JSON object you want to get
  * @param options - the object that the built-in Node HTTP and HTTPS requests accept
  * @param expectedContentType - the regular expression for the expected content type
- * @returns {Promise<unknown>} - the JSON object
+ * @returns {Promise<Object>} - the JSON object
  */
-function getJsonObject( url, options, expectedContentType ) {
+async function getJsonObject( url, options, expectedContentType ) {
 
   // The function returns a promise to resolve the JSON object. Thus, you need to use await when you call the function.
   return new Promise( ( resolve, reject ) => {
@@ -38,12 +38,12 @@ function getJsonObject( url, options, expectedContentType ) {
       if ( statusCode !== 200 ) {
         const badStatusCodeError = new Error( `HTTPS request failed. Status code: ${statusCode}` );
         winston.error( badStatusCodeError.message );
-        reject( badStatusCodeError );
+        reject( badStatusCodeError ); // TODO: We should be able to simply throw badStatusCodeError here. See https://github.com/phetsims/rosetta/issues/231#issuecomment-706420799.
       }
       else if ( !expectedContentType.test( contentType ) ) {
         const badContentTypeError = new Error( `Invalid content type. Expected ${expectedContentType} but received ${contentType}` );
         winston.error( badContentTypeError.message );
-        reject( badContentTypeError );
+        reject( badContentTypeError ); // TODO: We should be able to simply throw badContentTypeError here. See https://github.com/phetsims/rosetta/issues/231#issuecomment-706420799.
       }
 
       // Set encoding and variable for the raw data.
@@ -59,19 +59,19 @@ function getJsonObject( url, options, expectedContentType ) {
       response.on( 'end', () => {
         try {
           const parsedData = JSON.parse( rawData );
-          resolve( parsedData );
+          resolve( parsedData ); // TODO: We should be able to simply return parsedData here. See https://github.com/phetsims/rosetta/issues/231#issuecomment-706420799.
         }
         catch( error ) {
           const parseJsonError = new Error( `Parsing JSON failed. ${error.message}` );
           winston.error( parseJsonError.message );
-          reject( parseJsonError );
+          reject( parseJsonError ); // TODO: We should be able to simply throw parseJsonError here. See https://github.com/phetsims/rosetta/issues/231#issuecomment-706420799.
         }
       } );
     } );
 
     // Reject errors and finish sending the request.
     request.on( 'error', error => {
-      reject( error );
+      reject( error ); // TODO: We should be able to simply throw new Error( toString( error ) ) here. See https://github.com/phetsims/rosetta/issues/231#issuecomment-706420799.
     } );
     request.end();
   } );

@@ -5,19 +5,19 @@
  * that which is needed by Rosetta, the PhET translation utility, to do its job. This object is populated by obtaining
  * sim metadata from the server where the simulations reside.
  *
- * @author John Blanco
- * @author Liam Mulhall
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Liam Mulhall (PhET Interactive Simulations)
  */
 
 'use strict';
 
-// Modules
+// modules
 const _ = require( 'lodash' ); // eslint-disable-line
 const getJsonObject = require( './getJsonObject' );
 const winston = require( 'winston' );
 
-// Constants
-// (One is order-dependent. Thus, this list is not in alphabetical order.)
+// constants
+// (METADATA_URL depends on PRODUCTION_SERVER_URL. Thus, this list is not in alphabetical order.)
 const CACHED_DATA_VALID_TIME = 1800; // This is 1.8 seconds in milliseconds.
 const METADATA_REQUEST_OPTIONS = {
   auth: `token:${global.config.serverToken}`
@@ -158,6 +158,7 @@ module.exports = {
 
   /**
    * Get a list of the HTML5 sims that are available on the PhET website.
+   *
    * @param {boolean} includeUnpublished
    * @returns {Promise.<Array.<string>>}
    * @public
@@ -187,6 +188,7 @@ module.exports = {
    * Get an array of objects where each object contains the project-name, title, and published URL of the simulations
    * that are available on the website. The format is that which is needed to render the main translation selection
    * page, and is a bit historic, if background is needed please see https://github.com/phetsims/rosetta/issues/123.
+   *
    * @param {boolean} includeUnpublished
    * @returns {Promise.<Array>}
    * @public
@@ -208,6 +210,7 @@ module.exports = {
 
   /**
    * Get the URL where the simulation is available from the website.
+   *
    * @param {string} simName
    * @returns {Promise.<string|null>}
    * @public
@@ -223,6 +226,7 @@ module.exports = {
 
   /**
    * Get the English translation of the title for the specified simulation.
+   *
    * @param {string} simName
    * @returns {Promise.<string>}
    * @public
@@ -238,6 +242,7 @@ module.exports = {
 
   /**
    * Get the latest version for a simulation.
+   *
    * @param {string} simName
    * @returns {Promise<string>}
    * @public

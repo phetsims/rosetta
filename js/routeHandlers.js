@@ -18,6 +18,7 @@ const winston = require( 'winston' );
 const { Pool } = require( 'pg' ); // eslint-disable-line
 
 // Server Modules
+const getJsonObject = require( './getJsonObject' );
 const localeInfo = require( './localeInfo' );
 const RosettaConstants = require( './RosettaConstants' );
 const ServerTests = require( './ServerTests' );
@@ -715,6 +716,7 @@ function isStringNumber( stringToTest ) {
 
 /**
  * Handle a request to trigger a build. For team members only.
+ * TODO: Make sure documentation is up-to-date.
  *
  * @param request
  * @param response
@@ -737,6 +739,7 @@ module.exports.triggerBuild = async function( request, response ) {
     let simName = '';
     if ( typeof request.params.simName === 'string' ) {
       if ( arrayOfSimNames.includes( request.params.simName ) ) {
+        winston.info( 'simName is valid.' );
         simName = request.params.simName;
       }
       else {
@@ -757,6 +760,7 @@ module.exports.triggerBuild = async function( request, response ) {
     let targetLocale = '';
     if ( typeof request.params.targetLocale === 'string' ) {
       if ( localeArray.includes( request.params.targetLocale ) ) {
+        winston.info( 'targetLocale is valid.' );
         targetLocale = request.params.targetLocale;
       }
       else {
@@ -774,29 +778,77 @@ module.exports.triggerBuild = async function( request, response ) {
     }
 
     // Extract the user ID from the request.
-    let userID = null;
-    if ( isStringNumber( request.params.userID ) ) {
-      // TODO: If "params.userID" is a valid user ID, proceed with setting the "userID" variable. See https://github.com/phetsims/rosetta/issues/231.
-      // We don't want a dev's user ID. We want the most recent translator's ID, we think.
-      // Take a look at the code that validates login to see if there's anything you can use.
-      // Log who is getting credit for the translation.
-      userID = request.params.userID;
+    let userIdToSend = null;
+    if ( isStringNumber( request.params.userId ) ) {
+
+      // Set up URL for the Babel string file and get the string file object.
+      // Change the branch to tests if you want to test.
+      const STRING_FILE_URL = `https://raw.githubusercontent.com/phetsims/babel/tests/${simName}/${simName}-strings_${targetLocale}.json`;
+      let stringFileObject = {};
+      try {
+        stringFileObject = await getJsonObject( STRING_FILE_URL, {}, /^text\/plain/ );
+      }
+      catch( error ) {
+        winston.error( `Unable to get string file from Babel. ${error.message}` );
+        return;
+      }
+      winston.info( 'String file object successfully retrieved.' );
+
+      // Create an empty array of user ID's that will be populated with user ID's from the Babel string file for the
+      // translation.
+      const arrayOfUserIds = [];
+
+      // For each translatable string in the file, create a copy of the string object and extract a copy of that string
+      // object's history object.
+      for ( const stringProperty in stringFileObject ) {
+        const stringObject = stringFileObject[ stringProperty ];
+        const { history } = stringObject;
+
+        // For each history entry, create a history object and add its user ID to the array of user ID's if the user ID
+        // is not already in the array.
+        for ( const historyEntry in history ) {
+          const historyObject = history[ historyEntry ];
+          const userId = historyObject.userId;
+          if ( !arrayOfUserIds.includes( userId ) ) {
+            arrayOfUserIds.push( userId );
+          }
+        }
+      }
+
+      // Log the supplied user ID and the ones found in the Babel string file.
+      winston.debug( `request.params.userId: ${request.params.userId}` );
+      winston.debug( `arrayOfUserIds: ${arrayOfUserIds}` );
+
+      // If the supplied user ID exists in the array of user ID's, set the userId variable.
+      // It is important to remember that request.params.userId is a string. We must cast it to an integer.
+      // The elements of the arrayOfUserIds, on the other hand, should be numbers.
+      if ( arrayOfUserIds.includes( parseInt( request.params.userId, 10 ) ) ) {
+        winston.info( 'Supplied user ID is valid.' );
+        userIdToSend = request.params.userId;
+      }
+      else {
+        winston.info( 'User ID was not found in the Babel string file.' );
+        const message = 'Invalid user ID.';
+        const errorDetails = 'request.params.userId did not match a user ID in the string file fetched from Babel.';
+        renderErrorPage( request, response, message, errorDetails );
+        return;
+      }
     }
     else {
       const message = 'Invalid user ID.';
-      const errorDetails = '!isNaN( userID ) (checks if your user ID is a number) returned false.';
+      const errorDetails = '!isNaN( userIdToSend ) (checks if your user ID is a number) returned false.';
       renderErrorPage( request, response, message, errorDetails );
       return;
     }
 
     // Log message about triggerBuild being called.
-    const simLocaleAndID = `sim: ${simName}, locale: ${targetLocale}, ID: ${userID}`;
-    winston.info( `triggerBuild called for ${simLocaleAndID}.` );
+    const simLocaleAndId = `sim: ${simName}, locale: ${targetLocale}, ID: ${userIdToSend}`;
+    winston.info( `triggerBuild called for ${simLocaleAndId}.` );
 
     // Send the request to the build server.
     let status = null;
     if ( SEND_BUILD_REQUESTS ) {
-      status = requestBuild( simName, targetLocale, userID );
+      status = requestBuild( simName, targetLocale, userIdToSend );
     }
     else {
       winston.warn( 'global.config.sendBuildRequests is set to false. You might want to set it to true.' );
@@ -805,13 +857,13 @@ module.exports.triggerBuild = async function( request, response ) {
     // Create a simple response message that can be shown to the user in the browser window.
     let message = '';
     if ( status ) {
-      message = `Successfully triggered build for ${simLocaleAndID}.`;
+      message = `Successfully triggered build for ${simLocaleAndId}.`;
     }
     else {
       winston.info( `requestBuild status: ${status}.` );
       winston.warn( 'If requestBuild status is null, you probably have sendBuildRequests = false in your config file.' );
       winston.warn( 'If you\'re trying to trigger a build, you should set sendBuildRequests = true in your config file.' );
-      message = `Error when attempting to trigger build for ${simLocaleAndID}. See the log for more details.`;
+      message = `Error when attempting to trigger build for ${simLocaleAndId}. See the log for more details.`;
     }
 
     // Send back the response.

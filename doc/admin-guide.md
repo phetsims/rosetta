@@ -67,8 +67,8 @@ reverting it and submitting again, this will unfortunately cause the submitter t
 the credited translators for that simulation.  Issue https://github.com/phetsims/perennial/issues/178 describes a
 scenario where the need to trigger builds without being credited arose. To fill this need, a route was added through
 which a PhET team member can trigger a build of a simulation for a given locale.  There are three parameters for this
-route: the sim name, the locale, and the userID that should be credited.  The userID can be obtained by looking in babel
-for the userID of the most recent translator.  The route will then look something like this:
+route: the sim name, the locale, and the user ID that should be credited.  The user ID can be obtained by looking in
+babel for the user ID of the most recent translator.  The route will then look something like this:
 
 ```
 https://ox-dev.colorado.edu/translate/trigger-build/build-an-atom/de/1234
