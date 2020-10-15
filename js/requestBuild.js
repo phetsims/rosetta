@@ -9,12 +9,12 @@
 
 'use strict';
 
-// Modules
+// modules
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const simData = require( './simData' );
 const winston = require( 'winston' );
 
-// Constants
+// constants
 const PRODUCTION_SERVER_URL = global.config.productionServerURL;
 
 /**
@@ -23,7 +23,7 @@ const PRODUCTION_SERVER_URL = global.config.productionServerURL;
  * @param {string} locale
  * @returns {Promise<boolean>}
  */
-module.exports = async function( simName, locale, userID ) {
+module.exports = async ( simName, locale, userID ) => {
 
   winston.info( `Initiating build request for sim: ${simName}, locale: ${locale}.` );
   const latestVersionOfSim = await simData.getLatestSimVersion( simName );
@@ -42,7 +42,7 @@ module.exports = async function( simName, locale, userID ) {
   };
 
   const url = PRODUCTION_SERVER_URL + '/deploy-html-simulation';
-  winston.info( `Sending build request to server. URL: ${url}.` );
+  winston.info( `Sending build request to server. URL: ${url}` );
 
   // Send off the request and return the resulting promise.
   const buildRequestResponse = await nodeFetch( url, {
@@ -54,17 +54,17 @@ module.exports = async function( simName, locale, userID ) {
     body: JSON.stringify( requestObject )
   } );
   if ( buildRequestResponse.status === 200 || buildRequestResponse.status === 202 ) {
-    winston.info( `Build request accepted. Status: ${buildRequestResponse.status}.` );
+    winston.info( `Build request accepted. Status: ${buildRequestResponse.status}` );
     return true;
   }
   else if ( buildRequestResponse.status === 400 ) {
-    throw new Error( `Build request unsuccessful. Probably due to missing info. Status: ${buildRequestResponse.status}.` );
+    throw new Error( `Build request unsuccessful. Probably due to missing info. Status: ${buildRequestResponse.status}` );
   }
   else if ( buildRequestResponse.status === 401 ) {
-    throw new Error( `Build request unsuccessful. Probably due to bad authorization code. Status: ${buildRequestResponse.status}.` );
+    throw new Error( `Build request unsuccessful. Probably due to bad authorization code. Status: ${buildRequestResponse.status}` );
   }
   else {
-    throw new Error( `Build request unsuccessful. Status: ${buildRequestResponse.status}.` );
+    throw new Error( `Build request unsuccessful. Status: ${buildRequestResponse.status}` );
   }
 };
 
@@ -81,7 +81,7 @@ async function getDependencies( simName, version ) {
   const url = `${PRODUCTION_SERVER_URL}/sims/html/${simName}/${version}/dependencies.json`;
 
   // Get the dependencies.
-  winston.info( `Fetching dependencies from ${url}.` );
+  winston.info( `Fetching dependencies from ${url}` );
   const response = await nodeFetch( url );
 
   // Return the results or throw an error.
@@ -89,6 +89,6 @@ async function getDependencies( simName, version ) {
     return await response.text();
   }
   else {
-    throw new Error( `Unable to get dependencies for sim: ${simName}, version: ${version}. Status: ${response.status}.` );
+    throw new Error( `Unable to get dependencies for sim: ${simName}, version: ${version}. Status: ${response.status}` );
   }
 }

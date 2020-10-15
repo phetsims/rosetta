@@ -716,7 +716,6 @@ function isStringNumber( stringToTest ) {
 
 /**
  * Handle a request to trigger a build. For team members only.
- * TODO: Make sure documentation is up-to-date.
  *
  * @param request
  * @param response
@@ -871,7 +870,7 @@ module.exports.triggerBuild = async function( request, response ) {
   }
   else {
 
-    // The user is not a team member; render the "not found" page.
+    // The user is not a team member; render the not found page.
     pageNotFound( request, response );
   }
 };
