@@ -18,12 +18,37 @@ const winston = require( 'winston' );
 const PRODUCTION_SERVER_URL = global.config.productionServerURL;
 
 /**
+ * Get the dependencies for the specified simulation and version.
+ *
+ * @param {string} simName
+ * @param {string} version
+ * @returns {Promise.<string>} - JSON data with dependencies
+ */
+async function getDependencies( simName, version ) {
+
+  // Compose the URL where the dependencies should be.
+  const url = `${PRODUCTION_SERVER_URL}/sims/html/${simName}/${version}/dependencies.json`;
+
+  // Get the dependencies.
+  winston.info( `Fetching dependencies from ${url}` );
+  const response = await nodeFetch( url );
+
+  // Return the results or throw an error.
+  if ( response.status === 200 ) {
+    return await response.text();
+  }
+  else {
+    throw new Error( `Unable to get dependencies for sim: ${simName}, version: ${version}. Status: ${response.status}` );
+  }
+}
+
+/**
  * @param {string} simName
  * @param {number} userID
  * @param {string} locale
  * @returns {Promise<boolean>}
  */
-module.exports = async ( simName, locale, userID ) => {
+async function requestBuild( simName, locale, userID ) {
 
   winston.info( `Initiating build request for sim: ${simName}, locale: ${locale}.` );
   const latestVersionOfSim = await simData.getLatestSimVersion( simName );
@@ -66,29 +91,6 @@ module.exports = async ( simName, locale, userID ) => {
   else {
     throw new Error( `Build request unsuccessful. Status: ${buildRequestResponse.status}` );
   }
-};
-
-/**
- * Get the dependencies for the specified simulation and version.
- *
- * @param {string} simName
- * @param {string} version
- * @returns {Promise.<string>} - JSON data with dependencies
- */
-async function getDependencies( simName, version ) {
-
-  // Compose the URL where the dependencies should be.
-  const url = `${PRODUCTION_SERVER_URL}/sims/html/${simName}/${version}/dependencies.json`;
-
-  // Get the dependencies.
-  winston.info( `Fetching dependencies from ${url}` );
-  const response = await nodeFetch( url );
-
-  // Return the results or throw an error.
-  if ( response.status === 200 ) {
-    return await response.text();
-  }
-  else {
-    throw new Error( `Unable to get dependencies for sim: ${simName}, version: ${version}. Status: ${response.status}` );
-  }
 }
+
+module.exports = requestBuild;
