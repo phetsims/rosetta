@@ -4,7 +4,7 @@ Implementation Notes for the PhET Translation Utility
 Intro
 -----
 
-This document provide an overview of the way the translation utility works. The intended audience is developers who
+This document provides an overview of the way the translation utility works. The intended audience is developers who
 need to understand the utility, and want to get some "big picture" information before jumping into the code.
 
 Terminology
@@ -12,8 +12,7 @@ Terminology
 
 The term 'project name' is used throughout the code as a means to reference a simulation or common code library. This
 is essentially the repository name, but the term 'repository name' was avoided in case another VCS system is adopted
-at some point in the future. Examples of project names are 'build-an-atom' and 'energy-skate-park-basics' and 
-'scenery'.
+at some point in the future. Examples of project names are 'build-an-atom', 'energy-skate-park-basics' and 'scenery'.
 
 Dependencies
 ------------
