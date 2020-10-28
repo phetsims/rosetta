@@ -6,9 +6,9 @@ Intro
 
 Rosetta, AKA "the translation utility," has never had much of a budget supporting it. As a result, it's very basic,
 and lacks support for a number of features that would be nice to have. One such feature is the ability to change a
-string key after a simulation has been published and one or more translations of it have been submitted. It is, however,
-possible to do this &mdash; it just requires a number of manual steps. This document describes these steps, and provides
-background information for understanding why the steps are necessary.
+string key after a simulation has been published and translations have been created. It is _possible_ to do this, but
+it's not particularly easy, and the process includes a number of manual steps. This document describes those steps, and
+provides background information for understanding why the steps are necessary.
 
 Background
 ----------
