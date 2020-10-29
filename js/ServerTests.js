@@ -2,6 +2,8 @@
 
 /**
  * This file contains the server-side code for handling test requests.
+ *
+ * @author Aaron Davis
  */
 
 'use strict';

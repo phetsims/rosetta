@@ -2,6 +2,7 @@
 
 /**
  * Javascript for translate-sim.html
+ *
  * @author Michael Kauzmann
  * @author Aaron Davis
  * @author John Blanco
