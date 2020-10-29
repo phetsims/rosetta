@@ -5,11 +5,12 @@
  *
  * @author John Blanco
  * @author Aaron Davis
+ * @author Liam Mulhall
  */
 
 'use strict';
 
-// Node Modules
+// Node modules
 const _ = require( 'lodash' ); // eslint-disable-line
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const https = require( 'https' );
@@ -17,7 +18,7 @@ const longTermStringStorage = require( './longTermStringStorage' );
 const winston = require( 'winston' );
 const { Pool } = require( 'pg' ); // eslint-disable-line
 
-// Server Modules
+// server modules
 const getJsonObject = require( './getJsonObject' );
 const localeInfo = require( './localeInfo' );
 const RosettaConstants = require( './RosettaConstants' );
@@ -29,12 +30,11 @@ const escapeHtml = TranslationUtils.escapeHtml;
 const renderError = TranslationUtils.renderError;
 const requestBuild = require( './requestBuild' );
 
-// Constants
+// constants
 const GITHUB_RAW_FILE_URL_BASE = RosettaConstants.GITHUB_RAW_FILE_URL_BASE;
 const TITLE = 'PhET Translation Utility (HTML5)';
 const ASCII_REGEX = /^[ -~]+$/;
 const STRING_VAR_IN_HTML_FILES = RosettaConstants.STRING_VAR_IN_HTML_FILES;
-const SEND_BUILD_REQUESTS = global.config.sendBuildRequests === undefined ? true : global.config.sendBuildRequests;
 
 //===========================================================================//
 // Utility functions below.                                                  //
@@ -781,7 +781,7 @@ module.exports.triggerBuild = async function( request, response ) {
     if ( isStringNumber( request.params.userId ) ) {
 
       // Set up URL for the Babel string file and get the string file object.
-      const STRING_FILE_URL = `https://raw.githubusercontent.com/phetsims/babel/master/${simName}/${simName}-strings_${targetLocale}.json`;
+      const STRING_FILE_URL = `${GITHUB_RAW_FILE_URL_BASE}/phetsims/babel/master/${simName}/${simName}-strings_${targetLocale}.json`;
       let stringFileObject = {};
       try {
         stringFileObject = await getJsonObject( STRING_FILE_URL, {}, /^text\/plain/ );
@@ -846,29 +846,23 @@ module.exports.triggerBuild = async function( request, response ) {
     const simLocaleAndId = `sim: ${simName}, locale: ${targetLocale}, ID: ${userIdToSend}`;
     winston.info( `triggerBuild called for ${simLocaleAndId}.` );
 
-    // Send the request to the build server.
-    let status = null;
-    if ( SEND_BUILD_REQUESTS ) {
-      status = requestBuild( simName, targetLocale, userIdToSend );
+    // Try to send the build request. If it's successful, tell the user. Otherwise handle the error and put up the page
+    // not found page.
+    try {
+      const buildRequestWasSent = await requestBuild( simName, targetLocale, userIdToSend );
+      winston.debug( `requestBuild was called and returned ${buildRequestWasSent}.` );
+      if ( buildRequestWasSent ) {
+        response.send( `Successfully triggered build for ${simLocaleAndId}.` );
+      }
     }
-    else {
-      winston.warn( 'global.config.sendBuildRequests is set to false. You might want to set it to true.' );
-    }
-
-    // Create a simple response message that can be shown to the user in the browser window.
-    let message = '';
-    if ( status ) {
-      message = `Successfully triggered build for ${simLocaleAndId}.`;
-    }
-    else {
-      winston.info( `requestBuild status: ${status}.` );
-      winston.warn( 'If requestBuild status is null, you probably have sendBuildRequests = false in your config file.' );
+    catch( error ) {
+      winston.error( `Build for ${simLocaleAndId} unsuccessful. ${error.message}` );
       winston.warn( 'If you\'re trying to trigger a build, you should set sendBuildRequests = true in your config file.' );
-      message = `Error when attempting to trigger build for ${simLocaleAndId}. See the log for more details.`;
+      const errorMessage = `Build for ${simLocaleAndId} unsuccessful.`;
+      const errorDetails = `${error.message}`;
+      renderErrorPage( request, response, errorMessage, errorDetails );
+      return;
     }
-
-    // Send back the response.
-    response.send( message );
   }
   else {
 

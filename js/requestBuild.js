@@ -16,6 +16,7 @@ const winston = require( 'winston' );
 
 // constants
 const PRODUCTION_SERVER_URL = global.config.productionServerURL;
+const SEND_BUILD_REQUESTS = global.config.sendBuildRequests === undefined ? true : global.config.sendBuildRequests;
 
 /**
  * Get the dependencies for the specified simulation and version.
@@ -46,7 +47,7 @@ async function getDependencies( simName, version ) {
  * @param {string} simName
  * @param {number} userID
  * @param {string} locale
- * @returns {Promise<boolean>}
+ * @returns {Promise<boolean>} - true or false depending on whether the build was sent
  */
 async function requestBuild( simName, locale, userID ) {
 
@@ -66,30 +67,40 @@ async function requestBuild( simName, locale, userID ) {
     authorizationCode: global.config.buildServerAuthorizationCode
   };
 
-  const url = PRODUCTION_SERVER_URL + '/deploy-html-simulation';
-  winston.info( `Sending build request to server. URL: ${url}` );
+  // If the sendBuildRequests flag is set to true in the user's rosettaConfig.json, send it! Otherwise, don't send the
+  // build request. Do, however, log the theoretical build request for debugging purposes.
+  if ( SEND_BUILD_REQUESTS ) {
+    const url = PRODUCTION_SERVER_URL + '/deploy-html-simulation';
+    winston.info( `Sending build request to server. URL: ${url}` );
 
-  // Send off the request and return the resulting promise.
-  const buildRequestResponse = await nodeFetch( url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify( requestObject )
-  } );
-  if ( buildRequestResponse.status === 200 || buildRequestResponse.status === 202 ) {
-    winston.info( `Build request accepted. Status: ${buildRequestResponse.status}` );
-    return true;
-  }
-  else if ( buildRequestResponse.status === 400 ) {
-    throw new Error( `Build request unsuccessful. Probably due to missing info. Status: ${buildRequestResponse.status}` );
-  }
-  else if ( buildRequestResponse.status === 401 ) {
-    throw new Error( `Build request unsuccessful. Probably due to bad authorization code. Status: ${buildRequestResponse.status}` );
+    // Send off the request and return the resulting promise.
+    const buildRequestResponse = await nodeFetch( url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify( requestObject )
+    } );
+    if ( buildRequestResponse.status === 200 || buildRequestResponse.status === 202 ) {
+      winston.info( `Build request accepted. Status: ${buildRequestResponse.status}` );
+      return true;
+    }
+    else if ( buildRequestResponse.status === 400 ) {
+      throw new Error( `Build request unsuccessful. Probably due to missing info. Status: ${buildRequestResponse.status}` );
+    }
+    else if ( buildRequestResponse.status === 401 ) {
+      throw new Error( `Build request unsuccessful. Probably due to bad authorization code. Status: ${buildRequestResponse.status}` );
+    }
+    else {
+      throw new Error( `Build request unsuccessful. Status: ${buildRequestResponse.status}` );
+    }
   }
   else {
-    throw new Error( `Build request unsuccessful. Status: ${buildRequestResponse.status}` );
+    winston.info( 'The sendBuildRequest flag is set to false in your rosettaConfig.json! Not sending the build request.' );
+    winston.debug( 'You can find the theoretical requestObject below.' );
+    winston.debug( JSON.stringify( requestObject, null, 2 ) );
+    throw new Error( 'Build request unsuccessful. sendBuildRequest = false in rosettaConfig.json.' );
   }
 }
 
