@@ -37,6 +37,12 @@ async function getResource( url, options, expectedContentType ) {
       if ( statusCode !== 200 ) {
         const badStatusCodeError = new Error( `HTTPS request failed. Status code: ${statusCode}` );
         winston.error( badStatusCodeError.message );
+
+        // If page not found, log a message about it. It might be that the URL is bad.
+        if ( statusCode === 404 ) {
+          winston.error( 'Page not found! Check the URL in routeHandlers.js to make sure it is correct.' );
+        }
+
         reject( badStatusCodeError );
       }
       else if ( !expectedContentType.test( contentType ) ) {

@@ -781,13 +781,16 @@ module.exports.triggerBuild = async function( request, response ) {
     if ( isStringNumber( request.params.userId ) ) {
 
       // Set up URL for the Babel string file and get the string file object.
-      const STRING_FILE_URL = `https://raw.githubusercontent.com/phetsims/babel/master/${simName}/${simName}-strings_${targetLocale}.json`;
+      const STRING_FILE_URL = `https://raw.githubusercontent.com/phetsims/babel/tests/${simName}/${simName}-strings_${targetLocale}.json`;
       let stringFileObject = {};
       try {
         stringFileObject = await getJsonObject( STRING_FILE_URL, {}, /^text\/plain/ );
       }
       catch( error ) {
         winston.error( `Unable to get string file from Babel. ${error.message}` );
+        const message = 'Unable to get string file from Babel.';
+        const errorDetails = `Here's where you're trying to get the string file: ${STRING_FILE_URL}. Check this and make sure it's correct.`;
+        renderErrorPage( request, response, message, errorDetails );
         return;
       }
       winston.info( 'String file object successfully retrieved.' );
