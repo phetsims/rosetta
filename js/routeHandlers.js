@@ -781,7 +781,7 @@ module.exports.triggerBuild = async function( request, response ) {
     if ( isStringNumber( request.params.userId ) ) {
 
       // Set up URL for the Babel string file and get the string file object.
-      const STRING_FILE_URL = `https://raw.githubusercontent.com/phetsims/babel/tests/${simName}/${simName}-strings_${targetLocale}.json`;
+      const STRING_FILE_URL = `https://raw.githubusercontent.com/phetsims/babel/master/${simName}/${simName}-strings_${targetLocale}.json`;
       let stringFileObject = {};
       try {
         stringFileObject = await getJsonObject( STRING_FILE_URL, {}, /^text\/plain/ );
