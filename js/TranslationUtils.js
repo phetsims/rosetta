@@ -3,8 +3,9 @@
 /**
  * This file holds various utilities useful for translation.
  *
- * @author Aaron Davis
- * @author John Blanco
+ * @author Aaron Davis (PhET Interactive Simulations)
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Liam Mulhall (PhET Interactive Simulations)
  */
 
 'use strict';
@@ -12,7 +13,7 @@
 // Node Modules
 const _ = require( 'lodash' ); // eslint-disable-line
 const email = require( 'emailjs/email' );
-const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
+const getResource = require( './getResource' );
 const simData = require( './simData' );
 const winston = require( 'winston' );
 
@@ -53,7 +54,7 @@ function sendEmail( subject, text ) {
       subject: subject
     }, function( error, message ) {
       if ( error ) {
-        winston.error(`Unable to send email. Error: ${error}.`);
+        winston.error( `Unable to send email. Error: ${error}.` );
       }
       else {
         console.log( `Email sent! Email Body: ${message}` );
@@ -200,16 +201,15 @@ async function getLatestSimHtml( simName ) {
   // Compose the URL for the latest English version of the simulation.
   const simUrl = await simData.getLiveSimUrl( simName );
 
-  const response = await nodeFetch( simUrl );
-
-  if ( response.status === 200 ) {
-    return response.text();
+  // Get the sim's HTML.
+  try {
+    const simHtml = await getResource( simUrl, {}, /^text\/html/ );
+    return simHtml;
   }
-  else if ( response.status === 404 ) {
-    return Promise.reject( new Error( 'sim not found (response.status = ' + response.status ) + ')' );
-  }
-  else {
-    return Promise.reject( new Error( 'error getting sim (response.status = ' + response.status ) + ')' );
+  catch( error ) {
+    const errorMessage = `Unable to get sim HTML. ${error.message}`;
+    winston.error( errorMessage );
+    throw new Error( errorMessage );
   }
 }
 
