@@ -211,6 +211,17 @@ log messages and error messages sometimes insert a period.
 13. If you ever run into a situation where you're wondering what to name a variable that has a common acronym in it,
 just use regular `camelCase`. For example, prefer `myJsonObject` to `myJSONObject`. Also, prefer `myUserId` to
 `myUserID`. It's kind of ugly this way, but it's a bit easier to read.
+14. Follow this pattern for error messages:
+```
+try {
+  const thing = await someFunction();
+}
+catch( error ) {
+  const errorMessage = `Unable to get thing. ${error.message}`
+  winston.error( errorMessage );
+  throw new Error( errorMessage );
+}
+```
 
 * Read the [Admin Guide](https://github.com/phetsims/rosetta/blob/master/doc/admin-guide.md).
 * Read the [Implementation Notes](https://github.com/phetsims/rosetta/blob/master/doc/implementation-notes.md).

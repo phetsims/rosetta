@@ -787,10 +787,10 @@ module.exports.triggerBuild = async function( request, response ) {
         stringFileObject = await getJsonObject( STRING_FILE_URL, {}, /^text\/plain/ );
       }
       catch( error ) {
-        winston.error( `Unable to get string file from Babel. ${error.message}` );
-        const message = 'Unable to get string file from Babel.';
+        const errorMessage = `Unable to get string file from Babel. ${error.message}`;
+        winston.error( errorMessage );
         const errorDetails = `Here's where you're trying to get the string file: ${STRING_FILE_URL}. Check this and make sure it's correct.`;
-        renderErrorPage( request, response, message, errorDetails );
+        renderErrorPage( request, response, errorMessage, errorDetails );
         return;
       }
       winston.info( 'String file object successfully retrieved.' );

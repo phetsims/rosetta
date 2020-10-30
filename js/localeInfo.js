@@ -3,20 +3,21 @@
 /**
  * A singleton object that contains information about the locales into which sims can be translated.
  *
- * @author John Blanco
- * @author Michael Kauzmann
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Michael Kauzmann (PhET Interactive Simulations)
+ * @author Liam Mulhall (PhET Interactive Simulations)
  */
 
 'use strict';
 
-// Modules
-const _ = require( 'lodash' ); // eslint-disable-line
-const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
+// modules
+const getJsonObject = require( './getJsonObject' );
 const RosettaConstants = require( './RosettaConstants' );
 const winston = require( 'winston' );
 
-// Constants
-const CACHED_DATA_VALID_TIME = 86400; // in seconds
+// constants
+const CACHED_DATA_VALID_TIME = 86400; // This is in seconds.
+const GITHUB_RAW_FILE_URL_BASE = RosettaConstants.GITHUB_RAW_FILE_URL_BASE;
 
 // timestamp when the sim info was last updated, used to determine whether to use cached data
 let timeOfLastUpdate = 0;
@@ -27,56 +28,58 @@ let localeInfoObject = {};
 // locale info in an array, sorted by locale name
 let sortedLocaleInfoArray = [];
 
-// outstanding promise for getting locale info file, used to avoid creating duplicate requests if once is already in progress
+// outstanding promise for getting locale info file, used to avoid creating duplicate requests if one is already in progress
 let inProgressFileRetrievalPromise = null;
 
-// function that updates the local copy of the sim info by retrieving and interpreting file from GitHub
+// Updates the local copy of the locale info by retrieving and interpreting file from GitHub.
 async function updateLocaleInfo() {
-  const urlOfLocalInfoFile = RosettaConstants.GITHUB_RAW_FILE_URL_BASE + '/phetsims/chipper/master/data/localeInfo.json';
 
-  winston.info( 'requesting locale info file from GitHub, URL = ' + urlOfLocalInfoFile );
+  // Set boolean for whether localeInfoObject has cache.
+  const localeInfoObjectHasCache = Object.keys( localeInfoObject ).length === 0 ? false : true;
 
-  const response = await nodeFetch( urlOfLocalInfoFile );
-
-  // handle the response
-  if ( response.status === 200 ) {
-
-    // The file was obtained successfully.  Interpret the contents.
-    localeInfoObject = JSON.parse( await response.text() );
-
-    // update the sorted locale info array
-    sortedLocaleInfoArray = [];
-    for ( const locale in localeInfoObject ) {
-      if ( locale !== 'en' && localeInfoObject.hasOwnProperty( locale ) ) {
-        sortedLocaleInfoArray.push( {
-          code: locale,
-          name: localeInfoObject[ locale ].name,
-          localizedName: localeInfoObject[ locale ].localizedName,
-          direction: localeInfoObject[ locale ].direction
-        } );
-      }
-    }
-    sortedLocaleInfoArray.sort( function( a, b ) {
-      if ( a.name > b.name ) {
-        return 1;
-      }
-      if ( a.name < b.name ) {
-        return -1;
-      }
-      return 0;
-    } );
-
-    timeOfLastUpdate = Date.now();
+  // Get the locale info object from GitHub.
+  const localeInfoUrl = `${GITHUB_RAW_FILE_URL_BASE}/phetsims/chipper/master/data/localeInfo.json`;
+  winston.info( `Requesting locale info file from GitHub. URL: ${localeInfoUrl}` );
+  try {
+    localeInfoObject = await getJsonObject( localeInfoUrl, {}, /^text\/plain/ );
   }
-
-  else {
-    if ( _.keys( localeInfoObject ).length === 0 ) {
-      winston.error( 'unable to retrieve locale info, there is no cache to fall back to, response.status = ' + response.status );
+  catch( error ) {
+    if ( localeInfoObjectHasCache ) {
+      const errorMessage = `Unable to get localeInfoObject; using cache. ${error.message}`;
+      winston.error( errorMessage );
+      throw new Error( errorMessage );
     }
     else {
-      winston.error( 'unable to retrieve locale info, using cache, response.status = ' + response.status );
+      const errorMessage = `Unable to get localeInfoObject; no cache to fall back to. ${error.message}`;
+      winston.error( errorMessage );
+      throw new Error( errorMessage );
     }
   }
+
+  // Make sure sortedLocaleInfoArray is empty, then add locales to the array.
+  sortedLocaleInfoArray = [];
+  for ( const locale in localeInfoObject ) {
+    if ( locale !== 'en' && localeInfoObject.hasOwnProperty( locale ) ) {
+      sortedLocaleInfoArray.push( {
+        code: locale,
+        name: localeInfoObject[ locale ].name,
+        localizedName: localeInfoObject[ locale ].localizedName,
+        direction: localeInfoObject[ locale ].direction
+      } );
+    }
+  }
+
+  // Sort the locales by locale name (not locale code), e.g. sort by Slovak not sk, and set time of last update to now.
+  sortedLocaleInfoArray.sort( ( localeA, localeB ) => {
+    if ( localeA.name < localeB.name ) {
+      return -1;
+    }
+    if ( localeA.name > localeB.name ) {
+      return 1;
+    }
+    return 0;
+  } );
+  timeOfLastUpdate = Date.now();
 }
 
 /**
