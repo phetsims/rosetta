@@ -217,7 +217,7 @@ try {
   const thing = await someFunction();
 }
 catch( error ) {
-  const errorMessage = `Unable to get thing. ${error.message}`
+  const errorMessage = `Unable to get thing. ${error.message}`;
   winston.error( errorMessage );
   throw new Error( errorMessage );
 }

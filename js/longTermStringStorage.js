@@ -18,6 +18,7 @@
 // modules
 const _ = require( 'lodash' ); // eslint-disable-line
 const assert = require( 'assert' );
+const getJsonObject = require( './getJsonObject' );
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const octonode = require( 'octonode' );
 const Queue = require( 'promise-queue' ); // eslint-disable-line
@@ -52,31 +53,23 @@ const promiseQueue = new Queue( 1, 1000 );
  */
 async function getTranslatedStrings( simOrLibName, locale ) {
 
-  // parameter checking
-  assert( locale !== 'en', 'this function should not be used for retrieving English strings' );
+  // We don't want non-English locales in this function!
+  assert( locale !== 'en', 'This function should not be used for retrieving English strings' );
 
-  const rawStringFileURL = BASE_URL_FOR_TRANSLATED_STRINGS + simOrLibName + '/' + simOrLibName + '-strings_' + locale + '.json';
-  winston.info( 'requesting raw file from GitHub, URL = ' + rawStringFileURL );
+  // Form the URL and let user know what we're doing.
+  const rawStringFileUrl = `${BASE_URL_FOR_TRANSLATED_STRINGS}${simOrLibName}/${simOrLibName}-strings_${locale}.json`;
+  winston.info( `Requesting raw file from GitHub. URL: ${rawStringFileUrl}` );
 
-  // get the file from GitHub
-  // TODO: Try enabling compression, see https://github.com/phetsims/rosetta/issues/220
-  const response = await nodeFetch( rawStringFileURL, { compress: false } );
-
-  // handle the response
-  if ( response.status === 200 ) {
-
-    // the file was obtained successfully
-    winston.debug( 'successfully retrieved raw file ' + rawStringFileURL );
-    return response.json();
+  // Get the translated strings file from GitHub.
+  try {
+    const translatedStringsJsonObject = getJsonObject( rawStringFileUrl, {}, /^text\/plain/ );
+    winston.debug( 'Got the translated strings!' );
+    return translatedStringsJsonObject;
   }
-  else if ( response.status === 404 ) {
-
-    // This is okay, it just means that no translation exists yet. Return an empty object.
-    winston.debug( 'no string file found for translation, returning empty object, filename = ' + rawStringFileURL );
-    return Promise.resolve( {} );
-  }
-  else {
-    return Promise.reject( new Error( 'error getting strings (response.status = ' + response.status ) + ')' );
+  catch( error ) {
+    const errorMessage = `Unable to get the translated strings JSON object. ${error.message}`;
+    winston.error( errorMessage );
+    throw new Error( errorMessage );
   }
 }
 
