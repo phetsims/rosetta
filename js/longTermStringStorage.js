@@ -10,7 +10,8 @@
  * generic API so that if we ever decide to use something else as the long-term storage medium for strings, this object
  * could be rewritten with minimal impact on the client code. That's the idea anyway.
  *
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Liam Mulhall (PhET Interactive Simulations)
  */
 
 'use strict';
@@ -19,7 +20,6 @@
 const _ = require( 'lodash' ); // eslint-disable-line
 const assert = require( 'assert' );
 const getJsonObject = require( './getJsonObject' );
-const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const octonode = require( 'octonode' );
 const Queue = require( 'promise-queue' ); // eslint-disable-line
 const RosettaConstants = require( './RosettaConstants' );
@@ -29,6 +29,7 @@ const winston = require( 'winston' );
 const CONFIG = global.config;
 const BABEL_BRANCH = global.config.babelBranch || 'master';
 const BASE_URL_FOR_TRANSLATED_STRINGS = RosettaConstants.GITHUB_RAW_FILE_URL_BASE + '/phetsims/babel/' + BABEL_BRANCH + '/';
+const GITHUB_RAW_FILE_URL_BASE = RosettaConstants.GITHUB_RAW_FILE_URL_BASE;
 
 // for debug purposes, it is possible to set up the config file such that strings are not actually committed
 const PERFORM_STRING_COMMITS = CONFIG.performStringCommits;
@@ -57,12 +58,13 @@ async function getTranslatedStrings( simOrLibName, locale ) {
   assert( locale !== 'en', 'This function should not be used for retrieving English strings' );
 
   // Form the URL and let user know what we're doing.
-  const rawStringFileUrl = `${BASE_URL_FOR_TRANSLATED_STRINGS}${simOrLibName}/${simOrLibName}-strings_${locale}.json`;
-  winston.info( `Requesting raw file from GitHub. URL: ${rawStringFileUrl}` );
+  const translatedStringsFileUrl = `${BASE_URL_FOR_TRANSLATED_STRINGS}${simOrLibName}/${simOrLibName}-strings_${locale}.json`;
+  winston.info( `Requesting translated strings from GitHub. URL: ${translatedStringsFileUrl}` );
 
   // Get the translated strings file from GitHub.
+  // TODO: Try enabling compression. See https://github.com/phetsims/rosetta/issues/220.
   try {
-    const translatedStringsJsonObject = getJsonObject( rawStringFileUrl, {}, /^text\/plain/ );
+    const translatedStringsJsonObject = getJsonObject( translatedStringsFileUrl, {}, /^text\/plain/ );
     winston.debug( 'Got the translated strings!' );
     return translatedStringsJsonObject;
   }
@@ -81,27 +83,21 @@ async function getTranslatedStrings( simOrLibName, locale ) {
  */
 async function getEnglishStrings( simOrLibName, shaOrBranch = 'master' ) {
 
-  const rawStringFileURL = RosettaConstants.GITHUB_RAW_FILE_URL_BASE + '/phetsims/' + simOrLibName + '/' +
-                           shaOrBranch + '/' + simOrLibName + '-strings_en.json';
-  winston.info( 'requesting English strings file from GitHub, URL = ' + rawStringFileURL );
+  // Form the URL and let user know what we're doing.
+  const englishStringsFileUrl = `${GITHUB_RAW_FILE_URL_BASE}/phetsims/${simOrLibName}/${shaOrBranch}/${simOrLibName}-strings_en.json`;
+  winston.info( `Requesting English strings file from GitHub. URL: ${englishStringsFileUrl}` );
 
-  // get the file from GitHub
-  // TODO: Try enabling compression, see https://github.com/phetsims/rosetta/issues/220
-  const response = await nodeFetch( rawStringFileURL, { compress: false } );
-
-  // handle the response
-  if ( response.status === 200 ) {
-
-    // the file was obtained successfully
-    winston.debug( 'successfully retrieved raw file ' + rawStringFileURL );
-    return response.json();
+  // Get the English strings file from GitHub.
+  // TODO: Try enabling compression. See https://github.com/phetsims/rosetta/issues/220.
+  try {
+    const englishStringsJsonObject = getJsonObject( englishStringsFileUrl, {}, /^text\/plain/ );
+    winston.debug( 'Got the English strings!' );
+    return englishStringsJsonObject;
   }
-  else if ( response.status === 404 ) {
-    winston.debug( 'error retrieving raw file ' + rawStringFileURL );
-    return Promise.reject( new Error( 'file not found (response.status = ' + response.status ) + ')' );
-  }
-  else {
-    return Promise.reject( new Error( 'error getting strings (response.status = ' + response.status ) + ')' );
+  catch( error ) {
+    const errorMessage = `Unable to get the English strings JSON object. ${error.message}`;
+    winston.error( errorMessage );
+    throw new Error( errorMessage );
   }
 }
 
