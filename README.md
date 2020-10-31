@@ -164,12 +164,14 @@ The Rosetta uses syslog to save output to the Winston log. You can view the logs
 
 ### Code Style
 
-1. If you're using the JetBrains IntelliJ IDEA IDE, you should use the
-`phetsims/phet-info/ide/idea/phet-idea-codestyle.xml` file. [This page](https://www.jetbrains.com/help/idea/configuring-code-style.html)
-has info on how to set up the PhET code style with IntelliJ.
-2. We like to follow the conventions outlined in [Idomatic.js](https://github.com/rwaldron/idiomatic.js/).
-3. We also have our own [coding conventions](https://github.com/phetsims/phet-info/blob/master/checklists/code_review_checklist.md#coding-conventions).
-4. Each file should have a copyright and a JSDoc-style file description with the author(s) at the top:
+The Rosetta code style checklist is a Google Sheet. You can find it [here](https://docs.google.com/spreadsheets/d/16WazQ7EIH_78g122xbZeKoi7yIvEuL2DCj0rLMAGy2E/edit?usp=sharing).
+Each file in Rosetta has a checklist tab in the spreadsheet. Each checklist item gets a rating of 'good', 'in progress',
+or 'bad'. If the item is 'in progress', you must provide a link to a GitHub issue.
+
+These are notes about the Rosetta code style that we couldn't fit into the spreadsheet.
+
+#### How the JSDoc File Summary Should Look
+
 ```
 // Copyright 20xx-20yy, University of Colorado Boulder
 
@@ -180,9 +182,10 @@ has info on how to set up the PhET code style with IntelliJ.
  * @author Firstname Lastname (PhET Interactive Simulations)
  */
 ```
-5. We like to `'use strict';`.
-6. List your `// modules` and `// order-dependent modules`.
-7. List your (symbolic) `// constants`. These constants should never change. They are things like numbers and strings.
+
+#### A Note on Constants
+
+Symbolic constants should never change. They are things like numbers and strings.
 They should be `C_STYLE_CONSTANT_CASE`.
   * It is possible to have constants in the global scope that are regular `camelCase`. An
   example can be found in `js/simData.js`. It is a variable that needs to be populated. It's never reassigned.
@@ -190,7 +193,9 @@ They should be `C_STYLE_CONSTANT_CASE`.
   // Populated by obtaining metadata from the PhET website. Used as a cache. Updated when needed.
   const simInfoObject = {};
   ```
-8. For each function in the file, there needs to be a JSDoc-style description above it:
+
+#### How JSDoc Function Descriptions Should Look Like
+
 ```
 /**
  * Describe the function using a verb at the beginning of the sentence. This should be a complete sentence. There
@@ -201,17 +206,9 @@ They should be `C_STYLE_CONSTANT_CASE`.
  * @returns {type} returnVariableName - concise return variable description
  */
 ```
-9. Regular comments in the code should be complete sentences that describe code that isn't sufficiently self-describing
-or complete sentences that explain why the code is the way it is. Not having a comment is preferable to having a
-cryptic or potentially stale comment.
-10. All TODO comments need to have a link to an issue.
-11. Log messages should have proper capitalization, but there shouldn't be a period at the end of log messages because
-log messages and error messages sometimes insert a period.
-12. Function names and variable names shouldn't have quotes around them in comments or log messages.
-13. If you ever run into a situation where you're wondering what to name a variable that has a common acronym in it,
-just use regular `camelCase`. For example, prefer `myJsonObject` to `myJSONObject`. Also, prefer `myUserId` to
-`myUserID`. It's kind of ugly this way, but it's a bit easier to read.
-14. Follow this pattern for error messages:
+
+#### Error Handling Pattern
+
 ```
 try {
   const thing = await someFunction();
