@@ -168,7 +168,7 @@ The Rosetta code style checklist is a Google Sheet. You can find it [here](https
 Each file in Rosetta has a checklist tab in the spreadsheet. Each checklist item gets a rating of 'good', 'in progress',
 or 'bad'. If the item is 'in progress', you must provide a link to a GitHub issue.
 
-These are notes about the Rosetta code style that we couldn't fit into the spreadsheet.
+The following are notes about the Rosetta code style that we couldn't fit into the spreadsheet.
 
 #### How the JSDoc File Summary Should Look
 
