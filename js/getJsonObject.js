@@ -14,8 +14,8 @@ const getResource = require( './getResource' );
 const winston = require( 'winston' );
 
 /**
- * This function accepts a URL, an options object, and a regular expression for the expected content type. It should
- * return a promise to return a JSON object.
+ * This function first performs a get request using the getResource.js file. It then parses JSON and returns a JSON
+ * object.
  *
  * @param {string} url - the location of the JSON object you want to get
  * @param {Object} [options] - the object that the built-in Node HTTP and HTTPS requests accept

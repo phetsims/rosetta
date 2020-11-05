@@ -14,7 +14,7 @@ const https = require( 'https' );
 const winston = require( 'winston' );
 
 /**
- * This function performs a simple get request using the Node's built-in HTTPS request.
+ * This function performs a simple get request using Node's built-in HTTPS request.
  *
  * @param {string} url - the location of the web resource you want to get
  * @param {Object} [options] - the object that the built-in Node HTTP and HTTPS requests accept
@@ -35,7 +35,7 @@ async function getResource( url, options, expectedContentType ) {
 
       // Log incorrect return codes or incorrect content type.
       if ( statusCode !== 200 ) {
-        const badStatusCodeError = new Error( `HTTPS request failed. Status code: ${statusCode}` );
+        const badStatusCodeError = new Error( `HTTPS get request failed. Status code: ${statusCode}` );
         winston.error( badStatusCodeError.message );
 
         // If page not found, log a message about it. It might be that the URL is bad.
@@ -60,7 +60,7 @@ async function getResource( url, options, expectedContentType ) {
         rawData += chunk;
       } );
 
-      // Parse and resolve the JSON object.
+      // Try to resolve the data.
       response.on( 'end', () => {
         try {
           resolve( rawData );

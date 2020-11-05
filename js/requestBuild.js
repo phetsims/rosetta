@@ -3,14 +3,15 @@
 /**
  * Submits a request to the build server to build and deploy a translation.
  *
- * @author John Blanco
- * @author Liam Mulhall
+ * @author John Blanco (PhET Interactive Simulations)
+ * @author Liam Mulhall (PhET Interactive Simulations)
  */
 
 'use strict';
 
 // modules
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
+const postResource = require( './postResource' );
 const simData = require( './simData' );
 const winston = require( 'winston' );
 
@@ -53,8 +54,10 @@ async function requestBuild( simName, locale, userID ) {
 
   winston.info( `Initiating build request for sim: ${simName}, locale: ${locale}.` );
   const latestVersionOfSim = await simData.getLatestSimVersion( simName );
+
   winston.info( `Latest version of the sim: ${latestVersionOfSim}.` );
   const dependencies = await getDependencies( simName, latestVersionOfSim );
+
   const requestObject = {
     api: '2.0',
     dependencies: dependencies,
@@ -70,30 +73,32 @@ async function requestBuild( simName, locale, userID ) {
   // If the sendBuildRequests flag is set to true in the user's rosettaConfig.json, send it! Otherwise, don't send the
   // build request. Do, however, log the theoretical build request for debugging purposes.
   if ( SEND_BUILD_REQUESTS ) {
-    const url = PRODUCTION_SERVER_URL + '/deploy-html-simulation';
+
+    // Tell the user where we're sending the build request.
+    const url = `${PRODUCTION_SERVER_URL}/deploy-html-simulation`;
     winston.info( `Sending build request to server. URL: ${url}` );
 
-    // Send off the request and return the resulting promise.
-    const buildRequestResponse = await nodeFetch( url, {
+    // Set up the options object for the build request. As you can see, it has the URL and the path.
+    const options = {
+      hostname: PRODUCTION_SERVER_URL,
+      port: 443,
+      path: '/deploy-html-simulation',
       method: 'POST',
       headers: {
+        'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify( requestObject )
-    } );
-    if ( buildRequestResponse.status === 200 || buildRequestResponse.status === 202 ) {
-      winston.info( `Build request accepted. Status: ${buildRequestResponse.status}` );
-      return true;
+        'Content-Length': requestObject.length
+      }
+    };
+
+    // Try to send the build request.
+    try {
+      await postResource( requestObject, options );
     }
-    else if ( buildRequestResponse.status === 400 ) {
-      throw new Error( `Build request unsuccessful. Probably due to missing info. Status: ${buildRequestResponse.status}` );
-    }
-    else if ( buildRequestResponse.status === 401 ) {
-      throw new Error( `Build request unsuccessful. Probably due to bad authorization code. Status: ${buildRequestResponse.status}` );
-    }
-    else {
-      throw new Error( `Build request unsuccessful. Status: ${buildRequestResponse.status}` );
+    catch( error ) {
+      const errorMessage = `Build request unsuccessful. ${error.message}`;
+      winston.error( errorMessage );
+      throw new Error( errorMessage );
     }
   }
   else {
