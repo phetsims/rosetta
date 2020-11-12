@@ -19,7 +19,7 @@
 // modules
 const _ = require( 'lodash' ); // eslint-disable-line
 const assert = require( 'assert' );
-const getJsonObject = require( './getJsonObject' );
+const axios = require( 'axios' );
 const octonode = require( 'octonode' );
 const Queue = require( 'promise-queue' ); // eslint-disable-line
 const RosettaConstants = require( './RosettaConstants' );
@@ -64,8 +64,8 @@ async function getTranslatedStrings( simOrLibName, locale ) {
   // Get the translated strings file from GitHub.
   // TODO: Try enabling compression. See https://github.com/phetsims/rosetta/issues/220.
   try {
-    const translatedStringsJsonObject = getJsonObject( translatedStringsFileUrl, {}, /^text\/plain/ );
-    winston.debug( 'Got the translated strings!' );
+    const translatedStrings = await axios.get( translatedStringsFileUrl );
+    const translatedStringsJsonObject = translatedStrings.data;
     return translatedStringsJsonObject;
   }
   catch( error ) {
@@ -90,8 +90,9 @@ async function getEnglishStrings( simOrLibName, shaOrBranch = 'master' ) {
   // Get the English strings file from GitHub.
   // TODO: Try enabling compression. See https://github.com/phetsims/rosetta/issues/220.
   try {
-    const englishStringsJsonObject = getJsonObject( englishStringsFileUrl, {}, /^text\/plain/ );
+    const englishStrings = await axios.get( englishStringsFileUrl );
     winston.debug( 'Got the English strings!' );
+    const englishStringsJsonObject = englishStrings.data;
     return englishStringsJsonObject;
   }
   catch( error ) {
