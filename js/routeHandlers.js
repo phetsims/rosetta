@@ -13,7 +13,6 @@
 // Node modules
 const _ = require( 'lodash' ); // eslint-disable-line
 const axios = require( 'axios' );
-const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const https = require( 'https' );
 const longTermStringStorage = require( './longTermStringStorage' );
 const winston = require( 'winston' );
