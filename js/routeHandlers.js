@@ -12,6 +12,7 @@
 
 // Node modules
 const _ = require( 'lodash' ); // eslint-disable-line
+const axios = require( 'axios' );
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const https = require( 'https' );
 const longTermStringStorage = require( './longTermStringStorage' );
@@ -264,19 +265,16 @@ module.exports.renderTranslationPage = async function( request, response ) {
   const simUrl = await simData.getLiveSimUrl( simName );
   winston.debug( `Sending request to ${simUrl}.` );
 
-  // Get the HTML file that represents the sim.
-  const simFetchResponse = await nodeFetch( simUrl );
-
-  if ( simFetchResponse.error || simFetchResponse.status !== 200 ) {
-    winston.error( `Failed to retrieve live sim. Error: ${simFetchResponse.error}.` );
-
-    // This will display a simple error page to the user.
-    response.send( 'Error: Sim data not found.' );
-    return;
+  let simHtml = '';
+  try {
+    const simHtmlResponse = await axios.get( simUrl );
+    simHtml = simHtmlResponse.data;
   }
-
-  // Extract the HTML for the sim.
-  const simHtml = await simFetchResponse.text();
+  catch( error ) {
+    const errorMessage = `Unable to get sim HTML for ${simName}. ${error.message}`;
+    winston.error( errorMessage );
+    throw new Error( errorMessage );
+  }
 
   winston.debug( `Request for ${simUrl} returned successfully.` );
 
@@ -294,8 +292,16 @@ module.exports.renderTranslationPage = async function( request, response ) {
 
   // Initialize the sims array from the active-sims file in the phetsims/chipper repository.
   winston.debug( 'Sending request to ' + GITHUB_RAW_FILE_URL_BASE + activeSimsPath + '.' );
-  const activeSimsFileFetchResponse = await nodeFetch( GITHUB_RAW_FILE_URL_BASE + activeSimsPath );
-  const activeSimsFileContents = await activeSimsFileFetchResponse.text();
+  let activeSimsFileContents = '';
+  try {
+    const activeSimsFileFetchResponse = await axios.get( GITHUB_RAW_FILE_URL_BASE + activeSimsPath );
+    activeSimsFileContents = activeSimsFileFetchResponse.data;
+  }
+  catch( error ) {
+    const errorMessage = `Unable to get active sims file for ${simName}. ${error.message}`;
+    winston.error( errorMessage );
+    throw new Error( errorMessage );
+  }
   const activeSims = activeSimsFileContents.toString().split( '\n' );
 
   const englishStrings = {};
