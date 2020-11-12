@@ -11,7 +11,7 @@
 'use strict';
 
 // modules
-const getJsonObject = require( './getJsonObject' );
+const axios = require( 'axios' );
 const RosettaConstants = require( './RosettaConstants' );
 const winston = require( 'winston' );
 
@@ -41,7 +41,8 @@ async function updateLocaleInfo() {
   const localeInfoUrl = `${GITHUB_RAW_FILE_URL_BASE}/phetsims/chipper/master/data/localeInfo.json`;
   winston.info( `Requesting locale info file from GitHub. URL: ${localeInfoUrl}` );
   try {
-    localeInfoObject = await getJsonObject( localeInfoUrl, {}, /^text\/plain/ );
+    const localeInfo = await axios.get( localeInfoUrl );
+    localeInfoObject = localeInfo.data;
   }
   catch( error ) {
     if ( localeInfoObjectHasCache ) {

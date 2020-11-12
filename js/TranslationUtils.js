@@ -12,8 +12,8 @@
 
 // Node Modules
 const _ = require( 'lodash' ); // eslint-disable-line
+const axios = require( 'axios' );
 const email = require( 'emailjs/email' );
-const getResource = require( './getResource' );
 const simData = require( './simData' );
 const winston = require( 'winston' );
 
@@ -203,8 +203,8 @@ async function getLatestSimHtml( simName ) {
 
   // Get the sim's HTML.
   try {
-    const simHtml = await getResource( simUrl, {}, /^text\/html/ );
-    return simHtml;
+    const simHtml = await axios.get( simUrl );
+    return simHtml.data;
   }
   catch( error ) {
     const errorMessage = `Unable to get sim HTML. ${error.message}`;
