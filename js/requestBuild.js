@@ -10,8 +10,8 @@
 'use strict';
 
 // modules
+const axios = require( 'axios' );
 const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
-const postResource = require( './postResource' );
 const simData = require( './simData' );
 const winston = require( 'winston' );
 
@@ -33,14 +33,15 @@ async function getDependencies( simName, version ) {
 
   // Get the dependencies.
   winston.info( `Fetching dependencies from ${url}` );
-  const response = await nodeFetch( url );
-
-  // Return the results or throw an error.
-  if ( response.status === 200 ) {
-    return await response.text();
+  try {
+    const dependencies = await axios.get( url );
+    const dependenciesJsonObject = dependencies.data;
+    return dependenciesJsonObject;
   }
-  else {
-    throw new Error( `Unable to get dependencies for sim: ${simName}, version: ${version}. Status: ${response.status}` );
+  catch( error ) {
+    const errorMessage = `Unable to get dependencies for sim: ${simName}, version: ${version}. ${error.message}`;
+    winston.error( errorMessage );
+    throw new Error( errorMessage );
   }
 }
 
@@ -78,22 +79,13 @@ async function requestBuild( simName, locale, userID ) {
     const url = `${PRODUCTION_SERVER_URL}/deploy-html-simulation`;
     winston.info( `Sending build request to server. URL: ${url}` );
 
-    // Set up the options object for the build request. As you can see, it has the URL and the path.
-    const options = {
-      hostname: PRODUCTION_SERVER_URL,
-      port: 443,
-      path: '/deploy-html-simulation',
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Content-Length': requestObject.length
-      }
-    };
-
     // Try to send the build request.
     try {
-      await postResource( requestObject, options );
+      await axios.post( url, {
+        method: 'post',
+        url: url,
+        data: requestObject
+      } );
     }
     catch( error ) {
       const errorMessage = `Build request unsuccessful. ${error.message}`;
