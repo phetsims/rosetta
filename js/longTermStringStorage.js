@@ -35,10 +35,7 @@ const GITHUB_RAW_FILE_URL_BASE = RosettaConstants.GITHUB_RAW_FILE_URL_BASE;
 const PERFORM_STRING_COMMITS = CONFIG.performStringCommits;
 
 // create a handle to GitHub that will be used for all interactions
-const ghClient = octonode.client( {
-  username: CONFIG.githubUsername,
-  password: CONFIG.githubPassword
-} );
+const ghClient = octonode.client( CONFIG.githubPersonalAccessToken );
 
 // create a handle to the repo where strings are stored
 const stringStorageRepo = ghClient.repo( 'phetsims/babel' );

@@ -74,9 +74,8 @@ function readAndParseConfig( configPathWithFilename ) {
  */
 function assertConfigValuesExist( config, configPathWithFilename ) {
 
-  // The GitHub credentials for phet-dev must exist.
-  assert( config.githubUsername, `githubUsername is missing from ${configPathWithFilename}` );
-  assert( config.githubPassword, `githubPassword is missing from ${configPathWithFilename}` );
+  // The GitHub personal access token for the PhET GitHub machine account (phet-dev) must exist.
+  assert( config.githubPersonalAccessToken, `githubPersonalAccessToken is missing from ${configPathWithFilename}` );
 
   // The credentials for build requests and metadata retrieval must exist.
   assert(

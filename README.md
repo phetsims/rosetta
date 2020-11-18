@@ -58,8 +58,7 @@ This guide was made by @muedli on 2020-05-15.
 13. In `.phet/`, make `rosetta-config.json` with the following:
 ```
 {
-  "githubUsername": "phet-dev",
-  "githubPassword": "{phet-dev-password-here}",
+  "githubPersonalAccessToken": {personal-access-token},
   "buildServerAuthorizationCode": "{code-here}",
   "serverToken": "{token-here}",
   "productionServerURL": "https://ox-dev.colorado.edu",
@@ -103,8 +102,7 @@ This guide was made by @muedli on 2020-05-15.
 13. In `.phet/`, make rosetta-config.json with the following:
 ```
 {
-  "githubUsername": "phet-dev",
-  "githubPassword": "{phet-dev-password-here}",
+  "githubPersonalAccessToken": {personal-access-token},
   "buildServerAuthorizationCode": "{code-here}",
   "serverToken": "{token-here}",
   "productionServerURL": "https://ox-dev.colorado.edu",
