@@ -1,4 +1,21 @@
-/* Copyright 2002-2015, University of Colorado Boulder */
+/* Copyright 2020, University of Colorado Boulder */
+
+/*
+ * Provides the main styles for Rosetta. The styles are organized in sections of tag (HTML tag, e.g. body), class
+ * (period - .), ID (pound sign - #), and attributes (square brackets - []). Within each section, the styles are
+ * alphabetized. We use kebab-case for class and camelCase for ID.
+ *
+ * @author Liam Mulhall
+ */
+
+/* Define universal styles. */
+
+* {
+  font-family: Arial, sans-serif;
+  text-align: left;
+}
+
+/* Define styles for tags. Tags are in alphabetical order. */
 
 body {
   padding-top: 0;
@@ -6,58 +23,32 @@ body {
   background-color: #ffffff;
 }
 
-.div {
+h1 {
   display: block;
+  font-size: 2em;
+  -webkit-margin-before: 0.67em;
+  -webkit-margin-after: 0.67em;
+  -webkit-margin-start: 0px;
+  -webkit-margin-end: 0px;
+  font-weight: bold;
 }
 
-#page-header {
-  background-color: #2a326a;
-  height: 127px;
+img.warning {
+  width: 28px;
+  vertical-align: bottom
 }
 
-#page-header-container {
-  height: 127px;
-  margin: 0 auto;
-  width: 765px;
+img.warning:hover {
+  cursor: pointer;
+}
+
+/* Define styles for classes. Classes are in alphabetical order. */
+
+.bottom-btns {
   position: relative;
-}
-
-.header-logo-image {
-  position: relative;
-  top: 8px;
-  display: inline-block;
-}
-
-#page-header-sims-served {
-  position: absolute;
-  left: 250px;
-  top: 26px;
-  font-size: 13px;
-  color: #fff;
-  font-style: italic;
-  font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-}
-
-#page-header-cu {
-  position: absolute;
-  right: 19px;
-  top: 10px;
-  border: 0;
-}
-
-#page-header-user {
-  color: white;
-  display: table;
-  margin: 0 auto;
-}
-
-.selector {
-  margin-left: 20px;
-  font-size: 17px;
-}
-
-#goButton {
-  margin-left: 100px;
+  top: 20px;
+  margin-left: 5em;
+  margin-bottom: 5em;
 }
 
 .btn {
@@ -76,42 +67,6 @@ body {
   background: #6D77BD;
 }
 
-.translate-btn {
-  position: relative;
-  float: left;
-  margin-left: 5px;
-}
-
-[class~=testButton] {
-  left: 100px;
-}
-
-[class~=saveButton] {
-  left: 200px;
-}
-
-[class~=submitButton] {
-  left: 300px;
-}
-
-h1 {
-  display: block;
-  font-size: 2em;
-  -webkit-margin-before: 0.67em;
-  -webkit-margin-after: 0.67em;
-  -webkit-margin-start: 0px;
-  -webkit-margin-end: 0px;
-  font-weight: bold;
-}
-
-* {
-  font-family: Arial, sans-serif;
-}
-
-* {
-  text-align: left;
-}
-
 .container {
   width: 70%;
   margin: 0 auto;
@@ -119,26 +74,33 @@ h1 {
   text-align: center;
 }
 
-.top-btns{
-  position: relative;
-  margin-left: 5em;
-  height: 32px;
+.div {
+  display: block;
 }
 
-.bottom-btns{
+.header-logo-image {
   position: relative;
-  top: 20px;
-  margin-left: 5em;
-  margin-bottom: 5em;
+  top: 8px;
+  display: inline-block;
 }
 
-.savedSpan{
+.highlight {
+  color: #0000ff;
+}
+
+.savedSpan {
   font-size: 15px;
   color: green;
   position: relative;
   left: 5.4em;
   bottom: .3em;
   visibility: hidden;
+}
+
+.save-btn, .submit-btn, .test-btn {
+  position: relative;
+  float: left;
+  margin-left: 5px;
 }
 
 .saving-gif {
@@ -150,28 +112,13 @@ h1 {
   height: 30px;
 }
 
-.validation-message {
-  color: red;
-  margin-top: 1em;
+.selector {
+  margin-left: 20px;
+  font-size: 17px;
 }
 
 .string-translation-table {
   border-collapse: collapse;
-}
-
-.string-translation-table td, th {
-  padding: 5px;
-  /*border-bottom: 1px solid gray;*/
-}
-
-.string-translation-table td:nth-child(1) {
-  font-size: 12px;
-  color: gray;
-  text-align: right;
-}
-
-.string-translation-table td:nth-child(2) {
-  max-width: 400px;
 }
 
 .string-translation-table div[contenteditable] {
@@ -183,15 +130,89 @@ h1 {
   min-height: 18px;
 }
 
-.highlight {
-  color: #0000ff;
+.string-translation-table td:nth-child(1) {
+  font-size: 12px;
+  color: gray;
+  text-align: right;
 }
 
-img.warning {
-  width: 28px;
-  vertical-align: bottom
+.string-translation-table td, th {
+  padding: 5px;
+  /*border-bottom: 1px solid gray;*/
 }
 
-img.warning:hover {
-  cursor: pointer;
+.string-translation-table td:nth-child(2) {
+  max-width: 400px;
+}
+
+.top-btns {
+  position: relative;
+  margin-left: 5em;
+  height: 32px;
+}
+
+.translate-btn {
+  position: relative;
+  float: left;
+  margin-left: 5px;
+}
+
+.validation-message {
+  color: red;
+  margin-top: 1em;
+}
+
+/* Define styles for ID's. ID's are in alphabetical order. */
+
+#goButton {
+  margin-left: 100px;
+}
+
+#page-header {
+  background-color: #2a326a;
+  height: 127px;
+}
+
+#page-header-container {
+  height: 127px;
+  margin: 0 auto;
+  width: 765px;
+  position: relative;
+}
+
+#page-header-cu {
+  position: absolute;
+  right: 19px;
+  top: 10px;
+  border: 0;
+}
+
+#page-header-sims-served {
+  position: absolute;
+  left: 250px;
+  top: 26px;
+  font-size: 13px;
+  color: #fff;
+  font-style: italic;
+  font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+}
+
+#page-header-user {
+  color: white;
+  display: table;
+  margin: 0 auto;
+}
+
+/* Define styles for attributes. Attributes are in alphabetical order. */
+
+[class~=testButton] {
+  left: 100px;
+}
+
+[class~=saveButton] {
+  left: 200px;
+}
+
+[class~=submitButton] {
+  left: 300px;
 }

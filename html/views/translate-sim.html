@@ -1,15 +1,21 @@
-<!-- Copyright 2002-2020, University of Colorado Boulder -->
+<!-- Copyright 2020, University of Colorado Boulder -->
 
 <div class="container">
+
+  <!-- Display title for translation utility. -->
   <h1>{{=it.title}}</h1>
 
-  <h4><a href="/translate/">Translate Another Simulation</a></h4>
+  <!-- Provide link back to translate page in case the translator wants to translate a different sim. -->
+  <h4><a href="/translate/">Translate a Different Simulation</a></h4>
 
+  <!-- Display the validation message. (This is hidden by default.) -->
   <div class="validation-message"></div>
+
+  <!-- Display the top button bar. -->
   <div class="top-btns">
-    <button type="button" class="btn translate-btn" id="testButtonTop">Test</button>
-    <button type="button" class="btn translate-btn" id="saveButtonTop" form="strings">Save</button>
-    <button type="submit" class="btn translate-btn" form="strings">Submit</button>
+    <button type="button" class="btn test-btn" id="testButtonTop">Test</button>
+    <button type="button" class="btn save-btn" id="saveButtonTop" form="strings">Save</button>
+    <button type="submit" class="btn submit-btn" form="strings">Submit</button>
     <a class="btn translate-btn" href="https://docs.google.com/document/d/18UHBP1O_es-YnGgWb9Ywvlv7OtWYbHpGxM4OVe6CAjU/edit#" target="_blank">
       Help <i class="fa fa-question-circle"></i>
     </a>
@@ -17,9 +23,10 @@
     <span class="savedSpan" id="savedTop"><br><br>Saved</span>
   </div>
 
+  <!-- Display form for translating a sim. -->
   <form name="form" id="strings" method="post">
 
-    <!-- strings for the sim -->
+    <!-- Display strings exclusive to the selected sim. -->
     <h2>{{=it.simTitle}} Strings</h2>
     <table class="string-translation-table">
       <tr>
@@ -39,7 +46,7 @@
       {{~}}
     </table>
 
-    <!-- strings for other sim repos from which the current sim draw strings -->
+    <!-- Display strings for other sim repos from which the current sim draws strings. -->
     {{? it.otherSimNames}}
       <h2>Shared Strings (will affect {{=it.otherSimNames}})</h2>
       <table class="string-translation-table">
@@ -61,9 +68,8 @@
       </table>
     {{?}}
 
+    <!-- Display strings from common code repos from which the selected sim draws strings. -->
     <h2>Common Strings (will affect multiple simulations)</h2>
-
-    <!-- strings from common code repos -->
     <table id="commonStringsTable" class="string-translation-table">
       <tr>
         <th><strong>String Key</strong></th>
@@ -82,17 +88,18 @@
       {{~}}
     </table>
 
-    <!-- unused previously translated strings, included here so that they don't get overwritten -->
+    <!-- Display unused, previously translated strings here here so that they don't get overwritten. -->
     {{~it.unusedTranslatedStringsArray :value:index}}
     <input type="hidden" name="{{=value.repo}} {{=value.key}}" value="{{=value.value}}">
     {{~}}
 
   </form>
 
+  <!-- Display the bottom button bar. -->
   <div class="bottom-btns">
-    <button type="button" class="btn translate-btn" id="testButtonBottom">Test</button>
-    <button type="button" class="btn translate-btn" id="saveButtonBottom" form="strings">Save</button>
-    <button type="submit" class="btn translate-btn" id="submitButtonBottom" form="strings">Submit</button>
+    <button type="button" class="btn test-btn" id="testButtonBottom">Test</button>
+    <button type="button" class="btn save-btn" id="saveButtonBottom" form="strings">Save</button>
+    <button type="submit" class="btn submit-btn" id="submitButtonBottom" form="strings">Submit</button>
     <a class="btn translate-btn" href="https://docs.google.com/document/d/18UHBP1O_es-YnGgWb9Ywvlv7OtWYbHpGxM4OVe6CAjU/edit#" target="_blank">
       Help <i class="fa fa-question-circle"></i>
     </a>
@@ -101,9 +108,16 @@
   </div>
   <div class="validation-message"></div>
 
-  <!-- data for sim url -->
-  <div id="simData" data-sim-url={{=it.simUrl}} data-sim-name={{=it.simName}} data-locale-name={{=it.localeName}}
-       data-trusted-translator={{=it.trustedTranslator}} data-direction={{=it.direction}}></div>
+  <!-- Set data for sim URL. -->
+  <div id="simData"
+       data-sim-url={{=it.simUrl}}
+       data-sim-name={{=it.simName}}
+       data-locale-name={{=it.localeName}}
+       data-trusted-translator={{=it.trustedTranslator}}
+       data-direction={{=it.direction}}>
+  </div>
 
+  <!-- Include the script that gives the HTML its functionality. -->
   <script type="text/javascript" src="/translate/js/translate-sim.js"></script>
-</div><!-- /.container -->
+
+</div>
