@@ -204,6 +204,7 @@ async function getLatestSimHtml( simName ) {
   // Get the sim's HTML.
   try {
     const simHtml = await axios.get( simUrl );
+    winston.debug( 'Got sim HTML.' );
     return simHtml.data;
   }
   catch( error ) {

@@ -19,7 +19,6 @@ const winston = require( 'winston' );
 const { Pool } = require( 'pg' ); // eslint-disable-line
 
 // server modules
-const getJsonObject = require( './getJsonObject' );
 const localeInfo = require( './localeInfo' );
 const RosettaConstants = require( './RosettaConstants' );
 const ServerTests = require( './ServerTests' );
@@ -268,6 +267,7 @@ module.exports.renderTranslationPage = async function( request, response ) {
   try {
     const simHtmlResponse = await axios.get( simUrl );
     simHtml = simHtmlResponse.data;
+    winston.debug( 'Successfully retrieved sim HTML.' );
   }
   catch( error ) {
     const errorMessage = `Unable to get sim HTML for ${simName}. ${error.message}`;
@@ -295,6 +295,7 @@ module.exports.renderTranslationPage = async function( request, response ) {
   try {
     const activeSimsFileFetchResponse = await axios.get( GITHUB_RAW_FILE_URL_BASE + activeSimsPath );
     activeSimsFileContents = activeSimsFileFetchResponse.data;
+    winston.debug( 'Got active sims.' );
   }
   catch( error ) {
     const errorMessage = `Unable to get active sims file for ${simName}. ${error.message}`;
@@ -789,7 +790,9 @@ module.exports.triggerBuild = async function( request, response ) {
       const STRING_FILE_URL = `${GITHUB_RAW_FILE_URL_BASE}/phetsims/babel/master/${simName}/${simName}-strings_${targetLocale}.json`;
       let stringFileObject = {};
       try {
-        stringFileObject = await getJsonObject( STRING_FILE_URL, {}, /^text\/plain/ );
+        stringFileObject = await axios.get( STRING_FILE_URL );
+        stringFileObject = stringFileObject.data;
+        winston.debug( 'Got string file.' );
       }
       catch( error ) {
         const errorMessage = `Unable to get string file from Babel. ${error.message}`;

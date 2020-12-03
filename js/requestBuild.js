@@ -11,7 +11,6 @@
 
 // modules
 const axios = require( 'axios' );
-const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
 const simData = require( './simData' );
 const winston = require( 'winston' );
 

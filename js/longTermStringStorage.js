@@ -59,10 +59,10 @@ async function getTranslatedStrings( simOrLibName, locale ) {
   winston.info( `Requesting translated strings from GitHub. URL: ${translatedStringsFileUrl}` );
 
   // Get the translated strings file from GitHub.
-  // TODO: Try enabling compression. See https://github.com/phetsims/rosetta/issues/220.
   try {
     const translatedStrings = await axios.get( translatedStringsFileUrl );
     const translatedStringsJsonObject = translatedStrings.data;
+    winston.debug( 'Got translated strings object.' );
     return translatedStringsJsonObject;
   }
   catch( error ) {

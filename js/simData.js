@@ -13,14 +13,17 @@
 
 // modules
 const _ = require( 'lodash' ); // eslint-disable-line
-const getJsonObject = require( './getJsonObject' );
+const axios = require( 'axios' );
 const winston = require( 'winston' );
 
 // constants
 // (METADATA_URL depends on PRODUCTION_SERVER_URL. Thus, this list is not in alphabetical order.)
 const CACHED_DATA_VALID_TIME = 1800; // This is 1.8 seconds in milliseconds.
 const METADATA_REQUEST_OPTIONS = {
-  auth: `token:${global.config.serverToken}`
+  auth: {
+    username: 'token',
+    password: global.config.serverToken
+  }
 };
 const PRODUCTION_SERVER_URL = global.config.productionServerURL;
 const METADATA_URL = PRODUCTION_SERVER_URL +
@@ -47,12 +50,14 @@ let inProgressMetadataPromise = null;
 async function updateSimInfo() {
 
   // Get metadata.
-  let simMetadata = null;
+  let simMetadata = {};
   try {
-    simMetadata = await getJsonObject( METADATA_URL, METADATA_REQUEST_OPTIONS, /^text\/html/ );
+    const simMetadataResponse = await axios.get( METADATA_URL, METADATA_REQUEST_OPTIONS );
+    simMetadata = simMetadataResponse.data;
+    winston.debug('Metadata successfully retrieved!');
   }
   catch( error ) {
-    const getSimMetadataError = new Error( `Unable to get sim metadata. ${error.message}` );
+    const getSimMetadataError = new Error( `Unable to get sim metadata. Error: ${error.message}` );
     winston.error( getSimMetadataError.message );
     throw getSimMetadataError;
   }
