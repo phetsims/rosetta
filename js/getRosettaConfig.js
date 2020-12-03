@@ -1,7 +1,7 @@
 // Copyright 2019-2020, University of Colorado Boulder
 
 /**
- * // TODO: Relocate code in this file that doesn't have to do with getting the Rosetta configuration file. See https://github.com/phetsims/rosetta/issues/190#issuecomment-682169944.
+ * TODO: Relocate code in this file that doesn't have to do with getting the Rosetta configuration file. See https://github.com/phetsims/rosetta/issues/190#issuecomment-682169944.
  * If Rosetta's configuration file exists, read it and parse it. Assert that necessary values exist. Set default values
  * if they haven't been set. Set variables used by the pg module (the short-term storage PostgreSQL database).
  * Finally, return the resulting configuration as an object.
@@ -13,14 +13,13 @@
 
 'use strict';
 
-// Modules
-const _ = require( 'lodash' ); // eslint-disable-line
+// modules
 const assert = require( 'assert' );
 const fs = require( 'fs' );
 const passwdUser = require( 'passwd-user' ); // eslint-disable-line require-statement-match
 const winston = require( 'winston' );
 
-// Constants
+// constants
 const UNIX_CONFIG_DIR = '/.phet';
 const WINDOWS_CONFIG_DIR = '\\.phet';
 const CONFIG_FILENAME = 'rosetta-config.json';
@@ -97,7 +96,7 @@ function assertConfigValuesExist( config, configPathWithFilename ) {
     `rosettaSessionSecret is missing from ${configPathWithFilename}. For local testing, simply supply a dummy string`
   );
 
-  // Babel has only two branches: master and tests.
+  // Babel should have only two branches: master and tests.
   assert(
     config.babelBranch === 'master' || config.babelBranch === 'tests',
     'babelBranch must be either master or tests'
@@ -107,7 +106,7 @@ function assertConfigValuesExist( config, configPathWithFilename ) {
 /**
  * Set default Rosetta configuration values if they haven't been set.
  *
- * @param {Object} config - the parsed JSON configuration for Rosetta
+ * @param {Object} config - the JSON object configuration for Rosetta
  */
 function setDefaultConfigValues( config ) {
 
@@ -165,24 +164,24 @@ function setPostgresVariables( config ) {
  */
 function getRosettaConfig() {
 
-  const configDirPath = getConfigDirPath();
-  const configPathWithFilename = configDirPath + CONFIG_FILENAME;
+  // Create a variable for the config directory path.
+  const CONFIG_DIR_PATH = getConfigDirPath();
+  const CONFIG_PATH_WITH_FILENAME = CONFIG_DIR_PATH + CONFIG_FILENAME;
 
+  // Log information about the platform and the config for the user.
   winston.info( `Your platform is ${process.platform}` );
-  winston.info( `Config should be ${configPathWithFilename}` );
+  winston.info( `Config should be ${CONFIG_PATH_WITH_FILENAME}` );
 
-  const config = readAndParseConfig( configPathWithFilename );
-
-  assertConfigValuesExist( config, configPathWithFilename );
-
+  // Set the config and make sure it has what Rosetta needs to function.
+  const config = readAndParseConfig( CONFIG_PATH_WITH_FILENAME );
+  assertConfigValuesExist( config, CONFIG_PATH_WITH_FILENAME );
   setDefaultConfigValues( config );
-
   setPostgresVariables( config );
 
+  // If the enabled flag is set to false, Rosetta is down. Otherwise, send the config.
   if ( !config.enabled ) {
     winston.warn( 'The translation utility is disabled, no interaction will be possible' );
   }
-
   return config;
 }
 
