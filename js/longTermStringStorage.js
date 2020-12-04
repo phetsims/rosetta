@@ -58,18 +58,18 @@ async function getTranslatedStrings( simOrLibName, locale ) {
   const translatedStringsFileUrl = `${BASE_URL_FOR_TRANSLATED_STRINGS}${simOrLibName}/${simOrLibName}-strings_${locale}.json`;
   winston.info( `Requesting translated strings from GitHub. URL: ${translatedStringsFileUrl}` );
 
+  let translatedStringsJsonObject = {};
+
   // Get the translated strings file from GitHub.
   try {
     const translatedStrings = await axios.get( translatedStringsFileUrl );
-    const translatedStringsJsonObject = translatedStrings.data;
+    translatedStringsJsonObject = translatedStrings.data;
     winston.debug( 'Got translated strings object.' );
-    return translatedStringsJsonObject;
   }
   catch( error ) {
     if ( error.response.status === 404 ) {
       winston.info( 'Requested strings file doesn\'t exist yet. Returning empty object.' );
-      const translatedStringsJsonObject = {};
-      return translatedStringsJsonObject;
+      translatedStringsJsonObject = {};
     }
     else {
       const errorMessage = `Unable to get the translated strings JSON object. ${error.message}`;
@@ -77,6 +77,8 @@ async function getTranslatedStrings( simOrLibName, locale ) {
       throw new Error( errorMessage );
     }
   }
+
+  return translatedStringsJsonObject;
 }
 
 /**
