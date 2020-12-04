@@ -47,7 +47,7 @@ const promiseQueue = new Queue( 1, 1000 );
  * retrieve the translated strings, if any, for the given locale and repo
  * @param {string} simOrLibName - name of the simulation or common-code repository where the translated strings reside
  * @param {string} locale
- * @returns {Promise.<string>}
+ * @returns {Promise.<string>} - the JSON object for the translated strings
  */
 async function getTranslatedStrings( simOrLibName, locale ) {
 
@@ -66,9 +66,16 @@ async function getTranslatedStrings( simOrLibName, locale ) {
     return translatedStringsJsonObject;
   }
   catch( error ) {
-    const errorMessage = `Unable to get the translated strings JSON object. ${error.message}`;
-    winston.error( errorMessage );
-    throw new Error( errorMessage );
+    if ( error.response.status === 404 ) {
+      winston.info( 'Requested strings file doesn\'t exist yet. Returning empty object.' );
+      const translatedStringsJsonObject = {};
+      return translatedStringsJsonObject;
+    }
+    else {
+      const errorMessage = `Unable to get the translated strings JSON object. ${error.message}`;
+      winston.error( errorMessage );
+      throw new Error( errorMessage );
+    }
   }
 }
 
@@ -85,7 +92,6 @@ async function getEnglishStrings( simOrLibName, shaOrBranch = 'master' ) {
   winston.info( `Requesting English strings file from GitHub. URL: ${englishStringsFileUrl}` );
 
   // Get the English strings file from GitHub.
-  // TODO: Try enabling compression. See https://github.com/phetsims/rosetta/issues/220.
   try {
     const englishStrings = await axios.get( englishStringsFileUrl );
     winston.debug( 'Got the English strings!' );
