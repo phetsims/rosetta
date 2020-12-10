@@ -35,7 +35,7 @@ async function getDependencies( simName, version ) {
   try {
     const dependencies = await axios.get( url );
     const dependenciesJsonObject = dependencies.data;
-    return dependenciesJsonObject;
+    return JSON.stringify( dependenciesJsonObject );
   }
   catch( error ) {
     const errorMessage = `Unable to get dependencies for sim: ${simName}, version: ${version}. ${error.message}`;
@@ -80,11 +80,7 @@ async function requestBuild( simName, locale, userID ) {
 
     // Try to send the build request.
     try {
-      await axios.post( url, {
-        method: 'post',
-        url: url,
-        data: requestObject
-      } );
+      await axios.post( url, requestObject );
     }
     catch( error ) {
       const errorMessage = `Build request unsuccessful. ${error.message}`;
