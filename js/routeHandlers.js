@@ -672,7 +672,7 @@ module.exports.saveStrings = async function( request, response ) {
  */
 module.exports.showOfflinePage = function( request, response ) {
   winston.warn( 'Showing the \'Offline\' page to the user.' );
-  response.render( 'offline.html', { title: 'Off Line' } );
+  response.render( 'offline.html', { title: 'Offline' } );
 };
 
 /**
