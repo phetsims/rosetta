@@ -10,17 +10,17 @@
 
 'use strict';
 
-// Node Modules
+// Node modules
 const _ = require( 'lodash' ); // eslint-disable-line
 const axios = require( 'axios' );
 const email = require( 'emailjs/email' );
 const simData = require( './simData' );
 const winston = require( 'winston' );
 
-// Server Modules
+// server modules
 const RosettaConstants = require( './RosettaConstants' );
 
-// Constants
+// constants
 const preferences = global.config;
 const STRING_VAR_IN_HTML_FILES = RosettaConstants.STRING_VAR_IN_HTML_FILES;
 

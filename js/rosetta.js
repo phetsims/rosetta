@@ -6,11 +6,12 @@
  *
  * @author John Blanco
  * @author Aaron Davis
+ * @author Liam Mulhall
  */
 
 'use strict';
 
-// Modules
+// modules
 const bodyParser = require( 'body-parser' ); // eslint-disable-line require-statement-match
 const childProcess = require( 'child_process' ); // eslint-disable-line require-statement-match
 const cookieParser = require( 'cookie-parser' ); // eslint-disable-line require-statement-match
@@ -21,11 +22,11 @@ const { Pool } = require( 'pg' ); // eslint-disable-line
 const RosettaConstants = require( './RosettaConstants' );
 const winston = require( 'winston' );
 
-// Order-Dependent Modules
+// order-dependent Modules
 const session = require( 'express-session' ); // eslint-disable-line require-statement-match
 const MemoryStore = require( 'memorystore' )( session );
 
-// Constants
+// constants
 const LISTEN_PORT = 16372;
 const { format } = winston;
 

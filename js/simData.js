@@ -17,7 +17,6 @@ const axios = require( 'axios' );
 const winston = require( 'winston' );
 
 // constants
-// (METADATA_URL depends on PRODUCTION_SERVER_URL. Thus, this list is not in alphabetical order.)
 const CACHED_DATA_VALID_TIME = 1800; // This is 1.8 seconds in milliseconds.
 const METADATA_REQUEST_OPTIONS = {
   auth: {
