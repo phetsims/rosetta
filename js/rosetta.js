@@ -37,10 +37,7 @@ const { format } = winston;
 // Configure the logger. Uses default logging level, which can be updated once configuration is read.
 const consoleTransport = new winston.transports.Console( {
   format: format.combine(
-    format.timestamp( {
-      format: 'YYYY-MM-DD HH:mm:ss'
-    } ),
-    format.printf( i => `${i.timestamp} | ${i.level} - ${i.message}` )
+    format.printf( i => `${i.level} - ${i.message}` )
   )
 } );
 winston.add( consoleTransport );
