@@ -7,15 +7,10 @@
  */
 
 // modules
-// const sendUserToLoginPage = require( './sendUserToLoginPage' );
+const renderErrorPage = require('./renderErrorPage');
+const sendUserToLoginPage = require( './sendUserToLoginPage' );
 const winston = require( 'winston' );
 
-/**
- * TODO: Finish JSDoc.
- *
- * @param request
- * @param next
- */
 function bypassSessionValidation( request, next ) {
 
   winston.warn( 'Bypassing session validation to allow testing on localhost.' );
@@ -33,43 +28,31 @@ function bypassSessionValidation( request, next ) {
   return next();
 }
 
-/**
- * TODO: Finish JSDoc.
- *
- * @param request
- */
 function checkForLoginCookie( request, response ) {
 
   winston.info( 'Checking for login cookie.' );
 
-  // const cookie = request.cookies.JSESSIONID;
-  // const cookieIsPresent = !( cookie === undefined );
+  const cookie = request.cookies.JSESSIONID;
+  const cookieIsPresent = !( cookie === undefined );
   // const userIsTranslatorOrTeamMember = request.session.trustedTranslator || request.session.teamMember;
-  // const cookieIsStale = request.session.jSessionId && request.session.jSessionId !== cookie;
+  const cookieIsStale = request.session.jSessionId && request.session.jSessionId !== cookie;
 
-  // if ( cookieIsPresent ) {
-  //   if ( cookieIsStale ) {
-  //     winston.info( 'Session expired. Forcing user to log in again.' );
-  //     request.session.destroy( () => {
-  //       const message = '';
-  //       const errorDetails = '';
-  //       renderErrorPage( response, message, errorDetails ); // TODO: Make new module and replace the old one in TranslationUtils.js and the other function on line 696 in routeHandlers.js.
-  //     } );
-  //   }
-  // }
-  // else {
-  //   winston.info( 'Session cookie not found. Sending user to login page.' );
-  //   sendUserToLoginPage( response, request.get( 'host' ), request.url );
-  // }
+  if ( cookieIsPresent ) {
+    if ( cookieIsStale ) {
+      winston.info( 'Session expired. Forcing user to log in again.' );
+      request.session.destroy( () => {
+        const message = '';
+        const errorDetails = '';
+        renderErrorPage( response, message, errorDetails );
+      } );
+    }
+  }
+  else {
+    winston.info( 'Session cookie not found. Sending user to login page.' );
+    sendUserToLoginPage( response, request.get( 'host' ), request.url );
+  }
 }
 
-/**
- * TODO: Finish JSDoc.
- *
- * @param request
- * @param response
- * @param next
- */
 function checkForValidSession( request, response, next ) {
 
   const userIsOnLocalhost = request.get( 'host' ).indexOf( 'localhost' ) === 0;

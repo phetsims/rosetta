@@ -26,7 +26,7 @@ const simData = require( './simData' );
 const stringSubmissionQueue = require( './stringSubmissionQueue' ).stringSubmissionQueue; // eslint-disable-line
 const TranslationUtils = require( './TranslationUtils' );
 const escapeHtml = TranslationUtils.escapeHtml;
-const renderError = TranslationUtils.renderError;
+const renderErrorPage = require( './renderErrorPage' );
 const requestBuild = require( './requestBuild' );
 
 // constants
@@ -107,7 +107,7 @@ module.exports.checkForValidSession = function( request, response, next ) {
     winston.info( 'Session expired. Forcing user to log in again.' );
 
     request.session.destroy( function() {
-      renderError( response,
+      renderErrorPage( response,
         '<h1>Your session has expired</h1>' +
         '<p>Go to <a href="https://phet.colorado.edu/translate/">https://phet.colorado.edu/translate/</a> to start a new session.</p>',
         '' );
@@ -158,7 +158,7 @@ module.exports.checkForValidSession = function( request, response, next ) {
           winston.info( 'Credentials obtained. User is logged in. Moving to next step.' );
 
           if ( !userData.trustedTranslator && !userData.teamMember ) {
-            renderError( response, 'You must be a trusted translator to use the PhET translation utility. ' +
+            renderErrorPage( response, 'You must be a trusted translator to use the PhET translation utility. ' +
                                    'Email phethelp@colorado.edu for more information.', '' );
           }
           else {
@@ -190,7 +190,7 @@ module.exports.checkForValidSession = function( request, response, next ) {
     // Handle errors.
     requestCredentials.on( 'error', function( error ) {
       winston.error( `Unable to receive session data. Error: ${error}.` );
-      renderError( response, `Unable to obtain user credentials. Error: ${error}.` );
+      renderErrorPage( response, `Unable to obtain user credentials. Error: ${error}.` );
     } );
 
     // Send the request.
@@ -281,7 +281,7 @@ module.exports.renderTranslationPage = async function( request, response ) {
   const extractedStringKeysMap = TranslationUtils.extractStringKeys( simHtml );
 
   if ( extractedStringKeysMap.size === 0 ) {
-    renderError( response, `Unable to retrieve string keys from ${simUrl}.`, '' );
+    renderErrorPage( response, `Unable to retrieve string keys from ${simUrl}.`, '' );
     return;
   }
 
@@ -593,7 +593,7 @@ module.exports.testStrings = function( request, response ) {
       // Return the modified sim HTML as the response to the request.
       response.send( simHtml );
     } )
-    .catch( error => renderError( response, 'Error testing translation...', error ) );
+    .catch( error => renderErrorPage( response, 'Error testing translation...', error ) );
 };
 
 /**
@@ -688,23 +688,6 @@ function pageNotFound( request, response ) {
 module.exports.pageNotFound = pageNotFound;
 
 /**
- * Route for rendering the error page.
- *
- * @param request
- * @param response
- */
-function renderErrorPage( request, response, message, errorDetails ) {
-  response.render( 'error.html', {
-    title: 'Translation Utility Error',
-    message: message,
-    errorDetails: errorDetails,
-    timestamp: new Date().getTime()
-  } );
-}
-
-module.exports.renderErrorPage = renderErrorPage;
-
-/**
  * Helper function. !isNaN is confusing, hence this function.
  *
  * @param string
@@ -750,14 +733,14 @@ module.exports.triggerBuild = async function( request, response ) {
       else {
         const message = 'Invalid simulation name.';
         const errorDetails = 'Sim name not found in array made with simData.getListOfSimNames.';
-        renderErrorPage( request, response, message, errorDetails );
+        renderErrorPage( response, message, errorDetails );
         return;
       }
     }
     else {
       const message = 'Invalid simulation name.';
       const errorDetails = 'Sim name is not a string.';
-      renderErrorPage( request, response, message, errorDetails );
+      renderErrorPage( response, message, errorDetails );
       return;
     }
 
@@ -771,14 +754,14 @@ module.exports.triggerBuild = async function( request, response ) {
       else {
         const message = 'Invalid locale.';
         const errorDetails = 'Locale not found in array made with localeInfo.getSortedLocaleInfoArray.';
-        renderErrorPage( request, response, message, errorDetails );
+        renderErrorPage( response, message, errorDetails );
         return;
       }
     }
     else {
       const message = 'Invalid locale.';
       const errorDetails = 'Locale is not a string.';
-      renderErrorPage( request, response, message, errorDetails );
+      renderErrorPage( response, message, errorDetails );
       return;
     }
 
@@ -795,10 +778,10 @@ module.exports.triggerBuild = async function( request, response ) {
         winston.debug( 'Got string file.' );
       }
       catch( error ) {
-        const errorMessage = `Unable to get string file from Babel. ${error.message}`;
-        winston.error( errorMessage );
+        const message = `Unable to get string file from Babel. ${error.message}`;
+        winston.error( message );
         const errorDetails = `Here's where you're trying to get the string file: ${STRING_FILE_URL}. Check this and make sure it's correct.`;
-        renderErrorPage( request, response, errorMessage, errorDetails );
+        renderErrorPage( response, message, errorDetails );
         return;
       }
       winston.info( 'String file object successfully retrieved.' );
@@ -839,14 +822,14 @@ module.exports.triggerBuild = async function( request, response ) {
         winston.info( 'User ID was not found in the Babel string file.' );
         const message = 'Invalid user ID.';
         const errorDetails = 'request.params.userId did not match a user ID in the string file fetched from Babel.';
-        renderErrorPage( request, response, message, errorDetails );
+        renderErrorPage( response, message, errorDetails );
         return;
       }
     }
     else {
       const message = 'Invalid user ID.';
       const errorDetails = '!isNaN( userIdToSend ) (checks if your user ID is a number) returned false.';
-      renderErrorPage( request, response, message, errorDetails );
+      renderErrorPage( response, message, errorDetails );
       return;
     }
 
@@ -866,10 +849,10 @@ module.exports.triggerBuild = async function( request, response ) {
     catch( error ) {
       winston.error( `Build for ${simLocaleAndId} unsuccessful. ${error.message}` );
       winston.warn( 'If you\'re trying to trigger a build, you should set sendBuildRequests = true in your config file.' );
-      const errorMessage = `Build for ${simLocaleAndId} unsuccessful.`;
+      const message = `Build for ${simLocaleAndId} unsuccessful.`;
       const errorDetails = `${error.message}`;
-      renderErrorPage( request, response, errorMessage, errorDetails );
-      return;
+      renderErrorPage( response, message, errorDetails );
+
     }
   }
   else {

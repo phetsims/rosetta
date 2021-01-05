@@ -86,22 +86,6 @@ function escapeHtml( htmlString ) {
 }
 
 /**
- * Renders an error page.
- *
- * @param {Object} response - response object, used for rendering the response
- * @param {String} message
- * @param {String} err
- */
-function renderError( response, message, error ) {
-  response.render( 'error.html', {
-    title: 'Translation Utility Error',
-    message: message,
-    errorDetails: error,
-    timestamp: new Date().getTime()
-  } );
-}
-
-/**
  * Extracts sim's SHA from its HTML.
  *
  * @param {string} simHtml - HTML of the built sim
@@ -220,7 +204,6 @@ module.exports = {
   extractSimSha: extractSimSha,
   extractStringKeys: extractStringKeys,
   getLatestSimHtml: getLatestSimHtml,
-  renderError: renderError,
   sendEmail: sendEmail,
   stringify: stringify
 };
