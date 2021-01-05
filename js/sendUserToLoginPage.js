@@ -1,9 +1,8 @@
 // Copyright 2020, University of Colorado Boulder
 
 /**
- * Send the user to PhET's login page. We don't hard code the login URL in
- * case it changes.
- * 
+ * Send the user to PhET's login page. We don't hard code the login URL in case it changes.
+ *
  * @author Liam Mulhall
  */
 
