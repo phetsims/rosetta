@@ -46,6 +46,9 @@ async function sessionShouldBeCreated( request, response, loginCookie ) {
       return true;
     }
   }
+  else {
+    sendUserToLoginPage( response, request.get( 'host' ), request.url );
+  }
   return false;
 }
 
