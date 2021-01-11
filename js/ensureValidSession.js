@@ -41,8 +41,8 @@ async function getUserData( request, loginCookie ) {
 
 async function sessionShouldBeCreated( request, response, loginCookie ) {
   const userData = await getUserData( request, loginCookie );
-  if( userData && userData.loggedIn ) {
-    if( isTranslatorOrTeamMember( request, response, userData) ) {
+  if ( userData && userData.loggedIn ) {
+    if ( isTranslatorOrTeamMember( request, response, userData ) ) {
       return true;
     }
   }
@@ -80,7 +80,8 @@ function denyAccess( response ) {
 function handleStaleSessionCookie( request, response ) {
   winston.info( 'Session expired. Giving user option to log in.' );
   request.session.destroy( () => {
-    const loginPageUrl = 'https://phet.colorado.edu/translate'; // TODO: Should this not be hard-coded?
+    // TODO: This should be something like {host}/en/sign-in?dest={original url}
+    const loginPageUrl = `https://${request.get( 'host' )}/en/sign-in?dest=${request.url}`;
     const message = '<h1>Your session has expired. Please log in again.</h1>'
                     + `<a href="${loginPageUrl}">Log in</a>`;
     const errorDetails = 'Login cookie is stale.';
@@ -104,22 +105,22 @@ function handleStaleSessionCookie( request, response ) {
 async function ensureValidSession( request, response, next ) {
 
   const userIsOnLocalhost = request.get( 'host' ).indexOf( 'localhost' ) === 0;
-  const loginCookie = request.cookie.JSESSIONID;
+  const loginCookie = request.cookies.JSESSIONID;
   const userIsLoggedIn = !( loginCookie === undefined );
   const sessionCookieMatchesLoginCookie = request.session.jSessionId && request.session.jSessionId === loginCookie;
   const validSessionInProgress = request.session.trustedTranslator || request.session.teamMember;
 
-  if( userIsOnLocalhost ) {
+  if ( userIsOnLocalhost ) {
     bypassSessionValidation( response, next );
   }
 
-  if( userIsLoggedIn ) {
-    if( sessionCookieMatchesLoginCookie ) {
-      if( validSessionInProgress ) {
+  if ( userIsLoggedIn ) {
+    if ( sessionCookieMatchesLoginCookie ) {
+      if ( validSessionInProgress ) {
         next();
       }
-      else{
-        if( await sessionShouldBeCreated( request, response, loginCookie) ) {
+      else {
+        if ( await sessionShouldBeCreated( request, response, loginCookie ) ) {
           createSession( request, loginCookie );
         }
         else {

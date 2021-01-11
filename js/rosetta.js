@@ -21,6 +21,7 @@ const getRosettaConfig = require( './getRosettaConfig' );
 const { Pool } = require( 'pg' ); // eslint-disable-line
 const RosettaConstants = require( './RosettaConstants' );
 const winston = require( 'winston' );
+const ensureValidSession = require( './ensureValidSession' );
 
 // order-dependent Modules
 const session = require( 'express-session' ); // eslint-disable-line require-statement-match
@@ -138,7 +139,8 @@ if ( !global.config.enabled ) {
 }
 
 // Set up route for checking if a user is logged in.
-app.get( '/translate*', routeHandlers.checkForValidSession );
+app.get( '/translate*', ensureValidSession );
+// app.get( '/translate*', routeHandlers.checkForValidSession );
 
 // Set up routes for debugging.
 app.post( '/translate*', function( request, response, next ) {

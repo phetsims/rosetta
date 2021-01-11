@@ -11,7 +11,7 @@ function renderErrorPage( response, message, errorDetails ) {
     title: 'Translation Utility Error',
     message: message,
     errorDetails: errorDetails,
-    timestamp: new Date.getTime()
+    timestamp: new Date().getTime()
   } );
 }
 

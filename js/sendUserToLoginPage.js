@@ -6,11 +6,11 @@
  * @author Liam Mulhall
  */
 
-function sendUserToLoginPage( response, host, loginPageUrl ) {
+function sendUserToLoginPage( response, host, destinationUrl ) {
   response.render( 'login-required.html', {
     title: 'Login Required',
     host: host,
-    loginPageUrl: loginPageUrl
+    destinationUrl: destinationUrl
   } );
 }
 
