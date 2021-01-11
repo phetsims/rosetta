@@ -80,7 +80,6 @@ function denyAccess( response ) {
 function handleStaleSessionCookie( request, response ) {
   winston.info( 'Session expired. Giving user option to log in.' );
   request.session.destroy( () => {
-    // TODO: This should be something like {host}/en/sign-in?dest={original url}
     const loginPageUrl = `https://${request.get( 'host' )}/en/sign-in?dest=${request.url}`;
     const message = '<h1>Your session has expired. Please log in again.</h1>'
                     + `<a href="${loginPageUrl}">Log in</a>`;
@@ -116,6 +115,8 @@ async function ensureValidSession( request, response, next ) {
 
   if ( userIsLoggedIn ) {
     if ( sessionCookieMatchesLoginCookie ) {
+      winston.debug(`session cookie = ${request.session.jSessionId}`);
+      winston.debug(`login cookie = ${request.cookies.JSESSIONID}`);
       if ( validSessionInProgress ) {
         next();
       }
