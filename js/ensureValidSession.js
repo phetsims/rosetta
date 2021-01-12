@@ -103,6 +103,10 @@ function handleStaleSessionCookie( request, response ) {
 
 async function ensureValidSession( request, response, next ) {
 
+  // TODO: Take out debug statements when done.
+  winston.debug( `session cookie = ${request.session.jSessionId}` );
+  winston.debug( `login cookie = ${request.cookies.JSESSIONID}` );
+
   const userIsOnLocalhost = request.get( 'host' ).indexOf( 'localhost' ) === 0;
   const loginCookie = request.cookies.JSESSIONID;
   const userIsLoggedIn = !( loginCookie === undefined );
@@ -115,8 +119,6 @@ async function ensureValidSession( request, response, next ) {
 
   if ( userIsLoggedIn ) {
     if ( sessionCookieMatchesLoginCookie ) {
-      winston.debug(`session cookie = ${request.session.jSessionId}`);
-      winston.debug(`login cookie = ${request.cookies.JSESSIONID}`);
       if ( validSessionInProgress ) {
         next();
       }
