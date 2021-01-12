@@ -30,13 +30,13 @@ function bypassSessionValidation( request, next ) {
 }
 
 async function getUserData( request, websiteCookie ) {
-  const url = `${request.get( 'host' )}/services/check-login`;
   const options = {
+    host: request.get( 'host' ),
+    path: '/services/check-login',
     method: 'GET',
     headers: {
       'Cookie': `JSESSIONID=${websiteCookie}`
-    },
-    url: url
+    }
   };
   try {
     return await axios( options );
@@ -83,7 +83,7 @@ async function ensureValidSession( request, response, next ) {
 
   // Set up website session variables for later use.
   const websiteCookie = request.cookies.JSESSIONID;
-  const websiteUserData = getUserData( request, websiteCookie );
+  const websiteUserData = await getUserData( request, websiteCookie );
   const userIsLoggedIn = websiteUserData ? websiteUserData.loggedIn : false;
   const userIsTranslatorOrTeamMember = websiteUserData.trustedTranslator || websiteUserData.teamMember;
 
