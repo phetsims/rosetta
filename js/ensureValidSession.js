@@ -36,7 +36,12 @@ async function getUserData( request, websiteCookie ) {
       'Cookie': `JSESSIONID=${websiteCookie}`
     }
   };
-  return await axios.get( url, config );
+  try {
+    return await axios.get( url, config );
+  }
+  catch( error ) {
+    winston.error( `Unable to get website user data. ${error}` );
+  }
 }
 
 function handleStaleRosettaSession( request, response ) {
@@ -76,7 +81,7 @@ async function ensureValidSession( request, response, next ) {
 
   // Set up website session variables for later use.
   const websiteCookie = request.cookies.JSESSIONID;
-  const websiteUserData = await getUserData( request, websiteCookie );
+  const websiteUserData = getUserData( request, websiteCookie );
   const userIsLoggedIn = websiteUserData ? websiteUserData.loggedIn : false;
   const userIsTranslatorOrTeamMember = websiteUserData.trustedTranslator || websiteUserData.teamMember;
 
@@ -91,25 +96,25 @@ async function ensureValidSession( request, response, next ) {
 
   if ( userIsLoggedIn ) {
     if ( rosettaSessionIsFresh ) {
-      winston.debug('Rosetta cookie is defined and it matches the website cookie.');
+      winston.debug( 'Rosetta cookie is defined and it matches the website cookie.' );
       next();
     }
     else if ( rosettaSessionIsStale ) {
-      winston.debug('Rosetta cookie is defined, but it doesn\'t match the website cookie.');
+      winston.debug( 'Rosetta cookie is defined, but it doesn\'t match the website cookie.' );
       handleStaleRosettaSession( request, response );
     }
     else if ( userIsTranslatorOrTeamMember ) {
-      winston.debug('User is a translator or a team member, but they didn\'t have a Rosetta cookie defined.');
+      winston.debug( 'User is a translator or a team member, but they didn\'t have a Rosetta cookie defined.' );
       createRosettaSession( request, websiteCookie, websiteUserData );
     }
     else {
-      winston.debug('User has requested Rosetta access, but they are not a translator or team member.'
-                    + 'Telling them to ask phethelp@gmail.com for access.');
+      winston.debug( 'User has requested Rosetta access, but they are not a translator or team member.'
+                     + 'Telling them to ask phethelp@gmail.com for access.' );
       denyRosettaAccess( response );
     }
   }
   else {
-    winston.debug('User is not logged in. Sending them to the login page.');
+    winston.debug( 'User is not logged in. Sending them to the login page.' );
     sendUserToLoginPage( response, request.get( 'host' ), request.url );
   }
 }
