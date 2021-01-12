@@ -31,13 +31,15 @@ function bypassSessionValidation( request, next ) {
 
 async function getUserData( request, websiteCookie ) {
   const url = `${request.get( 'host' )}/services/check-login`;
-  const config = {
+  const options = {
+    method: 'GET',
     headers: {
       'Cookie': `JSESSIONID=${websiteCookie}`
-    }
+    },
+    url: url
   };
   try {
-    return await axios.get( url, config );
+    return await axios( options );
   }
   catch( error ) {
     winston.error( `Unable to get website user data. ${error}` );
