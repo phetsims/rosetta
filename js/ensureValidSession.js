@@ -30,16 +30,14 @@ function bypassSessionValidation( request, next ) {
 }
 
 async function getUserData( request, websiteCookie ) {
+  const url = `${request.get('host')}/services/check-login`;
   const options = {
-    host: request.get( 'host' ),
-    path: '/services/check-login',
-    method: 'GET',
     headers: {
       'Cookie': `JSESSIONID=${websiteCookie}`
     }
   };
   try {
-    return await axios( options );
+    return await axios.get( url, options );
   }
   catch( error ) {
     winston.error( `Unable to get website user data. ${error}` );
