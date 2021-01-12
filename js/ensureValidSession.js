@@ -91,19 +91,25 @@ async function ensureValidSession( request, response, next ) {
 
   if ( userIsLoggedIn ) {
     if ( rosettaSessionIsFresh ) {
+      winston.debug('Rosetta cookie is defined and it matches the website cookie.');
       next();
     }
     else if ( rosettaSessionIsStale ) {
+      winston.debug('Rosetta cookie is defined, but it doesn\'t match the website cookie.');
       handleStaleRosettaSession( request, response );
     }
     else if ( userIsTranslatorOrTeamMember ) {
+      winston.debug('User is a translator or a team member, but they didn\'t have a Rosetta cookie defined.');
       createRosettaSession( request, websiteCookie, websiteUserData );
     }
     else {
+      winston.debug('User has requested Rosetta access, but they are not a translator or team member.'
+                    + 'Telling them to ask phethelp@gmail.com for access.');
       denyRosettaAccess( response );
     }
   }
   else {
+    winston.debug('User is not logged in. Sending them to the login page.');
     sendUserToLoginPage( response, request.get( 'host' ), request.url );
   }
 }
