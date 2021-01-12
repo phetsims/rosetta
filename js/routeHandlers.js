@@ -69,6 +69,10 @@ function getPrintableString( string ) {
  */
 module.exports.checkForValidSession = function( request, response, next ) {
 
+  // TODO: Take out debug statements when done.
+  winston.debug( `session cookie = ${request.session.jSessionId}` );
+  winston.debug( `login cookie = ${request.cookies.JSESSIONID}` );
+
   if ( request.get( 'host' ).indexOf( 'localhost' ) === 0 ) {
 
     // The app is running on localhost, so session validation is bypassed.
