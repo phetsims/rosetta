@@ -29,55 +29,17 @@ function bypassSessionValidation( request, next ) {
   return next();
 }
 
-async function getUserData( request, loginCookie ) {
+async function getUserData( request, websiteCookie ) {
   const url = `${request.get( 'host' )}/services/check-login`;
   const config = {
     headers: {
-      'Cookie': `JSESSIONID=${loginCookie}`
+      'Cookie': `JSESSIONID=${websiteCookie}`
     }
   };
   return await axios.get( url, config );
 }
 
-async function sessionShouldBeCreated( request, response, loginCookie ) {
-  const userData = await getUserData( request, loginCookie );
-  if ( userData && userData.loggedIn ) {
-    if ( isTranslatorOrTeamMember( request, response, userData ) ) {
-      return true;
-    }
-  }
-  else {
-    sendUserToLoginPage( response, request.get( 'host' ), request.url );
-  }
-  return false;
-}
-
-function isTranslatorOrTeamMember( response, userData ) {
-  if ( userData.trustedTranslator || userData.teamMember ) {
-    return true;
-  }
-  return false;
-}
-
-function createSession( request, loginCookie ) {
-  const userData = getUserData( request, loginCookie );
-  request.session.cookie.expires = null; // Browser session.
-  request.session.email = userData.email;
-  request.session.jSessionId = loginCookie; // To verify user is still logged in.
-  request.session.teamMember = userData.teamMember;
-  request.session.translatedStrings = {}; // For storing string history across submissions.
-  request.session.trustedTranslator = userData.trustedTranslator;
-  request.session.userId = userData.userId;
-  request.session.username = userData.username;
-}
-
-function denyAccess( response ) {
-  const message = '<h1>You must be a trusted translator or a team member to access this page.</h1>'
-                  + '<p>Send an email to phethelp@gmail.com to request access.</p>';
-  renderErrorPage( response, message, '' );
-}
-
-function handleStaleSessionCookie( request, response ) {
+function handleStaleRosettaSession( request, response ) {
   winston.info( 'Session expired. Giving user option to log in.' );
   request.session.destroy( () => {
     const loginPageUrl = `https://${request.get( 'host' )}/en/sign-in?dest=${request.url}`;
@@ -88,51 +50,57 @@ function handleStaleSessionCookie( request, response ) {
   } );
 }
 
-/**
- * Algorithm
- * 1. Check if user is on localhost.
- *  - If so, bypass session validation.
- * 2. Check if user is logged in.
- *  - If not, send them to login page.
- * 3. Check if session cookie matches login cookie.
- *  - If not, handle stale session cookie.
- * 4. Check if there's a valid session in progress.
- *  - If not, check if one ought to be created.
- *    + If not, deny access.
- */
+function createRosettaSession( request, websiteCookie, websiteUserData ) {
+  request.session.cookie.expires = null; // Browser session.
+  request.session.email = websiteUserData.email;
+  request.session.jSessionId = websiteCookie;
+  request.session.teamMember = websiteUserData.teamMember;
+  request.session.translatedStrings = {}; // For storing string history across submissions.
+  request.session.trustedTranslator = websiteUserData.trustedTranslator;
+  request.session.userId = websiteUserData.userId;
+  request.session.username = websiteUserData.username;
+}
+
+function denyRosettaAccess( response ) {
+  const message = '<h1>You must be a trusted translator or a team member to access this page.</h1>'
+                  + '<p>Send an email to phethelp@gmail.com to request access.</p>';
+  renderErrorPage( response, message, '' );
+}
 
 async function ensureValidSession( request, response, next ) {
 
-  // TODO: Take out debug statements when done.
-  winston.debug( `session cookie = ${request.session.jSessionId}` );
-  winston.debug( `login cookie = ${request.cookies.JSESSIONID}` );
-
   const userIsOnLocalhost = request.get( 'host' ).indexOf( 'localhost' ) === 0;
-  const loginCookie = request.cookies.JSESSIONID;
-  const userIsLoggedIn = !( loginCookie === undefined );
-  const sessionCookieMatchesLoginCookie = request.session.jSessionId && request.session.jSessionId === loginCookie;
-  const validSessionInProgress = request.session.trustedTranslator || request.session.teamMember;
-
   if ( userIsOnLocalhost ) {
     bypassSessionValidation( response, next );
   }
 
+  // Set up website session variables for later use.
+  const websiteCookie = request.cookies.JSESSIONID;
+  const websiteUserData = await getUserData( request, websiteCookie );
+  const userIsLoggedIn = websiteUserData ? websiteUserData.loggedIn : false;
+  const userIsTranslatorOrTeamMember = websiteUserData.trustedTranslator || websiteUserData.teamMember;
+
+  // Set up Rosetta session variables for later use.
+  const rosettaCookie = request.session.jSessionId;
+  const rosettaSessionIsFresh = ( rosettaCookie !== undefined ) && ( rosettaCookie === websiteCookie );
+  const rosettaSessionIsStale = ( rosettaCookie !== undefined ) && ( rosettaCookie !== websiteCookie );
+
+  // TODO: Take out debug statements when done.
+  winston.debug( `website cookie = ${websiteCookie}` );
+  winston.debug( `rosetta cookie = ${rosettaCookie}` );
+
   if ( userIsLoggedIn ) {
-    if ( sessionCookieMatchesLoginCookie ) {
-      if ( validSessionInProgress ) {
-        next();
-      }
-      else {
-        if ( await sessionShouldBeCreated( request, response, loginCookie ) ) {
-          createSession( request, loginCookie );
-        }
-        else {
-          denyAccess( response );
-        }
-      }
+    if ( rosettaSessionIsFresh ) {
+      next();
+    }
+    else if ( rosettaSessionIsStale ) {
+      handleStaleRosettaSession( request, response );
+    }
+    else if ( userIsTranslatorOrTeamMember ) {
+      createRosettaSession( request, websiteCookie, websiteUserData );
     }
     else {
-      handleStaleSessionCookie( request, response );
+      denyRosettaAccess( response );
     }
   }
   else {
