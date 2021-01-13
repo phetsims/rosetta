@@ -30,7 +30,7 @@ function bypassSessionValidation( request, next ) {
 }
 
 async function getUserData( request, websiteCookie ) {
-  const url = `https://${request.get('host')}/services/check-login`;
+  const url = `https://${request.get( 'host' )}/services/check-login`;
   const options = {
     headers: {
       'Cookie': `JSESSIONID=${websiteCookie}`
@@ -82,23 +82,24 @@ async function ensureValidSession( request, response, next ) {
   const websiteCookie = request.cookies.JSESSIONID;
 
   if ( websiteCookie ) {
-    winston.debug(`websiteCookie = ${websiteCookie}.`);
+    winston.debug( `Checking if user is logged in. websiteCookie = ${websiteCookie}.` );
     const websiteUserData = await getUserData( request, websiteCookie );
+    winston.debug( `websiteUserData = ${JSON.stringify( websiteUserData, null, 2 )}` );
     if ( websiteUserData.loggedIn ) {
-      winston.debug(`websiteUserData.loggedIn = ${websiteUserData.loggedIn}.`);
+      winston.debug( `Ensuring valid session. websiteUserData.loggedIn = ${websiteUserData.loggedIn}.` );
       const rosettaCookie = request.session.jSessionId;
       const rosettaSessionIsFresh = ( rosettaCookie !== undefined ) && ( rosettaCookie === websiteCookie );
       const rosettaSessionIsStale = ( rosettaCookie !== undefined ) && ( rosettaCookie !== websiteCookie );
       const userIsTranslatorOrTeamMember = websiteUserData.trustedTranslator || websiteUserData.teamMember;
-      if( rosettaSessionIsFresh ) {
+      if ( rosettaSessionIsFresh ) {
         winston.debug( 'Rosetta cookie is defined and it matches the website cookie.' );
         next();
       }
-      else if( rosettaSessionIsStale ) {
+      else if ( rosettaSessionIsStale ) {
         winston.debug( 'Rosetta cookie is defined, but it doesn\'t match the website cookie.' );
         handleStaleRosettaSession( request, response );
       }
-      else if( userIsTranslatorOrTeamMember ) {
+      else if ( userIsTranslatorOrTeamMember ) {
         winston.debug( 'User is a translator or a team member, but they didn\'t have a Rosetta cookie defined.' );
         createRosettaSession( request, websiteCookie, websiteUserData );
       }
@@ -109,13 +110,13 @@ async function ensureValidSession( request, response, next ) {
       }
     }
     else {
-      winston.debug( `websiteUserData.loggedIn = ${websiteUserData.loggedIn}.`);
-      sendUserToLoginPage( response, request.get('host'), request.url );
+      winston.debug( `Sending user to login page. websiteUserData.loggedIn = ${websiteUserData.loggedIn}.` );
+      sendUserToLoginPage( response, request.get( 'host' ), request.url );
     }
   }
   else {
-    winston.debug( `websiteCookie = ${websiteCookie}.`);
-    sendUserToLoginPage( response, request.get('host'), request.url );
+    winston.debug( `Sending user to login page. websiteCookie = ${websiteCookie}.` );
+    sendUserToLoginPage( response, request.get( 'host' ), request.url );
   }
 }
 
