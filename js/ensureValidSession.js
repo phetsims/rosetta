@@ -83,7 +83,8 @@ async function ensureValidSession( request, response, next ) {
 
   if ( websiteCookie ) {
     winston.debug( `Checking if user is logged in. websiteCookie = ${websiteCookie}.` );
-    const websiteUserData = await getUserData( request, websiteCookie );
+    let websiteUserData = await getUserData( request, websiteCookie );
+    websiteUserData = websiteUserData.data;
     winston.debug( `websiteUserData = ${JSON.stringify( websiteUserData, null, 2 )}` );
     if ( websiteUserData.loggedIn ) {
       winston.debug( `Ensuring valid session. websiteUserData.loggedIn = ${websiteUserData.loggedIn}.` );
@@ -102,6 +103,7 @@ async function ensureValidSession( request, response, next ) {
       else if ( userIsTranslatorOrTeamMember ) {
         winston.debug( 'User is a translator or a team member, but they didn\'t have a Rosetta cookie defined.' );
         createRosettaSession( request, websiteCookie, websiteUserData );
+        next();
       }
       else {
         winston.debug( 'User has requested Rosetta access, but they are not a translator or team member.'
