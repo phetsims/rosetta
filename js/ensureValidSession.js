@@ -82,10 +82,10 @@ async function ensureValidSession( request, response, next ) {
   const websiteCookie = request.cookies.JSESSIONID;
 
   if ( websiteCookie ) {
-    winston.debug(`websiteCookie is defined: ${websiteCookie}`);
+    winston.debug(`websiteCookie = ${websiteCookie}.`);
     const websiteUserData = await getUserData( request, websiteCookie );
     if ( websiteUserData.loggedIn ) {
-      winston.debug(`websiteUserData.loggedIn: ${websiteUserData.loggedIn}`);
+      winston.debug(`websiteUserData.loggedIn = ${websiteUserData.loggedIn}.`);
       const rosettaCookie = request.session.jSessionId;
       const rosettaSessionIsFresh = ( rosettaCookie !== undefined ) && ( rosettaCookie === websiteCookie );
       const rosettaSessionIsStale = ( rosettaCookie !== undefined ) && ( rosettaCookie !== websiteCookie );
@@ -109,12 +109,12 @@ async function ensureValidSession( request, response, next ) {
       }
     }
     else {
-      winston.debug( 'websiteUserData.loggedIn was false.');
+      winston.debug( `websiteUserData.loggedIn = ${websiteUserData.loggedIn}.`);
       sendUserToLoginPage( response, request.get('host'), request.url );
     }
   }
   else {
-    winston.debug( 'websiteCookie wasn\'t defined.');
+    winston.debug( `websiteCookie = ${websiteCookie}.`);
     sendUserToLoginPage( response, request.get('host'), request.url );
   }
 }
