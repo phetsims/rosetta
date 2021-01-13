@@ -30,7 +30,7 @@ function bypassSessionValidation( request, next ) {
 }
 
 async function getUserData( request, websiteCookie ) {
-  const url = `${request.get('host')}/services/check-login`;
+  const url = `https://${request.get('host')}/services/check-login`;
   const options = {
     headers: {
       'Cookie': `JSESSIONID=${websiteCookie}`
