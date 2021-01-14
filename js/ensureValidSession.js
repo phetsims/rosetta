@@ -130,8 +130,6 @@ async function ensureValidSession( request, response, next ) {
   }
 
   const websiteCookie = request.cookies.JSESSIONID;
-  winston.debug( `typeof websiteCookie = ${typeof websiteCookie}` );
-
   winston.debug( 'Checking for website cookie.' );
   if ( websiteCookie ) { // TODO: What if user doesn't have cookies enabled? Bad times?
     winston.debug( `Got website cookie: ${websiteCookie}. Getting website user data.` );
@@ -146,17 +144,17 @@ async function ensureValidSession( request, response, next ) {
       const rosettaSessionIsStale = ( rosettaCookie !== undefined ) && ( rosettaCookie !== websiteCookie );
       const userIsTranslatorOrTeamMember = websiteUserData.trustedTranslator || websiteUserData.teamMember;
       if ( rosettaSessionIsFresh ) {
-        winston.debug( `Rosetta cookie is defined and it matches the website cookie: ${rosettaSessionIsFresh}.`
+        winston.debug( `Rosetta cookie is defined and it matches the website cookie: ${rosettaSessionIsFresh}. `
                        + 'Rosetta session is fresh.' );
         next();
       }
       else if ( rosettaSessionIsStale ) { // TODO: I'm not sure how to test this. Maybe I'll manually reset the website cookie.
-        winston.debug( `Rosetta cookie is defined, but it doesn't match the website cookie: ${rosettaSessionIsStale}.`
+        winston.debug( `Rosetta cookie is defined, but it doesn't match the website cookie: ${rosettaSessionIsStale}. `
                        + 'Rosetta session is stale.' );
         handleStaleRosettaSession( request, response );
       }
       else if ( userIsTranslatorOrTeamMember ) {
-        winston.debug( `User is a translator or a team member: ${userIsTranslatorOrTeamMember}.`
+        winston.debug( `User is a translator or a team member: ${userIsTranslatorOrTeamMember}. `
                        + `They didn't have a Rosetta cookie defined: ${rosettaCookie === undefined}.` );
         createRosettaSession( request, websiteCookie, websiteUserData );
         next();
