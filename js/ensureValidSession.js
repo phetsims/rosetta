@@ -131,7 +131,7 @@ async function ensureValidSession( request, response, next ) {
 
   const websiteCookie = request.cookies.JSESSIONID;
   winston.debug( 'Checking for website cookie.' );
-  if ( websiteCookie ) { // TODO: What if user doesn't have cookies enabled? Bad times?
+  if ( websiteCookie ) {
     winston.debug( `Got website cookie: ${websiteCookie}. Getting website user data.` );
     let websiteUserData = await getUserData( request, websiteCookie );
     websiteUserData = websiteUserData.data;
@@ -148,7 +148,7 @@ async function ensureValidSession( request, response, next ) {
                        + 'Rosetta session is fresh.' );
         next();
       }
-      else if ( rosettaSessionIsStale ) { // TODO: I'm not sure how to test this. Maybe I'll manually reset the website cookie.
+      else if ( rosettaSessionIsStale ) {
         winston.debug( `Rosetta cookie is defined, but it doesn't match the website cookie: ${rosettaSessionIsStale}. `
                        + 'Rosetta session is stale.' );
         handleStaleRosettaSession( request, response );
