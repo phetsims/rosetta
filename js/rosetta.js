@@ -153,25 +153,25 @@ app.get( '/translate*', function( request, response, next ) {
 } );
 
 // Set up landing page for the translation utility.
-app.get( '/translate/en', routeHandlers.chooseSimulationAndLanguage );
+app.get( '/translate', routeHandlers.chooseSimulationAndLanguage );
 
 // Set up page where user can submit their translated strings.
-app.get( '/translate/en/sim/:simName?/:targetLocale?', routeHandlers.renderTranslationPage );
+app.get( '/translate/sim/:simName?/:targetLocale?', routeHandlers.renderTranslationPage );
 
 // Set up post route for testing translated strings. This doesn't save the translated strings.
-app.post( '/translate/en/sim/test/:simName?', routeHandlers.testStrings );
+app.post( '/translate/sim/test/:simName?', routeHandlers.testStrings );
 
 // Set up post route for short-term storage of strings.
-app.post( '/translate/en/sim/save/:simName?/:targetLocale?', routeHandlers.saveStrings );
+app.post( '/translate/sim/save/:simName?/:targetLocale?', routeHandlers.saveStrings );
 
 // Set up post route for long-term storage of strings.
-app.post( '/translate/en/sim/:simName?/:targetLocale?', routeHandlers.submitStrings );
+app.post( '/translate/sim/:simName?/:targetLocale?', routeHandlers.submitStrings );
 
 // Set up logout.
-app.get( '/translate/en/logout', routeHandlers.logout );
+app.get( '/translate/logout', routeHandlers.logout );
 
 // Trigger the build of a simulation for a given sim, locale, and user ID. Only used by team members to fix problems.
-app.get( '/translate/en/trigger-build/:simName?/:targetLocale?/:userId?', routeHandlers.triggerBuild );
+app.get( '/translate/trigger-build/:simName?/:targetLocale?/:userId?', routeHandlers.triggerBuild );
 
 // Set up testing routes.
 app.get( '/translate/test/', routeHandlers.displayTestPage );
