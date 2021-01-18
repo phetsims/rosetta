@@ -18,12 +18,8 @@
   <script>
     function redirectToEnTranslatePath() {
       const notOnLocalhost = window.location.host === "ox-dev.colorado.edu" || window.location.host === "phet.colorado.edu";
-      console.log( `notOnLocalhost = ${notOnLocalhost}` );
-      console.log( `window.location.pathname === "/translate" = ${window.location.pathname === "/translate"}` );
-      console.log( `window.location.pathname = ${window.location.pathname}` );
-      if ( notOnLocalhost && window.location.pathname === "/translate" ) {
-        console.log( "We're not on localhost! Redirecting to /en/translate!" );
-        window.location.pathname = "/en/translate";
+      if ( notOnLocalhost && window.location.pathname === "/translate/" ) {
+        window.location.pathname = "/en/translate/";
       }
     }
     redirectToEnTranslatePath();
