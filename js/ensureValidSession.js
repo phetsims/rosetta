@@ -125,8 +125,8 @@ async function ensureValidSession( request, response, next ) {
 
   const userIsOnLocalhost = request.get( 'host' ).indexOf( 'localhost' ) === 0;
   if ( userIsOnLocalhost ) {
-    bypassSessionValidation( response );
-    next();
+    bypassSessionValidation( request );
+    return next();
   }
 
   const websiteCookie = request.cookies.JSESSIONID;
