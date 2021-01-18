@@ -19,7 +19,7 @@
     function redirectToEnTranslatePath() {
       const notOnLocalhost = window.location.host === "ox-dev.colorado.edu" || window.location.host === "phet.colorado.edu";
       if ( notOnLocalhost && window.location.pathname === "/translate/" ) {
-        window.location.pathname = "/en/translate/";
+        window.location.pathname = "/en/translate";
       }
     }
     redirectToEnTranslatePath();
