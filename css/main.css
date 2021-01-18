@@ -168,41 +168,6 @@ img.warning:hover {
   margin-left: 100px;
 }
 
-#page-header {
-  background-color: #2a326a;
-  height: 127px;
-}
-
-#page-header-container {
-  height: 127px;
-  margin: 0 auto;
-  width: 765px;
-  position: relative;
-}
-
-#page-header-cu {
-  position: absolute;
-  right: 19px;
-  top: 10px;
-  border: 0;
-}
-
-#page-header-sims-served {
-  position: absolute;
-  left: 250px;
-  top: 26px;
-  font-size: 13px;
-  color: #fff;
-  font-style: italic;
-  font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-}
-
-#page-header-user {
-  color: white;
-  display: table;
-  margin: 0 auto;
-}
-
 /* Define styles for attributes. Attributes are in alphabetical order. */
 
 [class~=testButton] {
