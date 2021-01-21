@@ -125,7 +125,7 @@ module.exports = {
 
   /**
    * get the locale info as an array sorted by locale
-   * @returns {Promise.<Array<Object>>}
+   * @returns {Promise.<Array.<Object>>}
    * @public
    */
   getSortedLocaleInfoArray: async function() {
