@@ -48,7 +48,7 @@ async function getDependencies( simName, version ) {
  * @param {string} simName
  * @param {number} userID
  * @param {string} locale
- * @returns {Promise<boolean>} - true or false depending on whether the build was sent
+ * @returns {Promise.<boolean>} - true or false depending on whether the build was sent
  */
 async function requestBuild( simName, locale, userID ) {
 

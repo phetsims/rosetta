@@ -85,7 +85,7 @@ async function updateLocaleInfo() {
 
 /**
  * update cached data if it is time to do so
- * @returns {Promise<void>}
+ * @returns {Promise.<void>}
  */
 async function checkAndUpdateLocaleInfo() {
 

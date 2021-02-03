@@ -248,7 +248,7 @@ module.exports = {
    * Get the latest version for a simulation.
    *
    * @param {string} simName
-   * @returns {Promise<string>}
+   * @returns {Promise.<string>}
    * @public
    */
   getLatestSimVersion: async function( simName ) {

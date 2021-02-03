@@ -103,7 +103,7 @@ function extractSimSha( simHtml, simName ) {
  * Extract all sim keys used in the provided built sim HTML and format them into a structured object.
  *
  * @param {string} simHtml - HTML of the built sim
- * @returns {Map<{String,String[]}>} - a map with project names for keys (e.g. "build-an-atom") and an array of all the
+ * @returns {Map.<{String,String[]}>} - a map with project names for keys (e.g. "build-an-atom") and an array of all the
  * string keys used for that project
  */
 function extractStringKeys( simHtml ) {
