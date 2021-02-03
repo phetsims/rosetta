@@ -40,7 +40,7 @@ function bypassSessionValidation( request ) {
  *
  * @param request {Object} - The Express request object.
  * @param websiteCookie {string} - The cookie for the website.
- * @returns {Promise.<AxiosResponse<Object>>} - The user's data.
+ * @returns {Promise.<AxiosResponse.<Object>>} - The user's data.
  */
 async function getUserData( request, websiteCookie ) {
   winston.debug( 'Getting user data from /services/check-login.' );
