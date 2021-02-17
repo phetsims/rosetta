@@ -580,6 +580,13 @@ module.exports.testStrings = function( request, response ) {
       // Replace values in the extracted strings with those specified by the user.
       const translatedStringsObject = request.body;
       _.keys( translatedStringsObject ).forEach( key => {
+
+        // If a translator inserts \n, we want a newline. See https://github.com/phetsims/rosetta/issues/207#issuecomment-764986950.
+        if ( translatedStringsObject[ key ].indexOf( '\\n' ) !== -1 ) {
+          winston.info( 'Making sure translator\'s newline works.' );
+          translatedStringsObject[ key ] = translatedStringsObject[ key ].replace( /\\n/g, '\n' );
+        }
+
         if ( stringsObject.en[ key ] ) {
           stringsObject.en[ key ] = translatedStringsObject[ key ];
         }
