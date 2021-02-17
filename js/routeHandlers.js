@@ -163,7 +163,7 @@ module.exports.checkForValidSession = function( request, response, next ) {
 
           if ( !userData.trustedTranslator && !userData.teamMember ) {
             renderErrorPage( response, 'You must be a trusted translator to use the PhET translation utility. ' +
-                                   'Email phethelp@colorado.edu for more information.', '' );
+                                       'Email phethelp@colorado.edu for more information.', '' );
           }
           else {
             request.session.teamMember = userData.teamMember;
@@ -575,11 +575,17 @@ module.exports.testStrings = function( request, response ) {
       const extractedStringsJson = extractedStrings[ 0 ]
         .replace( STRING_VAR_IN_HTML_FILES + ' = ', '' )
         .replace( /;$/m, '' );
-      const stringsObject = JSON.parse( extractedStringsJson );
+      const stringsObject = JSON.parse( extractedStringsJson ); // JSON object blank canvas
 
       // Replace values in the extracted strings with those specified by the user.
       const translatedStringsObject = request.body;
       _.keys( translatedStringsObject ).forEach( key => {
+
+        if ( translatedStringsObject[ key ].indexOf( '\\n' ) !== -1 ) {
+          winston.info( 'replacing line feed sequence in string from repo ' );
+          translatedStringsObject[ key ] = translatedStringsObject[ key ].replace( /\\n/g, '\n' );
+        }
+
         if ( stringsObject.en[ key ] ) {
           stringsObject.en[ key ] = translatedStringsObject[ key ];
         }
