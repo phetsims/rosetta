@@ -61,20 +61,28 @@ Set the value of `enabled` back to true and perform another restart to set Roset
 Triggering a Rebuild Without Being Credited
 -------------------------------------------
 
+### Background/Context
+
 There have been times when a need has arisen to build (or rebuild) a simulation for a non-English locale. While one
 might be tempted to do this via the normal translation interface by making and submitting a small change and then
 reverting it and submitting again, this will unfortunately cause the submitter to be listed on the website as one of
-the credited translators for that simulation.  Issue https://github.com/phetsims/perennial/issues/178 describes a
+the credited translators for that simulation. Issue https://github.com/phetsims/perennial/issues/178 describes a
 scenario where the need to trigger builds without being credited arose. To fill this need, a route was added through
-which a PhET team member can trigger a build of a simulation for a given locale.  There are three parameters for this
-route: the sim name, the locale, and the user ID that should be credited.  The user ID can be obtained by looking in
-babel for the user ID of the most recent translator.  The route will then look something like this:
+which a PhET team member can trigger a build of a simulation for a given locale. There are three parameters for this
+route: the sim name, the locale, and the user ID that should be credited. The user ID can be obtained by looking in
+babel for the user ID of the most recent translator.
 
-```
-https://ox-dev.colorado.edu/translate/trigger-build/build-an-atom/de/1234
-```
+### Instructions
 
-To use this, enter this URL in a browser window and then check some time later that the translation was rebuilt.  You
+1. Make sure you are signed in before you try to trigger a build.
+2. Make sure the instance of Rosetta has sendBuildRequests = true in its config file.
+3. Obtain the user ID you wish to use from Babel.
+4. Create and enter your URL in a web browser. It will look something like this:
+   `https://ox-dev.colorado.edu/translate/trigger-build/build-an-atom/de/1234`.
+5. Check Rosetta's logs and the build server's logs as desired.
+6. Make sure your build went through successfully. (This should take about five minutes.)
+
+To use this, enter this URL in a browser window and then check some time later that the translation was rebuilt. You
 can monitor rosetta and/or the build server log if desired.
 
 Test and Debug Support
