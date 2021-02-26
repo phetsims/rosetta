@@ -874,15 +874,16 @@ module.exports.triggerBuild = async function( request, response ) {
 };
 
 /**
+ * Returns an object that contains keys and values for untranslated strings. The set of untranslated strings is the set
+ * of English, i.e. original strings, minus the set of translated strings.
  *
- *
- * @param {string} sim - hyphenated sim name, e.g. acid-base-solutions (must match repo name)
- * @param {string} locale - locale code, e.g. zh_TW
- * @returns {Object} -
+ * @param {string} simName - hyphenated sim name, e.g. acid-base-solutions (must match repo name)
+ * @param {string} targetLocale - locale code, e.g. zh_TW
+ * @returns {Object} - keys and values for untranslated strings
  */
-async function getUntranslatedStringsObject( sim, locale ) {
+async function getUntranslatedStringsObject( simName, targetLocale ) {
 
-  winston.info( `Request received for untranslated strings object for ${sim} and ${locale}.` );
+  winston.info( `Request received for untranslated strings object for ${simName} and ${targetLocale}.` );
 
   // Get list of sims and locales.
   const simList = await simData.getListOfSimNames( false );
@@ -890,54 +891,34 @@ async function getUntranslatedStringsObject( sim, locale ) {
   const localeList = localeInfoList.map( localeInfo => localeInfo.code );
 
   // If the sim isn't in our list of sims, throw an error.
-  if ( !simList.includes( sim ) ) {
-    const errorMessage = `${sim} is not in simList.`
+  if ( !simList.includes( simName ) ) {
+    const errorMessage = `${simName} is not in simList.`
     winston.error( errorMessage );
     throw new Error( errorMessage );
   }
 
   // If the locale isn't in our list of locales, throw an error.
-  if ( !localeList.includes( locale ) ) {
-    const errorMessage = `${locale} is not in localeList.`
+  if ( !localeList.includes( targetLocale ) ) {
+    const errorMessage = `${targetLocale} is not in localeList.`
     winston.error( errorMessage );
     throw new Error( errorMessage );
   }
 
   // Get English string info and untranslated string info.
-  const englishStringsObject = await longTermStringStorage.getEnglishStrings( sim );
-  const translatedStringsObject = await longTermStringStorage.getTranslatedStrings( sim, locale );
+  const englishStringsObject = await longTermStringStorage.getEnglishStrings( simName );
+  const translatedStringsObject = await longTermStringStorage.getTranslatedStrings( simName, targetLocale );
 
   // Extract string keys.
   const englishStringKeys = Object.keys( englishStringsObject );
   const translatedStringKeys = Object.keys( translatedStringsObject );
 
-  // Print English string keys.
-  winston.debug( 'englishStringKeys==============================' );
-  for ( let i = 0; i < englishStringKeys.length; i++ ) {
-    winston.debug( englishStringKeys[ i ] );
-  }
-
-  // Print translated string keys.
-  winston.debug( 'translatedStringKeys===========================' );
-  for ( let i = 0; i < translatedStringKeys.length; i++ ) {
-    winston.debug( translatedStringKeys[ i ] );
-  }
-
   // The untranslated string keys are the English string keys minus the translated string keys.
   const untranslatedStringKeys = englishStringKeys.filter( key => !translatedStringKeys.includes( key ) );
 
-  // Print untranslated string keys.
-  winston.debug( 'untranslatedStringKeys=========================' );
-  for ( let i = 0; i < untranslatedStringKeys.length; i++ ) {
-    winston.debug( untranslatedStringKeys[ i ] );
-  }
-
   // Try to make an array of untranslated string values. Print them while you're at it.
   const untranslatedStringValues = [];
-  winston.debug( 'untranslatedStringValues=======================' );
   for ( const stringInfo in englishStringsObject ) {
     if ( untranslatedStringKeys.includes( stringInfo ) ) {
-      winston.debug( JSON.stringify( englishStringsObject[ stringInfo ].value ) );
       untranslatedStringValues.push( englishStringsObject[ stringInfo ].value );
     }
   }
@@ -948,25 +929,143 @@ async function getUntranslatedStringsObject( sim, locale ) {
     untranslatedStringsObject[ untranslatedStringKeys[ i ] ] = untranslatedStringValues[ i ];
   }
 
-  // Print the object.
-  winston.debug( 'untranslatedStringsObject======================' );
-  winston.debug( JSON.stringify( untranslatedStringsObject, null, 2 ) );
-
   return untranslatedStringsObject;
 }
 
-module.exports.renderUntranslatedStringsObject = async function( request, response ) {
+function getUntranslatedStringInfo() {
+  const htmlString = 'The following is a list of key-value where "key" is the string key for an untranslated string and ' +
+                     '"value" is the English, i.e. original, value of the untranslated string.<br>' +
+                     'If nothing has been translated, every key-value pair will be printed.<br>' +
+                     'If everything has been translated, no key-value pairs will be printed.<br><br>'
+  return htmlString;
+}
+
+/**
+ * Prints key-value pairs for untranslated strings of a single sim using response.send.
+ *
+ * @param request
+ * @param response
+ * @returns {Promise<void>}
+ */
+module.exports.renderUntranslatedKeysAndValues = async function( request, response ) {
   const simName = request.params.simName;
   const targetLocale = request.params.targetLocale;
   const untranslatedStrings = await getUntranslatedStringsObject( simName, targetLocale );
 
-  // Print key,value for untranslated strings.
-  let htmlString = 'The following is a list of key,value where key is the string key for an untranslated string and ' +
-                   'value is the English, i.e. original, value of the untranslated string.<br>'
+  // Print info for the user.
+  let htmlString = getUntranslatedStringInfo();
   htmlString += `Untranslated string info for ${simName} in locale ${targetLocale}:<br><br>`;
+
+  // Print key-value pairs for untranslated strings.
   for ( const key in untranslatedStrings ) {
     htmlString += `${key},${untranslatedStrings[ key ]}<br>`;
   }
+
+  response.send( htmlString );
+}
+
+// Return number of translated string keys.
+async function getNumTranslatedStrings( simName, targetLocale ) {
+  const translatedStringsObject = await longTermStringStorage.getTranslatedStrings( simName, targetLocale );
+  const translatedStringKeys = Object.keys( translatedStringsObject );
+  return translatedStringKeys.length;
+}
+
+// Return number of English string keys.
+async function getNumEnglishStrings( simName ) {
+  const englishStringsObject = await longTermStringStorage.getEnglishStrings( simName );
+  const englishStringKeys = Object.keys( englishStringsObject );
+  return englishStringKeys.length;
+}
+
+/**
+ * Prints stats about number of translated strings versus number of English strings.
+ *
+ * @param request
+ * @param response
+ * @returns {Promise<void>}
+ */
+module.exports.renderUntranslatedStringsStats = async function( request, response ) {
+  const targetLocale = request.params.targetLocale;
+
+  // Get a list of all sims.
+  const simList = await simData.getListOfSimNames( false );
+
+  // Print message for user.
+  let htmlString = `Translation stats for locale ${targetLocale}:<br>`;
+
+  // Print stats.
+  let numTotalEnglishStrings = 0;
+  let numTotalTranslatedStrings = 0;
+  for ( let i = 0; i < simList.length; i++ ) {
+    const numTranslatedStrings = await getNumTranslatedStrings( simList[i], targetLocale );
+    numTotalTranslatedStrings += numTranslatedStrings;
+    const numEnglishStrings = await getNumEnglishStrings( simList[i] );
+    numTotalEnglishStrings += numEnglishStrings;
+    htmlString += `<br>${simList[i]}:<br>`;
+    htmlString += `${numTranslatedStrings} translated string keys, ${numEnglishStrings} English string keys<br>`;
+  }
+
+  // Print big picture stats.
+  htmlString += `<br>TOTAL TRANSLATED STRING KEYS = ${numTotalTranslatedStrings}<br>`;
+  htmlString += `<br>TOTAL ENGLISH STRING KEYS = ${numTotalEnglishStrings}<br>`;
+  htmlString += `<br>Roughly ${(numTotalTranslatedStrings / numTotalEnglishStrings) * 100}% of the strings have been translated for locale ${targetLocale}.`;
+
+  response.send( htmlString );
+}
+
+/**
+ * Returns an object containing an object of key-value pairs for each sim. For example,
+ *
+ * {
+ *  "acid-base-solutions": {
+ *    "key": "value",
+ *    ...
+ *  }
+ * }
+ *
+ * @param targetLocale - locale code, e.g. zh_TW
+ * @returns {Promise<Object>} - an object containing an object of key-value pairs for each sim
+ */
+async function getAllUntranslatedStringsObject( targetLocale ) {
+
+  // Get a list of all sims.
+  const simList = await simData.getListOfSimNames( false );
+
+  // Create empty list of untranslated strings objects for later population.
+  const allUntranslatedStringsObject = {};
+
+  // For every sim, add its untranslated strings object.
+  for ( let i = 0; i < simList.length; i++ ) {
+    allUntranslatedStringsObject[ simList[ i ] ] = await getUntranslatedStringsObject( simList[ i ], targetLocale );
+  }
+
+  return allUntranslatedStringsObject;
+}
+
+/**
+ * Prints all key-value pairs for untranslated strings of a given sim using response.send.
+ *
+ * @param request
+ * @param response
+ * @returns {Promise<void>}
+ */
+module.exports.renderAllUntranslatedKeysAndValues = async function( request, response ) {
+  const targetLocale = request.params.targetLocale;
+  const allUntranslatedStringsObject = await getAllUntranslatedStringsObject( targetLocale );
+
+  // Print info for the user.
+  let htmlString = getUntranslatedStringInfo();
+  htmlString += `Untranslated string info for locale ${targetLocale}:<br>`;
+
+  // Specify sim, and then print key-value pairs for untranslated strings.
+  for ( const sim in allUntranslatedStringsObject ) {
+    htmlString += `<br>Untranslated key-value pairs for ${sim}:<br>`
+    for ( const key in allUntranslatedStringsObject[ sim ] ) {
+      htmlString += `${key},${allUntranslatedStringsObject[ sim ][ key ]}<br>`
+    }
+  }
+
   response.send( htmlString );
 }
 
