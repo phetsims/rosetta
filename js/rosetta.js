@@ -174,8 +174,8 @@ app.get( '/translate/logout', routeHandlers.logout );
 app.get( '/translate/trigger-build/:simName?/:targetLocale?/:userId?', routeHandlers.triggerBuild );
 
 // Routes for identifying untranslated strings and simulations.
-app.get( '/translate/get-untranslated-strings/:simName?/:targetLocale?/', routeHandlers.renderUntranslatedStrings );
-app.get( '/translate/get-untranslated-sims/:targetLocale?/', routeHandlers.renderUntranslatedStrings );
+app.get( '/translate/get-untranslated-strings/:simName?/:targetLocale?/', routeHandlers.renderUntranslatedStringsObject );
+app.get( '/translate/get-untranslated-sims/:targetLocale?/', routeHandlers.renderUntranslatedStringsObject );
 
 // Set up testing routes.
 app.get( '/translate/test/', routeHandlers.displayTestPage );
