@@ -14,12 +14,12 @@
 const _ = require( 'lodash' ); // eslint-disable-line
 const axios = require( 'axios' );
 const https = require( 'https' );
-const longTermStringStorage = require( './longTermStringStorage' );
 const winston = require( 'winston' );
 const { Pool } = require( 'pg' ); // eslint-disable-line
 
 // server modules
 const localeInfo = require( './localeInfo' );
+const longTermStringStorage = require( './longTermStringStorage' );
 const RosettaConstants = require( './RosettaConstants' );
 const ServerTests = require( './ServerTests' );
 const simData = require( './simData' );
@@ -163,7 +163,7 @@ module.exports.checkForValidSession = function( request, response, next ) {
 
           if ( !userData.trustedTranslator && !userData.teamMember ) {
             renderErrorPage( response, 'You must be a trusted translator to use the PhET translation utility. ' +
-                                   'Email phethelp@colorado.edu for more information.', '' );
+                                       'Email phethelp@colorado.edu for more information.', '' );
           }
           else {
             request.session.teamMember = userData.teamMember;
@@ -872,6 +872,78 @@ module.exports.triggerBuild = async function( request, response ) {
     pageNotFound( request, response );
   }
 };
+
+/**
+ * Gets the list of English strings for which there is no translated string for the provided locale.
+ * If there is no translation for the given sim and locale, we return every string key.
+ *
+ * @param {string} sim - hyphenated sim name, e.g. acid-base-solutions (must match repo name)
+ * @param {string} locale - locale code, e.g. zh_TW
+ * @returns {string[]} - list of untranslated string keys for given sim and locale
+ */
+async function getUntranslatedStringKeys( sim, locale ) {
+
+  winston.info( `Request received for untranslated strings for ${sim} and ${locale}.` );
+
+  // Get list of sims and locales.
+  const simList = await simData.getListOfSimNames( false );
+  const localeInfoList = await localeInfo.getSortedLocaleInfoArray();
+  const localeList = localeInfoList.map( localeInfo => localeInfo.code );
+
+  // If the sim isn't in our list of sims, throw an error.
+  if ( !simList.includes( sim ) ) {
+    const errorMessage = `${sim} is not in simList.`
+    winston.error( errorMessage );
+    throw new Error( errorMessage );
+  }
+
+  // If the locale isn't in our list of locales, throw an error.
+  if ( !localeList.includes( locale ) ) {
+    const errorMessage = `${locale} is not in localeList.`
+    winston.error( errorMessage );
+    throw new Error( errorMessage );
+  }
+
+  // Get English string info and untranslated string info.
+  const englishStringsObject = await longTermStringStorage.getEnglishStrings( sim );
+  const translatedStringsObject = await longTermStringStorage.getTranslatedStrings( sim, locale );
+
+  // Extract string keys.
+  const englishStringKeys = Object.getOwnPropertyNames( englishStringsObject );
+  const translatedStringKeys = Object.getOwnPropertyNames( translatedStringsObject );
+
+  // Print English string keys.
+  winston.debug('englishStringKeys==============================');
+  for ( let i = 0; i < englishStringKeys.length; i++ ) {
+    winston.debug( englishStringKeys[i] );
+  }
+
+  // Print translated string keys.
+  winston.debug('translatedStringKeys===========================');
+  for ( let i = 0; i < translatedStringKeys.length; i++ ) {
+    winston.debug( translatedStringKeys[i] );
+  }
+
+  // The untranslated string keys are the English string keys minus the translated string keys.
+  const untranslatedStringKeys = englishStringKeys.filter( key => !translatedStringKeys.includes( key ) );
+
+  // Print untranslated string keys.
+  winston.debug('untranslatedStringKeys=========================');
+  for ( let i = 0; i < untranslatedStringKeys.length; i++ ) {
+    winston.debug( untranslatedStringKeys[i] );
+  }
+
+  return untranslatedStringKeys;
+}
+
+module.exports.renderUntranslatedStrings = async function( request, response ) {
+  const untranslatedStrings = await getUntranslatedStringKeys( request.params.simName, request.params.targetLocale );
+  let htmlString = '';
+  for( let i = 0; i < untranslatedStrings.length; i++ ) {
+    htmlString += `${untranslatedStrings[i]}<br>`;
+  }
+  response.send( htmlString );
+}
 
 /**
  * Displays the main test harness page if the user is a PhET team member. Used for development.
