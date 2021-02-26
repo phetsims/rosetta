@@ -47,7 +47,7 @@ async function getUserData( request, websiteCookie ) {
   const url = `https://${request.get( 'host' )}/services/check-login`;
   const options = {
     headers: {
-      'Cookie': `JSESSIONID=${websiteCookie}`
+      Cookie: `JSESSIONID=${websiteCookie}`
     }
   };
   try {

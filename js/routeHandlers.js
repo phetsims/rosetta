@@ -133,7 +133,7 @@ module.exports.checkForValidSession = function( request, response, next ) {
       path: '/services/check-login',
       method: 'GET',
       headers: {
-        'Cookie': 'JSESSIONID=' + cookie
+        Cookie: 'JSESSIONID=' + cookie
       }
     };
 
@@ -671,7 +671,7 @@ module.exports.saveStrings = async function( request, response ) {
 
   // Send the response.
   response.json( {
-    'success': !saveError
+    success: !saveError
   } );
 };
 
