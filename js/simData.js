@@ -53,7 +53,7 @@ async function updateSimInfo() {
   try {
     const simMetadataResponse = await axios.get( METADATA_URL, METADATA_REQUEST_OPTIONS );
     simMetadata = simMetadataResponse.data;
-    winston.debug('Metadata successfully retrieved!');
+    winston.debug( 'Metadata successfully retrieved!' );
   }
   catch( error ) {
     const getSimMetadataError = new Error( `Unable to get sim metadata. Error: ${error.message}` );

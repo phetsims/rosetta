@@ -998,18 +998,18 @@ module.exports.renderUntranslatedStringsStats = async function( request, respons
   let numTotalEnglishStrings = 0;
   let numTotalTranslatedStrings = 0;
   for ( let i = 0; i < simList.length; i++ ) {
-    const numTranslatedStrings = await getNumTranslatedStrings( simList[i], targetLocale );
+    const numTranslatedStrings = await getNumTranslatedStrings( simList[ i ], targetLocale );
     numTotalTranslatedStrings += numTranslatedStrings;
-    const numEnglishStrings = await getNumEnglishStrings( simList[i] );
+    const numEnglishStrings = await getNumEnglishStrings( simList[ i ] );
     numTotalEnglishStrings += numEnglishStrings;
-    htmlString += `<br>${simList[i]}:<br>`;
+    htmlString += `<br>${simList[ i ]}:<br>`;
     htmlString += `${numTranslatedStrings} translated string keys, ${numEnglishStrings} English string keys<br>`;
   }
 
   // Print big picture stats.
   htmlString += `<br>TOTAL TRANSLATED STRING KEYS = ${numTotalTranslatedStrings}<br>`;
   htmlString += `<br>TOTAL ENGLISH STRING KEYS = ${numTotalEnglishStrings}<br>`;
-  htmlString += `<br>Roughly ${(numTotalTranslatedStrings / numTotalEnglishStrings) * 100}% of the strings have been translated for locale ${targetLocale}.`;
+  htmlString += `<br>Roughly ${( numTotalTranslatedStrings / numTotalEnglishStrings ) * 100}% of the strings have been translated for locale ${targetLocale}.`;
 
   response.send( htmlString );
 }
