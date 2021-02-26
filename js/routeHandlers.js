@@ -892,14 +892,14 @@ async function getUntranslatedStringsObject( simName, targetLocale ) {
 
   // If the sim isn't in our list of sims, throw an error.
   if ( !simList.includes( simName ) ) {
-    const errorMessage = `${simName} is not in simList.`
+    const errorMessage = `${simName} is not in simList.`;
     winston.error( errorMessage );
     throw new Error( errorMessage );
   }
 
   // If the locale isn't in our list of locales, throw an error.
   if ( !localeList.includes( targetLocale ) ) {
-    const errorMessage = `${targetLocale} is not in localeList.`
+    const errorMessage = `${targetLocale} is not in localeList.`;
     winston.error( errorMessage );
     throw new Error( errorMessage );
   }
@@ -936,7 +936,7 @@ function getUntranslatedStringInfo() {
   const htmlString = 'The following is a list of key-value where "key" is the string key for an untranslated string and ' +
                      '"value" is the English, i.e. original, value of the untranslated string.<br>' +
                      'If nothing has been translated, every key-value pair will be printed.<br>' +
-                     'If everything has been translated, no key-value pairs will be printed.<br><br>'
+                     'If everything has been translated, no key-value pairs will be printed.<br><br>';
   return htmlString;
 }
 
@@ -945,7 +945,7 @@ function getUntranslatedStringInfo() {
  *
  * @param request
  * @param response
- * @returns {Promise<void>}
+ * @returns {Promise.<void>}
  */
 module.exports.renderUntranslatedKeysAndValues = async function( request, response ) {
   const simName = request.params.simName;
@@ -962,7 +962,7 @@ module.exports.renderUntranslatedKeysAndValues = async function( request, respon
   }
 
   response.send( htmlString );
-}
+};
 
 // Return number of translated string keys.
 async function getNumTranslatedStrings( simName, targetLocale ) {
@@ -983,7 +983,7 @@ async function getNumEnglishStrings( simName ) {
  *
  * @param request
  * @param response
- * @returns {Promise<void>}
+ * @returns {Promise.<void>}
  */
 module.exports.renderUntranslatedStringsStats = async function( request, response ) {
   const targetLocale = request.params.targetLocale;
@@ -1012,7 +1012,7 @@ module.exports.renderUntranslatedStringsStats = async function( request, respons
   htmlString += `<br>Roughly ${( numTotalTranslatedStrings / numTotalEnglishStrings ) * 100}% of the strings have been translated for locale ${targetLocale}.`;
 
   response.send( htmlString );
-}
+};
 
 /**
  * Returns an object containing an object of key-value pairs for each sim. For example,
@@ -1025,7 +1025,7 @@ module.exports.renderUntranslatedStringsStats = async function( request, respons
  * }
  *
  * @param targetLocale - locale code, e.g. zh_TW
- * @returns {Promise<Object>} - an object containing an object of key-value pairs for each sim
+ * @returns {Promise.<Object>} - an object containing an object of key-value pairs for each sim
  */
 async function getAllUntranslatedStringsObject( targetLocale ) {
 
@@ -1048,7 +1048,7 @@ async function getAllUntranslatedStringsObject( targetLocale ) {
  *
  * @param request
  * @param response
- * @returns {Promise<void>}
+ * @returns {Promise.<void>}
  */
 module.exports.renderAllUntranslatedKeysAndValues = async function( request, response ) {
   const targetLocale = request.params.targetLocale;
@@ -1060,14 +1060,14 @@ module.exports.renderAllUntranslatedKeysAndValues = async function( request, res
 
   // Specify sim, and then print key-value pairs for untranslated strings.
   for ( const sim in allUntranslatedStringsObject ) {
-    htmlString += `<br>Untranslated key-value pairs for ${sim}:<br>`
+    htmlString += `<br>Untranslated key-value pairs for ${sim}:<br>`;
     for ( const key in allUntranslatedStringsObject[ sim ] ) {
-      htmlString += `${key},${allUntranslatedStringsObject[ sim ][ key ]}<br>`
+      htmlString += `${key},${allUntranslatedStringsObject[ sim ][ key ]}<br>`;
     }
   }
 
   response.send( htmlString );
-}
+};
 
 /**
  * Displays the main test harness page if the user is a PhET team member. Used for development.
