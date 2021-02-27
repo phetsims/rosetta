@@ -276,7 +276,7 @@ $( document ).ready( function() {
           const hasOpen = openIndex >= 0;
           const hasClosed = closedIndex >= 0;
 
-          if ( hasOpen ^ hasClosed ) {
+          if ( hasOpen ^ hasClosed ) { // eslint-disable-line no-bitwise
             validated = false;
             badTagMessage = `Tag is missing opening or closing for: ${tag}`;
           }
