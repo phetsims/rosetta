@@ -38,7 +38,7 @@
   "eslintConfig": {
     "extends": "../chipper/eslint/node_eslintrc.js",
     "globals": {
-      "alert": false
+      "alert": "readonly"
     }
   }
 }
