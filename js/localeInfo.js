@@ -35,7 +35,7 @@ let inProgressFileRetrievalPromise = null;
 async function updateLocaleInfo() {
 
   // Set boolean for whether localeInfoObject has cache.
-  const localeInfoObjectHasCache = Object.keys( localeInfoObject ).length === 0 ? false : true;
+  const localeInfoObjectHasCache = Object.keys( localeInfoObject ).length !== 0;
 
   // Get the locale info object from GitHub.
   const localeInfoUrl = `${GITHUB_RAW_FILE_URL_BASE}/phetsims/chipper/master/data/localeInfo.json`;

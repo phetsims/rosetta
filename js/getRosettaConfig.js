@@ -31,7 +31,7 @@ const CONFIG_FILENAME = 'rosetta-config.json';
  */
 function getConfigDirPath() {
   let configDirPath;
-  const platformIsWindows = process.platform === 'win32' ? true : false;
+  const platformIsWindows = process.platform === 'win32';
   if ( platformIsWindows ) {
     configDirPath = process.env.HOME + WINDOWS_CONFIG_DIR + '\\';
   }
