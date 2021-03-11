@@ -189,7 +189,7 @@ async function deleteStringsFromDB( userID, locale, simOrLibNames ) {
   // create a string with all the repo names that can be used in the SQL query
   let simOrLibNamesString = '';
   simOrLibNames.forEach( ( simOrLibName, index ) => {
-    simOrLibNamesString += 'repository = ' + '\'' + simOrLibName + '\'';
+    simOrLibNamesString += 'repository = \'' + simOrLibName + '\'';
     if ( index < simOrLibNames.length - 1 ) {
       simOrLibNamesString += ' OR ';
     }
