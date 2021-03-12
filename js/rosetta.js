@@ -143,11 +143,11 @@ app.get( '/translate*', ensureValidSession );
 // app.get( '/translate*', routeHandlers.checkForValidSession );
 
 // Set up routes for debugging.
-app.post( '/translate*', function( request, response, next ) {
+app.post( '/translate*', ( request, response, next ) => {
   winston.debug( `Post request received. URL: ${request.url}.` );
   next();
 } );
-app.get( '/translate*', function( request, response, next ) {
+app.get( '/translate*', ( request, response, next ) => {
   winston.debug( `Get request received. URL: ${request.url}.` );
   next();
 } );

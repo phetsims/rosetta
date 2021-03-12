@@ -110,7 +110,7 @@ module.exports.checkForValidSession = function( request, response, next ) {
     // User's session has expired. Clear session and send user to login page.
     winston.info( 'Session expired. Forcing user to log in again.' );
 
-    request.session.destroy( function() {
+    request.session.destroy( () => {
       renderErrorPage( response,
         '<h1>Your session has expired</h1>' +
         '<p>Go to <a href="https://phet.colorado.edu/translate/">https://phet.colorado.edu/translate/</a> to start a new session.</p>',
@@ -141,12 +141,12 @@ module.exports.checkForValidSession = function( request, response, next ) {
       let data = '';
 
       // Another chunk of data has been received, so append it.
-      response.on( 'data', function( chunk ) {
+      response.on( 'data', chunk => {
         data += chunk;
       } );
 
       // The whole response has been received. See if credentials are valid.
-      response.on( 'end', function() {
+      response.on( 'end', () => {
         winston.info( `Data: ${data}.` );
         let userData;
         try {
@@ -192,7 +192,7 @@ module.exports.checkForValidSession = function( request, response, next ) {
     const requestCredentials = https.request( options, sessionDataRequestCallback );
 
     // Handle errors.
-    requestCredentials.on( 'error', function( error ) {
+    requestCredentials.on( 'error', error => {
       winston.error( `Unable to receive session data. Error: ${error}.` );
       renderErrorPage( response, `Unable to obtain user credentials. Error: ${error}.` );
     } );
@@ -210,7 +210,7 @@ module.exports.checkForValidSession = function( request, response, next ) {
  * @param next
  */
 module.exports.logout = function( request, response ) {
-  request.session.destroy( function() {
+  request.session.destroy( () => {
     response.clearCookie( 'JSESSIONID' );
     response.redirect( '/' );
   } );
@@ -228,7 +228,7 @@ module.exports.chooseSimulationAndLanguage = async function( request, response )
   const simInfoArray = await simData.getSimTranslationPageInfo( request.session.teamMember );
 
   // Sort the list of sims in alphabetical order by sim title.
-  simInfoArray.sort( function( a, b ) {
+  simInfoArray.sort( ( a, b ) => {
     if ( a.simTitle < b.simTitle ) {
       return -1;
     }

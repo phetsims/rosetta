@@ -44,7 +44,7 @@ const testHandlers = {
     const stringRetrievalPromises = [];
 
     // create the promises for retrieving the strings
-    stringFilesToRetrieve.forEach( function( stringFileSpec ) {
+    stringFilesToRetrieve.forEach( stringFileSpec => {
 
       stringRetrievalPromises.push(
         longTermStringStorage.getTranslatedStrings( stringFileSpec.repoName, stringFileSpec.locale )
@@ -185,7 +185,7 @@ const testHandlers = {
     const stringChangePromises = [];
 
     // get the strings, then modify them
-    locales.forEach( function( locale ) {
+    locales.forEach( locale => {
       winston.info( 'getting strings for sim ' + simName + ', locale ' + locale );
       const modifyStringsPromise = longTermStringStorage.getTranslatedStrings( simName, locale )
         .then( strings => {

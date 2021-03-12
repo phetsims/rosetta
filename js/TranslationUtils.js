@@ -52,7 +52,7 @@ function sendEmail( subject, text ) {
       from: 'PhET Translation Utility (rosetta) <phethelp@colorado.edu>',
       to: preferences.emailTo,
       subject: subject
-    }, function( error, message ) {
+    }, ( error, message ) => {
       if ( error ) {
         winston.error( `Unable to send email. Error: ${error}.` );
       }

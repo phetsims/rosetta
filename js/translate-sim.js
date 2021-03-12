@@ -45,7 +45,7 @@ function setEndOfContentEditable( contentEditableElement ) {
   }
 }
 
-$( document ).ready( function() {
+$( document ).ready( () => {
 
   const testButtonTop = document.getElementById( 'testButtonTop' );
   const saveButtonTop = document.getElementById( 'saveButtonTop' );
@@ -66,7 +66,7 @@ $( document ).ready( function() {
    * Copy all of the content-editable text into the hidden inputs to be submitted
    */
   function syncInputs() {
-    inputs.each( function( index, element ) {
+    inputs.each( ( index, element ) => {
       const contentEditable = $( element );
       const input = contentEditable.next().get( 0 );
       input.value = contentEditable.text();
@@ -99,7 +99,7 @@ $( document ).ready( function() {
 
     // fill in the fields of this new form with the data from the main strings form
     const inputs = $( '.string-translation-table tr' );
-    inputs.each( function( i, row ) {
+    inputs.each( ( i, row ) => {
       const contentEditable = $( $( row ).find( 'div[contenteditable]' ).get( 0 ) );
       if ( contentEditable ) {
         let translation = contentEditable.text();
@@ -141,11 +141,11 @@ $( document ).ready( function() {
     syncInputs();
 
     const strings = {};
-    $( 'td input' ).each( function( index, item ) {
+    $( 'td input' ).each( ( index, item ) => {
       strings[ item.name ] = item.value;
     } );
 
-    $.post( '/translate/sim/save/' + simData.getAttribute( 'data-sim-name' ) + '/' + simData.getAttribute( 'data-locale-name' ), strings, function( data ) {
+    $.post( '/translate/sim/save/' + simData.getAttribute( 'data-sim-name' ) + '/' + simData.getAttribute( 'data-locale-name' ), strings, data => {
       $( '.saving-gif' ).hide();
 
       if ( data.success ) {
@@ -193,7 +193,7 @@ $( document ).ready( function() {
   }
 
   // add highlight to '\n', '{\d}', and '{{\w+}}' so users are aware that this is treated specially
-  $( 'td:nth-child(2)' ).each( function( index, element ) {
+  $( 'td:nth-child(2)' ).each( ( index, element ) => {
     $( element ).html( $( element ).html().replace( /(\{\d\}|\\n)/g, '<span class=\'highlight\'>$1</span>' ) );
     $( element ).html( $( element ).html().replace( DOUBLE_BRACE_PATTERN_REGULAR_EXP, '<span class=\'highlight\'>$&</span>' ) );
   } );
@@ -296,7 +296,7 @@ $( document ).ready( function() {
         const img = $( '<img>', { src: '/translate/img/warning.png', class: 'warning' } );
         tableDataCell.append( img );
 
-        img.click( function() {
+        img.click( () => {
           const errorMessage = [ 'Your translation has the following errors:\n' ];
           if ( missingPlaceholders.length ) {
             errorMessage.push( 'missing placeholder(s) in submission: ' + missingPlaceholders.join( ', ' ) );
@@ -324,7 +324,7 @@ $( document ).ready( function() {
    */
   function validatePatterns() {
     let validated = true;
-    $( 'tr' ).each( function( index, item ) {
+    $( 'tr' ).each( ( index, item ) => {
       if ( !validateRow( item ) ) {
         validated = false;
       }
@@ -356,7 +356,7 @@ $( document ).ready( function() {
   }
 
   // validate the inputs before submitting the form
-  $( '#strings' ).submit( function( event ) {
+  $( '#strings' ).submit( event => {
     if ( countTranslatedStringsForSim() === 0 ) {
       $( '.validation-message' ).text( 'No simulation strings have been translated.  Please translate at least one string before submitting.' );
       event.preventDefault();
@@ -380,7 +380,7 @@ $( document ).ready( function() {
   }
 
   // disable pressing enter in inputs because it complicates things by adding <br> and possibly other html
-  $( document ).on( 'keypress', inputSelector, function( e ) {
+  $( document ).on( 'keypress', inputSelector, e => {
     return e.which !== 13;
   } );
 
@@ -392,7 +392,7 @@ $( document ).ready( function() {
 
     // need to set a timeout after pasting in so that the paste has time to take effect
     if ( e.type === 'paste' ) {
-      setTimeout( function() {
+      setTimeout( () => {
         input.value = contentEditable.text();
         contentEditable.text( contentEditable.text() );
       }, 50 );

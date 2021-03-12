@@ -152,17 +152,17 @@ function saveTranslatedStrings( simOrLibName, locale, strings ) {
 function saveFileToGitHub( filePath, contents, commitMessage ) {
 
   // wrap the async calls that interact with GitHub into a promise
-  return new Promise( function( resolve, reject ) {
+  return new Promise( ( resolve, reject ) => {
 
     if ( PERFORM_STRING_COMMITS ) {
 
       // test if the file already exists
-      stringStorageRepo.contents( filePath, BABEL_BRANCH, function( err, data ) {
+      stringStorageRepo.contents( filePath, BABEL_BRANCH, ( err, data ) => {
 
         if ( !err ) {
 
           // update the existing file in GitHub
-          stringStorageRepo.updateContents( filePath, commitMessage, contents, data.sha, BABEL_BRANCH, function( err, data ) {
+          stringStorageRepo.updateContents( filePath, commitMessage, contents, data.sha, BABEL_BRANCH, ( err, data ) => {
             if ( !err ) {
               winston.info( 'successfully committed changes for file ' + filePath );
               resolve( data );
@@ -176,7 +176,7 @@ function saveFileToGitHub( filePath, contents, commitMessage ) {
         else {
 
           // create a new file in GitHub
-          stringStorageRepo.createContents( filePath, commitMessage, contents, BABEL_BRANCH, function( err, data ) {
+          stringStorageRepo.createContents( filePath, commitMessage, contents, BABEL_BRANCH, ( err, data ) => {
             if ( !err ) {
               winston.info( 'successfully created file ' + filePath );
               resolve( data );
