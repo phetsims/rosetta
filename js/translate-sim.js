@@ -89,7 +89,7 @@ $( document ).ready( () => {
     // didn't trigger the popup blocker, so I went with it.
 
     // create the URL for the post request
-    const testTranslationURL = window.location.origin + '/translate/sim/test/' + simData.getAttribute( 'data-sim-name' );
+    const testTranslationURL = `${window.location.origin}/translate/sim/test/${simData.getAttribute( 'data-sim-name' )}`;
 
     // create a form whose response will appear in a new window
     const translatedStringsForm = document.createElement( 'form' );
@@ -108,16 +108,16 @@ $( document ).ready( () => {
 
           // add RTL embedding markers for RTL strings
           if ( rtl ) {
-            translation = '\u202b' + translation + '\u202c';
+            translation = `\u202b${translation}\u202c`;
           }
           else {
-            translation = '\u202a' + translation + '\u202c';
+            translation = `\u202a${translation}\u202c`;
           }
 
           // create an input field for the translated string
           const input = document.createElement( 'input' );
           input.type = 'text';
-          input.name = repo.replace( /-/g, '_' ).toUpperCase() + '/' + row.getAttribute( 'data-string-key' );
+          input.name = `${repo.replace( /-/g, '_' ).toUpperCase()}/${row.getAttribute( 'data-string-key' )}`;
           input.value = translation;
           translatedStringsForm.appendChild( input );
         }
@@ -145,7 +145,7 @@ $( document ).ready( () => {
       strings[ item.name ] = item.value;
     } );
 
-    $.post( '/translate/sim/save/' + simData.getAttribute( 'data-sim-name' ) + '/' + simData.getAttribute( 'data-locale-name' ), strings, data => {
+    $.post( `/translate/sim/save/${simData.getAttribute( 'data-sim-name' )}/${simData.getAttribute( 'data-locale-name' )}`, strings, data => {
       $( '.saving-gif' ).hide();
 
       if ( data.success ) {
@@ -179,7 +179,7 @@ $( document ).ready( () => {
     button.style.backgroundColor = '#2a326a';
     button.style.borderColor = '#1A87B9';
     button.disabled = false;
-    $( '#' + button.id ).hover( function() {
+    $( `#${button.id}` ).hover( function() {
         $( this ).css( {
           background: '#6D77BD'
         } );
@@ -299,10 +299,10 @@ $( document ).ready( () => {
         img.click( () => {
           const errorMessage = [ 'Your translation has the following errors:\n' ];
           if ( missingPlaceholders.length ) {
-            errorMessage.push( 'missing placeholder(s) in submission: ' + missingPlaceholders.join( ', ' ) );
+            errorMessage.push( `missing placeholder(s) in submission: ${missingPlaceholders.join( ', ' )}` );
           }
           if ( extraPlaceholders.length ) {
-            errorMessage.push( 'extra placeholder(s) in submission: ' + extraPlaceholders.join( ', ' ) );
+            errorMessage.push( `extra placeholder(s) in submission: ${extraPlaceholders.join( ', ' )}` );
           }
           if ( badTagMessage ) {
             errorMessage.push( badTagMessage );

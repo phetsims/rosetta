@@ -90,7 +90,7 @@ const pool = new Pool( {
 } );
 pool.query( 'SELECT NOW();', ( error, result ) => {
   if ( error ) {
-    winston.error( 'Database test using SELECT NOW() failed. Error: ' + JSON.stringify( error ) );
+    winston.error( `Database test using SELECT NOW() failed. Error: ${JSON.stringify( error )}` );
     winston.error( 'Short term storage will be unavailable.' );
   }
   else {
@@ -104,13 +104,13 @@ pool.query( 'SELECT NOW();', ( error, result ) => {
 
 // Create and configure the Express.js app.
 const app = express();
-app.set( 'views', __dirname + '/../html/views' );
+app.set( 'views', `${__dirname}/../html/views` );
 app.set( 'view engine', 'dot' );
 app.engine( 'html', doT.__express );
 
 // Set static directories for CSS, images, and JavaScript.
-app.use( '/translate/css', express.static( __dirname + '/../css' ) );
-app.use( '/translate/img', express.static( __dirname + '/../img' ) );
+app.use( '/translate/css', express.static( `${__dirname}/../css` ) );
+app.use( '/translate/img', express.static( `${__dirname}/../img` ) );
 app.use( '/translate/js', express.static( __dirname ) );
 
 // Set up handling for cookies.
@@ -131,7 +131,7 @@ app.use( bodyParser.urlencoded( { extended: false } ) );
 //===========================================================================//
 
 // Add route handlers. Must be after global.config has been initialized and logger configured.
-const routeHandlers = require( __dirname + '/routeHandlers' );
+const routeHandlers = require( `${__dirname}/routeHandlers` );
 
 // Set up route for the 'down for maintenance' page.
 if ( !global.config.enabled ) {

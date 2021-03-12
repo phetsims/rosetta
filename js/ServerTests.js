@@ -51,19 +51,19 @@ const testHandlers = {
           .then( () => {
               if ( stringFileSpec.expectedToExist ) {
                 winston.info(
-                  'strings successfully retrieved for sim/lib:' +
-                  stringFileSpec.repoName + ',' +
-                  'locale:' +
-                  stringFileSpec.locale
+                  `strings successfully retrieved for sim/lib:${
+                  stringFileSpec.repoName},` +
+                  `locale:${
+                  stringFileSpec.locale}`
                 );
                 return Promise.resolve();
               }
               else {
                 winston.error(
-                  'strings retrieved, but this was not expected - sim/lib:' +
-                  stringFileSpec.repoName + ',' +
-                  'locale:' +
-                  stringFileSpec.locale
+                  `strings retrieved, but this was not expected - sim/lib:${
+                  stringFileSpec.repoName},` +
+                  `locale:${
+                  stringFileSpec.locale}`
                 );
                 return Promise.reject( new Error( 'successful string retrieval not expected' ) );
               }
@@ -72,19 +72,19 @@ const testHandlers = {
           .catch( err => {
             if ( !stringFileSpec.expectedToExist ) {
               winston.info(
-                'unable to obtain strings, which is the expected result, for sim/lib:' +
-                stringFileSpec.repoName + ',' +
-                'locale:' +
-                stringFileSpec.locale
+                `unable to obtain strings, which is the expected result, for sim/lib:${
+                stringFileSpec.repoName},` +
+                `locale:${
+                stringFileSpec.locale}`
               );
               return Promise.resolve();
             }
             else {
               winston.error(
-                'unable to get strings for sim/lib:' +
-                stringFileSpec.repoName + ',' +
-                'locale:' +
-                stringFileSpec.locale
+                `unable to get strings for sim/lib:${
+                stringFileSpec.repoName},` +
+                `locale:${
+                stringFileSpec.locale}`
               );
               return Promise.reject( err );
             }
@@ -147,7 +147,7 @@ const testHandlers = {
       .then( strings => {
 
         const firstKey = _.keys( strings )[ 0 ];
-        strings[ firstKey ].value = strings[ firstKey ].value + 'X';
+        strings[ firstKey ].value = `${strings[ firstKey ].value}X`;
 
         return longTermStringStorage.stringsMatch( 'arithmetic', 'es', strings )
           .then( result => {
@@ -186,7 +186,7 @@ const testHandlers = {
 
     // get the strings, then modify them
     locales.forEach( locale => {
-      winston.info( 'getting strings for sim ' + simName + ', locale ' + locale );
+      winston.info( `getting strings for sim ${simName}, locale ${locale}` );
       const modifyStringsPromise = longTermStringStorage.getTranslatedStrings( simName, locale )
         .then( strings => {
 
@@ -197,7 +197,7 @@ const testHandlers = {
           if ( dividerIndex !== -1 ) {
             firstStringValue = firstStringValue.substring( 0, dividerIndex );
           }
-          strings[ firstKey ].value = firstStringValue + '---' + ( new Date().getTime() );
+          strings[ firstKey ].value = `${firstStringValue}---${new Date().getTime()}`;
           return strings;
         } )
         .then( strings => {
@@ -225,9 +225,9 @@ const testHandlers = {
 
     // Note - there is a lot of sim data, so the code below can be changed as desired to test whatever you'd like
     const simUrl = await simData.getLiveSimUrl( 'chains' );
-    winston.info( 'simUrl = ' + simUrl );
+    winston.info( `simUrl = ${simUrl}` );
     const version = await simData.getLatestSimVersion( 'chains' );
-    winston.info( 'latest version = ' + version );
+    winston.info( `latest version = ${version}` );
     return 'success';
   },
 
@@ -251,7 +251,7 @@ const testHandlers = {
  */
 module.exports.executeTest = async function executeTest( testID ) {
   if ( testHandlers[ testID ] ) {
-    winston.info( 'initiating test ' + testID );
+    winston.info( `initiating test ${testID}` );
 
     try {
       const result = await testHandlers[ testID ]();
@@ -267,7 +267,7 @@ module.exports.executeTest = async function executeTest( testID ) {
     }
   }
   else {
-    const errorMessage = 'requested test not defined, testID = ' + testID;
+    const errorMessage = `requested test not defined, testID = ${testID}`;
     winston.error( errorMessage );
     return { err: errorMessage };
   }
@@ -289,12 +289,12 @@ module.exports.runTests = async function() {
     const { testPass, err } = await this.executeTest( testName );
 
     if ( testPass ) {
-      winston.info( 'test ' + testName + ' result: PASS' );
+      winston.info( `test ${testName} result: PASS` );
       testSummary.passed += 1;
     }
     else {
       const errMessage = err ? `, err = ${err}` : '';
-      winston.info( 'test ' + testName + ' result: PASS' + errMessage );
+      winston.info( `test ${testName} result: PASS${errMessage}` );
       testSummary.failed += 1;
     }
 

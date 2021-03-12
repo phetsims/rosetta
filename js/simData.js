@@ -25,8 +25,8 @@ const METADATA_REQUEST_OPTIONS = {
   }
 };
 const PRODUCTION_SERVER_URL = global.config.productionServerURL;
-const METADATA_URL = PRODUCTION_SERVER_URL +
-                     '/services/metadata/1.2/simulations?format=json&type=html&include-unpublished=true&summary';
+const METADATA_URL = `${PRODUCTION_SERVER_URL
+                     }/services/metadata/1.2/simulations?format=json&type=html&include-unpublished=true&summary`;
 
 //===========================================================================//
 // Set up variables for later use.                                           //
@@ -89,7 +89,7 @@ async function updateSimInfo() {
 
         simInfoObject[ simName ] = {
           englishTitle: englishTitle,
-          simUrl: PRODUCTION_SERVER_URL + '/sims/html/' + simName + '/latest/' + simName + '_en.html',
+          simUrl: `${PRODUCTION_SERVER_URL}/sims/html/${simName}/latest/${simName}_en.html`,
           translationLocales: translationLocales,
           visible: simulationInfo.visible,
           version: projectInfo.version.string
@@ -222,7 +222,7 @@ module.exports = {
   getLiveSimUrl: async function( simName ) {
     await checkAndUpdateSimInfo();
     if ( !simInfoObject[ simName ] ) {
-      winston.error( 'sim not found in metadata, simName = ' + simName );
+      winston.error( `sim not found in metadata, simName = ${simName}` );
       return null;
     }
     return simInfoObject[ simName ].simUrl;
@@ -238,7 +238,7 @@ module.exports = {
   getEnglishTitle: async function( simName ) {
     await checkAndUpdateSimInfo();
     if ( !simInfoObject[ simName ] ) {
-      winston.error( 'sim not found in metadata, simName = ' + simName );
+      winston.error( `sim not found in metadata, simName = ${simName}` );
       return '';
     }
     return simInfoObject[ simName ].englishTitle;
@@ -254,7 +254,7 @@ module.exports = {
   getLatestSimVersion: async function( simName ) {
     await checkAndUpdateSimInfo();
     if ( !simInfoObject[ simName ] ) {
-      winston.error( 'sim not found in metadata, simName = ' + simName );
+      winston.error( `sim not found in metadata, simName = ${simName}` );
       return '';
     }
     return simInfoObject[ simName ].version;

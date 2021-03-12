@@ -61,7 +61,7 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
     // thing to do going forward is to always use <br> in multi-line strings instead of '\n', this code is here to
     // handle older sims in which '\n' was used in multi-line strings.
     if ( stringValue.indexOf( '\\n' ) !== -1 ) {
-      winston.info( 'replacing line feed sequence in string from repo ' + repo + ' with key ' + stringKey );
+      winston.info( `replacing line feed sequence in string from repo ${repo} with key ${stringKey}` );
       stringValue = stringValue.replace( /\\n/g, '\n' );
     }
 
@@ -122,7 +122,7 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
   }
   catch( err ) {
 
-    winston.error( 'error while submitting strings, err = ' + err );
+    winston.error( `error while submitting strings, err = ${err}` );
     winston.info( 'rendering error page' );
 
     // render an error page
@@ -159,7 +159,7 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
   }
   catch( err ) {
 
-    winston.error( 'error while requesting build and clearing out DB, err = ' + err );
+    winston.error( `error while requesting build and clearing out DB, err = ${err}` );
     winston.info( 'rendering error page' );
 
     // render an error page
@@ -183,28 +183,28 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
 async function deleteStringsFromDB( userID, locale, simOrLibNames ) {
 
   winston.info(
-    'removing strings from short term storage for userID = ' + userID + ', sim/libs = ' + simOrLibNames + ', locale = ' + locale
+    `removing strings from short term storage for userID = ${userID}, sim/libs = ${simOrLibNames}, locale = ${locale}`
   );
 
   // create a string with all the repo names that can be used in the SQL query
   let simOrLibNamesString = '';
   simOrLibNames.forEach( ( simOrLibName, index ) => {
-    simOrLibNamesString += 'repository = \'' + simOrLibName + '\'';
+    simOrLibNamesString += `repository = '${simOrLibName}'`;
     if ( index < simOrLibNames.length - 1 ) {
       simOrLibNamesString += ' OR ';
     }
   } );
 
-  const deleteQuery = 'DELETE FROM saved_translations WHERE user_id = $1 AND locale = $2 AND (' + simOrLibNamesString + ')';
+  const deleteQuery = `DELETE FROM saved_translations WHERE user_id = $1 AND locale = $2 AND (${simOrLibNamesString})`;
   const pool = new Pool( {
     connectionTimeoutMillis: RosettaConstants.DATABASE_QUERY_TIMEOUT
   } );
   try {
-    winston.info( 'attempting query: ' + deleteQuery );
+    winston.info( `attempting query: ${deleteQuery}` );
     await pool.query( deleteQuery, [ userID, locale ] );
     winston.info( 'deletion of strings succeeded' );
   }
   catch( err ) {
-    winston.error( 'deletion of strings failed, err = ' + err );
+    winston.error( `deletion of strings failed, err = ${err}` );
   }
 }

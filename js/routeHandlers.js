@@ -133,7 +133,7 @@ module.exports.checkForValidSession = function( request, response, next ) {
       path: '/services/check-login',
       method: 'GET',
       headers: {
-        Cookie: 'JSESSIONID=' + cookie
+        Cookie: `JSESSIONID=${cookie}`
       }
     };
 
@@ -294,7 +294,7 @@ module.exports.renderTranslationPage = async function( request, response ) {
   winston.debug( `Sim SHA: ${simSha}.` );
 
   // Initialize the sims array from the active-sims file in the phetsims/chipper repository.
-  winston.debug( 'Sending request to ' + GITHUB_RAW_FILE_URL_BASE + activeSimsPath + '.' );
+  winston.debug( `Sending request to ${GITHUB_RAW_FILE_URL_BASE}${activeSimsPath}.` );
   let activeSimsFileContents = '';
   try {
     const activeSimsFileFetchResponse = await axios.get( GITHUB_RAW_FILE_URL_BASE + activeSimsPath );
@@ -345,7 +345,7 @@ module.exports.renderTranslationPage = async function( request, response ) {
     if ( repositories.length > 0 ) {
       repositories += ' OR ';
     }
-    repositories += 'repository = \'' + projectName + '\'';
+    repositories += `repository = '${projectName}'`;
 
     // Initialize saved strings for every repo to an empty object. These objects will store string key/value pairs for
     // each repo.
@@ -353,7 +353,7 @@ module.exports.renderTranslationPage = async function( request, response ) {
   }
 
   // Create a parameterized query string for retrieving the user's previously saved strings.
-  const savedStringsQuery = 'SELECT * FROM saved_translations WHERE user_id = $1 AND locale = $2 AND (' + repositories + ')';
+  const savedStringsQuery = `SELECT * FROM saved_translations WHERE user_id = $1 AND locale = $2 AND (${repositories})`;
 
   // Connect to the database and query for saved strings corresponding to this user and sim.
   let rows = null;
@@ -398,7 +398,7 @@ module.exports.renderTranslationPage = async function( request, response ) {
     // Put the strings into different arrays depending on whether they are from the sim, a shared sim, or common code.
     let array;
     if ( projectName === simName ) {
-      simTitle = strings[ projectName + '.title' ] && strings[ projectName + '.title' ].value;
+      simTitle = strings[ `${projectName}.title` ] && strings[ `${projectName}.title` ].value;
       array = currentSimStringsArray;
     }
     else if ( _.includes( activeSims, projectName ) ) {
@@ -450,8 +450,8 @@ module.exports.renderTranslationPage = async function( request, response ) {
 
           // Use previous translation value obtained from GitHub, if it exists.
           const translatedString = previouslyTranslatedStrings[ stringKey ];
-          winston.debug( 'Using previously translated string ' + stringKey + ': ' +
-                         getPrintableString( translatedString.value ) );
+          winston.debug( `Using previously translated string ${stringKey}: ${
+                         getPrintableString( translatedString.value )}` );
           stringRenderInfo.value = escapeHtml( translatedString.value );
         }
         else {
@@ -480,7 +480,7 @@ module.exports.renderTranslationPage = async function( request, response ) {
           }
         }
         if ( !containsObjectWithKey ) {
-          winston.debug( 'repo: ' + projectName + ' key: ' + previouslyTranslatedStringKey + ', ' +
+          winston.debug( `repo: ${projectName} key: ${previouslyTranslatedStringKey}, ` +
                          '- translation exists, but unused in this sim, adding to pass-through data.' );
           unusedTranslatedStringsArray.push( {
             repo: projectName,
@@ -546,10 +546,10 @@ module.exports.submitStrings = function( request, response ) {
   const simName = request.params.simName;
   const targetLocale = request.params.targetLocale;
 
-  winston.info( 'queuing string submission for ' + simName + '_' + targetLocale );
+  winston.info( `queuing string submission for ${simName}_${targetLocale}` );
   stringSubmissionQueue( request, response )
     .then( () => {
-      winston.info( 'finished string submission for ' + simName + '_' + targetLocale );
+      winston.info( `finished string submission for ${simName}_${targetLocale}` );
     } );
 };
 
@@ -570,10 +570,10 @@ module.exports.testStrings = function( request, response ) {
     .then( simHtml => {
 
       // Get the string definitions from the HTML file.
-      const re = new RegExp( STRING_VAR_IN_HTML_FILES + '.*$', 'm' );
+      const re = new RegExp( `${STRING_VAR_IN_HTML_FILES}.*$`, 'm' );
       const extractedStrings = simHtml.match( re );
       const extractedStringsJson = extractedStrings[ 0 ]
-        .replace( STRING_VAR_IN_HTML_FILES + ' = ', '' )
+        .replace( `${STRING_VAR_IN_HTML_FILES} = `, '' )
         .replace( /;$/m, '' );
       const stringsObject = JSON.parse( extractedStringsJson );
 
@@ -594,7 +594,7 @@ module.exports.testStrings = function( request, response ) {
           winston.error( `Key missing in extracted strings. Key: ${key}.` );
         }
       } );
-      const translatedStrings = STRING_VAR_IN_HTML_FILES + ' = ' + JSON.stringify( stringsObject ) + ';';
+      const translatedStrings = `${STRING_VAR_IN_HTML_FILES} = ${JSON.stringify( stringsObject )};`;
 
       // Insert the changed strings into the sim HTML.
       simHtml = simHtml.replace( re, translatedStrings );
@@ -693,7 +693,7 @@ module.exports.showOfflinePage = function( request, response ) {
  * @param response
  */
 function pageNotFound( request, response ) {
-  response.send( '<p>Error: Page not found.  URL = ' + request.url + '</p>' );
+  response.send( `<p>Error: Page not found.  URL = ${request.url}</p>` );
 }
 
 module.exports.pageNotFound = pageNotFound;

@@ -95,7 +95,7 @@ function escapeHtml( htmlString ) {
 function extractSimSha( simHtml, simName ) {
 
   // Get the SHA of this version of the sim
-  const simShaInfo = new RegExp( '"' + simName + '": {\\s*"sha": "(\\w*)",\\s*"branch": "(\\w*)"', 'g' ).exec( simHtml );
+  const simShaInfo = new RegExp( `"${simName}": {\\s*"sha": "(\\w*)",\\s*"branch": "(\\w*)"`, 'g' ).exec( simHtml );
   return ( simShaInfo && simShaInfo.length > 1 ) ? simShaInfo[ 1 ] : 'master'; // Default to master if no SHA is found.
 }
 
@@ -109,13 +109,13 @@ function extractSimSha( simHtml, simName ) {
 function extractStringKeys( simHtml ) {
 
   // Extract the line from the HTML file that defines the value of the global strings variable.
-  const regEx = new RegExp( STRING_VAR_IN_HTML_FILES + '.*$', 'm' );
+  const regEx = new RegExp( `${STRING_VAR_IN_HTML_FILES}.*$`, 'm' );
   const stringVariableAssignmentStatement = simHtml.match( regEx );
 
   // Extract the value (i.e. right side) of this assignment statement, which should consist of JSON string keys and
   // values.
   const stringsVariableJson = stringVariableAssignmentStatement[ 0 ]
-    .replace( STRING_VAR_IN_HTML_FILES + ' = ', '' )
+    .replace( `${STRING_VAR_IN_HTML_FILES} = `, '' )
     .replace( /;$/m, '' );
 
   // Convert the JSON string to an object.

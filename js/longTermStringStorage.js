@@ -28,7 +28,7 @@ const winston = require( 'winston' );
 // constants
 const CONFIG = global.config;
 const BABEL_BRANCH = global.config.babelBranch || 'master';
-const BASE_URL_FOR_TRANSLATED_STRINGS = RosettaConstants.GITHUB_RAW_FILE_URL_BASE + '/phetsims/babel/' + BABEL_BRANCH + '/';
+const BASE_URL_FOR_TRANSLATED_STRINGS = `${RosettaConstants.GITHUB_RAW_FILE_URL_BASE}/phetsims/babel/${BABEL_BRANCH}/`;
 const GITHUB_RAW_FILE_URL_BASE = RosettaConstants.GITHUB_RAW_FILE_URL_BASE;
 
 // for debug purposes, it is possible to set up the config file such that strings are not actually committed
@@ -133,10 +133,10 @@ function saveTranslatedStrings( simOrLibName, locale, strings ) {
   // the locale should never be English, since this is saving strings to GitHub
   assert( locale !== 'en', 'this function should not be used for saving English strings' );
 
-  winston.debug( 'saveTranslatedStrings called, simOrLibName = ' + simOrLibName + ', locale = ' + locale );
-  const filePath = simOrLibName + '/' + simOrLibName + '-strings_' + locale + '.json';
+  winston.debug( `saveTranslatedStrings called, simOrLibName = ${simOrLibName}, locale = ${locale}` );
+  const filePath = `${simOrLibName}/${simOrLibName}-strings_${locale}.json`;
   const stringsInJson = JSON.stringify( strings, null, 2 );
-  const commitMessage = 'automated commit from rosetta for sim/lib ' + simOrLibName + ', locale ' + locale;
+  const commitMessage = `automated commit from rosetta for sim/lib ${simOrLibName}, locale ${locale}`;
   return promiseQueue.add( () => saveFileToGitHub( filePath, stringsInJson, commitMessage ) );
 }
 
@@ -164,11 +164,11 @@ function saveFileToGitHub( filePath, contents, commitMessage ) {
           // update the existing file in GitHub
           stringStorageRepo.updateContents( filePath, commitMessage, contents, data.sha, BABEL_BRANCH, ( err, data ) => {
             if ( !err ) {
-              winston.info( 'successfully committed changes for file ' + filePath );
+              winston.info( `successfully committed changes for file ${filePath}` );
               resolve( data );
             }
             else {
-              winston.error( 'unable to commit changes for file ' + filePath, ', err = ' + err );
+              winston.error( `unable to commit changes for file ${filePath}`, `, err = ${err}` );
               reject( err );
             }
           } );
@@ -178,11 +178,11 @@ function saveFileToGitHub( filePath, contents, commitMessage ) {
           // create a new file in GitHub
           stringStorageRepo.createContents( filePath, commitMessage, contents, BABEL_BRANCH, ( err, data ) => {
             if ( !err ) {
-              winston.info( 'successfully created file ' + filePath );
+              winston.info( `successfully created file ${filePath}` );
               resolve( data );
             }
             else {
-              winston.error( 'unable to create file ' + filePath, ', err = ' + err );
+              winston.error( `unable to create file ${filePath}`, `, err = ${err}` );
               reject( err );
             }
           } );
@@ -193,7 +193,7 @@ function saveFileToGitHub( filePath, contents, commitMessage ) {
 
       // Skip the string commits and just log the information about what would have been done.  This is a debug mode
       // that was added to prevent excessive commits to GitHub during testing.
-      winston.warn( 'commits skipped due to setting of a debug flag, file = ' + filePath );
+      winston.warn( `commits skipped due to setting of a debug flag, file = ${filePath}` );
       resolve( {} );
     }
 

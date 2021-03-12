@@ -33,14 +33,14 @@ function getConfigDirPath() {
   let configDirPath;
   const platformIsWindows = process.platform === 'win32';
   if ( platformIsWindows ) {
-    configDirPath = process.env.HOME + WINDOWS_CONFIG_DIR + '\\';
+    configDirPath = `${process.env.HOME + WINDOWS_CONFIG_DIR}\\`;
   }
   else {
 
     // The following somewhat odd-looking code gets the config file from the home directory when running under a
     // UNIX variant. This was necessary because Rosetta is generally run under phet-admin, but process.env.HOME was
     // returning the home directory of the user who is starting the process, not phet-admin's home directory.
-    configDirPath = passwdUser.sync( process.getuid() ).homedir + UNIX_CONFIG_DIR + '/';
+    configDirPath = `${passwdUser.sync( process.getuid() ).homedir + UNIX_CONFIG_DIR}/`;
   }
   return configDirPath;
 }

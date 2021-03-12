@@ -27,7 +27,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
     // The button's ID should be the testID for the runSpecificTest route.
     const testID = button.getAttribute( 'id' );
     button.addEventListener( 'click', () => {
-      const fullTestUrl = runSpecificTestUrl + '/' + testID;
+      const fullTestUrl = `${runSpecificTestUrl}/${testID}`;
       fetch( fullTestUrl )
         .then( data => {
           console.log( `fullTestUrl: ${fullTestUrl}` );
