@@ -26,7 +26,7 @@ const METADATA_REQUEST_OPTIONS = {
 };
 const PRODUCTION_SERVER_URL = global.config.productionServerURL;
 const METADATA_URL = `${PRODUCTION_SERVER_URL
-                     }/services/metadata/1.2/simulations?format=json&type=html&include-unpublished=true&summary`;
+}/services/metadata/1.2/simulations?format=json&type=html&include-unpublished=true&summary`;
 
 //===========================================================================//
 // Set up variables for later use.                                           //

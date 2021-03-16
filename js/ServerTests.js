@@ -52,18 +52,18 @@ const testHandlers = {
               if ( stringFileSpec.expectedToExist ) {
                 winston.info(
                   `strings successfully retrieved for sim/lib:${
-                  stringFileSpec.repoName},` +
+                    stringFileSpec.repoName},` +
                   `locale:${
-                  stringFileSpec.locale}`
+                    stringFileSpec.locale}`
                 );
                 return Promise.resolve();
               }
               else {
                 winston.error(
                   `strings retrieved, but this was not expected - sim/lib:${
-                  stringFileSpec.repoName},` +
+                    stringFileSpec.repoName},` +
                   `locale:${
-                  stringFileSpec.locale}`
+                    stringFileSpec.locale}`
                 );
                 return Promise.reject( new Error( 'successful string retrieval not expected' ) );
               }
@@ -73,18 +73,18 @@ const testHandlers = {
             if ( !stringFileSpec.expectedToExist ) {
               winston.info(
                 `unable to obtain strings, which is the expected result, for sim/lib:${
-                stringFileSpec.repoName},` +
+                  stringFileSpec.repoName},` +
                 `locale:${
-                stringFileSpec.locale}`
+                  stringFileSpec.locale}`
               );
               return Promise.resolve();
             }
             else {
               winston.error(
                 `unable to get strings for sim/lib:${
-                stringFileSpec.repoName},` +
+                  stringFileSpec.repoName},` +
                 `locale:${
-                stringFileSpec.locale}`
+                  stringFileSpec.locale}`
               );
               return Promise.reject( err );
             }

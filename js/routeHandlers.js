@@ -451,7 +451,7 @@ module.exports.renderTranslationPage = async function( request, response ) {
           // Use previous translation value obtained from GitHub, if it exists.
           const translatedString = previouslyTranslatedStrings[ stringKey ];
           winston.debug( `Using previously translated string ${stringKey}: ${
-                         getPrintableString( translatedString.value )}` );
+            getPrintableString( translatedString.value )}` );
           stringRenderInfo.value = escapeHtml( translatedString.value );
         }
         else {
