@@ -873,7 +873,7 @@ module.exports.triggerBuild = async function( request, response ) {
   }
 };
 
-// TODO: Needs JSDoc.
+// TODO: Needs JSDoc. Need to remove debug statement.
 async function getUntranslatedStringKeysMap( simName, targetLocale ) {
 
   // Get the published sim's HTML.
