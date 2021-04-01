@@ -873,6 +873,61 @@ module.exports.triggerBuild = async function( request, response ) {
   }
 };
 
+// TODO: Needs JSDoc.
+async function getUntranslatedStringKeysMap( simName, targetLocale ) {
+
+  // Get the published sim's HTML.
+  const simUrl = await simData.getLiveSimUrl( simName );
+  let simHtml = '';
+  try {
+    const simHtmlResponse = await axios.get( simUrl );
+    simHtml = simHtmlResponse.data;
+    winston.debug( 'Successfully retrieved sim HTML.' );
+  }
+  catch( error ) {
+    const errorMessage = `Unable to get sim HTML for ${simName}. ${error.message}`;
+    winston.error( errorMessage );
+    throw new Error( errorMessage );
+  }
+
+  // {Map.<{String,String[]}>} - a Map with repo names and an array of string keys for that repo
+  const repoToStringKeyMap = TranslationUtils.extractStringKeys( simHtml );
+
+  // Get translated string keys from long-term storage.
+  const translatedStringsObject = await longTermStringStorage.getTranslatedStrings( simName, targetLocale );
+  const translatedStringKeys = Object.keys( translatedStringsObject );
+
+  // The untranslated string keys are the original English string keys minus the translated string keys.
+  const untranslatedStringKeysMap = new Map();
+  for ( const repo of repoToStringKeyMap ) {
+    if ( translatedStringsObject[ repo ] ) {
+      for ( const stringKey of repo ) {
+        if ( !translatedStringKeys.includes( stringKey ) ) {
+          if ( !untranslatedStringKeysMap.has( repo ) ) {
+            untranslatedStringKeysMap.set( repo, [] );
+          }
+          untranslatedStringKeysMap.get( repo ).push( stringKey );
+        }
+      }
+    }
+    else {
+
+      // There are no translated strings for this repo, so copy the entire array of untranslated string keys.
+      untranslatedStringKeysMap.set( repo, repoToStringKeyMap.get( repo ) );
+    }
+  }
+
+  for ( const key of untranslatedStringKeysMap ) {
+    winston.debug( key );
+  }
+
+  return untranslatedStringKeysMap;
+}
+
+module.exports.dummy = async function( req, res ) {
+  await getUntranslatedStringKeysMap( req.params.simName, req.params.targetLocale );
+};
+
 /**
  * Returns an object that contains keys and values for untranslated strings. The set of untranslated strings is the set
  * of English, i.e. original strings, minus the set of translated strings.
