@@ -924,7 +924,7 @@ async function getUntranslatedStringKeysMap( simName, targetLocale ) {
   return untranslatedStringKeysMap;
 }
 
-module.exports.dummy = async function( req, res ) {
+module.exports.dummy = async function( req ) {
   await getUntranslatedStringKeysMap( req.params.simName, req.params.targetLocale );
 };
 
