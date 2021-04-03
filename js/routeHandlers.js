@@ -873,8 +873,15 @@ module.exports.triggerBuild = async function( request, response ) {
   }
 };
 
-// TODO: Needs JSDoc. Need to remove debug statement.
-async function getUntranslatedStringKeysMap( simName, targetLocale ) {
+/**
+ * Given repo-style (lowercase kebab) sim name, returns a Map.<{String,String[]}>. This Map's keys are repo names, and
+ * its values are arrays of string keys. The repos are the repos where the sim gets its string keys. This Map maps
+ * repos to arrays of string keys. That is, it contains all string keys for a given simulation.
+ *
+ * @param {string} simName - repo-style sim name
+ * @returns {Map.<{String,String[]}>} - Map of repos to string key arrays
+ */
+async function getEnglishStringKeysMap( simName ) {
 
   // Get the published sim's HTML.
   const simUrl = await simData.getLiveSimUrl( simName );
@@ -890,42 +897,113 @@ async function getUntranslatedStringKeysMap( simName, targetLocale ) {
     throw new Error( errorMessage );
   }
 
+  // Return a Map of the sim's string keys.
+  return TranslationUtils.extractStringKeys( simHtml );
+}
+
+/**
+ * Given repo-style (lowercase kebab) sim name, returns a Map.<{String,String[]}>. This Map's keys are repo names, and
+ * its values are arrays of string keys. The repos are the repos where the sim gets its string keys. This Map maps
+ * repos to arrays of translated string keys. If none of the strings in a given repo have been translated, there will
+ * still be a repo in the Map, but the string key array for that repo will be empty.
+ *
+ * @param {string} simName - repo-style sim name
+ * @param {string} targetLocale - the language code for the locale, e.g. "de" for German
+ * @returns {Map.<{String,String[]}>} - Map of repos to string key arrays
+ */
+async function getTranslatedStringKeysMap( simName, targetLocale ) {
+
   // {Map.<{String,String[]}>} - a Map with repo names and an array of string keys for that repo
-  const repoToStringKeyMap = TranslationUtils.extractStringKeys( simHtml );
+  const englishStringKeysMap = await getEnglishStringKeysMap( simName );
+  const translatedStringKeysMap = new Map();
 
-  // Get translated string keys from long-term storage.
-  const translatedStringsObject = await longTermStringStorage.getTranslatedStrings( simName, targetLocale );
-  const translatedStringKeys = Object.keys( translatedStringsObject );
+  // For each repo in the English Map, add untranslated string keys.
+  for ( const [ repo ] of englishStringKeysMap ) {
 
-  // The untranslated string keys are the original English string keys minus the translated string keys.
-  const untranslatedStringKeysMap = new Map();
-  for ( const repo of repoToStringKeyMap ) {
-    if ( translatedStringsObject[ repo ] ) {
-      for ( const stringKey of repo ) {
-        if ( !translatedStringKeys.includes( stringKey ) ) {
-          if ( !untranslatedStringKeysMap.has( repo ) ) {
-            untranslatedStringKeysMap.set( repo, [] );
-          }
-          untranslatedStringKeysMap.get( repo ).push( stringKey );
-        }
-      }
-    }
-    else {
+    // Get translated string keys for the repo.
+    const translatedStringsObject = await longTermStringStorage.getTranslatedStrings( repo, targetLocale );
+    const translatedStringKeys = Object.keys( translatedStringsObject );
 
-      // There are no translated strings for this repo, so copy the entire array of untranslated string keys.
-      untranslatedStringKeysMap.set( repo, repoToStringKeyMap.get( repo ) );
-    }
+    // Add the repo name and the translated string keys to the Map.
+    translatedStringKeysMap.set( repo, translatedStringKeys );
   }
 
-  for ( const key of untranslatedStringKeysMap ) {
-    winston.debug( key );
+  return translatedStringKeysMap;
+}
+
+/**
+ * Given repo-style (lowercase kebab) sim name, returns a Map.<{String,String[]}>. This Map's keys are repo names, and
+ * its values are arrays of string keys. The repos are the repos where the sim gets its string keys. This Map maps
+ * repos to arrays of untranslated string keys. If there are no untranslated strings for a given repo, that repo will
+ * still be in the Map, but its string key array will be empty.
+ *
+ * @param {string} simName - repo-style sim name
+ * @param {string} targetLocale - the language code for the locale, e.g. "de" for German
+ * @returns {Map.<{String,String[]}>} - Map of repos to string key arrays
+ */
+async function getUntranslatedStringKeysMap( simName, targetLocale ) {
+
+  // {Map.<{String,String[]}>} - a Map with repo names and an array of string keys for that repo
+  const englishStringKeysMap = await getEnglishStringKeysMap( simName );
+  const untranslatedStringKeysMap = new Map();
+
+  // Get translated string keys for comparison.
+  const translatedStringKeysMap = await getTranslatedStringKeysMap( simName, targetLocale );
+
+  // Iterate through each repo and check if there are untranslated string keys.
+  for ( const [ repo, stringKeyArray ] of englishStringKeysMap ) {
+
+    // Iterate through the string key array associated with a repo.
+    for ( const stringKey of stringKeyArray ) {
+
+      // If the repo isn't in the Map, add it.
+      if ( !untranslatedStringKeysMap.has( repo ) ) {
+        untranslatedStringKeysMap.set( repo, [] );
+      }
+
+      // If there any string keys in the English array that aren't in the translated array, add them to the
+      // untranslated array.
+      if ( !translatedStringKeysMap.get( repo ).includes( stringKey ) ) {
+        untranslatedStringKeysMap.get( repo ).push( stringKey );
+      }
+    }
   }
 
   return untranslatedStringKeysMap;
 }
 
-module.exports.dummy = async function( req ) {
-  await getUntranslatedStringKeysMap( req.params.simName, req.params.targetLocale );
+/**
+ * Displays a report to the user about a sim's untranslated strings. It tells the user what the untranslated string
+ * keys are in each repo for a given sim.
+ * 
+ * @param {Object} request
+ * @param {Object} response
+ * @returns {Promise<string>} - a string of HTML to display to the user
+ */
+module.exports.simStringReport = async function( request, response ) {
+
+  // Get the untranslated strings for display.
+  const untranslatedStringKeysMap = await getUntranslatedStringKeysMap( request.params.simName, request.params.targetLocale );
+
+  // Tell user about sim, locale.
+  let html = `<h2>Report for ${request.params.simName} in locale ${request.params.targetLocale}:</h2>`;
+
+  // Tell user about untranslated string keys for each repo.
+  for ( const [ repo, stringKeyArray ] of untranslatedStringKeysMap ) {
+    html += `<h3>Untranslated string keys in the ${repo} repository:</h3>`;
+    html += `<ul>`;
+    if ( stringKeyArray.length === 0 ) {
+      html += `<li>All string keys have been translated in the ${repo} repository! :)</li>`
+    }
+    else {
+      for ( const stringKey of stringKeyArray ) {
+        html += `<li>${stringKey}</li>`;
+      }
+    }
+    html += '</ul>';
+  }
+
+  response.send( html );
 };
 
 /**
