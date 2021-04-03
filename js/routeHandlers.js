@@ -701,7 +701,7 @@ module.exports.pageNotFound = pageNotFound;
 /**
  * Helper function. !isNaN is confusing, hence this function.
  *
- * @param string
+ * @param stringToTest
  * @returns {boolean}
  */
 function isStringNumber( stringToTest ) {
