@@ -1018,6 +1018,44 @@ module.exports.simStringReport = async function( request, response ) {
 };
 
 /**
+ * Makes a string of HTML for a report on which string keys are untranslated for a given locale.
+ *
+ * @param targetLocale - the language code for the locale, e.g. "de" for German
+ * @returns {Promise<string>} - a string of HTML to display to the user
+ */
+async function getLocaleStringReportHtml( targetLocale ) {
+
+  // Get a list of the HTML5 sims that are available on the PhET website.
+  const listOfSimNames = await simData.getListOfSimNames( false );
+
+  // Tell user about locale.
+  let html = `<h1>Report for locale ${targetLocale}:</h1>`;
+
+  // Get a sim string report for each sim.
+  for ( const sim of listOfSimNames ) {
+
+    // TODO: We can't get sim HTML for NLO. See https://github.com/phetsims/rosetta/issues/261.
+    if ( sim !== 'number-line-operations' ) {
+      html += await getSimStringReportHtml( sim, targetLocale );
+    }
+  }
+
+  return html;
+}
+
+/**
+ * Displays a report to the user about a sim's untranslated strings. It tells the user what the untranslated string
+ * keys are in each repo for a given sim.
+ *
+ * @param {Object} request
+ * @param {Object} response
+ * @returns {Promise<string>} - a string of HTML to display to the user
+ */
+module.exports.localeStringReport = async function( request, response ) {
+  response.send( await getLocaleStringReportHtml( request.params.targetLocale ) );
+};
+
+/**
  * Displays the main test harness page if the user is a PhET team member. Used for development.
  *
  * @param request
