@@ -1033,11 +1033,7 @@ async function getLocaleStringReportHtml( targetLocale ) {
 
   // Get a sim string report for each sim.
   for ( const sim of listOfSimNames ) {
-
-    // TODO: We can't get sim HTML for NLO. See https://github.com/phetsims/rosetta/issues/261.
-    if ( sim !== 'number-line-operations' ) {
-      html += await getSimStringReportHtml( sim, targetLocale );
-    }
+    html += await getSimStringReportHtml( sim, targetLocale );
   }
 
   return html;
