@@ -112,6 +112,7 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
       longTermStringStorage.saveTranslatedStrings( simOrLibName, targetLocale, changedStringSets[ simOrLibName ] )
     );
   } );
+  winston.debug( `Queued ${stringSavePromises.length} promises for long-term string storage.` );
 
   // wait for all the save operations to complete
   try {
