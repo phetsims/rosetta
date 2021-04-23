@@ -879,7 +879,7 @@ module.exports.triggerBuild = async function( request, response ) {
  * repos to arrays of string keys. That is, it contains all string keys for a given simulation.
  *
  * @param {string} simName - repo-style sim name
- * @returns {Map.<{String,String[]}>} - Map of repos to string key arrays
+ * @returns {Promise<Map.<{String,String[]}>>} - Map of repos to string key arrays
  */
 async function getEnglishStringKeysMap( simName ) {
 
@@ -909,7 +909,7 @@ async function getEnglishStringKeysMap( simName ) {
  *
  * @param {string} simName - repo-style sim name
  * @param {string} targetLocale - the language code for the locale, e.g. "de" for German
- * @returns {Map.<{String,String[]}>} - Map of repos to string key arrays
+ * @returns {Promise<Map.<{String,String[]}>>} - Map of repos to string key arrays
  */
 async function getTranslatedStringKeysMap( simName, targetLocale ) {
 
@@ -939,7 +939,7 @@ async function getTranslatedStringKeysMap( simName, targetLocale ) {
  *
  * @param {string} simName - repo-style sim name
  * @param {string} targetLocale - the language code for the locale, e.g. "de" for German
- * @returns {Map.<{String,String[]}>} - Map of repos to string key arrays
+ * @returns {Promise<Map.<{String,String[]}>>} - Map of repos to string key arrays
  */
 async function getUntranslatedStringKeysMap( simName, targetLocale ) {
 
