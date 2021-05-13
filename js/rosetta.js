@@ -177,11 +177,6 @@ app.get( '/translate/trigger-build/:simName?/:targetLocale?/:userId?', routeHand
 app.get( '/translate/sim-string-report/:simName?/:targetLocale?/', routeHandlers.simStringReport );
 app.get( '/translate/locale-string-report/:targetLocale?/', routeHandlers.localeStringReport );
 
-// Set up testing routes.
-app.get( '/translate/test/', routeHandlers.displayTestPage );
-app.get( '/translate/runSpecificTest/:testID', routeHandlers.runSpecificTest );
-app.get( '/translate/runAllTests/', routeHandlers.runAllTests );
-
 // Set up routes for incorrect URL patterns.
 app.get( '/*', routeHandlers.pageNotFound );
 app.post( '/*', routeHandlers.pageNotFound );
