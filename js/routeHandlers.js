@@ -39,15 +39,6 @@ const STRING_VAR_IN_HTML_FILES = RosettaConstants.STRING_VAR_IN_HTML_FILES;
 // Utility functions below.                                                  //
 //===========================================================================//
 
-// Sends user to login page.
-function sendUserToLoginPage( response, host, destinationUrl ) {
-  response.render( 'login-required.html', {
-    title: 'Login Required',
-    host: host,
-    destinationUrl: destinationUrl
-  } );
-}
-
 // Returns string if printable. Otherwise returns warning message.
 function getPrintableString( string ) {
   return ASCII_REGEX.test( string ) ? string : '(String contains non-printable characters.)';
