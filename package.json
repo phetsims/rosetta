@@ -14,21 +14,16 @@
     "express-session": "^1.15.6",
     "lodash": "^4.17.20",
     "memorystore": "^1.6.2",
-    "minimist": "^1.2.0",
-    "node-fetch": "^2.6.1",
     "octonode": "^0.9.1",
     "passwd-user": "^2.1.0",
     "pg": "^8.2.1",
     "promise-queue": "^2.2.3",
-    "request": "^2.83.0",
     "winston": "^3.2.1"
   },
   "devDependencies": {
-    "grunt": "~1.1.0",
-    "qunit": "^2.13.0"
+    "grunt": "~1.1.0"
   },
   "scripts": {
-    "test": "qunit",
     "dev": "ENV=dev node js/rosetta.js"
   },
   "repository": {
