@@ -13,7 +13,6 @@
 // Node modules
 const _ = require( 'lodash' ); // eslint-disable-line
 const axios = require( 'axios' );
-const https = require( 'https' );
 const winston = require( 'winston' );
 const { Pool } = require( 'pg' ); // eslint-disable-line
 
@@ -21,7 +20,6 @@ const { Pool } = require( 'pg' ); // eslint-disable-line
 const localeInfo = require( './localeInfo' );
 const longTermStringStorage = require( './longTermStringStorage' );
 const RosettaConstants = require( './RosettaConstants' );
-const ServerTests = require( './ServerTests' );
 const simData = require( './simData' );
 const stringSubmissionQueue = require( './stringSubmissionQueue' ).stringSubmissionQueue; // eslint-disable-line
 const TranslationUtils = require( './TranslationUtils' );
