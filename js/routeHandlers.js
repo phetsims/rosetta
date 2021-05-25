@@ -1,4 +1,4 @@
-// Copyright 2015-2020, University of Colorado Boulder
+// Copyright 2015-2021, University of Colorado Boulder
 
 /**
  * Handler functions for Express.js-style routes that exist in the PhET translation utility.

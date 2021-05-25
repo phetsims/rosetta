@@ -1,4 +1,4 @@
-// Copyright 2015-2020, University of Colorado Boulder
+// Copyright 2015-2021, University of Colorado Boulder
 
 /**
  * TODO: Relocate code in this file that doesn't have to do with configuring the app, setting up routes, etc. See https://github.com/phetsims/rosetta/issues/190#issuecomment-682169944.

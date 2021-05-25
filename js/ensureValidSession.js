@@ -1,4 +1,4 @@
-// Copyright 2020, University of Colorado Boulder
+// Copyright 2021, University of Colorado Boulder
 
 /**
  * We ensure the user has logged in as a translator or a team member recently. If their Rosetta session is stale, we

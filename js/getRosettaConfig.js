@@ -1,4 +1,4 @@
-// Copyright 2019-2020, University of Colorado Boulder
+// Copyright 2019-2021, University of Colorado Boulder
 
 /**
  * TODO: Relocate code in this file that doesn't have to do with getting the Rosetta configuration file. See https://github.com/phetsims/rosetta/issues/190#issuecomment-682169944.
