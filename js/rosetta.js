@@ -9,7 +9,6 @@
  * @author Liam Mulhall
  */
 
-'use strict';
 
 // modules
 const bodyParser = require( 'body-parser' ); // eslint-disable-line require-statement-match

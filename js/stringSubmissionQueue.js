@@ -8,7 +8,6 @@
  * @author John Blanco
  */
 
-'use strict';
 
 // modules
 const _ = require( 'lodash' ); // eslint-disable-line

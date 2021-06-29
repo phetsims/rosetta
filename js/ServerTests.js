@@ -6,7 +6,6 @@
  * @author Aaron Davis
  */
 
-'use strict';
 
 // modules
 const _ = require( 'lodash' ); // eslint-disable-line

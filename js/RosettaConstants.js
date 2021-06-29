@@ -6,7 +6,6 @@
  * @author Aaron Davis
  */
 
-'use strict';
 
 module.exports = {
   GITHUB_RAW_FILE_URL_BASE: 'https://raw.githubusercontent.com',

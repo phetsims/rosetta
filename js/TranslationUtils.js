@@ -8,7 +8,6 @@
  * @author Liam Mulhall (PhET Interactive Simulations)
  */
 
-'use strict';
 
 // Node modules
 const _ = require( 'lodash' ); // eslint-disable-line

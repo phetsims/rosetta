@@ -8,7 +8,6 @@
  * @author John Blanco
  */
 
-'use strict';
 
 // constants
 const SINGLE_BRACE_PATTERN_REGULAR_EXP = /\{\d+\}/g;

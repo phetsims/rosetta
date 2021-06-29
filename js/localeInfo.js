@@ -8,7 +8,6 @@
  * @author Liam Mulhall (PhET Interactive Simulations)
  */
 
-'use strict';
 
 // modules
 const axios = require( 'axios' );
