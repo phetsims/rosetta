@@ -42,7 +42,7 @@ function bypassSessionValidation( request ) {
  * @param websiteCookie {string} - The cookie for the website.
  * @returns {Promise.<AxiosResponse.<Object>>} - The user's data.
  */
-async function getUserData( request, websiteCookie ) {
+async function getUserData( request, websiteCookie ) { // eslint-disable-line consistent-return
   winston.debug( 'Getting user data from /services/check-login.' );
   const url = `https://${request.get( 'host' )}/services/check-login`;
   const options = {
@@ -121,7 +121,7 @@ function denyRosettaAccess( response ) {
  * @param response {Object} - The Express response object.
  * @param next {Function} - The Express next function.
  */
-async function ensureValidSession( request, response, next ) {
+async function ensureValidSession( request, response, next ) { // eslint-disable-line consistent-return
 
   const userIsOnLocalhost = request.get( 'host' ).indexOf( 'localhost' ) === 0;
   if ( userIsOnLocalhost ) {

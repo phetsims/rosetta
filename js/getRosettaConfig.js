@@ -51,7 +51,7 @@ function getConfigDirPath() {
  * @param {string} configPathWithFilename - the full path with filename for Rosetta configuration
  * @returns {Object} config - the JSON object configuration for Rosetta
  */
-function readAndParseConfig( configPathWithFilename ) {
+function readAndParseConfig( configPathWithFilename ) { // eslint-disable-line consistent-return
   const configExists = fs.existsSync( configPathWithFilename );
   let configJson = '';
   let configObject = {};
