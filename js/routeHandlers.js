@@ -722,7 +722,7 @@ module.exports.triggerBuild = async function( request, response ) {
  * repos to arrays of string keys. That is, it contains all string keys for a given simulation.
  *
  * @param {string} simName - repo-style sim name
- * @returns {Promise<Map.<{String,String[]}>>} - Map of repos to string key arrays
+ * @returns {Promise.<Map.<{String,String[]}>>} - Map of repos to string key arrays
  */
 async function getEnglishStringKeysMap( simName ) {
 
@@ -752,7 +752,7 @@ async function getEnglishStringKeysMap( simName ) {
  *
  * @param {string} simName - repo-style sim name
  * @param {string} targetLocale - the language code for the locale, e.g. "de" for German
- * @returns {Promise<Map.<{String,String[]}>>} - Map of repos to string key arrays
+ * @returns {Promise.<Map.<{String,String[]}>>} - Map of repos to string key arrays
  */
 async function getTranslatedStringKeysMap( simName, targetLocale ) {
 
@@ -782,7 +782,7 @@ async function getTranslatedStringKeysMap( simName, targetLocale ) {
  *
  * @param {string} simName - repo-style sim name
  * @param {string} targetLocale - the language code for the locale, e.g. "de" for German
- * @returns {Promise<Map.<{String,String[]}>>} - Map of repos to string key arrays
+ * @returns {Promise.<Map.<{String,String[]}>>} - Map of repos to string key arrays
  */
 async function getUntranslatedStringKeysMap( simName, targetLocale ) {
 
@@ -820,7 +820,7 @@ async function getUntranslatedStringKeysMap( simName, targetLocale ) {
  *
  * @param {string} simName - repo-style sim name
  * @param {string} targetLocale - the language code for the locale, e.g. "de" for German
- * @returns {Promise<string>} - a string of HTML to display to the user
+ * @returns {Promise.<string>} - a string of HTML to display to the user
  */
 async function getSimStringReportHtml( simName, targetLocale ) {
 
@@ -854,7 +854,7 @@ async function getSimStringReportHtml( simName, targetLocale ) {
  *
  * @param {Object} request
  * @param {Object} response
- * @returns {Promise<string>} - a string of HTML to display to the user
+ * @returns {Promise.<string>} - a string of HTML to display to the user
  */
 module.exports.simStringReport = async function( request, response ) {
   response.send( await getSimStringReportHtml( request.params.simName, request.params.targetLocale ) );
@@ -864,7 +864,7 @@ module.exports.simStringReport = async function( request, response ) {
  * Makes a string of HTML for a report on which string keys are untranslated for a given locale.
  *
  * @param targetLocale - the language code for the locale, e.g. "de" for German
- * @returns {Promise<string>} - a string of HTML to display to the user
+ * @returns {Promise.<string>} - a string of HTML to display to the user
  */
 async function getLocaleStringReportHtml( targetLocale ) {
 
@@ -888,7 +888,7 @@ async function getLocaleStringReportHtml( targetLocale ) {
  *
  * @param {Object} request
  * @param {Object} response
- * @returns {Promise<string>} - a string of HTML to display to the user
+ * @returns {Promise.<string>} - a string of HTML to display to the user
  */
 module.exports.localeStringReport = async function( request, response ) {
   response.send( await getLocaleStringReportHtml( request.params.targetLocale ) );
