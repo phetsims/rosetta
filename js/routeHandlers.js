@@ -791,14 +791,14 @@ async function getTranslatedStringKeysMap( simName, targetLocale ) {
 async function getUntranslatedStringKeysMap( simName, targetLocale ) {
 
   // {Map.<{String,String[]}>} - a Map with repo names and an array of string keys for that repo
-  const englishStringKeysMap = await getEnglishStringKeysMap( simName );
+  const presentedToUserStringKeysMap = await getPresentedToUserStringKeysMap( simName );
   const untranslatedStringKeysMap = new Map();
 
   // Get translated string keys for comparison.
   const translatedStringKeysMap = await getTranslatedStringKeysMap( simName, targetLocale );
 
   // Iterate through each repo and check if there are untranslated string keys.
-  for ( const [ repo, stringKeyArray ] of englishStringKeysMap ) {
+  for ( const [ repo, stringKeyArray ] of presentedToUserStringKeysMap ) {
 
     // Iterate through the string key array associated with a repo.
     for ( const stringKey of stringKeyArray ) {
