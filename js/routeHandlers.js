@@ -872,7 +872,7 @@ async function getPresentedToUserStringKeysMap( simName ) {
 /**
  * Given repo-style (lowercase kebab) sim name and an ISO 639-1 language code (https://en.wikipedia.org/wiki/ISO_639-1),
  * e.g. "de" for German, returns a string of HTML. The string of HTML is for the sim string report. The sim string
- * report tells the user which string keys don't have a translation.
+ * report tells the user which string keys don't have a translation for a given sim.
  *
  * @param {string} simName - repo-style sim name
  * @param {string} targetLocale - the language code for the locale, e.g. "de" for German
@@ -917,7 +917,9 @@ module.exports.simStringReport = async function( request, response ) {
 };
 
 /**
- * Makes a string of HTML for a report on which string keys are untranslated for a given locale.
+ * Given an ISO 639-1 language code (https://en.wikipedia.org/wiki/ISO_639-1), e.g. "de" for German, returns a string
+ * of HTML. The string of HTML is for the locale string report. The locale string report tells the user which string
+ * keys don't have a translation for a given locale.
  *
  * @param targetLocale - the language code for the locale, e.g. "de" for German
  * @returns {Promise.<string>} - a string of HTML to display to the user
