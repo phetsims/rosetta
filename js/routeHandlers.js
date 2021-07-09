@@ -749,10 +749,11 @@ async function getEnglishStringKeysMap( simName ) {
 }
 
 /**
- * Given repo-style (lowercase kebab) sim name, returns a Map.<{String,String[]}>. This Map's keys are repo names, and
- * its values are arrays of string keys. The repos are the repos where the sim gets its string keys. This Map maps
- * repos to arrays of translated string keys. If none of the strings in a given repo have been translated, there will
- * still be a repo in the Map, but the string key array for that repo will be empty.
+ * Given repo-style (lowercase kebab) sim name and an ISO 639-1 language code (https://en.wikipedia.org/wiki/ISO_639-1),
+ * e.g. "de" for German, returns a Map.<{String,String[]}>. This Map's keys are repo names, and its values are arrays of
+ * string keys. The repos are the repos where the sim gets its string keys. This Map maps repos to arrays of translated
+ * string keys. If none of the strings in a given repo have been translated, there will still be a repo in the Map, but
+ * the string key array for that repo will be empty.
  *
  * @param {string} simName - repo-style sim name
  * @param {string} targetLocale - the language code for the locale, e.g. "de" for German
@@ -779,10 +780,11 @@ async function getTranslatedStringKeysMap( simName, targetLocale ) {
 }
 
 /**
- * Given repo-style (lowercase kebab) sim name, returns a Map.<{String,String[]}>. This Map's keys are repo names, and
- * its values are arrays of string keys. The repos are the repos where the sim gets its string keys. This Map maps
- * repos to arrays of untranslated string keys. If there are no untranslated strings for a given repo, that repo will
- * still be in the Map, but its string key array will be empty.
+ * Given repo-style (lowercase kebab) sim name and an ISO 639-1 language code (https://en.wikipedia.org/wiki/ISO_639-1),
+ * e.g. "de" for German, returns a Map.<{String,String[]}>. This Map's keys are repo names, and its values are arrays of
+ * string keys. The repos are the repos where the sim gets its string keys. This Map maps repos to arrays of
+ * untranslated string keys. If there are no untranslated strings for a given repo, that repo will still be in the Map,
+ * but its string key array will be empty.
  *
  * @param {string} simName - repo-style sim name
  * @param {string} targetLocale - the language code for the locale, e.g. "de" for German
@@ -868,7 +870,9 @@ async function getPresentedToUserStringKeysMap( simName ) {
 }
 
 /**
- * Makes a string of HTML for a report on which string keys are untranslated for a given simulation.
+ * Given repo-style (lowercase kebab) sim name and an ISO 639-1 language code (https://en.wikipedia.org/wiki/ISO_639-1),
+ * e.g. "de" for German, returns a string of HTML. The string of HTML is for the sim string report. The sim string
+ * report tells the user which string keys don't have a translation.
  *
  * @param {string} simName - repo-style sim name
  * @param {string} targetLocale - the language code for the locale, e.g. "de" for German
