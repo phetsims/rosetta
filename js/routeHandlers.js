@@ -196,7 +196,11 @@ module.exports.renderTranslationPage = async function( request, response ) {
   }
 
   // Create a parameterized query string for retrieving the user's previously saved strings.
-  const savedStringsQuery = `SELECT * FROM saved_translations WHERE user_id = $1 AND locale = $2 AND (${repositories})`;
+  const savedStringsQuery = `SELECT *
+                             FROM saved_translations
+                             WHERE user_id = $1
+                               AND locale = $2
+                               AND (${repositories})`;
 
   // Connect to the database and query for saved strings corresponding to this user and sim.
   let rows = null;
