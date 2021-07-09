@@ -820,6 +820,54 @@ async function getUntranslatedStringKeysMap( simName, targetLocale ) {
 }
 
 /**
+ * Given repo-style (lowercase kebab) sim name, returns a Map.<{String,String[]}>. This Map's keys are repo names, and
+ * its values are arrays of string keys. The repos are the repos where the sim gets its string keys. The string keys
+ * are the string keys presented to the user for translation.
+ *
+ * @param {string} simName - repo-style sim name
+ * @returns {Promise.<Map.<{String,String[]}>>} - Map of repos to string key arrays
+ */
+async function getPresentedToUserStringKeysMap( simName ) {
+
+  // {Map.<{String,String[]}>} - a Map with repo names and an array of string keys for that repo
+  const englishStringKeysMap = await getEnglishStringKeysMap( simName );
+  const presentedToUserStringKeysMap = new Map();
+
+  // Iterate through the repos in the Map.
+  for ( const [ repo, stringKeyArray ] of englishStringKeysMap ) {
+
+    // Iterate through the string key array associated with a repo.
+    for ( const stringKey of stringKeyArray ) {
+
+      // Set booleans for whether the string key is presented to the user.
+      const isAccessibility = stringKey.indexOf( 'a11y.' ) === 0;
+      const isVisible = ( stringKey.visible === undefined ) ? true : stringKey.visible;
+
+      // We don't present accessibility keys to the user and we only present visible keys to the user.
+      if ( !isAccessibility && isVisible ) {
+
+        // If the repo isn't in the Map, add it.
+        if ( !presentedToUserStringKeysMap.has( repo ) ) {
+          presentedToUserStringKeysMap.set( repo, [] );
+        }
+        else {
+
+          // Otherwise, the repo is in the Map and we need to add the string key to the array.
+          presentedToUserStringKeysMap.get( repo ).push( stringKey );
+        }
+      }
+      else {
+
+        // Don't add the string key to the Map.
+        winston.debug( `String key ${stringKey} not added to presentedToUserStringKeysMap.` );
+      }
+    }
+  }
+
+  return presentedToUserStringKeysMap;
+}
+
+/**
  * Makes a string of HTML for a report on which string keys are untranslated for a given simulation.
  *
  * @param {string} simName - repo-style sim name
