@@ -845,8 +845,12 @@ async function getPresentedToUserStringKeysMap( simName ) {
       const isAccessibility = stringKey.indexOf( 'a11y.' ) === 0;
       const isVisible = ( stringKey.visible === undefined ) ? true : stringKey.visible;
 
+      // PhetButton.name and ResetAllButton.name are vestigial. They exist because they were going to be used for
+      // accessibility. We ended up putting a11y before all accessibility strings, e.g. a11y.homeScreenDescription.
+      const isOldAccessibilityString = stringKey === "PhetButton.name" || stringKey === "ResetAllButton.name";
+
       // We don't present accessibility keys to the user and we only present visible keys to the user.
-      if ( !isAccessibility && isVisible ) {
+      if ( !isAccessibility && isVisible && !isOldAccessibilityString ) {
 
         // If the repo isn't in the Map, add it.
         if ( !presentedToUserStringKeysMap.has( repo ) ) {
