@@ -847,7 +847,7 @@ async function getPresentedToUserStringKeysMap( simName ) {
 
       // PhetButton.name and ResetAllButton.name are vestigial. They exist because they were going to be used for
       // accessibility. We ended up putting a11y before all accessibility strings, e.g. a11y.homeScreenDescription.
-      const isOldAccessibilityString = stringKey === "PhetButton.name" || stringKey === "ResetAllButton.name";
+      const isOldAccessibilityString = stringKey === 'PhetButton.name' || stringKey === 'ResetAllButton.name';
 
       // We don't present accessibility keys to the user and we only present visible keys to the user.
       if ( !isAccessibility && isVisible && !isOldAccessibilityString ) {
@@ -946,6 +946,7 @@ function countStringKeys( stringKeysMap ) {
 
   // Add the number of elements in each string key array to the count.
   for ( const [ repo, stringKeyArray ] of stringKeysMap ) {
+    winston.debug( `Counting number of string keys in ${repo}.` );
     numStringKeys += stringKeyArray.length;
   }
 
@@ -984,7 +985,7 @@ async function getLocaleStringReportHtml( targetLocale ) {
 
     // Display 10 sims at a time. (Otherwise it takes too long.)
     if ( numSims > 10 ) {
-      html += `</table>`
+      html += '</table>';
       return html;
     }
 
