@@ -921,30 +921,6 @@ module.exports.simStringReport = async function( request, response ) {
 };
 
 /**
- * Given an ISO 639-1 language code (https://en.wikipedia.org/wiki/ISO_639-1), e.g. "de" for German, returns a string
- * of HTML. The string of HTML is for the locale string report. The locale string report tells the user which string
- * keys don't have a translation for a given locale.
- *
- * @param targetLocale - the language code for the locale, e.g. "de" for German
- * @returns {Promise.<string>} - a string of HTML to display to the user
- */
-async function getLocaleStringReportHtml( targetLocale ) {
-
-  // Get a list of the HTML5 sims that are available on the PhET website.
-  const listOfSimNames = await simData.getListOfSimNames( false );
-
-  // Tell user about locale.
-  let html = `<h1>Report for locale ${targetLocale}:</h1>`;
-
-  // Get a sim string report for each sim.
-  for ( const sim of listOfSimNames ) {
-    html += await getSimStringReportHtml( sim, targetLocale );
-  }
-
-  return html;
-}
-
-/**
  * Displays a report to the user about a sim's untranslated strings. It tells the user what the untranslated string
  * keys are in each repo for a given sim.
  *
@@ -955,3 +931,80 @@ async function getLocaleStringReportHtml( targetLocale ) {
 module.exports.localeStringReport = async function( request, response ) {
   response.send( await getLocaleStringReportHtml( request.params.targetLocale ) );
 };
+
+
+/**
+ * Given a string key map, returns the number of string keys in a string key Map. Utility function.
+ *
+ * @param {Map.<{String,String[]}>} stringKeysMap - Map of repos to string key arrays
+ * @returns {number} - number of string keys in the string keys Map
+ */
+function countStringKeys( stringKeysMap ) {
+
+  // Create a variable for counting the number of string keys in the Map.
+  let numStringKeys = 0;
+
+  // Add the number of elements in each string key array to the count.
+  for ( const [ repo, stringKeyArray ] of stringKeysMap ) {
+    numStringKeys += stringKeyArray.length;
+  }
+
+  return numStringKeys;
+}
+
+/**
+ * Given an ISO 639-1 language code (https://en.wikipedia.org/wiki/ISO_639-1), e.g. "de" for German, returns a string
+ * of HTML. The string of HTML is the locale string report. It tells the user how many untranslated strings and how
+ * many total strings there are for each sim.
+ *
+ * @param {string} targetLocale - the language code for the locale, e.g. "de" for German
+ * @returns {Promise.<string>} - a string of HTML to display to the user
+ */
+async function getLocaleStringReportHtml( targetLocale ) {
+
+  // Get a list of the HTML5 sims that are available on the PhET website.
+  const listOfSimNames = await simData.getListOfSimNames( false );
+
+  // Tell user about locale.
+  let html = `<h1>Report for locale ${targetLocale}:</h1>`;
+
+  // Make table.
+  html += `<table>
+            <tr>
+              <th>Sim</th>
+              <th>Untranslated Strings</th>
+              <th>Total Strings</th>
+            </tr>`;
+
+  // Count the number of sims displayed.
+  let numSims = 0;
+
+  // Get number of untranslated strings and total number of strings for each sim.
+  for ( const simName of listOfSimNames ) {
+
+    // Display 10 sims at a time. (Otherwise it takes too long.)
+    if ( numSims > 10 ) {
+      html += `</table>`
+      return html;
+    }
+
+    // Start a table row.
+    html += '<tr>';
+
+    // Get number of untranslated strings.
+    const untranslatedStringKeysMap = await getUntranslatedStringKeysMap( simName, targetLocale );
+    const numUntranslatedStrings = countStringKeys( untranslatedStringKeysMap );
+
+    // Get number of total strings.
+    const presentedToUserStringKeysMap = await getPresentedToUserStringKeysMap( simName );
+    const numTotalStrings = countStringKeys( presentedToUserStringKeysMap );
+
+    // Finish the table row.
+    html += `<td>${simName}</td>`;
+    html += `<td>${numUntranslatedStrings}</td>`;
+    html += `<td>${numTotalStrings}</td>`;
+    html += '</tr>';
+
+    numSims++;
+  }
+}
