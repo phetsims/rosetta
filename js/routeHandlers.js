@@ -739,7 +739,7 @@ async function getEnglishStringKeysMap( simName ) {
     winston.debug( 'Successfully retrieved sim HTML.' );
   }
   catch( error ) {
-    const errorMessage = `Unable to get sim HTML for ${simName}. ${error.message}`;
+    const errorMessage = `Unable to get sim HTML for ${simName} with ${simUrl}. ${error.message}`;
     winston.error( errorMessage );
     throw new Error( errorMessage );
   }
@@ -860,12 +860,13 @@ async function getPresentedToUserStringKeysMap( simName ) {
 
           // Otherwise, the repo is in the Map and we need to add the string key to the array.
           presentedToUserStringKeysMap.get( repo ).push( stringKey );
+          winston.debug( `${stringKey} added to presentedToUserStringKeysMap.` );
         }
       }
       else {
 
         // Don't add the string key to the Map.
-        winston.debug( `String key ${stringKey} not added to presentedToUserStringKeysMap.` );
+        winston.debug( `${stringKey} not added to presentedToUserStringKeysMap.` );
       }
     }
   }
@@ -947,6 +948,7 @@ function countStringKeys( stringKeysMap ) {
   // Add the number of elements in each string key array to the count.
   for ( const [ repo, stringKeyArray ] of stringKeysMap ) {
     winston.debug( `Counting number of string keys in ${repo}.` );
+    winston.debug( `Adding stringKeyArray.length = ${stringKeyArray.length} to numStringKeys.` );
     numStringKeys += stringKeyArray.length;
   }
 
@@ -977,17 +979,8 @@ async function getLocaleStringReportHtml( targetLocale ) {
               <th>Total Strings</th>
             </tr>`;
 
-  // Count the number of sims displayed.
-  let numSims = 0;
-
   // Get number of untranslated strings and total number of strings for each sim.
   for ( const simName of listOfSimNames ) {
-
-    // Display 10 sims at a time. (Otherwise it takes too long.)
-    if ( numSims > 10 ) {
-      html += '</table>';
-      return html;
-    }
 
     // Start a table row.
     html += '<tr>';
@@ -1005,7 +998,7 @@ async function getLocaleStringReportHtml( targetLocale ) {
     html += `<td>${numUntranslatedStrings}</td>`;
     html += `<td>${numTotalStrings}</td>`;
     html += '</tr>';
-
-    numSims++;
   }
+
+  return html;
 }

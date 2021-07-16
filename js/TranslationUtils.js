@@ -191,7 +191,7 @@ async function getLatestSimHtml( simName ) {
     return simHtml.data;
   }
   catch( error ) {
-    const errorMessage = `Unable to get sim HTML. ${error.message}`;
+    const errorMessage = `Unable to get sim HTML with URL ${simUrl}. ${error.message}`;
     winston.error( errorMessage );
     throw new Error( errorMessage );
   }
