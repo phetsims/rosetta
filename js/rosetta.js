@@ -139,7 +139,6 @@ if ( !global.config.enabled ) {
 
 // Set up route for checking if a user is logged in.
 app.get( '/translate*', ensureValidSession );
-// app.get( '/translate*', routeHandlers.checkForValidSession );
 
 // Set up routes for debugging.
 app.post( '/translate*', ( request, response, next ) => {
