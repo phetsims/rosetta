@@ -819,7 +819,7 @@ module.exports.getUntranslatedStringKeysMap = async function( simName, targetLoc
   }
 
   return untranslatedStringKeysMap;
-}
+};
 
 /**
  * Given repo-style (lowercase kebab) sim name, returns a Map.<{String,String[]}>. This Map's keys are repo names, and
@@ -891,13 +891,13 @@ module.exports.getSimSpecificStringKeysArray = function( simName, untranslatedSt
 
   // Iterate through the repos in the Map.
   for ( const [ repo, stringKeyArray ] of untranslatedStringKeysMap ) {
-    if( repo === simName ) {
+    if ( repo === simName ) {
       simSpecificStringKeysArray = stringKeyArray;
     }
   }
 
   return simSpecificStringKeysArray;
-}
+};
 
 /**
  * Given a repo-style (lowercase kebab) sim name and a Map.<{String,String[]}> whose keys are repo names and
@@ -912,54 +912,54 @@ module.exports.getSimSpecificStringKeysArray = function( simName, untranslatedSt
 module.exports.getCommonStringKeysArray = function( simName, untranslatedStringKeysMap ) {
 
   // Initialize array of common strings.
-  let commonStringKeysArray = [];
+  const commonStringKeysArray = [];
 
   // Iterate through the repos in the Map.
   for ( const [ repo, stringKeyArray ] of untranslatedStringKeysMap ) {
-    if( repo !== simName ) {
-      commonStringKeysArray.push.apply( commonStringKeysArray, stringKeyArray );
+    if ( repo !== simName ) {
+      commonStringKeysArray.push.apply( commonStringKeysArray, stringKeyArray ); // eslint-disable-line prefer-spread
     }
   }
 
   return commonStringKeysArray;
-}
+};
 
-/**
- * Given repo-style (lowercase kebab) sim name and an ISO 639-1 language code (https://en.wikipedia.org/wiki/ISO_639-1),
- * e.g. "de" for German, returns a string of HTML. The string of HTML is for the sim string report. The sim string
- * report tells the user which string keys don't have a translation for a given sim.
- *
- * @param {string} simName - repo-style sim name
- * @param {string} targetLocale - the language code for the locale, e.g. "de" for German
- * @returns {Promise.<string>} - a string of HTML to display to the user
- */
-async function getSimStringReportHtml( simName, targetLocale ) {
+// /**
+//  * Given repo-style (lowercase kebab) sim name and an ISO 639-1 language code (https://en.wikipedia.org/wiki/ISO_639-1),
+//  * e.g. "de" for German, returns a string of HTML. The string of HTML is for the sim string report. The sim string
+//  * report tells the user which string keys don't have a translation for a given sim.
+//  *
+//  * @param {string} simName - repo-style sim name
+//  * @param {string} targetLocale - the language code for the locale, e.g. "de" for German
+//  * @returns {Promise.<string>} - a string of HTML to display to the user
+//  */
+// async function getSimStringReportHtml( simName, targetLocale ) {
+//
+//   // Get the untranslated strings for display.
+//   const untranslatedStringKeysMap = await getUntranslatedStringKeysMap( simName, targetLocale );
+//
+//   // Tell user about sim, locale.
+//   let html = `<h2>Report for ${simName} in locale ${targetLocale}:</h2>`;
+//
+//   // Tell user about untranslated string keys for each repo.
+//   for ( const [ repo, stringKeyArray ] of untranslatedStringKeysMap ) {
+//     html += `<h3>Untranslated string keys in the ${repo} repository:</h3>`;
+//     html += '<ul>';
+//     if ( stringKeyArray.length === 0 ) {
+//       html += `<li>All string keys have been translated in the ${repo} repository! :)</li>`;
+//     }
+//     else {
+//       for ( const stringKey of stringKeyArray ) {
+//         html += `<li>${stringKey}</li>`;
+//       }
+//     }
+//     html += '</ul>';
+//   }
+//
+//   return html;
+// }
 
-  // Get the untranslated strings for display.
-  const untranslatedStringKeysMap = await getUntranslatedStringKeysMap( simName, targetLocale );
-
-  // Tell user about sim, locale.
-  let html = `<h2>Report for ${simName} in locale ${targetLocale}:</h2>`;
-
-  // Tell user about untranslated string keys for each repo.
-  for ( const [ repo, stringKeyArray ] of untranslatedStringKeysMap ) {
-    html += `<h3>Untranslated string keys in the ${repo} repository:</h3>`;
-    html += '<ul>';
-    if ( stringKeyArray.length === 0 ) {
-      html += `<li>All string keys have been translated in the ${repo} repository! :)</li>`;
-    }
-    else {
-      for ( const stringKey of stringKeyArray ) {
-        html += `<li>${stringKey}</li>`;
-      }
-    }
-    html += '</ul>';
-  }
-
-  return html;
-}
-
-const renderSimStringReport = require('./renderSimStringReport');
+const renderSimStringReport = require( './renderSimStringReport' );
 
 /**
  * Displays a report to the user about a sim's untranslated strings. It tells the user what the untranslated string
@@ -973,84 +973,83 @@ module.exports.simStringReport = async function( request, response ) {
   await renderSimStringReport( request, response );
 };
 
-/**
- * Displays a report to the user about a sim's untranslated strings. It tells the user what the untranslated string
- * keys are in each repo for a given sim.
- *
- * @param {Object} request
- * @param {Object} response
- * @returns {Promise.<string>} - a string of HTML to display to the user
- */
-module.exports.localeStringReport = async function( request, response ) {
-  response.send( await getLocaleStringReportHtml( request.params.targetLocale ) );
-};
+// /**
+//  * Displays a report to the user about a sim's untranslated strings. It tells the user what the untranslated string
+//  * keys are in each repo for a given sim.
+//  *
+//  * @param {Object} request
+//  * @param {Object} response
+//  * @returns {Promise.<string>} - a string of HTML to display to the user
+//  */
+// module.exports.localeStringReport = async function( request, response ) {
+//   response.send( await getLocaleStringReportHtml( request.params.targetLocale ) );
+// };
 
+// /**
+//  * Given a string key map, returns the number of string keys in a string key Map. Utility function.
+//  *
+//  * @param {Map.<{String,String[]}>} stringKeysMap - Map of repos to string key arrays
+//  * @returns {number} - number of string keys in the string keys Map
+//  */
+// function countStringKeys( stringKeysMap ) {
+//
+//   // Create a variable for counting the number of string keys in the Map.
+//   let numStringKeys = 0;
+//
+//   // Add the number of elements in each string key array to the count.
+//   for ( const [ repo, stringKeyArray ] of stringKeysMap ) {
+//     winston.debug( `Counting number of string keys in ${repo}.` );
+//     winston.debug( `Adding stringKeyArray.length = ${stringKeyArray.length} to numStringKeys.` );
+//     numStringKeys += stringKeyArray.length;
+//   }
+//
+//   return numStringKeys;
+// }
 
-/**
- * Given a string key map, returns the number of string keys in a string key Map. Utility function.
- *
- * @param {Map.<{String,String[]}>} stringKeysMap - Map of repos to string key arrays
- * @returns {number} - number of string keys in the string keys Map
- */
-function countStringKeys( stringKeysMap ) {
-
-  // Create a variable for counting the number of string keys in the Map.
-  let numStringKeys = 0;
-
-  // Add the number of elements in each string key array to the count.
-  for ( const [ repo, stringKeyArray ] of stringKeysMap ) {
-    winston.debug( `Counting number of string keys in ${repo}.` );
-    winston.debug( `Adding stringKeyArray.length = ${stringKeyArray.length} to numStringKeys.` );
-    numStringKeys += stringKeyArray.length;
-  }
-
-  return numStringKeys;
-}
-
-/**
- * Given an ISO 639-1 language code (https://en.wikipedia.org/wiki/ISO_639-1), e.g. "de" for German, returns a string
- * of HTML. The string of HTML is the locale string report. It tells the user how many untranslated strings and how
- * many total strings there are for each sim.
- *
- * @param {string} targetLocale - the language code for the locale, e.g. "de" for German
- * @returns {Promise.<string>} - a string of HTML to display to the user
- */
-async function getLocaleStringReportHtml( targetLocale ) {
-
-  // Get a list of the HTML5 sims that are available on the PhET website.
-  const listOfSimNames = await simData.getListOfSimNames( false );
-
-  // Tell user about locale.
-  let html = `<h1>Report for locale ${targetLocale}:</h1>`;
-
-  // Make table.
-  html += `<table>
-            <tr>
-              <th>Sim</th>
-              <th>Untranslated Strings</th>
-              <th>Total Strings</th>
-            </tr>`;
-
-  // Get number of untranslated strings and total number of strings for each sim.
-  for ( const simName of listOfSimNames ) {
-
-    // Start a table row.
-    html += '<tr>';
-
-    // Get number of untranslated strings.
-    const untranslatedStringKeysMap = await getUntranslatedStringKeysMap( simName, targetLocale );
-    const numUntranslatedStrings = countStringKeys( untranslatedStringKeysMap );
-
-    // Get number of total strings.
-    const presentedToUserStringKeysMap = await getPresentedToUserStringKeysMap( simName );
-    const numTotalStrings = countStringKeys( presentedToUserStringKeysMap );
-
-    // Finish the table row.
-    html += `<td>${simName}</td>`;
-    html += `<td>${numUntranslatedStrings}</td>`;
-    html += `<td>${numTotalStrings}</td>`;
-    html += '</tr>';
-  }
-
-  return html;
-}
+// /**
+//  * Given an ISO 639-1 language code (https://en.wikipedia.org/wiki/ISO_639-1), e.g. "de" for German, returns a string
+//  * of HTML. The string of HTML is the locale string report. It tells the user how many untranslated strings and how
+//  * many total strings there are for each sim.
+//  *
+//  * @param {string} targetLocale - the language code for the locale, e.g. "de" for German
+//  * @returns {Promise.<string>} - a string of HTML to display to the user
+//  */
+// async function getLocaleStringReportHtml( targetLocale ) {
+//
+//   // Get a list of the HTML5 sims that are available on the PhET website.
+//   const listOfSimNames = await simData.getListOfSimNames( false );
+//
+//   // Tell user about locale.
+//   let html = `<h1>Report for locale ${targetLocale}:</h1>`;
+//
+//   // Make table.
+//   html += `<table>
+//             <tr>
+//               <th>Sim</th>
+//               <th>Untranslated Strings</th>
+//               <th>Total Strings</th>
+//             </tr>`;
+//
+//   // Get number of untranslated strings and total number of strings for each sim.
+//   for ( const simName of listOfSimNames ) {
+//
+//     // Start a table row.
+//     html += '<tr>';
+//
+//     // Get number of untranslated strings.
+//     const untranslatedStringKeysMap = await getUntranslatedStringKeysMap( simName, targetLocale );
+//     const numUntranslatedStrings = countStringKeys( untranslatedStringKeysMap );
+//
+//     // Get number of total strings.
+//     const presentedToUserStringKeysMap = await getPresentedToUserStringKeysMap( simName );
+//     const numTotalStrings = countStringKeys( presentedToUserStringKeysMap );
+//
+//     // Finish the table row.
+//     html += `<td>${simName}</td>`;
+//     html += `<td>${numUntranslatedStrings}</td>`;
+//     html += `<td>${numTotalStrings}</td>`;
+//     html += '</tr>';
+//   }
+//
+//   return html;
+// }

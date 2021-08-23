@@ -1,6 +1,6 @@
 // Copyright 2021, University of Colorado Boulder
 
-const routeHandlers = require('./routeHandlers');
+const routeHandlers = require( './routeHandlers' );
 
 /**
  * Renders the sim string report.
