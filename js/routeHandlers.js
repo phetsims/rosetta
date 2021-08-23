@@ -790,7 +790,7 @@ async function getTranslatedStringKeysMap( simName, targetLocale ) {
  * @param {string} targetLocale - the language code for the locale, e.g. "de" for German
  * @returns {Promise.<Map.<{String,String[]}>>} - Map of repos to string key arrays
  */
-async function getUntranslatedStringKeysMap( simName, targetLocale ) {
+module.exports.getUntranslatedStringKeysMap = async function( simName, targetLocale ) {
 
   // {Map.<{String,String[]}>} - a Map with repo names and an array of string keys for that repo
   const presentedToUserStringKeysMap = await getPresentedToUserStringKeysMap( simName );
@@ -875,6 +875,56 @@ async function getPresentedToUserStringKeysMap( simName ) {
 }
 
 /**
+ * Given a repo-style (lowercase kebab) sim name and a Map.<{String,String[]}> whose keys are repo names and
+ * whose values are arrays of string keys, this function returns an array of sim-specific string keys. That is, it
+ * returns an array of string keys that are only used in the given simulation rather than strings that are used
+ * across multiple simulations.
+ *
+ * @param {string} simName - repo-style sim name
+ * @param {Map.<{String,String[]}} untranslatedStringKeysMap - Map of repos to string key arrays
+ * @returns {String[]}
+ */
+module.exports.getSimSpecificStringKeysArray = function( simName, untranslatedStringKeysMap ) {
+
+  // Initialize array of sim-specific strings.
+  let simSpecificStringKeysArray = [];
+
+  // Iterate through the repos in the Map.
+  for ( const [ repo, stringKeyArray ] of untranslatedStringKeysMap ) {
+    if( repo === simName ) {
+      simSpecificStringKeysArray = stringKeyArray;
+    }
+  }
+
+  return simSpecificStringKeysArray;
+}
+
+/**
+ * Given a repo-style (lowercase kebab) sim name and a Map.<{String,String[]}> whose keys are repo names and
+ * whose values are arrays of string keys, this function returns an array of common string keys. That is, it
+ * returns an array of string keys that are used in multiple simulations rather than string keys that are specific
+ * to one simulation.
+ *
+ * @param {string} simName - repo-style sim name
+ * @param {Map.<{String,String[]}} untranslatedStringKeysMap - Map of repos to string key arrays
+ * @returns {String[]}
+ */
+module.exports.getCommonStringKeysArray = function( simName, untranslatedStringKeysMap ) {
+
+  // Initialize array of common strings.
+  let commonStringKeysArray = [];
+
+  // Iterate through the repos in the Map.
+  for ( const [ repo, stringKeyArray ] of untranslatedStringKeysMap ) {
+    if( repo !== simName ) {
+      commonStringKeysArray.push.apply( commonStringKeysArray, stringKeyArray );
+    }
+  }
+
+  return commonStringKeysArray;
+}
+
+/**
  * Given repo-style (lowercase kebab) sim name and an ISO 639-1 language code (https://en.wikipedia.org/wiki/ISO_639-1),
  * e.g. "de" for German, returns a string of HTML. The string of HTML is for the sim string report. The sim string
  * report tells the user which string keys don't have a translation for a given sim.
@@ -909,6 +959,8 @@ async function getSimStringReportHtml( simName, targetLocale ) {
   return html;
 }
 
+const renderSimStringReport = require('./renderSimStringReport');
+
 /**
  * Displays a report to the user about a sim's untranslated strings. It tells the user what the untranslated string
  * keys are in each repo for a given sim.
@@ -918,7 +970,7 @@ async function getSimStringReportHtml( simName, targetLocale ) {
  * @returns {Promise.<string>} - a string of HTML to display to the user
  */
 module.exports.simStringReport = async function( request, response ) {
-  response.send( await getSimStringReportHtml( request.params.simName, request.params.targetLocale ) );
+  await renderSimStringReport( request, response );
 };
 
 /**
