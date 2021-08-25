@@ -173,7 +173,7 @@ app.get( '/translate/trigger-build/:simName?/:targetLocale?/:userId?', routeHand
 
 // Routes for info on untranslated strings.
 app.get( '/translate/sim-string-report/:simName?/:targetLocale?/', routeHandlers.simStringReport );
-app.get( '/translate/locale-string-report/:targetLocale?/', routeHandlers.localeStringReport );
+//app.get( '/translate/locale-string-report/:targetLocale?/', routeHandlers.localeStringReport );
 
 // Set up routes for incorrect URL patterns.
 app.get( '/*', routeHandlers.pageNotFound );
