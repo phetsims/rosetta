@@ -4,19 +4,21 @@
   <h1>String Report for {{=it.simName}} in Locale {{=it.targetLocale}}</h1>
 </div>
 
-<h2>Untranslated Sim-Specific Strings ({{=it.numSimSpecificStringKeys}})</h2>
-<ul>
-  {{~ it.simSpecificStringKeysArray :value:index}}
-  <li>{{=value}}</li>
-  {{~}}
-</ul>
+<main class="mx-5">
+  <h2 class="mt-2">Untranslated Sim-Specific Strings ({{=it.numSimSpecificStringKeys}})</h2>
+  <ul>
+    {{~ it.simSpecificStringKeysArray :value:index}}
+    <li>{{=value}}</li>
+    {{~}}
+  </ul>
 
-<h2>Untranslated Common Strings ({{=it.numCommonStringKeys}})</h2>
-<ul>
-  {{~ it.commonStringKeysArray :value:index}}
-  <li>{{=value}}</li>
-  {{~}}
-</ul>
+  <h2>Untranslated Common Strings ({{=it.numCommonStringKeys}})</h2>
+  <ul class="mt-2">
+    {{~ it.commonStringKeysArray :value:index}}
+    <li>{{=value}}</li>
+    {{~}}
+  </ul>
+</main>
 
 <!-- Bootstrap -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
