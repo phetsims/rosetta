@@ -779,6 +779,8 @@ async function getTranslatedStringKeysMap( simName, targetLocale ) {
   return translatedStringKeysMap;
 }
 
+module.exports.getTranslatedStringKeysMap = getTranslatedStringKeysMap;
+
 /**
  * Given repo-style (lowercase kebab) sim name and an ISO 639-1 language code (https://en.wikipedia.org/wiki/ISO_639-1),
  * e.g. "de" for German, returns a Map.<{String,String[]}>. This Map's keys are repo names, and its values are arrays of
@@ -874,6 +876,8 @@ async function getPresentedToUserStringKeysMap( simName ) {
   return presentedToUserStringKeysMap;
 }
 
+module.exports.getPresentedToUserStringKeysMap = getPresentedToUserStringKeysMap;
+
 /**
  * Given a repo-style (lowercase kebab) sim name and a Map.<{String,String[]}> whose keys are repo names and
  * whose values are arrays of string keys, this function returns an array of sim-specific string keys. That is, it
@@ -963,14 +967,26 @@ const renderSimStringReport = require( './renderSimStringReport' );
 
 /**
  * Displays a report to the user about a sim's untranslated strings. It tells the user what the untranslated string
- * keys are in each repo for a given sim.
+ * keys are in the sim's repo and in common repos.
  *
  * @param {Object} request
  * @param {Object} response
- * @returns {Promise.<string>} - a string of HTML to display to the user
  */
 module.exports.simStringReport = async function( request, response ) {
   await renderSimStringReport( request, response );
+};
+
+const renderLocaleStringReport = require( './renderLocaleStringReport' );
+
+/**
+ * Displays a report to the user about a locale's untranslated strings. It tells the user what the untranslated string
+ * keys are for each sim in a given locale.
+ *
+ * @param {Object} request
+ * @param {Object} response
+ */
+module.exports.localeStringReport = async function( request, response ) {
+  await renderLocaleStringReport( request, response );
 };
 
 // /**
