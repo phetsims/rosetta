@@ -175,6 +175,22 @@ app.get( '/translate/trigger-build/:simName?/:targetLocale?/:userId?', routeHand
 app.get( '/translate/sim-string-report/:simName?/:targetLocale?/', routeHandlers.simStringReport );
 app.get( '/translate/locale-string-report/:targetLocale?/', routeHandlers.localeStringReport );
 
+// TODO: Move this when you're done.
+app.get( '/translate/sse/', async function( req, res ) {
+  res.set( {
+    'Cache-Control': 'no-cache',
+    'Content-Type': 'text/event-stream',
+    'Connection': 'keep-alive'
+  } );
+  res.flushHeaders();
+  let count = 0;
+  while ( true ) {
+    await new Promise( resolve => setTimeout( resolve, 1000 ) );
+    res.write(`data: ${count}\n\n`);
+    count++;
+  }
+} );
+
 // Set up routes for incorrect URL patterns.
 app.get( '/*', routeHandlers.pageNotFound );
 app.post( '/*', routeHandlers.pageNotFound );
