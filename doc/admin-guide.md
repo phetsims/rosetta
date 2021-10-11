@@ -74,13 +74,13 @@ babel for the user ID of the most recent translator.
 
 ### Instructions
 
-1. Make sure you are signed in before you try to trigger a build.
+1. Edit the babel file for the translation, as needed. Commit directly to master.
 2. Make sure the instance of Rosetta has sendBuildRequests = true in its config file.
 3. Obtain the user ID you wish to use from Babel.
-4. Create and enter your URL in a web browser. It will look something like this:
-   `https://ox-dev.colorado.edu/translate/trigger-build/build-an-atom/de/1234`.
-5. Check Rosetta's logs and the build server's logs as desired.
-6. Make sure your build went through successfully. (This should take about five minutes.)
+4. Create and enter your URL in a web browser (you will be asked to sign in, if not already). Use the following URL pattern:
+   `https://ox-dev.colorado.edu/translate/trigger-build/{sim-name}/{2-digit locale code}/{translator ID}`: 
+5. Check Rosetta's logs and the build server's logs as desired. (this log file is located on phet-server/ox-dev and will require SSH to view)
+6. Make sure your build went through successfully and the translation is published to the website. (This should take about five minutes.)
 
 To use this, enter this URL in a browser window and then check some time later that the translation was rebuilt. You
 can monitor rosetta and/or the build server log if desired.
