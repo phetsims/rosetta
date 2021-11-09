@@ -1,3 +1,5 @@
+// Copyright 2021, University of Colorado Boulder
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 

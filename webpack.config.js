@@ -1,9 +1,12 @@
+// Copyright 2021, University of Colorado Boulder
+
 const path = require( 'path' );
+
 module.exports = {
   entry: './src/client/index.js',
   output: {
     path: path.resolve( __dirname, 'static' ),
-    filename: 'bundle.js',
+    filename: 'bundle.js'
   },
   module: {
     rules: [
