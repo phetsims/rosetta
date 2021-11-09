@@ -1,8 +1,8 @@
 {
   "name": "rosetta",
   "scripts": {
-    "build": "webpack --mode=production",
-    "start": "node src/server/app.js"
+    "dev": "webpack --mode=development && node src/server/app.js",
+    "pro": "webpack --mode=production && node src/server/app.js"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
