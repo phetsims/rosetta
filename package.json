@@ -1,6 +1,7 @@
 {
   "name": "rosetta",
   "scripts": {
+    "pre": "husky install",
     "dev": "webpack --mode=development && node src/server/app.js",
     "pro": "webpack --mode=production && node src/server/app.js"
   },
@@ -13,6 +14,7 @@
     "eslint-plugin-react": "^7.26.1",
     "grunt": "^1.4.1",
     "html-webpack-plugin": "^5.5.0",
+    "husky": "^7.0.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "webpack": "^5.62.1",
