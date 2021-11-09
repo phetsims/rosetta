@@ -1,6 +1,7 @@
 // Copyright 2021, University of Colorado Boulder
 
 const path = require( 'path' );
+const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
 
 module.exports = {
   entry: './src/client/index.js',
@@ -23,5 +24,10 @@ module.exports = {
         }
       }
     ]
-  }
+  },
+  plugins: [
+    new HtmlWebpackPlugin( {
+      template: './src/client/index.html'
+    } )
+  ]
 };

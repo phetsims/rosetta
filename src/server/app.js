@@ -8,18 +8,9 @@ const STATIC_ASSETS_PATH = path.join( __dirname, '..', '..', 'static' );
 
 const app = express();
 
-app.use( '/static', express.static( STATIC_ASSETS_PATH ) );
-app.get( '/', ( req, res ) => {
-  const html = `
-    <!doctype html>
-    <html lang="en">
-      <body>
-        <div id="root"></div>
-        <script src="/static/bundle.js"></script>
-      </body>
-    </html>
-  `;
-  res.send( html );
+app.use( express.static( STATIC_ASSETS_PATH ) );
+app.get( '/translate', ( req, res ) => {
+  res.sendFile( path.join( __dirname, '..', '..', 'static', 'index.html' ) );
 } );
 
 app.listen( PORT, () => console.log( `http://localhost:${PORT}` ) );
