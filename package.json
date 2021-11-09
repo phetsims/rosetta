@@ -1,13 +1,17 @@
 {
+  "name": "rosetta",
   "scripts": {
     "build": "webpack --mode=production",
     "start": "node src/server/app.js"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
+    "@babel/eslint-parser": "^7.16.0",
     "@babel/preset-env": "^7.16.0",
     "@babel/preset-react": "^7.16.0",
     "babel-loader": "^8.2.3",
+    "eslint-plugin-react": "^7.26.1",
+    "grunt": "^1.4.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "webpack": "^5.62.1",
@@ -15,5 +19,37 @@
   },
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "node": true
+    },
+    "extends": [
+      "plugin:react/recommended",
+      "../chipper/eslint/sim_eslintrc.js",
+      "../chipper/eslint/node_eslintrc.js",
+      "../chipper/eslint/format_eslintrc.js"
+    ],
+    "ignorePatterns": [
+      "static/*"
+    ],
+    "parser": "@babel/eslint-parser",
+    "parserOptions": {
+      "babelOptions": {
+        "presets": [
+          "@babel/preset-react"
+        ]
+      },
+      "requireConfigFile": false
+    },
+    "rules": {
+      "bad-text": "off"
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    }
   }
 }

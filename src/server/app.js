@@ -1,3 +1,5 @@
+// Copyright 2021, University of Colorado Boulder
+
 const express = require( 'express' );
 const path = require( 'path' );
 
