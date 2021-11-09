@@ -2,8 +2,8 @@
   "name": "rosetta",
   "scripts": {
     "pre": "husky install",
-    "dev": "webpack --mode=development && node src/server/app.js",
-    "pro": "webpack --mode=production && node src/server/app.js"
+    "dev": "grunt lint && webpack --mode=development && node src/server/app.js",
+    "pro": "grunt lint && webpack --mode=production && node src/server/app.js"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
@@ -13,10 +13,12 @@
     "babel-loader": "^8.2.3",
     "eslint-plugin-react": "^7.26.1",
     "grunt": "^1.4.1",
+    "history": "^5.1.0",
     "html-webpack-plugin": "^5.5.0",
     "husky": "^7.0.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-router-dom": "^6.0.1",
     "webpack": "^5.62.1",
     "webpack-cli": "^4.9.1"
   },

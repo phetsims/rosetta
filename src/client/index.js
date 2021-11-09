@@ -2,7 +2,12 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import Rosetta from './components/Rosetta.js';
+import { BrowserRouter } from 'react-router-dom';
 
-ReactDOM.render( <Rosetta/>, document.getElementById( 'root' ) );
+ReactDOM.render(
+  <BrowserRouter>
+    <Rosetta/>
+  </BrowserRouter>,
+  document.getElementById( 'root' )
+);

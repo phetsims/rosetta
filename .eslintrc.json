@@ -23,6 +23,10 @@
   },
   "rules": {
     "bad-text": "off",
+    "jsx-quotes": [
+      "error",
+      "prefer-single"
+    ],
     "require-statement-match": "off"
   },
   "settings": {
