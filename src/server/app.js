@@ -17,5 +17,5 @@ app.get( '/translate', ( req, res ) => {
 } );
 
 app.listen( config.SERVER_PORT, () => {
-  logger.info( `rosetta started` );
+  logger.info( 'rosetta started' );
 } );
