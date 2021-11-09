@@ -6,6 +6,7 @@ const path = require( 'path' );
 
 // server modules
 const config = require( './config.js' );
+const logger = require( './logger.js' );
 
 const app = express();
 
@@ -15,4 +16,6 @@ app.get( '/translate', ( req, res ) => {
   res.sendFile( path.join( __dirname, '..', '..', 'static', 'index.html' ) );
 } );
 
-app.listen( config.SERVER_PORT, () => console.log( `http://localhost:${config.SERVER_PORT}/translate` ) );
+app.listen( config.SERVER_PORT, () => {
+  logger.info( `rosetta started` );
+} );
