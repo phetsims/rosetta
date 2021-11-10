@@ -5,6 +5,7 @@ import express from 'express';
 import localeInfo from './api/localeInfo.js';
 import logger from './logger.js';
 import path from 'path';
+import simNames from './api/simNames.js';
 import { URL } from 'url';
 
 // constants
@@ -28,6 +29,7 @@ app.get( '/translate', ( req, res ) => {
 
 // api gets
 app.get( '/translate/api/localeInfo', localeInfo );
+app.get( '/translate/api/simNames', simNames );
 
 app.listen( config.SERVER_PORT, () => {
   logger.info( 'rosetta started' );
