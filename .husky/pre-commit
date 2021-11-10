@@ -1,4 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-grunt lint
+grunt --gruntfile Gruntfile.cjs lint

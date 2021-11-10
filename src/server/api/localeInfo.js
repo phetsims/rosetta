@@ -1,8 +1,8 @@
 // Copyright 2021, University of Colorado Boulder
 
-// server modules
-const getLocaleInfo = require( '../getLocaleInfo.js' );
-const logger = require( '../logger.js' );
+// packages
+import getLocaleInfo from '../getLocaleInfo.js';
+import logger from '../logger.js';
 
 const localeInfo = async ( req, res ) => {
   try {
@@ -14,4 +14,4 @@ const localeInfo = async ( req, res ) => {
   }
 };
 
-module.exports = localeInfo;
+export { localeInfo as default };
