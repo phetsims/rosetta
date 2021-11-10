@@ -1,6 +1,5 @@
 // Copyright 2021, University of Colorado Boulder
 
-// packages
 import getLocaleInfo from '../getLocaleInfo.js';
 import logger from '../logger.js';
 

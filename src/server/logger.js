@@ -1,6 +1,5 @@
 // Copyright 2021, University of Colorado Boulder
 
-// packages
 import winston from 'winston';
 
 const logger = winston.createLogger( {

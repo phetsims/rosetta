@@ -1,6 +1,5 @@
 // Copyright 2021, University of Colorado Boulder
 
-// packages
 import dotenv from 'dotenv';
 import os from 'os';
 import path from 'path';

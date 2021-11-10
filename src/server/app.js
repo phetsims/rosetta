@@ -1,14 +1,11 @@
 // Copyright 2021, University of Colorado Boulder
 
-// packages
+import config from './config.js';
 import express from 'express';
+import localeInfo from './api/localeInfo.js';
+import logger from './logger.js';
 import path from 'path';
 import { URL } from 'url';
-
-// server modules
-import config from './config.js';
-import logger from './logger.js';
-import localeInfo from './api/localeInfo.js';
 
 // constants
 const app = express();
