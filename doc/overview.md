@@ -22,4 +22,4 @@ user interface for translating simulations using the data from the server, and i
 to the server.
 
 Babel and webpack are used to compile and bundle the React code, respectively. The result of compiling and bundling the
-React code is a directory containing static files that the server serves.
+React code is a directory containing static files. The server serves these static files.
