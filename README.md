@@ -1,6 +1,6 @@
 # Rosetta
 
-Rosetta is a tool for translating PhET simulations. It is built using the MERN tech stack: MongoDB, ExpressJS, React,
+Rosetta is a tool for translating PhET simulations. It is built using the MERN tech stack: MongoDB, ExpressJS, ReactJS,
 and NodeJS.
 
 ## Quick Start
@@ -14,9 +14,9 @@ npm install
 # add git hooks using husky
 npm run pre
 
-# bundle/compile react frontend using webpack/babel and serve static files for development
+# compile/bundle react frontend using babel/webpack and serve static files for development
 npm run dev
 
-# bundle/compile react frontend using webpack/babel and serve static files for production
+# compile/bundle react frontend using babel/webpack and serve static files for production
 npm run pro
 ```
