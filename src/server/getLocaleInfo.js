@@ -1,11 +1,11 @@
 // Copyright 2021, University of Colorado Boulder
 
 // packages
-const axios = require( 'axios' );
+import axios from 'axios';
 
 // server modules
-const config = require( 'config.js' );
-const logger = require( 'logger.js' );
+import config from './config.js';
+import logger from './logger.js';
 
 const getLocaleInfo = async () => {
   let localeInfo;
@@ -17,7 +17,7 @@ const getLocaleInfo = async () => {
     logger.error( e );
   }
   logger.info( 'got locale info; returning it' );
-  return localeInfo;
+  return localeInfo.data;
 };
 
-module.exports = getLocaleInfo;
+export { getLocaleInfo as default };

@@ -1,9 +1,10 @@
 {
   "name": "rosetta",
+  "type": "module",
   "scripts": {
     "pre": "husky install",
-    "dev": "grunt lint && webpack --mode=development && node src/server/app.js",
-    "pro": "grunt lint && webpack --mode=production && node src/server/app.js"
+    "dev": "grunt --gruntfile Gruntfile.cjs lint && webpack --mode=development && node src/server/app.js",
+    "pro": "grunt --gruntfile Gruntfile.cjs lint && webpack --mode=production && node src/server/app.js"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",

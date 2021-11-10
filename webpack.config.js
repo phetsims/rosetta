@@ -1,9 +1,14 @@
 // Copyright 2021, University of Colorado Boulder
 
-const path = require( 'path' );
-const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
+// packages
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import path from 'path';
+import { URL } from 'url';
 
-module.exports = {
+// constants
+const __dirname = new URL( '.', import.meta.url ).pathname;
+
+const webpackConfig = {
   entry: './src/client/index.js',
   output: {
     path: path.resolve( __dirname, 'static' ),
@@ -31,3 +36,5 @@ module.exports = {
     } )
   ]
 };
+
+export { webpackConfig as default };

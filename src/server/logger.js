@@ -1,6 +1,7 @@
 // Copyright 2021, University of Colorado Boulder
 
-const winston = require( 'winston' );
+// packages
+import winston from 'winston';
 
 const logger = winston.createLogger( {
   format: winston.format.combine(
@@ -13,4 +14,4 @@ const logger = winston.createLogger( {
   ]
 } );
 
-module.exports = logger;
+export { logger as default };

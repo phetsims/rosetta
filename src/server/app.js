@@ -1,20 +1,36 @@
 // Copyright 2021, University of Colorado Boulder
 
 // packages
-const express = require( 'express' );
-const path = require( 'path' );
+import express from 'express';
+import path from 'path';
+import { URL } from 'url';
 
 // server modules
-const config = require( './config.js' );
-const logger = require( './logger.js' );
+import config from './config.js';
+import logger from './logger.js';
+import localeInfo from './api/localeInfo.js';
 
+// constants
 const app = express();
-
+const __dirname = new URL( '.', import.meta.url ).pathname;
 const staticAssetsPath = path.join( __dirname, '..', '..', 'static' );
+
+// middleware
 app.use( express.static( staticAssetsPath ) );
+
+// log info about get request
+app.get( '/translate*', ( req, res, next ) => {
+  logger.info( `get request ${req.url}` );
+  next();
+} );
+
+// serve static index.html file
 app.get( '/translate', ( req, res ) => {
   res.sendFile( path.join( __dirname, '..', '..', 'static', 'index.html' ) );
 } );
+
+// api gets
+app.get( '/translate/api/localeInfo', localeInfo );
 
 app.listen( config.SERVER_PORT, () => {
   logger.info( 'rosetta started' );
