@@ -1,7 +1,7 @@
 # Rosetta
 
-Rosetta is a tool for translating PhET simulations. It is built using the MERN tech stack: MongoDB, ExpressJS, ReactJS,
-and NodeJS.
+Rosetta is a tool for translating PhET simulations. It is built using the MERN tech stack: MongoDB, Express, React,
+and Node.
 
 ## Quick Start
 
