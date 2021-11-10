@@ -1,9 +1,6 @@
 // Copyright 2021, University of Colorado Boulder
 
-// packages
 import axios from 'axios';
-
-// server modules
 import config from './config.js';
 import logger from './logger.js';
 
