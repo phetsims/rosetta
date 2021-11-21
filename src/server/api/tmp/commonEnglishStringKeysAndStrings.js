@@ -6,7 +6,7 @@ import logger from '../../logger.js';
 const commonEnglishStringKeysAndStrings = async ( req, res ) => {
   try {
     const commonEnglishStringKeysAndStrings = await getCommonEnglishStringKeysAndStrings( req.params.simName );
-    logger.info( `responding with common english string keys and strings for ${req.params.simName}` );
+    logger.info( `responding ${req.params.simName}'s common english string keys and strings` );
     res.json( commonEnglishStringKeysAndStrings );
   }
   catch( e ) {

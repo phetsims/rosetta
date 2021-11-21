@@ -6,6 +6,7 @@ import logger from '../logger.js';
 const localeInfo = async ( req, res ) => {
   try {
     const localeInfo = await getLocaleInfo();
+    logger.info( 'responding with locale info' );
     res.json( localeInfo );
   }
   catch( e ) {

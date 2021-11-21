@@ -35,7 +35,7 @@ const getCategorizedStringKeys = async simName => {
         }
       }
     }
-    logger.info( 'returning categorized string keys' );
+    logger.info( `returning ${simName}'s categorized string keys` );
   }
   catch( e ) {
     logger.error( e );

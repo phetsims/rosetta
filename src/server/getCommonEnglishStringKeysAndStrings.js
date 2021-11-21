@@ -35,6 +35,7 @@ const getCommonEnglishStringKeysAndStrings = async simName => {
   catch( e ) {
     logger.error( e );
   }
+  logger.info( `got ${simName}'s common english string keys and strings; returning them` );
   return [ ...stringKeysToCommonEnglishStrings ];
 };
 
