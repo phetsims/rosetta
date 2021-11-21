@@ -1,5 +1,6 @@
 // Copyright 2021, University of Colorado Boulder
 
+import commonEnglishStringKeysAndStrings from './api/tmp/commonEnglishStringKeysAndStrings.js';
 import config from './config.js';
 import express from 'express';
 import localeInfo from './api/localeInfo.js';
@@ -30,6 +31,9 @@ app.get( '/translate', ( req, res ) => {
 // api gets
 app.get( '/translate/api/localeInfo', localeInfo );
 app.get( '/translate/api/simNames', simNames );
+
+// temporary api gets for manual testing
+app.get( '/translate/api/tmp/commonEnglishStringKeysAndStrings/:simName?', commonEnglishStringKeysAndStrings );
 
 app.listen( config.SERVER_PORT, () => {
   logger.info( 'rosetta started' );
