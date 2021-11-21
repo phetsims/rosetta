@@ -1,11 +1,9 @@
 // Copyright 2021, University of Colorado Boulder
 
-// packages
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import path from 'path';
 import { URL } from 'url';
 
-// constants
 const __dirname = new URL( '.', import.meta.url ).pathname;
 
 const webpackConfig = {
