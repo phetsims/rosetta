@@ -26,10 +26,10 @@ cd chipper
 git pull
 npm prune && npm update
 
-# if you don't already have a .phet directory, make one
+# if you don't have a `~/.phet` directory, make one
 mkdir ~/.phet
 
-# make a config file and ask the maintainer to populate it for you
+# if you don't have a config file, make one and ask the maintainer to help you populate it
 touch ~/.phet/rosetta-config.env
 
 # add git hooks using husky
