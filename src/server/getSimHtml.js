@@ -11,7 +11,7 @@ const getSimHtml = async simUrl => {
   catch( e ) {
     logger.error( e );
   }
-  logger.info( 'got sim html; returning it' );
+  logger.info( `got sim html from ${simUrl}; returning it` );
   return simHtml;
 };
 

@@ -37,7 +37,5 @@ app.get( '/translate/api/tmp/commonEnglishStringKeysAndStrings/:simName?', commo
 
 app.listen( config.SERVER_PORT, () => {
   logger.info( 'rosetta started' );
-
-  // todo: remove when done
   logger.info( 'http://localhost:16372/translate' );
 } );

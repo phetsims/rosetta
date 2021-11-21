@@ -4,7 +4,7 @@ import config from './config.js';
 import logger from './logger.js';
 
 const getSimUrl = simName => {
-  logger.info( 'returning sim url' );
+  logger.info( `returning ${simName}'s sim url` );
   return `${config.SERVER_URL}/sims/html/${simName}/latest/${simName}_en.html`;
 };
 
