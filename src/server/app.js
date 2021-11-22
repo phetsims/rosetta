@@ -5,7 +5,6 @@ import commonTranslatedStringKeysAndStrings from './api/tmp/commonTranslatedStri
 import config from './config.js';
 import express from 'express';
 import localeInfo from './api/localeInfo.js';
-import getEnglishStringKeysAndStrings from './getEnglishStringKeysAndStrings.js';
 import logger from './logger.js';
 import path from 'path';
 import simNames from './api/simNames.js';
