@@ -2,6 +2,7 @@
 
 import commonEnglishStringKeysAndStrings from './api/tmp/commonEnglishStringKeysAndStrings.js';
 import commonTranslatedStringKeysAndStrings from './api/tmp/commonTranslatedStringKeysAndStrings.js';
+import simSpecificEnglishStringKeysAndStrings from './api/tmp/simSpecificEnglishStringKeysAndStrings.js';
 import config from './config.js';
 import express from 'express';
 import localeInfo from './api/localeInfo.js';
@@ -35,6 +36,7 @@ app.get( '/translate/api/simNames', simNames );
 
 // temporary api gets for manual testing
 app.get( '/translate/api/tmp/commonEnglishStringKeysAndStrings/:simName?', commonEnglishStringKeysAndStrings );
+app.get( '/translate/api/tmp/simSpecificEnglishStringKeysAndStrings/:simName?', simSpecificEnglishStringKeysAndStrings );
 app.get( '/translate/api/tmp/commonTranslatedStringKeysAndStrings/:simOrLibName?/:locale?', commonTranslatedStringKeysAndStrings );
 
 app.listen( config.SERVER_PORT, () => {
