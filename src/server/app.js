@@ -2,13 +2,14 @@
 
 import commonEnglishStringKeysAndStrings from './api/tmp/commonEnglishStringKeysAndStrings.js';
 import commonTranslatedStringKeysAndStrings from './api/tmp/commonTranslatedStringKeysAndStrings.js';
-import simSpecificEnglishStringKeysAndStrings from './api/tmp/simSpecificEnglishStringKeysAndStrings.js';
 import config from './config.js';
 import express from 'express';
 import localeInfo from './api/localeInfo.js';
 import logger from './logger.js';
 import path from 'path';
 import simNames from './api/simNames.js';
+import simSpecificEnglishStringKeysAndStrings from './api/tmp/simSpecificEnglishStringKeysAndStrings.js';
+import simSpecificTranslatedStringKeysAndStrings from './api/tmp/simSpecificTranslatedStringKeysAndStrings.js';
 import { URL } from 'url';
 
 // constants
@@ -38,6 +39,7 @@ app.get( '/translate/api/simNames', simNames );
 app.get( '/translate/api/tmp/commonEnglishStringKeysAndStrings/:simName?', commonEnglishStringKeysAndStrings );
 app.get( '/translate/api/tmp/simSpecificEnglishStringKeysAndStrings/:simName?', simSpecificEnglishStringKeysAndStrings );
 app.get( '/translate/api/tmp/commonTranslatedStringKeysAndStrings/:simOrLibName?/:locale?', commonTranslatedStringKeysAndStrings );
+app.get( '/translate/api/tmp/simSpecificTranslatedStringKeysAndStrings/:simName?/:locale?', simSpecificTranslatedStringKeysAndStrings );
 
 app.listen( config.SERVER_PORT, () => {
   logger.info( 'rosetta started' );
