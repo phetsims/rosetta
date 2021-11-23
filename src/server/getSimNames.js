@@ -6,7 +6,7 @@ import logger from './logger.js';
 const getSimNames = async () => {
   const simNames = [];
   try {
-    const simMetadata = await getSimMetadata();
+    const simMetadata = await getSimMetadata(); // inefficient
     for ( const project of simMetadata.projects ) {
 
       // slice html/ off the project name
