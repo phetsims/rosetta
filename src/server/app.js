@@ -6,6 +6,7 @@ import config from './config.js';
 import express from 'express';
 import localeInfo from './api/localeInfo.js';
 import logger from './logger.js';
+import mockWebsiteUserData from './api/mockWebsiteUserData.js';
 import path from 'path';
 import simNames from './api/simNames.js';
 import simSpecificEnglishStringKeysAndStrings from './api/tmp/simSpecificEnglishStringKeysAndStrings.js';
@@ -36,6 +37,13 @@ app.get( '/translate', ( req, res ) => {
 app.get( '/translate/api/localeInfo', localeInfo );
 app.get( '/translate/api/simNames', simNames );
 app.get( '/translate/api/translationFormData/:simName?/:locale?', translationFormData );
+
+// mock website user data for local development
+if ( config.ENVIRONMENT === 'development' ) {
+
+  // not sure what webstorm is barking about here
+  app.get( '/services/check-login', mockWebsiteUserData );
+}
 
 // temporary api gets for manual testing
 app.get( '/translate/api/tmp/commonEnglishStringKeysAndStrings/:simName?', commonEnglishStringKeysAndStrings );
