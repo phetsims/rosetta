@@ -6,7 +6,7 @@ import logger from '../../logger.js';
 const commonTranslatedStringKeysAndStrings = async ( req, res ) => {
   try {
     const commonTranslatedStringKeysAndStrings = await getCommonTranslatedStringKeysAndStrings( req.params.simOrLibName, req.params.locale );
-    logger.info( `responding with ${req.params.simOrLibName}/${req.params.locale}'s common translated string keys and strings` );
+    logger.info( `responding with ${req.params.locale}/${req.params.simOrLibName}'s common translated string keys and strings` );
     res.json( commonTranslatedStringKeysAndStrings );
   }
   catch( e ) {

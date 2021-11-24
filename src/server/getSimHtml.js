@@ -4,6 +4,7 @@ import axios from 'axios';
 import logger from './logger.js';
 
 const getSimHtml = async simUrl => {
+  logger.info( `getting sim html from ${simUrl}` );
   let simHtml;
   try {
     simHtml = await axios.get( simUrl );

@@ -9,6 +9,7 @@ import getStringKeysWithRepoName from './getStringKeysWithRepoName.js';
 import logger from './logger.js';
 
 const getCategorizedStringKeys = async simName => {
+  logger.info( `getting ${simName}'s categorized string keys` );
   const categorizedStringKeys = {
     common: [],
     simSpecific: []
@@ -35,11 +36,11 @@ const getCategorizedStringKeys = async simName => {
         }
       }
     }
-    logger.info( `returning ${simName}'s categorized string keys` );
   }
   catch( e ) {
     logger.error( e );
   }
+  logger.info( `got ${simName}'s categorized string keys; returning them` );
   return categorizedStringKeys;
 };
 

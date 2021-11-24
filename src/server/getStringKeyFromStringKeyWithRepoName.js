@@ -3,7 +3,8 @@
 import logger from './logger.js';
 
 const getStringKeyFromStringKeyWithRepoName = stringKeyWithRepoName => {
-  logger.verbose( `returning string key from ${stringKeyWithRepoName}` );
+  logger.verbose( `getting string key from ${stringKeyWithRepoName}` );
+  logger.verbose( `got string key from ${stringKeyWithRepoName}; returning it` );
   return stringKeyWithRepoName.match( /\/(.*)/ )[ 0 ].replace( '/', '' );
 };
 

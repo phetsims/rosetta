@@ -8,6 +8,7 @@ const populateTranslationFormData = ( translationFormData,
                                       englishStringKeysAndStrings,
                                       translatedStringKeysAndStrings
 ) => {
+  logger.info( `populating ${dataToPopulate} translation form data` );
 
   /**
    * Here we populate the translation form data. This snippet is special for a couple of reasons.
@@ -63,6 +64,7 @@ const populateTranslationFormData = ( translationFormData,
       }
     }
   }
+  logger.info( `populated ${dataToPopulate} translation form data` );
 };
 
 export { populateTranslationFormData as default };

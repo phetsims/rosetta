@@ -4,6 +4,7 @@ import getSimMetadata from './getSimMetadata.js';
 import logger from './logger.js';
 
 const getSimNames = async () => {
+  logger.info( 'getting sim names' );
   const simNames = [];
   try {
     const simMetadata = await getSimMetadata(); // inefficient

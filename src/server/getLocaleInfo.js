@@ -5,6 +5,7 @@ import config from './config.js';
 import logger from './logger.js';
 
 const getLocaleInfo = async () => {
+  logger.info( 'getting locale info' );
   let localeInfo;
   try {
     const localeInfoUrl = `${config.GITHUB_URL}/chipper/master/data/localeInfo.json`;

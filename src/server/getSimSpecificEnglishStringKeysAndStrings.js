@@ -5,6 +5,7 @@ import getEnglishStringKeysAndStrings from './getEnglishStringKeysAndStrings.js'
 import logger from './logger.js';
 
 const getSimSpecificEnglishStringKeysAndStrings = async simName => {
+  logger.info( `getting ${simName}'s sim-specific english string keys and strings` );
   const stringKeysToSimSpecificEnglishStrings = new Map();
   try {
     const categorizedStringKeysRes = await getCategorizedStringKeys( simName );
@@ -26,6 +27,7 @@ const getSimSpecificEnglishStringKeysAndStrings = async simName => {
   catch( e ) {
     logger.error( e );
   }
+  logger.info( `got ${simName}'s sim-specific english string keys and strings; returning them` );
   return [ ...stringKeysToSimSpecificEnglishStrings ];
 };
 

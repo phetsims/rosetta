@@ -5,6 +5,8 @@ import config from './config.js';
 
 const getStringKeysWithRepoName = simHtml => {
 
+  logger.info( 'getting string keys with repo name from sim html' );
+
   simHtml = simHtml.data;
 
   /*
@@ -33,7 +35,7 @@ const getStringKeysWithRepoName = simHtml => {
 
   const parsedStringKeysWithRepoName = JSON.parse( unparsedStringKeysWithRepoName );
 
-  logger.info( 'returning string keys with repo name' );
+  logger.info( 'got string keys with repo name from sim html; returning them' );
   return Object.keys( parsedStringKeysWithRepoName.en );
 };
 

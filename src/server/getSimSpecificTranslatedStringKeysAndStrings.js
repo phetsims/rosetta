@@ -6,6 +6,7 @@ import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
 import logger from './logger.js';
 
 const getSimSpecificTranslatedStringKeysAndStrings = async ( simName, locale ) => {
+  logger.info( `getting ${simName}'s sim-specific translated string keys and strings` );
   const simSpecificTranslatedStringKeysAndStrings = new Map();
   try {
     const categorizedStringKeys = await getCategorizedStringKeys( simName );
@@ -39,6 +40,7 @@ const getSimSpecificTranslatedStringKeysAndStrings = async ( simName, locale ) =
   catch( e ) {
     logger.error( e );
   }
+  logger.info( `got ${simName}'s sim-specific translated string keys and strings; returning them` );
   return [ ...simSpecificTranslatedStringKeysAndStrings ];
 };
 

@@ -11,6 +11,7 @@ import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
 import logger from './logger.js';
 
 const getCommonTranslatedStringKeysAndStrings = async ( simName, locale ) => {
+  logger.info( `getting ${simName}'s common translated string keys and strings` );
   const commonTranslatedStringKeysAndStrings = new Map();
   try {
     const categorizedStringKeys = await getCategorizedStringKeys( simName );
@@ -53,6 +54,7 @@ const getCommonTranslatedStringKeysAndStrings = async ( simName, locale ) => {
   catch( e ) {
     logger.error( e );
   }
+  logger.info( `got ${simName}'s common translated string keys and strings; returning them` );
   return [ ...commonTranslatedStringKeysAndStrings ];
 };
 

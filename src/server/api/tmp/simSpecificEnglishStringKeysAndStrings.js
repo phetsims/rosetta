@@ -6,7 +6,7 @@ import logger from '../../logger.js';
 const simSpecificEnglishStringKeysAndStrings = async ( req, res ) => {
   try {
     const simSpecificEnglishStringKeysAndStrings = await getSimSpecificEnglishStringKeysAndStrings( req.params.simName );
-    logger.info( `responding with sim-specific english string keys and strings for ${req.params.simName}` );
+    logger.info( `responding with ${req.params.simName}'s sim-specific english string keys and strings` );
     res.json( simSpecificEnglishStringKeysAndStrings );
   }
   catch( e ) {

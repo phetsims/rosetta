@@ -8,6 +8,7 @@ import logger from '../../src/server/logger.js';
  */
 
 const getRandomSimNames = async numberOfSimNamesToGet => {
+  logger.info( `getting ${numberOfSimNamesToGet} random sim name(s)` );
   const randomSimNames = [];
   try {
     const simNames = await getSimNames();
@@ -26,6 +27,7 @@ const getRandomSimNames = async numberOfSimNamesToGet => {
   catch( e ) {
     logger.error( e );
   }
+  logger.info( `got ${numberOfSimNamesToGet} random sim name(s); returning it(them)` );
   return randomSimNames;
 };
 
