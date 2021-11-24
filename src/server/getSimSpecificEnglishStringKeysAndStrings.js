@@ -16,7 +16,10 @@ const getSimSpecificEnglishStringKeysAndStrings = async simName => {
         stringKeysToSimSpecificEnglishStrings.set( stringKey, englishStringKeysAndStrings[ stringKey ].value );
       }
       else {
-        stringKeysToSimSpecificEnglishStrings.set( stringKey, 'no longer used' ); // todo: don't display strings that are no longer used
+
+        // we don't display unused string keys and strings to the user
+        // they get stripped out prior to sending them to the client
+        stringKeysToSimSpecificEnglishStrings.set( stringKey, 'no longer used' );
       }
     }
   }

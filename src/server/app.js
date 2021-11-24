@@ -10,6 +10,7 @@ import path from 'path';
 import simNames from './api/simNames.js';
 import simSpecificEnglishStringKeysAndStrings from './api/tmp/simSpecificEnglishStringKeysAndStrings.js';
 import simSpecificTranslatedStringKeysAndStrings from './api/tmp/simSpecificTranslatedStringKeysAndStrings.js';
+import translationFormData from './api/translationFormData.js';
 import { URL } from 'url';
 
 // constants
@@ -34,6 +35,7 @@ app.get( '/translate', ( req, res ) => {
 // api gets
 app.get( '/translate/api/localeInfo', localeInfo );
 app.get( '/translate/api/simNames', simNames );
+app.get( '/translate/api/translationFormData/:simName?/:locale?', translationFormData );
 
 // temporary api gets for manual testing
 app.get( '/translate/api/tmp/commonEnglishStringKeysAndStrings/:simName?', commonEnglishStringKeysAndStrings );
