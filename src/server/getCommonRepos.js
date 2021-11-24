@@ -8,6 +8,7 @@ import getStringKeysWithRepoName from './getStringKeysWithRepoName.js';
 import logger from './logger.js';
 
 const getCommonRepos = async simName => {
+  logger.info( `getting ${simName}'s common repos` );
   const commonRepos = new Set();
   try {
     const simUrl = getSimUrl( simName );
@@ -27,7 +28,7 @@ const getCommonRepos = async simName => {
   catch( e ) {
     logger.error( e );
   }
-  logger.info( `returning ${simName}'s common repos sorted alphabetically` );
+  logger.info( `got ${simName}'s common repos; returning them sorted alphabetically` );
   return Array.from( commonRepos ).sort();
 };
 

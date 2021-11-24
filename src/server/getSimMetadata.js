@@ -14,6 +14,7 @@ const METADATA_REQ_OPTIONS = {
 };
 
 const getSimMetadata = async () => {
+  logger.info( 'getting sim metadata' );
   let simMetadata;
   try {
     const simMetadataRes = await axios.get( METADATA_URL, METADATA_REQ_OPTIONS );

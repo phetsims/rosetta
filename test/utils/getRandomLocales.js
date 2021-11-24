@@ -8,6 +8,7 @@ import logger from '../../src/server/logger.js';
  */
 
 const getRandomLocales = async numberOfLocalesToGet => {
+  logger.info( `getting ${numberOfLocalesToGet} random locale(s)` );
   const randomLocales = [];
   try {
     const localeInfo = await getLocaleInfo();
@@ -27,6 +28,7 @@ const getRandomLocales = async numberOfLocalesToGet => {
   catch( e ) {
     logger.error( e );
   }
+  logger.info( `got ${numberOfLocalesToGet} random locale(s); returning it(them)` );
   return randomLocales;
 };
 

@@ -7,6 +7,7 @@ import getStringFileUrl from './getStringFileUrl.js';
 import logger from './logger.js';
 
 const getCommonEnglishStringKeysAndStrings = async simName => {
+  logger.info( `getting ${simName}'s common english string keys and strings` );
   const stringKeysToCommonEnglishStrings = new Map();
   try {
     const commonRepos = await getCommonRepos( simName );
@@ -28,6 +29,9 @@ const getCommonEnglishStringKeysAndStrings = async simName => {
         }
       }
       if ( !stringKeyMapped ) {
+
+        // we don't display unused string keys and strings to the user
+        // they get stripped out prior to sending them to the client
         stringKeysToCommonEnglishStrings.set( stringKey, 'no longer used' );
       }
     }
