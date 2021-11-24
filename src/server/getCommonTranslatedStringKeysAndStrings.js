@@ -7,7 +7,7 @@ import getSimHtml from './getSimHtml.js';
 import getSimUrl from './getSimUrl.js';
 import getStringKeyFromStringKeyWithRepoName from './getStringKeyFromStringKeyWithRepoName.js';
 import getStringKeysWithRepoName from './getStringKeysWithRepoName.js';
-import getTranslatedStringFile from './getTranslatedStringFileUrl.js';
+import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
 import logger from './logger.js';
 
 const getCommonTranslatedStringKeysAndStrings = async ( simName, locale ) => {
@@ -26,15 +26,26 @@ const getCommonTranslatedStringKeysAndStrings = async ( simName, locale ) => {
     }
     for ( const stringKey of commonStringKeys ) {
       if ( stringKeyToRepoName.has( stringKey ) ) {
-        const repoName = stringKeyToRepoName.get( stringKey );        // inefficient
-        const babelUrl = getTranslatedStringFile( repoName, locale ); // inefficient
-        const translatedStringKeysAndStringsRes = await axios.get( babelUrl );
-        const translatedStringKeysAndStrings = translatedStringKeysAndStringsRes.data;
-        if ( translatedStringKeysAndStrings[ stringKey ] ) {
-          commonTranslatedStringKeysAndStrings.set( stringKey, translatedStringKeysAndStrings[ stringKey ].value );
+        const repoName = stringKeyToRepoName.get( stringKey );                          // inefficient
+        const translatedStringFileUrl = getTranslatedStringFileUrl( repoName, locale ); // inefficient
+        try {
+          const translatedStringKeysAndStringsRes = await axios.get( translatedStringFileUrl );
+          const translatedStringKeysAndStrings = translatedStringKeysAndStringsRes.data;
+          if ( translatedStringKeysAndStrings[ stringKey ] ) {
+            commonTranslatedStringKeysAndStrings.set( stringKey, translatedStringKeysAndStrings[ stringKey ].value );
+          }
+          else {
+            commonTranslatedStringKeysAndStrings.set( stringKey, '' );
+          }
         }
-        else {
-          commonTranslatedStringKeysAndStrings.set( stringKey, '' );
+        catch( e ) {
+          if ( e.response.status === 404 ) {
+            logger.verbose( `translated string file doesn't exist; setting empty string for ${stringKey}` );
+            commonTranslatedStringKeysAndStrings.set( stringKey, '' );
+          }
+          else {
+            logger.error( e );
+          }
         }
       }
     }

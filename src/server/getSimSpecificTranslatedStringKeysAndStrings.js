@@ -11,15 +11,28 @@ const getSimSpecificTranslatedStringKeysAndStrings = async ( simName, locale ) =
     const categorizedStringKeys = await getCategorizedStringKeys( simName );
     const simSpecificStringKeys = categorizedStringKeys.simSpecific;
     const translatedStringFileUrl = getTranslatedStringFileUrl( simName, locale );
-    const stringKeysAndTranslatedValuesRes = await axios.get( translatedStringFileUrl );
-    const stringKeysAndTranslatedValues = stringKeysAndTranslatedValuesRes.data;
-    const translatedStringKeys = Object.keys( stringKeysAndTranslatedValues );
-    for ( const stringKey of simSpecificStringKeys ) {
-      if ( translatedStringKeys.includes( stringKey ) ) {
-        simSpecificTranslatedStringKeysAndStrings.set( stringKey, stringKeysAndTranslatedValues[ stringKey ].value );
+    try {
+      const stringKeysAndTranslatedValuesRes = await axios.get( translatedStringFileUrl );
+      const stringKeysAndTranslatedValues = stringKeysAndTranslatedValuesRes.data;
+      const translatedStringKeys = Object.keys( stringKeysAndTranslatedValues );
+      for ( const stringKey of simSpecificStringKeys ) {
+        if ( translatedStringKeys.includes( stringKey ) ) {
+          simSpecificTranslatedStringKeysAndStrings.set( stringKey, stringKeysAndTranslatedValues[ stringKey ].value );
+        }
+        else {
+          simSpecificTranslatedStringKeysAndStrings.set( stringKey, '' );
+        }
+      }
+    }
+    catch( e ) {
+      if ( e.response.status === 404 ) {
+        logger.verbose( 'translated string file doesn\'t exist; setting empty strings' );
+        for ( const stringKey of simSpecificStringKeys ) {
+          simSpecificTranslatedStringKeysAndStrings.set( stringKey, '' );
+        }
       }
       else {
-        simSpecificTranslatedStringKeysAndStrings.set( stringKey, '' );
+        logger.error( e );
       }
     }
   }
