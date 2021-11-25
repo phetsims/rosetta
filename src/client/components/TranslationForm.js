@@ -1,16 +1,18 @@
 // Copyright 2021, University of Colorado Boulder
 
-/* eslint-disable indent */
+/* eslint-disable no-undef */
+/* eslint-disable prefer-const */
 
-import InfoAndInput from './InfoAndInput.js';
 import React, { useEffect, useState } from 'react';
+import TranslationTable from './TranslationTable.js';
 import axios from 'axios';
 import { Formik, Form } from 'formik';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const TranslationForm = () => {
 
   const params = useParams();
+
   const [ translationFormData, setTranslationFormData ] = useState( [] );
   useEffect( () => {
     try {
@@ -24,36 +26,8 @@ const TranslationForm = () => {
     }
   }, [] );
 
-  const [ simSpecificInfoAndInputs, setSimSpecificInfoAndInputs ] = useState( [] );
-  const [ commonInfoAndInputs, setCommonInfoAndInputs ] = useState( [] );
-  useEffect( () => {
-    for ( const stringKeyWithoutDots in translationFormData.simSpecific ) {
-      const englishString = translationFormData.simSpecific[ stringKeyWithoutDots ].english;
-      const stringKeyWithDots = stringKeyWithoutDots.split( '_DOT_' ).join( '.' );
-      setSimSpecificInfoAndInputs( simSpecificInfoAndInputs => [ ...simSpecificInfoAndInputs,
-        <InfoAndInput
-          key={stringKeyWithDots}
-          name={`simSpecific.${stringKeyWithoutDots}.translated`}
-          stringKey={stringKeyWithDots}
-          englishString={englishString}
-        />
-      ] );
-    }
-    for ( const stringKeyWithoutDots in translationFormData.common ) {
-      const englishString = translationFormData.common[ stringKeyWithoutDots ].english;
-      const stringKeyWithDots = stringKeyWithoutDots.split( '_DOT_' ).join( '.' );
-      setCommonInfoAndInputs( commonInfoAndInputs => [ ...commonInfoAndInputs,
-        <InfoAndInput
-          key={stringKeyWithDots}
-          name={`common.${stringKeyWithoutDots}.translated`}
-          stringKey={stringKeyWithDots}
-          englishString={englishString}
-        />
-      ] );
-    }
-  }, [ translationFormData ] );
+  const navigate = useNavigate();
 
-  // todo: get conditional rendering of info and inputs to work
   return (
     <Formik
       enableReinitialize={true}
@@ -66,26 +40,38 @@ const TranslationForm = () => {
           locale: params.locale,
           translationFormData: values
         };
-        ( async () => {
+        const [ saved, setSaved ] = useState( false );
+        const [ submitted, setSubmitted ] = useState( false );
+        useEffect( async () => {
           if ( document.activeElement.dataset.flag === 'save' ) {
-            window.confirm( `If you have a translation saved for ${params.sim} in locale ${params.locale}, it will be overwritten.` );
-            const postRes = await axios.post( '/translate/api/saveTranslation', translation );
-            console.log( postRes.data );
+            let wantsToSave = window.confirm( `If you have a translation saved for ${params.sim} in locale ${params.locale}, it will be overwritten.` );
+            if ( wantsToSave ) {
+              const postRes = await axios.post( '/translate/api/saveTranslation', translation );
+              console.log( postRes.data );
+              setSaved( true );
+            }
           }
           else if ( document.activeElement.dataset.flag === 'submit' ) {
-            const postRes = await axios.post( '/translate/api/submitTranslation', translation );
-            console.log( postRes.data );
+            let wantsToSubmit = window.confirm( `Are you sure you want to submit your translation for ${params.sim} in locale ${params.locale}?` );
+            if ( wantsToSubmit ) {
+              const postRes = await axios.post( '/translate/api/submitTranslation', translation );
+              console.log( postRes.data );
+              setSubmitted( true );
+            }
           }
-        } )();
+        } );
+        if ( saved ) {
+          alert( 'Translation saved. Redirecting you to the PhET Translation Tool home page.' );
+          navigate( '/translate' );
+        }
+        else if ( submitted ) {
+          alert( 'Translation submitted. Your translation should appear on the PhET website in about half an hour. Redirecting you to the PhET Translation Tool home page.' );
+          navigate( '/translate' );
+        }
       }}
     >
       <Form>
-        <h2>Sim-Specific Strings</h2>
-        <h3>(Translating these strings will only affect the selected simulation.)</h3>
-        {!simSpecificInfoAndInputs ? <p>Loading...</p> : simSpecificInfoAndInputs}
-        <h2>Common Strings</h2>
-        <h3>(Translating these strings will affect multiple simulations.)</h3>
-        {!commonInfoAndInputs ? <p>Loading...</p> : commonInfoAndInputs}
+        <TranslationTable translationFormData={translationFormData}/>
         <button type='submit' data-flag='save'>
           Save Translation
         </button>
