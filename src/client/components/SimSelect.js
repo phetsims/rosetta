@@ -30,7 +30,7 @@ const SimSelect = ( { field } ) => { // eslint-disable-line react/prop-types
   }
 
   return (
-    <select {...field} defaultValue=''>
+    <select {...field}>
       {simOptions}
     </select>
   );

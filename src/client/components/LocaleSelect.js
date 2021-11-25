@@ -36,7 +36,7 @@ const LocaleSelect = ( { field } ) => { // eslint-disable-line react/prop-types
   }
 
   return (
-    <select {...field} defaultValue=''>
+    <select {...field}>
       {localeOptions}
     </select>
   );
