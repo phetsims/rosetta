@@ -4,7 +4,7 @@ import getSimNames from '../src/server/getSimNames.js';
 
 QUnit.module( 'simNames' );
 
-QUnit.test( 'getSimNames should return truthy', async assert => {
+QUnit.skip( 'getSimNames should return truthy', async assert => {
   const simNames = await getSimNames();
   assert.ok( simNames );
 } );
