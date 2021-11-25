@@ -9,9 +9,8 @@ const RosettaRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/translate' element={<LocaleAndSimForm/>}>
-          <Route path=':locale/:sim' element={<TranslationForm/>}/>
-        </Route>
+        <Route path='/translate' element={<LocaleAndSimForm/>}/>
+        <Route path='/translate/:locale/:sim' element={<TranslationForm/>}/>
       </Routes>
     </BrowserRouter>
   );
