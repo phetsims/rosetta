@@ -13,6 +13,7 @@
     "@babel/preset-react": "^7.16.0",
     "babel-loader": "^8.2.3",
     "eslint-plugin-react": "^7.26.1",
+    "formik": "^2.2.9",
     "grunt": "^1.4.1",
     "history": "^5.1.0",
     "html-webpack-plugin": "^5.5.0",
