@@ -7,6 +7,8 @@ import RosettaRoutes from './RosettaRoutes.js';
 function Rosetta() {
 
   const [ websiteUserData, setWebsiteUserData ] = useState( {} );
+
+  // todo: useEffect
   ( async () => {
     try {
       const websiteUserDataRes = await axios.get( `${window.location.origin}/services/check-login` );
