@@ -1,64 +1,35 @@
 // Copyright 2021, University of Colorado Boulder
 
-/* eslint-disable indent */
-
-import React, { useState } from 'react';
 import LocaleSelect from './LocaleSelect.js';
+import React from 'react';
+import SimSelect from './SimSelect.js';
+import { Formik, Form, Field } from 'formik';
+import { useNavigate } from 'react-router-dom';
 
 const LocaleAndSimForm = () => {
-
-  const [ localeSelected, setLocaleSelected ] = useState( false );
-  const handleLocaleClick = () => {
-    setLocaleSelected( true );
-  };
-
-  const table = (
-    <div>
-      <table>
-        <thead>
-        <tr>
-          <th>Sim</th>
-          <th>Strings Translated</th>
-          <th>Total Strings</th>
-          <th>Translate Button</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td>acid base solutions</td>
-          <td>24</td>
-          <td>25</td>
-          <td>
-            <button>Translate</button>
-          </td>
-        </tr>
-        <tr>
-          <td>john travoltage</td>
-          <td>16</td>
-          <td>34</td>
-          <td>
-            <button>Translate</button>
-          </td>
-        </tr>
-        <tr>
-          <td>wave on a string</td>
-          <td>42</td>
-          <td>48</td>
-          <td>
-            <button>Translate</button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-  );
-
+  const navigate = useNavigate();
   return (
-    <div>
-      <LocaleSelect/>
-      <button onClick={handleLocaleClick}>Submit</button>
-      {localeSelected ? table : null}
-    </div>
+    <Formik
+      initialValues={{ locale: 'ab', sim: 'acid-base-solutions' }}
+      onSubmit={values => {
+        alert( JSON.stringify( values, null, 2 ) );
+        navigate( `/translate/${values.locale}/${values.sim}` );
+      }}
+    >
+      <Form>
+        <div>
+          <Field name='locale' component={LocaleSelect}/>
+        </div>
+        <div>
+          <Field name='sim' component={SimSelect}/>
+        </div>
+        <div>
+          <button type='submit'>
+            Translate
+          </button>
+        </div>
+      </Form>
+    </Formik>
   );
 };
 

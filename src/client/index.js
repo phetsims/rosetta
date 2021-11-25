@@ -3,11 +3,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Rosetta from './components/Rosetta.js';
-import { BrowserRouter } from 'react-router-dom';
 
 ReactDOM.render(
-  <BrowserRouter>
-    <Rosetta/>
-  </BrowserRouter>,
+  <Rosetta/>,
   document.getElementById( 'root' )
 );
