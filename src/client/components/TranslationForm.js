@@ -28,9 +28,8 @@ const TranslationForm = () => {
 
   const navigate = useNavigate();
 
-  const save = async ( locale, sim, translation ) => {
-    const wantsToSave = window.confirm( `If you have a translation saved for ${params.sim} in locale ${params.locale}, it will be overwritten.` );
-    if ( wantsToSave ) {
+  const save = async translation => {
+    if ( window.confirm( `If you have a translation saved for ${translation.sim} in locale ${translation.locale}, it will be overwritten.` ) ) {
       try {
         const postRes = await axios.post( '/translate/api/saveTranslation', translation );
         console.log( postRes.data );
@@ -43,9 +42,8 @@ const TranslationForm = () => {
     }
   };
 
-  const submit = async ( locale, sim, translation ) => {
-    const wantsToSubmit = window.confirm( `Are you sure you want to submit your translation for ${params.sim} in locale ${params.locale}?` );
-    if ( wantsToSubmit ) {
+  const submit = async translation => {
+    if ( window.confirm( `Are you sure you want to submit your translation for ${translation.sim} in locale ${translation.locale}?` ) ) {
       try {
         const postRes = await axios.post( '/translate/api/submitTranslation', translation );
         console.log( postRes.data );
@@ -59,7 +57,6 @@ const TranslationForm = () => {
   };
 
   const handleSubmit = async values => {
-    console.log( JSON.stringify( values, null, 2 ) );
     const translation = {
       userId: 123456,
       sim: params.sim,
@@ -67,10 +64,10 @@ const TranslationForm = () => {
       translationFormData: values
     };
     if ( document.activeElement.dataset.flag === 'save' ) {
-      await save( params.locale, params.sim, translation );
+      await save( translation );
     }
     else if ( document.activeElement.dataset.flag === 'submit' ) {
-      await submit( params.locale, params.sim, translation );
+      await submit( translation );
     }
   };
 
