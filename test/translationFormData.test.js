@@ -10,7 +10,7 @@ import getRandomSimNames from './utils/getRandomSimNames.js';
 
 QUnit.module( 'translationFormData' );
 
-QUnit.skip( 'translationFormData should return truthy', async assert => {
+QUnit.test( 'translationFormData should return truthy', async assert => {
 
   if ( config.ENVIRONMENT === 'development' ) {
     const numberOfSimsToTest = 1;
