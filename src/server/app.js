@@ -1,5 +1,6 @@
 // Copyright 2021, University of Colorado Boulder
 
+import saveTranslation from './api/saveTranslation.js';
 import commonEnglishStringKeysAndStrings from './api/tmp/commonEnglishStringKeysAndStrings.js';
 import commonTranslatedStringKeysAndStrings from './api/tmp/commonTranslatedStringKeysAndStrings.js';
 import config from './config.js';
@@ -21,6 +22,7 @@ const staticAssetsPath = path.join( __dirname, '..', '..', 'static' );
 
 // middleware
 app.use( express.static( staticAssetsPath ) );
+app.use( express.json() );
 
 // log info about get request
 app.get( '/translate*', ( req, res, next ) => {
@@ -50,6 +52,9 @@ app.get( '/translate/api/tmp/commonEnglishStringKeysAndStrings/:simName?', commo
 app.get( '/translate/api/tmp/simSpecificEnglishStringKeysAndStrings/:simName?', simSpecificEnglishStringKeysAndStrings );
 app.get( '/translate/api/tmp/commonTranslatedStringKeysAndStrings/:simOrLibName?/:locale?', commonTranslatedStringKeysAndStrings );
 app.get( '/translate/api/tmp/simSpecificTranslatedStringKeysAndStrings/:simName?/:locale?', simSpecificTranslatedStringKeysAndStrings );
+
+// api posts
+app.post( '/translate/api/saveTranslation', saveTranslation );
 
 app.listen( config.SERVER_PORT, () => {
   logger.info( 'rosetta started' );
