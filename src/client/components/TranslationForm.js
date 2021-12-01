@@ -59,6 +59,7 @@ const TranslationForm = () => {
   const handleSubmit = async values => {
     const translation = {
       userId: 123456,
+      timestamp: Date.now(),
       sim: params.sim,
       locale: params.locale,
       translationFormData: values
