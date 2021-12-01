@@ -1,6 +1,5 @@
 // Copyright 2021, University of Colorado Boulder
 
-import saveTranslation from './api/saveTranslation.js';
 import commonEnglishStringKeysAndStrings from './api/tmp/commonEnglishStringKeysAndStrings.js';
 import commonTranslatedStringKeysAndStrings from './api/tmp/commonTranslatedStringKeysAndStrings.js';
 import config from './config.js';
@@ -9,9 +8,11 @@ import localeInfo from './api/localeInfo.js';
 import logger from './logger.js';
 import mockWebsiteUserData from './api/mockWebsiteUserData.js';
 import path from 'path';
+import saveTranslation from './api/saveTranslation.js';
 import simNames from './api/simNames.js';
 import simSpecificEnglishStringKeysAndStrings from './api/tmp/simSpecificEnglishStringKeysAndStrings.js';
 import simSpecificTranslatedStringKeysAndStrings from './api/tmp/simSpecificTranslatedStringKeysAndStrings.js';
+import submitTranslation from './api/submitTranslation.js';
 import translationFormData from './api/translationFormData.js';
 import { URL } from 'url';
 
@@ -42,8 +43,6 @@ app.get( '/translate/api/translationFormData/:simName?/:locale?', translationFor
 
 // mock website user data for local development
 if ( config.ENVIRONMENT === 'development' ) {
-
-  // not sure what webstorm is barking about here
   app.get( '/services/check-login', mockWebsiteUserData );
 }
 
@@ -55,6 +54,7 @@ app.get( '/translate/api/tmp/simSpecificTranslatedStringKeysAndStrings/:simName?
 
 // api posts
 app.post( '/translate/api/saveTranslation', saveTranslation );
+app.post( '/translate/api/submitTranslation', submitTranslation );
 
 app.listen( config.SERVER_PORT, () => {
   logger.info( 'rosetta started' );
