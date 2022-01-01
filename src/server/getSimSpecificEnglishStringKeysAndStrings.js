@@ -1,15 +1,13 @@
 // Copyright 2021, University of Colorado Boulder
 
-import getCategorizedStringKeys from './getCategorizedStringKeys.js';
 import getEnglishStringKeysAndStrings from './getEnglishStringKeysAndStrings.js';
 import logger from './logger.js';
 
-const getSimSpecificEnglishStringKeysAndStrings = async simName => {
+const getSimSpecificEnglishStringKeysAndStrings = async ( simName, categorizedStringKeys ) => {
   logger.info( `getting ${simName}'s sim-specific english string keys and strings` );
   const stringKeysToSimSpecificEnglishStrings = new Map();
   try {
-    const categorizedStringKeysRes = await getCategorizedStringKeys( simName );
-    const simSpecificStringKeys = categorizedStringKeysRes.simSpecific;
+    const simSpecificStringKeys = categorizedStringKeys.simSpecific;
     const englishStringKeysAndStrings = await getEnglishStringKeysAndStrings( simName );
     const englishStringKeys = Object.keys( englishStringKeysAndStrings );
     for ( const stringKey of simSpecificStringKeys ) {

@@ -23,12 +23,12 @@ const getTranslationFormData = async ( simName, locale ) => {
     const categorizedStringKeys = await getCategorizedStringKeys( simName );
 
     const simSpecificStringKeys = categorizedStringKeys.simSpecific;
-    const simSpecificEnglishStringKeysAndStrings = await getSimSpecificEnglishStringKeysAndStrings( simName );
-    const simSpecificTranslatedStringKeysAndStrings = await getSimSpecificTranslatedStringKeysAndStrings( simName, locale );
+    const simSpecificEnglishStringKeysAndStrings = await getSimSpecificEnglishStringKeysAndStrings( simName, categorizedStringKeys );
+    const simSpecificTranslatedStringKeysAndStrings = await getSimSpecificTranslatedStringKeysAndStrings( simName, locale, categorizedStringKeys );
 
     const commonStringKeys = categorizedStringKeys.common;
-    const commonEnglishStringKeysAndStrings = await getCommonEnglishStringKeysAndStrings( simName );
-    const commonTranslatedStringKeysAndStrings = await getCommonTranslatedStringKeysAndStrings( simName, locale );
+    const commonEnglishStringKeysAndStrings = await getCommonEnglishStringKeysAndStrings( simName, categorizedStringKeys );
+    const commonTranslatedStringKeysAndStrings = await getCommonTranslatedStringKeysAndStrings( simName, locale, categorizedStringKeys );
 
     logger.info( 'testing string keys from sim html equal string keys from long-term storage' );
     const simSpecificEnglishStringKeys = simSpecificEnglishStringKeysAndStrings.map( stringKeyAndString => stringKeyAndString[ 0 ] );

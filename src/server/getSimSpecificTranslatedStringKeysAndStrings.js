@@ -1,15 +1,13 @@
 // Copyright 2021, University of Colorado Boulder
 
 import axios from 'axios';
-import getCategorizedStringKeys from './getCategorizedStringKeys.js';
 import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
 import logger from './logger.js';
 
-const getSimSpecificTranslatedStringKeysAndStrings = async ( simName, locale ) => {
+const getSimSpecificTranslatedStringKeysAndStrings = async ( simName, locale, categorizedStringKeys ) => {
   logger.info( `getting ${simName}'s sim-specific translated string keys and strings` );
   const simSpecificTranslatedStringKeysAndStrings = new Map();
   try {
-    const categorizedStringKeys = await getCategorizedStringKeys( simName );
     const simSpecificStringKeys = categorizedStringKeys.simSpecific;
     const translatedStringFileUrl = getTranslatedStringFileUrl( simName, locale );
     try {

@@ -1,7 +1,6 @@
 // Copyright 2021, University of Colorado Boulder
 
 import axios from 'axios';
-import getCategorizedStringKeys from './getCategorizedStringKeys.js';
 import getRepoNameFromStringKeyWithRepoName from './getRepoNameFromStringKeyWithRepoName.js';
 import getSimHtml from './getSimHtml.js';
 import getSimUrl from './getSimUrl.js';
@@ -10,11 +9,10 @@ import getStringKeysWithRepoName from './getStringKeysWithRepoName.js';
 import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
 import logger from './logger.js';
 
-const getCommonTranslatedStringKeysAndStrings = async ( simName, locale ) => {
+const getCommonTranslatedStringKeysAndStrings = async ( simName, locale, categorizedStringKeys ) => {
   logger.info( `getting ${simName}'s common translated string keys and strings` );
   const commonTranslatedStringKeysAndStrings = new Map();
   try {
-    const categorizedStringKeys = await getCategorizedStringKeys( simName );
     const commonStringKeys = categorizedStringKeys.common;
     const simUrl = getSimUrl( simName );
     const simHtml = await getSimHtml( simUrl );
