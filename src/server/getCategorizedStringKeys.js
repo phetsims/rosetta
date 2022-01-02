@@ -36,4 +36,4 @@ const getCategorizedStringKeys = async ( simName, simNames, stringKeysWithRepoNa
   return categorizedStringKeys;
 };
 
-export { getCategorizedStringKeys as default };
+export default getCategorizedStringKeys;

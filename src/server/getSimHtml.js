@@ -16,4 +16,4 @@ const getSimHtml = async simUrl => {
   return simHtml;
 };
 
-export { getSimHtml as default };
+export default getSimHtml;

@@ -9,4 +9,4 @@ const prepareTranslationForLongTermStorage = translation => {
   return translation;
 };
 
-export { prepareTranslationForLongTermStorage as default };
+export default prepareTranslationForLongTermStorage;

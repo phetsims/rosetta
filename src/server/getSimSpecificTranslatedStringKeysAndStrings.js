@@ -42,4 +42,4 @@ const getSimSpecificTranslatedStringKeysAndStrings = async ( simName, locale, ca
   return [ ...simSpecificTranslatedStringKeysAndStrings ];
 };
 
-export { getSimSpecificTranslatedStringKeysAndStrings as default };
+export default getSimSpecificTranslatedStringKeysAndStrings;

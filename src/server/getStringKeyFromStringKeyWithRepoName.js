@@ -8,4 +8,4 @@ const getStringKeyFromStringKeyWithRepoName = stringKeyWithRepoName => {
   return stringKeyWithRepoName.match( /\/(.*)/ )[ 0 ].replace( '/', '' );
 };
 
-export { getStringKeyFromStringKeyWithRepoName as default };
+export default getStringKeyFromStringKeyWithRepoName;

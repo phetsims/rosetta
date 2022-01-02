@@ -9,4 +9,4 @@ const getStringFileUrl = repoName => {
   return `${config.GITHUB_URL}/${repoName}/master/${repoName}-strings_en.json`;
 };
 
-export { getStringFileUrl as default };
+export default getStringFileUrl;

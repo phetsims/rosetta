@@ -41,4 +41,4 @@ const getCommonEnglishStringKeysAndStrings = async ( simName, simNames, categori
   return [ ...stringKeysToCommonEnglishStrings ];
 };
 
-export { getCommonEnglishStringKeysAndStrings as default };
+export default getCommonEnglishStringKeysAndStrings;

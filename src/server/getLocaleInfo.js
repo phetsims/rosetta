@@ -18,4 +18,4 @@ const getLocaleInfo = async () => {
   return localeInfo.data;
 };
 
-export { getLocaleInfo as default };
+export default getLocaleInfo;

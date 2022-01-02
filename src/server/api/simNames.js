@@ -14,4 +14,4 @@ const simNames = async ( req, res ) => {
   }
 };
 
-export { simNames as default };
+export default simNames;

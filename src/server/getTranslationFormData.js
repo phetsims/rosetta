@@ -72,4 +72,4 @@ const getTranslationFormData = async ( simName, locale ) => {
   return translationFormData;
 };
 
-export { getTranslationFormData as default };
+export default getTranslationFormData;

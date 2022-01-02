@@ -17,4 +17,4 @@ const submitTranslation = async ( req, res ) => {
   }
 };
 
-export { submitTranslation as default };
+export default submitTranslation;

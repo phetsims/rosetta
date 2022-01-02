@@ -27,4 +27,4 @@ const getSimMetadata = async () => {
   return simMetadata;
 };
 
-export { getSimMetadata as default };
+export default getSimMetadata;
