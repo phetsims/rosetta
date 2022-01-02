@@ -29,4 +29,4 @@ const getSimSpecificEnglishStringKeysAndStrings = async ( simName, categorizedSt
   return [ ...stringKeysToSimSpecificEnglishStrings ];
 };
 
-export { getSimSpecificEnglishStringKeysAndStrings as default };
+export default getSimSpecificEnglishStringKeysAndStrings;

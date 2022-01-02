@@ -28,4 +28,4 @@ const storeTranslationShortTerm = async translation => {
   logger.info( `stored ${translation.locale}/${translation.sim} translation in short-term storage` );
 };
 
-export { storeTranslationShortTerm as default };
+export default storeTranslationShortTerm;

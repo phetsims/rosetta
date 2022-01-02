@@ -67,4 +67,4 @@ const populateTranslationFormData = ( translationFormData,
   logger.info( `populated ${dataToPopulate} translation form data` );
 };
 
-export { populateTranslationFormData as default };
+export default populateTranslationFormData;

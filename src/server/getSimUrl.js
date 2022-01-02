@@ -9,4 +9,4 @@ const getSimUrl = simName => {
   return `${config.SERVER_URL}/sims/html/${simName}/latest/${simName}_en.html`;
 };
 
-export { getSimUrl as default };
+export default getSimUrl;

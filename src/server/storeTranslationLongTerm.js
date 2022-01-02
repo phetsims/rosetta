@@ -40,4 +40,4 @@ const storeTranslationLongTerm = async translation => {
   logger.info( `stored ${translation.locale}/${translation.sim} translation in long-term storage` );
 };
 
-export { storeTranslationLongTerm as default };
+export default storeTranslationLongTerm;

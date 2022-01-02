@@ -16,4 +16,4 @@ const mockWebsiteUserData = ( req, res ) => {
   res.json( mockWebsiteUserData );
 };
 
-export { mockWebsiteUserData as default };
+export default mockWebsiteUserData;

@@ -24,4 +24,4 @@ const simSpecificEnglishStringKeysAndStrings = async ( req, res ) => {
   }
 };
 
-export { simSpecificEnglishStringKeysAndStrings as default };
+export default simSpecificEnglishStringKeysAndStrings;

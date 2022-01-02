@@ -23,4 +23,4 @@ const getSimNames = async () => {
   return simNames;
 };
 
-export { getSimNames as default };
+export default getSimNames;

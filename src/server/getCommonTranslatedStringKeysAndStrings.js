@@ -50,4 +50,4 @@ const getCommonTranslatedStringKeysAndStrings = async ( simName, locale, categor
   return [ ...commonTranslatedStringKeysAndStrings ];
 };
 
-export { getCommonTranslatedStringKeysAndStrings as default };
+export default getCommonTranslatedStringKeysAndStrings;

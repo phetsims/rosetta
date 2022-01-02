@@ -19,4 +19,4 @@ const getEnglishStringKeysAndStrings = async ( simOrLibName, shaOrBranch = 'mast
   return englishStringKeysAndStrings;
 };
 
-export { getEnglishStringKeysAndStrings as default };
+export default getEnglishStringKeysAndStrings;

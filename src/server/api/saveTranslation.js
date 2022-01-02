@@ -14,4 +14,4 @@ const saveTranslation = async ( req, res ) => {
   }
 };
 
-export { saveTranslation as default };
+export default saveTranslation;

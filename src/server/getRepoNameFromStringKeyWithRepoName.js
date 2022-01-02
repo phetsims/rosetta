@@ -12,4 +12,4 @@ const getRepoNameFromStringKeyWithRepoName = stringKeyWithRepoName => {
   return lowercaseKebabRepoName;
 };
 
-export { getRepoNameFromStringKeyWithRepoName as default };
+export default getRepoNameFromStringKeyWithRepoName;

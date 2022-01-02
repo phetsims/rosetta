@@ -14,4 +14,4 @@ const localeInfo = async ( req, res ) => {
   }
 };
 
-export { localeInfo as default };
+export default localeInfo;

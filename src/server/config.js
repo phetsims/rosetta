@@ -9,4 +9,5 @@ const dotenvPath = {
 };
 dotenv.config( dotenvPath );
 const config = process.env;
-export { config as default };
+
+export default config;

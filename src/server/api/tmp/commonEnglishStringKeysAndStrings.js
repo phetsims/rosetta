@@ -24,4 +24,4 @@ const commonEnglishStringKeysAndStrings = async ( req, res ) => {
   }
 };
 
-export { commonEnglishStringKeysAndStrings as default };
+export default commonEnglishStringKeysAndStrings;

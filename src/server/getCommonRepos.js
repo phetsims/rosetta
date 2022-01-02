@@ -24,4 +24,4 @@ const getCommonRepos = async ( simName, simNames, stringKeysWithRepoName ) => {
   return Array.from( commonRepos ).sort();
 };
 
-export { getCommonRepos as default };
+export default getCommonRepos;

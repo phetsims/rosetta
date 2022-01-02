@@ -15,4 +15,4 @@ const translationFormData = async ( req, res ) => {
   }
 };
 
-export { translationFormData as default };
+export default translationFormData;

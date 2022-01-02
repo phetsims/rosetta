@@ -9,4 +9,4 @@ const getTranslatedStringFile = ( simName, locale ) => {
   return `${config.GITHUB_URL}/babel/${config.BABEL_BRANCH}/${simName}/${simName}-strings_${locale}.json`;
 };
 
-export { getTranslatedStringFile as default };
+export default getTranslatedStringFile;

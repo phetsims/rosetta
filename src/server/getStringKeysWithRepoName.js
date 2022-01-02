@@ -39,4 +39,4 @@ const getStringKeysWithRepoName = simHtml => {
   return Object.keys( parsedStringKeysWithRepoName.en );
 };
 
-export { getStringKeysWithRepoName as default };
+export default getStringKeysWithRepoName;
