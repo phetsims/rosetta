@@ -61,38 +61,42 @@ const TranslationTables = props => {
 
   return (
     <div>
-      <h2>Sim-Specific Strings</h2>
-      <h4 className='text-muted'>(Translating these strings will only affect the selected simulation.)</h4>
-      <table className='table table-striped'>
-        <thead>
-        <tr>
-          <th>String Key</th>
-          <th>English String</th>
-          <th>Translation</th>
-        </tr>
-        </thead>
-        <tbody>
+      <div className='mt-2'>
+        <h2>Sim-Specific Strings</h2>
+        <h4 className='text-muted'>(Translating these strings will only affect the selected simulation.)</h4>
+        <table className='table table-striped'>
+          <thead>
+          <tr>
+            <th>String Key</th>
+            <th>English String</th>
+            <th>Translation</th>
+          </tr>
+          </thead>
+          <tbody>
 
-        {/* iterate over the sim-specific rows */}
-        {simSpecificRows}
-        </tbody>
-      </table>
-      <h2>Common Strings</h2>
-      <h4 className='text-muted'>(Translating these strings will affect multiple simulations.)</h4>
-      <table className='table table-striped'>
-        <thead>
-        <tr>
-          <th>String Key</th>
-          <th>English String</th>
-          <th>Translation</th>
-        </tr>
-        </thead>
-        <tbody>
+          {/* iterate over the sim-specific rows */}
+          {simSpecificRows}
+          </tbody>
+        </table>
+      </div>
+      <div className='mt-2'>
+        <h2>Common Strings</h2>
+        <h4 className='text-muted'>(Translating these strings will affect multiple simulations.)</h4>
+        <table className='table table-striped'>
+          <thead>
+          <tr>
+            <th>String Key</th>
+            <th>English String</th>
+            <th>Translation</th>
+          </tr>
+          </thead>
+          <tbody>
 
-        {/* iterate over the common rows */}
-        {commonRows}
-        </tbody>
-      </table>
+          {/* iterate over the common rows */}
+          {commonRows}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
