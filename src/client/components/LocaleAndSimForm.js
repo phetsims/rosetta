@@ -10,10 +10,10 @@ const LocaleAndSimForm = () => {
   const navigate = useNavigate();
   return (
     <Formik
-      initialValues={{ locale: 'ab', sim: 'acid-base-solutions' }}
+      initialValues={{ locale: 'ab', simName: 'acid-base-solutions' }}
       onSubmit={values => {
         alert( JSON.stringify( values, null, 2 ) );
-        navigate( `/translate/${values.locale}/${values.sim}` );
+        navigate( `/translate/${values.locale}/${values.simName}` );
       }}
     >
       <Form>
@@ -21,7 +21,7 @@ const LocaleAndSimForm = () => {
           <Field name='locale' component={LocaleSelect}/>
         </div>
         <div>
-          <Field name='sim' component={SimSelect}/>
+          <Field name='simName' component={SimSelect}/>
         </div>
         <div>
           <button type='submit'>

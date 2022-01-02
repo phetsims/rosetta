@@ -17,7 +17,7 @@ const TranslationForm = () => {
   useEffect( () => {
     try {
       ( async () => {
-        const translationFormDataRes = await axios.get( `/translate/api/translationFormData/${params.sim}/${params.locale}` );
+        const translationFormDataRes = await axios.get( `/translate/api/translationFormData/${params.simName}/${params.locale}` );
         setTranslationFormData( translationFormDataRes.data );
       } )();
     }
@@ -29,7 +29,7 @@ const TranslationForm = () => {
   const navigate = useNavigate();
 
   const save = async translation => {
-    if ( window.confirm( `If you have a translation saved for ${translation.sim} in locale ${translation.locale}, it will be overwritten.` ) ) {
+    if ( window.confirm( `If you have a translation saved for ${translation.simName} in locale ${translation.locale}, it will be overwritten.` ) ) {
       try {
         const postRes = await axios.post( '/translate/api/saveTranslation', translation );
         console.log( postRes.data );
@@ -43,7 +43,7 @@ const TranslationForm = () => {
   };
 
   const submit = async translation => {
-    if ( window.confirm( `Are you sure you want to submit your translation for ${translation.sim} in locale ${translation.locale}?` ) ) {
+    if ( window.confirm( `Are you sure you want to submit your translation for ${translation.simName} in locale ${translation.locale}?` ) ) {
       try {
         const postRes = await axios.post( '/translate/api/submitTranslation', translation );
         console.log( postRes.data );
@@ -60,7 +60,7 @@ const TranslationForm = () => {
     const translation = {
       userId: 123456,
       timestamp: Date.now(),
-      sim: params.sim,
+      simName: params.simName,
       locale: params.locale,
       translationFormData: values
     };
