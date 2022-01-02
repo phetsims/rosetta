@@ -62,8 +62,8 @@ const TranslationTables = props => {
   return (
     <div>
       <h2>Sim-Specific Strings</h2>
-      <h3>(Translating these strings will only affect the selected simulation.)</h3>
-      <table>
+      <h4 className='text-muted'>(Translating these strings will only affect the selected simulation.)</h4>
+      <table className='table table-striped'>
         <thead>
         <tr>
           <th>String Key</th>
@@ -78,8 +78,8 @@ const TranslationTables = props => {
         </tbody>
       </table>
       <h2>Common Strings</h2>
-      <h3>(Translating these strings will affect multiple simulations.)</h3>
-      <table>
+      <h4 className='text-muted'>(Translating these strings will affect multiple simulations.)</h4>
+      <table className='table table-striped'>
         <thead>
         <tr>
           <th>String Key</th>
