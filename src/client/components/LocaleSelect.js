@@ -18,15 +18,16 @@ import React, { useEffect, useState } from 'react';
  *
  * and so on. We have the English name of the language followed by the locale code in parentheses.
  *
- * @param field
+ * @param {Object} field - props used by Formik
  * @returns {JSX.Element}
  * @constructor
  */
 const LocaleSelect = ( { field } ) => { // eslint-disable-line react/prop-types
 
+  // for storing locale info and
   const [ localeInfo, setLocaleInfo ] = useState( {} );
 
-  // get locale info from the backend
+  // get locale info
   useEffect( async () => {
     try {
       const localeInfoRes = await axios.get( '/translate/api/localeInfo' );
@@ -58,6 +59,7 @@ const LocaleSelect = ( { field } ) => { // eslint-disable-line react/prop-types
     );
   }
 
+  // use the spread operator to give the select each of the props in the field object
   return (
     <select {...field}>
 

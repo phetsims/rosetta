@@ -3,17 +3,34 @@
 /* eslint-disable no-undef */
 /* eslint-disable prefer-const */
 
+/**
+ * We define the form for translations. Once the user has selected the locale and sim they want, they see this
+ * component.
+ *
+ * @author Liam Mulhall
+ */
+
 import React, { useEffect, useState } from 'react';
-import TranslationTable from './TranslationTable.js';
+import TranslationTables from './TranslationTables.js';
 import axios from 'axios';
 import { Formik, Form } from 'formik';
 import { useNavigate, useParams } from 'react-router-dom';
 
+/**
+ * This component is a form with a table that is populated by the translation form data that we get from the backend.
+ *
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const TranslationForm = () => {
 
+  // grab the query parameters for later use
   const params = useParams();
 
+  // for storing and setting translation form data
   const [ translationFormData, setTranslationFormData ] = useState( [] );
+
+  // get the translation form data for the selected locale and sim
   useEffect( () => {
     try {
       ( async () => {
@@ -26,8 +43,10 @@ const TranslationForm = () => {
     }
   }, [] );
 
+  // used to programmatically navigate the user to the translation page
   const navigate = useNavigate();
 
+  // save functionality
   const save = async translation => {
     if ( window.confirm( `If you have a translation saved for ${translation.simName} in locale ${translation.locale}, it will be overwritten.` ) ) {
       try {
@@ -42,6 +61,7 @@ const TranslationForm = () => {
     }
   };
 
+  // submit functionality
   const submit = async translation => {
     if ( window.confirm( `Are you sure you want to submit your translation for ${translation.simName} in locale ${translation.locale}?` ) ) {
       try {
@@ -56,6 +76,7 @@ const TranslationForm = () => {
     }
   };
 
+  // as of this writing, saving or submitting hits this function
   const handleSubmit = async values => {
     const translation = {
       userId: 123456,
@@ -72,6 +93,8 @@ const TranslationForm = () => {
     }
   };
 
+  // we need to be able to reinitialize because the translation form data is initially empty
+  // as of this writing, both buttons submit the form; they use different flags to separate functionality
   return (
     <Formik
       enableReinitialize={true}
@@ -79,7 +102,7 @@ const TranslationForm = () => {
       onSubmit={handleSubmit}
     >
       <Form>
-        <TranslationTable translationFormData={translationFormData}/>
+        <TranslationTables translationFormData={translationFormData}/>
         <button type='submit' data-flag='save'>
           Save Translation
         </button>
