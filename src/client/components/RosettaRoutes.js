@@ -10,7 +10,7 @@ const RosettaRoutes = () => {
     <BrowserRouter>
       <Routes>
         <Route path='/translate' element={<LocaleAndSimForm/>}/>
-        <Route path='/translate/:locale/:sim' element={<TranslationForm/>}/>
+        <Route path='/translate/:locale/:simName' element={<TranslationForm/>}/>
       </Routes>
     </BrowserRouter>
   );
