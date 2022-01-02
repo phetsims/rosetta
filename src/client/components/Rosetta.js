@@ -13,6 +13,7 @@
 
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import Navbar from './Navbar.js';
 import RosettaRoutes from './RosettaRoutes.js';
 
 /**
@@ -51,8 +52,11 @@ function Rosetta() {
   if ( allowedAccess ) {
     jsx = (
       <div>
-        <h1>PhET Translation Tool</h1>
-        <RosettaRoutes/>
+        <Navbar/>
+        <div className='container'>
+          <h1>PhET Translation Tool</h1>
+          <RosettaRoutes/>
+        </div>
       </div>
     );
   }

@@ -40,14 +40,14 @@ const LocaleAndSimForm = () => {
       }}
     >
       <Form>
-        <div className='m-2'>
+        <div className='mt-2'>
           <Field name='locale' component={LocaleSelect}/>
         </div>
-        <div className='m-2'>
+        <div className='mt-2'>
           <Field name='simName' component={SimSelect}/>
         </div>
-        <div>
-          <button type='submit' className='btn btn-primary m-2'>
+        <div className='mt-2'>
+          <button type='submit' className='btn btn-primary'>
             Translate
           </button>
         </div>

@@ -103,12 +103,16 @@ const TranslationForm = () => {
     >
       <Form>
         <TranslationTables translationFormData={translationFormData}/>
-        <button type='submit' data-flag='save' className='btn btn-primary m-2'>
-          Save Translation
-        </button>
-        <button type='submit' data-flag='submit' className='btn btn-primary m-2'>
-          Submit Translation
-        </button>
+        <div className='mt-2'>
+          <button type='submit' data-flag='save' className='btn btn-primary'>
+            Save Translation
+          </button>
+        </div>
+        <div className='mt-2'>
+          <button type='submit' data-flag='submit' className='btn btn-primary'>
+            Submit Translation
+          </button>
+        </div>
       </Form>
     </Formik>
   );
