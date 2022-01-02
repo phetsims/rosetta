@@ -1,24 +1,16 @@
 // Copyright 2021, University of Colorado Boulder
 
 import getRepoNameFromStringKeyWithRepoName from './getRepoNameFromStringKeyWithRepoName.js';
-import getSimHtml from './getSimHtml.js';
-import getSimNames from './getSimNames.js';
-import getSimUrl from './getSimUrl.js';
 import getStringKeyFromStringKeyWithRepoName from './getStringKeyFromStringKeyWithRepoName.js';
-import getStringKeysWithRepoName from './getStringKeysWithRepoName.js';
 import logger from './logger.js';
 
-const getCategorizedStringKeys = async simName => {
+const getCategorizedStringKeys = async ( simName, simNames, stringKeysWithRepoName ) => {
   logger.info( `getting ${simName}'s categorized string keys` );
   const categorizedStringKeys = {
     common: [],
     simSpecific: []
   };
   try {
-    const simUrl = getSimUrl( simName );
-    const simHtml = await getSimHtml( simUrl );
-    const stringKeysWithRepoName = getStringKeysWithRepoName( simHtml );
-    const simNames = await getSimNames();
     for ( const stringKeyWithRepoName of stringKeysWithRepoName ) {
       const stringKey = getStringKeyFromStringKeyWithRepoName( stringKeyWithRepoName );
       const repoName = getRepoNameFromStringKeyWithRepoName( stringKeyWithRepoName );

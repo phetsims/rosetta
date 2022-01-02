@@ -3,8 +3,12 @@
 import getCategorizedStringKeys from './getCategorizedStringKeys.js';
 import getCommonEnglishStringKeysAndStrings from './getCommonEnglishStringKeysAndStrings.js';
 import getCommonTranslatedStringKeysAndStrings from './getCommonTranslatedStringKeysAndStrings.js';
+import getSimHtml from './getSimHtml.js';
+import getSimNames from './getSimNames.js';
 import getSimSpecificEnglishStringKeysAndStrings from './getSimSpecificEnglishStringKeysAndStrings.js';
 import getSimSpecificTranslatedStringKeysAndStrings from './getSimSpecificTranslatedStringKeysAndStrings.js';
+import getSimUrl from './getSimUrl.js';
+import getStringKeysWithRepoName from './getStringKeysWithRepoName.js';
 import logger from './logger.js';
 import populateTranslationFormData from './populateTranslationFormData.js';
 import { strict as assert } from 'assert';
@@ -20,15 +24,19 @@ const getTranslationFormData = async ( simName, locale ) => {
 
   try {
 
-    const categorizedStringKeys = await getCategorizedStringKeys( simName );
+    const simUrl = getSimUrl( simName );
+    const simHtml = await getSimHtml( simUrl );
+    const stringKeysWithRepoName = getStringKeysWithRepoName( simHtml );
+    const simNames = await getSimNames();
+    const categorizedStringKeys = await getCategorizedStringKeys( simName, simNames, stringKeysWithRepoName );
 
     const simSpecificStringKeys = categorizedStringKeys.simSpecific;
     const simSpecificEnglishStringKeysAndStrings = await getSimSpecificEnglishStringKeysAndStrings( simName, categorizedStringKeys );
     const simSpecificTranslatedStringKeysAndStrings = await getSimSpecificTranslatedStringKeysAndStrings( simName, locale, categorizedStringKeys );
 
     const commonStringKeys = categorizedStringKeys.common;
-    const commonEnglishStringKeysAndStrings = await getCommonEnglishStringKeysAndStrings( simName, categorizedStringKeys );
-    const commonTranslatedStringKeysAndStrings = await getCommonTranslatedStringKeysAndStrings( simName, locale, categorizedStringKeys );
+    const commonEnglishStringKeysAndStrings = await getCommonEnglishStringKeysAndStrings( simName, simNames, categorizedStringKeys, stringKeysWithRepoName );
+    const commonTranslatedStringKeysAndStrings = await getCommonTranslatedStringKeysAndStrings( simName, locale, categorizedStringKeys, stringKeysWithRepoName );
 
     logger.info( 'testing string keys from sim html equal string keys from long-term storage' );
     const simSpecificEnglishStringKeys = simSpecificEnglishStringKeysAndStrings.map( stringKeyAndString => stringKeyAndString[ 0 ] );

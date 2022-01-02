@@ -1,20 +1,12 @@
 // Copyright 2021, University of Colorado Boulder
 
 import getRepoNameFromStringKeyWithRepoName from './getRepoNameFromStringKeyWithRepoName.js';
-import getSimHtml from './getSimHtml.js';
-import getSimNames from './getSimNames.js';
-import getSimUrl from './getSimUrl.js';
-import getStringKeysWithRepoName from './getStringKeysWithRepoName.js';
 import logger from './logger.js';
 
-const getCommonRepos = async simName => {
+const getCommonRepos = async ( simName, simNames, stringKeysWithRepoName ) => {
   logger.info( `getting ${simName}'s common repos` );
   const commonRepos = new Set();
   try {
-    const simUrl = getSimUrl( simName );
-    const simHtml = await getSimHtml( simUrl );
-    const stringKeysWithRepoName = getStringKeysWithRepoName( simHtml );
-    const simNames = await getSimNames();
     for ( const stringKeyWithRepoName of stringKeysWithRepoName ) {
       const repoName = getRepoNameFromStringKeyWithRepoName( stringKeyWithRepoName );
       if ( ( simNames ).includes( repoName ) ) {

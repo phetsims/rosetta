@@ -49,7 +49,7 @@ if ( config.ENVIRONMENT === 'development' ) {
 // temporary api gets for manual testing
 app.get( '/translate/api/tmp/commonEnglishStringKeysAndStrings/:simName?', commonEnglishStringKeysAndStrings );
 app.get( '/translate/api/tmp/simSpecificEnglishStringKeysAndStrings/:simName?', simSpecificEnglishStringKeysAndStrings );
-app.get( '/translate/api/tmp/commonTranslatedStringKeysAndStrings/:simOrLibName?/:locale?', commonTranslatedStringKeysAndStrings );
+app.get( '/translate/api/tmp/commonTranslatedStringKeysAndStrings/:simName?/:locale?', commonTranslatedStringKeysAndStrings );
 app.get( '/translate/api/tmp/simSpecificTranslatedStringKeysAndStrings/:simName?/:locale?', simSpecificTranslatedStringKeysAndStrings );
 
 // api posts
