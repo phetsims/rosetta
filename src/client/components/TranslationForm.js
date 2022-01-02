@@ -103,10 +103,10 @@ const TranslationForm = () => {
     >
       <Form>
         <TranslationTables translationFormData={translationFormData}/>
-        <button type='submit' data-flag='save'>
+        <button type='submit' data-flag='save' className='btn btn-primary m-2'>
           Save Translation
         </button>
-        <button type='submit' data-flag='submit'>
+        <button type='submit' data-flag='submit' className='btn btn-primary m-2'>
           Submit Translation
         </button>
       </Form>
