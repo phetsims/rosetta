@@ -5,11 +5,11 @@ import getCommonRepos from './getCommonRepos.js';
 import getStringFileUrl from './getStringFileUrl.js';
 import logger from './logger.js';
 
-const getCommonEnglishStringKeysAndStrings = async ( simName, categorizedStringKeys ) => {
+const getCommonEnglishStringKeysAndStrings = async ( simName, simNames, categorizedStringKeys, stringKeysWithRepoName ) => {
   logger.info( `getting ${simName}'s common english string keys and strings` );
   const stringKeysToCommonEnglishStrings = new Map();
   try {
-    const commonRepos = await getCommonRepos( simName );
+    const commonRepos = await getCommonRepos( simName, simNames, stringKeysWithRepoName );
     const commonStringKeys = categorizedStringKeys.common;
     const stringFiles = [];
     for ( const repo of commonRepos ) {

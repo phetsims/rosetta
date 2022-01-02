@@ -2,21 +2,15 @@
 
 import axios from 'axios';
 import getRepoNameFromStringKeyWithRepoName from './getRepoNameFromStringKeyWithRepoName.js';
-import getSimHtml from './getSimHtml.js';
-import getSimUrl from './getSimUrl.js';
 import getStringKeyFromStringKeyWithRepoName from './getStringKeyFromStringKeyWithRepoName.js';
-import getStringKeysWithRepoName from './getStringKeysWithRepoName.js';
 import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
 import logger from './logger.js';
 
-const getCommonTranslatedStringKeysAndStrings = async ( simName, locale, categorizedStringKeys ) => {
+const getCommonTranslatedStringKeysAndStrings = async ( simName, locale, categorizedStringKeys, stringKeysWithRepoName ) => {
   logger.info( `getting ${simName}'s common translated string keys and strings` );
   const commonTranslatedStringKeysAndStrings = new Map();
   try {
     const commonStringKeys = categorizedStringKeys.common;
-    const simUrl = getSimUrl( simName );
-    const simHtml = await getSimHtml( simUrl );
-    const stringKeysWithRepoName = getStringKeysWithRepoName( simHtml );
     const stringKeyToRepoName = new Map();
     for ( const stringKeyWithRepoName of stringKeysWithRepoName ) {
       const stringKey = getStringKeyFromStringKeyWithRepoName( stringKeyWithRepoName );
