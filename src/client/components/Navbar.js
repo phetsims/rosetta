@@ -1,8 +1,21 @@
 // Copyright 2022, University of Colorado Boulder
 
+/**
+ * We define the navigation bar.
+ *
+ * @author Liam Mulhall
+ */
+
 import PhetLogo from '../img/phet-logo.png';
 import React from 'react';
 
+/**
+ * This component is the navigation bar you see at the top of the page once you've gained access to the translation
+ * tool.
+ *
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const Navbar = () => {
   return (
     <nav className='navbar navbar-expand-lg navbar-light bg-light'>

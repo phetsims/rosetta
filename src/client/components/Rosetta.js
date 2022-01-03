@@ -13,6 +13,7 @@
 
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import Footer from './Footer.js';
 import Navbar from './Navbar.js';
 import RosettaRoutes from './RosettaRoutes.js';
 
@@ -57,6 +58,7 @@ function Rosetta() {
           <h1>PhET Translation Tool</h1>
           <RosettaRoutes/>
         </div>
+        <Footer/>
       </div>
     );
   }
