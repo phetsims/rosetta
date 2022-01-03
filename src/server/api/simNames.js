@@ -20,7 +20,6 @@ const simNames = async ( req, res ) => {
   try {
     const simNames = await getSimNames();
     logger.info( 'responding with sim names' );
-    logger.info( typeof simNames );
     res.json( simNames );
   }
   catch( e ) {
