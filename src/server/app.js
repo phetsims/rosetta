@@ -33,7 +33,19 @@ app.get( '/translate*', ( req, res, next ) => {
 
 // serve static index.html file
 app.get( '/translate', ( req, res ) => {
+  logger.info( 'serving static index.html file' );
   res.sendFile( path.join( __dirname, '..', '..', 'static', 'index.html' ) );
+} );
+
+// if we get a request for a route that isn't an api route, redirect to the first page of the translation tool
+// this can happen if the user reloads the page when their path is something like translate/ab/acid-base-solutions
+// we don't have routes for every single locale/sim combination; that's handled with client-side routing
+app.get( '/translate/*', ( req, res, next ) => {
+  if ( !req.path.includes( 'api' ) ) {
+    logger.info( 'not an api route; redirecting user to the first page of the translation tool' );
+    res.redirect( '/translate' );
+  }
+  next();
 } );
 
 // api gets
