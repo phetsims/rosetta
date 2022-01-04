@@ -28,7 +28,7 @@ const TranslationForm = () => {
   const params = useParams();
 
   // for storing and setting translation form data
-  const [ translationFormData, setTranslationFormData ] = useState( [] );
+  const [ translationFormData, setTranslationFormData ] = useState( null );
 
   // get the translation form data for the selected locale and sim
   useEffect( () => {
@@ -93,29 +93,37 @@ const TranslationForm = () => {
     }
   };
 
-  // we need to be able to reinitialize because the translation form data is initially empty
-  // as of this writing, both buttons submit the form; they use different flags to separate functionality
-  return (
-    <Formik
-      enableReinitialize={true}
-      initialValues={translationFormData}
-      onSubmit={handleSubmit}
-    >
-      <Form>
-        <TranslationTables translationFormData={translationFormData}/>
-        <div className='mt-2'>
-          <button type='submit' data-flag='save' className='btn btn-primary'>
-            Save Translation
-          </button>
-        </div>
-        <div className='mt-2'>
-          <button type='submit' data-flag='submit' className='btn btn-primary'>
-            Submit Translation
-          </button>
-        </div>
-      </Form>
-    </Formik>
-  );
+  if ( translationFormData === null ) {
+    return (
+      <div className='spinner-border text-primary' role='status'>
+        <span className='visually-hidden'>Loading...</span>
+      </div>
+    );
+  }
+  else {
+
+    // as of this writing, both buttons submit the form; they use different flags to separate functionality
+    return (
+      <Formik
+        initialValues={translationFormData}
+        onSubmit={handleSubmit}
+      >
+        <Form>
+          <TranslationTables translationFormData={translationFormData}/>
+          <div className='mt-2'>
+            <button type='submit' data-flag='save' className='btn btn-primary'>
+              Save Translation
+            </button>
+          </div>
+          <div className='mt-2'>
+            <button type='submit' data-flag='submit' className='btn btn-primary'>
+              Submit Translation
+            </button>
+          </div>
+        </Form>
+      </Formik>
+    );
+  }
 };
 
 export default TranslationForm;
