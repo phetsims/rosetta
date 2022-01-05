@@ -11,12 +11,14 @@ import getStringKeyFromStringKeyWithRepoName from './getStringKeyFromStringKeyWi
 import logger from './logger.js';
 
 /**
- *
+ * Return an object with string keys categorized by whether they are common or sim-specific. Common string keys are
+ * used by multiple sims whereas sim-specific string keys are only used by one sim. We categorized the string keys like
+ * this so that we can separate them in the frontend translation form.
  *
  * @param {String} simName - sim name
  * @param {string[]} simNames - list of all sim names
  * @param {string[]} stringKeysWithRepoName - string keys with their respective repo names for the specified sim
- * @returns {Promise<{simSpecific: *[], common: *[]}>}
+ * @returns {Promise<{simSpecific: string[], common: string[]}>}
  */
 const getCategorizedStringKeys = async ( simName, simNames, stringKeysWithRepoName ) => {
   logger.info( `getting ${simName}'s categorized string keys` );
