@@ -7,10 +7,12 @@
  */
 
 import Footer from './Footer.js';
+import Help from './Help.js';
 import LocaleAndSimForm from './LocaleAndSimForm.js';
-import React from 'react';
 import Navbar from './Navbar.js';
+import React from 'react';
 import TranslationForm from './TranslationForm.js';
+import TranslationStatistics from './TranslationStatistics.js';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 /**
@@ -25,9 +27,10 @@ const RosettaRoutes = () => {
     <BrowserRouter>
       <Navbar/>
       <div className='container'>
-        <h1>PhET Translation Tool</h1>
         <Routes>
           <Route path='/translate' element={<LocaleAndSimForm/>}/>
+          <Route path='/translate/statistics' element={<TranslationStatistics/>}/>
+          <Route path='/translate/help' element={<Help/>}/>
           <Route path='/translate/:locale/:simName' element={<TranslationForm/>}/>
         </Routes>
       </div>

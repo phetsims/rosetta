@@ -95,8 +95,13 @@ const TranslationForm = () => {
 
   if ( translationFormData === null ) {
     return (
-      <div className='spinner-border text-primary' role='status'>
-        <span className='visually-hidden'>Loading...</span>
+      <div>
+        <h1>Translation Form</h1>
+        <h2 className='text-muted'>Locale: {params.locale}</h2>
+        <h2 className='text-muted'>Sim: {params.simName}</h2>
+        <div className='spinner-border text-primary' role='status'>
+          <span className='visually-hidden'>Loading...</span>
+        </div>
       </div>
     );
   }
@@ -104,24 +109,29 @@ const TranslationForm = () => {
 
     // as of this writing, both buttons submit the form; they use different flags to separate functionality
     return (
-      <Formik
-        initialValues={translationFormData}
-        onSubmit={handleSubmit}
-      >
-        <Form>
-          <TranslationTables translationFormData={translationFormData}/>
-          <div className='mt-2'>
-            <button type='submit' data-flag='save' className='btn btn-primary'>
-              Save Translation
-            </button>
-          </div>
-          <div className='mt-2'>
-            <button type='submit' data-flag='submit' className='btn btn-primary'>
-              Submit Translation
-            </button>
-          </div>
-        </Form>
-      </Formik>
+      <div>
+        <h1>Translation Form</h1>
+        <h2 className='text-muted'>Locale: {params.locale}</h2>
+        <h2 className='text-muted'>Sim: {params.simName}</h2>
+        <Formik
+          initialValues={translationFormData}
+          onSubmit={handleSubmit}
+        >
+          <Form>
+            <TranslationTables translationFormData={translationFormData}/>
+            <div className='mt-2'>
+              <button type='submit' data-flag='save' className='btn btn-primary'>
+                Save Translation
+              </button>
+            </div>
+            <div className='mt-2'>
+              <button type='submit' data-flag='submit' className='btn btn-primary'>
+                Submit Translation
+              </button>
+            </div>
+          </Form>
+        </Formik>
+      </div>
     );
   }
 };
