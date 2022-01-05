@@ -13,8 +13,6 @@
 
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import Footer from './Footer.js';
-import Navbar from './Navbar.js';
 import RosettaRoutes from './RosettaRoutes.js';
 
 /**
@@ -52,14 +50,7 @@ function Rosetta() {
   const notAllowedAccess = websiteUserData.loggedIn && ( !websiteUserData.trustedTranslator && !websiteUserData.teamMember );
   if ( allowedAccess ) {
     jsx = (
-      <div>
-        <Navbar/>
-        <div className='container'>
-          <h1>PhET Translation Tool</h1>
-          <RosettaRoutes/>
-        </div>
-        <Footer/>
-      </div>
+      <RosettaRoutes/>
     );
   }
   else if ( notAllowedAccess ) {
