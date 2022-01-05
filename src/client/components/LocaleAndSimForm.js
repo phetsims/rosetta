@@ -30,29 +30,32 @@ const LocaleAndSimForm = () => {
   // since our list of locales comes from a file in the chipper repo, the first locale is unlikely to change
   // if we ever make a sim that comes before acid base solutions alphabetically, this will need to change
   return (
-    <Formik
-      initialValues={{ locale: 'ab', simName: 'acid-base-solutions' }}
-      onSubmit={values => {
-        alert( JSON.stringify( values, null, 2 ) );
+    <div>
+      <h1>Select Locale and Sim</h1>
+      <Formik
+        initialValues={{ locale: 'ab', simName: 'acid-base-solutions' }}
+        onSubmit={values => {
+          alert( JSON.stringify( values, null, 2 ) );
 
-        {/* we navigate the user to the translation page when they submit the form */}
-        navigate( `/translate/${values.locale}/${values.simName}` );
-      }}
-    >
-      <Form>
-        <div className='mt-2'>
-          <Field name='locale' component={LocaleSelect}/>
-        </div>
-        <div className='mt-2'>
-          <Field name='simName' component={SimSelect}/>
-        </div>
-        <div className='mt-2'>
-          <button type='submit' className='btn btn-primary'>
-            Translate
-          </button>
-        </div>
-      </Form>
-    </Formik>
+          {/* we navigate the user to the translation page when they submit the form */}
+          navigate( `/translate/${values.locale}/${values.simName}` );
+        }}
+      >
+        <Form>
+          <div className='mt-2'>
+            <Field name='locale' component={LocaleSelect}/>
+          </div>
+          <div className='mt-2'>
+            <Field name='simName' component={SimSelect}/>
+          </div>
+          <div className='mt-2'>
+            <button type='submit' className='btn btn-primary'>
+              Translate
+            </button>
+          </div>
+        </Form>
+      </Formik>
+    </div>
   );
 };
 

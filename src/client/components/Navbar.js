@@ -8,6 +8,7 @@
 
 import PhetLogo from '../img/phet-logo.png';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 /**
  * This component is the navigation bar you see at the top of the page once you've gained access to the translation
@@ -29,13 +30,13 @@ const Navbar = () => {
         <div className='collapse navbar-collapse' id='navbarSupportedContent'>
           <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
             <li className='nav-item'>
-              <a className='nav-link' href={`${window.origin}/translate`}>Select Locale and Sim</a>
+              <Link className='nav-link' to='/translate'>Select Locale and Sim</Link>
             </li>
             <li className='nav-item'>
-              <a className='nav-link' href={`${window.origin}/translate/statistics`}>Translation Statistics</a>
+              <Link className='nav-link' to='/translate/statistics'>Translation Statistics</Link>
             </li>
             <li className='nav-item'>
-              <a className='nav-link' href={`${window.origin}/translate/help`}>Help</a>
+              <Link className='nav-link' to='/translate/help'>Help</Link>
             </li>
           </ul>
         </div>
