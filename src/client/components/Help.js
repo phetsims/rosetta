@@ -1,9 +1,20 @@
 // Copyright 2022, University of Colorado Boulder
 
-/* eslint-disable bad-sim-text */
+/**
+ * Display the help guide.
+ *
+ * @author Liam Mulhall
+ */
 
 import React from 'react';
 
+/**
+ * This component displays the help guide in an iframe. It also provides a link to the help guide. The help guide is a
+ * Google Doc that has been published to the web.
+ *
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const Help = () => {
 
   const iframeStyle = {
