@@ -18,7 +18,7 @@ import logger from './logger.js';
  * @param {String} simName - sim name
  * @param {string[]} simNames - list of all sim names
  * @param {string[]} stringKeysWithRepoName - string keys with their respective repo names for the specified sim
- * @returns {Promise<{simSpecific: string[], common: string[]}>}
+ * @returns {Promise<{simSpecific: string[], common: string[]}>} - categorized strings keys
  */
 const getCategorizedStringKeys = async ( simName, simNames, stringKeysWithRepoName ) => {
   logger.info( `getting ${simName}'s categorized string keys` );
