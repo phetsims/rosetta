@@ -1,7 +1,8 @@
 // Copyright 2021, University of Colorado Boulder
 
 /**
- * Export an object where string keys are organized into two categories: (1) common and (2) sim-specific.
+ * Export a function that returns an object where string keys are organized into two categories: (1) common and (2)
+ * sim-specific.
  *
  * @author Liam Mulhall
  */
@@ -16,9 +17,9 @@ import logger from './logger.js';
  * this so that we can separate them in the frontend translation form.
  *
  * @param {String} simName - sim name
- * @param {string[]} simNames - list of all sim names
- * @param {string[]} stringKeysWithRepoName - string keys with their respective repo names for the specified sim
- * @returns {Promise<{simSpecific: string[], common: string[]}>} - categorized strings keys
+ * @param {String[]} simNames - list of all sim names
+ * @param {String[]} stringKeysWithRepoName - string keys with their respective repo names for the specified sim
+ * @returns {Promise<{simSpecific: String[], common: String[]}>} - categorized strings keys
  */
 const getCategorizedStringKeys = async ( simName, simNames, stringKeysWithRepoName ) => {
   logger.info( `getting ${simName}'s categorized string keys` );
