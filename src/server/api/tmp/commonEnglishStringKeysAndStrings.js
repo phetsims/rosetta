@@ -15,7 +15,7 @@ const commonEnglishStringKeysAndStrings = async ( req, res ) => {
     const stringKeysWithRepoName = getStringKeysWithRepoName( simHtml );
     const simNames = await getSimNames();
     const categorizedStringKeys = await getCategorizedStringKeys( req.params.simName, simNames, stringKeysWithRepoName );
-    const commonEnglishStringKeysAndStrings = await getCommonEnglishStringKeysAndStrings( req.params.simName, categorizedStringKeys );
+    const commonEnglishStringKeysAndStrings = await getCommonEnglishStringKeysAndStrings( req.params.simName, simNames, categorizedStringKeys, stringKeysWithRepoName );
     logger.info( `responding ${req.params.simName}'s common english string keys and strings` );
     res.json( commonEnglishStringKeysAndStrings );
   }
