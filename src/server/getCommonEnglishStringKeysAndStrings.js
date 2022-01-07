@@ -17,11 +17,11 @@ import logger from './logger.js';
  * (its string). This is implemented as an array of arrays where each sub-array has two elements, namely the common
  * English string key and its string.
  *
- * @param {String} simName
- * @param {String[]} simNames
- * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys
- * @param {String[]} stringKeysWithRepoName
- * @returns {Promise<String[][]>}
+ * @param {String} simName - sim name
+ * @param {String[]} simNames - list of all sim names
+ * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys - string keys categorized into common and sim-specific
+ * @param {String[]} stringKeysWithRepoName - string keys with their respective repo names for the specified sim
+ * @returns {Promise<String[][]>} - list of ordered pairs of common English string keys and strings
  */
 const getCommonEnglishStringKeysAndStrings = async ( simName, simNames, categorizedStringKeys, stringKeysWithRepoName ) => {
   logger.info( `getting ${simName}'s common english string keys and strings` );
