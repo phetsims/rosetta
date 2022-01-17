@@ -1,4 +1,4 @@
-// Copyright 2021, University of Colorado Boulder
+// Copyright 2021-2022, University of Colorado Boulder
 
 /**
  * Export a function that returns an array of arrays. Each sub-array has two elements: (1) a common translated string
@@ -22,7 +22,7 @@ import logger from './logger.js';
  * @param {String} locale - two-letter ISO 639-1 locale code, e.g. es for Spanish
  * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys - string keys categorized into common and sim-specific
  * @param {String[]} stringKeysWithRepoName - string keys with their respective repo names for the specified sim
- * @returns {Promise<String[][]>}
+ * @returns {Promise<String[][]>} - ordered pairs of common translated string keys and their values (their strings)
  */
 const getCommonTranslatedStringKeysAndStrings = async ( simName, locale, categorizedStringKeys, stringKeysWithRepoName ) => {
   logger.info( `getting ${simName}'s common translated string keys and strings` );

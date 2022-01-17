@@ -1,4 +1,4 @@
-// Copyright 2021, University of Colorado Boulder
+// Copyright 2021-2022, University of Colorado Boulder
 
 /**
  * Export a function that returns an array of arrays. Each sub-array has two elements: (1) a common English string key,

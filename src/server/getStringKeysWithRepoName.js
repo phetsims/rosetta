@@ -1,8 +1,21 @@
 // Copyright 2021, University of Colorado Boulder
 
+/**
+ * Export a function that gets ordered pairs of repo name and string key from a sim's HTML.
+ *
+ * @author Liam Mulhall
+ */
+
 import logger from './logger.js';
 import config from './config.js';
 
+/**
+ * Return a list of ordered pairs where each ordered pair is a REPO_NAME/stringKey string. These strings are extracted
+ * from a sim's production HTML.
+ *
+ * @param {String} simHtml - sim HTML
+ * @returns {String[]} - list of REPO_NAME/stringKey from the sim
+ */
 const getStringKeysWithRepoName = simHtml => {
 
   logger.info( 'getting string keys with repo name from sim html' );

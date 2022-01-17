@@ -1,9 +1,20 @@
-// Copyright 2021, University of Colorado Boulder
+// Copyright 2021-2022, University of Colorado Boulder
+
+/**
+ * Export a function that gets locale info.
+ *
+ * @author Liam Mulhall
+ */
 
 import axios from 'axios';
 import config from './config.js';
 import logger from './logger.js';
 
+/**
+ * Return the locale info stored in a remote repository. This locale info contains names of locales and locale codes.
+ *
+ * @returns {Promise<Object>} - locale info, i.e. names of locales and ISO 639-1 locale codes
+ */
 const getLocaleInfo = async () => {
   logger.info( 'getting locale info' );
   let localeInfo;
