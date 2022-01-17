@@ -13,3 +13,15 @@ On the client, we *do not* use `console` in production.
 
 We try to keep logs lowercase to reduce fatigue when reading logs. We also try to keep punctuation in logs to a minimum
 for the same reason.
+
+```js
+import logger from './logger.js';
+
+logger.info( 'logs are all lowercase' );
+logger.info( 'logs not full sentences' );
+logger.info( 'logs eschew punctuation' );
+
+for ( let i = 0; i < 1000; i++ ) {
+  logger.verbose( 'if a log is going to be called in a loop, consider using the verbose logging level' );
+}
+```
