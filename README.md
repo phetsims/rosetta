@@ -39,11 +39,11 @@ mkdir ~/.phet
 touch ~/.phet/rosetta-config.env
 
 # add git hooks using husky
-npm run pre
+npm run prepare
 
 # compile/bundle react frontend using babel/webpack and serve static files for development
 npm run dev
 
 # compile/bundle react frontend using babel/webpack and serve static files for production
-npm run pro
+npm run production
 ```
