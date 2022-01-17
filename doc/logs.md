@@ -1,4 +1,4 @@
-# Logging
+# Logs
 
 On the server, we like to log
 
