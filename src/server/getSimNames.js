@@ -1,8 +1,19 @@
-// Copyright 2021, University of Colorado Boulder
+// Copyright 2021-2022, University of Colorado Boulder
+
+/**
+ * Export a function that gets a list of all sim names.
+ *
+ * @author Liam Mulhall
+ */
 
 import getSimMetadata from './getSimMetadata.js';
 import logger from './logger.js';
 
+/**
+ * Return a list of lowercase-kebab (repo-style) sim names (e.g. acid-base-solutions).
+ *
+ * @returns {Promise<String[]>} - list of lowercase-kebab (repo-style) sim names (e.g. acid-base-solutions)
+ */
 const getSimNames = async () => {
   logger.info( 'getting sim names' );
   const simNames = [];

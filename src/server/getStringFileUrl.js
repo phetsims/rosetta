@@ -1,8 +1,20 @@
-// Copyright 2021, University of Colorado Boulder
+// Copyright 2021-2022, University of Colorado Boulder
+
+/**
+ * Export a utility function that gets the URL for a sim or library's string file.
+ *
+ * @author Liam Mulhall
+ */
 
 import config from './config.js';
 import logger from './logger.js';
 
+/**
+ *
+ *
+ * @param {String} repoName - remote repository name; should be the same as a sim or library's name
+ * @returns {String} - string file's URL
+ */
 const getStringFileUrl = repoName => {
   logger.verbose( `getting ${repoName}'s string file url` );
   logger.verbose( `got ${repoName}'s string file url; returning it` );

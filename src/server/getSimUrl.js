@@ -1,8 +1,20 @@
-// Copyright 2021, University of Colorado Boulder
+// Copyright 2021-2022, University of Colorado Boulder
+
+/**
+ * Export a utility function to get a sim's URL.
+ *
+ * @author Liam Mulhall
+ */
 
 import config from './config.js';
 import logger from './logger.js';
 
+/**
+ * Return a sim's URL.
+ *
+ * @param {String} simName - sim name
+ * @returns {String} - sim url
+ */
 const getSimUrl = simName => {
   logger.info( `getting ${simName}'s sim url` );
   logger.info( `got ${simName}'s sim url; returning it` );
