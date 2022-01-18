@@ -1,4 +1,10 @@
-// Copyright 2021, University of Colorado Boulder
+// Copyright 2021-2022, University of Colorado Boulder
+
+/**
+ * Export the Winston logger. See Winston's documentation for details on how to set up a logger.
+ *
+ * @author Liam Mulhall
+ */
 
 import config from './config.js';
 import winston from 'winston';

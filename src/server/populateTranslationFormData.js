@@ -1,7 +1,24 @@
-// Copyright 2021, University of Colorado Boulder
+// Copyright 2021-2022, University of Colorado Boulder
+
+/**
+ * Export a utility function that populates translation form data. This function also transforms the data so that it
+ * can be easily parsed by the client. See the multiline comment in the function.
+ *
+ * @author Liam Mulhall
+ */
 
 import logger from './logger.js';
 
+/**
+ * Return populated translation form data. Also strip any dots (.'s) out of the string so that the client can easily
+ * parse the data.
+ *
+ * @param {{simSpecific: {}, common: {}}} translationFormData - translation form data
+ * @param {String} dataToPopulate - either sim-specific or common
+ * @param {String[]} stringKeys - list of sim-specific or common string keys
+ * @param {String[][]} englishStringKeysAndStrings - ordered pairs of English string keys and their values (their strings)
+ * @param {String[][]} translatedStringKeysAndStrings - ordered pairs of translated string keys and their values (their strings)
+ */
 const populateTranslationFormData = ( translationFormData,
                                       dataToPopulate,
                                       stringKeys,
@@ -43,21 +60,33 @@ const populateTranslationFormData = ( translationFormData,
    * client in a submission, we transform the data from (C) back to (A).
    */
   for ( let i = 0; i < stringKeys.length; i++ ) {
+
+    // if the string key / string pair is unused, strip it out
     if ( englishStringKeysAndStrings[ i ][ 1 ] === 'no longer used' ) {
       logger.verbose( 'not including unused string key and string in translation form data' );
     }
+
+    // if the string key / string pair is used...
     else {
+
+      // strip out the dots to make it easier for the client to parse the translation form data
       const stringKeyWithoutDots = stringKeys[ i ].replaceAll( '.', '_DOT_' );
+
+      // create an object to add to the translation form data
       const englishAndTranslatedKeysAndValues = {
         english: englishStringKeysAndStrings[ i ][ 1 ],
         translated: translatedStringKeysAndStrings[ i ][ 1 ]
       };
+
+      // add the object we just made
       if ( dataToPopulate === 'sim-specific' ) {
         translationFormData.simSpecific[ stringKeyWithoutDots ] = englishAndTranslatedKeysAndValues;
       }
       else if ( dataToPopulate === 'common' ) {
         translationFormData.common[ stringKeyWithoutDots ] = englishAndTranslatedKeysAndValues;
       }
+
+      // make sure the caller provides the correct parameter
       else {
         logger.error( 'incorrect parameter passed to function that populates translation form data' );
         logger.error( 'please specify sim-specific or common' );
