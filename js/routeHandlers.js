@@ -698,9 +698,9 @@ module.exports.triggerBuild = async function( request, response ) {
     // Try to send the build request. If it's successful, tell the user. Otherwise handle the error and put up the page
     // not found page.
     try {
-      const buildRequestWasSent = await requestBuild( simName, targetLocale, userIdToSend );
-      winston.debug( `requestBuild was called and returned ${buildRequestWasSent}.` );
-      if ( buildRequestWasSent ) {
+      const buildRequestRes = await requestBuild( simName, targetLocale, userIdToSend );
+      winston.debug( `requestBuild was called and returned ${buildRequestRes.status}.` );
+      if ( buildRequestRes.status >= 200 && buildRequestRes.status < 300 ) {
         response.send( `Successfully triggered build for ${simLocaleAndId}.` );
       }
     }

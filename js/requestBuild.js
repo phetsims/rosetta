@@ -78,14 +78,18 @@ async function requestBuild( simName, locale, userID ) {
     winston.info( `Sending build request to server. URL: ${url}` );
 
     // Try to send the build request.
+    let buildRequestRes = null;
     try {
-      await axios.post( url, requestObject );
+      buildRequestRes = await axios.post( url, requestObject );
     }
     catch( error ) {
       const errorMessage = `Build request unsuccessful. ${error.message}`;
       winston.error( errorMessage );
       throw new Error( errorMessage );
     }
+
+    // return the build request response
+    return buildRequestRes;
   }
   else {
     winston.info( 'The sendBuildRequest flag is set to false in your rosettaConfig.json! Not sending the build request.' );
