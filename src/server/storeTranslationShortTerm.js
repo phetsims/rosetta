@@ -1,10 +1,23 @@
-// Copyright 2021, University of Colorado Boulder
+// Copyright 2021-2022, University of Colorado Boulder
+
+/**
+ * Export a function that stores a translation in short-term storage.
+ *
+ * @author Liam Mulhall
+ */
 
 import config from './config.js';
 import logger from './logger.js';
 import { MongoClient } from 'mongodb';
 
 const client = new MongoClient( config.DB_URI );
+
+/**
+ * Save a translation to the short-term storage database. We store the translation without reformatting the data. We
+ * simply take the translation received from the client and save it in the short-term storage database.
+ *
+ * @param translation - translation received from client
+ */
 const storeTranslationShortTerm = async translation => {
   logger.info( `storing ${translation.locale}/${translation.sim} translation in short-term storage` );
   try {
