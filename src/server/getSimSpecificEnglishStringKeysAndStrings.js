@@ -16,7 +16,7 @@ import logger from './logger.js';
  * English string key and its string.
  *
  * @param {String} simName - sim name
- * @param {String} categorizedStringKeys - string keys categorized into common and sim-specific
+ * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys - string keys categorized into common and sim-specific
  * @returns {Promise<String[][]>} - ordered pairs of sim-specific English string keys and their values (their strings)
  */
 const getSimSpecificEnglishStringKeysAndStrings = async ( simName, categorizedStringKeys ) => {
