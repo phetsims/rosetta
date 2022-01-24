@@ -13,7 +13,7 @@ import config from './config.js';
  * Return a list of ordered pairs where each ordered pair is a REPO_NAME/stringKey string. These strings are extracted
  * from a sim's production HTML.
  *
- * @param {String} simHtml - sim HTML
+ * @param {Object} simHtml - sim HTML
  * @returns {String[]} - list of REPO_NAME/stringKey from the sim
  */
 const getStringKeysWithRepoName = simHtml => {

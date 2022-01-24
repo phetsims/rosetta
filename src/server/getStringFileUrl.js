@@ -10,7 +10,7 @@ import config from './config.js';
 import logger from './logger.js';
 
 /**
- *
+ * Return the URL of a repo's string file.
  *
  * @param {String} repoName - remote repository name; should be the same as a sim or library's name
  * @returns {String} - string file's URL
