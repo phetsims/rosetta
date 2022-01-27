@@ -15,6 +15,7 @@ import logger from './logger.js';
  * @returns {Promise<String[]>} - list of lowercase-kebab (repo-style) sim names (e.g. acid-base-solutions)
  */
 const getSimNames = async () => {
+  console.time( 'getSimNames' );
   logger.info( 'getting sim names' );
   const simNames = [];
   try {
@@ -31,6 +32,7 @@ const getSimNames = async () => {
     logger.error( e );
   }
   logger.info( 'got sim names; returning them' );
+  console.timeEnd( 'getSimNames' );
   return simNames;
 };
 

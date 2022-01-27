@@ -18,6 +18,7 @@ import config from './config.js';
  */
 const getStringKeysWithRepoName = simHtml => {
 
+  console.time( 'getStringKeysWithRepoName' );
   logger.info( 'getting string keys with repo name from sim html' );
 
   simHtml = simHtml.data;
@@ -49,6 +50,7 @@ const getStringKeysWithRepoName = simHtml => {
   const parsedStringKeysWithRepoName = JSON.parse( unparsedStringKeysWithRepoName );
 
   logger.info( 'got string keys with repo name from sim html; returning them' );
+  console.timeEnd( 'getStringKeysWithRepoName' );
   return Object.keys( parsedStringKeysWithRepoName.en );
 };
 
