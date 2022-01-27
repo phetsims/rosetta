@@ -31,6 +31,7 @@ import { strict as assert } from 'assert';
  */
 const getTranslationFormData = async ( simName, locale ) => {
 
+  console.time( 'getTranslationFormData' );
   logger.info( `getting ${locale}/${simName}'s translation form data` );
 
   const translationFormData = {
@@ -58,6 +59,7 @@ const getTranslationFormData = async ( simName, locale ) => {
     const commonTranslatedStringKeysAndStrings = await getCommonTranslatedStringKeysAndStrings( simName, locale, categorizedStringKeys, stringKeysWithRepoName );
 
     // ensure data we get from the sim html equals data we get from long-term storage (github as of this writing)
+    console.time( 'simHtmlDataEqualsLongTermStorageData' );
     logger.info( 'testing string keys from sim html equal string keys from long-term storage' );
     const simSpecificEnglishStringKeys = simSpecificEnglishStringKeysAndStrings.map( stringKeyAndString => stringKeyAndString[ 0 ] );
     assert.deepEqual( simSpecificStringKeys, simSpecificEnglishStringKeys );
@@ -68,6 +70,7 @@ const getTranslationFormData = async ( simName, locale ) => {
     const commonTranslatedStringKeys = commonTranslatedStringKeysAndStrings.map( stringKeyAndString => stringKeyAndString[ 0 ] );
     assert.deepEqual( commonStringKeys, commonTranslatedStringKeys );
     logger.info( 'tested string keys from sim html and string keys from long-term string storage; they are equal' );
+    console.timeEnd( 'simHtmlDataEqualsLongTermStorageData' );
 
     // use a utility function to populate translation form data with sim-specific data
     populateTranslationFormData(
@@ -92,6 +95,7 @@ const getTranslationFormData = async ( simName, locale ) => {
   }
 
   logger.info( `got ${locale}/${simName}'s translation form data; returning it` );
+  console.timeEnd( 'getTranslationFormData' );
   return translationFormData;
 };
 

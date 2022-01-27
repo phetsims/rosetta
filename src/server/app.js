@@ -5,6 +5,10 @@ import commonTranslatedStringKeysAndStrings from './api/tmp/commonTranslatedStri
 import config from './config.js';
 import express from 'express';
 import localeInfo from './api/localeInfo.js';
+import getSimHtml from './getSimHtml.js';
+import getSimNames from './getSimNames.js';
+import getSimUrl from './getSimUrl.js';
+import getStringKeysWithRepoName from './getStringKeysWithRepoName.js';
 import logger from './logger.js';
 import mockWebsiteUserData from './api/mockWebsiteUserData.js';
 import path from 'path';
@@ -15,6 +19,7 @@ import simSpecificTranslatedStringKeysAndStrings from './api/tmp/simSpecificTran
 import submitTranslation from './api/submitTranslation.js';
 import translationFormData from './api/translationFormData.js';
 import { URL } from 'url';
+import getCommonTranslatedStringKeysAndStringsRewrite from './getCommonTranslatedStringKeysAndStringsRewrite.js';
 
 // constants
 const app = express();
@@ -24,6 +29,17 @@ const staticAssetsPath = path.join( __dirname, '..', '..', 'static' );
 // middleware
 app.use( express.static( staticAssetsPath ) );
 app.use( express.json() );
+
+// todo: remove when done
+// test getCommonTranslatedStringKeysAndStringsRewrite
+( async () => {
+  const simName = 'acid-base-solutions';
+  const simUrl = getSimUrl( simName );
+  const simHtml = await getSimHtml( simUrl );
+  const stringKeysWithRepoName = getStringKeysWithRepoName( simHtml );
+  const simNames = await getSimNames();
+  await getCommonTranslatedStringKeysAndStringsRewrite( simName, simNames, stringKeysWithRepoName );
+} )();
 
 // log info about get request
 app.get( '/translate*', ( req, res, next ) => {

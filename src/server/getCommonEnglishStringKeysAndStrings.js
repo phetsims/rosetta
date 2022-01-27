@@ -24,6 +24,7 @@ import logger from './logger.js';
  * @returns {Promise<String[][]>} - list of ordered pairs of common English string keys and strings
  */
 const getCommonEnglishStringKeysAndStrings = async ( simName, simNames, categorizedStringKeys, stringKeysWithRepoName ) => {
+  console.time( 'getCommonEnglishStringKeysAndStrings' );
   logger.info( `getting ${simName}'s common english string keys and strings` );
   const stringKeysToCommonEnglishStrings = new Map();
   try {
@@ -67,6 +68,8 @@ const getCommonEnglishStringKeysAndStrings = async ( simName, simNames, categori
     logger.error( e );
   }
   logger.info( `got ${simName}'s common english string keys and strings; returning them` );
+
+  console.timeEnd( 'getCommonEnglishStringKeysAndStrings' );
 
   // use spread operator and brackets to return an array
   return [ ...stringKeysToCommonEnglishStrings ];

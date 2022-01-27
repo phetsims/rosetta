@@ -22,6 +22,7 @@ import logger from './logger.js';
  * @returns {Promise<{simSpecific: String[], common: String[]}>} - string keys categorized into common and sim-specific
  */
 const getCategorizedStringKeys = async ( simName, simNames, stringKeysWithRepoName ) => {
+  console.time( 'getCategorizedStringKeys' );
   logger.info( `getting ${simName}'s categorized string keys` );
   const categorizedStringKeys = {
     common: [],
@@ -56,6 +57,7 @@ const getCategorizedStringKeys = async ( simName, simNames, stringKeysWithRepoNa
     logger.error( e );
   }
   logger.info( `got ${simName}'s categorized string keys; returning them` );
+  console.timeEnd( 'getCategorizedStringKeys' );
   return categorizedStringKeys;
 };
 

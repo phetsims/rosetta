@@ -25,6 +25,7 @@ const populateTranslationFormData = ( translationFormData,
                                       englishStringKeysAndStrings,
                                       translatedStringKeysAndStrings
 ) => {
+  console.time( 'populateTranslationFormData' );
   logger.info( `populating ${dataToPopulate} translation form data` );
 
   /**
@@ -94,6 +95,7 @@ const populateTranslationFormData = ( translationFormData,
     }
   }
   logger.info( `populated ${dataToPopulate} translation form data` );
+  console.timeEnd( 'populateTranslationFormData' );
 };
 
 export default populateTranslationFormData;
