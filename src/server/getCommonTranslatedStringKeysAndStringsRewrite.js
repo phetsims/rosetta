@@ -7,9 +7,10 @@ import getStringKeyFromStringKeyWithRepoName from './getStringKeyFromStringKeyWi
 import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
 import logger from './logger.js';
 
-const getCommonTranslatedStringKeysAndStringsRewrite = async ( simName, locale, simNames, stringKeysWithRepoName ) => {
+const getCommonTranslatedStringKeysAndStringsRewrite = async ( simName, locale, simNames, stringKeysWithRepoName, categorizedStringKeys ) => {
 
-  const commonTranslatedStringKeysAndStrings = new Map(); // eslint-disable-line
+  const commonTranslatedStringKeysAndStrings = new Map();
+  const commonStringKeys = categorizedStringKeys.common;
 
   // get a list of common repos for the sim
   const commonRepos = await getCommonRepos( simName, simNames, stringKeysWithRepoName );
@@ -36,24 +37,25 @@ const getCommonTranslatedStringKeysAndStringsRewrite = async ( simName, locale, 
     // if the repo is a common repo, create an empty list of string keys for it or update the list of string keys
     if ( commonRepos.includes( repoName ) ) {
       repoNameToStringKeys[ repoName ] = repoNameToStringKeys[ repoName ] || [];
-      repoNameToStringKeys[ repoName ].push( stringKey );
+
+      // if the string key is included in the list of common string keys
+      if ( commonStringKeys.includes( stringKey ) ) {
+        repoNameToStringKeys[ repoName ].push( stringKey );
+      }
     }
   }
-
-  console.log( repoNameToStringKeys );
 
   // for each common repo from which the sim gets string keys...
   for ( const repo in repoNameToStringKeys ) {
 
     // get the string file url
     const translatedStringFileUrl = getTranslatedStringFileUrl( repo, locale );
-    console.log( translatedStringFileUrl );
 
+
+    // try to get the contents stored at the string file url
     try {
-
-      // try to get the contents stored at the string file url
       const translatedStringKeysAndStringsRes = await axios.get( translatedStringFileUrl );
-      const translatedStringKeysAndStrings = translatedStringKeysAndStringsRes.data; // eslint-disable-line
+      const translatedStringKeysAndStrings = translatedStringKeysAndStringsRes.data;
 
       // for each string key associated with the repo, extract its value from the string file
       for ( const stringKey of repoNameToStringKeys[ repo ] ) {
@@ -80,9 +82,13 @@ const getCommonTranslatedStringKeysAndStringsRewrite = async ( simName, locale, 
     }
   }
 
-  console.log( [ ...commonTranslatedStringKeysAndStrings ] );
+  // reorder map according to the order of string keys in common categorized string keys
+  const sortedCommonTranslatedStringKeysAndStrings = [ ...commonTranslatedStringKeysAndStrings ]; // not sorted yet
+  sortedCommonTranslatedStringKeysAndStrings.sort( ( a, b ) => {
+    return commonStringKeys.indexOf( a ) - commonStringKeys.indexOf( b );
+  } ); // now they're sorted
 
-  // todo: reorder map according to the order of categorizedStringKeys.common
+  return sortedCommonTranslatedStringKeysAndStrings;
 };
 
 export default getCommonTranslatedStringKeysAndStringsRewrite;

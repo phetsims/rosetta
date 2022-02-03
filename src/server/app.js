@@ -5,6 +5,7 @@ import commonTranslatedStringKeysAndStrings from './api/tmp/commonTranslatedStri
 import config from './config.js';
 import express from 'express';
 import localeInfo from './api/localeInfo.js';
+import getCategorizedStringKeys from './getCategorizedStringKeys.js';
 import getSimHtml from './getSimHtml.js';
 import getSimNames from './getSimNames.js';
 import getSimUrl from './getSimUrl.js';
@@ -33,13 +34,14 @@ app.use( express.json() );
 // todo: remove when done
 // test getCommonTranslatedStringKeysAndStringsRewrite
 ( async () => {
-  const simName = 'acid-base-solutions';
+  const simName = 'john-travoltage';
   const locale = 'ab';
   const simUrl = getSimUrl( simName );
   const simHtml = await getSimHtml( simUrl );
   const stringKeysWithRepoName = getStringKeysWithRepoName( simHtml );
   const simNames = await getSimNames();
-  await getCommonTranslatedStringKeysAndStringsRewrite( simName, locale, simNames, stringKeysWithRepoName );
+  const categorizedStringKeys = await getCategorizedStringKeys( simName, simNames, stringKeysWithRepoName );
+  await getCommonTranslatedStringKeysAndStringsRewrite( simName, locale, simNames, stringKeysWithRepoName, categorizedStringKeys );
 } )();
 
 // log info about get request
