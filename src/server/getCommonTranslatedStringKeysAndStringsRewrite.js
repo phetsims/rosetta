@@ -18,11 +18,13 @@ const getCommonTranslatedStringKeysAndStringsRewrite = async ( simName, locale, 
   /*
    * We want a data structure that looks like:
    *
-   * repoName1: [stringKeyA, stringKeyB, stringKeyC]
-   * repoName2: [stringKeyD, stringKeyE, stringKeyF]
-   * repoName3: [stringKeyG, stringKeyH, stringKeyI]
-   * ...
-   * repoNameN: [stringKeyX, stringKeyY, stringKeyZ]
+   * {
+   *   repoName1: [stringKeyA, stringKeyB, stringKeyC]
+   *   repoName2: [stringKeyD, stringKeyE, stringKeyF]
+   *   repoName3: [stringKeyG, stringKeyH, stringKeyI]
+   *   ...
+   *   repoNameN: [stringKeyX, stringKeyY, stringKeyZ]
+   * }
    *
    * For each repo, we will get its string file. Then we will get the value for each string key in the list of string
    * keys for that repo.
