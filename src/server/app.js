@@ -34,11 +34,12 @@ app.use( express.json() );
 // test getCommonTranslatedStringKeysAndStringsRewrite
 ( async () => {
   const simName = 'acid-base-solutions';
+  const locale = 'ab';
   const simUrl = getSimUrl( simName );
   const simHtml = await getSimHtml( simUrl );
   const stringKeysWithRepoName = getStringKeysWithRepoName( simHtml );
   const simNames = await getSimNames();
-  await getCommonTranslatedStringKeysAndStringsRewrite( simName, simNames, stringKeysWithRepoName );
+  await getCommonTranslatedStringKeysAndStringsRewrite( simName, locale, simNames, stringKeysWithRepoName );
 } )();
 
 // log info about get request
