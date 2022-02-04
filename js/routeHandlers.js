@@ -721,6 +721,25 @@ module.exports.triggerBuild = async function( request, response ) {
 };
 
 /**
+ * A route to get the SHA of the currently running version of this server.  This is useful for debugging.
+ */
+module.exports.getSha = async function( request, response ) {
+
+  // Only a logged-in PhET team member can get this information.
+  if ( request.session.teamMember ) {
+    response.render( 'debug.html', {
+      debugMessage: `SHA = ${global.rosettaSha}`,
+      timestamp: new Date().getTime()
+    } );
+  }
+  else {
+
+    // The user is not a team member; render the not found page.
+    pageNotFound( request, response );
+  }
+};
+
+/**
  * Given repo-style (lowercase kebab) sim name, returns a Map.<{String,String[]}>. This Map's keys are repo names, and
  * its values are arrays of string keys. The repos are the repos where the sim gets its string keys. This Map maps
  * repos to arrays of string keys. That is, it contains all string keys for a given simulation.

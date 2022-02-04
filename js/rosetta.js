@@ -57,11 +57,14 @@ winston.info( `Node Version ${process.version}` );
 // Log Rosetta's SHA. This might make it easier to duplicate issues and track them down.
 try {
 
-  // For some reason, "sha.toString()" has a newline. I want the log to look nice, so I'm taking it out.
+  // For some reason, "sha.toString()" has a newline. Take it out so that it looks nice in the log.
   let sha = childProcess.execSync( 'git rev-parse HEAD' );
   sha = sha.toString();
   sha = sha.replace( /\r?\n|\r/, '' );
   winston.info( `Current SHA is ${sha}` );
+
+  // Save the value in a global variable so that it can be retrieved later.
+  global.rosettaSha = sha;
 }
 catch( error ) {
   winston.warn( `Unable to get SHA from Git. Error: ${error}` );
@@ -165,9 +168,6 @@ app.post( '/translate/sim/save/:simName?/:targetLocale?', routeHandlers.saveStri
 // Set up post route for long-term storage of strings.
 app.post( '/translate/sim/:simName?/:targetLocale?', routeHandlers.submitStrings );
 
-// Set up logout.
-app.get( '/translate/logout', routeHandlers.logout );
-
 // Trigger the build of a simulation for a given sim, locale, and user ID. Only used by team members to fix problems.
 app.get( '/translate/trigger-build/:simName?/:targetLocale?/:userId?', routeHandlers.triggerBuild );
 
@@ -190,6 +190,12 @@ app.get( '/translate/locale-string-report/:targetLocale?/', routeHandlers.locale
 //     count++;
 //   }
 // } );
+
+// Set up a route that will return the SHA of the version that is currently being run.  This is useful for debugging.
+app.get( '/translate/sha', routeHandlers.getSha );
+
+// Set up logout.
+app.get( '/translate/logout', routeHandlers.logout );
 
 // Set up routes for incorrect URL patterns.
 app.get( '/*', routeHandlers.pageNotFound );
