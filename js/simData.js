@@ -17,15 +17,14 @@ const winston = require( 'winston' );
 
 // constants
 const CACHED_DATA_VALID_TIME = 1800; // This is 1.8 seconds in milliseconds.
+const PRODUCTION_SERVER_URL = global.config.productionServerURL;
+const METADATA_URL = `${PRODUCTION_SERVER_URL}/services/metadata/1.2/simulations?format=json&type=html&include-unpublished=true&summary`;
 const METADATA_REQUEST_OPTIONS = {
   auth: {
     username: 'token',
     password: global.config.serverToken
   }
 };
-const PRODUCTION_SERVER_URL = global.config.productionServerURL;
-const METADATA_URL = `${PRODUCTION_SERVER_URL
-}/services/metadata/1.2/simulations?format=json&type=html&include-unpublished=true&summary`;
 
 //===========================================================================//
 // Set up variables for later use.                                           //
