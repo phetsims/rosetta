@@ -1,5 +1,12 @@
 // Copyright 2022, University of Colorado Boulder
 
+/**
+ * Export a function that returns an array of arrays. Each sub-array has two elements: (1) a common translated string
+ * key, and (2) the string corresponding to (1).
+ *
+ * @author Liam Mulhall
+ */
+
 import axios from 'axios';
 import getCommonRepos from './getCommonRepos.js';
 import getRepoNameFromStringKeyWithRepoName from './getRepoNameFromStringKeyWithRepoName.js';
@@ -7,7 +14,25 @@ import getStringKeyFromStringKeyWithRepoName from './getStringKeyFromStringKeyWi
 import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
 import logger from './logger.js';
 
-const getCommonTranslatedStringKeysAndStringsRewrite = async ( simName, locale, simNames, stringKeysWithRepoName, categorizedStringKeys ) => {
+/**
+ * Return a list of ordered pairs where each ordered pair is a common translated string key followed by its value
+ * (its string). This is implemented as an array of arrays where each sub-array has two elements, namely the common
+ * translated string key and its string.
+ *
+ * @param {String} simName
+ * @param {String} locale
+ * @param {String[]} simNames
+ * @param {String[]} stringKeysWithRepoName
+ * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys
+ * @returns {Promise<String[][]>}
+ */
+const getCommonTranslatedStringKeysAndStringsRewrite = async (
+  simName,
+  locale,
+  simNames,
+  stringKeysWithRepoName,
+  categorizedStringKeys
+) => {
 
   const commonTranslatedStringKeysAndStrings = new Map();
   const commonStringKeys = categorizedStringKeys.common;
