@@ -34,6 +34,7 @@ const getCommonTranslatedStringKeysAndStringsRewrite = async (
   categorizedStringKeys
 ) => {
 
+  console.time( 'getCommonTranslatedStringKeysAndStrings' );
   const commonTranslatedStringKeysAndStrings = new Map();
   const commonStringKeys = categorizedStringKeys.common;
 
@@ -109,13 +110,17 @@ const getCommonTranslatedStringKeysAndStringsRewrite = async (
     }
   }
 
-  // reorder map according to the order of string keys in common categorized string keys
-  const sortedCommonTranslatedStringKeysAndStrings = [ ...commonTranslatedStringKeysAndStrings ]; // not sorted yet
-  sortedCommonTranslatedStringKeysAndStrings.sort( ( a, b ) => {
-    return commonStringKeys.indexOf( a ) - commonStringKeys.indexOf( b );
-  } ); // now they're sorted
+  // sort list according to the order of string keys in common categorized string keys
+  const sortedCommonTranslatedStringKeysAndStrings = new Map();
+  for ( const stringKey of commonStringKeys ) {
+    const stringValue = commonTranslatedStringKeysAndStrings.get( stringKey );
+    if ( stringValue ) {
+      sortedCommonTranslatedStringKeysAndStrings.set( stringKey, stringValue );
+    }
+  }
 
-  return sortedCommonTranslatedStringKeysAndStrings;
+  console.timeEnd( 'getCommonTranslatedStringKeysAndStrings' );
+  return [ ...sortedCommonTranslatedStringKeysAndStrings ];
 };
 
 export default getCommonTranslatedStringKeysAndStringsRewrite;
