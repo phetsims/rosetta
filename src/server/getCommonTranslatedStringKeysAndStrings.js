@@ -1,4 +1,4 @@
-// Copyright 2021-2022, University of Colorado Boulder
+// Copyright 2022, University of Colorado Boulder
 
 /**
  * Export a function that returns an array of arrays. Each sub-array has two elements: (1) a common translated string
@@ -8,6 +8,7 @@
  */
 
 import axios from 'axios';
+import getCommonRepos from './getCommonRepos.js';
 import getRepoNameFromStringKeyWithRepoName from './getRepoNameFromStringKeyWithRepoName.js';
 import getStringKeyFromStringKeyWithRepoName from './getStringKeyFromStringKeyWithRepoName.js';
 import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
@@ -18,73 +19,115 @@ import logger from './logger.js';
  * (its string). This is implemented as an array of arrays where each sub-array has two elements, namely the common
  * translated string key and its string.
  *
- * @param {String} simName - sim name
- * @param {String} locale - two-letter ISO 639-1 locale code, e.g. es for Spanish
- * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys - string keys categorized into common and sim-specific
- * @param {String[]} stringKeysWithRepoName - string keys with their respective repo names for the specified sim
- * @returns {Promise<String[][]>} - ordered pairs of common translated string keys and their values (their strings)
+ * @param {String} simName
+ * @param {String} locale
+ * @param {String[]} simNames
+ * @param {String[]} stringKeysWithRepoName
+ * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys
+ * @returns {Promise<String[][]>}
  */
-const getCommonTranslatedStringKeysAndStrings = async ( simName, locale, categorizedStringKeys, stringKeysWithRepoName ) => {
+const getCommonTranslatedStringKeysAndStrings = async (
+  simName,
+  locale,
+  simNames,
+  stringKeysWithRepoName,
+  categorizedStringKeys
+) => {
+
   console.time( 'getCommonTranslatedStringKeysAndStrings' );
-  logger.info( `getting ${simName}'s common translated string keys and strings` );
   const commonTranslatedStringKeysAndStrings = new Map();
-  try {
+  const commonStringKeys = categorizedStringKeys.common;
 
-    // map string keys in the sim to their respective repo names
-    console.time( 'mapStringKeysToRepoNames' );
-    const stringKeyToRepoName = new Map();
-    for ( const stringKeyWithRepoName of stringKeysWithRepoName ) {
-      const stringKey = getStringKeyFromStringKeyWithRepoName( stringKeyWithRepoName );
-      const repoName = getRepoNameFromStringKeyWithRepoName( stringKeyWithRepoName );
-      stringKeyToRepoName.set( stringKey, repoName );
+  // get a list of common repos for the sim
+  const commonRepos = await getCommonRepos( simName, simNames, stringKeysWithRepoName );
+
+  /*
+   * We want a data structure that looks like:
+   *
+   * {
+   *   repoName1: [stringKeyA, stringKeyB, stringKeyC]
+   *   repoName2: [stringKeyD, stringKeyE, stringKeyF]
+   *   repoName3: [stringKeyG, stringKeyH, stringKeyI]
+   *   ...
+   *   repoNameN: [stringKeyX, stringKeyY, stringKeyZ]
+   * }
+   *
+   * For each repo, we will get its string file. Then we will get the value for each string key in the list of string
+   * keys for that repo.
+   */
+
+  // create the above data structure
+  const repoNameToStringKeys = {};
+  for ( const stringKeyWithRepoName of stringKeysWithRepoName ) {
+    const stringKey = getStringKeyFromStringKeyWithRepoName( stringKeyWithRepoName );
+    const repoName = getRepoNameFromStringKeyWithRepoName( stringKeyWithRepoName );
+
+    // if the repo is a common repo, create an empty list of string keys for it or update the list of string keys
+    if ( commonRepos.includes( repoName ) ) {
+      repoNameToStringKeys[ repoName ] = repoNameToStringKeys[ repoName ] || [];
+
+      // if the string key is included in the list of common string keys
+      if ( commonStringKeys.includes( stringKey ) ) {
+        repoNameToStringKeys[ repoName ].push( stringKey );
+      }
     }
-    console.timeEnd( 'mapStringKeysToRepoNames' );
+  }
 
-    // for each common string key in the sim...
-    console.time( 'loopThroughCommonKeys' );
-    const commonStringKeys = categorizedStringKeys.common;
-    for ( const stringKey of commonStringKeys ) {
+  // for each common repo from which the sim gets string keys...
+  for ( const repo in repoNameToStringKeys ) {
 
-      // if the string key is in the map we made earlier...
-      if ( stringKeyToRepoName.has( stringKey ) ) {
+    // get the string file url
+    const translatedStringFileUrl = getTranslatedStringFileUrl( repo, locale );
 
-        // get the string key's repo url
-        const repoName = stringKeyToRepoName.get( stringKey );                          // inefficient
-        const translatedStringFileUrl = getTranslatedStringFileUrl( repoName, locale ); // inefficient
 
-        // go into the string file for that repo and grab the string key's value
-        try {
-          const translatedStringKeysAndStringsRes = await axios.get( translatedStringFileUrl );
-          const translatedStringKeysAndStrings = translatedStringKeysAndStringsRes.data;
-          if ( translatedStringKeysAndStrings[ stringKey ] ) {
-            commonTranslatedStringKeysAndStrings.set( stringKey, translatedStringKeysAndStrings[ stringKey ].value );
-          }
-          else {
-            commonTranslatedStringKeysAndStrings.set( stringKey, '' );
-          }
+    // try to get the contents stored at the string file url
+    try {
+      const translatedStringKeysAndStringsRes = await axios.get( translatedStringFileUrl );
+      const translatedStringKeysAndStrings = translatedStringKeysAndStringsRes.data;
+
+      // for each string key associated with the repo, extract its value from the string file
+      for ( const stringKey of repoNameToStringKeys[ repo ] ) {
+        if ( translatedStringKeysAndStrings[ stringKey ] ) {
+          commonTranslatedStringKeysAndStrings.set( stringKey, translatedStringKeysAndStrings[ stringKey ].value );
         }
-        catch( e ) {
-          if ( e.response.status === 404 ) {
-            logger.verbose( `translated string file doesn't exist; setting empty string for ${stringKey}` );
-            commonTranslatedStringKeysAndStrings.set( stringKey, '' );
-          }
-          else {
-            logger.error( e );
-          }
+        else {
+          commonTranslatedStringKeysAndStrings.set( stringKey, '' );
         }
       }
     }
-    console.timeEnd( 'loopThroughCommonKeys' );
+    catch( e ) {
+
+      // if there is no string file, then there hasn't been a translation that affects the repo
+      if ( e.response.status === 404 ) {
+        logger.verbose( `translated string file doesn't exist; setting empty strings for ${repo}` );
+        for ( const stringKey of repoNameToStringKeys[ repo ] ) {
+          commonTranslatedStringKeysAndStrings.set( stringKey, '' );
+        }
+      }
+      else {
+        logger.error( e );
+      }
+    }
   }
-  catch( e ) {
-    logger.error( e );
+
+  // sort list according to the order of string keys in common categorized string keys
+  const sortedCommonTranslatedStringKeysAndStrings = new Map();
+  for ( const stringKey of commonStringKeys ) {
+    const stringValue = commonTranslatedStringKeysAndStrings.get( stringKey );
+
+    // if there is a value for the string key
+    if ( stringValue ) {
+      sortedCommonTranslatedStringKeysAndStrings.set( stringKey, stringValue );
+    }
+
+    // if there isn't a value for the string key
+    else {
+      sortedCommonTranslatedStringKeysAndStrings.set( stringKey, '' );
+    }
   }
-  logger.info( `got ${simName}'s common translated string keys and strings; returning them` );
 
   console.timeEnd( 'getCommonTranslatedStringKeysAndStrings' );
-
-  // use spread operator and brackets to return an array
-  return [ ...commonTranslatedStringKeysAndStrings ];
+  return [ ...sortedCommonTranslatedStringKeysAndStrings ];
 };
 
 export default getCommonTranslatedStringKeysAndStrings;

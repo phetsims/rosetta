@@ -20,7 +20,7 @@ import simSpecificTranslatedStringKeysAndStrings from './api/tmp/simSpecificTran
 import submitTranslation from './api/submitTranslation.js';
 import translationFormData from './api/translationFormData.js';
 import { URL } from 'url';
-import getCommonTranslatedStringKeysAndStringsRewrite from './getCommonTranslatedStringKeysAndStringsRewrite.js';
+import getCommonTranslatedStringKeysAndStrings from './getCommonTranslatedStringKeysAndStrings.js';
 
 // constants
 const app = express();
@@ -32,7 +32,7 @@ app.use( express.static( staticAssetsPath ) );
 app.use( express.json() );
 
 // todo: remove when done
-// test getCommonTranslatedStringKeysAndStringsRewrite
+// test getCommonTranslatedStringKeysAndStrings
 ( async () => {
   const simName = 'john-travoltage';
   const locale = 'ab';
@@ -41,7 +41,7 @@ app.use( express.json() );
   const stringKeysWithRepoName = getStringKeysWithRepoName( simHtml );
   const simNames = await getSimNames();
   const categorizedStringKeys = await getCategorizedStringKeys( simName, simNames, stringKeysWithRepoName );
-  await getCommonTranslatedStringKeysAndStringsRewrite( simName, locale, simNames, stringKeysWithRepoName, categorizedStringKeys );
+  await getCommonTranslatedStringKeysAndStrings( simName, locale, simNames, stringKeysWithRepoName, categorizedStringKeys );
 } )();
 
 // log info about get request
