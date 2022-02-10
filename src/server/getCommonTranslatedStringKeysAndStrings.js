@@ -9,8 +9,7 @@
 
 import axios from 'axios';
 import getCommonRepos from './getCommonRepos.js';
-import getRepoNameFromStringKeyWithRepoName from './getRepoNameFromStringKeyWithRepoName.js';
-import getStringKeyFromStringKeyWithRepoName from './getStringKeyFromStringKeyWithRepoName.js';
+import getRepoNameToStringKeys from './getRepoNameToStringKeys.js';
 import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
 import logger from './logger.js';
 
@@ -57,28 +56,13 @@ const getCommonTranslatedStringKeysAndStrings = async (
    */
 
   // create the above data structure
-  const repoNameToStringKeys = {};
-  for ( const stringKeyWithRepoName of stringKeysWithRepoName ) {
-    const stringKey = getStringKeyFromStringKeyWithRepoName( stringKeyWithRepoName );
-    const repoName = getRepoNameFromStringKeyWithRepoName( stringKeyWithRepoName );
-
-    // if the repo is a common repo, create an empty list of string keys for it or update the list of string keys
-    if ( commonRepos.includes( repoName ) ) {
-      repoNameToStringKeys[ repoName ] = repoNameToStringKeys[ repoName ] || [];
-
-      // if the string key is included in the list of common string keys
-      if ( commonStringKeys.includes( stringKey ) ) {
-        repoNameToStringKeys[ repoName ].push( stringKey );
-      }
-    }
-  }
+  const repoNameToStringKeys = getRepoNameToStringKeys( stringKeysWithRepoName, commonRepos, commonStringKeys );
 
   // for each common repo from which the sim gets string keys...
   for ( const repo in repoNameToStringKeys ) {
 
     // get the string file url
     const translatedStringFileUrl = getTranslatedStringFileUrl( repo, locale );
-
 
     // try to get the contents stored at the string file url
     try {
