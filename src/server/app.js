@@ -5,11 +5,6 @@ import commonTranslatedStringKeysAndStrings from './api/tmp/commonTranslatedStri
 import config from './config.js';
 import express from 'express';
 import localeInfo from './api/localeInfo.js';
-import getCategorizedStringKeys from './getCategorizedStringKeys.js';
-import getSimHtml from './getSimHtml.js';
-import getSimNames from './getSimNames.js';
-import getSimUrl from './getSimUrl.js';
-import getStringKeysWithRepoName from './getStringKeysWithRepoName.js';
 import logger from './logger.js';
 import mockWebsiteUserData from './api/mockWebsiteUserData.js';
 import path from 'path';
@@ -20,7 +15,15 @@ import simSpecificTranslatedStringKeysAndStrings from './api/tmp/simSpecificTran
 import submitTranslation from './api/submitTranslation.js';
 import translationFormData from './api/translationFormData.js';
 import { URL } from 'url';
-import getCommonTranslatedStringKeysAndStrings from './getCommonTranslatedStringKeysAndStrings.js';
+
+// todo: remove when done
+import getCategorizedStringKeys from './getCategorizedStringKeys.js';
+import getKeysValuesAndRepos from './getKeysValuesAndRepos.js';
+import getSimHtml from './getSimHtml.js';
+import getSimNames from './getSimNames.js';
+import getSimUrl from './getSimUrl.js';
+import getStringKeysWithRepoName from './getStringKeysWithRepoName.js';
+import fs from 'fs';
 
 // constants
 const app = express();
@@ -34,14 +37,21 @@ app.use( express.json() );
 // todo: remove when done
 // test getCommonTranslatedStringKeysAndStrings
 ( async () => {
-  const simName = 'john-travoltage';
-  const locale = 'ab';
+  const simName = 'acid-base-solutions';
+  const locale = 'es';
+  const simNames = await getSimNames();
   const simUrl = getSimUrl( simName );
   const simHtml = await getSimHtml( simUrl );
   const stringKeysWithRepoName = getStringKeysWithRepoName( simHtml );
-  const simNames = await getSimNames();
   const categorizedStringKeys = await getCategorizedStringKeys( simName, simNames, stringKeysWithRepoName );
-  await getCommonTranslatedStringKeysAndStrings( simName, locale, simNames, stringKeysWithRepoName, categorizedStringKeys );
+  const keysValuesAndRepos = await getKeysValuesAndRepos(
+    simName,
+    locale,
+    simNames,
+    stringKeysWithRepoName,
+    categorizedStringKeys
+  );
+  fs.writeFileSync( './keysValuesAndRepos', JSON.stringify( keysValuesAndRepos, null, 2 ) );
 } )();
 
 // log info about get request
