@@ -1,0 +1,298 @@
+{
+  "common": {
+    "scenery-phet": {
+      "ResetAllButton.name": {
+        "english": "",
+        "translated": ""
+      },
+      "shortCircuit": {
+        "english": "Short circuit!",
+        "translated": ""
+      }
+    },
+    "joist": {
+      "HomeButton.name": {
+        "english": "",
+        "translated": ""
+      },
+      "adaptedFrom": {
+        "english": "",
+        "translated": ""
+      },
+      "termsPrivacyAndLicensing": {
+        "english": "Terms, Privacy & Licensing",
+        "translated": ""
+      },
+      "translation.credits.link": {
+        "english": "Translation Credits",
+        "translated": ""
+      },
+      "thirdParty.credits.link": {
+        "english": "Third-party Credits",
+        "translated": ""
+      },
+      "credits.title": {
+        "english": "Credits",
+        "translated": ""
+      },
+      "credits.leadDesign": {
+        "english": "Lead Design: {0}",
+        "translated": ""
+      },
+      "credits.softwareDevelopment": {
+        "english": "Software Development: {0}",
+        "translated": ""
+      },
+      "credits.team": {
+        "english": "Team: {0}",
+        "translated": ""
+      },
+      "credits.qualityAssurance": {
+        "english": "Quality Assurance: {0}",
+        "translated": ""
+      },
+      "credits.graphicArts": {
+        "english": "Graphic Arts: {0}",
+        "translated": ""
+      },
+      "credits.translation": {
+        "english": "Translation",
+        "translated": ""
+      },
+      "credits.thanks": {
+        "english": "Thanks",
+        "translated": ""
+      },
+      "updates.upToDate": {
+        "english": "This simulation is up to date.",
+        "translated": ""
+      },
+      "updates.outOfDate": {
+        "english": "New version available",
+        "translated": ""
+      },
+      "updates.checking": {
+        "english": "Checking for updates…",
+        "translated": ""
+      },
+      "updates.offline": {
+        "english": "Unable to check for updates.",
+        "translated": ""
+      },
+      "updates.newVersionAvailable": {
+        "english": "There is a new version available: {0}.",
+        "translated": ""
+      },
+      "updates.yourCurrentVersion": {
+        "english": "Your current version is: {0}.",
+        "translated": ""
+      },
+      "updates.getUpdate": {
+        "english": "Get Update…",
+        "translated": ""
+      },
+      "updates.noThanks": {
+        "english": "No Thanks",
+        "translated": ""
+      },
+      "versionPattern": {
+        "english": "version {0}",
+        "translated": ""
+      },
+      "options.title": {
+        "english": "Options",
+        "translated": ""
+      },
+      "showPointers": {
+        "english": "Show Pointers",
+        "translated": ""
+      },
+      "done": {
+        "english": "Done",
+        "translated": ""
+      },
+      "title.settings": {
+        "english": "Settings",
+        "translated": ""
+      },
+      "menuItem.options": {
+        "english": "Options…",
+        "translated": ""
+      },
+      "menuItem.about": {
+        "english": "About…",
+        "translated": ""
+      },
+      "menuItem.mailInputEventsLog": {
+        "english": "",
+        "translated": ""
+      },
+      "menuItem.outputInputEventsLog": {
+        "english": "",
+        "translated": ""
+      },
+      "menuItem.phetWebsite": {
+        "english": "PhET Website…",
+        "translated": ""
+      },
+      "menuItem.reportAProblem": {
+        "english": "Report a Problem…",
+        "translated": ""
+      },
+      "menuItem.screenshot": {
+        "english": "Screenshot",
+        "translated": ""
+      },
+      "menuItem.fullscreen": {
+        "english": "Full Screen",
+        "translated": ""
+      },
+      "menuItem.settings": {
+        "english": "",
+        "translated": ""
+      },
+      "menuItem.getUpdate": {
+        "english": "Check for Updates…",
+        "translated": ""
+      },
+      "menuItem.submitInputEventsLog": {
+        "english": "",
+        "translated": ""
+      },
+      "PhetButton.name": {
+        "english": "",
+        "translated": ""
+      },
+      "titlePattern": {
+        "english": "",
+        "translated": ""
+      }
+    }
+  },
+  "simSpecific": {
+    "pattern.0label.1value": {
+      "english": "{0}: {1}",
+      "translated": "{0}: {1}"
+    },
+    "pH": {
+      "english": "pH",
+      "translated": "pH"
+    },
+    "pattern.0value.1units": {
+      "english": "{0}{1}",
+      "translated": "{0}{1}"
+    },
+    "liters": {
+      "english": "L",
+      "translated": "L"
+    },
+    "pattern.0value.1power": {
+      "english": "{0} x 10<sup>{1}</sup>",
+      "translated": ""
+    },
+    "negligible": {
+      "english": "negligible",
+      "translated": "despreciable"
+    },
+    "concentrationGraph.yAxis": {
+      "english": "Equilibrium Concentration (mol/L)",
+      "translated": "Concentración en Equilibrio (mol/L)"
+    },
+    "graph": {
+      "english": "Graph",
+      "translated": "Gráfica"
+    },
+    "hideViews": {
+      "english": "Hide Views",
+      "translated": "Ocultar vistas"
+    },
+    "molecules": {
+      "english": "Molecules",
+      "translated": "Moléculas"
+    },
+    "solvent": {
+      "english": "Solvent",
+      "translated": "Solvente"
+    },
+    "solution": {
+      "english": "Solution",
+      "translated": "Solución"
+    },
+    "tools": {
+      "english": "",
+      "translated": "Herramientas"
+    },
+    "views": {
+      "english": "Views",
+      "translated": "Vistas"
+    },
+    "pHColorKey": {
+      "english": "pH Color Key",
+      "translated": "Clave de colores de pH"
+    },
+    "stronger": {
+      "english": "stronger",
+      "translated": "más fuerte"
+    },
+    "weaker": {
+      "english": "weaker",
+      "translated": "más débil"
+    },
+    "acid": {
+      "english": "Acid",
+      "translated": "Ácido"
+    },
+    "base": {
+      "english": "Base",
+      "translated": "Base"
+    },
+    "initialConcentration": {
+      "english": "Initial Concentration (mol/L):",
+      "translated": "Concentración\nInicial:"
+    },
+    "strength": {
+      "english": "Strength:",
+      "translated": "Intensidad:"
+    },
+    "strong": {
+      "english": "strong",
+      "translated": "fuerte"
+    },
+    "weak": {
+      "english": "weak",
+      "translated": "débil"
+    },
+    "screen.mySolution": {
+      "english": "My Solution",
+      "translated": "Mi solución"
+    },
+    "strongAcid": {
+      "english": "Strong Acid",
+      "translated": "Ácido Fuerte"
+    },
+    "strongBase": {
+      "english": "Strong Base",
+      "translated": "Base Fuerte"
+    },
+    "water": {
+      "english": "Water",
+      "translated": "Agua"
+    },
+    "weakAcid": {
+      "english": "Weak Acid",
+      "translated": "Ácido Débil"
+    },
+    "weakBase": {
+      "english": "Weak Base",
+      "translated": "Base Débil"
+    },
+    "screen.introduction": {
+      "english": "Introduction",
+      "translated": "Introducción"
+    },
+    "acid-base-solutions.title": {
+      "english": "Acid-Base Solutions",
+      "translated": "Soluciones Ácido-Base"
+    }
+  }
+}
