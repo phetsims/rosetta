@@ -19,12 +19,12 @@ import logger from './logger.js';
  * (its string). This is implemented as an array of arrays where each sub-array has two elements, namely the common
  * translated string key and its string.
  *
- * @param {String} simName
- * @param {String} locale
- * @param {String[]} simNames
- * @param {String[]} stringKeysWithRepoName
- * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys
- * @returns {Promise<String[][]>}
+ * @param {String} simName - sim name
+ * @param {String} locale - two-letter ISO 639-1 locale code, e.g. es for Spanish
+ * @param {String[]} simNames - list of all sim names
+ * @param {String[]} stringKeysWithRepoName - stringKey/REPO_NAME we get from a sim's HTML
+ * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys - string keys categorized into common and sim-specific
+ * @returns {Promise<String[][]>} - ordered pairs of common translated string keys and their values (their strings)
  */
 const getCommonTranslatedStringKeysAndStrings = async (
   simName,
