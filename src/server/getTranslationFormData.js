@@ -56,7 +56,13 @@ const getTranslationFormData = async ( simName, locale ) => {
     // get common data
     const commonStringKeys = categorizedStringKeys.common;
     const commonEnglishStringKeysAndStrings = await getCommonEnglishStringKeysAndStrings( simName, simNames, categorizedStringKeys, stringKeysWithRepoName );
-    const commonTranslatedStringKeysAndStrings = await getCommonTranslatedStringKeysAndStrings( simName, locale, categorizedStringKeys, stringKeysWithRepoName );
+    const commonTranslatedStringKeysAndStrings = await getCommonTranslatedStringKeysAndStrings(
+      simName,
+      locale,
+      simNames,
+      stringKeysWithRepoName,
+      categorizedStringKeys
+    );
 
     // ensure data we get from the sim html equals data we get from long-term storage (github as of this writing)
     console.time( 'simHtmlDataEqualsLongTermStorageData' );
