@@ -20,28 +20,16 @@ import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
  *
  * {
  *   common: {
- *     joist: {
- *       stringKeyA: {
- *         english: "Foo",
- *         translated: "Faa",
- *       },
- *       stringKeyB: {
- *         english: "Bar",
- *         translated: "Bur",
- *       },
- *       ...
+ *     stringKeyA: {
+ *       english: "Foo",
+ *       translated: "Faa",
+ *       repo: "scenery-phet"
  *     },
- *     scenery: {
- *       stringKeyC: {
- *         english: "Baz",
- *         translated: "Buz"
- *       },
- *       stringKeyD: {
- *         english: "Boop",
- *         translated: "Buup"
- *       },
- *       ...
- *     },
+ *     stringKeyB: {
+ *       english: "Bar",
+ *       translated: "Bur",
+ *       repo: "joist"
+ *     }
  *     ...
  *   },
  *   sim-specific: {
@@ -62,26 +50,19 @@ import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
  * Return an object like the one above. This object is used to render the translation form. The repo fields are used by
  * the server when it submits a translation to long-term storage. The repos are not used by the client.
  *
- * @param simName - sim name
- * @param locale
- * @param simNames - list of all sim names
- * @param stringKeysWithRepoName
- * @param categorizedStringKeys
- * @returns {Promise<{simSpecific: {}, common: {}}>}
+ * @param {String} simName - sim name
+ * @param {String} locale - two-letter ISO 639-1 locale code, e.g. es for Spanish
+ * @param {String[]} simNames - list of all sim names
+ * @param {String[]} stringKeysWithRepoName - list of REPO_NAME/stringKey from the sim
+ * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys - string keys categorized into common and sim-specific
+ * @returns {Promise<{simSpecific: {}, common: {}}>} - translation form data
  */
-const getKeysValuesAndRepos = async (
-  simName,
-  locale,
-  simNames,
-  stringKeysWithRepoName,
-  categorizedStringKeys
-) => {
+const getKeysValuesAndRepos = async ( simName, locale, simNames, stringKeysWithRepoName, categorizedStringKeys ) => {
   console.time( 'getKeysValuesAndRepos' );
 
   // initialize our object
   const keysValuesAndRepos = {
-    common: {},
-    simSpecific: {}
+    common: {}, simSpecific: {}
   };
 
   // we need common repos for the sim
@@ -93,11 +74,8 @@ const getKeysValuesAndRepos = async (
   // we get an object that maps common repos to lists of string keys that belong to those repos
   const repoNameToStringKeys = getRepoNameToStringKeys( stringKeysWithRepoName, commonRepos, commonStringKeys );
 
-  // for each repo, we want to add a field to the common object
+  // for each repo, we want to get an enlish string file and a translated string file
   for ( const repo of Object.keys( repoNameToStringKeys ) ) {
-
-    // add the repo field
-    keysValuesAndRepos.common[ repo ] = {};
 
     // get english file
     const commonEnglishStringFileUrl = getStringFileUrl( repo );
@@ -105,35 +83,45 @@ const getKeysValuesAndRepos = async (
     const commonEnglishStringKeysAndStrings = commonEnglishStringFileRes.data;
 
     // get translated file
-    const commonTranslatedStringFileUrl = getTranslatedStringFile( simName, locale );
+    const commonTranslatedStringFileUrl = getTranslatedStringFile( repo, locale );
     const commonTranslatedStringFileRes = await axios.get( commonTranslatedStringFileUrl );
     const commonTranslatedStringKeysAndStrings = commonTranslatedStringFileRes.data;
 
     /*
      * For each string key in a repo, we need to:
-     * (1) get its English value and its translated value,
-     * (2) add the string key to the repo object, and
-     * (3) add the English value and the translated value to the string key object.
+     * (1) get its English value and its translated value, and
+     * (2) add the string key and its English value, translated value, and repo name to the common object.
      */
     for ( const stringKey of repoNameToStringKeys[ repo ] ) {
 
       // get english value
-      let englishValue = '';
+      /*
+       * Here we assume the string key is no longer used, i.e. its string file doesn't have the string key anymore.
+       * It's possible that a sim could have a string "no longer used" so I added a nonsense word "gooble".
+       */
+      let englishValue = 'no longer used gooble';
       if ( Object.keys( commonEnglishStringKeysAndStrings ).includes( stringKey ) ) {
         englishValue = commonEnglishStringKeysAndStrings[ stringKey ].value;
       }
 
       // get translated value
-      let translatedValue = '';
+      /*
+       * Here we assume the string key is no longer used, i.e. its string file doesn't have the string key anymore.
+       * It's possible that a sim could have a string "no longer used" so I added a nonsense word "gooble".
+       */
+      let translatedValue = 'no longer used gooble';
       if ( Object.keys( commonTranslatedStringKeysAndStrings ).includes( stringKey ) ) {
         translatedValue = commonTranslatedStringKeysAndStrings[ stringKey ].value;
       }
 
-      // add english and translated values to a newly created string key field
-      keysValuesAndRepos.common[ repo ][ stringKey ] = {
-        english: englishValue,
-        translated: translatedValue
-      };
+      // add the string key, its english value, translated value, and repo name to the common object
+      if ( englishValue !== 'no longer used gooble' && translatedValue !== 'no longer used gooble' ) {
+        keysValuesAndRepos.common[ stringKey ] = {
+          english: englishValue,
+          translated: translatedValue,
+          repo: repo
+        };
+      }
     }
   }
 
