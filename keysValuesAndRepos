@@ -1,172 +1,164 @@
 {
   "common": {
-    "scenery-phet": {
-      "ResetAllButton.name": {
-        "english": "",
-        "translated": ""
-      },
-      "shortCircuit": {
-        "english": "Short circuit!",
-        "translated": ""
-      }
+    "shortCircuit": {
+      "english": "Short circuit!",
+      "translated": "¡Cortocircuito!",
+      "repo": "scenery-phet"
     },
-    "joist": {
-      "HomeButton.name": {
-        "english": "",
-        "translated": ""
-      },
-      "adaptedFrom": {
-        "english": "",
-        "translated": ""
-      },
-      "termsPrivacyAndLicensing": {
-        "english": "Terms, Privacy & Licensing",
-        "translated": ""
-      },
-      "translation.credits.link": {
-        "english": "Translation Credits",
-        "translated": ""
-      },
-      "thirdParty.credits.link": {
-        "english": "Third-party Credits",
-        "translated": ""
-      },
-      "credits.title": {
-        "english": "Credits",
-        "translated": ""
-      },
-      "credits.leadDesign": {
-        "english": "Lead Design: {0}",
-        "translated": ""
-      },
-      "credits.softwareDevelopment": {
-        "english": "Software Development: {0}",
-        "translated": ""
-      },
-      "credits.team": {
-        "english": "Team: {0}",
-        "translated": ""
-      },
-      "credits.qualityAssurance": {
-        "english": "Quality Assurance: {0}",
-        "translated": ""
-      },
-      "credits.graphicArts": {
-        "english": "Graphic Arts: {0}",
-        "translated": ""
-      },
-      "credits.translation": {
-        "english": "Translation",
-        "translated": ""
-      },
-      "credits.thanks": {
-        "english": "Thanks",
-        "translated": ""
-      },
-      "updates.upToDate": {
-        "english": "This simulation is up to date.",
-        "translated": ""
-      },
-      "updates.outOfDate": {
-        "english": "New version available",
-        "translated": ""
-      },
-      "updates.checking": {
-        "english": "Checking for updates…",
-        "translated": ""
-      },
-      "updates.offline": {
-        "english": "Unable to check for updates.",
-        "translated": ""
-      },
-      "updates.newVersionAvailable": {
-        "english": "There is a new version available: {0}.",
-        "translated": ""
-      },
-      "updates.yourCurrentVersion": {
-        "english": "Your current version is: {0}.",
-        "translated": ""
-      },
-      "updates.getUpdate": {
-        "english": "Get Update…",
-        "translated": ""
-      },
-      "updates.noThanks": {
-        "english": "No Thanks",
-        "translated": ""
-      },
-      "versionPattern": {
-        "english": "version {0}",
-        "translated": ""
-      },
-      "options.title": {
-        "english": "Options",
-        "translated": ""
-      },
-      "showPointers": {
-        "english": "Show Pointers",
-        "translated": ""
-      },
-      "done": {
-        "english": "Done",
-        "translated": ""
-      },
-      "title.settings": {
-        "english": "Settings",
-        "translated": ""
-      },
-      "menuItem.options": {
-        "english": "Options…",
-        "translated": ""
-      },
-      "menuItem.about": {
-        "english": "About…",
-        "translated": ""
-      },
-      "menuItem.mailInputEventsLog": {
-        "english": "",
-        "translated": ""
-      },
-      "menuItem.outputInputEventsLog": {
-        "english": "",
-        "translated": ""
-      },
-      "menuItem.phetWebsite": {
-        "english": "PhET Website…",
-        "translated": ""
-      },
-      "menuItem.reportAProblem": {
-        "english": "Report a Problem…",
-        "translated": ""
-      },
-      "menuItem.screenshot": {
-        "english": "Screenshot",
-        "translated": ""
-      },
-      "menuItem.fullscreen": {
-        "english": "Full Screen",
-        "translated": ""
-      },
-      "menuItem.settings": {
-        "english": "",
-        "translated": ""
-      },
-      "menuItem.getUpdate": {
-        "english": "Check for Updates…",
-        "translated": ""
-      },
-      "menuItem.submitInputEventsLog": {
-        "english": "",
-        "translated": ""
-      },
-      "PhetButton.name": {
-        "english": "",
-        "translated": ""
-      },
-      "titlePattern": {
-        "english": "",
-        "translated": ""
-      }
+    "termsPrivacyAndLicensing": {
+      "english": "Terms, Privacy & Licensing",
+      "translated": "Términos, privacidad y licencias",
+      "repo": "joist"
+    },
+    "translation.credits.link": {
+      "english": "Translation Credits",
+      "translated": "Créditos de traducción",
+      "repo": "joist"
+    },
+    "thirdParty.credits.link": {
+      "english": "Third-party Credits",
+      "translated": "Créditos de terceros",
+      "repo": "joist"
+    },
+    "credits.title": {
+      "english": "Credits",
+      "translated": "Créditos",
+      "repo": "joist"
+    },
+    "credits.leadDesign": {
+      "english": "Lead Design: {0}",
+      "translated": "Elaboración de diseño:  {0}",
+      "repo": "joist"
+    },
+    "credits.softwareDevelopment": {
+      "english": "Software Development: {0}",
+      "translated": "Desarrollo de software {0}",
+      "repo": "joist"
+    },
+    "credits.team": {
+      "english": "Team: {0}",
+      "translated": "Equipo: {0}",
+      "repo": "joist"
+    },
+    "credits.qualityAssurance": {
+      "english": "Quality Assurance: {0}",
+      "translated": "Seguro de calidad: {0}",
+      "repo": "joist"
+    },
+    "credits.graphicArts": {
+      "english": "Graphic Arts: {0}",
+      "translated": "Artes gráficas:  {0}",
+      "repo": "joist"
+    },
+    "credits.translation": {
+      "english": "Translation",
+      "translated": "Traducción",
+      "repo": "joist"
+    },
+    "credits.thanks": {
+      "english": "Thanks",
+      "translated": "Gracias",
+      "repo": "joist"
+    },
+    "updates.upToDate": {
+      "english": "This simulation is up to date.",
+      "translated": "La simulación está realizada al día ...",
+      "repo": "joist"
+    },
+    "updates.outOfDate": {
+      "english": "New version available",
+      "translated": "Nueva versión disponible",
+      "repo": "joist"
+    },
+    "updates.checking": {
+      "english": "Checking for updates…",
+      "translated": "Buscando actualizaciones...",
+      "repo": "joist"
+    },
+    "updates.offline": {
+      "english": "Unable to check for updates.",
+      "translated": "No disponible para chequear actualizaciones",
+      "repo": "joist"
+    },
+    "updates.newVersionAvailable": {
+      "english": "There is a new version available: {0}.",
+      "translated": "Hay una nueva versión disponible {0}",
+      "repo": "joist"
+    },
+    "updates.yourCurrentVersion": {
+      "english": "Your current version is: {0}.",
+      "translated": "Su versión actual es: {0}.",
+      "repo": "joist"
+    },
+    "updates.getUpdate": {
+      "english": "Get Update…",
+      "translated": "Actualizar...",
+      "repo": "joist"
+    },
+    "updates.noThanks": {
+      "english": "No Thanks",
+      "translated": "No, gracias",
+      "repo": "joist"
+    },
+    "versionPattern": {
+      "english": "version {0}",
+      "translated": "Versión {0}",
+      "repo": "joist"
+    },
+    "options.title": {
+      "english": "Options",
+      "translated": "Opciones",
+      "repo": "joist"
+    },
+    "showPointers": {
+      "english": "Show Pointers",
+      "translated": "Punteros de muestra",
+      "repo": "joist"
+    },
+    "done": {
+      "english": "Done",
+      "translated": "Hecho",
+      "repo": "joist"
+    },
+    "title.settings": {
+      "english": "Settings",
+      "translated": "Configuraciones",
+      "repo": "joist"
+    },
+    "menuItem.options": {
+      "english": "Options…",
+      "translated": "Opciones",
+      "repo": "joist"
+    },
+    "menuItem.about": {
+      "english": "About…",
+      "translated": "Acerca de...",
+      "repo": "joist"
+    },
+    "menuItem.phetWebsite": {
+      "english": "PhET Website…",
+      "translated": "Sitio web PhET",
+      "repo": "joist"
+    },
+    "menuItem.reportAProblem": {
+      "english": "Report a Problem…",
+      "translated": "Informe un problema",
+      "repo": "joist"
+    },
+    "menuItem.screenshot": {
+      "english": "Screenshot",
+      "translated": "Captura de pantalla",
+      "repo": "joist"
+    },
+    "menuItem.fullscreen": {
+      "english": "Full Screen",
+      "translated": "Pantalla completa",
+      "repo": "joist"
+    },
+    "menuItem.getUpdate": {
+      "english": "Check for Updates…",
+      "translated": "Buscar actualizaciones...",
+      "repo": "joist"
     }
   },
   "simSpecific": {
