@@ -1,4 +1,130 @@
 {
+  "simSpecific": {
+    "pattern.0label.1value": {
+      "english": "{0}: {1}",
+      "translated": "{0}: {1}"
+    },
+    "pH": {
+      "english": "pH",
+      "translated": "pH"
+    },
+    "pattern.0value.1units": {
+      "english": "{0}{1}",
+      "translated": "{0}{1}"
+    },
+    "liters": {
+      "english": "L",
+      "translated": "L"
+    },
+    "pattern.0value.1power": {
+      "english": "{0} x 10<sup>{1}</sup>",
+      "translated": ""
+    },
+    "negligible": {
+      "english": "negligible",
+      "translated": "despreciable"
+    },
+    "concentrationGraph.yAxis": {
+      "english": "Equilibrium Concentration (mol/L)",
+      "translated": "Concentración en Equilibrio (mol/L)"
+    },
+    "graph": {
+      "english": "Graph",
+      "translated": "Gráfica"
+    },
+    "hideViews": {
+      "english": "Hide Views",
+      "translated": "Ocultar vistas"
+    },
+    "molecules": {
+      "english": "Molecules",
+      "translated": "Moléculas"
+    },
+    "solvent": {
+      "english": "Solvent",
+      "translated": "Solvente"
+    },
+    "solution": {
+      "english": "Solution",
+      "translated": "Solución"
+    },
+    "tools": {
+      "english": "",
+      "translated": "Herramientas"
+    },
+    "views": {
+      "english": "Views",
+      "translated": "Vistas"
+    },
+    "pHColorKey": {
+      "english": "pH Color Key",
+      "translated": "Clave de colores de pH"
+    },
+    "stronger": {
+      "english": "stronger",
+      "translated": "más fuerte"
+    },
+    "weaker": {
+      "english": "weaker",
+      "translated": "más débil"
+    },
+    "acid": {
+      "english": "Acid",
+      "translated": "Ácido"
+    },
+    "base": {
+      "english": "Base",
+      "translated": "Base"
+    },
+    "initialConcentration": {
+      "english": "Initial Concentration (mol/L):",
+      "translated": "Concentración\nInicial:"
+    },
+    "strength": {
+      "english": "Strength:",
+      "translated": "Intensidad:"
+    },
+    "strong": {
+      "english": "strong",
+      "translated": "fuerte"
+    },
+    "weak": {
+      "english": "weak",
+      "translated": "débil"
+    },
+    "screen.mySolution": {
+      "english": "My Solution",
+      "translated": "Mi solución"
+    },
+    "strongAcid": {
+      "english": "Strong Acid",
+      "translated": "Ácido Fuerte"
+    },
+    "strongBase": {
+      "english": "Strong Base",
+      "translated": "Base Fuerte"
+    },
+    "water": {
+      "english": "Water",
+      "translated": "Agua"
+    },
+    "weakAcid": {
+      "english": "Weak Acid",
+      "translated": "Ácido Débil"
+    },
+    "weakBase": {
+      "english": "Weak Base",
+      "translated": "Base Débil"
+    },
+    "screen.introduction": {
+      "english": "Introduction",
+      "translated": "Introducción"
+    },
+    "acid-base-solutions.title": {
+      "english": "Acid-Base Solutions",
+      "translated": "Soluciones Ácido-Base"
+    }
+  },
   "common": {
     "shortCircuit": {
       "english": "Short circuit!",
@@ -159,132 +285,6 @@
       "english": "Check for Updates…",
       "translated": "Buscar actualizaciones...",
       "repo": "joist"
-    }
-  },
-  "simSpecific": {
-    "pattern.0label.1value": {
-      "english": "{0}: {1}",
-      "translated": "{0}: {1}"
-    },
-    "pH": {
-      "english": "pH",
-      "translated": "pH"
-    },
-    "pattern.0value.1units": {
-      "english": "{0}{1}",
-      "translated": "{0}{1}"
-    },
-    "liters": {
-      "english": "L",
-      "translated": "L"
-    },
-    "pattern.0value.1power": {
-      "english": "{0} x 10<sup>{1}</sup>",
-      "translated": ""
-    },
-    "negligible": {
-      "english": "negligible",
-      "translated": "despreciable"
-    },
-    "concentrationGraph.yAxis": {
-      "english": "Equilibrium Concentration (mol/L)",
-      "translated": "Concentración en Equilibrio (mol/L)"
-    },
-    "graph": {
-      "english": "Graph",
-      "translated": "Gráfica"
-    },
-    "hideViews": {
-      "english": "Hide Views",
-      "translated": "Ocultar vistas"
-    },
-    "molecules": {
-      "english": "Molecules",
-      "translated": "Moléculas"
-    },
-    "solvent": {
-      "english": "Solvent",
-      "translated": "Solvente"
-    },
-    "solution": {
-      "english": "Solution",
-      "translated": "Solución"
-    },
-    "tools": {
-      "english": "",
-      "translated": "Herramientas"
-    },
-    "views": {
-      "english": "Views",
-      "translated": "Vistas"
-    },
-    "pHColorKey": {
-      "english": "pH Color Key",
-      "translated": "Clave de colores de pH"
-    },
-    "stronger": {
-      "english": "stronger",
-      "translated": "más fuerte"
-    },
-    "weaker": {
-      "english": "weaker",
-      "translated": "más débil"
-    },
-    "acid": {
-      "english": "Acid",
-      "translated": "Ácido"
-    },
-    "base": {
-      "english": "Base",
-      "translated": "Base"
-    },
-    "initialConcentration": {
-      "english": "Initial Concentration (mol/L):",
-      "translated": "Concentración\nInicial:"
-    },
-    "strength": {
-      "english": "Strength:",
-      "translated": "Intensidad:"
-    },
-    "strong": {
-      "english": "strong",
-      "translated": "fuerte"
-    },
-    "weak": {
-      "english": "weak",
-      "translated": "débil"
-    },
-    "screen.mySolution": {
-      "english": "My Solution",
-      "translated": "Mi solución"
-    },
-    "strongAcid": {
-      "english": "Strong Acid",
-      "translated": "Ácido Fuerte"
-    },
-    "strongBase": {
-      "english": "Strong Base",
-      "translated": "Base Fuerte"
-    },
-    "water": {
-      "english": "Water",
-      "translated": "Agua"
-    },
-    "weakAcid": {
-      "english": "Weak Acid",
-      "translated": "Ácido Débil"
-    },
-    "weakBase": {
-      "english": "Weak Base",
-      "translated": "Base Débil"
-    },
-    "screen.introduction": {
-      "english": "Introduction",
-      "translated": "Introducción"
-    },
-    "acid-base-solutions.title": {
-      "english": "Acid-Base Solutions",
-      "translated": "Soluciones Ácido-Base"
     }
   }
 }
