@@ -27,7 +27,7 @@ At this point, the translator can input or revise values for all of the strings 
 to test the sim with the new values without submitting them, but that feature isn't particularly relevant to this
 document. Once the translator is ready, they submit their translated strings. At that point, Rosetta:
 
-+ commits and pushes the translated strings for both the simulation and the common code re-post to the babel repository,
++ commits and pushes the translated strings for both the simulation and the common code repos to the babel repository,
 and
 + commands the build server to build a new version of the sim for the locale for which the translation was submitted.
 
