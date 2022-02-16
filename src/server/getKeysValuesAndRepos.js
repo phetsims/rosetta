@@ -50,10 +50,17 @@ import getSimSpecificKeysValuesAndRepos from './getSimSpecificKeysValuesAndRepos
  * @param {String} locale - two-letter ISO 639-1 locale code, e.g. es for Spanish
  * @param {String[]} simNames - list of all sim names
  * @param {String[]} stringKeysWithRepoName - list of REPO_NAME/stringKey from the sim
- * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys - string keys categorized into common and sim-specific
+ * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys - string keys categorized into common and
+ *                                                                            sim-specific
  * @returns {Promise<{simSpecific: {}, common: {}}>} - translation form data
  */
-const getKeysValuesAndRepos = async ( simName, locale, simNames, stringKeysWithRepoName, categorizedStringKeys ) => {
+const getKeysValuesAndRepos = async (
+  simName,
+  locale,
+  simNames,
+  stringKeysWithRepoName,
+  categorizedStringKeys
+) => {
   console.time( 'getKeysValuesAndRepos' );
   const keysValuesAndRepos = {
     simSpecific: {},
