@@ -34,22 +34,18 @@ import logger from './logger.js';
  *
  * @param {String} simName - sim name
  * @param {String} locale - two-letter ISO 639-1 locale code, e.g. es for Spanish
- * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys - string keys categorized into common and
- *                                                                            sim-specific
+ * @param {string[]} simSpecificStringKeys - list of sim-specific string keys
  * @returns {Promise<{}>} - sim-specific string keys, their English values, and their translated values
  */
 const getSimSpecificTranslationFormData = async (
   simName,
   locale,
-  categorizedStringKeys
+  simSpecificStringKeys
 ) => {
 
   const simSpecific = {};
 
   try {
-
-    // we need to get sim-specific string keys
-    const simSpecificStringKeys = categorizedStringKeys.simSpecific;
 
     // get english file
     // the english file should exist
