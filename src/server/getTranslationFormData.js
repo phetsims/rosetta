@@ -8,7 +8,7 @@
  * @author Liam Mulhall
  */
 
-import getCommonKeysValuesAndRepos from './getCommonKeysValuesAndRepos.js';
+import getCommonTranslationFormData from './getCommonTranslationFormData.js';
 import getSimSpecificKeysValuesAndRepos from './getSimSpecificKeysValuesAndRepos.js';
 
 /*
@@ -67,7 +67,7 @@ const getTranslationFormData = async (
     common: {}
   };
   keysValuesAndRepos.simSpecific = await getSimSpecificKeysValuesAndRepos( simName, locale, categorizedStringKeys );
-  keysValuesAndRepos.common = await getCommonKeysValuesAndRepos(
+  keysValuesAndRepos.common = await getCommonTranslationFormData(
     simName,
     locale,
     simNames,

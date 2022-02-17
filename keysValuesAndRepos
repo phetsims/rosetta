@@ -2,288 +2,351 @@
   "simSpecific": {
     "pattern_DOT_0label_DOT_1value": {
       "english": "{0}: {1}",
-      "translated": "{0}: {1}"
+      "translated": "{0}: {1}",
+      "oldTranslated": "{0}: {1}"
     },
     "pH": {
       "english": "pH",
-      "translated": "pH"
+      "translated": "pH",
+      "oldTranslated": "pH"
     },
     "pattern_DOT_0value_DOT_1units": {
       "english": "{0}{1}",
-      "translated": "{0}{1}"
+      "translated": "{0}{1}",
+      "oldTranslated": "{0}{1}"
     },
     "liters": {
       "english": "L",
-      "translated": "L"
+      "translated": "L",
+      "oldTranslated": "L"
     },
     "pattern_DOT_0value_DOT_1power": {
       "english": "{0} x 10<sup>{1}</sup>",
-      "translated": ""
+      "translated": "",
+      "oldTranslated": ""
     },
     "negligible": {
       "english": "negligible",
-      "translated": "despreciable"
+      "translated": "despreciable",
+      "oldTranslated": "despreciable"
     },
     "concentrationGraph_DOT_yAxis": {
       "english": "Equilibrium Concentration (mol/L)",
-      "translated": "Concentración en Equilibrio (mol/L)"
+      "translated": "Concentración en Equilibrio (mol/L)",
+      "oldTranslated": "Concentración en Equilibrio (mol/L)"
     },
     "graph": {
       "english": "Graph",
-      "translated": "Gráfica"
+      "translated": "Gráfica",
+      "oldTranslated": "Gráfica"
     },
     "hideViews": {
       "english": "Hide Views",
-      "translated": "Ocultar vistas"
+      "translated": "Ocultar vistas",
+      "oldTranslated": "Ocultar vistas"
     },
     "molecules": {
       "english": "Molecules",
-      "translated": "Moléculas"
+      "translated": "Moléculas",
+      "oldTranslated": "Moléculas"
     },
     "solvent": {
       "english": "Solvent",
-      "translated": "Solvente"
+      "translated": "Solvente",
+      "oldTranslated": "Solvente"
     },
     "solution": {
       "english": "Solution",
-      "translated": "Solución"
+      "translated": "Solución",
+      "oldTranslated": "Solución"
     },
     "tools": {
       "english": "",
-      "translated": "Herramientas"
+      "translated": "Herramientas",
+      "oldTranslated": "Herramientas"
     },
     "views": {
       "english": "Views",
-      "translated": "Vistas"
+      "translated": "Vistas",
+      "oldTranslated": "Vistas"
     },
     "pHColorKey": {
       "english": "pH Color Key",
-      "translated": "Clave de colores de pH"
+      "translated": "Clave de colores de pH",
+      "oldTranslated": "Clave de colores de pH"
     },
     "stronger": {
       "english": "stronger",
-      "translated": "más fuerte"
+      "translated": "más fuerte",
+      "oldTranslated": "más fuerte"
     },
     "weaker": {
       "english": "weaker",
-      "translated": "más débil"
+      "translated": "más débil",
+      "oldTranslated": "más débil"
     },
     "acid": {
       "english": "Acid",
-      "translated": "Ácido"
+      "translated": "Ácido",
+      "oldTranslated": "Ácido"
     },
     "base": {
       "english": "Base",
-      "translated": "Base"
+      "translated": "Base",
+      "oldTranslated": "Base"
     },
     "initialConcentration": {
       "english": "Initial Concentration (mol/L):",
-      "translated": "Concentración\nInicial:"
+      "translated": "Concentración\nInicial:",
+      "oldTranslated": "Concentración\nInicial:"
     },
     "strength": {
       "english": "Strength:",
-      "translated": "Intensidad:"
+      "translated": "Intensidad:",
+      "oldTranslated": "Intensidad:"
     },
     "strong": {
       "english": "strong",
-      "translated": "fuerte"
+      "translated": "fuerte",
+      "oldTranslated": "fuerte"
     },
     "weak": {
       "english": "weak",
-      "translated": "débil"
+      "translated": "débil",
+      "oldTranslated": "débil"
     },
     "screen_DOT_mySolution": {
       "english": "My Solution",
-      "translated": "Mi solución"
+      "translated": "Mi solución",
+      "oldTranslated": "Mi solución"
     },
     "strongAcid": {
       "english": "Strong Acid",
-      "translated": "Ácido Fuerte"
+      "translated": "Ácido Fuerte",
+      "oldTranslated": "Ácido Fuerte"
     },
     "strongBase": {
       "english": "Strong Base",
-      "translated": "Base Fuerte"
+      "translated": "Base Fuerte",
+      "oldTranslated": "Base Fuerte"
     },
     "water": {
       "english": "Water",
-      "translated": "Agua"
+      "translated": "Agua",
+      "oldTranslated": "Agua"
     },
     "weakAcid": {
       "english": "Weak Acid",
-      "translated": "Ácido Débil"
+      "translated": "Ácido Débil",
+      "oldTranslated": "Ácido Débil"
     },
     "weakBase": {
       "english": "Weak Base",
-      "translated": "Base Débil"
+      "translated": "Base Débil",
+      "oldTranslated": "Base Débil"
     },
     "screen_DOT_introduction": {
       "english": "Introduction",
-      "translated": "Introducción"
+      "translated": "Introducción",
+      "oldTranslated": "Introducción"
     },
     "acid-base-solutions_DOT_title": {
       "english": "Acid-Base Solutions",
-      "translated": "Soluciones Ácido-Base"
+      "translated": "Soluciones Ácido-Base",
+      "oldTranslated": "Soluciones Ácido-Base"
     }
   },
   "common": {
     "shortCircuit": {
       "english": "Short circuit!",
       "translated": "¡Cortocircuito!",
+      "oldTranslated": "¡Cortocircuito!",
       "repo": "scenery-phet"
     },
     "termsPrivacyAndLicensing": {
       "english": "Terms, Privacy & Licensing",
       "translated": "Términos, privacidad y licencias",
+      "oldTranslated": "Términos, privacidad y licencias",
       "repo": "joist"
     },
     "translation_DOT_credits_DOT_link": {
       "english": "Translation Credits",
       "translated": "Créditos de traducción",
+      "oldTranslated": "Créditos de traducción",
       "repo": "joist"
     },
     "thirdParty_DOT_credits_DOT_link": {
       "english": "Third-party Credits",
       "translated": "Créditos de terceros",
+      "oldTranslated": "Créditos de terceros",
       "repo": "joist"
     },
     "credits_DOT_title": {
       "english": "Credits",
       "translated": "Créditos",
+      "oldTranslated": "Créditos",
       "repo": "joist"
     },
     "credits_DOT_leadDesign": {
       "english": "Lead Design: {0}",
       "translated": "Elaboración de diseño:  {0}",
+      "oldTranslated": "Elaboración de diseño:  {0}",
       "repo": "joist"
     },
     "credits_DOT_softwareDevelopment": {
       "english": "Software Development: {0}",
       "translated": "Desarrollo de software {0}",
+      "oldTranslated": "Desarrollo de software {0}",
       "repo": "joist"
     },
     "credits_DOT_team": {
       "english": "Team: {0}",
       "translated": "Equipo: {0}",
+      "oldTranslated": "Equipo: {0}",
       "repo": "joist"
     },
     "credits_DOT_qualityAssurance": {
       "english": "Quality Assurance: {0}",
       "translated": "Seguro de calidad: {0}",
+      "oldTranslated": "Seguro de calidad: {0}",
       "repo": "joist"
     },
     "credits_DOT_graphicArts": {
       "english": "Graphic Arts: {0}",
       "translated": "Artes gráficas:  {0}",
+      "oldTranslated": "Artes gráficas:  {0}",
       "repo": "joist"
     },
     "credits_DOT_translation": {
       "english": "Translation",
       "translated": "Traducción",
+      "oldTranslated": "Traducción",
       "repo": "joist"
     },
     "credits_DOT_thanks": {
       "english": "Thanks",
       "translated": "Gracias",
+      "oldTranslated": "Gracias",
       "repo": "joist"
     },
     "updates_DOT_upToDate": {
       "english": "This simulation is up to date.",
       "translated": "La simulación está realizada al día ...",
+      "oldTranslated": "La simulación está realizada al día ...",
       "repo": "joist"
     },
     "updates_DOT_outOfDate": {
       "english": "New version available",
       "translated": "Nueva versión disponible",
+      "oldTranslated": "Nueva versión disponible",
       "repo": "joist"
     },
     "updates_DOT_checking": {
       "english": "Checking for updates…",
       "translated": "Buscando actualizaciones...",
+      "oldTranslated": "Buscando actualizaciones...",
       "repo": "joist"
     },
     "updates_DOT_offline": {
       "english": "Unable to check for updates.",
       "translated": "No disponible para chequear actualizaciones",
+      "oldTranslated": "No disponible para chequear actualizaciones",
       "repo": "joist"
     },
     "updates_DOT_newVersionAvailable": {
       "english": "There is a new version available: {0}.",
       "translated": "Hay una nueva versión disponible {0}",
+      "oldTranslated": "Hay una nueva versión disponible {0}",
       "repo": "joist"
     },
     "updates_DOT_yourCurrentVersion": {
       "english": "Your current version is: {0}.",
       "translated": "Su versión actual es: {0}.",
+      "oldTranslated": "Su versión actual es: {0}.",
       "repo": "joist"
     },
     "updates_DOT_getUpdate": {
       "english": "Get Update…",
       "translated": "Actualizar...",
+      "oldTranslated": "Actualizar...",
       "repo": "joist"
     },
     "updates_DOT_noThanks": {
       "english": "No Thanks",
       "translated": "No, gracias",
+      "oldTranslated": "No, gracias",
       "repo": "joist"
     },
     "versionPattern": {
       "english": "version {0}",
       "translated": "Versión {0}",
+      "oldTranslated": "Versión {0}",
       "repo": "joist"
     },
     "options_DOT_title": {
       "english": "Options",
       "translated": "Opciones",
+      "oldTranslated": "Opciones",
       "repo": "joist"
     },
     "showPointers": {
       "english": "Show Pointers",
       "translated": "Punteros de muestra",
+      "oldTranslated": "Punteros de muestra",
       "repo": "joist"
     },
     "done": {
       "english": "Done",
       "translated": "Hecho",
+      "oldTranslated": "Hecho",
       "repo": "joist"
     },
     "title_DOT_settings": {
       "english": "Settings",
       "translated": "Configuraciones",
+      "oldTranslated": "Configuraciones",
       "repo": "joist"
     },
     "menuItem_DOT_options": {
       "english": "Options…",
       "translated": "Opciones",
+      "oldTranslated": "Opciones",
       "repo": "joist"
     },
     "menuItem_DOT_about": {
       "english": "About…",
       "translated": "Acerca de...",
+      "oldTranslated": "Acerca de...",
       "repo": "joist"
     },
     "menuItem_DOT_phetWebsite": {
       "english": "PhET Website…",
       "translated": "Sitio web PhET",
+      "oldTranslated": "Sitio web PhET",
       "repo": "joist"
     },
     "menuItem_DOT_reportAProblem": {
       "english": "Report a Problem…",
       "translated": "Informe un problema",
+      "oldTranslated": "Informe un problema",
       "repo": "joist"
     },
     "menuItem_DOT_screenshot": {
       "english": "Screenshot",
       "translated": "Captura de pantalla",
+      "oldTranslated": "Captura de pantalla",
       "repo": "joist"
     },
     "menuItem_DOT_fullscreen": {
       "english": "Full Screen",
       "translated": "Pantalla completa",
+      "oldTranslated": "Pantalla completa",
       "repo": "joist"
     },
     "menuItem_DOT_getUpdate": {
       "english": "Check for Updates…",
       "translated": "Buscar actualizaciones...",
+      "oldTranslated": "Buscar actualizaciones...",
       "repo": "joist"
     }
   }
