@@ -1,6 +1,8 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
+ * Export a function that gets a sim's common string keys, their English values, and their translated values.
+ *
  * @author Liam Mulhall
  */
 
@@ -11,6 +13,37 @@ import getStringFileUrl from './getStringFileUrl.js';
 import getTranslatedStringFile from './getTranslatedStringFileUrl.js';
 import logger from './logger.js';
 
+/*
+ * We want to return an object that looks like:
+ *
+ * {
+ *   stringKeyA: {
+ *     english: "Foo",
+ *     translated: "Faa",
+ *     oldTranslated: "Faa",
+ *     repo: "scenery-phet"
+ *   },
+ *   stringKeyB: {
+ *     english: "Bar",
+ *     translated: "Bur",
+ *     oldTranslated: "Bur",
+ *     repo: "joist"
+ *   }
+ *   ...
+ * }
+ */
+
+/**
+ * Return an object that contains a sim's common string keys, their English values, and their translated values.
+ *
+ * @param simName - sim name
+ * @param locale - two-letter ISO 639-1 locale code, e.g. es for Spanish
+ * @param simNames - string keys categorized into common and sim-specific
+ * @param stringKeysWithRepoName - list of REPO_NAME/stringKey from the sim
+ * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys - string keys categorized into common and
+ *                                                                            sim-specific
+ * @returns {Promise<{}>} - common string keys, their English values, and their translated values
+ */
 const getCommonTranslationFormData = async (
   simName,
   locale,
