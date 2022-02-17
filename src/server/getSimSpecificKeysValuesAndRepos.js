@@ -7,50 +7,82 @@
 import axios from 'axios';
 import getStringFileUrl from './getStringFileUrl.js';
 import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
+import logger from './logger.js';
 
 const getSimSpecificKeysValuesAndRepos = async ( simName, locale, categorizedStringKeys ) => {
 
   const simSpecific = {};
 
-  // we need to get sim-specific string keys
-  const simSpecificStringKeys = categorizedStringKeys.simSpecific;
+  try {
 
-  // we need the english string file for the sim
-  const simSpecificEnglishStringFileUrl = getStringFileUrl( simName );
-  const simSpecificEnglishStringFileRes = await axios.get( simSpecificEnglishStringFileUrl );
-  const simSpecificEnglishStringKeysAndStrings = simSpecificEnglishStringFileRes.data;
+    // we need to get sim-specific string keys
+    const simSpecificStringKeys = categorizedStringKeys.simSpecific;
 
-  // we need the translated string file for the sim
-  const simSpecificTranslatedStringFileUrl = getTranslatedStringFileUrl( simName, locale );
-  const simSpecificTranslatedStringFileRes = await axios.get( simSpecificTranslatedStringFileUrl );
-  const simSpecificTranslatedStringKeysAndStrings = simSpecificTranslatedStringFileRes.data;
-
-  /*
-   * For each sim-specific string key, we need to:
-   * (1) get the string key's English value,
-   * (2) get the string key's translated value, and
-   * (3) add the string key and its values to the sim-specific object
-   */
-  for ( const stringKey of simSpecificStringKeys ) {
-
-    // get the english value
-    let englishValue = '';
-    if ( simSpecificEnglishStringKeysAndStrings[ stringKey ] ) {
-      englishValue = simSpecificEnglishStringKeysAndStrings[ stringKey ].value;
+    // get english file
+    // the english file should exist
+    // if it doesn't exist, we've got a serious problem, houston
+    let simSpecificEnglishStringFileUrl = '';
+    let simSpecificEnglishStringFileRes = {};
+    let simSpecificEnglishStringKeysAndStrings = {};
+    try {
+      simSpecificEnglishStringFileUrl = getStringFileUrl( simName );
+      simSpecificEnglishStringFileRes = await axios.get( simSpecificEnglishStringFileUrl );
+      simSpecificEnglishStringKeysAndStrings = simSpecificEnglishStringFileRes.data;
+    }
+    catch( e ) {
+      logger.error( e );
     }
 
-    // get the translated value
-    let translatedValue = '';
-    if ( simSpecificTranslatedStringKeysAndStrings[ stringKey ] ) {
-      translatedValue = simSpecificTranslatedStringKeysAndStrings[ stringKey ].value;
+    // get translated file
+    // the translated file might not exist
+    let simSpecificTranslatedStringFileUrl = '';
+    let simSpecificTranslatedStringFileRes = {};
+    let simSpecificTranslatedStringKeysAndStrings = {};
+    try {
+      simSpecificTranslatedStringFileUrl = getTranslatedStringFileUrl( simName, locale );
+      simSpecificTranslatedStringFileRes = await axios.get( simSpecificTranslatedStringFileUrl );
+      simSpecificTranslatedStringKeysAndStrings = simSpecificTranslatedStringFileRes.data;
+    }
+    catch( e ) {
+      if ( e.response.status === 404 ) {
+        logger.verbose( `translation file for ${simName} doesn't exist; setting empty strings for ${simName}` );
+      }
+      else {
+        logger.error( e );
+      }
     }
 
-    // add the string key and its values to the sim-specific object
-    simSpecific[ stringKey ] = {
-      english: englishValue,
-      translated: translatedValue
-    };
+    /*
+     * For each sim-specific string key, we need to:
+     * (1) get the string key's English value,
+     * (2) get the string key's translated value, and
+     * (3) add the string key and its values to the sim-specific object
+     */
+    for ( const stringKey of simSpecificStringKeys ) {
+
+      // get the english value
+      let englishValue = '';
+      if ( simSpecificEnglishStringKeysAndStrings[ stringKey ] ) {
+        englishValue = simSpecificEnglishStringKeysAndStrings[ stringKey ].value;
+      }
+
+      // get the translated value
+      let translatedValue = '';
+      if ( simSpecificTranslatedStringKeysAndStrings[ stringKey ] ) {
+        translatedValue = simSpecificTranslatedStringKeysAndStrings[ stringKey ].value;
+      }
+
+      // add the string key and its values to the sim-specific object
+      simSpecific[ stringKey ] = {
+        english: englishValue,
+        translated: translatedValue
+      };
+    }
   }
+  catch( e ) {
+    logger.error( e );
+  }
+
 
   return simSpecific;
 };
