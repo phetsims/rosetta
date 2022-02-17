@@ -11,7 +11,7 @@ import getStringFileUrl from './getStringFileUrl.js';
 import getTranslatedStringFile from './getTranslatedStringFileUrl.js';
 import logger from './logger.js';
 
-const getCommonKeysValuesAndRepos = async (
+const getCommonTranslationFormData = async (
   simName,
   locale,
   simNames,
@@ -114,4 +114,4 @@ const getCommonKeysValuesAndRepos = async (
   return common;
 };
 
-export default getCommonKeysValuesAndRepos;
+export default getCommonTranslationFormData;
