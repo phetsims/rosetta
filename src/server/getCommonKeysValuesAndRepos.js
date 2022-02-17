@@ -99,7 +99,8 @@ const getCommonKeysValuesAndRepos = async (
         if ( englishValue !== 'no longer used gooble' ) {
           common[ stringKeyWithoutDots ] = {
             english: englishValue,
-            translated: translatedValue,
+            translated: translatedValue,    // the user will be able to modify this value
+            oldTranslated: translatedValue, // the user won't be able to modify this value; it will be used for history
             repo: repo
           };
         }
