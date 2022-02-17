@@ -1,6 +1,6 @@
 {
   "simSpecific": {
-    "pattern.0label.1value": {
+    "pattern_DOT_0label_DOT_1value": {
       "english": "{0}: {1}",
       "translated": "{0}: {1}"
     },
@@ -8,7 +8,7 @@
       "english": "pH",
       "translated": "pH"
     },
-    "pattern.0value.1units": {
+    "pattern_DOT_0value_DOT_1units": {
       "english": "{0}{1}",
       "translated": "{0}{1}"
     },
@@ -16,7 +16,7 @@
       "english": "L",
       "translated": "L"
     },
-    "pattern.0value.1power": {
+    "pattern_DOT_0value_DOT_1power": {
       "english": "{0} x 10<sup>{1}</sup>",
       "translated": ""
     },
@@ -24,7 +24,7 @@
       "english": "negligible",
       "translated": "despreciable"
     },
-    "concentrationGraph.yAxis": {
+    "concentrationGraph_DOT_yAxis": {
       "english": "Equilibrium Concentration (mol/L)",
       "translated": "Concentración en Equilibrio (mol/L)"
     },
@@ -92,7 +92,7 @@
       "english": "weak",
       "translated": "débil"
     },
-    "screen.mySolution": {
+    "screen_DOT_mySolution": {
       "english": "My Solution",
       "translated": "Mi solución"
     },
@@ -116,11 +116,11 @@
       "english": "Weak Base",
       "translated": "Base Débil"
     },
-    "screen.introduction": {
+    "screen_DOT_introduction": {
       "english": "Introduction",
       "translated": "Introducción"
     },
-    "acid-base-solutions.title": {
+    "acid-base-solutions_DOT_title": {
       "english": "Acid-Base Solutions",
       "translated": "Soluciones Ácido-Base"
     }
@@ -136,92 +136,92 @@
       "translated": "Términos, privacidad y licencias",
       "repo": "joist"
     },
-    "translation.credits.link": {
+    "translation_DOT_credits_DOT_link": {
       "english": "Translation Credits",
       "translated": "Créditos de traducción",
       "repo": "joist"
     },
-    "thirdParty.credits.link": {
+    "thirdParty_DOT_credits_DOT_link": {
       "english": "Third-party Credits",
       "translated": "Créditos de terceros",
       "repo": "joist"
     },
-    "credits.title": {
+    "credits_DOT_title": {
       "english": "Credits",
       "translated": "Créditos",
       "repo": "joist"
     },
-    "credits.leadDesign": {
+    "credits_DOT_leadDesign": {
       "english": "Lead Design: {0}",
       "translated": "Elaboración de diseño:  {0}",
       "repo": "joist"
     },
-    "credits.softwareDevelopment": {
+    "credits_DOT_softwareDevelopment": {
       "english": "Software Development: {0}",
       "translated": "Desarrollo de software {0}",
       "repo": "joist"
     },
-    "credits.team": {
+    "credits_DOT_team": {
       "english": "Team: {0}",
       "translated": "Equipo: {0}",
       "repo": "joist"
     },
-    "credits.qualityAssurance": {
+    "credits_DOT_qualityAssurance": {
       "english": "Quality Assurance: {0}",
       "translated": "Seguro de calidad: {0}",
       "repo": "joist"
     },
-    "credits.graphicArts": {
+    "credits_DOT_graphicArts": {
       "english": "Graphic Arts: {0}",
       "translated": "Artes gráficas:  {0}",
       "repo": "joist"
     },
-    "credits.translation": {
+    "credits_DOT_translation": {
       "english": "Translation",
       "translated": "Traducción",
       "repo": "joist"
     },
-    "credits.thanks": {
+    "credits_DOT_thanks": {
       "english": "Thanks",
       "translated": "Gracias",
       "repo": "joist"
     },
-    "updates.upToDate": {
+    "updates_DOT_upToDate": {
       "english": "This simulation is up to date.",
       "translated": "La simulación está realizada al día ...",
       "repo": "joist"
     },
-    "updates.outOfDate": {
+    "updates_DOT_outOfDate": {
       "english": "New version available",
       "translated": "Nueva versión disponible",
       "repo": "joist"
     },
-    "updates.checking": {
+    "updates_DOT_checking": {
       "english": "Checking for updates…",
       "translated": "Buscando actualizaciones...",
       "repo": "joist"
     },
-    "updates.offline": {
+    "updates_DOT_offline": {
       "english": "Unable to check for updates.",
       "translated": "No disponible para chequear actualizaciones",
       "repo": "joist"
     },
-    "updates.newVersionAvailable": {
+    "updates_DOT_newVersionAvailable": {
       "english": "There is a new version available: {0}.",
       "translated": "Hay una nueva versión disponible {0}",
       "repo": "joist"
     },
-    "updates.yourCurrentVersion": {
+    "updates_DOT_yourCurrentVersion": {
       "english": "Your current version is: {0}.",
       "translated": "Su versión actual es: {0}.",
       "repo": "joist"
     },
-    "updates.getUpdate": {
+    "updates_DOT_getUpdate": {
       "english": "Get Update…",
       "translated": "Actualizar...",
       "repo": "joist"
     },
-    "updates.noThanks": {
+    "updates_DOT_noThanks": {
       "english": "No Thanks",
       "translated": "No, gracias",
       "repo": "joist"
@@ -231,7 +231,7 @@
       "translated": "Versión {0}",
       "repo": "joist"
     },
-    "options.title": {
+    "options_DOT_title": {
       "english": "Options",
       "translated": "Opciones",
       "repo": "joist"
@@ -246,42 +246,42 @@
       "translated": "Hecho",
       "repo": "joist"
     },
-    "title.settings": {
+    "title_DOT_settings": {
       "english": "Settings",
       "translated": "Configuraciones",
       "repo": "joist"
     },
-    "menuItem.options": {
+    "menuItem_DOT_options": {
       "english": "Options…",
       "translated": "Opciones",
       "repo": "joist"
     },
-    "menuItem.about": {
+    "menuItem_DOT_about": {
       "english": "About…",
       "translated": "Acerca de...",
       "repo": "joist"
     },
-    "menuItem.phetWebsite": {
+    "menuItem_DOT_phetWebsite": {
       "english": "PhET Website…",
       "translated": "Sitio web PhET",
       "repo": "joist"
     },
-    "menuItem.reportAProblem": {
+    "menuItem_DOT_reportAProblem": {
       "english": "Report a Problem…",
       "translated": "Informe un problema",
       "repo": "joist"
     },
-    "menuItem.screenshot": {
+    "menuItem_DOT_screenshot": {
       "english": "Screenshot",
       "translated": "Captura de pantalla",
       "repo": "joist"
     },
-    "menuItem.fullscreen": {
+    "menuItem_DOT_fullscreen": {
       "english": "Full Screen",
       "translated": "Pantalla completa",
       "repo": "joist"
     },
-    "menuItem.getUpdate": {
+    "menuItem_DOT_getUpdate": {
       "english": "Check for Updates…",
       "translated": "Buscar actualizaciones...",
       "repo": "joist"
