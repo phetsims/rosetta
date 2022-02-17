@@ -9,7 +9,7 @@ import getStringFileUrl from './getStringFileUrl.js';
 import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
 import logger from './logger.js';
 
-const getSimSpecificKeysValuesAndRepos = async ( simName, locale, categorizedStringKeys ) => {
+const getSimSpecificTranslationFormData = async ( simName, locale, categorizedStringKeys ) => {
 
   const simSpecific = {};
 
@@ -91,4 +91,4 @@ const getSimSpecificKeysValuesAndRepos = async ( simName, locale, categorizedStr
   return simSpecific;
 };
 
-export default getSimSpecificKeysValuesAndRepos;
+export default getSimSpecificTranslationFormData;
