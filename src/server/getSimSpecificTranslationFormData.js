@@ -1,6 +1,8 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
+ * Export a function that gets a sim's common string keys, their English values, and their translated values.
+ *
  * @author Liam Mulhall
  */
 
@@ -9,6 +11,33 @@ import getStringFileUrl from './getStringFileUrl.js';
 import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
 import logger from './logger.js';
 
+/*
+ * We want to return an object that looks like:
+ *
+ * {
+ *   stringKeyE: {
+ *     english: "Bing",
+ *     translated: "Bong",
+ *     oldTranslated: "Bong",
+ *   },
+ *   stringKeyF: {
+ *     english: "Ding",
+ *     translated: "Dong",
+ *     oldTranslated: "Dong",
+ *   }
+ *   ...
+ * },
+ */
+
+/**
+ * Return an object that contains a sim's sim-specific string keys, their English values, and their translated values.
+ *
+ * @param simName - sim name
+ * @param locale - two-letter ISO 639-1 locale code, e.g. es for Spanish
+ * @param categorizedStringKeys - string keys categorized into common and
+ *                                sim-specific
+ * @returns {Promise<{}>} - sim-specific string keys, their English values, and their translated values
+ */
 const getSimSpecificTranslationFormData = async ( simName, locale, categorizedStringKeys ) => {
 
   const simSpecific = {};
@@ -86,7 +115,6 @@ const getSimSpecificTranslationFormData = async ( simName, locale, categorizedSt
   catch( e ) {
     logger.error( e );
   }
-
 
   return simSpecific;
 };
