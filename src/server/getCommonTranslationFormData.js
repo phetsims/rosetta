@@ -36,12 +36,11 @@ import logger from './logger.js';
 /**
  * Return an object that contains a sim's common string keys, their English values, and their translated values.
  *
- * @param simName - sim name
- * @param locale - two-letter ISO 639-1 locale code, e.g. es for Spanish
- * @param simNames - string keys categorized into common and sim-specific
- * @param stringKeysWithRepoName - list of REPO_NAME/stringKey from the sim
- * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys - string keys categorized into common and
- *                                                                            sim-specific
+ * @param {String[]} simName - sim name
+ * @param {String} locale - two-letter ISO 639-1 locale code, e.g. es for Spanish
+ * @param {String[]} simNames - string keys categorized into common and sim-specific
+ * @param {String[]} stringKeysWithRepoName - list of REPO_NAME/stringKey from the sim
+ * @param {string[]} commonStringKeys - list of common string keys for the sim
  * @returns {Promise<{}>} - common string keys, their English values, and their translated values
  */
 const getCommonTranslationFormData = async (
@@ -49,7 +48,7 @@ const getCommonTranslationFormData = async (
   locale,
   simNames,
   stringKeysWithRepoName,
-  categorizedStringKeys
+  commonStringKeys
 ) => {
 
   const common = {};
@@ -58,9 +57,6 @@ const getCommonTranslationFormData = async (
 
     // we need common repos for the sim
     const commonRepos = await getCommonRepos( simName, simNames, stringKeysWithRepoName );
-
-    // we need to get common string keys
-    const commonStringKeys = categorizedStringKeys.common;
 
     // we get an object that maps common repos to lists of string keys that belong to those repos
     const repoNameToStringKeys = getRepoNameToStringKeys( stringKeysWithRepoName, commonRepos, commonStringKeys );
