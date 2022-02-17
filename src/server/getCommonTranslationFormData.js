@@ -36,7 +36,7 @@ import logger from './logger.js';
 /**
  * Return an object that contains a sim's common string keys, their English values, and their translated values.
  *
- * @param {String[]} simName - sim name
+ * @param {String} simName - sim name
  * @param {String} locale - two-letter ISO 639-1 locale code, e.g. es for Spanish
  * @param {String[]} simNames - string keys categorized into common and sim-specific
  * @param {String[]} stringKeysWithRepoName - list of REPO_NAME/stringKey from the sim

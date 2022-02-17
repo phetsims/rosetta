@@ -69,13 +69,17 @@ const getTranslationFormData = async (
     common: {}
   };
   try {
-    translationFormData.simSpecific = await getSimSpecificTranslationFormData( simName, locale, categorizedStringKeys );
+    translationFormData.simSpecific = await getSimSpecificTranslationFormData(
+      simName,
+      locale,
+      categorizedStringKeys.simSpecific
+    );
     translationFormData.common = await getCommonTranslationFormData(
       simName,
       locale,
       simNames,
       stringKeysWithRepoName,
-      categorizedStringKeys
+      categorizedStringKeys.common
     );
   }
   catch( e ) {
