@@ -51,6 +51,8 @@ const getCommonTranslationFormData = async (
   commonStringKeys
 ) => {
 
+  logger.info( 'getting common translation form data' );
+
   const common = {};
 
   try {
@@ -139,6 +141,8 @@ const getCommonTranslationFormData = async (
   catch( e ) {
     logger.error( e );
   }
+
+  logger.info( 'got common translation form data; returning it' );
 
   return common;
 };

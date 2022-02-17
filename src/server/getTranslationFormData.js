@@ -62,6 +62,7 @@ const getTranslationFormData = async (
   stringKeysWithRepoName,
   categorizedStringKeys
 ) => {
+  logger.info( 'getting translation form data' );
   console.time( 'getTranslationFormData' );
   const translationFormData = {
     simSpecific: {},
@@ -81,6 +82,7 @@ const getTranslationFormData = async (
     logger.error( e );
   }
   console.timeEnd( 'getTranslationFormData' );
+  logger.info( 'got translation form data; returning it' );
   return translationFormData;
 };
 

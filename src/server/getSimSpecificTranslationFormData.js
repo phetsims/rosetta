@@ -43,6 +43,8 @@ const getSimSpecificTranslationFormData = async (
   simSpecificStringKeys
 ) => {
 
+  logger.info( 'getting sim-specific translation form data' );
+
   const simSpecific = {};
 
   try {
@@ -115,6 +117,8 @@ const getSimSpecificTranslationFormData = async (
   catch( e ) {
     logger.error( e );
   }
+
+  logger.info( 'got sim-specific translation form data; returning it' );
 
   return simSpecific;
 };
