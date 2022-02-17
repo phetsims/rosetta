@@ -1,7 +1,7 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * Export a function that gets a sim's common string keys, their English values, and their translated values.
+ * Export a function that gets a sim's sim-specific string keys, their English values, and their translated values.
  *
  * @author Liam Mulhall
  */
@@ -32,10 +32,10 @@ import logger from './logger.js';
 /**
  * Return an object that contains a sim's sim-specific string keys, their English values, and their translated values.
  *
- * @param simName - sim name
- * @param locale - two-letter ISO 639-1 locale code, e.g. es for Spanish
- * @param categorizedStringKeys - string keys categorized into common and
- *                                sim-specific
+ * @param {String} simName - sim name
+ * @param {String} locale - two-letter ISO 639-1 locale code, e.g. es for Spanish
+ * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys - string keys categorized into common and
+ *                                                                            sim-specific
  * @returns {Promise<{}>} - sim-specific string keys, their English values, and their translated values
  */
 const getSimSpecificTranslationFormData = async ( simName, locale, categorizedStringKeys ) => {
