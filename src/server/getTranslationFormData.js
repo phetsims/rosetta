@@ -10,6 +10,7 @@
 
 import getCommonTranslationFormData from './getCommonTranslationFormData.js';
 import getSimSpecificTranslationFormData from './getSimSpecificTranslationFormData.js';
+import logger from './logger.js';
 
 /*
  * We want to return an object that looks like:
@@ -62,20 +63,25 @@ const getTranslationFormData = async (
   categorizedStringKeys
 ) => {
   console.time( 'getTranslationFormData' );
-  const keysValuesAndRepos = {
+  const translationFormData = {
     simSpecific: {},
     common: {}
   };
-  keysValuesAndRepos.simSpecific = await getSimSpecificTranslationFormData( simName, locale, categorizedStringKeys );
-  keysValuesAndRepos.common = await getCommonTranslationFormData(
-    simName,
-    locale,
-    simNames,
-    stringKeysWithRepoName,
-    categorizedStringKeys
-  );
+  try {
+    translationFormData.simSpecific = await getSimSpecificTranslationFormData( simName, locale, categorizedStringKeys );
+    translationFormData.common = await getCommonTranslationFormData(
+      simName,
+      locale,
+      simNames,
+      stringKeysWithRepoName,
+      categorizedStringKeys
+    );
+  }
+  catch( e ) {
+    logger.error( e );
+  }
   console.timeEnd( 'getTranslationFormData' );
-  return keysValuesAndRepos;
+  return translationFormData;
 };
 
 export default getTranslationFormData;
