@@ -78,7 +78,8 @@ const getSimSpecificKeysValuesAndRepos = async ( simName, locale, categorizedStr
       // add the string key and its values to the sim-specific object
       simSpecific[ stringKeyWithoutDots ] = {
         english: englishValue,
-        translated: translatedValue
+        translated: translatedValue,   // the user will be able to modify this value
+        oldTranslated: translatedValue // the user won't be able to modify this value; it will be used for history
       };
     }
   }
