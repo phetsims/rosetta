@@ -38,7 +38,11 @@ import logger from './logger.js';
  *                                                                            sim-specific
  * @returns {Promise<{}>} - sim-specific string keys, their English values, and their translated values
  */
-const getSimSpecificTranslationFormData = async ( simName, locale, categorizedStringKeys ) => {
+const getSimSpecificTranslationFormData = async (
+  simName,
+  locale,
+  categorizedStringKeys
+) => {
 
   const simSpecific = {};
 
