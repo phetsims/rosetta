@@ -16,15 +16,6 @@ import submitTranslation from './api/submitTranslation.js';
 import translationFormData from './api/translationFormData.js';
 import { URL } from 'url';
 
-// todo: remove when done
-import getCategorizedStringKeys from './getCategorizedStringKeys.js';
-import getTranslationFormData from './getTranslationFormData.js';
-import getSimHtml from './getSimHtml.js';
-import getSimNames from './getSimNames.js';
-import getSimUrl from './getSimUrl.js';
-import getStringKeysWithRepoName from './getStringKeysWithRepoName.js';
-import fs from 'fs';
-
 // constants
 const app = express();
 const __dirname = new URL( '.', import.meta.url ).pathname;
@@ -33,25 +24,6 @@ const staticAssetsPath = path.join( __dirname, '..', '..', 'static' );
 // middleware
 app.use( express.static( staticAssetsPath ) );
 app.use( express.json() );
-
-// todo: remove when done
-( async () => {
-  const simName = 'acid-base-solutions';
-  const locale = 'es';
-  const simNames = await getSimNames();
-  const simUrl = getSimUrl( simName );
-  const simHtml = await getSimHtml( simUrl );
-  const stringKeysWithRepoName = getStringKeysWithRepoName( simHtml );
-  const categorizedStringKeys = await getCategorizedStringKeys( simName, simNames, stringKeysWithRepoName );
-  const keysValuesAndRepos = await getTranslationFormData(
-    simName,
-    locale,
-    simNames,
-    stringKeysWithRepoName,
-    categorizedStringKeys
-  );
-  fs.writeFileSync( './keysValuesAndRepos', JSON.stringify( keysValuesAndRepos, null, 2 ) );
-} )();
 
 // log info about get request
 app.get( '/translate*', ( req, res, next ) => {
