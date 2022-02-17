@@ -18,7 +18,7 @@ import { URL } from 'url';
 
 // todo: remove when done
 import getCategorizedStringKeys from './getCategorizedStringKeys.js';
-import getKeysValuesAndRepos from './getKeysValuesAndRepos.js';
+import getTranslationFormData from './getTranslationFormData.js';
 import getSimHtml from './getSimHtml.js';
 import getSimNames from './getSimNames.js';
 import getSimUrl from './getSimUrl.js';
@@ -35,7 +35,6 @@ app.use( express.static( staticAssetsPath ) );
 app.use( express.json() );
 
 // todo: remove when done
-// test getCommonTranslatedStringKeysAndStrings
 ( async () => {
   const simName = 'acid-base-solutions';
   const locale = 'es';
@@ -44,7 +43,7 @@ app.use( express.json() );
   const simHtml = await getSimHtml( simUrl );
   const stringKeysWithRepoName = getStringKeysWithRepoName( simHtml );
   const categorizedStringKeys = await getCategorizedStringKeys( simName, simNames, stringKeysWithRepoName );
-  const keysValuesAndRepos = await getKeysValuesAndRepos(
+  const keysValuesAndRepos = await getTranslationFormData(
     simName,
     locale,
     simNames,
