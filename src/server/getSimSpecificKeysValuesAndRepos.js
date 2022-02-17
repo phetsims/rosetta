@@ -72,8 +72,11 @@ const getSimSpecificKeysValuesAndRepos = async ( simName, locale, categorizedStr
         translatedValue = simSpecificTranslatedStringKeysAndStrings[ stringKey ].value;
       }
 
+      // strip out the dots to make it easier for the client to parse the translation form data
+      const stringKeyWithoutDots = stringKey.replaceAll( '.', '_DOT_' );
+
       // add the string key and its values to the sim-specific object
-      simSpecific[ stringKey ] = {
+      simSpecific[ stringKeyWithoutDots ] = {
         english: englishValue,
         translated: translatedValue
       };

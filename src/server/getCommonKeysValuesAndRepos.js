@@ -92,9 +92,12 @@ const getCommonKeysValuesAndRepos = async (
           translatedValue = commonTranslatedStringKeysAndStrings[ stringKey ].value;
         }
 
+        // strip out the dots to make it easier for the client to parse the translation form data
+        const stringKeyWithoutDots = stringKey.replaceAll( '.', '_DOT_' );
+
         // add the string key, its english value, translated value, and repo name to the common object
         if ( englishValue !== 'no longer used gooble' ) {
-          common[ stringKey ] = {
+          common[ stringKeyWithoutDots ] = {
             english: englishValue,
             translated: translatedValue,
             repo: repo
