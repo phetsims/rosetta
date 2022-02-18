@@ -6,10 +6,12 @@
  * @author Liam Mulhall
  */
 
-import config from './config.js';
-import { encode } from 'js-base64';
+// import config from './config.js';
+// import { encode } from 'js-base64';
+// import { Octokit } from '@octokit/rest';
+
 import logger from './logger.js';
-import { Octokit } from '@octokit/rest';
+import prepareTranslationForLongTermStorage from './prepareTranslationForLongTermStorage.js';
 
 /**
  * Save the translation to long-term storage.
@@ -17,38 +19,43 @@ import { Octokit } from '@octokit/rest';
  * @param translation - translation received from client
  */
 const storeTranslationLongTerm = async translation => {
-  logger.info( `storing ${translation.locale}/${translation.sim} translation in long-term storage` );
-  logger.info( JSON.stringify( translation, null, 2 ) );
-  try {
 
-    // make the translation a string and use base 64 encoding
-    const encodedTranslation = encode( JSON.stringify( translation, null, 2 ) );
+  const preparedTranslation = prepareTranslationForLongTermStorage( translation );
+  logger.info( JSON.stringify( preparedTranslation, null, 2 ) );
 
-    // push the translation to long-term storage
-    const octokit = new Octokit( {
-      auth: config.LIAM_BABEL_PAT
-    } );
-    const { data } = await octokit.repos.createOrUpdateFileContents( {
-      owner: 'liam-mulhall',
-      repo: 'babel',
-      path: 'test-translation-2.json',
-      message: 'test',
-      content: encodedTranslation,
-      committer: {
-        name: 'Liam',
-        email: 'dummy@dummy.com'
-      },
-      author: {
-        name: 'Liam',
-        email: 'dummy@dummy.com'
-      }
-    } );
-    logger.info( data );
-  }
-  catch( e ) {
-    logger.error( e );
-  }
-  logger.info( `stored ${translation.locale}/${translation.sim} translation in long-term storage` );
+  // todo: finish this when you're done preparing the translation for long-term storage
+  // logger.info( `storing ${translation.locale}/${translation.sim} translation in long-term storage` );
+  // logger.info( JSON.stringify( translation, null, 2 ) );
+  // try {
+  //
+  //   // make the translation a string and use base 64 encoding
+  //   const encodedTranslation = encode( JSON.stringify( translation, null, 2 ) );
+  //
+  //   // push the translation to long-term storage
+  //   const octokit = new Octokit( {
+  //     auth: config.LIAM_BABEL_PAT
+  //   } );
+  //   const { data } = await octokit.repos.createOrUpdateFileContents( {
+  //     owner: 'liam-mulhall',
+  //     repo: 'babel',
+  //     path: 'test-translation-2.json',
+  //     message: 'test',
+  //     content: encodedTranslation,
+  //     committer: {
+  //       name: 'Liam',
+  //       email: 'dummy@dummy.com'
+  //     },
+  //     author: {
+  //       name: 'Liam',
+  //       email: 'dummy@dummy.com'
+  //     }
+  //   } );
+  //   logger.info( data );
+  // }
+  // catch( e ) {
+  //   logger.error( e );
+  // }
+  // logger.info( `stored ${translation.locale}/${translation.sim} translation in long-term storage` );
 };
 
 export default storeTranslationLongTerm;
