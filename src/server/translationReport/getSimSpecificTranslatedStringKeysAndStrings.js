@@ -8,8 +8,8 @@
  */
 
 import axios from 'axios';
-import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
-import logger from './logger.js';
+import getTranslatedStringFileUrl from '../getTranslatedStringFileUrl.js';
+import logger from '../logger.js';
 
 /**
  * Return a list of ordered pairs where each ordered pair is a sim-specific string key followed by its value (its
