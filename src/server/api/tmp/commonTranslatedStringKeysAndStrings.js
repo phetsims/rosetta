@@ -1,7 +1,7 @@
 // Copyright 2021, University of Colorado Boulder
 
 import getCategorizedStringKeys from '../../getCategorizedStringKeys.js';
-import getCommonTranslatedStringKeysAndStrings from '../../getCommonTranslatedStringKeysAndStrings.js';
+import getCommonTranslatedStringKeysAndStrings from '../../translationReport/getCommonTranslatedStringKeysAndStrings.js';
 import getSimHtml from '../../getSimHtml.js';
 import getSimNames from '../../getSimNames.js';
 import getSimUrl from '../../getSimUrl.js';

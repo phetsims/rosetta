@@ -8,10 +8,10 @@
  */
 
 import axios from 'axios';
-import getCommonRepos from './getCommonRepos.js';
-import getRepoNameToStringKeys from './getRepoNameToStringKeys.js';
-import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
-import logger from './logger.js';
+import getCommonRepos from '../getCommonRepos.js';
+import getRepoNameToStringKeys from '../getRepoNameToStringKeys.js';
+import getTranslatedStringFileUrl from '../getTranslatedStringFileUrl.js';
+import logger from '../logger.js';
 
 /**
  * Return a list of ordered pairs where each ordered pair is a common translated string key followed by its value
