@@ -16,7 +16,7 @@ import makeTranslationFileContents from './makeTranslationFileContents.js';
  * @param {Object} translation - translation received from client
  * @returns {Object} - translated with an added dummy field
  */
-const prepareTranslationForLongTermStorage = translation => {
+const prepareTranslationForLongTermStorage = async translation => {
 
   logger.info( `preparing translation of ${translation.locale}/${translation.simName} for long-term storage` );
 
@@ -69,7 +69,7 @@ const prepareTranslationForLongTermStorage = translation => {
   // for each repo in the translation, make its translation file contents
   const preparedTranslation = {};
   for ( const repo of repos ) {
-    preparedTranslation[ repo ] = makeTranslationFileContents( repo, translation );
+    preparedTranslation[ repo ] = await makeTranslationFileContents( repo, translation );
   }
 
   // todo: take out when done
