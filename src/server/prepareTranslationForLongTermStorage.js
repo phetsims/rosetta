@@ -17,7 +17,7 @@ import logger from './logger.js';
  */
 const prepareTranslationForLongTermStorage = translation => {
 
-  /**
+  /*
    * We strip the dots out of the string keys and replace them with strings before we send translation form
    * data to the client. We do this because the dots cause the client to think there are more deeply nested
    * keys when there aren't. For example, a string key like
