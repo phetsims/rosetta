@@ -8,6 +8,7 @@
 
 import getStringKeysWithDots from './getStringKeysWithDots.js';
 import logger from './logger.js';
+import makeTranslationFileContents from './makeTranslationFileContents.js';
 
 /**
  * Return the translation with an added dummy field. (This function is obviously unfinished.)
@@ -62,7 +63,17 @@ const prepareTranslationForLongTermStorage = translation => {
     }
   }
 
+  // todo: take out when done
   logger.error( repos );
+
+  // for each repo in the translation, make its translation file contents
+  const preparedTranslation = {};
+  for ( const repo of repos ) {
+    preparedTranslation[ repo ] = makeTranslationFileContents( repo, translation );
+  }
+
+  // todo: take out when done
+  logger.error( JSON.stringify( preparedTranslation, null, 2 ) );
 
   logger.info( `prepared translation of ${translation.locale}/${translation.simName} for long-term storage` );
   return translation;
