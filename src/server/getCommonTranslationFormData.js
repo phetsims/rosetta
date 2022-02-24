@@ -121,7 +121,34 @@ const getCommonTranslationFormData = async (
           translatedValue = commonTranslatedStringKeysAndStrings[ stringKey ].value;
         }
 
-        // strip out the dots to make it easier for the client to parse the translation form data
+        /*
+         * This strips the dots out of the string keys and replaces them with strings. We do this because the dots cause
+         * the client to think there are more deeply nested keys when there aren't. For example, a string key like
+         *
+         * (A)
+         * "acid-base-solutions.title": {
+         *    "value": "Acid-Base Solutions"
+         * }
+         *
+         * would confuse the client. The client would think that it's looking for something like
+         *
+         * (B)
+         * "acid-base-solutions": {
+         *    "title": {
+         *      "value": "Acid-Base Solutions"
+         *    }
+         * }
+         *
+         * but (B) is obviously wrong. The below snippet makes (A) look like
+         *
+         * (C)
+         * "acid-base-solutions_DOT_title": {
+         *    "value": "Acid-Base Solutions"
+         * }
+         *
+         * and the translation form data is sent to the client as in (C). When we get the translation form data back from
+         * the client in a submission, we transform the data from (C) back to (A).
+         */
         const stringKeyWithoutDots = stringKey.replaceAll( '.', '_DOT_' );
 
         // add the string key, its english value, translated value, and repo name to the common object
