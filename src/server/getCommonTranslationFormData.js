@@ -20,13 +20,11 @@ import logger from './logger.js';
  *   stringKeyA: {
  *     english: "Foo",
  *     translated: "Faa",
- *     oldTranslated: "Faa",
  *     repo: "scenery-phet"
  *   },
  *   stringKeyB: {
  *     english: "Bar",
  *     translated: "Bur",
- *     oldTranslated: "Bur",
  *     repo: "joist"
  *   }
  *   ...
@@ -130,8 +128,7 @@ const getCommonTranslationFormData = async (
         if ( englishValue !== 'no longer used gooble' ) {
           common[ stringKeyWithoutDots ] = {
             english: englishValue,
-            translated: translatedValue,    // the user will be able to modify this value
-            oldTranslated: translatedValue, // the user won't be able to modify this value; it will be used for history
+            translated: translatedValue,
             repo: repo
           };
         }

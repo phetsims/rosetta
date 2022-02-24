@@ -18,12 +18,10 @@ import logger from './logger.js';
  *   stringKeyE: {
  *     english: "Bing",
  *     translated: "Bong",
- *     oldTranslated: "Bong",
  *   },
  *   stringKeyF: {
  *     english: "Ding",
  *     translated: "Dong",
- *     oldTranslated: "Dong",
  *   }
  *   ...
  * },
@@ -109,8 +107,7 @@ const getSimSpecificTranslationFormData = async (
       // add the string key and its values to the sim-specific object
       simSpecific[ stringKeyWithoutDots ] = {
         english: englishValue,
-        translated: translatedValue,   // the user will be able to modify this value
-        oldTranslated: translatedValue // the user won't be able to modify this value; it will be used for history
+        translated: translatedValue
       };
     }
   }
