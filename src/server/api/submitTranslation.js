@@ -21,7 +21,7 @@ import storeTranslationLongTerm from '../storeTranslationLongTerm.js';
 const submitTranslation = async ( req, res ) => {
   try {
     logger.info( `sending ${req.body.locale}/${req.body.simName} translation to be prepared for long-term storage` );
-    const preparedTranslation = prepareTranslationForLongTermStorage( req.body );
+    const preparedTranslation = await prepareTranslationForLongTermStorage( req.body );
 
     // todo: remove when done
     logger.error( JSON.stringify( preparedTranslation, null, 2 ) );
