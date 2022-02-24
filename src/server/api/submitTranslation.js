@@ -20,9 +20,13 @@ import storeTranslationLongTerm from '../storeTranslationLongTerm.js';
  */
 const submitTranslation = async ( req, res ) => {
   try {
-    logger.info( `sending ${req.body.locale}/${req.body.sim} translation to be prepared for long-term storage` );
+    logger.info( `sending ${req.body.locale}/${req.body.simName} translation to be prepared for long-term storage` );
     const preparedTranslation = prepareTranslationForLongTermStorage( req.body );
-    logger.info( `sending ${req.body.locale}/${req.body.sim} translation to be stored long-term` );
+
+    // todo: remove when done
+    logger.error( JSON.stringify( preparedTranslation, null, 2 ) );
+
+    logger.info( `sending ${req.body.locale}/${req.body.simName} translation to be stored long-term` );
     await storeTranslationLongTerm( preparedTranslation );
     res.send( 'translation submitted' );
   }
