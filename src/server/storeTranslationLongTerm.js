@@ -11,7 +11,6 @@
 // import { Octokit } from '@octokit/rest';
 
 import logger from './logger.js';
-import prepareTranslationForLongTermStorage from './prepareTranslationForLongTermStorage.js';
 
 /**
  * Save the translation to long-term storage.
@@ -20,8 +19,7 @@ import prepareTranslationForLongTermStorage from './prepareTranslationForLongTer
  */
 const storeTranslationLongTerm = async translation => {
 
-  const preparedTranslation = prepareTranslationForLongTermStorage( translation );
-  logger.info( JSON.stringify( preparedTranslation, null, 2 ) );
+  logger.info( `storing translation of ${translation.locale}/${translation.simName} long-term` );
 
   // todo: finish this when you're done preparing the translation for long-term storage
   // logger.info( `storing ${translation.locale}/${translation.sim} translation in long-term storage` );
@@ -56,6 +54,8 @@ const storeTranslationLongTerm = async translation => {
   //   logger.error( e );
   // }
   // logger.info( `stored ${translation.locale}/${translation.sim} translation in long-term storage` );
+
+  logger.info( `stored translation of ${translation.locale}/${translation.simName} long-term` );
 };
 
 export default storeTranslationLongTerm;

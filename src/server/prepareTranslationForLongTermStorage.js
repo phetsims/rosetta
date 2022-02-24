@@ -17,6 +17,8 @@ import logger from './logger.js';
  */
 const prepareTranslationForLongTermStorage = translation => {
 
+  logger.info( `preparing translation of ${translation.locale}/${translation.simName} for long-term storage` );
+
   /*
    * We strip the dots out of the string keys and replace them with strings before we send translation form
    * data to the client. We do this because the dots cause the client to think there are more deeply nested
@@ -50,6 +52,19 @@ const prepareTranslationForLongTermStorage = translation => {
   translation.translationFormData.simSpecific = getStringKeysWithDots( translation.translationFormData.simSpecific );
   translation.translationFormData.common = getStringKeysWithDots( translation.translationFormData.common );
 
+  // get a list of repos whose strings are in the translation
+  const repos = [ translation.simName ];
+  const commonData = translation.translationFormData.common;
+  for ( const stringKey of Object.keys( commonData ) ) {
+    const commonRepo = commonData[ stringKey ].repo;
+    if ( !repos.includes( commonRepo ) ) {
+      repos.push( commonRepo );
+    }
+  }
+
+  logger.error( repos );
+
+  logger.info( `prepared translation of ${translation.locale}/${translation.simName} for long-term storage` );
   return translation;
 };
 
