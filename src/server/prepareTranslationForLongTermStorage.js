@@ -63,20 +63,16 @@ const prepareTranslationForLongTermStorage = async translation => {
     }
   }
 
-  // todo: take out when done
-  logger.error( repos );
-
   // for each repo in the translation, make its translation file contents
   const preparedTranslation = {};
   for ( const repo of repos ) {
+
+    // we will iterate through each repo and store the translation file contents long-term
     preparedTranslation[ repo ] = await makeTranslationFileContents( repo, translation );
   }
 
-  // todo: take out when done
-  logger.error( JSON.stringify( preparedTranslation, null, 2 ) );
-
   logger.info( `prepared translation of ${translation.locale}/${translation.simName} for long-term storage` );
-  return translation;
+  return preparedTranslation;
 };
 
 export default prepareTranslationForLongTermStorage;
