@@ -14,7 +14,7 @@ import makeTranslationFileContents from './makeTranslationFileContents.js';
  * Return an object with the exact translation file contents for each repo in a given translation.
  *
  * @param {Object} translation - translation received from client
- * @returns {Object} - translated with an added dummy field
+ * @returns {Object} - exact translation file contents for each repo in a translation
  */
 const prepareTranslationForLongTermStorage = async translation => {
 
@@ -64,11 +64,15 @@ const prepareTranslationForLongTermStorage = async translation => {
   }
 
   // for each repo in the translation, make its translation file contents
-  const preparedTranslation = {};
+  const preparedTranslation = {
+    simName: translation.simName,
+    locale: translation.locale,
+    translationFileContents: {}
+  };
   for ( const repo of repos ) {
 
     // we will iterate through each repo and store the translation file contents long-term
-    preparedTranslation[ repo ] = await makeTranslationFileContents( repo, translation );
+    preparedTranslation.translationFileContents[ repo ] = await makeTranslationFileContents( repo, translation );
   }
 
   logger.info( `prepared translation of ${translation.locale}/${translation.simName} for long-term storage` );
