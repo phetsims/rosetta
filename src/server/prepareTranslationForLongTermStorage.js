@@ -11,7 +11,7 @@ import logger from './logger.js';
 import makeTranslationFileContents from './makeTranslationFileContents.js';
 
 /**
- * Return the translation with an added dummy field. (This function is obviously unfinished.)
+ * Return an object with the exact translation file contents for each repo in a given translation.
  *
  * @param {Object} translation - translation received from client
  * @returns {Object} - translated with an added dummy field
