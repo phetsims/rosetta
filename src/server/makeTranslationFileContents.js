@@ -19,6 +19,8 @@ import logger from './logger.js';
  */
 const makeTranslationFileContents = async ( repo, translation ) => {
 
+  logger.info( `making translation file contents for ${repo}` );
+
   // the contents of each file we'll store long-term separated by repo
   const translationFileContents = {};
 
@@ -81,6 +83,8 @@ const makeTranslationFileContents = async ( repo, translation ) => {
       history: newHistory
     };
   }
+
+  logger.info( `made translation file contents for ${repo}; returning them` );
 
   return translationFileContents;
 };
