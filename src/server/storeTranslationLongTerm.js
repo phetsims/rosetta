@@ -34,10 +34,10 @@ const storeTranslationLongTerm = async preparedTranslation => {
       } );
 
       // save translation file contents to long-term storage
-      const { data } = await octokit.repos.createOrUpdateFileContents( {
+      await octokit.repos.createOrUpdateFileContents( {
         owner: 'liam-mulhall',
         repo: 'babel',
-        path: `test-${preparedTranslation.simName}-${preparedTranslation.locale}-${repo}-translation.json`,
+        path: `${repo}/${repo}-strings_${preparedTranslation.locale}.json`,
         message: 'test',
         content: encodedTranslationFileContents,
         committer: {
@@ -49,46 +49,11 @@ const storeTranslationLongTerm = async preparedTranslation => {
           email: 'dummy@dummy.com'
         }
       } );
-      logger.error( data );
     }
     catch( e ) {
       logger.error( e );
     }
   }
-
-  // todo: finish this when you're done preparing the translation for long-term storage
-  // logger.info( `storing ${translation.locale}/${translation.sim} translation in long-term storage` );
-  // logger.info( JSON.stringify( translation, null, 2 ) );
-  // try {
-  //
-  //   // make the translation a string and use base 64 encoding
-  //   const encodedTranslation = encode( JSON.stringify( translation, null, 2 ) );
-  //
-  //   // push the translation to long-term storage
-  //   const octokit = new Octokit( {
-  //     auth: config.LIAM_BABEL_PAT
-  //   } );
-  //   const { data } = await octokit.repos.createOrUpdateFileContents( {
-  //     owner: 'liam-mulhall',
-  //     repo: 'babel',
-  //     path: 'test-translation-2.json',
-  //     message: 'test',
-  //     content: encodedTranslation,
-  //     committer: {
-  //       name: 'Liam',
-  //       email: 'dummy@dummy.com'
-  //     },
-  //     author: {
-  //       name: 'Liam',
-  //       email: 'dummy@dummy.com'
-  //     }
-  //   } );
-  //   logger.info( data );
-  // }
-  // catch( e ) {
-  //   logger.error( e );
-  // }
-  // logger.info( `stored ${translation.locale}/${translation.sim} translation in long-term storage` );
 
   logger.info( `stored translation of ${preparedTranslation.locale}/${preparedTranslation.simName} long-term` );
 };
