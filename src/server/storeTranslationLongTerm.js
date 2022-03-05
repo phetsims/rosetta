@@ -33,11 +33,32 @@ const storeTranslationLongTerm = async preparedTranslation => {
         auth: config.LIAM_BABEL_PAT
       } );
 
+      const translationFilePath = `${repo}/${repo}-strings_${preparedTranslation.locale}.json`;
+
+      // if a translation file exists for the repo/locale we're dealing with, get its sha
+      let translationFileSha = null;
+      try {
+
+        // todo: change 'liam-mulhall' to phetsims when done
+        const translationFileRes = await octokit.request(
+          `GET /repos/liam-mulhall/babel/contents/${translationFilePath}`
+        );
+        translationFileSha = translationFileRes.data.sha;
+        logger.warn( translationFileSha );
+      }
+      catch( e ) {
+        if ( e.response.status === 404 ) {
+          logger.info( `no translation file exists for ${repo}/${preparedTranslation.locale}` );
+        }
+        logger.error( e );
+      }
+
+      // todo: change params when done
       // save translation file contents to long-term storage
-      await octokit.repos.createOrUpdateFileContents( {
+      const params = {
         owner: 'liam-mulhall',
         repo: 'babel',
-        path: `${repo}/${repo}-strings_${preparedTranslation.locale}.json`,
+        path: translationFilePath,
         message: 'test',
         content: encodedTranslationFileContents,
         committer: {
@@ -48,7 +69,11 @@ const storeTranslationLongTerm = async preparedTranslation => {
           name: 'Liam',
           email: 'dummy@dummy.com'
         }
-      } );
+      };
+      if ( translationFileSha ) {
+        params.sha = translationFileSha;
+      }
+      await octokit.repos.createOrUpdateFileContents( params );
     }
     catch( e ) {
       logger.error( e );
