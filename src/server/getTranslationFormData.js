@@ -1,3 +1,4 @@
+/* eslint-disable */
 // Copyright 2022, University of Colorado Boulder
 
 /**
@@ -8,6 +9,8 @@
  * @author Liam Mulhall
  */
 
+import axios from 'axios';
+import config from './config.js';
 import getCommonTranslationFormData from './getCommonTranslationFormData.js';
 import getSimSpecificTranslationFormData from './getSimSpecificTranslationFormData.js';
 import logger from './logger.js';
@@ -63,6 +66,25 @@ const getTranslationFormData = async (
   categorizedStringKeys
 ) => {
   logger.info( 'getting translation form data' );
+
+  // try to get a saved translation from the short-term storage database
+  try {
+    let userId;
+    if ( config.ENVIRONMENT === 'development' ) {
+      userId = config.LOCAL_USER_ID;
+    }
+    else {
+      const userDataRes = await axios.get( `${config.SERVER_URL}/services/check-login` );
+      const userData = userDataRes.data;
+      userId = userData.userId;
+    }
+
+    // todo: check database for userId/sim/locale translation
+  }
+  catch( e ) {
+    logger.error( e );
+  }
+
   console.time( 'getTranslationFormData' );
   const translationFormData = {
     simSpecific: {},
