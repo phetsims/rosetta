@@ -153,7 +153,7 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
     }
   }
 
-  // we will check for empty contents before we store a translation long-term
+  // we will check for null contents before we store a translation long-term
   if ( JSON.stringify( translationFileContents, null, 2 ) === JSON.stringify( oldTranslationFile, null, 2 ) ) {
     logger.info( `no translations in ${repo}; setting translation file contents to null` );
     return null;
