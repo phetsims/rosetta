@@ -24,10 +24,15 @@ const storeTranslationShortTerm = async translation => {
     await client.connect();
     const database = client.db( config.DB_NAME );
     const shortTermStringStorageCollection = database.collection( config.DB_SHORT_TERM_STORAGE_COLLECTION_NAME );
-    const oldSavedTranslation = await shortTermStringStorageCollection.find( { userId: translation.userId } );
+    const filter = {
+      userId: translation.userId,
+      simName: translation.simName,
+      locale: translation.locale
+    };
+    const oldSavedTranslation = await shortTermStringStorageCollection.find( filter );
     if ( oldSavedTranslation ) {
       logger.info( `old saved ${translation.locale}/${translation.simName} translation(s) with same user id extant; deleting them` );
-      await shortTermStringStorageCollection.deleteMany( { userId: translation.userId } );
+      await shortTermStringStorageCollection.deleteMany( filter );
     }
     logger.info( 'inserting new translation' );
     await shortTermStringStorageCollection.insertOne( translation );
