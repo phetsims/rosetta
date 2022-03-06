@@ -11,21 +11,26 @@ import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
 import logger from './logger.js';
 
 /**
- * Return an object that has the exact contents of the translation file for the given repo and translation.
+ * Return an object that has the exact contents of the translation file for the given repo and translation. If the
+ * object matches the contents of the existing translation file, an empty object is returned.
+ *
+ * The code in this file isn't the DRYest (don't repeat yourself) code in the world, but it's easier (in my opinion) to
+ * read and debug than it used to be when it was DRY. (Its initial incarnation was DRY, but it was buggy.) If a future
+ * maintainer is so inclined, it can be made DRYer, but covering edge cases is a bit tricky.
  *
  * @param {String} repo - repo we're making translation file contents for
  * @param {Object} translation - translation received from the client
  * @returns {Promise<Object>} - translation file contents for the given repo
  */
-const makeTranslationFileContents = async ( repo, translation ) => {
+const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
 
   logger.info( `making translation file contents for ${repo}` );
 
   // the contents of each file we'll store long-term separated by repo
   const translationFileContents = {};
 
-  // data will be different depending on whether the repo is the sim's repo or a common repo
-  let data = {};
+  // will be different depending on whether the repo is the sim's repo or a common repo
+  let translationDataForRepo = {};
 
   // get old translation file if one exists
   const oldTranslationFileUrl = getTranslatedStringFileUrl( repo, translation.locale );
@@ -45,9 +50,9 @@ const makeTranslationFileContents = async ( repo, translation ) => {
     }
   }
 
-  // determine what data will be
+  // determine what translation data for repo will be
   if ( repo === translation.simName ) {
-    data = translation.translationFormData.simSpecific;
+    translationDataForRepo = translation.translationFormData.simSpecific;
   }
   else {
     const translatedData = translation.translationFormData.common;
@@ -55,7 +60,7 @@ const makeTranslationFileContents = async ( repo, translation ) => {
     // only get data associated with the given repo
     for ( const stringKey of Object.keys( translatedData ) ) {
       if ( repo === translatedData[ stringKey ].repo ) {
-        data[ stringKey ] = translatedData[ stringKey ];
+        translationDataForRepo[ stringKey ] = translatedData[ stringKey ];
       }
     }
   }
@@ -66,8 +71,8 @@ const makeTranslationFileContents = async ( repo, translation ) => {
     for ( const stringKey of Object.keys( oldTranslationFile ) ) {
 
       let stringWasTranslated = false;
-      if ( data[ stringKey ] ) {
-        stringWasTranslated = oldTranslationFile[ stringKey ].value !== data[ stringKey ].translated;
+      if ( translationDataForRepo[ stringKey ] ) {
+        stringWasTranslated = oldTranslationFile[ stringKey ].value !== translationDataForRepo[ stringKey ].translated;
       }
 
       if ( stringWasTranslated ) {
@@ -77,7 +82,7 @@ const makeTranslationFileContents = async ( repo, translation ) => {
           userId: translation.userId,
           timestamp: translation.timestamp,
           oldValue: oldTranslationFile[ stringKey ].value,
-          newValue: data[ stringKey ].translated,
+          newValue: translationDataForRepo[ stringKey ].translated,
           explanation: null // this is no longer used, but for some reason we keep it around
         };
 
@@ -86,7 +91,7 @@ const makeTranslationFileContents = async ( repo, translation ) => {
 
         // add translated value and history to translation file
         translationFileContents[ stringKey ] = {
-          value: data[ stringKey ].translated,
+          value: translationDataForRepo[ stringKey ].translated,
           history: newHistory
         };
       }
@@ -101,7 +106,7 @@ const makeTranslationFileContents = async ( repo, translation ) => {
     // iterate through string keys from the translation belonging to the repo
     // if they are in the old translation file, they've already been updated
     // otherwise, add them to the new translation file contents
-    for ( const stringKey of Object.keys( data ) ) {
+    for ( const stringKey of Object.keys( translationDataForRepo ) ) {
       if ( oldTranslationFile[ stringKey ] ) {
         logger.verbose( `string key ${stringKey} has already been updated; ignoring it` );
       }
@@ -112,13 +117,13 @@ const makeTranslationFileContents = async ( repo, translation ) => {
           userId: translation.userId,
           timestamp: translation.timestamp,
           oldValue: '',
-          newValue: data[ stringKey ].translated,
+          newValue: translationDataForRepo[ stringKey ].translated,
           explanation: null // this is no longer used, but for some reason we keep it around
         };
 
         // add translated value and history to translation file
         translationFileContents[ stringKey ] = {
-          value: data[ stringKey ].translated,
+          value: translationDataForRepo[ stringKey ].translated,
           history: [ newHistoryEntry ]
         };
       }
@@ -129,27 +134,30 @@ const makeTranslationFileContents = async ( repo, translation ) => {
   // translation file doesn't exist
   else {
 
-    for ( const stringKey of Object.keys( data ) ) {
+    for ( const stringKey of Object.keys( translationDataForRepo ) ) {
 
       // populate history object
       const newHistoryEntry = {
         userId: translation.userId,
         timestamp: translation.timestamp,
         oldValue: '',
-        newValue: data[ stringKey ].translated,
+        newValue: translationDataForRepo[ stringKey ].translated,
         explanation: null // this is no longer used, but for some reason we keep it around
       };
 
       // add translated value and history to translation file
       translationFileContents[ stringKey ] = {
-        value: data[ stringKey ].translated,
+        value: translationDataForRepo[ stringKey ].translated,
         history: [ newHistoryEntry ]
       };
     }
-
   }
 
+  // we will check for empty contents before we store a translation long-term
+  if ( translationFileContents === oldTranslationFile ) {
+    return {};
+  }
   return translationFileContents;
 };
 
-export default makeTranslationFileContents;
+export default makeTranslationFileContentsForRepo;
