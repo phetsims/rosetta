@@ -158,6 +158,8 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
     logger.info( `no translations in ${repo}; setting translation file contents to null` );
     return null;
   }
+
+  logger.info( `made translation file contents for ${repo}; returning them` );
   return translationFileContents;
 };
 

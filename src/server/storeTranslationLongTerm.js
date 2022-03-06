@@ -28,6 +28,8 @@ const storeTranslationLongTerm = async preparedTranslation => {
     if ( contents[ repo ] ) {
       try {
 
+        logger.info( `storing translation of strings in ${repo} long-term` );
+
         // make the translation file contents a string and use base 64 encoding
         const encodedTranslationFileContents = encode( JSON.stringify( contents[ repo ], null, 2 ) );
 
@@ -77,6 +79,8 @@ const storeTranslationLongTerm = async preparedTranslation => {
           params.sha = translationFileSha;
         }
         await octokit.repos.createOrUpdateFileContents( params );
+
+        logger.info( `stored translation of strings in ${repo} long-term` );
       }
       catch( e ) {
         logger.error( e );
