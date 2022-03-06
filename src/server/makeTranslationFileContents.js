@@ -60,31 +60,94 @@ const makeTranslationFileContents = async ( repo, translation ) => {
     }
   }
 
-  // make translation file contents
-  for ( const stringKey of Object.keys( data ) ) {
+  if ( oldTranslationFile ) {
 
-    // populate history object
-    const newHistoryEntry = {
-      userId: translation.userId,
-      timestamp: translation.timestamp,
-      oldValue: oldTranslationFile && oldTranslationFile[ stringKey ]
-                ? oldTranslationFile[ stringKey ].value : '',
-      newValue: data[ stringKey ].translated,
-      explanation: null // this is no longer used, but for some reason we keep it around
-    };
+    // iterate through the string keys in the translation file and either update them or leave them as they are
+    for ( const stringKey of Object.keys( oldTranslationFile ) ) {
 
-    // add the history object to the history array if it exists, otherwise make a new one with our history object
-    const newHistory = oldTranslationFile && oldTranslationFile[ stringKey ]
-                       ? oldTranslationFile[ stringKey ].history.concat( [ newHistoryEntry ] ) : [ newHistoryEntry ];
+      let stringWasTranslated = false;
+      if ( data[ stringKey ] ) {
+        stringWasTranslated = oldTranslationFile[ stringKey ].value !== data[ stringKey ].translated;
+      }
 
-    // add translated value and history to translation file
-    translationFileContents[ stringKey ] = {
-      value: data[ stringKey ].translated,
-      history: newHistory
-    };
+      if ( stringWasTranslated ) {
+
+        // populate history object
+        const newHistoryEntry = {
+          userId: translation.userId,
+          timestamp: translation.timestamp,
+          oldValue: oldTranslationFile[ stringKey ].value,
+          newValue: data[ stringKey ].translated,
+          explanation: null // this is no longer used, but for some reason we keep it around
+        };
+
+        // add the history entry to the history array
+        const newHistory = oldTranslationFile[ stringKey ].history.concat( [ newHistoryEntry ] );
+
+        // add translated value and history to translation file
+        translationFileContents[ stringKey ] = {
+          value: data[ stringKey ].translated,
+          history: newHistory
+        };
+      }
+      else {
+
+        // string is unchanged
+        translationFileContents[ stringKey ] = oldTranslationFile[ stringKey ];
+
+      }
+    }
+
+    // iterate through string keys from the translation belonging to the repo
+    // if they are in the old translation file, they've already been updated
+    // otherwise, add them to the new translation file contents
+    for ( const stringKey of Object.keys( data ) ) {
+      if ( oldTranslationFile[ stringKey ] ) {
+        logger.verbose( `string key ${stringKey} has already been updated; ignoring it` );
+      }
+      else {
+
+        // populate history object
+        const newHistoryEntry = {
+          userId: translation.userId,
+          timestamp: translation.timestamp,
+          oldValue: '',
+          newValue: data[ stringKey ].translated,
+          explanation: null // this is no longer used, but for some reason we keep it around
+        };
+
+        // add translated value and history to translation file
+        translationFileContents[ stringKey ] = {
+          value: data[ stringKey ].translated,
+          history: [ newHistoryEntry ]
+        };
+      }
+    }
+
   }
 
-  logger.info( `made translation file contents for ${repo}; returning them` );
+  // translation file doesn't exist
+  else {
+
+    for ( const stringKey of Object.keys( data ) ) {
+
+      // populate history object
+      const newHistoryEntry = {
+        userId: translation.userId,
+        timestamp: translation.timestamp,
+        oldValue: '',
+        newValue: data[ stringKey ].translated,
+        explanation: null // this is no longer used, but for some reason we keep it around
+      };
+
+      // add translated value and history to translation file
+      translationFileContents[ stringKey ] = {
+        value: data[ stringKey ].translated,
+        history: [ newHistoryEntry ]
+      };
+    }
+
+  }
 
   return translationFileContents;
 };
