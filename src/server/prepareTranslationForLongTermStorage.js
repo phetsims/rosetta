@@ -8,7 +8,7 @@
 
 import getStringKeysWithDots from './getStringKeysWithDots.js';
 import logger from './logger.js';
-import makeTranslationFileContents from './makeTranslationFileContents.js';
+import makeTranslationFileContentsForRepo from './makeTranslationFileContentsForRepo.js';
 
 /**
  * Return an object with the exact translation file contents for each repo in a given translation.
@@ -72,7 +72,7 @@ const prepareTranslationForLongTermStorage = async translation => {
   for ( const repo of repos ) {
 
     // we will iterate through each repo and store the translation file contents long-term
-    preparedTranslation.translationFileContents[ repo ] = await makeTranslationFileContents( repo, translation );
+    preparedTranslation.translationFileContents[ repo ] = await makeTranslationFileContentsForRepo( repo, translation );
   }
 
   logger.info( `prepared translation of ${translation.locale}/${translation.simName} for long-term storage` );
