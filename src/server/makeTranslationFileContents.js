@@ -75,7 +75,7 @@ const makeTranslationFileContents = async ( repo, translation ) => {
 
     // add the history object to the history array if it exists, otherwise make a new one with our history object
     const newHistory = oldTranslationFile && oldTranslationFile[ stringKey ]
-                       ? oldTranslationFile[ stringKey ].history.push( newHistoryEntry ) : [ newHistoryEntry ];
+                       ? oldTranslationFile[ stringKey ].history.concat( [ newHistoryEntry ] ) : [ newHistoryEntry ];
 
     // add translated value and history to translation file
     translationFileContents[ stringKey ] = {
