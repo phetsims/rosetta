@@ -12,7 +12,7 @@ import LocaleAndSimForm from './LocaleAndSimForm.js';
 import Navbar from './Navbar.js';
 import React from 'react';
 import TranslationForm from './TranslationForm.js';
-import TranslationStatistics from './TranslationStatistics.js';
+import TranslationReport from './TranslationReport.js';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 /**
@@ -29,7 +29,7 @@ const RosettaRoutes = () => {
       <div className='container'>
         <Routes>
           <Route path='/translate' element={<LocaleAndSimForm/>}/>
-          <Route path='/translate/statistics' element={<TranslationStatistics/>}/>
+          <Route path='/translate/report' element={<TranslationReport/>}/>
           <Route path='/translate/help' element={<Help/>}/>
           <Route path='/translate/:locale/:simName' element={<TranslationForm/>}/>
         </Routes>
