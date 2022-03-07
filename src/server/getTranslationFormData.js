@@ -92,7 +92,9 @@ const getTranslationFormData = async (
     const savedTranslation = await shortTermStringStorageCollection.findOne( filter );
     if ( savedTranslation ) {
 
+      // todo: remove when done
       logger.warn( JSON.stringify( savedTranslation, null, 2 ) );
+
       logger.info( 'found saved translation; returning it' );
 
       // noinspection JSValidateTypes
