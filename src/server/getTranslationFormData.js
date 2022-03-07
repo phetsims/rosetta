@@ -1,9 +1,10 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * Export a function that gets a simulation's string keys, the English value for the string key, the translated value
- * for the string key, and the repo name for the string key if it is a common string key. (Sim-specific string keys
- * don't need a repo name field because it will be obvious to the caller of the function what the sim repo is.)
+ * Export a function that first checks for a saved translation and if it can't find one gets a simulation's string keys,
+ * the English value for the string key, the translated value for the string key, and the repo name for the string key
+ * if it is a common string key. (Sim-specific string keys don't need a repo name field because it will be obvious to
+ * the caller of the function what the sim repo is.)
  *
  * @author Liam Mulhall
  */
@@ -18,7 +19,7 @@ import { MongoClient } from 'mongodb';
 const client = new MongoClient( config.DB_URI );
 
 /*
- * We want to return an object that looks like:
+ * If we can't find a saved translation, we want to return an object that looks like:
  *
  * {
  *   common: {
@@ -49,8 +50,9 @@ const client = new MongoClient( config.DB_URI );
  */
 
 /**
- * Return an object like the one above. This object is used to render the translation form. The repo fields are used by
- * the server when it submits a translation to long-term storage. The repos are not used by the client.
+ * Check for a saved translation and if one isn't found return an object like the one above. This object is used to
+ * render the translation form. The repo fields are used by the server when it submits a translation to long-term
+ * storage. The repos are not used by the client. If a saved translation is found, we simply return that.
  *
  * @param {String} simName - sim name
  * @param {String} locale - two-letter ISO 639-1 locale code, e.g. es for Spanish
