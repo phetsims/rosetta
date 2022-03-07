@@ -49,7 +49,6 @@ const storeTranslationLongTerm = async preparedTranslation => {
             `GET /repos/liam-mulhall/babel/contents/${translationFilePath}`
           );
           translationFileSha = translationFileRes.data.sha;
-          logger.warn( translationFileSha );
         }
         catch( e ) {
           if ( e.response.status === 404 ) {
