@@ -14,6 +14,9 @@ import config from './config.js';
 import getCommonTranslationFormData from './getCommonTranslationFormData.js';
 import getSimSpecificTranslationFormData from './getSimSpecificTranslationFormData.js';
 import logger from './logger.js';
+import { MongoClient } from 'mongodb';
+
+const client = new MongoClient( config.DB_URI );
 
 /*
  * We want to return an object that looks like:
@@ -78,14 +81,32 @@ const getTranslationFormData = async (
       const userData = userDataRes.data;
       userId = userData.userId;
     }
+    await client.connect();
+    const database = client.db( config.DB_NAME );
+    const shortTermStringStorageCollection = database.collection( config.DB_SHORT_TERM_STORAGE_COLLECTION_NAME );
+    const filter = {
+      userId: parseInt( userId, 10 ),
+      simName: simName,
+      locale: locale
+    };
+    const savedTranslation = await shortTermStringStorageCollection.findOne( filter );
+    if ( savedTranslation ) {
 
-    // todo: check database for userId/sim/locale translation
-    // todo: remember to enable eslint for this file when done
+      logger.warn( JSON.stringify( savedTranslation, null, 2 ) );
+      logger.info( 'found saved translation; returning it' );
+
+      // noinspection JSValidateTypes
+      return savedTranslation;
+    }
   }
   catch( e ) {
     logger.error( e );
   }
+  finally {
+    await client.close();
+  }
 
+  // otherwise, get translation form data the normal way
   console.time( 'getTranslationFormData' );
   const translationFormData = {
     simSpecific: {},
