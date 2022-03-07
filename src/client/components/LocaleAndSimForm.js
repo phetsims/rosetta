@@ -37,7 +37,7 @@ const LocaleAndSimForm = () => {
         onSubmit={values => {
           alert( JSON.stringify( values, null, 2 ) );
 
-          {/* we navigate the user to the translation page when they submit the form */}
+          {/* navigate the user to the translation page for the locale/sim they selected when they submit */}
           navigate( `/translate/${values.locale}/${values.simName}` );
         }}
       >

@@ -1,44 +1,31 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * Placeholder for translation statistics.
+ * We define the translation report for a given locale.
  *
  * @author Liam Mulhall
  */
 
-import LocaleSelect from './LocaleSelect.js';
 import React from 'react';
-import { Field, Form, Formik } from 'formik';
+import { useParams } from 'react-router-dom';
 
 /**
- * This component is a placeholder for what will eventually be the translation statistics component.
+ * This component allows a user to see a translation report for a given locale (statistics about translations, e.g.
+ * number of strings translated, total number of strings, etc.) and allows them to navigate to any of the simulations
+ * to translate them.
  *
  * @returns {JSX.Element}
  * @constructor
  */
 const TranslationReport = () => {
 
+  // grab the query parameters for later use
+  const params = useParams();
+
   return (
     <div>
-      <h1>Select Locale</h1>
-      <Formik
-        initialValues={{ locale: 'ab' }}
-        onSubmit={values => {
-          alert( JSON.stringify( values, null, 2 ) );
-          console.log( 'hi' );
-        }}
-      >
-        <Form>
-          <div className='mt-2'>
-            <Field name='locale' component={LocaleSelect}/>
-          </div>
-          <div className='mt-2'>
-            <button type='submit' className='btn btn-primary'>
-              Get Translation Report
-            </button>
-          </div>
-        </Form>
-      </Formik>
+      <h1>Translation Report</h1>
+      <h2 className='text-muted'>Locale: {params.locale}</h2>
     </div>
   );
 };
