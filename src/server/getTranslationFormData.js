@@ -1,4 +1,3 @@
-/* eslint-disable */
 // Copyright 2022, University of Colorado Boulder
 
 /**
@@ -73,6 +72,8 @@ const getTranslationFormData = async (
   // try to get a saved translation from the short-term storage database
   try {
 
+    logger.info( 'checking for saved translation' );
+
     // get user id; depends on whether we're running on localhost or on a server
     let userId;
     if ( config.ENVIRONMENT === 'development' ) {
@@ -101,6 +102,7 @@ const getTranslationFormData = async (
       // noinspection JSValidateTypes
       return savedTranslation.translationFormData;
     }
+    logger.info( 'no saved translation found' );
   }
   catch( e ) {
     logger.error( e );
