@@ -72,6 +72,8 @@ const getTranslationFormData = async (
 
   // try to get a saved translation from the short-term storage database
   try {
+
+    // get user id; depends on whether we're running on localhost or on a server
     let userId;
     if ( config.ENVIRONMENT === 'development' ) {
       userId = config.LOCAL_USER_ID;
@@ -81,6 +83,8 @@ const getTranslationFormData = async (
       const userData = userDataRes.data;
       userId = userData.userId;
     }
+
+    // try to get translation
     await client.connect();
     const database = client.db( config.DB_NAME );
     const shortTermStringStorageCollection = database.collection( config.DB_SHORT_TERM_STORAGE_COLLECTION_NAME );
