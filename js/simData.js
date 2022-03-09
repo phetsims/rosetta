@@ -18,7 +18,7 @@ const winston = require( 'winston' );
 // constants
 const CACHED_DATA_VALID_TIME = 1800; // This is 1.8 seconds in milliseconds.
 const PRODUCTION_SERVER_URL = global.config.productionServerURL;
-const METADATA_URL = `${PRODUCTION_SERVER_URL}/services/metadata/1.2/simulations?format=json&type=html&include-unpublished=true&summary`;
+const METADATA_URL = `${PRODUCTION_SERVER_URL}/services/metadata/1.3/simulations?format=json&type=html&include-unpublished=true&summary`;
 const METADATA_REQUEST_OPTIONS = {
   auth: {
     username: 'token',
@@ -78,18 +78,23 @@ async function updateSimInfo() {
         const simName = simulationInfo.name;
         const translationLocales = [];
         let englishTitle = '';
-        simulationInfo.localizedSimulations.forEach( localizedSimData => {
-          translationLocales.push( localizedSimData.locale );
-          if ( localizedSimData.locale === 'en' ) {
-            englishTitle = localizedSimData.title;
-          }
-        } );
 
+        // Make a list of the translated locales for this sim and grab the English title.
+        for ( const [ locale, value ] of Object.entries( simulationInfo.localizedSimulations ) ) {
+          translationLocales.push( locale );
+          if ( locale === 'en' ) {
+            englishTitle = value.title;
+          }
+        }
+
+        // Populate the simulation information object for this simulation.  This contains the information needed by the
+        // translation utility and nothing else.
         simInfoObject[ simName ] = {
           englishTitle: englishTitle,
           simUrl: `${PRODUCTION_SERVER_URL}/sims/html/${simName}/latest/${simName}_en.html`,
           translationLocales: translationLocales,
           visible: simulationInfo.visible,
+          isPrototype: simulationInfo.isPrototype,
           version: projectInfo.version.string
         };
       } );
@@ -177,7 +182,7 @@ module.exports = {
     if ( !includeUnpublished ) {
       const simNamesToExclude = [];
       simNames.forEach( sim => {
-        if ( !simInfoObject[ sim ].visible ) {
+        if ( !simInfoObject[ sim ].visible && !simInfoObject[ sim ].isPrototype ) {
           simNamesToExclude.push( sim );
         }
       } );
@@ -199,7 +204,7 @@ module.exports = {
     await checkAndUpdateSimInfo();
     const simInfoArray = [];
     _.keys( simInfoObject ).forEach( projectName => {
-      if ( simInfoObject[ projectName ].visible || includeUnpublished ) {
+      if ( simInfoObject[ projectName ].visible || simInfoObject[ projectName ].isPrototype || includeUnpublished ) {
         simInfoArray.push( {
           projectName: projectName,
           simTitle: simInfoObject[ projectName ].englishTitle,
