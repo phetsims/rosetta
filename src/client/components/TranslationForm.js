@@ -118,6 +118,16 @@ const TranslationForm = () => {
           onSubmit={handleSubmit}
         >
           <Form>
+            <div className='mt-2'>
+              <button type='submit' data-flag='save' className='btn btn-primary'>
+                Save Translation
+              </button>
+            </div>
+            <div className='mt-2'>
+              <button type='submit' data-flag='submit' className='btn btn-primary'>
+                Submit Translation
+              </button>
+            </div>
             <TranslationTables translationFormData={translationFormData}/>
             <div className='mt-2'>
               <button type='submit' data-flag='save' className='btn btn-primary'>
