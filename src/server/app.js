@@ -1,6 +1,6 @@
 // Copyright 2021-2022, University of Colorado Boulder
 
-import testTranslation from './api/testTranslation.js';
+import testTranslation from './testTranslation/testTranslation.js';
 import commonEnglishStringKeysAndStrings from './api/tmp/commonEnglishStringKeysAndStrings.js';
 import commonTranslatedStringKeysAndStrings from './api/tmp/commonTranslatedStringKeysAndStrings.js';
 import config from './config.js';
