@@ -1,5 +1,6 @@
 // Copyright 2021-2022, University of Colorado Boulder
 
+import testTranslation from './api/testTranslation.js';
 import commonEnglishStringKeysAndStrings from './api/tmp/commonEnglishStringKeysAndStrings.js';
 import commonTranslatedStringKeysAndStrings from './api/tmp/commonTranslatedStringKeysAndStrings.js';
 import config from './config.js';
@@ -36,6 +37,9 @@ app.get( '/translate', ( req, res ) => {
   logger.info( 'serving static index.html file' );
   res.sendFile( path.join( __dirname, '..', '..', 'static', 'index.html' ) );
 } );
+
+// define route for testing a translation
+app.get( '/translate/test/:simName?', testTranslation );
 
 // if we get a request for a route that isn't an api route, redirect to the first page of the translation tool
 // this can happen if the user reloads the page when their path is something like translate/ab/acid-base-solutions
