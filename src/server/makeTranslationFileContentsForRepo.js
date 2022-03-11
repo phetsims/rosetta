@@ -72,7 +72,13 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
 
       let stringWasTranslated = false;
       if ( translationDataForRepo[ stringKey ] ) {
-        stringWasTranslated = oldTranslationFile[ stringKey ].value !== translationDataForRepo[ stringKey ].translated;
+        stringWasTranslated =
+
+          // translated value not empty
+          ( translationDataForRepo[ stringKey ].translated !== '' )
+
+          // translated value not the same as the old translated value
+          && ( oldTranslationFile[ stringKey ].value !== translationDataForRepo[ stringKey ].translated );
       }
 
       if ( stringWasTranslated ) {
@@ -105,10 +111,14 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
 
     // iterate through string keys from the translation belonging to the repo
     // if they are in the old translation file, they've already been updated
+    // if the translation is empty, don't add it
     // otherwise, add them to the new translation file contents
     for ( const stringKey of Object.keys( translationDataForRepo ) ) {
       if ( oldTranslationFile[ stringKey ] ) {
         logger.verbose( `string key ${stringKey} has already been updated; ignoring it` );
+      }
+      else if ( translationDataForRepo[ stringKey ].translated === '' ) {
+        logger.verbose( `string key ${stringKey} wasn't translated; ignoring it` );
       }
       else {
 
@@ -136,25 +146,29 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
 
     for ( const stringKey of Object.keys( translationDataForRepo ) ) {
 
-      // populate history object
-      const newHistoryEntry = {
-        userId: translation.userId,
-        timestamp: translation.timestamp,
-        oldValue: '',
-        newValue: translationDataForRepo[ stringKey ].translated,
-        explanation: null // this is no longer used, but for some reason we keep it around
-      };
+      // if the user translated the string
+      if ( translationDataForRepo[ stringKey ].translated !== '' ) {
 
-      // add translated value and history to translation file
-      translationFileContents[ stringKey ] = {
-        value: translationDataForRepo[ stringKey ].translated,
-        history: [ newHistoryEntry ]
-      };
+        // populate history object
+        const newHistoryEntry = {
+          userId: translation.userId,
+          timestamp: translation.timestamp,
+          oldValue: '',
+          newValue: translationDataForRepo[ stringKey ].translated,
+          explanation: null // this is no longer used, but for some reason we keep it around
+        };
+
+        // add translated value and history to translation file
+        translationFileContents[ stringKey ] = {
+          value: translationDataForRepo[ stringKey ].translated,
+          history: [ newHistoryEntry ]
+        };
+      }
     }
   }
 
   // we will check for null contents before we store a translation long-term
-  if ( JSON.stringify( translationFileContents, null, 2 ) === JSON.stringify( oldTranslationFile, null, 2 ) ) {
+  if ( JSON.stringify( translationFileContents, null, 2 ) === '{}' ) {
     logger.info( `no translations in ${repo}; setting translation file contents to null` );
     return null;
   }
