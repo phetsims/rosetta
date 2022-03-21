@@ -374,7 +374,8 @@ module.exports.renderTranslationPage = async function( request, response ) {
     direction: languageDirection,
     simUrl: await simData.getLiveSimUrl( simName ),
     username: request.session.email || 'not logged in',
-    trustedTranslator: ( request.session.trustedTranslator ) ? request.session.trustedTranslator : false
+    trustedTranslator: ( request.session.trustedTranslator ) ? request.session.trustedTranslator : false,
+    showPrototypeWarning: await simData.isPrototype( simName )
   };
 
   // Render the translation page.

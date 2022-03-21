@@ -28,6 +28,12 @@
 
     <!-- Display strings exclusive to the selected sim. -->
     <h2>{{=it.simTitle}} Strings</h2>
+    {{? it.showPrototypeWarning}}
+    <p style="color:red;font-size:20px;font-weight: bold">
+      Warning - This simulation is currently a prototype.  Changes may occur by the time the simulation is fully
+      published that will require some strings to be re-translated.
+    </p>
+    {{?}}
     <table class="string-translation-table">
       <tr>
         <th><strong>String Key</strong></th>

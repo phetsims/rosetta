@@ -261,5 +261,23 @@ module.exports = {
       return '';
     }
     return simInfoObject[ simName ].version;
+  },
+
+  /**
+   * Get a boolean value that indicates whether a sim is a prototype.
+   *
+   * @param {string} simName
+   * @returns {Promise.<boolean>}
+   * @public
+   */
+  isPrototype: async function( simName ) {
+    await checkAndUpdateSimInfo();
+    if ( !simInfoObject[ simName ] ) {
+      winston.error( `sim not found in metadata, simName = ${simName}` );
+      return false;
+    }
+    console.log( `simName = ${simName}` );
+    console.log( `simInfoObject[ simName ].isPrototype = ${simInfoObject[ simName ].isPrototype}` );
+    return simInfoObject[ simName ].isPrototype;
   }
 };
