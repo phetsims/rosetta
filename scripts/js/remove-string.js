@@ -1,10 +1,10 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * This file defines a NodeJS script that can be used to remove a string key from the English string file and all
- * translations.  This should only be done for a string key that is fully retired, and there are no published versions
- * of a sim that reference it.  Be particularly careful if using this on common code, since the master versions of
- * common code strings are used for all builds, i.e. we don't branch the translated common-code string files.
+ * This file defines a NodeJS script that can be used to remove a string from the English string file and all
+ * translations.  This should only be done for a string that is fully retired, and there are no published versions of a
+ * sim that reference it.  Be particularly careful if using this on common code, since the master versions of common
+ * code strings are used for all builds, i.e. we don't branch the translated common-code string files.
  *
  * This was originally created to remove some unused strings from the preferences dialog, see
  * https://github.com/phetsims/joist/issues/772.
@@ -13,11 +13,11 @@
  *
  * USAGE:
  *
- * node remove-string-key <repo-name> <string-key>
+ *   node remove-string-key <repo-name> <string-key>
  *
  * EXAMPLE USAGE:
  *
- * node ./rosetta/scripts/js/remove-string-key.js joist preferences.tabs.general.simulationSpecificSettings
+ *   node ./rosetta/scripts/js/remove-string-key.js joist preferences.tabs.general.simulationSpecificSettings
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
