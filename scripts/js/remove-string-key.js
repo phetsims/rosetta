@@ -17,7 +17,7 @@
  *
  * EXAMPLE USAGE:
  *
- * node ./my-tests/js/remove-string-key.js joist preferences.tabs.general.simulationSpecificSettings
+ * node ./rosetta/scripts/js/remove-string-key.js joist preferences.tabs.general.simulationSpecificSettings
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
@@ -64,7 +64,7 @@ let removalCount = 0;
 if ( englishStringsObject[ stringKeyToRemove ] ) {
   delete englishStringsObject[ stringKeyToRemove ];
   removalCount++;
-  // fs.writeFileSync( JSON.stringify( englishStringsObject, null, 2 ) );
+  fs.writeFileSync( englishStringsFileName, JSON.stringify( englishStringsObject, null, 2 ) );
   console.log( `Deleted string ${stringKeyToRemove} from English strings file.` );
 }
 else {
@@ -90,7 +90,7 @@ translatedStringFiles.forEach( translatedStringFile => {
   const translation = JSON.parse( fs.readFileSync( translatedStringFile, 'utf8' ) );
   if ( translation[ stringKeyToRemove ] ) {
     delete translation[ stringKeyToRemove ];
-    // fs.writeFileSync( translatedStringFile, JSON.stringify( translation, null, 2 ) );
+    fs.writeFileSync( translatedStringFile, JSON.stringify( translation, null, 2 ) );
     removalCount++;
     console.log( `  ${translatedStringFile} - removed` );
   }
