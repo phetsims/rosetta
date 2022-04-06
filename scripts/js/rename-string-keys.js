@@ -18,7 +18,7 @@
  *
  * EXAMPLE USAGE:
  *
- * node ./my-tests/js/rename-string-keys.js geometric-optics ./temp/geometric-optics-changed-strings.csv
+ * node ./rosetta/scripts/js/rename-string-keys.js geometric-optics ./temp/geometric-optics-changed-strings.csv
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
