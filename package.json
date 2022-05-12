@@ -22,7 +22,7 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
-    "grunt": "~1.4.0"
+    "grunt": "~1.5.3"
   },
   "scripts": {
     "dev": "ENV=dev node js/rosetta.js"
