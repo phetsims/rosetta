@@ -52,8 +52,9 @@ const TranslationForm = () => {
       try {
         const postRes = await axios.post( '/translate/api/saveTranslation', translation );
         console.log( postRes.data );
-        alert( 'Translation saved. Redirecting you to the PhET Translation Tool home page.' );
-        navigate( '/translate' );
+
+        // todo: change
+        alert( 'Translation saved.' );
       }
       catch( e ) {
         console.error( e );
