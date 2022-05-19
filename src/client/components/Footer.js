@@ -23,13 +23,18 @@ const Footer = () => {
     textAlign: 'center',
     width: '100%'
   };
+
+  // for dynamic footer date
+  // eslint-disable-next-line new-cap
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer className='text-muted' style={footerStyle}>
       <div>
         If you notice an issue, please send an email to phethelp@colorado.edu.
       </div>
       <div>
-        Copyright &copy; 2022, University of Colorado Boulder
+        Copyright &copy; 2021-{currentYear}, University of Colorado Boulder
       </div>
     </footer>
   );
