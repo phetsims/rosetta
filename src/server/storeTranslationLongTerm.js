@@ -24,8 +24,8 @@ const storeTranslationLongTerm = async preparedTranslation => {
   const contents = preparedTranslation.translationFileContents;
   for ( const repo of Object.keys( contents ) ) {
 
-    // strings were translated in repo
-    if ( contents[ repo ] ) {
+    // check to see if the object is not empty (i.e. strings were translated in repo)
+    if ( Object.keys( contents[ repo ] ).length !== 0 ) {
       try {
 
         logger.info( `storing translation of strings in ${repo} long-term` );
