@@ -11,26 +11,36 @@ import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
 import logger from './logger.js';
 
 /**
- * Return an object that has the exact contents of the translation file for the given repo and translation. If the
- * object matches the contents of the existing translation file, an empty object is returned.
+ * For a given repo, return an object that looks like:
  *
- * The code in this file isn't the DRYest (don't repeat yourself) code in the world, but it's easier (in my opinion) to
- * read and debug than it used to be when it was DRY. (Its initial incarnation was DRY, but it was buggy.) If a future
- * maintainer is so inclined, it can be made DRYer, but covering edge cases is a bit tricky.
+ * {
+ *   "stringKeyA": {
+ *     "value": "string key A value",
+ *     "history": [
+ *       {
+ *         "userId": 123456,
+ *         "timestamp": 1653082097154,
+ *         "oldValue": "",
+ *         "newValue": "string key A value",
+ *         "explanation": null
+ *       }
+ *     ]
+ *   },
+ *   "stringKeyB": { ... },
+ *   ...
+ * }
  *
- * @param {String} repo - repo we're making translation file contents for
- * @param {Object} translation - translation received from the client
- * @returns {Promise<Object>} - translation file contents for the given repo
+ * Essentially, it's the translation file contents for the given repo based on the translation provided.
+ *
+ * @param repo - the repo name in lowercase-kebab (repo-style)
+ * @param translation - the translation object obtained from the client side
+ * @returns {Promise<{translationFileContentsForRepo}>}
  */
 const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
 
   logger.info( `making translation file contents for ${repo}` );
 
-  // the contents of each file we'll store long-term separated by repo
-  const translationFileContents = {};
-
-  // will be different depending on whether the repo is the sim's repo or a common repo
-  let translationDataForRepo = {};
+  const translationFileContentsForRepo = {};
 
   // get old translation file if one exists
   const oldTranslationFileUrl = getTranslatedStringFileUrl( repo, translation.locale );
@@ -43,52 +53,179 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
   }
   catch( e ) {
     if ( e.response.status === 404 ) {
-      logger.verbose( `no translation file for ${translation.locale}/${repo}` );
+      logger.warn( `no translation file for ${translation.locale}/${repo}` );
     }
     else {
       logger.error( e );
     }
   }
 
-  // determine what translation data for repo will be
+  // set translation form data variable
+  let translationFormData = {};
   if ( repo === translation.simName ) {
-    translationDataForRepo = translation.translationFormData.simSpecific;
+
+    // we're dealing with sim-specific strings
+    translationFormData = translation.translationFormData.simSpecific;
   }
   else {
-    const translatedData = translation.translationFormData.common;
 
-    // only get data associated with the given repo
-    for ( const stringKey of Object.keys( translatedData ) ) {
-      if ( repo === translatedData[ stringKey ].repo ) {
-        translationDataForRepo[ stringKey ] = translatedData[ stringKey ];
-      }
-    }
+    // we're dealing with common strings
+    translationFormData = translation.translationFormData.common;
   }
 
-  if ( oldTranslationFile ) {
+  /*
+   * Now there are several scenarios:
+   * (1) there hasn't been a translation of the string yet            stringNotYetTranslated
+   *   (1.1) the translator leaves the string blank                   translationLeftBlank
+   *     - solution: don't add the string to the file
+   *   (1.2) the translator translates the string                     userProvidedTranslation
+   *     - solution: add the user's translation to the file
+   * (2) there has been a non-blank translation of the string         stringHasNonBlankTranslation
+   *   (2.1) the translator erases the existing translation           translationErased
+   *     - solution: keep the old non-blank translation (do nothing)
+   *     - N.B. if a sim doesn't have a title or screen title, it breaks
+   *   (2.2) the translator doesn't touch the existing translation    translationUntouched
+   *     - solution: do nothing with the translation
+   *   (2.3) the translator modifies the existing translation         translationModified
+   *     - solution: use the translator's translation
+   *
+   * Remember, the translation file for each repo should only contain strings that have actually been translated. We
+   * don't want any blank strings in the translation file.
+   */
+  for ( const stringKey of Object.keys( translationFormData ) ) {
+    if ( repo === translation.simName || repo === translationFormData[ stringKey ].repo ) {
 
-    // iterate through the string keys in the translation file and either update them or leave them as they are
-    for ( const stringKey of Object.keys( oldTranslationFile ) ) {
+      // we're dealing with a string key associated with the repo we're interested in
 
-      let stringWasTranslated = false;
-      if ( translationDataForRepo[ stringKey ] ) {
-        stringWasTranslated =
+      // now we'll set up booleans for our scenarios...
 
-          // translated value not empty
-          ( translationDataForRepo[ stringKey ].translated !== '' )
+      // 1
+      let stringNotYetTranslated = false;
+      if ( !oldTranslationFile
+           || Object.keys( oldTranslationFile ).length === 0
+           || oldTranslationFile[ stringKey ] === '' ) {
 
-          // translated value not the same as the old translated value
-          && ( oldTranslationFile[ stringKey ].value !== translationDataForRepo[ stringKey ].translated );
+        /*
+         * A translation file for this repo doesn't exist yet. Technically, neither the second nor the third conditions
+         * should ever be true.
+         */
+        stringNotYetTranslated = true;
       }
 
-      if ( stringWasTranslated ) {
+      // 1.1
+      let translationLeftBlank = false;
+      if ( stringNotYetTranslated && translationFormData[ stringKey ].translated === '' ) {
+
+        /*
+         * The string hasn't been translated yet and the user didn't provide a translation of the string.
+         */
+        translationLeftBlank = true;
+      }
+
+      // 1.2
+      let userProvidedTranslation = false;
+      if ( stringNotYetTranslated && translationFormData[ stringKey ].translated !== '' ) {
+
+        /*
+         * The string hasn't been translated yet, but the user provided a translation of the string.
+         */
+        userProvidedTranslation = true;
+      }
+
+      // 2
+      let stringHasNonBlankTranslation = false;
+      if ( oldTranslationFile && oldTranslationFile[ stringKey ] && oldTranslationFile[ stringKey ].value !== '' ) {
+
+        /*
+         * A translation file for the repo exists and the value for the string key isn't blank. If a translation file
+         * exists and the string key has a translation, this should be true.
+         */
+        stringHasNonBlankTranslation = true;
+      }
+
+      // 2.1
+      let translationErased = false;
+      if ( stringHasNonBlankTranslation && translationFormData[ stringKey ].translated === '' ) {
+
+        /*
+         * If a string has been translated as a blank string, best-case scenario it will just be blank in the sim,
+         * worst-case scenario it will cause the sim to throw an assertion and the sim won't load. If the blank string
+         * is for the title of the sim or the title of a screen, an assertion will probably be thrown.
+         */
+        translationErased = true;
+      }
+
+      // 2.2
+      let translationUntouched = false;
+      if ( stringHasNonBlankTranslation
+           && translationFormData[ stringKey ].translated === oldTranslationFile[ stringKey ].value ) {
+
+        /*
+         * A previous translation of the string exists, but in this particular translation, the translator doesn't touch
+         * the string.
+         */
+        translationUntouched = true;
+      }
+
+      // 2.3
+      let translationModified = false;
+      if ( stringHasNonBlankTranslation &&
+           translationFormData[ stringKey ].translated === oldTranslationFile[ stringKey ].value ) {
+
+        /*
+         * A previous translation of the string exists, but in this particular translation, the translator modifies the
+         * string.
+         */
+        translationModified = true;
+      }
+
+      // act on the values of the booleans...
+
+      // 1.1
+      if ( translationLeftBlank ) {
+        logger.warn( `string for ${stringKey} not translated; not adding it to the translation file for ${repo}` );
+      }
+
+      // 1.2
+      else if ( userProvidedTranslation ) {
+        logger.warn( `user provided translation for previously untranslated string; adding ${stringKey}'s info to the translation file for ${repo}` );
+
+        // populate history object
+        const newHistoryEntry = {
+          userId: translation.userId,
+          timestamp: translation.timestamp,
+          oldValue: '',
+          newValue: translationFormData[ stringKey ].translated,
+          explanation: null // this is no longer used, but for some reason we keep it around
+        };
+
+        // add translated value and history to translation file
+        translationFileContentsForRepo[ stringKey ] = {
+          value: translationFormData[ stringKey ].translated,
+          history: [ newHistoryEntry ]
+        };
+      }
+
+      // 2.1
+      else if ( translationErased ) {
+        logger.warn( `the translation for ${stringKey}'s string was erased; preserving old value of ${stringKey}` );
+      }
+
+      // 2.2
+      else if ( translationUntouched ) {
+        logger.warn( `the translation for ${stringKey}'s string was untouched; not adding it to the translation file for ${repo}` );
+      }
+
+      // 2.3
+      else if ( translationModified ) {
+        logger.warn( `the translation for ${stringKey}'s string was modified; adding it to the translation file for ${repo}` );
 
         // populate history object
         const newHistoryEntry = {
           userId: translation.userId,
           timestamp: translation.timestamp,
           oldValue: oldTranslationFile[ stringKey ].value,
-          newValue: translationDataForRepo[ stringKey ].translated,
+          newValue: translationFormData[ stringKey ].translated,
           explanation: null // this is no longer used, but for some reason we keep it around
         };
 
@@ -96,85 +233,21 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
         const newHistory = oldTranslationFile[ stringKey ].history.concat( [ newHistoryEntry ] );
 
         // add translated value and history to translation file
-        translationFileContents[ stringKey ] = {
-          value: translationDataForRepo[ stringKey ].translated,
+        translationFileContentsForRepo[ stringKey ] = {
+          value: translationFormData[ stringKey ].translated,
           history: newHistory
         };
       }
       else {
 
-        // string is unchanged
-        translationFileContents[ stringKey ] = oldTranslationFile[ stringKey ];
-
+        // we've hit some sort of weird corner case
+        logger.error( `none of the scenarios for ${stringKey} were true; something has gone wrong` );
       }
     }
-
-    // iterate through string keys from the translation belonging to the repo
-    // if they are in the old translation file, they've already been updated
-    // if the translation is empty, don't add it
-    // otherwise, add them to the new translation file contents
-    for ( const stringKey of Object.keys( translationDataForRepo ) ) {
-      if ( oldTranslationFile[ stringKey ] ) {
-        logger.verbose( `string key ${stringKey} has already been updated; ignoring it` );
-      }
-      else if ( translationDataForRepo[ stringKey ].translated === '' ) {
-        logger.verbose( `string key ${stringKey} wasn't translated; ignoring it` );
-      }
-      else {
-
-        // populate history object
-        const newHistoryEntry = {
-          userId: translation.userId,
-          timestamp: translation.timestamp,
-          oldValue: '',
-          newValue: translationDataForRepo[ stringKey ].translated,
-          explanation: null // this is no longer used, but for some reason we keep it around
-        };
-
-        // add translated value and history to translation file
-        translationFileContents[ stringKey ] = {
-          value: translationDataForRepo[ stringKey ].translated,
-          history: [ newHistoryEntry ]
-        };
-      }
-    }
-
-  }
-
-  // translation file doesn't exist
-  else {
-
-    for ( const stringKey of Object.keys( translationDataForRepo ) ) {
-
-      // if the user translated the string
-      if ( translationDataForRepo[ stringKey ].translated !== '' ) {
-
-        // populate history object
-        const newHistoryEntry = {
-          userId: translation.userId,
-          timestamp: translation.timestamp,
-          oldValue: '',
-          newValue: translationDataForRepo[ stringKey ].translated,
-          explanation: null // this is no longer used, but for some reason we keep it around
-        };
-
-        // add translated value and history to translation file
-        translationFileContents[ stringKey ] = {
-          value: translationDataForRepo[ stringKey ].translated,
-          history: [ newHistoryEntry ]
-        };
-      }
-    }
-  }
-
-  // we will check for null contents before we store a translation long-term
-  if ( JSON.stringify( translationFileContents, null, 2 ) === '{}' ) {
-    logger.info( `no translations in ${repo}; setting translation file contents to null` );
-    return null;
   }
 
   logger.info( `made translation file contents for ${repo}; returning them` );
-  return translationFileContents;
+  return translationFileContentsForRepo;
 };
 
 export default makeTranslationFileContentsForRepo;
