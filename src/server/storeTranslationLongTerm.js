@@ -7,6 +7,7 @@
  */
 
 import config from './config.js';
+import deleteSavedTranslation from './deleteSavedTranslation.js';
 import logger from './logger.js';
 import { Octokit } from '@octokit/rest';
 import { encode } from 'js-base64';
@@ -46,7 +47,8 @@ const storeTranslationLongTerm = async preparedTranslation => {
           let translationFileSha = null;
           try {
 
-            // todo: change 'liam-mulhall' to phetsims when done
+            // todo: if config.BABEL_BRANCH = tests, get sha for file on tests branch
+            // this is going to get the sha for the version of the file on the master branch
             const translationFileRes = await octokit.request(
               `GET /repos/phetsims/babel/contents/${translationFilePath}`
             );
@@ -69,12 +71,12 @@ const storeTranslationLongTerm = async preparedTranslation => {
             message: `automated commit from rosetta for sim/lib ${repo}, locale ${preparedTranslation.locale}`,
             content: encodedTranslationFileContents,
             committer: {
-              name: 'Liam',
-              email: 'dummy@dummy.com'
+              name: 'phetdev',
+              email: 'phetadmin@gmail.com'
             },
             author: {
-              name: 'Liam',
-              email: 'dummy@dummy.com'
+              name: 'phetdev',
+              email: 'phetadmin@gmail.com'
             }
           };
           if ( translationFileSha ) {
@@ -83,6 +85,12 @@ const storeTranslationLongTerm = async preparedTranslation => {
           await octokit.repos.createOrUpdateFileContents( params );
 
           logger.info( `stored translation of strings in ${repo} long-term` );
+
+          await deleteSavedTranslation( {
+            userId: preparedTranslation.userId,
+            simName: preparedTranslation.simName,
+            locale: preparedTranslation.locale
+          } );
         }
         catch( e ) {
           logger.error( e );

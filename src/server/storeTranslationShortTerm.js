@@ -6,11 +6,9 @@
  * @author Liam Mulhall
  */
 
-import config from './config.js';
+import deleteSavedTranslation from './deleteSavedTranslation.js';
 import logger from './logger.js';
-import { MongoClient } from 'mongodb';
-
-const client = new MongoClient( config.DB_URI );
+import { shortTermStringStorageCollection } from './getShortTermStringStorageCollection.js';
 
 /**
  * Save a translation to the short-term storage database. We store the translation without reformatting the data. We
@@ -21,27 +19,16 @@ const client = new MongoClient( config.DB_URI );
 const storeTranslationShortTerm = async translation => {
   logger.info( `storing ${translation.locale}/${translation.simName} translation in short-term storage` );
   try {
-    await client.connect();
-    const database = client.db( config.DB_NAME );
-    const shortTermStringStorageCollection = database.collection( config.DB_SHORT_TERM_STORAGE_COLLECTION_NAME );
-    const filter = {
+    await deleteSavedTranslation( {
       userId: translation.userId,
       simName: translation.simName,
       locale: translation.locale
-    };
-    const oldSavedTranslation = await shortTermStringStorageCollection.find( filter );
-    if ( oldSavedTranslation ) {
-      logger.info( `old saved ${translation.locale}/${translation.simName} translation(s) with same user id extant; deleting them` );
-      await shortTermStringStorageCollection.deleteMany( filter );
-    }
+    } );
     logger.info( 'inserting new translation' );
     await shortTermStringStorageCollection.insertOne( translation );
   }
   catch( e ) {
     logger.error( e );
-  }
-  finally {
-    await client.close();
   }
   logger.info( `stored ${translation.locale}/${translation.simName} translation in short-term storage` );
 };
