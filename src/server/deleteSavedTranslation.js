@@ -23,6 +23,9 @@ const deleteSavedTranslation = async idSimNameAndLocale => {
       logger.info( `old saved ${idSimNameAndLocale.locale}/${idSimNameAndLocale.simName} translation(s) with same user id extant; deleting them` );
       await shortTermStringStorageCollection.deleteMany( idSimNameAndLocale );
     }
+    else {
+      logger.info( `no saved translation for ${idSimNameAndLocale.locale}/${idSimNameAndLocale.simName} found` );
+    }
   }
   catch( e ) {
     logger.error( e );
