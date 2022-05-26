@@ -23,11 +23,6 @@ const getSimNames = async () => {
     const simMetadata = await getSimMetadata(); // inefficient
     for ( const project of simMetadata.projects ) {
 
-      // todo: remove when done
-      if ( project.name === 'html/acid-base-solutions' ) {
-        console.log( JSON.stringify( project, null, 2 ) );
-      }
-
       // slice html/ off the project name
       // e.g. turn html/acid-base-solutions into acid-base-solutions
       const simName = project.name.slice( 5 );
