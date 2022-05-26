@@ -71,12 +71,12 @@ const storeTranslationLongTerm = async preparedTranslation => {
             message: `automated commit from rosetta for sim/lib ${repo}, locale ${preparedTranslation.locale}`,
             content: encodedTranslationFileContents,
             committer: {
-              name: 'phetdev',
-              email: 'phetadmin@gmail.com'
+              name: config.COMMITTER_NAME,
+              email: config.COMMITTER_EMAIL
             },
             author: {
-              name: 'phetdev',
-              email: 'phetadmin@gmail.com'
+              name: config.COMMITTER_NAME,
+              email: config.COMMITTER_EMAIL
             }
           };
           if ( translationFileSha ) {
