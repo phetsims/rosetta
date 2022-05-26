@@ -103,7 +103,8 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
       let stringNotYetTranslated = false;
       if ( !oldTranslationFile
            || Object.keys( oldTranslationFile ).length === 0
-           || oldTranslationFile[ stringKey ] === '' ) {
+           || oldTranslationFile[ stringKey ] === ''
+           || !oldTranslationFile[ stringKey ] ) {
 
         /*
          * A translation file for this repo doesn't exist yet. Technically, neither the second nor the third conditions
