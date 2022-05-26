@@ -12,7 +12,7 @@ import logger from './logger.js';
 
 // where we get the metadata
 const METADATA_URL = config.SERVER_URL +
-                     '/services/metadata/1.2/simulations?format=json&type=html&include-unpublished=true&summary';
+                     '/services/metadata/1.3/simulations?format=json&type=html&include-unpublished=true&summary';
 
 // the authorization object we must provide in the request
 const METADATA_REQ_OPTIONS = {
