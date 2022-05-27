@@ -171,7 +171,7 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
       // 2.3
       let translationModified = false;
       if ( stringHasNonBlankTranslation &&
-           translationFormData[ stringKey ].translated === oldTranslationFile[ stringKey ].value ) {
+           translationFormData[ stringKey ].translated !== oldTranslationFile[ stringKey ].value ) {
 
         /*
          * A previous translation of the string exists, but in this particular translation, the translator modifies the
