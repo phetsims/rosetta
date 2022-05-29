@@ -8,9 +8,10 @@
 
 import config from './config.js';
 import deleteSavedTranslation from './deleteSavedTranslation.js';
+import github from 'octonode';
 import logger from './logger.js';
-import { Octokit } from '@octokit/rest';
-import { encode } from 'js-base64';
+
+// import { encode } from 'js-base64';
 
 /**
  * Save the translation to long-term storage.
@@ -34,58 +35,24 @@ const storeTranslationLongTerm = async preparedTranslation => {
           logger.info( `storing translation of strings in ${repo} long-term` );
 
           // make the translation file contents a string and use base 64 encoding
-          const encodedTranslationFileContents = encode( JSON.stringify( contents[ repo ], null, 2 ) );
+          // const encodedTranslationFileContents = encode( JSON.stringify( contents[ repo ], null, 2 ) );
 
-          // create an interface to long-term storage
-          const octokit = new Octokit( {
-            auth: config.GITHUB_PAT
-          } );
+          // create an interface to github
+          const githubClient = github.client( config.GITHUB_PAT );
+
+          // create interface to long-term storage
+          const longTermStorageRepo = githubClient.repo( 'phetsims/babel' );
 
           const translationFilePath = `${repo}/${repo}-strings_${preparedTranslation.locale}.json`;
 
-          // if a translation file exists for the repo/locale we're dealing with, get its sha
-          let translationFileSha = null;
-          try {
+          const contentsOfFilePath = await longTermStorageRepo.contentsAsync( translationFilePath, config.BABEL_BRANCH );
 
-            // todo: if config.BABEL_BRANCH = tests, get sha for file on tests branch
-            // this is going to get the sha for the version of the file on the master branch
-            const translationFileRes = await octokit.request(
-              `GET /repos/phetsims/babel/contents/${translationFilePath}`
-            );
-            translationFileSha = translationFileRes.data.sha;
-          }
-          catch( e ) {
-            if ( e.response.status === 404 ) {
-              logger.info( `no translation file exists for ${repo}/${preparedTranslation.locale}` );
-            }
-            logger.error( e );
-          }
-
-          // todo: change params when done
-          // save translation file contents to long-term storage
-          const params = {
-            owner: 'phetsims',
-            repo: 'babel',
-            branch: config.BABEL_BRANCH,
-            path: translationFilePath,
-            message: `automated commit from rosetta for sim/lib ${repo}, locale ${preparedTranslation.locale}`,
-            content: encodedTranslationFileContents,
-            committer: {
-              name: config.COMMITTER_NAME,
-              email: config.COMMITTER_EMAIL
-            },
-            author: {
-              name: config.COMMITTER_NAME,
-              email: config.COMMITTER_EMAIL
-            }
-          };
-          if ( translationFileSha ) {
-            params.sha = translationFileSha;
-          }
-          await octokit.repos.createOrUpdateFileContents( params );
+          // todo: remove when done
+          console.log( contentsOfFilePath, null, 2 );
 
           logger.info( `stored translation of strings in ${repo} long-term` );
 
+          // delete any extant saved translation(s) with the given user id / sim name / locale
           await deleteSavedTranslation( {
             userId: preparedTranslation.userId,
             simName: preparedTranslation.simName,
