@@ -11,8 +11,6 @@ import deleteSavedTranslation from './deleteSavedTranslation.js';
 import github from 'octonode';
 import logger from './logger.js';
 
-// import { encode } from 'js-base64';
-
 /**
  * Save the translation to long-term storage.
  *
@@ -26,6 +24,7 @@ const storeTranslationLongTerm = async preparedTranslation => {
 
     // iterate through each repo in the prepared translation and save its translation file contents to long-term storage
     const contents = preparedTranslation.translationFileContents;
+    console.log( 'OBJECT KEYS OF contents = ' + Object.keys( contents ) );
     for ( const repo of Object.keys( contents ) ) {
 
       // check to see if the object is not empty (i.e. strings were translated in repo)
@@ -37,9 +36,11 @@ const storeTranslationLongTerm = async preparedTranslation => {
           // make the translation file contents a string and use base 64 encoding
           // const encodedTranslationFileContents = encode( JSON.stringify( contents[ repo ], null, 2 ) );
 
+          // todo: do this before the loop
           // create an interface to github
           const githubClient = github.client( config.GITHUB_PAT );
 
+          // todo: do this before the loop
           // create interface to long-term storage
           const longTermStorageRepo = githubClient.repo( 'phetsims/babel' );
 
@@ -48,7 +49,26 @@ const storeTranslationLongTerm = async preparedTranslation => {
           const contentsOfFilePath = await longTermStorageRepo.contentsAsync( translationFilePath, config.BABEL_BRANCH );
 
           // todo: remove when done
-          console.log( contentsOfFilePath, null, 2 );
+          console.log( 'contents of file for ' + repo + ' = ' );
+          console.log( 'typeof contentsOfFilePath = ' + typeof contentsOfFilePath );
+          console.log( contentsOfFilePath );
+
+          if ( contentsOfFilePath.content !== '' ) {
+
+            // contents exist
+
+            const commitMessage = `automated commit from rosetta for sim/lib ${preparedTranslation.simName}, locale ${preparedTranslation.locale}`;
+            longTermStorageRepo.updateContents(
+              translationFilePath,
+              commitMessage,
+              JSON.stringify( contents[ repo ], null, 2 ),
+              '50eebe66a9aff0b40e9994a1eec642ea7513c94',
+              config.BABEL_BRANCH,
+              ( e, data ) => {
+                e ? logger.error( e ) : logger.info( 'done' );
+              }
+            );
+          }
 
           logger.info( `stored translation of strings in ${repo} long-term` );
 
