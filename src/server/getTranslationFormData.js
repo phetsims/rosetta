@@ -14,9 +14,7 @@ import config from './config.js';
 import getCommonTranslationFormData from './getCommonTranslationFormData.js';
 import getSimSpecificTranslationFormData from './getSimSpecificTranslationFormData.js';
 import logger from './logger.js';
-import { MongoClient } from 'mongodb';
-
-const client = new MongoClient( config.DB_URI );
+import { shortTermStringStorageCollection } from './getShortTermStringStorageCollection.js';
 
 /*
  * If we can't find a saved translation, we want to return an object that looks like:
@@ -72,45 +70,44 @@ const getTranslationFormData = async (
   logger.info( 'getting translation form data' );
 
   // try to get a saved translation from the short-term storage database
-  try {
+  if ( config.DB_ENABLED === 'true' ) {
+    try {
 
-    logger.info( 'checking for saved translation' );
+      logger.info( 'checking for saved translation' );
 
-    // get user id; depends on whether we're running on localhost or on a server
-    let userId;
-    if ( config.ENVIRONMENT === 'development' ) {
-      userId = config.LOCAL_USER_ID;
+      // get user id; depends on whether we're running on localhost or on a server
+      let userId;
+      if ( config.ENVIRONMENT === 'development' ) {
+        userId = config.LOCAL_USER_ID;
+      }
+      else {
+        const userDataRes = await axios.get( `${config.SERVER_URL}/services/check-login` );
+        const userData = userDataRes.data;
+        userId = userData.userId;
+      }
+
+      // try to get saved translation in short-term storage database
+      const filter = {
+        userId: parseInt( userId, 10 ),
+        simName: simName,
+        locale: locale
+      };
+      const savedTranslation = await shortTermStringStorageCollection.findOne( filter );
+      if ( savedTranslation ) {
+
+        logger.info( 'found saved translation; returning it' );
+
+        // noinspection JSValidateTypes
+        return savedTranslation.translationFormData;
+      }
+      logger.info( 'no saved translation found' );
     }
-    else {
-      const userDataRes = await axios.get( `${config.SERVER_URL}/services/check-login` );
-      const userData = userDataRes.data;
-      userId = userData.userId;
+    catch( e ) {
+      logger.error( e );
     }
-
-    // try to get translation
-    await client.connect();
-    const database = client.db( config.DB_NAME );
-    const shortTermStringStorageCollection = database.collection( config.DB_SHORT_TERM_STORAGE_COLLECTION_NAME );
-    const filter = {
-      userId: parseInt( userId, 10 ),
-      simName: simName,
-      locale: locale
-    };
-    const savedTranslation = await shortTermStringStorageCollection.findOne( filter );
-    if ( savedTranslation ) {
-
-      logger.info( 'found saved translation; returning it' );
-
-      // noinspection JSValidateTypes
-      return savedTranslation.translationFormData;
-    }
-    logger.info( 'no saved translation found' );
   }
-  catch( e ) {
-    logger.error( e );
-  }
-  finally {
-    await client.close();
+  else {
+    logger.warn( 'short-term string storage database not enabled; check your config' );
   }
 
   // otherwise, get translation form data the normal way
