@@ -1,9 +1,10 @@
 // Copyright 2022, University of Colorado Boulder
 /* eslint-disable consistent-return */
 
-import { exec } from 'node:child_process';
 import config from './config.js';
+import getShaFromArray from './getShaFromArray.js';
 import logger from './logger.js';
+import { exec } from 'node:child_process';
 
 /**
  * Export a function that gets the SHA for a given file or directory.
@@ -11,19 +12,6 @@ import logger from './logger.js';
  * @author Liam Mulhall
  */
 
-const getShaString = array => {
-  for ( const item of array ) {
-    if ( item.length === 40 ) {
-      const hexRegex = /[0-9A-Fa-f]{6}/g;
-      if ( hexRegex.test( item ) ) {
-        return item;
-      }
-      else {
-        return 'error';
-      }
-    }
-  }
-};
 
 /**
  * Return the SHA of the blob of the file or directory given.
@@ -55,14 +43,13 @@ const getBlobSha = fileOrDir => {
       if ( stderr ) {
         logger.warn( stderr );
       }
-      const result = stdout.split( '\n' );
-      console.log( result );
-      const sha = getShaString( result );
-      if ( sha !== 'error' ) {
-        resolve( sha );
+      const outputArray = stdout.split( '\n' );
+      const sha = getShaFromArray( outputArray );
+      if ( sha === 'no sha' ) {
+        reject( sha );
       }
       else {
-        reject( sha );
+        resolve( sha );
       }
     } );
   } );
