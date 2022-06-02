@@ -6,6 +6,7 @@
  * @author Liam Mulhall
  */
 
+import axios from 'axios';
 import config from './config.js';
 import deleteSavedTranslation from './deleteSavedTranslation.js';
 import getBlobSha from './getBlobSha.js';
@@ -22,6 +23,11 @@ const storeTranslationLongTerm = async preparedTranslation => {
 
   if ( config.PERFORM_STRING_COMMITS ) {
 
+    // create an interface to long-term storage
+    const octokit = new Octokit( {
+      auth: config.GITHUB_PAT
+    } );
+
     logger.info( `storing translation of ${preparedTranslation.locale}/${preparedTranslation.simName} long-term` );
 
     // iterate through each repo in the prepared translation and save its translation file contents to long-term storage
@@ -37,22 +43,22 @@ const storeTranslationLongTerm = async preparedTranslation => {
           // make the translation file contents a string and use base 64 encoding
           const encodedTranslationFileContents = encode( JSON.stringify( contents[ repo ], null, 2 ) );
 
-          // todo: move this out of loop
-          // create an interface to long-term storage
-          const octokit = new Octokit( {
-            auth: config.GITHUB_PAT
-          } );
-
           const translationFilePath = `${repo}/${repo}-strings_${preparedTranslation.locale}.json`;
 
           // if a translation file exists for the repo/locale we're dealing with, get its sha
           let translationFileSha = null;
           try {
-            translationFileSha = await getBlobSha( translationFilePath );
-            console.log( 'SHSHSHSHSHAAAAA = ' + translationFileSha );
+            const rawGithubFileUrl = `${config.GITHUB_URL}/babel/${config.BABEL_BRANCH}/${translationFilePath}`;
+            logger.info( `trying to get ${rawGithubFileUrl}` );
+            const rawGithubFileRes = await axios.get( rawGithubFileUrl );
+            if ( rawGithubFileRes.status === 200 ) {
+
+              // the file exists in babel, so let's get its sha
+              translationFileSha = await getBlobSha( translationFilePath );
+            }
           }
           catch( e ) {
-            if ( e.response.status === 404 ) {
+            if ( e.status === 404 ) {
               logger.info( `no translation file exists for ${repo}/${preparedTranslation.locale}` );
             }
             logger.error( e );
@@ -76,7 +82,7 @@ const storeTranslationLongTerm = async preparedTranslation => {
               email: config.COMMITTER_EMAIL
             }
           };
-          if ( translationFileSha !== null ) {
+          if ( translationFileSha ) {
             params.sha = translationFileSha;
           }
           await octokit.repos.createOrUpdateFileContents( params );
