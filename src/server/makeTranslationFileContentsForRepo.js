@@ -214,7 +214,8 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
 
       // 2.2
       else if ( translationUntouched ) {
-        logger.warn( `the translation for ${stringKey}'s string was untouched; not adding it to the translation file for ${repo}` );
+        logger.warn( `the translation for ${stringKey}'s string was untouched; using old entry` );
+        translationFileContentsForRepo[ stringKey ] = oldTranslationFile[ stringKey ];
       }
 
       // 2.3
