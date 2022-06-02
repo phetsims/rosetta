@@ -7,6 +7,7 @@
  * @author Liam Mulhall
  */
 
+import config from './config.js';
 import logger from './logger.js';
 import { shortTermStringStorageCollection } from './getShortTermStringStorageCollection.js';
 
@@ -16,21 +17,26 @@ import { shortTermStringStorageCollection } from './getShortTermStringStorageCol
  * @param {Object} idSimNameAndLocale - an object containing the user ID, sim name, and locale for a translation
  */
 const deleteSavedTranslation = async idSimNameAndLocale => {
-  logger.info( `attempting to delete old ${idSimNameAndLocale.locale}/${idSimNameAndLocale.simName} translation(s) in short-term storage` );
-  try {
-    const oldSavedTranslation = await shortTermStringStorageCollection.find( idSimNameAndLocale );
-    if ( oldSavedTranslation ) {
-      logger.info( `old saved ${idSimNameAndLocale.locale}/${idSimNameAndLocale.simName} translation(s) with same user id extant; deleting them` );
-      await shortTermStringStorageCollection.deleteMany( idSimNameAndLocale );
+  if ( config.DB_ENABLED === 'true' ) {
+    logger.info( `attempting to delete old ${idSimNameAndLocale.locale}/${idSimNameAndLocale.simName} translation(s) in short-term storage` );
+    try {
+      const oldSavedTranslation = await shortTermStringStorageCollection.find( idSimNameAndLocale );
+      if ( oldSavedTranslation ) {
+        logger.info( `old saved ${idSimNameAndLocale.locale}/${idSimNameAndLocale.simName} translation(s) with same user id extant; deleting them` );
+        await shortTermStringStorageCollection.deleteMany( idSimNameAndLocale );
+      }
+      else {
+        logger.info( `no saved translation for ${idSimNameAndLocale.locale}/${idSimNameAndLocale.simName} found` );
+      }
     }
-    else {
-      logger.info( `no saved translation for ${idSimNameAndLocale.locale}/${idSimNameAndLocale.simName} found` );
+    catch( e ) {
+      logger.error( e );
     }
+    logger.info( `done attempting to delete ${idSimNameAndLocale.locale}/${idSimNameAndLocale.simName} translation(s) in short-term storage` );
   }
-  catch( e ) {
-    logger.error( e );
+  else {
+    logger.warn( 'short-term string storage database not enabled; check your config' );
   }
-  logger.info( `done attempting to delete ${idSimNameAndLocale.locale}/${idSimNameAndLocale.simName} translation(s) in short-term storage` );
 };
 
 export default deleteSavedTranslation;

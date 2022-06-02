@@ -6,6 +6,7 @@
  * @author Liam Mulhall
  */
 
+import config from './config.js';
 import deleteSavedTranslation from './deleteSavedTranslation.js';
 import logger from './logger.js';
 import { shortTermStringStorageCollection } from './getShortTermStringStorageCollection.js';
@@ -17,20 +18,25 @@ import { shortTermStringStorageCollection } from './getShortTermStringStorageCol
  * @param translation - translation received from client
  */
 const storeTranslationShortTerm = async translation => {
-  logger.info( `storing ${translation.locale}/${translation.simName} translation in short-term storage` );
-  try {
-    await deleteSavedTranslation( {
-      userId: translation.userId,
-      simName: translation.simName,
-      locale: translation.locale
-    } );
-    logger.info( 'inserting new translation' );
-    await shortTermStringStorageCollection.insertOne( translation );
+  if ( config.DB_ENABLED === 'true' ) {
+    logger.info( `storing ${translation.locale}/${translation.simName} translation in short-term storage` );
+    try {
+      await deleteSavedTranslation( {
+        userId: translation.userId,
+        simName: translation.simName,
+        locale: translation.locale
+      } );
+      logger.info( 'inserting new translation' );
+      await shortTermStringStorageCollection.insertOne( translation );
+    }
+    catch( e ) {
+      logger.error( e );
+    }
+    logger.info( `stored ${translation.locale}/${translation.simName} translation in short-term storage` );
   }
-  catch( e ) {
-    logger.error( e );
+  else {
+    logger.warn( 'short-term string storage database not enabled; check your config' );
   }
-  logger.info( `stored ${translation.locale}/${translation.simName} translation in short-term storage` );
 };
 
 export default storeTranslationShortTerm;
