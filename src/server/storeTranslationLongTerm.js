@@ -31,14 +31,13 @@ const storeTranslationLongTerm = async preparedTranslation => {
 
         // make the translation file contents a string and use base 64 encoding
         const fileContents = JSON.stringify( contents[ repo ], null, 2 );
-
         const translationFilePath = `${repo}/${repo}-strings_${preparedTranslation.locale}.json`;
-
+        const commitMessage = `automated commit from rosetta for sim/lib ${repo}, locale ${preparedTranslation.locale}`;
         try {
 
-          // try to update the file
+          logger.info( 'trying to update contents of file on github' );
+
           const contentsRes = await longTermStorage.contentsAsync( translationFilePath, config.BABEL_BRANCH );
-          const commitMessage = `automated commit from rosetta for sim/lib ${repo}, locale ${preparedTranslation.locale}`;
           await longTermStorage.updateContentsAsync(
             translationFilePath,
             commitMessage,
@@ -46,12 +45,23 @@ const storeTranslationLongTerm = async preparedTranslation => {
             contentsRes[ 0 ].sha,
             config.BABEL_BRANCH
           );
+
+          logger.info( 'updated contents of file on github' );
+          logger.info( `stored translation of strings in ${repo} long-term` );
         }
         catch( e ) {
           try {
 
             // try to create the file
-            console.log( 'TRY TO CREATE FILE' );
+            logger.info( 'trying to create file on github' );
+            await longTermStorage.createContentsAsync(
+              translationFilePath,
+              commitMessage,
+              fileContents,
+              config.BABEL_BRANCH
+            );
+            logger.info( 'created file on github' );
+            logger.info( `stored translation of strings in ${repo} long-term` );
           }
           catch( e ) {
             logger.error( e );
