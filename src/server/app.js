@@ -32,30 +32,29 @@ app.get( '/translate*', ( req, res, next ) => {
   next();
 } );
 
+
 // serve static index.html file
 app.get( '/translate', ( req, res ) => {
   logger.info( 'serving static index.html file' );
   res.sendFile( path.join( __dirname, '..', '..', 'static', 'index.html' ) );
 } );
 
-// define route for testing a translation
-app.get( '/translate/test/:simName?', testTranslation );
-
 // if we get a request for a route that isn't an api route, redirect to the first page of the translation tool
 // this can happen if the user reloads the page when their path is something like translate/ab/acid-base-solutions
 // we don't have routes for every single locale/sim combination; that's handled with client-side routing
-app.get( '/translate/*', ( req, res, next ) => {
-  if ( !req.path.includes( 'api' ) ) {
-    logger.info( 'not an api route; redirecting user to the first page of the translation tool' );
-    res.redirect( '/translate' );
-  }
-  next();
-} );
+// app.get( '/translate/*', ( req, res, next ) => {
+//   if ( !req.path.includes( 'api' ) ) {
+//     logger.info( 'not an api route; redirecting user to the first page of the translation tool' );
+//     res.redirect( '/translate' );
+//   }
+//   next();
+// } );
 
 // api gets
 app.get( '/translate/api/localeInfo', localeInfo );
 app.get( '/translate/api/simNames', simNames );
 app.get( '/translate/api/translationFormData/:simName?/:locale?', translationFormData );
+app.get( '/translate/api/testTranslation', testTranslation );
 
 // mock website user data for local development
 if ( config.ENVIRONMENT === 'development' ) {

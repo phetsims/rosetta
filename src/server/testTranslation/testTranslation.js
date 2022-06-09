@@ -15,16 +15,9 @@ import logger from '../logger.js';
  * @param {Object} res - Express response object
  * @returns {} - todo: add type when done
  */
-const testTranslation = ( req, res ) => {
+const testTranslation = async ( req, res ) => {
   try {
-    const response = {
-      simName: req.params.simName
-    };
-    for ( const queryParam of Object.keys( req.query ) ) {
-      response[ queryParam ] = req.query[ queryParam ];
-    }
-    logger.warn( JSON.stringify( req.query, null, 2 ) );
-    res.json( response );
+    res.send( '<h1>Hi</h1>' );
   }
   catch( e ) {
     logger.error( e );

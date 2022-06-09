@@ -77,6 +77,16 @@ const TranslationForm = () => {
     }
   };
 
+  // test functionality
+  // const test = () => {
+  //   try {
+  //     console.log( 'hi this is test' );
+  //   }
+  //   catch( e ) {
+  //     console.error( e );
+  //   }
+  // };
+
   // as of this writing, saving or submitting hits this function
   const handleSubmit = async values => {
     const translation = {
@@ -91,6 +101,9 @@ const TranslationForm = () => {
     }
     else if ( document.activeElement.dataset.flag === 'submit' ) {
       await submit( translation );
+    }
+    else if ( document.activeElement.dataset.flag === 'test' ) {
+      window.open( '/translate/api/testTranslation' );
     }
   };
 
@@ -129,6 +142,11 @@ const TranslationForm = () => {
                 Submit Translation
               </button>
             </div>
+            <div className='mt-2'>
+              <button type='submit' data-flag='test' className='btn btn-primary'>
+                Test Translation
+              </button>
+            </div>
             <TranslationTables translationFormData={translationFormData}/>
             <div className='mt-2'>
               <button type='submit' data-flag='save' className='btn btn-primary'>
@@ -138,6 +156,11 @@ const TranslationForm = () => {
             <div className='mt-2'>
               <button type='submit' data-flag='submit' className='btn btn-primary'>
                 Submit Translation
+              </button>
+            </div>
+            <div className='mt-2'>
+              <button type='submit' data-flag='test' className='btn btn-primary'>
+                Test Translation
               </button>
             </div>
           </Form>
