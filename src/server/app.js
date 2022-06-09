@@ -54,7 +54,6 @@ app.get( '/translate', ( req, res ) => {
 app.get( '/translate/api/localeInfo', localeInfo );
 app.get( '/translate/api/simNames', simNames );
 app.get( '/translate/api/translationFormData/:simName?/:locale?', translationFormData );
-app.get( '/translate/api/testTranslation', testTranslation );
 
 // mock website user data for local development
 if ( config.ENVIRONMENT === 'development' ) {
@@ -70,6 +69,7 @@ app.get( '/translate/api/tmp/simSpecificTranslatedStringKeysAndStrings/:simName?
 // api posts
 app.post( '/translate/api/saveTranslation', saveTranslation );
 app.post( '/translate/api/submitTranslation', submitTranslation );
+app.post( '/translate/api/testTranslation', testTranslation );
 
 app.listen( config.SERVER_PORT, () => {
   logger.info( 'rosetta started' );
