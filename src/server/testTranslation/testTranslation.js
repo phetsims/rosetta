@@ -6,6 +6,9 @@
  * @author Liam Mulhall
  */
 
+// import getSimUrl from '../getSimUrl.js';
+// import getSimHtml from '../getSimHtml.js';
+
 import logger from '../logger.js';
 
 /**
@@ -17,7 +20,9 @@ import logger from '../logger.js';
  */
 const testTranslation = async ( req, res ) => {
   try {
-    res.send( '<h1>Hi</h1>' );
+
+    // debugger;
+    res.send( JSON.stringify( req.body, null, 2 ) );
   }
   catch( e ) {
     logger.error( e );

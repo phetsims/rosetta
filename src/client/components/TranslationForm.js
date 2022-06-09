@@ -87,6 +87,26 @@ const TranslationForm = () => {
   //   }
   // };
 
+  const openWindowWithPost = async ( url, data ) => {
+    const form = document.createElement( 'form' );
+    form.target = '_blank';
+    form.method = 'POST';
+    form.action = url;
+    form.style.display = 'none';
+
+    for ( const key in data ) {
+      const input = document.createElement( 'input' );
+      input.type = 'hidden';
+      input.name = key;
+      input.value = data[ key ];
+      form.appendChild( input );
+    }
+
+    document.body.appendChild( form );
+    form.submit();
+    document.body.removeChild( form );
+  };
+
   // as of this writing, saving or submitting hits this function
   const handleSubmit = async values => {
     const translation = {
@@ -103,7 +123,7 @@ const TranslationForm = () => {
       await submit( translation );
     }
     else if ( document.activeElement.dataset.flag === 'test' ) {
-      window.open( '/translate/api/testTranslation' );
+      await openWindowWithPost( '/translate/api/testTranslation', translation );
     }
   };
 
