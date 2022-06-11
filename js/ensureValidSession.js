@@ -135,7 +135,13 @@ async function ensureValidSession( request, response, next ) { // eslint-disable
     winston.debug( `Got website cookie: ${websiteCookie}. Getting website user data.` );
     let websiteUserData = await getUserData( request, websiteCookie );
     websiteUserData = websiteUserData.data;
-    winston.debug( `Got website user data: ${JSON.stringify( websiteUserData, null, 2 )}` );
+    const websiteUserDataToLog = {
+      userId: websiteUserData.userId,
+      loggedIn: websiteUserData.loggedIn,
+      teamMember: websiteUserData.teamMember,
+      trustedTranslator: websiteUserData.trustedTranslator
+    };
+    winston.debug( `Got website user data: ${JSON.stringify( websiteUserDataToLog, null, 2 )}` );
     winston.debug( 'Checking if user is logged in.' );
     if ( websiteUserData.loggedIn ) {
       winston.debug( `User is logged in: ${websiteUserData.loggedIn}. Ensuring valid session.` );
