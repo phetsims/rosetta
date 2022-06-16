@@ -78,33 +78,8 @@ const TranslationForm = () => {
   };
 
   // test functionality
-  // const test = () => {
-  //   try {
-  //     console.log( 'hi this is test' );
-  //   }
-  //   catch( e ) {
-  //     console.error( e );
-  //   }
-  // };
-
-  const openWindowWithPost = async ( url, data ) => {
-    const form = document.createElement( 'form' );
-    form.target = '_blank';
-    form.method = 'POST';
-    form.action = url;
-    form.style.display = 'none';
-
-    for ( const key in data ) {
-      const input = document.createElement( 'input' );
-      input.type = 'hidden';
-      input.name = key;
-      input.value = data[ key ];
-      form.appendChild( input );
-    }
-
-    document.body.appendChild( form );
-    form.submit();
-    document.body.removeChild( form );
+  const test = () => {
+    console.log( 'test' );
   };
 
   // as of this writing, saving or submitting hits this function
@@ -123,7 +98,7 @@ const TranslationForm = () => {
       await submit( translation );
     }
     else if ( document.activeElement.dataset.flag === 'test' ) {
-      await openWindowWithPost( '/translate/api/testTranslation', translation );
+      test();
     }
   };
 
