@@ -1,5 +1,7 @@
 // Copyright 2022, University of Colorado Boulder
 
+/* eslint-disable default-import-match-filename */
+
 /**
  * We define the navigation bar.
  *
