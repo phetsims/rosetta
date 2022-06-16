@@ -1,5 +1,7 @@
 // Copyright 2022, University of Colorado Boulder
 
+/* eslint-disable default-import-match-filename */
+
 /**
  * Export a function that gets a sim's common string keys, their English values, and their translated values.
  *
