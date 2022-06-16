@@ -6,8 +6,8 @@
  * @author Liam Mulhall
  */
 
-// import getSimUrl from '../getSimUrl.js';
-// import getSimHtml from '../getSimHtml.js';
+import getSimUrl from '../getSimUrl.js';
+import getSimHtml from '../getSimHtml.js';
 
 import logger from '../logger.js';
 
@@ -20,9 +20,9 @@ import logger from '../logger.js';
  */
 const testTranslation = async ( req, res ) => {
   try {
-
-    // debugger;
-    res.send( JSON.stringify( req.body, null, 2 ) );
+    const simHtmlRes = await getSimHtml( getSimUrl( req.body.simName ) );
+    console.log( typeof simHtmlRes.data );
+    res.send( simHtmlRes.data );
   }
   catch( e ) {
     logger.error( e );

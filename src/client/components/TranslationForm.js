@@ -78,8 +78,15 @@ const TranslationForm = () => {
   };
 
   // test functionality
-  const test = () => {
-    console.log( 'test' );
+  const test = async translation => {
+    try {
+      const testRes = await axios.post( '/translate/api/testTranslation', translation );
+      const stringSimHtml = testRes.data;
+      console.log( stringSimHtml );
+    }
+    catch( e ) {
+      console.error( e );
+    }
   };
 
   // as of this writing, saving or submitting hits this function
@@ -98,7 +105,7 @@ const TranslationForm = () => {
       await submit( translation );
     }
     else if ( document.activeElement.dataset.flag === 'test' ) {
-      test();
+      await test( translation );
     }
   };
 
