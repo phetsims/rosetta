@@ -673,7 +673,7 @@ module.exports.triggerBuild = async function( request, response ) {
       // If the supplied user ID exists in the array of user ID's, set the userId variable.
       // It is important to remember that request.params.userId is a string. We must cast it to an integer.
       // The elements of the arrayOfUserIds, on the other hand, should be numbers.
-      if ( arrayOfUserIds.includes( parseInt( request.params.userId, 10 ) ) ) {
+      if ( arrayOfUserIds.includes( Number( request.params.userId ) ) ) {
         winston.info( 'Supplied user ID is valid.' );
         userIdToSend = request.params.userId;
       }
