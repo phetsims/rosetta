@@ -83,6 +83,8 @@ const TranslationForm = () => {
       const testRes = await axios.post( '/translate/api/testTranslation', translation );
       const stringSimHtml = testRes.data;
       console.log( stringSimHtml );
+
+      navigate( '/translate/test', { state: { html: stringSimHtml } } );
     }
     catch( e ) {
       console.error( e );

@@ -6,6 +6,7 @@
  * @author Liam Mulhall
  */
 
+import TestTranslation from './TestTranslation.js';
 import Footer from './Footer.js';
 import Help from './Help.js';
 import LocaleAndSimForm from './LocaleAndSimForm.js';
@@ -29,6 +30,7 @@ const RosettaRoutes = () => {
       <Navbar/>
       <div className='container'>
         <Routes>
+          <Route path='/translate/test' element={<TestTranslation/>}/>
           <Route path='/translate' element={<LocaleAndSimForm/>}/>
           <Route path='/translate/report/:locale' element={<TranslationReport/>}/>
           <Route path='/translate/report' element={<TranslationReportForm/>}/>
