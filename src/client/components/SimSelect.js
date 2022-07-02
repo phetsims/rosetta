@@ -24,7 +24,7 @@ const SimSelect = ( { field } ) => { // eslint-disable-line react/prop-types
   // get sim names
   useEffect( async () => {
     try {
-      const simNamesRes = await axios.get( '/translate/api/simNames' );
+      const simNamesRes = await axios.get( '/rosettaApi/simNames' );
       setSimNames( simNamesRes.data );
     }
     catch( e ) {

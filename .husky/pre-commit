@@ -1,5 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-grunt --gruntfile Gruntfile.cjs lint
-qunit
+npm run lint

@@ -1,75 +1,40 @@
 // Copyright 2021-2022, University of Colorado Boulder
 
-import testTranslation from './testTranslation/testTranslation.js';
-import commonEnglishStringKeysAndStrings from './api/tmp/commonEnglishStringKeysAndStrings.js';
-import commonTranslatedStringKeysAndStrings from './api/tmp/commonTranslatedStringKeysAndStrings.js';
-import config from './config.js';
+/**
+ * This file is the entry point for Rosetta's server-side code. It sets up the Express app, which has two components:
+ * (1) the static file server, and
+ * (2) the API server.
+ *
+ * (1) is responsible for serving the static files generated when we build the React front end. (2) is responsible for
+ * returning JSON data that the React front end consumes.
+ *
+ * @author Liam Mulhall
+ */
+
+import config from './common/config.js';
 import express from 'express';
-import localeInfo from './api/localeInfo.js';
-import logger from './logger.js';
-import mockWebsiteUserData from './api/mockWebsiteUserData.js';
-import path from 'path';
-import saveTranslation from './api/saveTranslation.js';
-import simNames from './api/simNames.js';
-import simSpecificEnglishStringKeysAndStrings from './api/tmp/simSpecificEnglishStringKeysAndStrings.js';
-import simSpecificTranslatedStringKeysAndStrings from './api/tmp/simSpecificTranslatedStringKeysAndStrings.js';
-import submitTranslation from './api/submitTranslation.js';
-import translationFormData from './api/translationFormData.js';
-import { URL } from 'url';
+import logger from './common/logger.js';
+import mockWebsiteUserData from './rosettaApiServer/api/mockWebsiteUserData.js';
 
-// constants
+// These are components (1) and (2) mentioned above.
+import rosettaApiServer from './rosettaApiServer/rosettaApiServer.js';
+import staticServer from './staticServer/staticServer.js';
+
 const app = express();
-const __dirname = new URL( '.', import.meta.url ).pathname;
-const staticAssetsPath = path.join( __dirname, '..', '..', 'static' );
 
-// middleware
-app.use( express.static( staticAssetsPath ) );
+// Enable returning JSON.
 app.use( express.json() );
 
-// log info about get request
-app.get( '/translate*', ( req, res, next ) => {
-  logger.info( `get request ${req.url}` );
-  next();
-} );
+// Set up route for serving JSON data consumed by the React front end.
+app.use( '/rosettaApi', rosettaApiServer );
 
+// Set up route for serving the static files.
+app.use( '/translate', staticServer );
 
-// serve static index.html file
-app.get( '/translate', ( req, res ) => {
-  logger.info( 'serving static index.html file' );
-  res.sendFile( path.join( __dirname, '..', '..', 'static', 'index.html' ) );
-} );
-
-// if we get a request for a route that isn't an api route, redirect to the first page of the translation tool
-// this can happen if the user reloads the page when their path is something like translate/ab/acid-base-solutions
-// we don't have routes for every single locale/sim combination; that's handled with client-side routing
-// app.get( '/translate/*', ( req, res, next ) => {
-//   if ( !req.path.includes( 'api' ) ) {
-//     logger.info( 'not an api route; redirecting user to the first page of the translation tool' );
-//     res.redirect( '/translate' );
-//   }
-//   next();
-// } );
-
-// api gets
-app.get( '/translate/api/localeInfo', localeInfo );
-app.get( '/translate/api/simNames', simNames );
-app.get( '/translate/api/translationFormData/:simName?/:locale?', translationFormData );
-
-// mock website user data for local development
+// Mock website user data for local development.
 if ( config.ENVIRONMENT === 'development' ) {
   app.get( '/services/check-login', mockWebsiteUserData );
 }
-
-// temporary api gets for manual testing
-app.get( '/translate/api/tmp/commonEnglishStringKeysAndStrings/:simName?', commonEnglishStringKeysAndStrings );
-app.get( '/translate/api/tmp/simSpecificEnglishStringKeysAndStrings/:simName?', simSpecificEnglishStringKeysAndStrings );
-app.get( '/translate/api/tmp/commonTranslatedStringKeysAndStrings/:simName?/:locale?', commonTranslatedStringKeysAndStrings );
-app.get( '/translate/api/tmp/simSpecificTranslatedStringKeysAndStrings/:simName?/:locale?', simSpecificTranslatedStringKeysAndStrings );
-
-// api posts
-app.post( '/translate/api/saveTranslation', saveTranslation );
-app.post( '/translate/api/submitTranslation', submitTranslation );
-app.post( '/translate/api/testTranslation', testTranslation );
 
 app.listen( config.SERVER_PORT, () => {
   logger.info( 'rosetta started' );
