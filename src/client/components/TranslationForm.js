@@ -34,7 +34,7 @@ const TranslationForm = () => {
   useEffect( () => {
     try {
       ( async () => {
-        const translationFormDataRes = await axios.get( `/translate/api/translationFormData/${params.simName}/${params.locale}` );
+        const translationFormDataRes = await axios.get( `/rosettaApi/translationFormData/${params.simName}/${params.locale}` );
         setTranslationFormData( translationFormDataRes.data );
       } )();
     }
@@ -50,7 +50,7 @@ const TranslationForm = () => {
   const save = async translation => {
     if ( window.confirm( `If you have a translation saved for ${translation.simName} in locale ${translation.locale}, it will be overwritten.` ) ) {
       try {
-        const postRes = await axios.post( '/translate/api/saveTranslation', translation );
+        const postRes = await axios.post( '/rosettaApi/saveTranslation', translation );
         console.log( postRes.data );
 
         // todo: change
@@ -66,7 +66,7 @@ const TranslationForm = () => {
   const submit = async translation => {
     if ( window.confirm( `Are you sure you want to submit your translation for ${translation.simName} in locale ${translation.locale}?` ) ) {
       try {
-        const postRes = await axios.post( '/translate/api/submitTranslation', translation );
+        const postRes = await axios.post( '/rosettaApi/submitTranslation', translation );
         console.log( postRes.data );
         alert( 'Translation submitted. Your translation should appear on the PhET website in about half an hour. Redirecting you to the PhET Translation Tool home page.' );
         navigate( '/translate' );
@@ -80,7 +80,7 @@ const TranslationForm = () => {
   // test functionality
   const test = async translation => {
     try {
-      const testRes = await axios.post( '/translate/api/testTranslation', translation );
+      const testRes = await axios.post( '/rosettaApi/testTranslation', translation );
       const stringSimHtml = testRes.data;
       console.log( stringSimHtml );
 
