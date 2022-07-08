@@ -53,7 +53,7 @@ values for common code strings are obtained from the master branch so that Roset
 from branches. This means that common code strings need to remain pretty stable. 
 3. If a user presses "Save", strings are saved in PostgreSQL and automatically loaded the next time the user goes to
 translate that sim and locale. When the translation for that sim and locale is finally submitted, the saved strings are
-deleted from PostgreSQL. It's important to note that the databases that support string saving on phet-server and
+deleted from PostgreSQL. It's important to note that the databases that support string saving on phet-server2 and
 phet-server-dev are not available through the firewall, so the Rosetta instances are generally configured to use a
 `localhost` URL to reach the database. This makes it challenging to verify the database behavior if running Rosetta
 locally (more on this in the "Debugging Notes" section).
@@ -70,10 +70,10 @@ Debugging Notes
 ---------------
 
 When testing and debugging, it generally works best to run it on a local machine and work out major issues, then test
-on phet-server-dev, then deploy it to phet-server. When running locally, the "Save" function is hard to get working
-since it requires a database, so that is often just allowed to error out. To get it to work correctly on phet-server-dev, it
-may be necessary to sync phet-server-dev to phet-dev. As of this writing, this is done by contacting @mattpen and
-asking him to do it (see https://github.com/phetsims/website/issues/974).
+on phet-server-dev, then deploy it to phet-server2. When running locally, the "Save" function is hard to get working
+since it requires a database, so that is often just allowed to error out. To get it to work correctly on
+phet-server-dev, it may be necessary to sync phet-server-dev to phet-dev. As of this writing, this is done by contacting
+@mattpen and asking him to do it (see https://github.com/phetsims/website/issues/974).
 
 It can be useful to disable certain steps in the translation process while debugging to prevent excessive commits
 to GitHub and to prevent unneeded build requests to the build server. The configuration parameters 
