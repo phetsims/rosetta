@@ -477,7 +477,7 @@ module.exports.saveStrings = async function( request, response ) {
   // Loop through the string descriptions in the post request, saving each one.
   for ( const stringDescription in request.body ) {
 
-    if ( !Object.hasOwnProperty.call( request.body, stringDescription ) ) {
+    if ( !Object.hasOwn( request.body, stringDescription ) ) {
       continue;
     }
 
