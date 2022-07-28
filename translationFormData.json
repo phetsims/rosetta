@@ -1,0 +1,272 @@
+{
+    "simIsPrototype": false,
+    "simSpecific": {
+        "concentration_DOT_title": {
+            "english": "Concentration",
+            "translated": "Concentration_濃度"
+        }
+    },
+    "common": {
+        "termsPrivacyAndLicensing": {
+            "english": "Terms, Privacy & Licensing",
+            "translated": "術語、隱私與授權條款",
+            "repo": "joist"
+        },
+        "translation_DOT_credits_DOT_link": {
+            "english": "Translation Credits",
+            "translated": "翻譯貢獻者",
+            "repo": "joist"
+        },
+        "thirdParty_DOT_credits_DOT_link": {
+            "english": "Third-party Credits",
+            "translated": "感謝第三方團體的協助",
+            "repo": "joist"
+        },
+        "credits_DOT_title": {
+            "english": "Credits",
+            "translated": "謝誌",
+            "repo": "joist"
+        },
+        "credits_DOT_leadDesign": {
+            "english": "Lead Design: {0}",
+            "translated": "首席設計：{0}",
+            "repo": "joist"
+        },
+        "credits_DOT_softwareDevelopment": {
+            "english": "Software Development: {0}",
+            "translated": "軟體開發：{0}",
+            "repo": "joist"
+        },
+        "credits_DOT_team": {
+            "english": "Team: {0}",
+            "translated": "團隊：{0}",
+            "repo": "joist"
+        },
+        "credits_DOT_qualityAssurance": {
+            "english": "Quality Assurance: {0}",
+            "translated": "品管：{0}",
+            "repo": "joist"
+        },
+        "credits_DOT_graphicArts": {
+            "english": "Graphic Arts: {0}",
+            "translated": "美術設計：{0}",
+            "repo": "joist"
+        },
+        "credits_DOT_translation": {
+            "english": "Translation",
+            "translated": "翻譯",
+            "repo": "joist"
+        },
+        "credits_DOT_thanks": {
+            "english": "Thanks",
+            "translated": "感謝",
+            "repo": "joist"
+        },
+        "updates_DOT_upToDate": {
+            "english": "This simulation is up to date.",
+            "translated": "此模擬已是最新版本",
+            "repo": "joist"
+        },
+        "updates_DOT_outOfDate": {
+            "english": "New version available",
+            "translated": "有新版本可使用",
+            "repo": "joist"
+        },
+        "updates_DOT_checking": {
+            "english": "Checking for updates…",
+            "translated": "正在檢查更新...",
+            "repo": "joist"
+        },
+        "updates_DOT_offline": {
+            "english": "Unable to check for updates.",
+            "translated": "無法檢查更新。",
+            "repo": "joist"
+        },
+        "updates_DOT_newVersionAvailable": {
+            "english": "There is a new version available: {0}.",
+            "translated": "已經有新版本：{0}",
+            "repo": "joist"
+        },
+        "updates_DOT_yourCurrentVersion": {
+            "english": "Your current version is: {0}.",
+            "translated": "您目前的版本為 {0}",
+            "repo": "joist"
+        },
+        "updates_DOT_getUpdate": {
+            "english": "Get Update…",
+            "translated": "取得更新...",
+            "repo": "joist"
+        },
+        "updates_DOT_noThanks": {
+            "english": "No Thanks",
+            "translated": "不用了，謝謝",
+            "repo": "joist"
+        },
+        "versionPattern": {
+            "english": "version {0}",
+            "translated": "版本 {0}",
+            "repo": "joist"
+        },
+        "options_DOT_title": {
+            "english": "Options",
+            "translated": "選項",
+            "repo": "joist"
+        },
+        "showPointers": {
+            "english": "Show Pointers",
+            "translated": "顯示指標",
+            "repo": "joist"
+        },
+        "done": {
+            "english": "Done",
+            "translated": "完成",
+            "repo": "joist"
+        },
+        "title_DOT_settings": {
+            "english": "Settings",
+            "translated": "設定",
+            "repo": "joist"
+        },
+        "menuItem_DOT_options": {
+            "english": "Options…",
+            "translated": "選項...",
+            "repo": "joist"
+        },
+        "menuItem_DOT_about": {
+            "english": "About…",
+            "translated": "關於...",
+            "repo": "joist"
+        },
+        "menuItem_DOT_phetWebsite": {
+            "english": "PhET Website…",
+            "translated": "PhET 網站...",
+            "repo": "joist"
+        },
+        "menuItem_DOT_reportAProblem": {
+            "english": "Report a Problem…",
+            "translated": "回報問題...",
+            "repo": "joist"
+        },
+        "menuItem_DOT_screenshot": {
+            "english": "Screenshot",
+            "translated": "螢幕快照",
+            "repo": "joist"
+        },
+        "menuItem_DOT_fullscreen": {
+            "english": "Full Screen",
+            "translated": "全螢幕",
+            "repo": "joist"
+        },
+        "menuItem_DOT_getUpdate": {
+            "english": "Check for Updates…",
+            "translated": "檢查更新...",
+            "repo": "joist"
+        }
+    },
+    "shared": {
+        "drinkMix": {
+            "english": "Drink mix",
+            "translated": "飲料粉"
+        },
+        "cobaltChloride": {
+            "english": "Cobalt(II) chloride",
+            "translated": "Cobalt chloride 氯化鈷"
+        },
+        "cobaltIINitrate": {
+            "english": "Cobalt(II) nitrate",
+            "translated": "Cobalt (II) nitrate 硝酸鈷(II)"
+        },
+        "copperSulfate": {
+            "english": "Copper(II) sulfate",
+            "translated": "Copper sulfate 硫酸銅"
+        },
+        "nickelIIChloride": {
+            "english": "Nickel(II) chloride",
+            "translated": "Nickel (II) chloride 氯化鎳"
+        },
+        "potassiumChromate": {
+            "english": "Potassium chromate",
+            "translated": "Potassium chromate 鉻酸鉀"
+        },
+        "potassiumDichromate": {
+            "english": "Potassium dichromate",
+            "translated": "Potassium dichromate 二鉻酸鉀"
+        },
+        "potassiumPermanganate": {
+            "english": "Potassium permanganate",
+            "translated": "Potassium permanganate 過猛酸鉀"
+        },
+        "sodiumChloride": {
+            "english": "Sodium chloride",
+            "translated": "氯化納"
+        },
+        "pattern_DOT_0value_DOT_1units": {
+            "english": "{0} {1}",
+            "translated": "{0} {1}"
+        },
+        "units_DOT_liters": {
+            "english": "L",
+            "translated": "公升"
+        },
+        "units_DOT_milliliters": {
+            "english": "mL",
+            "translated": "毫升"
+        },
+        "concentration": {
+            "english": "Concentration",
+            "translated": "濃度"
+        },
+        "pattern_DOT_0percent": {
+            "english": "{0}%",
+            "translated": "{0}%"
+        },
+        "units_DOT_molesPerLiter": {
+            "english": "mol/L",
+            "translated": "莫耳/公升"
+        },
+        "evaporation": {
+            "english": "Evaporation",
+            "translated": "蒸發"
+        },
+        "lots": {
+            "english": "lots",
+            "translated": "大量"
+        },
+        "none": {
+            "english": "none",
+            "translated": "無"
+        },
+        "pattern_DOT_0label": {
+            "english": "{0}:",
+            "translated": "{0}:"
+        },
+        "removeSolute": {
+            "english": "Remove Solute",
+            "translated": "將溶質移除"
+        },
+        "saturated": {
+            "english": "Saturated!",
+            "translated": "已飽和！"
+        },
+        "pattern_DOT_0soluteAmount": {
+            "english": "Solute Amount: {0} g",
+            "translated": "溶質量：{0} 克"
+        },
+        "solute": {
+            "english": "Solute",
+            "translated": "溶質"
+        },
+        "solid": {
+            "english": "Solid",
+            "translated": "固體"
+        },
+        "solution": {
+            "english": "Solution",
+            "translated": "溶液"
+        },
+        "screen_DOT_concentration": {
+            "english": "Concentration",
+            "translated": "濃度"
+        }
+    }
+}
