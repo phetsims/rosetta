@@ -22,7 +22,7 @@ module.exports = {
     "requireConfigFile": false
   },
   "rules": {
-    "bad-text": "off",
+    "bad-sim-text": "off",
     "jsx-quotes": [
       "error",
       "prefer-single"
