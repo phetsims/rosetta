@@ -1,7 +1,6 @@
 {
   "name": "scripts",
   "private": true,
-  "type": "module",
   "devDependencies": {
     "lodash": "^4.17.21"
   }
