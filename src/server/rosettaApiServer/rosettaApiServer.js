@@ -11,6 +11,7 @@ import simSpecificTranslatedStringKeysAndStrings from './api/tmp/simSpecificTran
 import submitTranslation from './api/submitTranslation.js';
 import testTranslation from './testTranslation.js';
 import translationFormData from './api/translationFormData.js';
+import sha from './api/sha.js';
 
 const rosettaApiServer = express();
 
@@ -22,6 +23,7 @@ rosettaApiServer.get( '/', ( req, res ) => {
 rosettaApiServer.get( '/localeInfo', localeInfo );
 rosettaApiServer.get( '/simNames', simNames );
 rosettaApiServer.get( '/translationFormData/:simName?/:locale?', translationFormData );
+rosettaApiServer.get( 'sha', sha );
 
 // These might be used in the translation report. (Currently unused, hence the tmp directory.)
 rosettaApiServer.get( '/tmp/commonEnglishStringKeysAndStrings/:simName?', commonEnglishStringKeysAndStrings );
