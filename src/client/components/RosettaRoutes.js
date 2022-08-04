@@ -7,7 +7,6 @@
  */
 
 import TestTranslation from './TestTranslation.js';
-import Footer from './Footer.js';
 import Help from './Help.js';
 import LocaleAndSimForm from './LocaleAndSimForm.js';
 import Navbar from './Navbar.js';
@@ -38,7 +37,6 @@ const RosettaRoutes = () => {
           <Route path='/translate/:locale/:simName' element={<TranslationForm/>}/>
         </Routes>
       </div>
-      <Footer/>
     </BrowserRouter>
   );
 };
