@@ -27,7 +27,11 @@ module.exports = {
       "error",
       "prefer-single"
     ],
-    "require-statement-match": "off"
+    "require-statement-match": "off",
+    "require-atomic-updates": [
+      "error",
+      { "allowProperties": true }
+    ]
   },
   "settings": {
     "react": {
