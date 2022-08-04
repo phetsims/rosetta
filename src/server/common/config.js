@@ -9,6 +9,7 @@
 import dotenv from 'dotenv';
 import os from 'os';
 import path from 'path';
+import getCurrentSha from '../rosettaApiServer/getCurrentSha.js';
 
 // specify directory where config lives
 // on unix systems, this should be ~/.phet, per phet convention
@@ -21,5 +22,6 @@ dotenv.config( dotenvPath );
 
 // provide variable with all the key-value pairs from the config
 const config = process.env;
+config.sha = getCurrentSha();
 
 export default config;

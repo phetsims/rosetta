@@ -23,7 +23,7 @@ rosettaApiServer.get( '/', ( req, res ) => {
 rosettaApiServer.get( '/localeInfo', localeInfo );
 rosettaApiServer.get( '/simNames', simNames );
 rosettaApiServer.get( '/translationFormData/:simName?/:locale?', translationFormData );
-rosettaApiServer.get( 'sha', sha );
+rosettaApiServer.get( '/sha', sha );
 
 // These might be used in the translation report. (Currently unused, hence the tmp directory.)
 rosettaApiServer.get( '/tmp/commonEnglishStringKeysAndStrings/:simName?', commonEnglishStringKeysAndStrings );
