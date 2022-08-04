@@ -4,7 +4,8 @@
   "type": "module",
   "workspaces": [
     "src/client",
-    "src/server"
+    "src/server",
+    "scripts"
   ],
   "scripts": {
     "lint": "grunt --gruntfile Gruntfile.cjs lint",
