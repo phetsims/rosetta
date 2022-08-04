@@ -1,22 +1,25 @@
 // Copyright 2022, University of Colorado Boulder
 
-import { exec } from 'node:child_process';
-import logger from '../common/logger.js';
+import { execSync } from 'node:child_process';
 
-let currentSha = '';
+/**
+ * Return the current SHA of the running instance of Rosetta.
+ *
+ * @returns {string}
+ */
+const getCurrentSha = () => {
+  console.log( 'info: trying to get current sha' );
+  let retVal;
+  try {
 
-logger.info( 'trying to get current sha' );
-exec( 'git rev-parse HEAD', ( e, stdout, stderr ) => {
-  if ( e ) {
-    logger.error( e );
+    // Slice off the \n from the end of the string.
+    retVal = execSync( 'git rev-parse HEAD' ).toString().slice( 0, 40 );
   }
-  if ( stdout ) {
-    currentSha = stdout;
-    logger.info( 'got current sha' );
+  catch( e ) {
+    console.error( e );
+    retVal = `error: ${e}`;
   }
-  if ( stderr ) {
-    logger.error( stderr );
-  }
-} );
+  return retVal;
+};
 
-export default currentSha;
+export default getCurrentSha;
