@@ -83,7 +83,9 @@ const TranslationForm = () => {
       const testRes = await axios.post( '/rosettaApi/testTranslation', translation );
       const stringSimHtml = testRes.data;
 
-      navigate( '/translate/test', { state: { html: stringSimHtml } } );
+      // Open the translated sim in a new tab.
+      const win = window.open( '' );
+      win.document.write( stringSimHtml );
     }
     catch( e ) {
       console.error( e );
