@@ -82,7 +82,6 @@ const TranslationForm = () => {
     try {
       const testRes = await axios.post( '/rosettaApi/testTranslation', translation );
       const stringSimHtml = testRes.data;
-      console.log( stringSimHtml );
 
       navigate( '/translate/test', { state: { html: stringSimHtml } } );
     }
