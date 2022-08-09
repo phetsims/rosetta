@@ -7,7 +7,6 @@
  */
 
 import React from 'react';
-import { Interweave } from 'interweave';
 import { useLocation } from 'react-router-dom';
 
 /**
@@ -20,8 +19,15 @@ const TestTranslation = () => {
 
   const location = useLocation();
 
+  const iframeStyle = {
+    height: '80vh',
+    width: '100%'
+  };
+
   return (
-    <Interweave content={location.state.html}/>
+    <div>
+      <iframe style={iframeStyle} srcDoc={location.state.html}></iframe>
+    </div>
   );
 };
 
