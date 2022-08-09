@@ -39,4 +39,12 @@ if ( config.ENVIRONMENT === 'development' ) {
 app.listen( config.SERVER_PORT, () => {
   logger.info( 'rosetta started' );
   logger.info( 'http://localhost:16372/translate' );
+
+  const unsafeKeys = [ 'BUILD_SERVER_AUTH', 'GITHUB_PAT', 'SERVER_TOKEN', 'ROSETTA_SESSION_SECRET' ];
+
+  const configKeysToLog = Object.keys( config ).filter( key => !unsafeKeys.includes( key ) );
+  logger.info( 'see process.env below' );
+  for ( const key of configKeysToLog ) {
+    logger.info( `  ${key}=${config[ key ]}` );
+  }
 } );
