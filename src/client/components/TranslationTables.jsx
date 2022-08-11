@@ -10,7 +10,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import TranslationRow from './TranslationRow.js';
+import TranslationRow from './TranslationRow.jsx';
 
 /**
  * This component has some headers, some info, and a table for sim-specific strings and common strings. The header

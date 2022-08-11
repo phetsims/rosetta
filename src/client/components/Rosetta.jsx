@@ -13,7 +13,7 @@
 
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import RosettaRoutes from './RosettaRoutes.js';
+import RosettaRoutes from './RosettaRoutes.jsx';
 
 /**
  * If a user is allowed access to the translation tool, this component will contain some header stuff and the routes

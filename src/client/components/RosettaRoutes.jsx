@@ -6,14 +6,14 @@
  * @author Liam Mulhall
  */
 
-import TestTranslation from './TestTranslation.js';
-import Help from './Help.js';
-import LocaleAndSimForm from './LocaleAndSimForm.js';
-import Navbar from './Navbar.js';
+import TestTranslation from './TestTranslation.jsx';
+import Help from './Help.jsx';
+import LocaleAndSimForm from './LocaleAndSimForm.jsx';
+import Navbar from './Navbar.jsx';
 import React from 'react';
-import TranslationForm from './TranslationForm.js';
-import TranslationReport from './TranslationReport.js';
-import TranslationReportForm from './TranslationReportForm.js';
+import TranslationForm from './TranslationForm.jsx';
+import TranslationReport from './TranslationReport.jsx';
+import TranslationReportForm from './TranslationReportForm.jsx';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 /**

@@ -7,7 +7,7 @@
  */
 
 import { useNavigate } from 'react-router-dom';
-import LocaleSelect from './LocaleSelect.js';
+import LocaleSelect from './LocaleSelect.jsx';
 import React from 'react';
 import { Field, Form, Formik } from 'formik';
 

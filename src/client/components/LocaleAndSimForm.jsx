@@ -9,9 +9,9 @@
  * @author Liam Mulhall
  */
 
-import LocaleSelect from './LocaleSelect.js';
+import LocaleSelect from './LocaleSelect.jsx';
 import React from 'react';
-import SimSelect from './SimSelect.js';
+import SimSelect from './SimSelect.jsx';
 import { Formik, Form, Field } from 'formik';
 import { useNavigate } from 'react-router-dom';
 

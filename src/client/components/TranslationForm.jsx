@@ -11,7 +11,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import TranslationTables from './TranslationTables.js';
+import TranslationTables from './TranslationTables.jsx';
 import axios from 'axios';
 import { Formik, Form } from 'formik';
 import { useNavigate, useParams } from 'react-router-dom';

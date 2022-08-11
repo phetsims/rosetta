@@ -9,7 +9,6 @@
   ],
   "scripts": {
     "lint": "grunt --gruntfile Gruntfile.cjs lint",
-    "dev": "grunt --gruntfile Gruntfile.cjs lint && webpack --mode=development && node src/server/app.js",
-    "production": "grunt --gruntfile Gruntfile.cjs lint && webpack --mode=production && node src/server/app.js"
+    "start": "npm run lint && npm run build --workspace=client && node src/server/app.js"
   }
 }
