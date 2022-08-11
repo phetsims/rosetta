@@ -11,10 +11,7 @@ const staticServer = express();
 const __dirname = new URL( '.', import.meta.url ).pathname;
 
 // This is the path to the static files generated when you build the React front end.
-const staticAssetsPath = path.join( __dirname, '..', '..', '..', 'static' );
-
-// Enable serving static files.
-staticServer.use( express.static( staticAssetsPath ) );
+const staticAssetsPath = path.join( __dirname, '..', '..', 'client', 'dist' );
 
 // If we get any route, hand it over to the React app so that it can do client-side routing.
 staticServer.get( '/*', ( req, res ) => {

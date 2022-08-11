@@ -15,6 +15,8 @@ import config from './common/config.js';
 import express from 'express';
 import logger from './common/logger.js';
 import mockWebsiteUserData from './rosettaApiServer/api/mockWebsiteUserData.js';
+import path from 'path';
+import { URL } from 'url';
 
 // These are components (1) and (2) mentioned above.
 import rosettaApiServer from './rosettaApiServer/rosettaApiServer.js';
@@ -24,6 +26,19 @@ const app = express();
 
 // Enable returning JSON.
 app.use( express.json() );
+
+// Set up a variable similar to the old __dirname variable.
+// The __dirname variable gets the present working directory.
+const __dirname = new URL( '.', import.meta.url ).pathname;
+
+// This is the path to the static files generated when you build the React front end.
+const staticAssetsPath = path.join( __dirname, '..', 'client', 'dist' );
+
+/*
+ * We serve these static files using app as opposed to staticFileServer because if we use staticFileServer it tries to
+ * serve all the files in the static directory as HTML instead of whatever their file type is, e.g. CSS or JS.
+ */
+app.use( express.static( staticAssetsPath ) );
 
 // Set up route for serving JSON data consumed by the React front end.
 app.use( '/rosettaApi', rosettaApiServer );
