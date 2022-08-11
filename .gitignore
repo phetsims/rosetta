@@ -1,6 +1,6 @@
 .DS_Store
 .env
 .idea
+dist
 node_modules
 package-lock.json
-static
