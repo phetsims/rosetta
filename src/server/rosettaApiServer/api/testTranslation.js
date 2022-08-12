@@ -6,10 +6,9 @@
  * @author Liam Mulhall
  */
 
-import getSimUrl from './getSimUrl.js';
-import getSimHtml from './getSimHtml.js';
-
-import logger from '../common/logger.js';
+import getSimUrl from '../getSimUrl.js';
+import getSimHtml from '../getSimHtml.js';
+import logger from '../../common/logger.js';
 
 /**
  * todo: update this when done
