@@ -9,7 +9,7 @@
 import dotenv from 'dotenv';
 import os from 'os';
 import path from 'path';
-import getCurrentSha from '../rosettaApiServer/getCurrentSha.js';
+import getCurrentSha from '../translationApi/getCurrentSha.js';
 
 // specify directory where config lives
 // on unix systems, this should be ~/.phet, per phet convention

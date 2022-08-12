@@ -14,12 +14,12 @@
 import config from './common/config.js';
 import express from 'express';
 import logger from './common/logger.js';
-import mockWebsiteUserData from './rosettaApiServer/api/mockWebsiteUserData.js';
+import mockWebsiteUserData from './translationApi/api/mockWebsiteUserData.js';
 import path from 'path';
 import { URL } from 'url';
 
 // These are components (1) and (2) mentioned above.
-import rosettaApiServer from './rosettaApiServer/rosettaApiServer.js';
+import translationApi from './translationApi/translationApi.js';
 import staticServer from './staticServer/staticServer.js';
 
 const app = express();
@@ -41,7 +41,7 @@ const staticAssetsPath = path.join( __dirname, '..', 'client', 'dist' );
 app.use( express.static( staticAssetsPath ) );
 
 // Set up route for serving JSON data consumed by the React front end.
-app.use( '/rosettaApi', rosettaApiServer );
+app.use( '/rosettaApi', translationApi );
 
 // Set up route for serving the static files.
 app.use( '/translate', staticServer );
