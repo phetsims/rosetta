@@ -8,7 +8,7 @@
 
 import axios from 'axios';
 import config from '../common/config.js';
-import logger from '../common/logger.js';
+import logger from './logger.js';
 
 // where we get the metadata
 const METADATA_URL = config.SERVER_URL +

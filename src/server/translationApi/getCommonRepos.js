@@ -7,7 +7,7 @@
  */
 
 import getRepoNameFromStringKeyWithRepoName from './getRepoNameFromStringKeyWithRepoName.js';
-import logger from '../common/logger.js';
+import logger from './logger.js';
 
 /**
  * Return an array of lowercase-kebab names of common repos for a given sim. (Common repos are repos that multiple

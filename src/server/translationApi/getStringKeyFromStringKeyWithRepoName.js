@@ -6,7 +6,7 @@
  * @author Liam Mulhall
  */
 
-import logger from '../common/logger.js';
+import logger from './logger.js';
 
 /**
  * Return a camelCase string key from a string that looks like stringKey/REPO_NAME. We get the strings that look like

@@ -12,7 +12,7 @@ import getSimNames from '../getSimNames.js';
 import getSimUrl from '../getSimUrl.js';
 import getStringKeysWithRepoName from '../getStringKeysWithRepoName.js';
 import getTranslationFormData from '../getTranslationFormData.js';
-import logger from '../../common/logger.js';
+import logger from '../logger.js';
 
 /**
  * API function. Send translation form data.

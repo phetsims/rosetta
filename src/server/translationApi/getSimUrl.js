@@ -7,7 +7,7 @@
  */
 
 import config from '../common/config.js';
-import logger from '../common/logger.js';
+import logger from './logger.js';
 
 /**
  * Return a sim's URL.

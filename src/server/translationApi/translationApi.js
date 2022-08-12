@@ -4,7 +4,7 @@ import commonEnglishStringKeysAndStrings from './api/tmp/commonEnglishStringKeys
 import commonTranslatedStringKeysAndStrings from './api/tmp/commonTranslatedStringKeysAndStrings.js';
 import express from 'express';
 import localeInfo from './api/localeInfo.js';
-import logger from '../common/logger.js';
+import logger from './logger.js';
 import saveTranslation from './api/saveTranslation.js';
 import sha from './api/sha.js';
 import simNames from './api/simNames.js';

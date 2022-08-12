@@ -13,7 +13,7 @@ import getCommonRepos from './getCommonRepos.js';
 import getRepoNameToStringKeys from './getRepoNameToStringKeys.js';
 import getStringFileUrl from './getStringFileUrl.js';
 import getTranslatedStringFile from './getTranslatedStringFileUrl.js';
-import logger from '../common/logger.js';
+import logger from './logger.js';
 
 /*
  * We want to return an object that looks like:

@@ -10,7 +10,7 @@
 import axios from 'axios';
 import getCommonRepos from '../getCommonRepos.js';
 import getStringFileUrl from '../getStringFileUrl.js';
-import logger from '../../common/logger.js';
+import logger from '../logger.js';
 
 /**
  * Return a list of ordered pairs where each ordered pair is a common English string key followed by its value

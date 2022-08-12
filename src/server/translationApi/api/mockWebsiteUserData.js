@@ -7,7 +7,7 @@
  */
 
 import config from '../../common/config.js';
-import logger from '../../common/logger.js';
+import logger from '../logger.js';
 
 /**
  * API function. Send mock website user data. This is only used for development. You can modify the user data to suit

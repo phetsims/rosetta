@@ -8,7 +8,7 @@
 
 import axios from 'axios';
 import config from '../common/config.js';
-import logger from '../common/logger.js';
+import logger from './logger.js';
 
 /**
  * Return the locale info stored in a remote repository. This locale info contains names of locales and locale codes.

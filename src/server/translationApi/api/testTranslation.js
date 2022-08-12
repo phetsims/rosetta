@@ -8,7 +8,7 @@
 
 import getSimUrl from '../getSimUrl.js';
 import getSimHtml from '../getSimHtml.js';
-import logger from '../../common/logger.js';
+import logger from '../logger.js';
 
 /**
  * todo: update this when done

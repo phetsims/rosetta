@@ -6,7 +6,7 @@ import getSimHtml from '../../getSimHtml.js';
 import getSimNames from '../../getSimNames.js';
 import getSimUrl from '../../getSimUrl.js';
 import getStringKeysWithRepoName from '../../getStringKeysWithRepoName.js';
-import logger from '../../../common/logger.js';
+import logger from '../../logger.js';
 
 const commonEnglishStringKeysAndStrings = async ( req, res ) => {
   try {

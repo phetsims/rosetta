@@ -1,7 +1,7 @@
 // Copyright 2022, University of Colorado Boulder
 
 import config from '../../common/config.js';
-import logger from '../../common/logger.js';
+import logger from '../logger.js';
 
 /**
  * API function. Respond with the current SHA of the running instance of Rosetta.

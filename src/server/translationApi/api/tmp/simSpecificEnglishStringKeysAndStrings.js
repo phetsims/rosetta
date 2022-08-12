@@ -6,7 +6,7 @@ import getSimNames from '../../getSimNames.js';
 import getSimSpecificEnglishStringKeysAndStrings from '../../translationReport/getSimSpecificEnglishStringKeysAndStrings.js';
 import getSimUrl from '../../getSimUrl.js';
 import getStringKeysWithRepoName from '../../getStringKeysWithRepoName.js';
-import logger from '../../../common/logger.js';
+import logger from '../../logger.js';
 
 const simSpecificEnglishStringKeysAndStrings = async ( req, res ) => {
   try {

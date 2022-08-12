@@ -7,7 +7,7 @@
  */
 
 import getLocaleInfo from '../getLocaleInfo.js';
-import logger from '../../common/logger.js';
+import logger from '../logger.js';
 
 /**
  * API function. Send the locale info that we get from the phetsims/chipper repository.

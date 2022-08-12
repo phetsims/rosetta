@@ -8,7 +8,7 @@
 
 import github from 'octonode';
 import config from '../common/config.js';
-import logger from '../common/logger.js';
+import logger from './logger.js';
 
 const githubInterface = github.client( config.GITHUB_PAT );
 const longTermStorage = githubInterface.repo( 'phetsims/babel' );
