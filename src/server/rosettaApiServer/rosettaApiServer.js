@@ -4,14 +4,15 @@ import commonEnglishStringKeysAndStrings from './api/tmp/commonEnglishStringKeys
 import commonTranslatedStringKeysAndStrings from './api/tmp/commonTranslatedStringKeysAndStrings.js';
 import express from 'express';
 import localeInfo from './api/localeInfo.js';
+import logger from '../common/logger.js';
 import saveTranslation from './api/saveTranslation.js';
+import sha from './api/sha.js';
 import simNames from './api/simNames.js';
 import simSpecificEnglishStringKeysAndStrings from './api/tmp/simSpecificEnglishStringKeysAndStrings.js';
 import simSpecificTranslatedStringKeysAndStrings from './api/tmp/simSpecificTranslatedStringKeysAndStrings.js';
 import submitTranslation from './api/submitTranslation.js';
-import testTranslation from './testTranslation.js';
+import testTranslation from './api/testTranslation.js';
 import translationFormData from './api/translationFormData.js';
-import sha from './api/sha.js';
 
 const rosettaApiServer = express();
 
@@ -20,6 +21,10 @@ rosettaApiServer.get( '/', ( req, res ) => {
 } );
 
 // gets
+rosettaApiServer.get( '/*', ( req, res, next ) => {
+  logger.info( `get request received for ${req.url}` );
+  next();
+} );
 rosettaApiServer.get( '/localeInfo', localeInfo );
 rosettaApiServer.get( '/simNames', simNames );
 rosettaApiServer.get( '/translationFormData/:simName?/:locale?', translationFormData );
@@ -32,6 +37,10 @@ rosettaApiServer.get( '/tmp/commonTranslatedStringKeysAndStrings/:simName?/:loca
 rosettaApiServer.get( '/tmp/simSpecificTranslatedStringKeysAndStrings/:simName?/:locale?', simSpecificTranslatedStringKeysAndStrings );
 
 // posts
+rosettaApiServer.post( '/*', ( req, res, next ) => {
+  logger.info( `post request received for ${req.url}` );
+  next();
+} );
 rosettaApiServer.post( '/saveTranslation', saveTranslation );
 rosettaApiServer.post( '/submitTranslation', submitTranslation );
 rosettaApiServer.post( '/testTranslation', testTranslation );
