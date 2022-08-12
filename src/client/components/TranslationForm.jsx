@@ -92,10 +92,24 @@ const TranslationForm = () => {
     }
   };
 
+  // for storing and setting website user data
+  const [ websiteUserData, setWebsiteUserData ] = useState( {} );
+
+  // get website user data
+  useEffect( async () => {
+    try {
+      const websiteUserDataRes = await axios.get( `${window.location.origin}/services/check-login` );
+      setWebsiteUserData( websiteUserDataRes.data );
+    }
+    catch( e ) {
+      console.error( e );
+    }
+  }, [] );
+
   // as of this writing, saving or submitting hits this function
   const handleSubmit = async values => {
     const translation = {
-      userId: 123456,
+      userId: websiteUserData.userId,
       timestamp: Date.now(),
       simName: params.simName,
       locale: params.locale,
