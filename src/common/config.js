@@ -3,7 +3,7 @@
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import getCurrentSha from '../translationApi/getCurrentSha.js';
+import getCurrentSha from 'server/translationApi/getCurrentSha.js';
 
 const pathToConfig = path.join( os.homedir(), '.phet', 'rosetta-config.json' );
 

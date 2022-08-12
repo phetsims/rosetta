@@ -6,7 +6,7 @@
  * @author Liam Mulhall
  */
 
-import config from '../common/config.js';
+import config from '../../common/config.js';
 import logger from './logger.js';
 
 /**

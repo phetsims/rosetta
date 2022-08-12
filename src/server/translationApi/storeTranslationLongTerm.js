@@ -7,7 +7,7 @@
  */
 
 import github from 'octonode';
-import config from '../common/config.js';
+import config from '../../common/config.js';
 import logger from './logger.js';
 
 const githubInterface = github.client( config.GITHUB_PAT );

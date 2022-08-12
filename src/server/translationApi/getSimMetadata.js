@@ -7,7 +7,7 @@
  */
 
 import axios from 'axios';
-import config from '../common/config.js';
+import config from '../../common/config.js';
 import logger from './logger.js';
 
 // where we get the metadata

@@ -10,7 +10,7 @@
  */
 
 import axios from 'axios';
-import config from '../common/config.js';
+import config from '../../common/config.js';
 import getCommonTranslationFormData from './getCommonTranslationFormData.js';
 import getSimSpecificTranslationFormData from './getSimSpecificTranslationFormData.js';
 import logger from './logger.js';
