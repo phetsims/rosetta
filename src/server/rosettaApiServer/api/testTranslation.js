@@ -21,7 +21,7 @@ import logger from '../common/logger.js';
 const testTranslation = async ( req, res ) => {
   try {
     const simHtmlRes = await getSimHtml( getSimUrl( req.body.simName ) );
-    console.log( typeof simHtmlRes.data );
+    logger.info( 'responding with sim html for translation test' );
     res.send( simHtmlRes.data );
   }
   catch( e ) {
