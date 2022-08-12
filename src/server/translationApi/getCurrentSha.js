@@ -13,6 +13,7 @@ const getCurrentSha = () => {
   try {
 
     // Slice off the \n from the end of the string.
+    console.log( 'info: got current sha; returning it' );
     retVal = execSync( 'git rev-parse HEAD' ).toString().slice( 0, 40 );
   }
   catch( e ) {
