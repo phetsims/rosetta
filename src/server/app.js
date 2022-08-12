@@ -41,7 +41,7 @@ const staticAssetsPath = path.join( __dirname, '..', 'client', 'dist' );
 app.use( express.static( staticAssetsPath ) );
 
 // Set up route for serving JSON data consumed by the React front end.
-app.use( '/rosettaApi', translationApi );
+app.use( '/translationApi', translationApi );
 
 // Set up route for serving the static files.
 app.use( '/translate', staticAssetsServer );
@@ -58,8 +58,8 @@ app.listen( config.SERVER_PORT, () => {
   const unsafeKeys = [ 'BUILD_SERVER_AUTH', 'GITHUB_PAT', 'SERVER_TOKEN', 'ROSETTA_SESSION_SECRET' ];
 
   const configKeysToLog = Object.keys( config ).filter( key => !unsafeKeys.includes( key ) );
-  logger.info( 'see process.env below' );
+  logger.info( 'see config below' );
   for ( const key of configKeysToLog ) {
-    logger.info( `  ${key}=${config[ key ]}` );
+    logger.info( `    ${key}: ${config[ key ]}` );
   }
 } );

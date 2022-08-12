@@ -1,27 +1,20 @@
-// Copyright 2021-2022, University of Colorado Boulder
+// Copyright 2022, University of Colorado Boulder
 
-/**
- * Export a variable with the key-value pairs from the configuration file for the translation tool.
- *
- * @author Liam Mulhall
- */
-
-import dotenv from 'dotenv';
+import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import getCurrentSha from '../translationApi/getCurrentSha.js';
 
-// specify directory where config lives
-// on unix systems, this should be ~/.phet, per phet convention
-const dotenvPath = {
-  path: path.join( os.homedir(), '.phet', 'rosetta-config.env' )
-};
+const pathToConfig = path.join( os.homedir(), '.phet', 'rosetta-config.json' );
 
-// load key-value pairs from config into process.env
-dotenv.config( dotenvPath );
-
-// provide variable with all the key-value pairs from the config
-const config = process.env;
-config.sha = getCurrentSha();
+let config = {};
+try {
+  const unparsedJson = fs.readFileSync( pathToConfig, 'utf8' );
+  config = JSON.parse( unparsedJson );
+  config.SHA = getCurrentSha();
+}
+catch( e ) {
+  console.error( e );
+}
 
 export default config;
