@@ -4,7 +4,7 @@ import express from 'express';
 import { URL } from 'url';
 import path from 'path';
 
-const staticServer = express();
+const staticAssetsServer = express();
 
 // Set up a variable similar to the old __dirname variable.
 // The __dirname variable gets the present working directory.
@@ -14,8 +14,8 @@ const __dirname = new URL( '.', import.meta.url ).pathname;
 const staticAssetsPath = path.join( __dirname, '..', '..', 'client', 'dist' );
 
 // If we get any route, hand it over to the React app so that it can do client-side routing.
-staticServer.get( '/*', ( req, res ) => {
+staticAssetsServer.get( '/*', ( req, res ) => {
   res.sendFile( path.join( staticAssetsPath, 'index.html' ) );
 } );
 
-export default staticServer;
+export default staticAssetsServer;

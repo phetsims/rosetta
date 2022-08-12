@@ -20,7 +20,7 @@ import { URL } from 'url';
 
 // These are components (1) and (2) mentioned above.
 import translationApi from './translationApi/translationApi.js';
-import staticServer from './staticServer/staticServer.js';
+import staticAssetsServer from './staticAssetsServer/staticAssetsServer.js';
 
 const app = express();
 
@@ -44,7 +44,7 @@ app.use( express.static( staticAssetsPath ) );
 app.use( '/rosettaApi', translationApi );
 
 // Set up route for serving the static files.
-app.use( '/translate', staticServer );
+app.use( '/translate', staticAssetsServer );
 
 // Mock website user data for local development.
 if ( config.ENVIRONMENT === 'development' ) {
