@@ -9,7 +9,7 @@
 
 import getRepoNameFromStringKeyWithRepoName from './getRepoNameFromStringKeyWithRepoName.js';
 import getStringKeyFromStringKeyWithRepoName from './getStringKeyFromStringKeyWithRepoName.js';
-import logger from '../common/logger.js';
+import logger from './logger.js';
 
 /**
  * Return an object with string keys categorized by whether they are common or sim-specific. Common string keys are

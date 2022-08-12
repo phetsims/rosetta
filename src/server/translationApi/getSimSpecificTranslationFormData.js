@@ -9,7 +9,7 @@
 import axios from 'axios';
 import getStringFileUrl from './getStringFileUrl.js';
 import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
-import logger from '../common/logger.js';
+import logger from './logger.js';
 
 /*
  * We want to return an object that looks like:

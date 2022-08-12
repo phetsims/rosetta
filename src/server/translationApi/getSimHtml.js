@@ -7,7 +7,7 @@
  */
 
 import axios from 'axios';
-import logger from '../common/logger.js';
+import logger from './logger.js';
 
 /**
  * Return a sim's HTML. As of this writing, this function doesn't return the raw data, i.e. the sim's HTML. It returns

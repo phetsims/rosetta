@@ -8,7 +8,7 @@
 
 import config from '../common/config.js';
 import deleteSavedTranslation from './deleteSavedTranslation.js';
-import logger from '../common/logger.js';
+import logger from './logger.js';
 import { shortTermStringStorageCollection } from './getShortTermStringStorageCollection.js';
 
 /**

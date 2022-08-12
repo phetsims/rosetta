@@ -8,7 +8,7 @@
 
 import axios from 'axios';
 import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
-import logger from '../common/logger.js';
+import logger from './logger.js';
 
 /**
  * For a given repo, return an object that looks like:

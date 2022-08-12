@@ -8,7 +8,7 @@
 
 import config from '../common/config.js';
 import getSimMetadata from './getSimMetadata.js';
-import logger from '../common/logger.js';
+import logger from './logger.js';
 
 /**
  * Return a list of lowercase-kebab (repo-style) sim names (e.g. acid-base-solutions).

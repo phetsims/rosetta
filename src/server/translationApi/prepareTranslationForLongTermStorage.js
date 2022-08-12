@@ -7,7 +7,7 @@
  */
 
 import getStringKeysWithDots from './getStringKeysWithDots.js';
-import logger from '../common/logger.js';
+import logger from './logger.js';
 import makeTranslationFileContentsForRepo from './makeTranslationFileContentsForRepo.js';
 
 /**

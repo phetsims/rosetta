@@ -7,7 +7,7 @@
  */
 
 import getSimNames from '../getSimNames.js';
-import logger from '../../common/logger.js';
+import logger from '../logger.js';
 
 /**
  * API function. Send sim names that we get from sim metadata.

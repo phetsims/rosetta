@@ -8,7 +8,7 @@
  */
 
 import config from '../common/config.js';
-import logger from '../common/logger.js';
+import logger from './logger.js';
 
 /**
  * Return the URL for a translated sim's string file.

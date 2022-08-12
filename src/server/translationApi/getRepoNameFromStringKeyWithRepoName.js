@@ -7,7 +7,7 @@
  * @author Liam Mulhall
  */
 
-import logger from '../common/logger.js';
+import logger from './logger.js';
 
 /**
  * Return a lowercase-kebab (repo-style) repo name (e.g. acid-base-solutions) from a string that looks like

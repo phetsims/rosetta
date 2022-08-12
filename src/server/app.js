@@ -13,7 +13,7 @@
 
 import config from './common/config.js';
 import express from 'express';
-import logger from './common/logger.js';
+import logger from './translationApi/logger.js';
 import mockWebsiteUserData from './translationApi/api/mockWebsiteUserData.js';
 import path from 'path';
 import { URL } from 'url';

@@ -8,7 +8,7 @@
 
 import axios from 'axios';
 import config from '../../common/config.js';
-import logger from '../../common/logger.js';
+import logger from '../logger.js';
 
 /**
  * Return sim or library's English string keys and their values (their strings) from the remote repository they live

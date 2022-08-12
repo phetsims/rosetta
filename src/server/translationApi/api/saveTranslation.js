@@ -6,7 +6,7 @@
  * @author Liam Mulhall
  */
 
-import logger from '../../common/logger.js';
+import logger from '../logger.js';
 import storeTranslationShortTerm from '../storeTranslationShortTerm.js';
 
 /**
