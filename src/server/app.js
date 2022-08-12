@@ -11,7 +11,7 @@
  * @author Liam Mulhall
  */
 
-import config from './common/config.js';
+import config from '../common/config.js';
 import express from 'express';
 import logger from './translationApi/logger.js';
 import mockWebsiteUserData from './translationApi/api/mockWebsiteUserData.js';

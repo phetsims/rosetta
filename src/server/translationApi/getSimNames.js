@@ -6,7 +6,7 @@
  * @author Liam Mulhall
  */
 
-import config from '../common/config.js';
+import config from '../../common/config.js';
 import getSimMetadata from './getSimMetadata.js';
 import logger from './logger.js';
 
