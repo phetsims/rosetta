@@ -1,5 +1,11 @@
 // Copyright 2022, University of Colorado Boulder
 
+/**
+ * This module gets the configuration for Rosetta from ~/.phet/rosetta-config.json.
+ *
+ * @author Liam Mulhall
+ */
+
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
@@ -15,6 +21,7 @@ try {
 }
 catch( e ) {
   console.error( e );
+  config = { error: 'unable to get configuration file for rosetta' };
 }
 
 export default config;
