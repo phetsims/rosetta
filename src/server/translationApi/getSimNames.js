@@ -20,7 +20,7 @@ const getSimNames = async () => {
   logger.info( 'getting sim names' );
   const simNames = [];
   try {
-    const simMetadata = await getSimMetadata(); // inefficient
+    const simMetadata = await getSimMetadata();
     for ( const project of simMetadata.projects ) {
 
       // slice html/ off the project name
