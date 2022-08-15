@@ -124,6 +124,9 @@ const TranslationForm = () => {
     else if ( document.activeElement.dataset.flag === 'test' ) {
       await test( translation );
     }
+    else {
+      console.error( 'unexpected dataset flag' );
+    }
   };
 
   if ( translationFormData === null ) {
