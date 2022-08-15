@@ -1,7 +1,7 @@
 // Copyright 2021-2022, University of Colorado Boulder
 
 /**
- * Export a function that gets metadata for all the sims.
+ * Export a function that gets metadata for all the sims. We cache the sim metadata. We update it when it's stale.
  *
  * @author Liam Mulhall
  */
@@ -22,22 +22,46 @@ const METADATA_REQ_OPTIONS = {
   }
 };
 
+// This is an arbitrary time duration for how long the sim metadata is valid.
+const VALID_METADATA_DURATION = 60 * 60 * 1000; // (In milliseconds.)
+
+let timeOfLastUpdate = Number.NEGATIVE_INFINITY;
+
+let simMetadata;
+
 /**
- * Return the sim metadata object.
+ * Return the sim metadata object. Update it if it is stale, otherwise used cached sim metadata.
  *
- * @returns {Promise<Object>} - sim metadata
+ * @returns {Promise<Object> | Object} - sim metadata
  */
 const getSimMetadata = async () => {
   logger.info( 'getting sim metadata' );
-  let simMetadata;
   try {
-    const simMetadataRes = await axios.get( METADATA_URL, METADATA_REQ_OPTIONS );
-    simMetadata = simMetadataRes.data;
+    const metadataValidDurationElapsed = timeOfLastUpdate + VALID_METADATA_DURATION < Date.now();
+
+    /*
+     * We use cached sim metadata unless the sim metadata has become stale (i.e. the valid metadata duration has
+     * elapsed). Note: This doesn't handle the case where two requests for sim metadata are made in quick succession.
+     * If the translation utility sees a lot of use, it might make sense to handle this case.
+     */
+    if ( metadataValidDurationElapsed ) {
+      logger.info( 'sim metadata is stale or nonexistent; getting it' );
+      const simMetadataRes = await axios.get( METADATA_URL, METADATA_REQ_OPTIONS );
+      simMetadata = simMetadataRes.data;
+
+      // We ignore this ESLint rule because a race condition here won't be problematic.
+      /* eslint-disable require-atomic-updates */
+      timeOfLastUpdate = Date.now();
+    }
+    else {
+      logger.info( 'using cached sim metadata' );
+    }
   }
   catch( e ) {
     logger.error( e );
+    simMetadata = { error: 'unable to get sim metadata' };
   }
-  logger.info( 'got sim metadata; returning it' );
+  logger.info( 'returning sim metadata' );
   return simMetadata;
 };
 
