@@ -30,7 +30,7 @@ const LocaleSelect = ( { field } ) => { // eslint-disable-line react/prop-types
   // get locale info
   useEffect( async () => {
     try {
-      const localeInfoRes = await axios.get( '/rosettaApi/localeInfo' );
+      const localeInfoRes = await axios.get( '/translationApi/localeInfo' );
       setLocaleInfo( localeInfoRes.data );
     }
     catch( e ) {
