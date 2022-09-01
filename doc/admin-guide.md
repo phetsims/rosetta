@@ -18,10 +18,13 @@ Starting, Stopping, and Checking
 You must have sudo privileges to execute the following commands.
 
 Restart:
-`sudo systemctl restart rosetta`
-
-Stop:
 `sudo systemctl stop rosetta`
+`grunt update-rosetta`
+`sudo systemctl start rosetta`
+
+**NOTE: It is very important to run the `grunt update-rosetta` task before starting again because the `update-rosetta`
+task updates rosetta and its other dependencies (one of which is a parallel checkout of perennial, as of this writing)
+.**
 
 Check status:
 `sudo systemctl status rosetta`
@@ -67,16 +70,16 @@ babel for the user ID of the most recent translator.
 ### Instructions
 
 1. If necessary, edit the babel file for the translation as needed. Commit directly to master.
-2. Make sure the instance of Rosetta that you plan to use has sendBuildRequests = true in its config file.  If you're
-using the public version, this will generally be set to true.
+2. Make sure the instance of Rosetta that you plan to use has sendBuildRequests = true in its config file. If you're
+   using the public version, this will generally be set to true.
 3. Obtain the user ID you wish to use from Babel.
 4. Create and enter your URL in a web browser (you will be asked to sign in if you aren't already). Use the following
-URL pattern: `https://ox-dev.colorado.edu/translate/trigger-build/{sim-name}/{locale code}/{translator ID}`.  For
-example, `https://phet.colorado.edu/translate/trigger-build/circuit-construction-kit-ac/fa/333624`: 
+   URL pattern: `https://ox-dev.colorado.edu/translate/trigger-build/{sim-name}/{locale code}/{translator ID}`. For
+   example, `https://phet.colorado.edu/translate/trigger-build/circuit-construction-kit-ac/fa/333624`:
 5. Check Rosetta's logs and the build server's logs as desired. These log files are located on phet-server/ox-dev and
-will require SSH to view.
+   will require SSH to view.
 6. Make sure your build went through successfully and the translation is published to the website. (This should take
-about five minutes.)
+   about five minutes.)
 
 To use this, enter this URL in a browser window and then check some time later that the translation was rebuilt. You
 can monitor rosetta and/or the build server log if desired.
@@ -89,7 +92,7 @@ on phet-server-dev. The directory structure is the same as that used on phet-ser
 
 The URL to access the version running on phet-server-dev is https://ox-dev.colorado.edu/translate.
 
-On phet-server-dev, the configuration file `rosetta-config.json` is generally set up so that the value of the 
+On phet-server-dev, the configuration file `rosetta-config.json` is generally set up so that the value of the
 `babelBranch` parameter is set to `tests`. This allows translations to be committed to a different branch of
 the babel repository (where the translated string files live) so that they don't affect "real" translations. The down
 side of this is that there aren't many real translations on this branch, so it is sometimes necessary to manually move
