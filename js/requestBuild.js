@@ -12,6 +12,8 @@
 const axios = require( 'axios' );
 const simData = require( './simData' );
 const winston = require( 'winston' );
+const SimVersion = require( '../../perennial/js/common/SimVersion' );
+const simPhetioMetadata = require( '../../perennial/js/common/simPhetioMetadata' );
 
 // constants
 const PRODUCTION_SERVER_URL = global.config.productionServerURL;
@@ -56,6 +58,24 @@ async function requestBuild( simName, locale, userID ) {
 
   winston.info( `Latest version of the sim: ${latestVersionOfSim}.` );
   const dependencies = await getDependencies( simName, latestVersionOfSim );
+
+  const simVersionObject = SimVersion.parse( latestVersionOfSim );
+
+  const phetioSims = await simPhetioMetadata( {
+    active: true,
+    latest: true
+  } );
+
+  const brands = [ 'phet' ];
+  for ( let i = 0; i < phetioSims.length; i++ ) {
+    const phetioSim = phetioSims[ i ];
+
+
+    if ( phetioSim.name === simName &&
+         SimVersion.parse( phetioSim.versionMajor, phetioSim.versionMinor, phetioSim.versionMaintenance ).compare( simVersionObject ) === 0 ) {
+      brands.push( 'phet-io' );
+    }
+  }
 
   const requestObject = {
     api: '2.0',
