@@ -8,7 +8,7 @@
  */
 
 const Gruntfile = require( '../../chipper/js/grunt/Gruntfile' );
-const gitPull = require( '../../perennial/js/common/gitPull.js' );
+const gitPull = require( '../../perennial/js/common/gitPull' );
 
 module.exports = grunt => {
   Gruntfile( grunt );
