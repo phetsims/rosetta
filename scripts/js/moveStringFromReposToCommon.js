@@ -56,14 +56,14 @@ SIMS_WITH_STRING.forEach( simName => {
         const joistStringFileName = '../../babel/joist/joist-strings_' + locale + '.json';
 
         // read in the joist string data
-        const joistStringsData = JSON.parse( fs.readFileSync( joistStringFileName, 'utf8' ) );
+        const JoistStringsData = JSON.parse( fs.readFileSync( joistStringFileName, 'utf8' ) );
 
         // add in the new translated value
-        joistStringsData.projectorMode = stringsObject[ stringKey ];
+        JoistStringsData.projectorMode = stringsObject[ stringKey ];
 
         // write the modified string file
         console.log( 'adding new string to file: ', joistStringFileName );
-        fs.writeFileSync( joistStringFileName, JSON.stringify( joistStringsData, null, 2 ) );
+        fs.writeFileSync( joistStringFileName, JSON.stringify( JoistStringsData, null, 2 ) );
       }
     } );
   } );
