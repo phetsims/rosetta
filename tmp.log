@@ -1,0 +1,186 @@
+
+> start
+> npm run lint && npm run build --workspace=client && node src/server/app.js
+
+
+> lint
+> grunt --gruntfile Gruntfile.cjs lint
+
+Running "lint" task
+
+Done.
+
+> build
+> vite build
+
+vite v3.1.0 building for production...
+transforming...
+✓ 220 modules transformed.
+rendering chunks...
+dist/assets/favicon.fbd33c8b.ico     4.19 KiB
+dist/assets/phet-logo.e90bc55d.png   4.05 KiB
+dist/index.html                      0.84 KiB
+dist/assets/index.6e2d8fac.js        204.92 KiB / gzip: 66.33 KiB
+info: trying to get current sha
+info: got current sha; returning it
+[33mwarn[39m: short-term string storage database not enabled; check your config
+[32minfo[39m: rosetta started
+[32minfo[39m: http://localhost:16372/translate
+[32minfo[39m: see config below
+[32minfo[39m:     BABEL_BRANCH: tests
+[32minfo[39m:     COMMITTER_NAME: phet-dev
+[32minfo[39m:     COMMITTER_EMAIL: phetadmin@gmail.com
+[32minfo[39m:     DB_NAME: rosetta
+[32minfo[39m:     DB_SHORT_TERM_STORAGE_COLLECTION_NAME: shortTermTranslationStorage
+[32minfo[39m:     DB_URI: mongodb://127.0.0.1:27017
+[32minfo[39m:     DB_ENABLED: false
+[32minfo[39m:     ENVIRONMENT: development
+[32minfo[39m:     GITHUB_URL: https://raw.githubusercontent.com/phetsims
+[32minfo[39m:     IS_ENABLED: true
+[32minfo[39m:     LIAM_BABEL_PAT: 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
+[32minfo[39m:     LOCAL_USER_ID: 654321
+[32minfo[39m:     PERFORM_STRING_COMMITS: true
+[32minfo[39m:     SEND_BUILD_REQUESTS: false
+[32minfo[39m:     SERVER_PORT: 16372
+[32minfo[39m:     SERVER_URL: https://phet.colorado.edu
+[32minfo[39m:     STRING_KEYS_WITH_REPO_NAME_IN_HTML_VAR: window.phet.chipper.strings
+[32minfo[39m:     SHA: 9d598fb4a40b7c6fa66ca6964eb3a40f55bcd9c4
+[32minfo[39m: responding with mock website user data
+[32minfo[39m: get request received for /localeInfo
+[32minfo[39m: getting locale info
+[32minfo[39m: locale info is stale or nonexistent; getting it
+[32minfo[39m: get request received for /simNames
+[32minfo[39m: getting sim names
+[32minfo[39m: getting sim metadata
+[32minfo[39m: sim metadata is stale or nonexistent; getting it
+[32minfo[39m: got locale info; returning it
+[32minfo[39m: responding with locale info
+[32minfo[39m: returning sim metadata
+[32minfo[39m: got sim names; returning them
+getSimNames: 789.205ms
+[32minfo[39m: responding with sim names
+[32minfo[39m: get request received for /translationFormData/acid-base-solutions/ab
+[32minfo[39m: getting sim names
+[32minfo[39m: getting sim metadata
+[32minfo[39m: using cached sim metadata
+[32minfo[39m: returning sim metadata
+[32minfo[39m: got sim names; returning them
+getSimNames: 0.36ms
+[32minfo[39m: getting acid-base-solutions's sim url
+[32minfo[39m: got acid-base-solutions's sim url; returning it
+getSimUrl: 0.087ms
+[32minfo[39m: getting sim html from https://phet.colorado.edu/sims/html/acid-base-solutions/latest/acid-base-solutions_en.html
+[32minfo[39m: responding with mock website user data
+[32minfo[39m: got sim html from https://phet.colorado.edu/sims/html/acid-base-solutions/latest/acid-base-solutions_en.html; returning it
+getSimHtml: 371.238ms
+[32minfo[39m: getting string keys with repo name from sim html
+[32minfo[39m: got string keys with repo name from sim html; returning them
+getStringKeysWithRepoName: 0.69ms
+[32minfo[39m: getting acid-base-solutions's categorized string keys
+[32minfo[39m: got acid-base-solutions's categorized string keys; returning them
+getCategorizedStringKeys: 6.938ms
+[32minfo[39m: getting translation form data
+[33mwarn[39m: short-term string storage database not enabled; check your config
+[32minfo[39m: getting sim-specific translation form data
+[33mwarn[39m: getting https://raw.githubusercontent.com/phetsims/babel/tests/acid-base-solutions/acid-base-solutions-strings_ab.json
+[32minfo[39m: got sim-specific translation form data; returning it
+[32minfo[39m: getting common translation form data
+[32minfo[39m: getting acid-base-solutions's common repos
+[32minfo[39m: got acid-base-solutions's common repos; returning them sorted alphabetically
+[33mwarn[39m: getting https://raw.githubusercontent.com/phetsims/babel/tests/scenery-phet/scenery-phet-strings_ab.json
+[33mwarn[39m: getting https://raw.githubusercontent.com/phetsims/babel/tests/joist/joist-strings_ab.json
+[32minfo[39m: got common translation form data; returning it
+getTranslationFormData: 561.893ms
+[32minfo[39m: got translation form data; returning it
+[32minfo[39m: responding with ab/acid-base-solutions's translation form data
+[32minfo[39m: post request received for /submitTranslation
+[32minfo[39m: sending ab/acid-base-solutions translation to be prepared for long-term storage
+[32minfo[39m: preparing translation of ab/acid-base-solutions for long-term storage
+[32minfo[39m: adding back dots to translation form data from client
+[32minfo[39m: making translation file contents for acid-base-solutions
+[33mwarn[39m: getting https://raw.githubusercontent.com/phetsims/babel/tests/acid-base-solutions/acid-base-solutions-strings_ab.json
+[32minfo[39m: string for pattern.0label.1value not translated; not adding it to the translation file for acid-base-solutions
+[32minfo[39m: the translation for pH's string was untouched; using old entry
+[32minfo[39m: string for pattern.0value.1units not translated; not adding it to the translation file for acid-base-solutions
+[32minfo[39m: the translation for liters's string was untouched; using old entry
+[32minfo[39m: string for pattern.0value.1power not translated; not adding it to the translation file for acid-base-solutions
+[32minfo[39m: the translation for negligible's string was untouched; using old entry
+[32minfo[39m: the translation for concentrationGraph.yAxis's string was untouched; using old entry
+[32minfo[39m: the translation for graph's string was untouched; using old entry
+[32minfo[39m: the translation for hideViews's string was untouched; using old entry
+[32minfo[39m: the translation for molecules's string was untouched; using old entry
+[32minfo[39m: the translation for solvent's string was untouched; using old entry
+[32minfo[39m: the translation for solution's string was untouched; using old entry
+[32minfo[39m: the translation for tools's string was untouched; using old entry
+[32minfo[39m: string for views not translated; not adding it to the translation file for acid-base-solutions
+[32minfo[39m: string for pHColorKey not translated; not adding it to the translation file for acid-base-solutions
+[32minfo[39m: string for stronger not translated; not adding it to the translation file for acid-base-solutions
+[32minfo[39m: string for weaker not translated; not adding it to the translation file for acid-base-solutions
+[32minfo[39m: string for acid not translated; not adding it to the translation file for acid-base-solutions
+[32minfo[39m: string for base not translated; not adding it to the translation file for acid-base-solutions
+[32minfo[39m: string for initialConcentration not translated; not adding it to the translation file for acid-base-solutions
+[32minfo[39m: string for strength not translated; not adding it to the translation file for acid-base-solutions
+[32minfo[39m: string for strong not translated; not adding it to the translation file for acid-base-solutions
+[32minfo[39m: string for weak not translated; not adding it to the translation file for acid-base-solutions
+[32minfo[39m: string for screen.mySolution not translated; not adding it to the translation file for acid-base-solutions
+[32minfo[39m: string for strongAcid not translated; not adding it to the translation file for acid-base-solutions
+[32minfo[39m: the translation for strongBase's string was untouched; using old entry
+[32minfo[39m: string for water not translated; not adding it to the translation file for acid-base-solutions
+[32minfo[39m: string for weakAcid not translated; not adding it to the translation file for acid-base-solutions
+[32minfo[39m: string for weakBase not translated; not adding it to the translation file for acid-base-solutions
+[32minfo[39m: string for screen.introduction not translated; not adding it to the translation file for acid-base-solutions
+[32minfo[39m: the translation for acid-base-solutions.title's string was untouched; using old entry
+[32minfo[39m: made translation file contents for acid-base-solutions; returning them
+[32minfo[39m: making translation file contents for scenery-phet
+[33mwarn[39m: getting https://raw.githubusercontent.com/phetsims/babel/tests/scenery-phet/scenery-phet-strings_ab.json
+[32minfo[39m: string for shortCircuit not translated; not adding it to the translation file for scenery-phet
+[32minfo[39m: made translation file contents for scenery-phet; returning them
+[32minfo[39m: making translation file contents for joist
+[33mwarn[39m: getting https://raw.githubusercontent.com/phetsims/babel/tests/joist/joist-strings_ab.json
+[32minfo[39m: the translation for termsPrivacyAndLicensing's string was untouched; using old entry
+[32minfo[39m: the translation for translation.credits.link's string was untouched; using old entry
+[32minfo[39m: the translation for thirdParty.credits.link's string was untouched; using old entry
+[32minfo[39m: string for credits.title not translated; not adding it to the translation file for joist
+[32minfo[39m: the translation for credits.leadDesign's string was modified; adding it to the translation file for joist
+[32minfo[39m: the translation for credits.softwareDevelopment's string was modified; adding it to the translation file for joist
+[32minfo[39m: string for credits.team not translated; not adding it to the translation file for joist
+[32minfo[39m: the translation for credits.qualityAssurance's string was modified; adding it to the translation file for joist
+[32minfo[39m: the translation for credits.graphicArts's string was modified; adding it to the translation file for joist
+[32minfo[39m: string for credits.translation not translated; not adding it to the translation file for joist
+[32minfo[39m: string for credits.thanks not translated; not adding it to the translation file for joist
+[32minfo[39m: string for updates.upToDate not translated; not adding it to the translation file for joist
+[32minfo[39m: string for updates.outOfDate not translated; not adding it to the translation file for joist
+[32minfo[39m: string for updates.checking not translated; not adding it to the translation file for joist
+[32minfo[39m: string for updates.offline not translated; not adding it to the translation file for joist
+[32minfo[39m: string for updates.newVersionAvailable not translated; not adding it to the translation file for joist
+[32minfo[39m: string for updates.yourCurrentVersion not translated; not adding it to the translation file for joist
+[32minfo[39m: string for updates.getUpdate not translated; not adding it to the translation file for joist
+[32minfo[39m: string for updates.noThanks not translated; not adding it to the translation file for joist
+[32minfo[39m: the translation for versionPattern's string was modified; adding it to the translation file for joist
+[32minfo[39m: the translation for options.title's string was untouched; using old entry
+[32minfo[39m: string for showPointers not translated; not adding it to the translation file for joist
+[32minfo[39m: string for done not translated; not adding it to the translation file for joist
+[32minfo[39m: string for title.settings not translated; not adding it to the translation file for joist
+[32minfo[39m: the translation for menuItem.options's string was untouched; using old entry
+[32minfo[39m: the translation for menuItem.about's string was untouched; using old entry
+[32minfo[39m: the translation for menuItem.phetWebsite's string was untouched; using old entry
+[32minfo[39m: the translation for menuItem.reportAProblem's string was untouched; using old entry
+[32minfo[39m: the translation for menuItem.screenshot's string was untouched; using old entry
+[32minfo[39m: the translation for menuItem.fullscreen's string was untouched; using old entry
+[32minfo[39m: the translation for menuItem.getUpdate's string was untouched; using old entry
+[32minfo[39m: made translation file contents for joist; returning them
+[32minfo[39m: prepared translation of ab/acid-base-solutions for long-term storage
+[32minfo[39m: sending ab/acid-base-solutions translation to be stored long-term
+[32minfo[39m: get request received for /localeInfo
+[32minfo[39m: getting locale info
+[32minfo[39m: using cached locale info
+[32minfo[39m: got locale info; returning it
+[32minfo[39m: responding with locale info
+[32minfo[39m: get request received for /simNames
+[32minfo[39m: getting sim names
+[32minfo[39m: getting sim metadata
+[32minfo[39m: using cached sim metadata
+[32minfo[39m: returning sim metadata
+[32minfo[39m: got sim names; returning them
+getSimNames: 0.68ms
+[32minfo[39m: responding with sim names
