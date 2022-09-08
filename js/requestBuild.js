@@ -61,18 +61,16 @@ async function requestBuild( simName, locale, userID ) {
 
   const simVersionObject = SimVersion.parse( latestVersionOfSim );
 
-  const phetioSims = await simPhetioMetadata( {
-    active: true,
-    latest: true
-  } );
-
+  // See if there is a published phet-io version of the sim we are requesting a build for. If so, add the phet-io brand
+  // to the list of brands we are requesting to build. For the history of this, see:
+  // https://github.com/phetsims/phet-io/issues/1874.
+  const phetioSims = await simPhetioMetadata( { active: true, latest: true } );
   const brands = [ 'phet' ];
   for ( let i = 0; i < phetioSims.length; i++ ) {
     const phetioSim = phetioSims[ i ];
-
-
-    if ( phetioSim.name === simName &&
-         SimVersion.parse( phetioSim.versionMajor, phetioSim.versionMinor, phetioSim.versionMaintenance ).compare( simVersionObject ) === 0 ) {
+    const phetioSimVersion = new SimVersion( phetioSim.versionMajor, phetioSim.versionMinor, phetioSim.versionMaintenance );
+    const nameAndVersionAreSame = phetioSim.name === simName && phetioSimVersion.compareNumber( simVersionObject ) === 0;
+    if ( nameAndVersionAreSame ) {
       brands.push( 'phet-io' );
     }
   }
@@ -84,7 +82,7 @@ async function requestBuild( simName, locale, userID ) {
     version: latestVersionOfSim,
     locales: [ locale ],
     servers: [ 'production' ],
-    brands: [ 'phet' ],
+    brands: brands,
     translatorId: userID,
     authorizationCode: global.config.buildServerAuthorizationCode
   };

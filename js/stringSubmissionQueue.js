@@ -139,13 +139,7 @@ module.exports.stringSubmissionQueue = async ( req, res ) => {
 
   try {
 
-    // request a build of the new translation (if enabled)
-    if ( SEND_BUILD_REQUESTS ) {
-      await requestBuild( simName, targetLocale, userId );
-    }
-    else {
-      winston.info( 'build requests for translations are disabled, skipping' );
-    }
+    await requestBuild( simName, targetLocale, userId );
 
     // clear out short-term storage, since these strings have now been successfully stored in the long-term area
     await deleteStringsFromDB( userId, targetLocale, _.keys( stringSets ) ).catch();
