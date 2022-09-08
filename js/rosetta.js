@@ -115,6 +115,7 @@ app.use( '/translate/css', express.static( `${__dirname}/../css` ) );
 app.use( '/translate/img', express.static( `${__dirname}/../img` ) );
 app.use( '/translate/js', express.static( __dirname ) );
 
+
 // Set up handling for cookies.
 app.use( cookieParser() );
 app.use( session( {
@@ -125,8 +126,11 @@ app.use( session( {
     checkPeriod: 86400000 // In milliseconds. Set to 1 day.
   } )
 } ) );
-app.use( bodyParser.json() );
-app.use( bodyParser.urlencoded( { extended: false } ) );
+
+// Fix for https://github.com/phetsims/rosetta/issues/309.
+// See https://stackoverflow.com/a/19965089.
+app.use( express.json( { limit: '50mb' } ) );
+app.use( bodyParser.urlencoded( { limit: '50mb', extended: true, parameterLimit: 1000000 } ) );
 
 //===========================================================================//
 // Set up the routes. The order in which they are set up matters!            //
