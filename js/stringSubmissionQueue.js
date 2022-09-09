@@ -17,9 +17,6 @@ const requestBuild = require( './requestBuild' );
 const RosettaConstants = require( './RosettaConstants' );
 const winston = require( 'winston' );
 
-// for debug purposes, it is possible to configure Rosetta to skip sending build requests to the build server
-const SEND_BUILD_REQUESTS = global.config.sendBuildRequests === undefined ? true : global.config.sendBuildRequests;
-
 /**
  * task queue into which translation requests are pushed
  * @public
