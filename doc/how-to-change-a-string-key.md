@@ -98,7 +98,8 @@ Changing a String Key for a Common Code Repository
 --------------------------------------------------
 
 Below are the steps for changing a string in a common code repository (as opposed to in a simulation). This is done as
-a checklist so that it can be easily pasted into a GitHub issue.
+a checklist so that it can be easily pasted into a GitHub issue.  **Make sure you have read the "Background" section
+before starting on this.**
 
 The checklist is written assuming a single string key is being changed, but the same process applies for multiple string
 keys, and several can be changed at once if necessary.
