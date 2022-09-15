@@ -106,7 +106,7 @@ pool.query( 'SELECT NOW();', ( error, result ) => {
 // Check dependencies.
 //===========================================================================//
 
-const perennialExists = fs.existsSync( path.join( __dirname, '..', 'perennial' ) );
+const perennialExists = fs.existsSync( path.join( __dirname, '..', '..', 'perennial' ) );
 if ( !perennialExists ) {
   winston.error( 'no parallel checkout of phetsims/perennial; exiting' );
   throw new Error( 'missing dependency' );
