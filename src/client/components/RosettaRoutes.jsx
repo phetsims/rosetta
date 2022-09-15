@@ -6,6 +6,7 @@
  * @author Liam Mulhall
  */
 
+import Admin from './Admin.jsx';
 import TestTranslation from './TestTranslation.jsx';
 import Help from './Help.jsx';
 import LocaleAndSimForm from './LocaleAndSimForm.jsx';
@@ -35,6 +36,7 @@ const RosettaRoutes = () => {
           <Route path='/translate/report' element={<TranslationReportForm/>}/>
           <Route path='/translate/help' element={<Help/>}/>
           <Route path='/translate/:locale/:simName' element={<TranslationForm/>}/>
+          <Route path='/translate/admin' element={<Admin/>}/>
         </Routes>
       </div>
     </BrowserRouter>
