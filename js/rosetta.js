@@ -21,6 +21,8 @@ const { Pool } = require( 'pg' ); // eslint-disable-line
 const RosettaConstants = require( './RosettaConstants' );
 const winston = require( 'winston' );
 const ensureValidSession = require( './ensureValidSession' );
+const fs = require( 'fs' );
+const path = require( 'path' );
 
 // order-dependent Modules
 const session = require( 'express-session' ); // eslint-disable-line require-statement-match
@@ -99,6 +101,16 @@ pool.query( 'SELECT NOW();', ( error, result ) => {
     winston.info( `Database test using SELECT NOW() succeeded. Now: ${result.rows[ 0 ].now}` );
   }
 } );
+
+//===========================================================================//
+// Check dependencies.
+//===========================================================================//
+
+const perennialExists = fs.existsSync( path.join( __dirname, '..', 'perennial' ) );
+if ( !perennialExists ) {
+  winston.error( 'no parallel checkout of phetsims/perennial; exiting' );
+  throw new Error( 'missing dependency' );
+}
 
 //===========================================================================//
 // Set up the app.                                                           //
