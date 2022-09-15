@@ -187,26 +187,6 @@ app.post( '/translate/sim/:simName?/:targetLocale?', routeHandlers.submitStrings
 // Trigger the build of a simulation for a given sim, locale, and user ID. Only used by team members to fix problems.
 app.get( '/translate/trigger-build/:simName?/:targetLocale?/:userId?', routeHandlers.triggerBuild );
 
-// Routes for info on untranslated strings.
-app.get( '/translate/sim-string-report/:simName?/:targetLocale?/', routeHandlers.simStringReport );
-app.get( '/translate/locale-string-report/:targetLocale?/', routeHandlers.localeStringReport );
-
-// // TODO: Move this when you're done.
-// app.get( '/translate/sse/', async ( req, res ) => {
-//   res.set( {
-//     'Cache-Control': 'no-cache',
-//     'Content-Type': 'text/event-stream',
-//     'Connection': 'keep-alive'
-//   } );
-//   res.flushHeaders();
-//   let count = 0;
-//   while ( true ) {
-//     await new Promise( resolve => setTimeout( resolve, 1000 ) );
-//     res.write( `data: ${count}\n\n` );
-//     count++;
-//   }
-// } );
-
 // Set up a route that will return the SHA of the version that is currently being run.  This is useful for debugging.
 app.get( '/translate/sha', routeHandlers.getSha );
 
