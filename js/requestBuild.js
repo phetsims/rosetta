@@ -69,7 +69,9 @@ async function requestBuild( simName, locale, userID ) {
   for ( let i = 0; i < phetioSims.length; i++ ) {
     const phetioSim = phetioSims[ i ];
     const phetioSimVersion = new SimVersion( phetioSim.versionMajor, phetioSim.versionMinor, phetioSim.versionMaintenance );
-    const nameAndVersionAreSame = phetioSim.name === simName && phetioSimVersion.compareNumber( simVersionObject ) === 0;
+    const nameAndVersionAreSame = phetioSim.name === simName &&
+                                  phetioSimVersion.major === simVersionObject.major &&
+                                  phetioSimVersion.minor === simVersionObject.minor;
     if ( nameAndVersionAreSame ) {
       brands.push( 'phet-io' );
     }
@@ -87,8 +89,16 @@ async function requestBuild( simName, locale, userID ) {
     authorizationCode: global.config.buildServerAuthorizationCode
   };
 
+  // Log the build request without the auth code.
+  const keysForLog = Object.keys( requestObject ).filter( key => key !== 'authorizationCode' );
+  winston.info( 'Build request object:' );
+  for ( const key of keysForLog ) {
+    winston.info( `    ${key}: ${requestObject[ key ]}` );
+  }
+
   // If the sendBuildRequests flag is set to true in the user's rosettaConfig.json, send it! Otherwise, don't send the
   // build request. Do, however, log the theoretical build request for debugging purposes.
+  let buildRequestRes = false;
   if ( SEND_BUILD_REQUESTS ) {
 
     // Tell the user where we're sending the build request.
@@ -96,7 +106,6 @@ async function requestBuild( simName, locale, userID ) {
     winston.info( `Sending build request to server. URL: ${url}` );
 
     // Try to send the build request.
-    let buildRequestRes = null;
     try {
       buildRequestRes = await axios.post( url, requestObject );
     }
@@ -105,16 +114,12 @@ async function requestBuild( simName, locale, userID ) {
       winston.error( errorMessage );
       throw new Error( errorMessage );
     }
-
-    // return the build request response
-    return buildRequestRes;
   }
   else {
-    winston.info( 'The sendBuildRequest flag is set to false in your rosettaConfig.json! Not sending the build request.' );
-    winston.debug( 'You can find the theoretical requestObject below.' );
-    winston.debug( JSON.stringify( requestObject, null, 2 ) );
+    winston.warn( 'The sendBuildRequest flag is set to false in your rosettaConfig.json. Not sending the build request.' );
     throw new Error( 'Build request unsuccessful. sendBuildRequest = false in rosettaConfig.json.' );
   }
+  return buildRequestRes;
 }
 
 module.exports = requestBuild;
