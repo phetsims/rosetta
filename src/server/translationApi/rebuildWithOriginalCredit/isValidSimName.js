@@ -6,7 +6,7 @@ import getSimNames from '../getSimNames.js';
  * Tell whether a sim is in the list of sim names.
  *
  * @param simName - lowercase kebab-case sim name, e.g. acid-base-solutions
- * @return {boolean}
+ * @returns {boolean}
  */
 const isValidSimName = async simName => {
   const listOfSimNames = await getSimNames();

@@ -8,7 +8,7 @@ import logger from '../logger.js';
  * @param {Object} req - the Express request object
  * @param {Object} res - the Express response object
  */
-const triggerBuild = ( req, res ) => {
+const rebuildWithOriginalCredit = ( req, res ) => {
   logger.info( 'trigger build' );
   const buildObject = {
     sim: req.params.simName,
@@ -18,4 +18,4 @@ const triggerBuild = ( req, res ) => {
   res.json( buildObject );
 };
 
-export default triggerBuild;
+export default rebuildWithOriginalCredit;

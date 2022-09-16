@@ -1,4 +1,4 @@
-// Copyright, 2022 University of Colorado Boulder
+// Copyright 2022, University of Colorado Boulder
 
 import axios from 'axios';
 import config from '../../../common/config.js';

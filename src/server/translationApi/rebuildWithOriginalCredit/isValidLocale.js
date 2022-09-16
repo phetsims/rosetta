@@ -12,7 +12,7 @@ import getLocaleInfo from '../getLocaleInfo.js';
  * Tell whether a locale is in the list of locales.
  *
  * @param {string} locale - ISO 639-1 locale code, e.g. es for Spanish
- * @return {boolean}
+ * @returns {boolean}
  */
 const isValidLocale = locale => {
   const localeInfo = getLocaleInfo();
