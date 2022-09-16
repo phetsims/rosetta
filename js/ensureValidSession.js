@@ -132,7 +132,6 @@ async function ensureValidSession( request, response, next ) { // eslint-disable
   const websiteCookie = request.cookies.JSESSIONID;
   winston.debug( 'Checking for website cookie.' );
   if ( websiteCookie ) {
-    winston.debug( `Got website cookie: ${websiteCookie}. Getting website user data.` );
     let websiteUserData = await getUserData( request, websiteCookie );
     websiteUserData = websiteUserData.data;
     const websiteUserDataToLog = {
