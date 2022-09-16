@@ -26,7 +26,7 @@ const Admin = () => {
   let jsx;
   const allowedAccess = websiteUserData.loggedIn && websiteUserData.teamMember;
 
-  const initialTriggerBuildValues = {
+  const initialRebuildValues = {
     sim: '',
     locale: '',
     userId: ''
@@ -45,8 +45,11 @@ const Admin = () => {
           If you aren't a PhET Team Member, you shouldn't be seeing this page. Please send an email to
           phethelp@colorado.edu to help us resolve this.
         </p>
-        <h2>Trigger Build</h2>
-        <Formik initialValues={initialTriggerBuildValues} onSubmit={handleSubmit}>
+        <h2>Rebuild With Original Credit</h2>
+        <p>
+          See documentation for rebuilding a sim with original credit <a href='#'>here</a>.
+        </p>
+        <Formik initialValues={initialRebuildValues} onSubmit={handleSubmit}>
           {( { isSubmitting } ) => (
             <Form>
               <div>
@@ -61,7 +64,7 @@ const Admin = () => {
                 <label className='mt-2'>User ID:</label><br/>
                 <Field type='text' name='userId'/>
               </div>
-              <button type='submit' disabled={isSubmitting} className='btn btn-primary mt-2'>Trigger Build</button>
+              <button type='submit' disabled={isSubmitting} className='btn btn-primary mt-2'>Rebuild</button>
             </Form>
           )}
         </Formik>
