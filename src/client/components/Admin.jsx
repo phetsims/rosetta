@@ -26,8 +26,15 @@ const Admin = () => {
   let jsx;
   const allowedAccess = websiteUserData.loggedIn && websiteUserData.teamMember;
 
-  const handleSubmit = values => {
+  const initialTriggerBuildValues = {
+    sim: '',
+    locale: '',
+    userId: ''
+  };
+
+  const handleSubmit = ( values, { setSubmitting } ) => {
     console.log( JSON.stringify( values, null, 2 ) );
+    setSubmitting( false );
   };
 
   if ( allowedAccess ) {
@@ -39,22 +46,24 @@ const Admin = () => {
           phethelp@colorado.edu to help us resolve this.
         </p>
         <h2>Trigger Build</h2>
-        <Formik initialValues={{}} onSubmit={handleSubmit}>
-          <Form>
-            <div>
-              <label className='mt-2'>Lowercase kebab sim name (e.g. acid-base-solutions):</label><br/>
-              <Field type='text' name='sim'/>
-            </div>
-            <div>
-              <label className='mt-2'>ISO 639-1 locale name (e.g. es for Spanish):</label><br/>
-              <Field type='text' name='locale'/>
-            </div>
-            <div>
-              <label className='mt-2'>User ID:</label><br/>
-              <Field type='text' name='userId'/>
-            </div>
-            <button type='submit' className='btn btn-primary mt-2'>Trigger Build</button>
-          </Form>
+        <Formik initialValues={initialTriggerBuildValues} onSubmit={handleSubmit}>
+          {( { isSubmitting } ) => (
+            <Form>
+              <div>
+                <label className='mt-2'>Sim:</label><br/>
+                <Field type='text' name='sim'/>
+              </div>
+              <div>
+                <label className='mt-2'>Locale:</label><br/>
+                <Field type='text' name='locale'/>
+              </div>
+              <div>
+                <label className='mt-2'>User ID:</label><br/>
+                <Field type='text' name='userId'/>
+              </div>
+              <button type='submit' disabled={isSubmitting} className='btn btn-primary mt-2'>Trigger Build</button>
+            </Form>
+          )}
         </Formik>
       </div>
     );
@@ -63,7 +72,7 @@ const Admin = () => {
     jsx = (
       <div>
         <h1>Nothing to see here! :)</h1>
-        Go back to the <p><Link to='/translate'>Translate</Link> page.</p>
+        <p>Go back to the <Link to='/translate'>Translate</Link> page.</p>
       </div>
     );
   }
