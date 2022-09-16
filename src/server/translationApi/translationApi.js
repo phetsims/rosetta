@@ -13,7 +13,7 @@ import simSpecificTranslatedStringKeysAndStrings from './api/tmp/simSpecificTran
 import submitTranslation from './api/submitTranslation.js';
 import testTranslation from './api/testTranslation.js';
 import translationFormData from './api/translationFormData.js';
-import triggerBuild from './api/triggerBuild.js';
+import rebuildWithOriginalCredit from './api/rebuildWithOriginalCredit.js';
 
 const rosettaApiServer = express();
 
@@ -30,7 +30,7 @@ rosettaApiServer.get( '/localeInfo', localeInfo );
 rosettaApiServer.get( '/simNames', simNames );
 rosettaApiServer.get( '/translationFormData/:simName?/:locale?', translationFormData );
 rosettaApiServer.get( '/sha', sha );
-rosettaApiServer.get( '/triggerBuild/:simName?/:locale?/:userId?', triggerBuild );
+rosettaApiServer.get( '/rebuildWithOriginalCredit/:simName?/:locale?/:userId?', rebuildWithOriginalCredit );
 
 // These might be used in the translation report. (Currently unused, hence the tmp directory.)
 rosettaApiServer.get( '/tmp/commonEnglishStringKeysAndStrings/:simName?', commonEnglishStringKeysAndStrings );

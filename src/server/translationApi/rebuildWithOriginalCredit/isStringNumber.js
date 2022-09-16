@@ -22,6 +22,6 @@ const isStringNumber = stringToTest => {
     logger.error( `isStringNumber was called with parameter type ${typeof stringToTest}; returning false` );
     return false;
   }
-}
+};
 
 export default isStringNumber;
