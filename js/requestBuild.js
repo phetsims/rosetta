@@ -89,8 +89,8 @@ async function requestBuild( simName, locale, userID ) {
     authorizationCode: global.config.buildServerAuthorizationCode
   };
 
-  // Log the build request without the auth code.
-  const keysForLog = Object.keys( requestObject ).filter( key => key !== 'authorizationCode' );
+  // Log the build request without the auth code or dependencies.
+  const keysForLog = Object.keys( requestObject ).filter( key => key !== 'authorizationCode' && key !== 'dependencies' );
   winston.info( 'Build request object:' );
   for ( const key of keysForLog ) {
     winston.info( `    ${key}: ${requestObject[ key ]}` );
