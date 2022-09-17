@@ -20,12 +20,15 @@ const SimSelect = ( { field } ) => { // eslint-disable-line react/prop-types
 
   // for storing and setting sim names
   const [ simNames, setSimNames ] = useState( [] );
+  const [ simTitles, setSimTitles ] = useState( [] );
 
   // get sim names
   useEffect( async () => {
     try {
       const simNamesRes = await axios.get( '/translationApi/simNames' );
       setSimNames( simNamesRes.data );
+      const simTitlesRes = await axios.get( '/translationApi/simTitles' );
+      setSimTitles( simTitlesRes.data );
     }
     catch( e ) {
       console.error( e );
@@ -34,13 +37,13 @@ const SimSelect = ( { field } ) => { // eslint-disable-line react/prop-types
 
   // create a list of sim options to iterate over
   const simOptions = [];
-  for ( const simName of simNames ) {
+  for ( let i = 0; i < simNames.length; i++ ) {
     simOptions.push(
       <option
-        key={simName}
-        value={simName}
+        key={simNames[ i ]}
+        value={simNames[ i ]}
       >
-        {simName.replaceAll( '-', ' ' )}
+        {simTitles[ i ]}
       </option>
     );
   }

@@ -1,12 +1,12 @@
 // Copyright 2022, University of Colorado Boulder
 
-import logger from './logger.js';
 import getSimMetadata from './getSimMetadata.js';
+import logger from './logger.js';
 
 const getSimTitles = async () => {
+  let simTitles = [];
   try {
     const simMetadata = await getSimMetadata();
-    const simTitles = [];
     for ( const project of simMetadata.projects ) {
       for ( const sim of project.simulations ) {
         const localizedSims = sim.localizedSimulations;
@@ -14,15 +14,12 @@ const getSimTitles = async () => {
         simTitles.push( simTitle );
       }
     }
-    console.log( simTitles );
   }
   catch( e ) {
+    simTitles = [ 'error: unable to get sim titles' ];
     logger.error( e );
   }
+  return simTitles;
 };
-
-( async () => {
-  await getSimTitles();
-} )();
 
 export default getSimTitles;
