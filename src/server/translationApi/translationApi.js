@@ -5,15 +5,16 @@ import commonTranslatedStringKeysAndStrings from './api/tmp/commonTranslatedStri
 import express from 'express';
 import localeInfo from './api/localeInfo.js';
 import logger from './logger.js';
+import rebuildWithOriginalCredit from './api/rebuildWithOriginalCredit.js';
 import saveTranslation from './api/saveTranslation.js';
 import sha from './api/sha.js';
 import simNames from './api/simNames.js';
 import simSpecificEnglishStringKeysAndStrings from './api/tmp/simSpecificEnglishStringKeysAndStrings.js';
 import simSpecificTranslatedStringKeysAndStrings from './api/tmp/simSpecificTranslatedStringKeysAndStrings.js';
+import simTitles from './api/simTitles.js';
 import submitTranslation from './api/submitTranslation.js';
 import testTranslation from './api/testTranslation.js';
 import translationFormData from './api/translationFormData.js';
-import rebuildWithOriginalCredit from './api/rebuildWithOriginalCredit.js';
 
 const rosettaApiServer = express();
 
@@ -28,6 +29,7 @@ rosettaApiServer.get( '/*', ( req, res, next ) => {
 } );
 rosettaApiServer.get( '/localeInfo', localeInfo );
 rosettaApiServer.get( '/simNames', simNames );
+rosettaApiServer.get( '/simTitles', simTitles );
 rosettaApiServer.get( '/translationFormData/:simName?/:locale?', translationFormData );
 rosettaApiServer.get( '/sha', sha );
 rosettaApiServer.get( '/rebuildWithOriginalCredit/:simName?/:locale?/:userId?', rebuildWithOriginalCredit );
