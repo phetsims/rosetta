@@ -6,6 +6,7 @@ import RebuildWithOriginalCredit from './RebuildWithOriginalCredit.jsx';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import Sha from './Sha.jsx';
 
 const Admin = () => {
 
@@ -34,6 +35,7 @@ const Admin = () => {
           If you aren't a PhET Team Member, you shouldn't be seeing this page. Please send an email to
           phethelp@colorado.edu to help us resolve this.
         </p>
+        <Sha/>
         <RebuildWithOriginalCredit/>
       </div>
     );
