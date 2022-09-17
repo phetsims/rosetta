@@ -9,7 +9,8 @@
  */
 
 import PhetLogo from '../img/phet-logo.png';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 /**
@@ -20,6 +21,23 @@ import { Link } from 'react-router-dom';
  * @constructor
  */
 const Navbar = () => {
+  const [ websiteUserData, setWebsiteUserData ] = useState( {} );
+  useEffect( async () => {
+    try {
+      const websiteUserDataRes = await axios.get( `${window.location.origin}/services/check-login` );
+      setWebsiteUserData( websiteUserDataRes.data );
+    }
+    catch( e ) {
+      console.error( e );
+    }
+  }, [] );
+  const shouldShowAdminLink = websiteUserData.loggedIn && websiteUserData.teamMember;
+  const adminLinkJsx = (
+    <li className='nav-item'>
+      <Link className='nav-link' to='/translate/admin'>Admin</Link>
+    </li>
+  );
+  const nothingJsx = <div></div>;
   return (
     <nav className='navbar navbar-expand-lg navbar-light bg-light'>
       <div className='container-fluid'>
@@ -40,6 +58,7 @@ const Navbar = () => {
             <li className='nav-item'>
               <Link className='nav-link' to='/translate/help'>Help</Link>
             </li>
+            {shouldShowAdminLink ? adminLinkJsx : nothingJsx}
           </ul>
         </div>
       </div>
