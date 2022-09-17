@@ -2,8 +2,8 @@
 
 /* eslint-disable react/no-unescaped-entities */
 
+import RebuildWithOriginalCredit from './RebuildWithOriginalCredit.jsx';
 import axios from 'axios';
-import { Field, Form, Formik } from 'formik';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
@@ -26,17 +26,6 @@ const Admin = () => {
   let jsx;
   const allowedAccess = websiteUserData.loggedIn && websiteUserData.teamMember;
 
-  const initialRebuildValues = {
-    sim: '',
-    locale: '',
-    userId: ''
-  };
-
-  const handleSubmit = ( values, { setSubmitting } ) => {
-    console.log( JSON.stringify( values, null, 2 ) );
-    setSubmitting( false );
-  };
-
   if ( allowedAccess ) {
     jsx = (
       <div>
@@ -45,29 +34,7 @@ const Admin = () => {
           If you aren't a PhET Team Member, you shouldn't be seeing this page. Please send an email to
           phethelp@colorado.edu to help us resolve this.
         </p>
-        <h2>Rebuild With Original Credit</h2>
-        <p>
-          See documentation for rebuilding a sim with original credit <a href='#'>here</a>.
-        </p>
-        <Formik initialValues={initialRebuildValues} onSubmit={handleSubmit}>
-          {( { isSubmitting } ) => (
-            <Form>
-              <div>
-                <label className='mt-2'>Sim:</label><br/>
-                <Field type='text' name='sim'/>
-              </div>
-              <div>
-                <label className='mt-2'>Locale:</label><br/>
-                <Field type='text' name='locale'/>
-              </div>
-              <div>
-                <label className='mt-2'>User ID:</label><br/>
-                <Field type='text' name='userId'/>
-              </div>
-              <button type='submit' disabled={isSubmitting} className='btn btn-primary mt-2'>Rebuild</button>
-            </Form>
-          )}
-        </Formik>
+        <RebuildWithOriginalCredit/>
       </div>
     );
   }
