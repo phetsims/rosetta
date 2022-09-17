@@ -15,7 +15,9 @@ const rebuildWithOriginalCredit = ( req, res ) => {
     locale: req.params.locale,
     userId: req.params.userId
   };
-  res.json( buildObject );
+  logger.info( 'build object:' );
+  logger.info( JSON.stringify( buildObject, null, 2 ) );
+  res.end();
 };
 
 export default rebuildWithOriginalCredit;

@@ -1,5 +1,6 @@
 // Copyright 2022, University of Colorado Boulder
 
+import axios from 'axios';
 import { Field, Form, Formik } from 'formik';
 
 const RebuildWithOriginalCredit = () => {
@@ -8,8 +9,9 @@ const RebuildWithOriginalCredit = () => {
     locale: '',
     userId: ''
   };
-  const handleSubmit = ( values, { setSubmitting } ) => {
-    window.alert( JSON.stringify( values, null, 2 ) );
+  const handleSubmit = async ( values, { setSubmitting } ) => {
+    await axios.get( `/translationApi/rebuildWithOriginalCredit/${values.sim}/${values.locale}/${values.userId}` );
+    window.alert( `Rebuild request sent for sim ${values.sim} in locale ${values.locale} with user ID ${values.userId}.` );
     setSubmitting( false );
   };
   return (
