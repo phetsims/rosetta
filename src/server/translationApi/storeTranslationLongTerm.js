@@ -50,6 +50,7 @@ const storeTranslationLongTerm = async preparedTranslation => {
           logger.info( `stored translation of strings in ${repo} long-term` );
         }
         catch( e ) {
+          logger.error( e );
           try {
 
             // try to create the file
@@ -66,7 +67,6 @@ const storeTranslationLongTerm = async preparedTranslation => {
           catch( e ) {
             logger.error( e );
           }
-          logger.error( e );
         }
       }
     }
