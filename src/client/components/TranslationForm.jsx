@@ -10,6 +10,7 @@
  * @author Liam Mulhall
  */
 
+import LoadingSpinner from './LoadingSpinner.jsx';
 import React, { useEffect, useState } from 'react';
 import TranslationTables from './TranslationTables.jsx';
 import axios from 'axios';
@@ -89,9 +90,7 @@ const TranslationForm = () => {
         <h1>Translation Form</h1>
         <h2 className='text-muted'>Locale: {params.locale}</h2>
         <h2 className='text-muted'>Sim: {params.simName}</h2>
-        <div className='spinner-border text-primary' role='status'>
-          <span className='visually-hidden'>Loading...</span>
-        </div>
+        <LoadingSpinner/>
       </div>
     );
   }
