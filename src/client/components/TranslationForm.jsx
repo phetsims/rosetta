@@ -13,8 +13,11 @@
 import React, { useEffect, useState } from 'react';
 import TranslationTables from './TranslationTables.jsx';
 import axios from 'axios';
+import saveTranslation from '../utils/saveTranslation.js';
+import submitTranslation from '../utils/submitTranslation.js';
+import testTranslation from '../utils/testTranslation.js';
 import { Formik, Form } from 'formik';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 /**
  * This component is a form with a table that is populated by the translation form data that we get from the backend.
@@ -43,55 +46,6 @@ const TranslationForm = () => {
     }
   }, [] );
 
-  // used to programmatically navigate the user to the translation page
-  const navigate = useNavigate();
-
-  // save functionality
-  const save = async translation => {
-    if ( window.confirm( `If you have a translation saved for ${translation.simName} in locale ${translation.locale}, it will be overwritten.` ) ) {
-      try {
-        const postRes = await axios.post( '/translationApi/saveTranslation', translation );
-        console.log( postRes.data );
-
-        // todo: change
-        alert( 'Translation saved.' );
-      }
-      catch( e ) {
-        console.error( e );
-      }
-    }
-  };
-
-  // submit functionality
-  const submit = async translation => {
-    if ( window.confirm( `Are you sure you want to submit your translation for ${translation.simName} in locale ${translation.locale}?` ) ) {
-      try {
-        const postRes = await axios.post( '/translationApi/submitTranslation', translation );
-        console.log( postRes.data );
-        alert( 'Translation submitted. Your translation should appear on the PhET website in about half an hour. Redirecting you to the PhET Translation Tool home page.' );
-        navigate( '/translate' );
-      }
-      catch( e ) {
-        console.error( e );
-      }
-    }
-  };
-
-  // test functionality
-  const test = async translation => {
-    try {
-      const testRes = await axios.post( '/translationApi/testTranslation', translation );
-      const stringSimHtml = testRes.data;
-
-      // Open the translated sim in a new tab.
-      const win = window.open( '' );
-      win.document.write( stringSimHtml );
-    }
-    catch( e ) {
-      console.error( e );
-    }
-  };
-
   // for storing and setting website user data
   const [ websiteUserData, setWebsiteUserData ] = useState( {} );
 
@@ -116,13 +70,13 @@ const TranslationForm = () => {
       translationFormData: values
     };
     if ( document.activeElement.dataset.flag === 'save' ) {
-      await save( translation );
+      await saveTranslation( translation );
     }
     else if ( document.activeElement.dataset.flag === 'submit' ) {
-      await submit( translation );
+      await submitTranslation( translation );
     }
     else if ( document.activeElement.dataset.flag === 'test' ) {
-      await test( translation );
+      await testTranslation( translation );
     }
     else {
       console.error( 'unexpected dataset flag' );
@@ -143,7 +97,6 @@ const TranslationForm = () => {
   }
   else {
 
-    // as of this writing, both buttons submit the form; they use different flags to separate functionality
     return (
       <div>
         <h1>Translation Form</h1>
