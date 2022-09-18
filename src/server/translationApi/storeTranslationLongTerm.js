@@ -19,7 +19,7 @@ const longTermStorage = githubInterface.repo( 'phetsims/babel' );
  * @param {Object} preparedTranslation - exact translation file contents for each repo in a translation
  */
 const storeTranslationLongTerm = async preparedTranslation => {
-  if ( config.PERFORM_STRING_COMMITS === 'true' ) {
+  if ( config.PERFORM_STRING_COMMITS ) {
 
     const contents = preparedTranslation.translationFileContents;
     for ( const repo of Object.keys( contents ) ) {
