@@ -12,6 +12,7 @@
 
 import LoadingSpinner from './LoadingSpinner.jsx';
 import React, { useEffect, useState } from 'react';
+import TranslationFormHeader from './TranslationFormHeader.jsx';
 import TranslationTables from './TranslationTables.jsx';
 import axios from 'axios';
 import saveTranslation from '../utils/saveTranslation.js';
@@ -87,9 +88,7 @@ const TranslationForm = () => {
   if ( translationFormData === null ) {
     return (
       <div>
-        <h1>Translation Form</h1>
-        <h2 className='text-muted'>Locale: {params.locale}</h2>
-        <h2 className='text-muted'>Sim: {params.simName}</h2>
+        <TranslationFormHeader locale={params.locale} simName={params.simName}/>
         <LoadingSpinner/>
       </div>
     );
@@ -98,9 +97,7 @@ const TranslationForm = () => {
 
     return (
       <div>
-        <h1>Translation Form</h1>
-        <h2 className='text-muted'>Locale: {params.locale}</h2>
-        <h2 className='text-muted'>Sim: {params.simName}</h2>
+        <TranslationFormHeader locale={params.locale} simName={params.simName}/>
         <Formik
           initialValues={translationFormData}
           onSubmit={handleSubmit}
