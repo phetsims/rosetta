@@ -10,9 +10,6 @@ import axios from 'axios';
 import config from '../../common/config.js';
 import logger from './logger.js';
 
-// This is an arbitrary time duration for how long the locale info is valid.
-const VALID_LOCALE_INFO_DURATION = 2 * 7 * 24 * 60 * 60 * 1000; // (In milliseconds.)
-
 let timeOfLastUpdate = Number.NEGATIVE_INFINITY;
 
 let localeInfo;
@@ -25,7 +22,8 @@ let localeInfo;
 const getLocaleInfo = async () => {
   logger.info( 'getting locale info' );
   try {
-    const localeInfoValidDurationElapsed = timeOfLastUpdate + VALID_LOCALE_INFO_DURATION < Date.now();
+    const localeInfoValidDurationElapsed = timeOfLastUpdate
+                                           + parseInt( config.VALID_LOCALE_INFO_DURATION, 10 ) < Date.now();
 
     /*
      * We use cached locale info unless the locale info has become stale (i.e. the valid locale info duration has
