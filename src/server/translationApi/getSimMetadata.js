@@ -22,9 +22,6 @@ const METADATA_REQ_OPTIONS = {
   }
 };
 
-// This is an arbitrary time duration for how long the sim metadata is valid.
-const VALID_METADATA_DURATION = 60 * 60 * 1000; // (In milliseconds.)
-
 let timeOfLastUpdate = Number.NEGATIVE_INFINITY;
 
 let simMetadata;
@@ -37,7 +34,8 @@ let simMetadata;
 const getSimMetadata = async () => {
   logger.info( 'getting sim metadata' );
   try {
-    const metadataValidDurationElapsed = timeOfLastUpdate + VALID_METADATA_DURATION < Date.now();
+    const metadataValidDurationElapsed = timeOfLastUpdate +
+                                         parseInt( config.VALID_METADATA_DURATION, 10 ) < Date.now();
 
     /*
      * We use cached sim metadata unless the sim metadata has become stale (i.e. the valid metadata duration has
