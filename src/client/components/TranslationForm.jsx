@@ -12,12 +12,10 @@
 
 import LoadingSpinner from './LoadingSpinner.jsx';
 import React, { useEffect, useState } from 'react';
+import TranslationFormButtons from './TranslationFormButtons.jsx';
 import TranslationFormHeader from './TranslationFormHeader.jsx';
 import TranslationTables from './TranslationTables.jsx';
 import axios from 'axios';
-import saveTranslation from '../utils/saveTranslation.js';
-import submitTranslation from '../utils/submitTranslation.js';
-import testTranslation from '../utils/testTranslation.js';
 import { Formik, Form } from 'formik';
 import { useParams } from 'react-router-dom';
 
@@ -48,45 +46,13 @@ const TranslationForm = () => {
     }
   }, [] );
 
-  // for storing and setting website user data
-  const [ websiteUserData, setWebsiteUserData ] = useState( {} );
-
-  // get website user data
-  useEffect( async () => {
-    try {
-      const websiteUserDataRes = await axios.get( `${window.location.origin}/services/check-login` );
-      setWebsiteUserData( websiteUserDataRes.data );
-    }
-    catch( e ) {
-      console.error( e );
-    }
-  }, [] );
-
-  // as of this writing, saving or submitting hits this function
-  const handleSubmit = async values => {
-    const translation = {
-      userId: websiteUserData.userId,
-      timestamp: Date.now(),
-      simName: params.simName,
-      locale: params.locale,
-      translationFormData: values
-    };
-    if ( document.activeElement.dataset.flag === 'save' ) {
-      await saveTranslation( translation );
-    }
-    else if ( document.activeElement.dataset.flag === 'submit' ) {
-      await submitTranslation( translation );
-    }
-    else if ( document.activeElement.dataset.flag === 'test' ) {
-      await testTranslation( translation );
-    }
-    else {
-      console.error( 'unexpected dataset flag' );
-    }
+  const handleSubmit = () => {
+    console.log( 'submit' );
   };
 
+  let translationFormJsx;
   if ( translationFormData === null ) {
-    return (
+    translationFormJsx = (
       <div>
         <TranslationFormHeader locale={params.locale} simName={params.simName}/>
         <LoadingSpinner/>
@@ -94,8 +60,7 @@ const TranslationForm = () => {
     );
   }
   else {
-
-    return (
+    translationFormJsx = (
       <div>
         <TranslationFormHeader locale={params.locale} simName={params.simName}/>
         <Formik
@@ -103,42 +68,15 @@ const TranslationForm = () => {
           onSubmit={handleSubmit}
         >
           <Form>
-            <div className='mt-2'>
-              <button type='submit' data-flag='save' className='btn btn-primary'>
-                Save Translation
-              </button>
-            </div>
-            <div className='mt-2'>
-              <button type='submit' data-flag='submit' className='btn btn-primary'>
-                Submit Translation
-              </button>
-            </div>
-            <div className='mt-2'>
-              <button type='submit' data-flag='test' className='btn btn-primary'>
-                Test Translation
-              </button>
-            </div>
+            <TranslationFormButtons simName={params.simName} locale={params.locale} />
             <TranslationTables translationFormData={translationFormData}/>
-            <div className='mt-2'>
-              <button type='submit' data-flag='save' className='btn btn-primary'>
-                Save Translation
-              </button>
-            </div>
-            <div className='mt-2'>
-              <button type='submit' data-flag='submit' className='btn btn-primary'>
-                Submit Translation
-              </button>
-            </div>
-            <div className='mt-2'>
-              <button type='submit' data-flag='test' className='btn btn-primary'>
-                Test Translation
-              </button>
-            </div>
+            <TranslationFormButtons simName={params.simName} locale={params.locale} />
           </Form>
         </Formik>
       </div>
     );
   }
+  return translationFormJsx;
 };
 
 export default TranslationForm;
