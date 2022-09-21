@@ -33,7 +33,6 @@ const getCommonTranslatedStringKeysAndStrings = async (
   categorizedStringKeys
 ) => {
 
-  console.time( 'getCommonTranslatedStringKeysAndStrings' );
   const commonTranslatedStringKeysAndStrings = new Map();
   const commonStringKeys = categorizedStringKeys.common;
 
@@ -110,7 +109,6 @@ const getCommonTranslatedStringKeysAndStrings = async (
     }
   }
 
-  console.timeEnd( 'getCommonTranslatedStringKeysAndStrings' );
   return [ ...sortedCommonTranslatedStringKeysAndStrings ];
 };
 
