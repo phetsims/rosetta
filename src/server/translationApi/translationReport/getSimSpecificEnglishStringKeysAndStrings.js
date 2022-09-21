@@ -20,7 +20,6 @@ import logger from '../logger.js';
  * @returns {Promise<String[][]>} - ordered pairs of sim-specific English string keys and their values (their strings)
  */
 const getSimSpecificEnglishStringKeysAndStrings = async ( simName, categorizedStringKeys ) => {
-  console.time( 'getSimSpecificEnglishStringKeysAndStrings' );
   logger.info( `getting ${simName}'s sim-specific english string keys and strings` );
   const stringKeysToSimSpecificEnglishStrings = new Map();
   try {
@@ -50,7 +49,6 @@ const getSimSpecificEnglishStringKeysAndStrings = async ( simName, categorizedSt
   }
   logger.info( `got ${simName}'s sim-specific english string keys and strings; returning them` );
 
-  console.timeEnd( 'getSimSpecificEnglishStringKeysAndStrings' );
 
   // use spread operator and brackets to return an array
   return [ ...stringKeysToSimSpecificEnglishStrings ];

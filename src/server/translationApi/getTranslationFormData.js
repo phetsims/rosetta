@@ -111,7 +111,6 @@ const getTranslationFormData = async (
   }
 
   // otherwise, get translation form data the normal way
-  console.time( 'getTranslationFormData' );
   const translationFormData = {
     simSpecific: {},
     common: {}
@@ -133,7 +132,6 @@ const getTranslationFormData = async (
   catch( e ) {
     logger.error( e );
   }
-  console.timeEnd( 'getTranslationFormData' );
   logger.info( 'got translation form data; returning it' );
   return translationFormData;
 };
