@@ -7,8 +7,7 @@ const submitTranslation = async ( values, simName, locale ) => {
   const translation = await makeTranslationObject( values, simName, locale );
   if ( window.confirm( `Are you sure you want to submit your translation for ${translation.simName} in locale ${translation.locale}?` ) ) {
     try {
-      const postRes = await axios.post( '/translationApi/submitTranslation', translation );
-      console.log( postRes.data );
+      await axios.post( '/translationApi/submitTranslation', translation );
       alert( 'Translation submitted. Your translation should appear on the PhET website in about half an hour.' );
     }
     catch( e ) {

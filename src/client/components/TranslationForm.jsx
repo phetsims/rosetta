@@ -16,6 +16,9 @@ import TranslationFormButtons from './TranslationFormButtons.jsx';
 import TranslationFormHeader from './TranslationFormHeader.jsx';
 import TranslationTables from './TranslationTables.jsx';
 import axios from 'axios';
+import saveTranslation from '../utils/saveTranslation.js';
+import submitTranslation from '../utils/submitTranslation.js';
+import testTranslation from '../utils/testTranslation.js';
 import { Formik, Form } from 'formik';
 import { useParams } from 'react-router-dom';
 
@@ -46,8 +49,9 @@ const TranslationForm = () => {
     }
   }, [] );
 
-  const handleSubmit = () => {
-    console.log( 'submit' );
+  const [ buttonId, setButtonId ] = useState( '' );
+  const handleButtonClick = evt => {
+    setButtonId( evt.target.id );
   };
 
   let translationFormJsx;
@@ -65,12 +69,25 @@ const TranslationForm = () => {
         <TranslationFormHeader locale={params.locale} simName={params.simName}/>
         <Formik
           initialValues={translationFormData}
-          onSubmit={handleSubmit}
+          onSubmit={async values => {
+            if ( buttonId === '' ) {
+              console.error( 'unable to get button id' );
+            }
+            else if ( buttonId === 'save' ) {
+              await saveTranslation( values, params.simName, params.locale );
+            }
+            else if ( buttonId === 'submit' ) {
+              await submitTranslation( values, params.simName, params.locale );
+            }
+            else if ( buttonId === 'test' ) {
+              await testTranslation( values, params.simName, params.locale );
+            }
+          }}
         >
           <Form>
-            <TranslationFormButtons simName={params.simName} locale={params.locale} />
+            <TranslationFormButtons simName={params.simName} locale={params.locale} handleButtonClick={handleButtonClick}/>
             <TranslationTables translationFormData={translationFormData}/>
-            <TranslationFormButtons simName={params.simName} locale={params.locale} />
+            <TranslationFormButtons simName={params.simName} locale={params.locale} handleButtonClick={handleButtonClick}/>
           </Form>
         </Formik>
       </div>
