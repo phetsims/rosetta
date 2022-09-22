@@ -74,19 +74,26 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
   }
 
   /*
+   * TODO: This comment is probably going to become stale. Eventually, we'll want these
+   *       comments to be interspersed in the code, and we'll delete this comment.
+   *
    * Now there are several scenarios:
-   * (1) there hasn't been a translation of the string yet            stringNotYetTranslated
-   *   (1.1) the translator leaves the string blank                   translationLeftBlank
+   * (1) there hasn't been a translation of the string yet
+   *   (1.1) the translator leaves the string blank
    *     - solution: don't add the string to the file
-   *   (1.2) the translator translates the string                     userProvidedTranslation
+   *   (1.2) the translator translates the string
    *     - solution: add the user's translation to the file
-   * (2) there has been a non-blank translation of the string         stringHasNonBlankTranslation
-   *   (2.1) the translator erases the existing translation           translationErased
-   *     - solution: keep the old non-blank translation (do nothing)
+   * (2) there has been a non-blank translation of the string
+   *   (2.1) the translator erases the existing translation
+   *     - TODO: Change the solution depending on how JB solves
+   *             these issues in old Rosetta.
+   *     - solution: don't allow user to submit blank
+   *             translations (protect against this on both
+   *             client and server)
    *     - N.B. if a sim doesn't have a title or screen title, it breaks
-   *   (2.2) the translator doesn't touch the existing translation    translationUntouched
+   *   (2.2) the translator doesn't touch the existing translation
    *     - solution: do nothing with the translation
-   *   (2.3) the translator modifies the existing translation         translationModified
+   *   (2.3) the translator modifies the existing translation
    *     - solution: use the translator's translation
    *
    * Remember, the translation file for each repo should only contain strings that have actually been translated. We
@@ -100,85 +107,37 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
       // now we'll set up booleans for our scenarios...
 
       // 1
-      let stringNotYetTranslated = false;
-      if ( !oldTranslationFile
-           || Object.keys( oldTranslationFile ).length === 0
-           || oldTranslationFile[ stringKey ] === ''
-           || !oldTranslationFile[ stringKey ] ) {
-
-        /*
-         * A translation file for this repo doesn't exist yet. Technically, neither the second nor the third conditions
-         * should ever be true.
-         */
-        stringNotYetTranslated = true;
-      }
+      const stringNotYetTranslated = !oldTranslationFile ||
+                                     Object.keys( oldTranslationFile ).length === 0 ||
+                                     oldTranslationFile[ stringKey ] === '' ||
+                                     !oldTranslationFile[ stringKey ];
 
       // 1.1
-      let translationLeftBlank = false;
-      if ( stringNotYetTranslated && translationFormData[ stringKey ].translated === '' ) {
-
-        /*
-         * The string hasn't been translated yet and the user didn't provide a translation of the string.
-         */
-        translationLeftBlank = true;
-      }
+      // TODO: The client strips out blank values for strings, but we handle the case here for the sake of robustness.
+      // TODO: Once you've implemented stripping out blank values on the client, make the above comment not a TODO.
+      const translationLeftBlank = stringNotYetTranslated &&
+                                   translationFormData[ stringKey ].translated === '';
 
       // 1.2
-      let userProvidedTranslation = false;
-      if ( stringNotYetTranslated && translationFormData[ stringKey ].translated !== '' ) {
-
-        /*
-         * The string hasn't been translated yet, but the user provided a translation of the string.
-         */
-        userProvidedTranslation = true;
-      }
+      const userProvidedInitialTranslation = stringNotYetTranslated &&
+                                             translationFormData[ stringKey ].translated !== '';
 
       // 2
-      let stringHasNonBlankTranslation = false;
-      if ( oldTranslationFile && oldTranslationFile[ stringKey ] && oldTranslationFile[ stringKey ].value !== '' ) {
-
-        /*
-         * A translation file for the repo exists and the value for the string key isn't blank. If a translation file
-         * exists and the string key has a translation, this should be true.
-         */
-        stringHasNonBlankTranslation = true;
-      }
+      const stringHasNonBlankTranslation = oldTranslationFile &&
+                                           oldTranslationFile[ stringKey ] &&
+                                           oldTranslationFile[ stringKey ].value !== '';
 
       // 2.1
-      let translationErased = false;
-      if ( stringHasNonBlankTranslation && translationFormData[ stringKey ].translated === '' ) {
-
-        /*
-         * If a string has been translated as a blank string, best-case scenario it will just be blank in the sim,
-         * worst-case scenario it will cause the sim to throw an assertion and the sim won't load. If the blank string
-         * is for the title of the sim or the title of a screen, an assertion will probably be thrown.
-         */
-        translationErased = true;
-      }
+      const translationErased = stringHasNonBlankTranslation &&
+                                translationFormData[ stringKey ].translated === '';
 
       // 2.2
-      let translationUntouched = false;
-      if ( stringHasNonBlankTranslation
-           && translationFormData[ stringKey ].translated === oldTranslationFile[ stringKey ].value ) {
-
-        /*
-         * A previous translation of the string exists, but in this particular translation, the translator doesn't touch
-         * the string.
-         */
-        translationUntouched = true;
-      }
+      const translationUntouched = stringHasNonBlankTranslation &&
+                                   translationFormData[ stringKey ].translated === oldTranslationFile[ stringKey ].value;
 
       // 2.3
-      let translationModified = false;
-      if ( stringHasNonBlankTranslation &&
-           translationFormData[ stringKey ].translated !== oldTranslationFile[ stringKey ].value ) {
-
-        /*
-         * A previous translation of the string exists, but in this particular translation, the translator modifies the
-         * string.
-         */
-        translationModified = true;
-      }
+      const translationModified = stringHasNonBlankTranslation &&
+                                  translationFormData[ stringKey ].translated !== oldTranslationFile[ stringKey ].value;
 
       // act on the values of the booleans...
 
@@ -188,7 +147,7 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
       }
 
       // 1.2
-      else if ( userProvidedTranslation ) {
+      else if ( userProvidedInitialTranslation ) {
         logger.info( `user provided translation for previously untranslated string; adding ${stringKey}'s info to the translation file for ${repo}` );
 
         // populate history object
@@ -196,8 +155,7 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
           userId: translation.userId,
           timestamp: translation.timestamp,
           oldValue: '',
-          newValue: translationFormData[ stringKey ].translated,
-          explanation: null // this is no longer used, but for some reason we keep it around
+          newValue: translationFormData[ stringKey ].translated
         };
 
         // add translated value and history to translation file
@@ -209,7 +167,7 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
 
       // 2.1
       else if ( translationErased ) {
-        logger.info( `the translation for ${stringKey}'s string was erased; preserving old value of ${stringKey}` );
+        logger.warn( `blank value submitted for previously translated string ${stringKey}; preserving previous value` );
       }
 
       // 2.2
@@ -243,7 +201,7 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
       else {
 
         // we've hit some sort of weird corner case
-        logger.error( `none of the scenarios for ${stringKey} were true; something has gone wrong` );
+        logger.error( `none of the scenarios for ${stringKey} were true; something has gone horribly wrong` );
       }
     }
   }
