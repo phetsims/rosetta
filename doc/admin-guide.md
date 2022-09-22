@@ -15,19 +15,27 @@ The utility is accessed at the URL https://phet.colorado.edu/translate.
 Starting, Stopping, and Checking
 --------------------------------
 
-You must have sudo privileges to execute the following commands.
+You need sudo permissions to run the following commands.
 
-Restart:
-`sudo systemctl stop rosetta`
-`grunt update-rosetta`
+Start:
 `sudo systemctl start rosetta`
 
-**NOTE: It is very important to run the `grunt update-rosetta` task before starting again because the `update-rosetta`
-task updates rosetta and its other dependencies (one of which is a parallel checkout of perennial, as of this writing)
-.**
+Stop:
+`sudo systemctl stop rosetta`
+
+Restart:
+`sudo systemctl restart rosetta`
 
 Check status:
 `sudo systemctl status rosetta`
+
+Here is an example of using this commands in context.  When you've made a change to rosetta and need to pull that change
+onto the development or production server, the steps are as follows.  The `update-rosetta` command pulls rosetta and its
+dependencies.
+- `cd /data/share/phet/translation-utility/rosetta`
+- `sudo systemctl stop rosetta`
+- `sudo -u phet-admin grunt update-rosetta`
+- `sudo systemctl start rosetta`
 
 View the log:
 `sudo journalctl -t rosetta`
