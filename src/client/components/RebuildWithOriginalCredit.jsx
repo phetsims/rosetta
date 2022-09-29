@@ -1,5 +1,7 @@
 // Copyright 2022, University of Colorado Boulder
 
+import * as Yup from 'yup';
+import InputErrorMessage from './InputErrorMessage.jsx';
 import axios from 'axios';
 import { Field, Form, Formik } from 'formik';
 
@@ -9,33 +11,62 @@ const RebuildWithOriginalCredit = () => {
     locale: '',
     userId: ''
   };
-  const handleSubmit = async ( values, { setSubmitting } ) => {
+  const handleSubmit = async values => {
+    console.log( values );
     await axios.get( `/translationApi/rebuildWithOriginalCredit/${values.sim}/${values.locale}/${values.userId}` );
     window.alert( `Rebuild request sent for sim ${values.sim} in locale ${values.locale} with user ID ${values.userId}.` );
-    setSubmitting( false );
   };
+  const ValidationSchema = Yup.object().shape( {
+    sim: Yup.string()
+      .required( 'Required' )
+      .lowercase( 'Sim name should be lowercase' )
+      .matches( /^[a-z]/, 'The first character must be lowercase, e.g. acid-base-solutions' ),
+    locale: Yup.string()
+      .required( 'Required' )
+      .min( 2, 'Too short' )
+      .max( 5, 'Too long' ),
+    userId: Yup.number()
+      .required( 'Required' )
+      .positive( 'User ID should be a positive number' )
+      .integer( 'User ID should be an integer' )
+  } );
+  const grayButton = 'btn btn-secondary mt-2';
+  const blueButton = 'btn btn-primary mt-2';
   return (
     <div>
       <h2>Rebuild With Original Credit</h2>
       <p>
         See documentation for rebuilding a sim with original credit <a href='#'>here</a>.
       </p>
-      <Formik initialValues={initialRebuildValues} onSubmit={handleSubmit}>
-        {( { isSubmitting } ) => (
+      <Formik initialValues={initialRebuildValues} onSubmit={handleSubmit} validationSchema={ValidationSchema}>
+        {(
+          {
+            errors,
+            touched,
+            isValid,
+            dirty
+          } ) => (
           <Form>
             <div>
               <label className='mt-2'>Sim:</label><br/>
               <Field type='text' name='sim'/>
+              <InputErrorMessage errors={errors} touched={touched} fieldKey='sim'/>
             </div>
             <div>
               <label className='mt-2'>Locale:</label><br/>
               <Field type='text' name='locale'/>
+              <InputErrorMessage errors={errors} touched={touched} fieldKey='locale'/>
             </div>
             <div>
               <label className='mt-2'>User ID:</label><br/>
               <Field type='text' name='userId'/>
+              <InputErrorMessage errors={errors} touched={touched} fieldKey='userId'/>
             </div>
-            <button type='submit' disabled={isSubmitting} className='btn btn-primary mt-2'>Rebuild</button>
+            <button
+              type='submit'
+              disabled={!( isValid && dirty )}
+              className={!( isValid && dirty ) ? grayButton : blueButton}>Rebuild
+            </button>
           </Form>
         )}
       </Formik>

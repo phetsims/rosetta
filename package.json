@@ -10,5 +10,8 @@
   "scripts": {
     "lint": "grunt --gruntfile Gruntfile.cjs lint",
     "start": "npm run lint && npm run build --workspace=client && node src/server/app.js"
+  },
+  "devDependencies": {
+    "yup": "^0.32.11"
   }
 }
