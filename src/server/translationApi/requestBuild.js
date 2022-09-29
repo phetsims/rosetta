@@ -2,10 +2,13 @@
 
 /* eslint-disable */
 
+import SimVersion from '../../../../perennial/js/common/SimVersion.js';
 import axios from 'axios';
 import config from '../../common/config.js';
+import getDependencies from './getDependencies.js';
 import getLatestVersionOfSim from './getLatestVersionOfSim.js';
 import logger from './logger.js';
+import simPhetioMetadata from '../../../../perennial/js/common/simPhetioMetadata.js';
 
 /**
  * @param {string} simName
@@ -13,7 +16,7 @@ import logger from './logger.js';
  * @param {string} locale
  * @returns {Promise.<boolean>} - true or false depending on whether the build was sent
  */
-async function requestBuild( simName, locale, userID ) {
+const requestBuild = async ( simName, locale, userID ) => {
 
   logger.info( `initiating build request for sim: ${simName}, locale: ${locale}` );
   const latestVersionOfSim = await getLatestVersionOfSim( simName );
