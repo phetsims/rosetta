@@ -10,6 +10,7 @@
  * @author Liam Mulhall
  */
 
+import * as Yup from 'yup';
 import LoadingSpinner from './LoadingSpinner.jsx';
 import React, { useEffect, useState } from 'react';
 import TranslationFormButtons from './TranslationFormButtons.jsx';
@@ -54,6 +55,7 @@ const TranslationForm = () => {
     setButtonId( evt.target.id );
   };
 
+
   let translationFormJsx;
   if ( translationFormData === null ) {
     translationFormJsx = (
@@ -64,11 +66,26 @@ const TranslationForm = () => {
     );
   }
   else {
+
+    // const simSpecificKeys = Object.keys( translationFormData.simSpecific );
+    // const commonKeys = Object.keys( translationFormData.common );
+    // const allKeys = simSpecificKeys.concat( commonKeys );
+    // const allKeysWithDots = allKeys.map( key => key.split( '_DOT_' ).join( '.' ) );
+    const validationObject = {
+      pH: Yup.string()
+        .min( 5, 'foo' )
+    };
+
+    // for ( const key of allKeysWithDots ) {
+    //   validationObject[ key ] = Yup.string().required( 'REQUIRED' );
+    // }
+    const validationSchema = Yup.object().shape( validationObject );
     translationFormJsx = (
       <div>
         <TranslationFormHeader locale={params.locale} simName={params.simName}/>
         <Formik
           initialValues={translationFormData}
+          validationSchema={validationSchema}
           onSubmit={async values => {
             if ( buttonId === '' ) {
               console.error( 'unable to get button id' );
@@ -84,11 +101,38 @@ const TranslationForm = () => {
             }
           }}
         >
-          <Form>
-            <TranslationFormButtons simName={params.simName} locale={params.locale} handleButtonClick={handleButtonClick}/>
-            <TranslationTables translationFormData={translationFormData}/>
-            <TranslationFormButtons simName={params.simName} locale={params.locale} handleButtonClick={handleButtonClick}/>
-          </Form>
+          {props => {
+            const {
+              errors,
+              touched,
+              isValid,
+              dirty
+            } = props;
+            console.log( props );
+            return (
+              <Form>
+                <TranslationFormButtons
+                  simName={params.simName}
+                  locale={params.locale}
+                  handleButtonClick={handleButtonClick}
+                  isValid={isValid}
+                  dirty={dirty}
+                />
+                <TranslationTables
+                  translationFormData={translationFormData}
+                  errors={errors}
+                  touched={touched}
+                />
+                <TranslationFormButtons
+                  simName={params.simName}
+                  locale={params.locale}
+                  handleButtonClick={handleButtonClick}
+                  isValid={isValid}
+                  dirty={dirty}
+                />
+              </Form>
+            );
+          }}
         </Formik>
       </div>
     );

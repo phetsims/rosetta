@@ -2,27 +2,39 @@
 
 /* eslint-disable react/prop-types */
 
-// TODO: The values we get in onClick aren't the translation form values.
-// TODO: We need to find another way to do this.
-// TODO: Set some sort of flag or reference on each button, then in the handleSubmit, use conditional logic.
-// TODO: https://reactjs.org/docs/lifting-state-up.html
-// TODO: Maybe useRef will help?
-
-const TranslationFormButtons = props => {
+const TranslationFormButtons = ( { handleButtonClick, isValid, dirty } ) => {
+  const grayButton = 'btn btn-secondary mt-2';
+  const blueButton = 'btn btn-primary mt-2';
+  console.log( `isValid = ${isValid}` );
   return (
     <div>
       <div className='mt-2'>
-        <button id='save' onClick={props.handleButtonClick} className='btn btn-primary'>
+        <button
+          id='save'
+          onClick={handleButtonClick}
+          disabled={!( isValid && dirty )}
+          className={!( isValid && dirty ) ? grayButton : blueButton}
+        >
           Save Translation
         </button>
       </div>
       <div className='mt-2'>
-        <button id='submit' onClick={props.handleButtonClick} className='btn btn-primary'>
+        <button
+          id='submit'
+          onClick={handleButtonClick}
+          disabled={!( isValid && dirty )}
+          className={!( isValid && dirty ) ? grayButton : blueButton}
+        >
           Submit Translation
         </button>
       </div>
       <div className='mt-2'>
-        <button id='test' onClick={props.handleButtonClick} className='btn btn-primary'>
+        <button
+          id='test'
+          onClick={handleButtonClick}
+          disabled={!( isValid && dirty )}
+          className={!( isValid && dirty ) ? grayButton : blueButton}
+        >
           Test Translation
         </button>
       </div>

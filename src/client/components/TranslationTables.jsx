@@ -40,6 +40,8 @@ const TranslationTables = props => {
           name={`simSpecific.${stringKeyWithoutDots}.translated`}
           stringKey={stringKeyWithDots}
           englishString={englishString}
+          errors={props.errors}
+          touched={props.touched}
         />
       ] );
     }
@@ -54,6 +56,8 @@ const TranslationTables = props => {
           name={`common.${stringKeyWithoutDots}.translated`}
           stringKey={stringKeyWithDots}
           englishString={englishString}
+          errors={props.errors}
+          touched={props.touched}
         />
       ] );
     }
