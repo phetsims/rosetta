@@ -5,6 +5,13 @@ const InputErrorMessage = ( { errors, touched, fieldKey } ) => {
   const divStyle = {
     color: 'red'
   };
+
+  /*
+  touched: {
+    simSpecific: {
+      pH: { translated: true }
+  */
+  // TODO: Change conditional to reflect true shape of errors and touched objects.
   if ( errors[ fieldKey ] && touched[ fieldKey ] ) {
     jsx = <div style={divStyle}>{errors[ fieldKey ]}</div>;
   }
