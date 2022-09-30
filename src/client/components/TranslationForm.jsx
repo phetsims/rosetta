@@ -71,9 +71,15 @@ const TranslationForm = () => {
     // const commonKeys = Object.keys( translationFormData.common );
     // const allKeys = simSpecificKeys.concat( commonKeys );
     // const allKeysWithDots = allKeys.map( key => key.split( '_DOT_' ).join( '.' ) );
+
+    // TODO: Make validation object similar to below for all string keys.
     const validationObject = {
-      pH: Yup.string()
-        .min( 5, 'foo' )
+      simSpecific: Yup.object( {
+        pH: Yup.object( {
+          english: Yup.string().required(),
+          translated: Yup.string().required()
+        } )
+      } )
     };
 
     // for ( const key of allKeysWithDots ) {
