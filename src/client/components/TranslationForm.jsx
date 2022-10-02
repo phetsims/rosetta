@@ -110,9 +110,7 @@ const TranslationForm = () => {
           {props => {
             const {
               errors,
-              touched,
-              isValid,
-              dirty
+              touched
             } = props;
             console.log( props );
             return (
@@ -121,8 +119,7 @@ const TranslationForm = () => {
                   simName={params.simName}
                   locale={params.locale}
                   handleButtonClick={handleButtonClick}
-                  isValid={isValid}
-                  dirty={dirty}
+                  {...props}
                 />
                 <TranslationTables
                   translationFormData={translationFormData}
@@ -133,8 +130,7 @@ const TranslationForm = () => {
                   simName={params.simName}
                   locale={params.locale}
                   handleButtonClick={handleButtonClick}
-                  isValid={isValid}
-                  dirty={dirty}
+                  {...props}
                 />
               </Form>
             );
