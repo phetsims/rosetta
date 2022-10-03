@@ -108,10 +108,6 @@ const TranslationForm = () => {
           }}
         >
           {props => {
-            const {
-              errors,
-              touched
-            } = props;
             console.log( props );
             return (
               <Form>
@@ -123,8 +119,7 @@ const TranslationForm = () => {
                 />
                 <TranslationTables
                   translationFormData={translationFormData}
-                  errors={errors}
-                  touched={touched}
+                  {...props}
                 />
                 <TranslationFormButtons
                   simName={params.simName}

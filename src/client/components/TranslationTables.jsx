@@ -40,8 +40,7 @@ const TranslationTables = props => {
           name={`simSpecific.${stringKeyWithoutDots}.translated`}
           stringKey={stringKeyWithDots}
           englishString={englishString}
-          errors={props.errors}
-          touched={props.touched}
+          {...props}
         />
       ] );
     }
@@ -56,12 +55,11 @@ const TranslationTables = props => {
           name={`common.${stringKeyWithoutDots}.translated`}
           stringKey={stringKeyWithDots}
           englishString={englishString}
-          errors={props.errors}
-          touched={props.touched}
+          {...props}
         />
       ] );
     }
-  }, [ props.translationFormData ] );
+  }, [ props.translationFormData, props.errors ] ); // re-render if there are errors
 
   return (
     <div>

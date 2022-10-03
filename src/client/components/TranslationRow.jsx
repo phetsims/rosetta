@@ -5,6 +5,7 @@
 import React from 'react';
 import { useField } from 'formik';
 import InputErrorMessage from './InputErrorMessage.jsx';
+import { useEffect } from 'react';
 
 /**
  * This component is a row in the translation table. It has the string key, the English string, and an input for
@@ -20,10 +21,12 @@ const TranslationRow = props => {
   // get field props for the input
   const [ field ] = useField( props );
 
-  const change = () => {
-    console.log( props.errors );
-    console.log( props.touched );
-  };
+  // re-render if there are errors
+  useEffect( () => {
+    if ( Object.keys( props.errors ) > 0 ) {
+      console.error( props.errors );
+    }
+  }, [ props.errors ] );
 
   return (
     <tr>
@@ -31,8 +34,8 @@ const TranslationRow = props => {
       <td>{props.englishString}</td>
 
       {/* use the spread operator to give the input each of the props in the field object */}
-      <td><input onChange={change} {...field}/></td>
-      <InputErrorMessage errors={props.errors} touched={props.touched} fieldKey={props.key}/>
+      <td><input {...field}/></td>
+      <InputErrorMessage {...props} fieldKey={props.key}/>
     </tr>
   );
 };
