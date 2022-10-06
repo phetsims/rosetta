@@ -2,18 +2,10 @@
 
 /* eslint-disable react/prop-types */
 
-import { useState } from 'react';
-import { useEffect } from 'react';
-
 const InputErrorMessage = props => {
   const divStyle = {
     color: 'red'
   };
-
-  const [ error, setError ] = useState( props.errors );
-  useEffect( () => {
-    setError( props.errors );
-  }, [ props.errors ] );
 
   /*
   touched: {
@@ -27,8 +19,8 @@ const InputErrorMessage = props => {
   // TODO: Using something like {...props} on parent components?
   // TODO: And https://formik.org/docs/api/useField?
   let jsx;
-  if ( props.errors ) {
-    jsx = <div style={divStyle}>Error: {JSON.stringify( error )}</div>;
+  if ( Object.keys( props.errors ) > 0 ) {
+    jsx = <div style={divStyle}>Error: {JSON.stringify( props.errors )}</div>;
   }
   else {
     jsx = null;
