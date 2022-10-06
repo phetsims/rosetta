@@ -18,7 +18,7 @@ const InputErrorMessage = () => {
   // TODO: Change conditional to reflect true shape of errors and touched objects.
   const error = useContext( ErrorContext );
   let jsx;
-  if ( error ) {
+  if ( Object.keys( error ).length > 0 ) {
     jsx = <div style={divStyle}>Error: {JSON.stringify( error )}</div>;
   }
   else {
