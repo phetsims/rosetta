@@ -10,18 +10,20 @@
  * @author Liam Mulhall
  */
 
-import * as Yup from 'yup';
-import LoadingSpinner from './LoadingSpinner.jsx';
-import React, { useEffect, useState } from 'react';
-import TranslationFormButtons from './TranslationFormButtons.jsx';
-import TranslationFormHeader from './TranslationFormHeader.jsx';
-import TranslationTables from './TranslationTables.jsx';
 import axios from 'axios';
+import { Form, Formik } from 'formik';
+import React, { createContext, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import * as Yup from 'yup';
 import saveTranslation from '../utils/saveTranslation.js';
 import submitTranslation from '../utils/submitTranslation.js';
 import testTranslation from '../utils/testTranslation.js';
-import { Formik, Form } from 'formik';
-import { useParams } from 'react-router-dom';
+import LoadingSpinner from './LoadingSpinner.jsx';
+import TranslationFormButtons from './TranslationFormButtons.jsx';
+import TranslationFormHeader from './TranslationFormHeader.jsx';
+import TranslationTables from './TranslationTables.jsx';
+
+const ErrorContext = createContext( null );
 
 /**
  * This component is a form with a table that is populated by the translation form data that we get from the backend.
@@ -54,7 +56,6 @@ const TranslationForm = () => {
   const handleButtonClick = evt => {
     setButtonId( evt.target.id );
   };
-
 
   let translationFormJsx;
   if ( translationFormData === null ) {
@@ -117,10 +118,12 @@ const TranslationForm = () => {
                   handleButtonClick={handleButtonClick}
                   {...props}
                 />
-                <TranslationTables
-                  translationFormData={translationFormData}
-                  {...props}
-                />
+                <ErrorContext.Provider value={props.errors}>
+                  <TranslationTables
+                    translationFormData={translationFormData}
+                    {...props}
+                  />
+                </ErrorContext.Provider>
                 <TranslationFormButtons
                   simName={params.simName}
                   locale={params.locale}
@@ -138,3 +141,4 @@ const TranslationForm = () => {
 };
 
 export default TranslationForm;
+export { ErrorContext };
