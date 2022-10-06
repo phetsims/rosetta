@@ -1,5 +1,8 @@
 // Copyright 2022, University of Colorado Boulder
 
+import { useContext } from 'react';
+import { ErrorContext } from './TranslationForm.jsx';
+
 /* eslint-disable react/prop-types */
 
 const InputErrorMessage = props => {
@@ -18,9 +21,10 @@ const InputErrorMessage = props => {
   // TODO: Would something like this https://stackoverflow.com/a/41679634 help?
   // TODO: Using something like {...props} on parent components?
   // TODO: And https://formik.org/docs/api/useField?
+  const error = useContext( ErrorContext );
   let jsx;
-  if ( Object.keys( props.errors ) > 0 ) {
-    jsx = <div style={divStyle}>Error: {JSON.stringify( props.errors )}</div>;
+  if ( error ) {
+    jsx = <div style={divStyle}>Error: {JSON.stringify( error )}</div>;
   }
   else {
     jsx = null;
