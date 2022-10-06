@@ -26,15 +26,14 @@ const InputErrorMessage = props => {
   // TODO: Would something like this https://stackoverflow.com/a/41679634 help?
   // TODO: Using something like {...props} on parent components?
   // TODO: And https://formik.org/docs/api/useField?
-  // let jsx;
-  // if ( props.errors ) {
-  //   jsx = <div style={divStyle}>Error</div>;
-  // }
-  // else {
-  //   jsx = null;
-  // }
-  // return jsx;
-  return <div style={divStyle}>{JSON.stringify( error )}</div>;
+  let jsx;
+  if ( props.errors ) {
+    jsx = <div style={divStyle}>Error: {JSON.stringify( error )}</div>;
+  }
+  else {
+    jsx = null;
+  }
+  return jsx;
 };
 
 export default InputErrorMessage;
