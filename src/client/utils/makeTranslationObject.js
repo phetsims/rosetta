@@ -1,6 +1,7 @@
 // Copyright 2022, University of Colorado Boulder
 
 import axios from 'axios';
+import alertErrorMessage from './alertErrorMessage.js';
 
 const makeTranslationObject = async ( values, simName, locale ) => {
   let translation;
@@ -16,7 +17,7 @@ const makeTranslationObject = async ( values, simName, locale ) => {
     };
   }
   catch( e ) {
-    console.error( e );
+    alertErrorMessage( e );
     translation = { error: 'unable to make translation' };
   }
   return translation;
