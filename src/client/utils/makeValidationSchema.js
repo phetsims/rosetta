@@ -20,7 +20,7 @@ keyboardHelpDialog.grabOrReleaseHeadingPattern
 keyboardHelpDialog.grabOrReleaseLabelPattern
   doesn't work
 
- */
+*/
 
 const makeValidationSchema = translationFormData => {
   const subObjects = {};
