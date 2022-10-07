@@ -1,6 +1,7 @@
 // Copyright 2022, University of Colorado Boulder
 
 import axios from 'axios';
+import alertErrorMessage from './alertErrorMessage.js';
 import makeTranslationObject from './makeTranslationObject.js';
 
 const submitTranslation = async ( values, simName, locale ) => {
@@ -11,7 +12,7 @@ const submitTranslation = async ( values, simName, locale ) => {
       alert( 'Translation submitted. Your translation should appear on the PhET website in about half an hour.' );
     }
     catch( e ) {
-      console.error( e );
+      alertErrorMessage( e );
     }
   }
 };

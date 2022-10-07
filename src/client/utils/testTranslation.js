@@ -1,6 +1,7 @@
 // Copyright 2022, University of Colorado Boulder
 
 import axios from 'axios';
+import alertErrorMessage from './alertErrorMessage.js';
 import makeTranslationObject from './makeTranslationObject.js';
 
 const testTranslation = async ( values, simName, locale ) => {
@@ -14,7 +15,7 @@ const testTranslation = async ( values, simName, locale ) => {
     win.document.write( stringSimHtml );
   }
   catch( e ) {
-    console.error( e );
+    alertErrorMessage( e );
   }
 };
 
