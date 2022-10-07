@@ -68,24 +68,29 @@ const TranslationForm = () => {
   }
   else {
 
-    // const simSpecificKeys = Object.keys( translationFormData.simSpecific );
-    // const commonKeys = Object.keys( translationFormData.common );
-    // const allKeys = simSpecificKeys.concat( commonKeys );
-    // const allKeysWithDots = allKeys.map( key => key.split( '_DOT_' ).join( '.' ) );
-
-    // TODO: Make validation object similar to below for all string keys.
+    const simSpecificKeys = Object.keys( translationFormData.simSpecific ).map(
+      key => key.split( '_DOT_' ).join( '.' )
+    );
+    const simSpecificValidationObject = {};
+    for ( const key of simSpecificKeys ) {
+      simSpecificValidationObject[ key ] = Yup.object( {
+        translated: Yup.string().required()
+      } );
+    }
+    const commonKeys = Object.keys( translationFormData.common ).map(
+      key => key.split( '_DOT_' ).join( '.' )
+    );
+    const commonValidationObject = {};
+    for ( const key of commonKeys ) {
+      commonValidationObject[ key ] = Yup.object( {
+        translated: Yup.string().required()
+      } );
+    }
     const validationObject = {
-      simSpecific: Yup.object( {
-        pH: Yup.object( {
-          english: Yup.string().required(),
-          translated: Yup.string().required()
-        } )
-      } )
+      simSpecific: Yup.object( simSpecificValidationObject ),
+      common: Yup.object( commonValidationObject )
     };
 
-    // for ( const key of allKeysWithDots ) {
-    //   validationObject[ key ] = Yup.string().required( 'REQUIRED' );
-    // }
     const validationSchema = Yup.object().shape( validationObject );
     translationFormJsx = (
       <div>
