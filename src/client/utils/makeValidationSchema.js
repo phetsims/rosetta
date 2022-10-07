@@ -5,6 +5,23 @@ import * as Yup from 'yup';
 const SINGLE_BRACE_REGEX = /\{\d+\}/g;
 const DOUBLE_BRACE_REGEX = /\{\{\w+\}\}/g;
 
+/*
+
+TODO
+
+(ノಠ益ಠ)ノ彡┻━┻
+SOMEHOW there's a problem with this.
+
+For example, in ab/energy-skate-park (at the very bottom of the translation form):
+
+keyboardHelpDialog.grabOrReleaseHeadingPattern
+  works
+
+keyboardHelpDialog.grabOrReleaseLabelPattern
+  doesn't work
+
+ */
+
 const makeValidationSchema = translationFormData => {
   const subObjects = {};
   let validationSchema;
