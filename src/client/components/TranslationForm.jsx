@@ -14,7 +14,7 @@ import axios from 'axios';
 import { Form, Formik } from 'formik';
 import React, { createContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import * as Yup from 'yup';
+import makeValidationSchema from '../utils/makeValidationSchema.js';
 import saveTranslation from '../utils/saveTranslation.js';
 import submitTranslation from '../utils/submitTranslation.js';
 import testTranslation from '../utils/testTranslation.js';
@@ -67,31 +67,7 @@ const TranslationForm = () => {
     );
   }
   else {
-
-    const simSpecificKeys = Object.keys( translationFormData.simSpecific ).map(
-      key => key.split( '_DOT_' ).join( '.' )
-    );
-    const simSpecificValidationObject = {};
-    for ( const key of simSpecificKeys ) {
-      simSpecificValidationObject[ key ] = Yup.object( {
-        translated: Yup.string().required()
-      } );
-    }
-    const commonKeys = Object.keys( translationFormData.common ).map(
-      key => key.split( '_DOT_' ).join( '.' )
-    );
-    const commonValidationObject = {};
-    for ( const key of commonKeys ) {
-      commonValidationObject[ key ] = Yup.object( {
-        translated: Yup.string().required()
-      } );
-    }
-    const validationObject = {
-      simSpecific: Yup.object( simSpecificValidationObject ),
-      common: Yup.object( commonValidationObject )
-    };
-
-    const validationSchema = Yup.object().shape( validationObject );
+    const validationSchema = makeValidationSchema( translationFormData );
     translationFormJsx = (
       <div>
         <TranslationFormHeader locale={params.locale} simName={params.simName}/>
