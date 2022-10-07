@@ -28,7 +28,7 @@ const TranslationRow = props => {
       {/* use the spread operator to give the input each of the props in the field object */}
       <td>
         <input {...field}/>
-        <InputErrorMessage fieldKey={props.stringKey}/>
+        <InputErrorMessage fieldKey={props.keyWithoutDots}/>
       </td>
     </tr>
   );

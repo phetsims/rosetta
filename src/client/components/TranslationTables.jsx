@@ -37,6 +37,7 @@ const TranslationTables = props => {
       setSimSpecificRows( simSpecificRows => [ ...simSpecificRows,
         <TranslationRow
           key={stringKeyWithDots}
+          keyWithoutDots={stringKeyWithoutDots}
           name={`simSpecific.${stringKeyWithoutDots}.translated`}
           stringKey={stringKeyWithDots}
           englishString={englishString}
@@ -51,6 +52,7 @@ const TranslationTables = props => {
       setCommonRows( commonRows => [ ...commonRows,
         <TranslationRow
           key={stringKeyWithDots}
+          keyWithoutDots={stringKeyWithoutDots}
           name={`common.${stringKeyWithoutDots}.translated`}
           stringKey={stringKeyWithDots}
           englishString={englishString}
