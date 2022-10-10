@@ -12,7 +12,6 @@
 // Node modules
 const _ = require( 'lodash' ); // eslint-disable-line
 const axios = require( 'axios' );
-const email = require( 'emailjs/email' );
 const simData = require( './simData' );
 const winston = require( 'winston' );
 
@@ -20,50 +19,7 @@ const winston = require( 'winston' );
 const RosettaConstants = require( './RosettaConstants' );
 
 // constants
-const preferences = global.config;
 const STRING_VAR_IN_HTML_FILES = RosettaConstants.STRING_VAR_IN_HTML_FILES;
-
-//===========================================================================//
-// Email functions.                                                          //
-//===========================================================================//
-
-// Configure email server if credentials are present.
-let emailServer;
-if ( preferences.emailUsername && preferences.emailPassword && preferences.emailServer && preferences.emailTo ) {
-  emailServer = email.server.connect( {
-    user: preferences.emailUsername,
-    password: preferences.emailPassword,
-    host: preferences.emailServer,
-    tls: preferences.tls || true
-  } );
-}
-
-/**
- * Send an email if server is defined. Used to notify developers push to Babel (the string repo) fails.
- *
- * @param subject
- * @param text
- */
-function sendEmail( subject, text ) {
-  if ( emailServer ) {
-    emailServer.send( {
-      text: text,
-      from: 'PhET Translation Utility (rosetta) <phethelp@colorado.edu>',
-      to: preferences.emailTo,
-      subject: subject
-    }, ( error, message ) => {
-      if ( error ) {
-        winston.error( `Unable to send email. Error: ${error}.` );
-      }
-      else {
-        console.log( `Email sent! Email Body: ${message}` );
-      }
-    } );
-  }
-  else {
-    winston.warn( 'emailServer evaluated false. Email not sent!' );
-  }
-}
 
 //===========================================================================//
 // Utility functions below.                                                  //
@@ -203,6 +159,5 @@ module.exports = {
   extractSimSha: extractSimSha,
   extractStringKeys: extractStringKeys,
   getLatestSimHtml: getLatestSimHtml,
-  sendEmail: sendEmail,
   stringify: stringify
 };
