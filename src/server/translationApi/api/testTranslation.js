@@ -6,6 +6,7 @@
  * @author Liam Mulhall
  */
 
+import getReplacementStringObject from '../getReplacementStringObject.js';
 import getSimUrl from '../getSimUrl.js';
 import getSimHtml from '../getSimHtml.js';
 import logger from '../logger.js';
@@ -20,8 +21,13 @@ import logger from '../logger.js';
 const testTranslation = async ( req, res ) => {
   try {
     const simHtmlRes = await getSimHtml( getSimUrl( req.body.simName ) );
+    const simHtml = simHtmlRes.data;
+
+    // TODO: We should be able to call this with just simHtml. Fix getStringKeysWithRepoName.
+    const replacementStringObject = getReplacementStringObject( simHtmlRes, req.body.translationFormData );
+    console.log( JSON.stringify( replacementStringObject, null, 4 ) );
     logger.info( 'responding with sim html for translation test' );
-    res.send( simHtmlRes.data );
+    res.send( simHtml );
   }
   catch( e ) {
     logger.error( e );
