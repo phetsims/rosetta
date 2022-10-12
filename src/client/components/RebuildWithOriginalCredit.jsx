@@ -1,7 +1,6 @@
 // Copyright 2022, University of Colorado Boulder
 
 import * as Yup from 'yup';
-import InputErrorMessage from './InputErrorMessage.jsx';
 import axios from 'axios';
 import { Field, Form, Formik } from 'formik';
 
@@ -50,17 +49,17 @@ const RebuildWithOriginalCredit = () => {
             <div>
               <label className='mt-2'>Sim:</label><br/>
               <Field type='text' name='sim'/>
-              <InputErrorMessage errors={errors} touched={touched} fieldKey='sim'/>
+              {errors.sim && touched.sim ? errors.sim : null}
             </div>
             <div>
               <label className='mt-2'>Locale:</label><br/>
               <Field type='text' name='locale'/>
-              <InputErrorMessage errors={errors} touched={touched} fieldKey='locale'/>
+              {errors.locale && touched.locale ? errors.locale : null}
             </div>
             <div>
               <label className='mt-2'>User ID:</label><br/>
               <Field type='text' name='userId'/>
-              <InputErrorMessage errors={errors} touched={touched} fieldKey='userId'/>
+              {errors.userId && touched.userId ? errors.userId : null}
             </div>
             <button
               type='submit'
