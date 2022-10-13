@@ -4,9 +4,15 @@
 // const DOUBLE_BRACE_PATTERN_REGULAR_EXP = /\{\{\w+\}\}/g;
 
 const isValidBracePattern = ( translatedValue, englishValue ) => {
+
+  //debugger; // eslint-disable-line no-debugger
+  let ret = false;
+  if ( translatedValue === undefined ) {
+    ret = true;
+  }
   console.log( `englishValue = ${englishValue}` );
   console.log( `translatedValue = ${translatedValue}` );
-  return false;
+  return ret;
 };
 
 export default isValidBracePattern;

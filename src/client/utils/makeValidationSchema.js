@@ -1,17 +1,9 @@
 // Copyright 2022, University of Colorado Boulder
 
+/* eslint-disable prefer-arrow-callback */
+
 import * as Yup from 'yup';
 import isValidBracePattern from './isValidBracePattern.js';
-
-function validBracePattern( message, englishValue ) {
-
-  // value here is the translated value.
-  return this.test( 'validBracePattern', message, value => {
-    return isValidBracePattern( value, englishValue );
-  } );
-}
-
-Yup.addMethod( Yup.string, 'validBracePattern', validBracePattern );
 
 const makeValidationSchema = translationFormData => {
   const subObjects = {};
@@ -27,7 +19,11 @@ const makeValidationSchema = translationFormData => {
         const englishValue = translationFormData[ keyType ][ key ].english;
         if ( englishValue.includes( '{' ) && englishValue.includes( '}' ) ) {
           subObjects[ keyType ][ key ] = Yup.object( {
-            translated: Yup.string().validBracePattern( 'Hello', englishValue )
+            translated: Yup.string().test( 'validBracePattern', 'Invalid brace pattern', function foo( value ) {
+              console.log( englishValue );
+              console.log( value );
+              return isValidBracePattern( value, englishValue );
+            } )
           } );
         }
       }
