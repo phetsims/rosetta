@@ -90,7 +90,6 @@ const TranslationForm = () => {
           }}
         >
           {props => {
-            console.log( props );
             return (
               <Form>
                 <TranslationFormButtons

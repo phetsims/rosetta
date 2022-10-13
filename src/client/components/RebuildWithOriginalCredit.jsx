@@ -11,7 +11,6 @@ const RebuildWithOriginalCredit = () => {
     userId: ''
   };
   const handleSubmit = async values => {
-    console.log( values );
     await axios.get( `/translationApi/rebuildWithOriginalCredit/${values.sim}/${values.locale}/${values.userId}` );
     window.alert( `Rebuild request sent for sim ${values.sim} in locale ${values.locale} with user ID ${values.userId}.` );
   };

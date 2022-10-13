@@ -1,13 +1,16 @@
 // Copyright 2022, University of Colorado Boulder
 
 import * as Yup from 'yup';
+import isValidBracePattern from './isValidBracePattern.js';
 
-function validBracePattern( message ) {
+function validBracePattern( message, englishValue ) {
+
+  // value here is the translated value.
   return this.test( 'validBracePattern', message, value => {
-    console.log( value );
-    return false;
+    return isValidBracePattern( value, englishValue );
   } );
 }
+
 Yup.addMethod( Yup.string, 'validBracePattern', validBracePattern );
 
 const makeValidationSchema = translationFormData => {
@@ -24,7 +27,7 @@ const makeValidationSchema = translationFormData => {
         const englishValue = translationFormData[ keyType ][ key ].english;
         if ( englishValue.includes( '{' ) && englishValue.includes( '}' ) ) {
           subObjects[ keyType ][ key ] = Yup.object( {
-            translated: Yup.string().validBracePattern( 'Hello' )
+            translated: Yup.string().validBracePattern( 'Hello', englishValue )
           } );
         }
       }
