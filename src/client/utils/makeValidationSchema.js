@@ -2,23 +2,6 @@
 
 import * as Yup from 'yup';
 
-/*
-
-TODO
-
-(ノಠ益ಠ)ノ彡┻━┻
-SOMEHOW there's a problem with this.
-
-For example, in ab/energy-skate-park (at the very bottom of the translation form):
-
-keyboardHelpDialog.grabOrReleaseHeadingPattern
-  works
-
-keyboardHelpDialog.grabOrReleaseLabelPattern
-  doesn't work
-
-*/
-
 function validBracePattern( message ) {
   return this.test( 'validBracePattern', message, value => {
     console.log( value );
