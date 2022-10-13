@@ -2,9 +2,6 @@
 
 import * as Yup from 'yup';
 
-const SINGLE_BRACE_REGEX = /\{\d+\}/g;
-const DOUBLE_BRACE_REGEX = /\{\{\w+\}\}/g;
-
 /*
 
 TODO
@@ -22,6 +19,14 @@ keyboardHelpDialog.grabOrReleaseLabelPattern
 
 */
 
+function validBracePattern( message ) {
+  return this.test( 'validBracePattern', message, value => {
+    console.log( value );
+    return false;
+  } );
+}
+Yup.addMethod( Yup.string, 'validBracePattern', validBracePattern );
+
 const makeValidationSchema = translationFormData => {
   const subObjects = {};
   let validationSchema;
@@ -34,14 +39,9 @@ const makeValidationSchema = translationFormData => {
       subObjects[ keyType ] = {};
       for ( const key of keys ) {
         const englishValue = translationFormData[ keyType ][ key ].english;
-        if ( SINGLE_BRACE_REGEX.test( englishValue ) ) {
+        if ( englishValue.includes( '{' ) && englishValue.includes( '}' ) ) {
           subObjects[ keyType ][ key ] = Yup.object( {
-            translated: Yup.string().matches( SINGLE_BRACE_REGEX, 'Must have single brace pattern' )
-          } );
-        }
-        else if ( DOUBLE_BRACE_REGEX.test( englishValue ) ) {
-          subObjects[ keyType ][ key ] = Yup.object( {
-            translated: Yup.string().matches( DOUBLE_BRACE_REGEX, 'Must have double brace pattern' )
+            translated: Yup.string().validBracePattern( 'Hello' )
           } );
         }
       }
