@@ -23,7 +23,7 @@ I try to keep my development process as simple as possible.
 
 ### Local Development and Testing
 
-I've set the `npm run dev` script to (1) lint, (2) test, (3) compile/bundle React code using Babel/webpack, and (4)
+I've set the `npm run dev` script to lint and compile/bundle React code using Vite, and then
 start the Node/Express server. When I make a change to the client or the server, I simply run the `npm run dev` script
 to see if my change works and play around with Rosetta. When I'm done, I stop the script. Rinse and repeat.
 
