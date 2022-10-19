@@ -6,9 +6,12 @@ import clientConstants from './clientConstants.js';
 // const globalDoubleBraceRegex = new RegExp( clientConstants.doubleBraceRegex, 'g' );
 
 const isValidBracePattern = ( translatedValue, englishValue ) => {
-  let ret = false;
+  let isValid = false;
   if ( translatedValue === undefined ) {
-    ret = true;
+
+    // If the user hasn't supplied a translation yet, the value will be undefined.
+    // We want blank translations to be valid.
+    isValid = true;
   }
   const singleBracePlaceHolders = englishValue.match( clientConstants.singleBraceRegex ) || [];
   const doubleBracePlaceHolders = englishValue.match( clientConstants.doubleBraceRegex ) || [];
@@ -16,7 +19,7 @@ const isValidBracePattern = ( translatedValue, englishValue ) => {
   console.log( `translatedValue = ${translatedValue}` );
   console.log( `single braces = ${Array.isArray( singleBracePlaceHolders )}` );
   console.log( `double braces = ${Array.isArray( doubleBracePlaceHolders )}` );
-  return ret;
+  return isValid;
 };
 
 export default isValidBracePattern;
