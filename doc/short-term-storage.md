@@ -14,15 +14,16 @@ unfinished translation and the behavior of Rosetta would probably[1] be the same
 
 One possible edge case for saving a translation is:
 
-* A user saves a translation with a set of string keys S.
-* A new version of a simulation is published with a set of string keys S' where S' != S.
-* When the user logs back in, their saved translation with string keys S is presented to them.
-* The user finishes their translation with string keys S and submits it to long-term storage thinking they've translated
+* A user saves a translation with a set of string keys $S$.
+* A new version of a simulation is published with a set of string keys $S'$ where $S' \neq S$.
+* When the user logs back in, their saved translation with string keys $S$ is presented to them.
+* The user finishes their translation with string keys $S$ and submits it to long-term storage thinking they've translated
   every string in the sim.
-* Since S' != S, the user has not translated every string in the sim.
+* Since $S' \neq S$, the user has not translated every string in the sim.
 
 This edge case is probably rare enough to ignore. Adding code to prevent this from happening would be a lot of work, and
-thus probably not worth it. However, it's good to keep this edge case in mind.
+thus probably not worth it ([YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it)). However, it's good to
+keep this edge case in mind.
 
 ## Setting Up MongoDB for Local Development
 
