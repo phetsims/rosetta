@@ -8,8 +8,8 @@
  */
 
 import config from '../../common/config.js';
-import logger from './logger.js';
 import { shortTermStringStorageCollection } from './getShortTermStringStorageCollection.js';
+import logger from './logger.js';
 
 /**
  * Delete any translations that match the provided user ID, sim name, and locale.

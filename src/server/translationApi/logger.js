@@ -6,8 +6,8 @@
  * @author Liam Mulhall
  */
 
-import config from '../../common/config.js';
 import winston from 'winston';
+import config from '../../common/config.js';
 
 const logger = winston.createLogger( {
   format: winston.format.combine(

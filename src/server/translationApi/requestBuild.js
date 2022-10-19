@@ -2,13 +2,13 @@
 
 /* eslint-disable */
 
-import SimVersion from '../../../../perennial/js/common/SimVersion.js';
 import axios from 'axios';
+import simPhetioMetadata from '../../../../perennial/js/common/simPhetioMetadata.js';
+import SimVersion from '../../../../perennial/js/common/SimVersion.js';
 import config from '../../common/config.js';
 import getDependencies from './getDependencies.js';
 import getLatestVersionOfSim from './getLatestVersionOfSim.js';
 import logger from './logger.js';
-import simPhetioMetadata from '../../../../perennial/js/common/simPhetioMetadata.js';
 
 /**
  * @param {string} simName

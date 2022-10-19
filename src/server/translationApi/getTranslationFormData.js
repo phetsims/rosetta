@@ -12,9 +12,9 @@
 import axios from 'axios';
 import config from '../../common/config.js';
 import getCommonTranslationFormData from './getCommonTranslationFormData.js';
+import { shortTermStringStorageCollection } from './getShortTermStringStorageCollection.js';
 import getSimSpecificTranslationFormData from './getSimSpecificTranslationFormData.js';
 import logger from './logger.js';
-import { shortTermStringStorageCollection } from './getShortTermStringStorageCollection.js';
 
 /*
  * If we can't find a saved translation, we want to return an object that looks like:

@@ -8,8 +8,8 @@
 
 import config from '../../common/config.js';
 import deleteSavedTranslation from './deleteSavedTranslation.js';
-import logger from './logger.js';
 import { shortTermStringStorageCollection } from './getShortTermStringStorageCollection.js';
+import logger from './logger.js';
 
 /**
  * Save a translation to the short-term storage database. We store the translation without reformatting the data. We
