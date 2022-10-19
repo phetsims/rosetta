@@ -7,8 +7,8 @@
  * @author Liam Mulhall
  */
 
-import getEnglishStringKeysAndStrings from './getEnglishStringKeysAndStrings.js';
 import logger from '../logger.js';
+import getEnglishStringKeysAndStrings from './getEnglishStringKeysAndStrings.js';
 
 /**
  * Return a list of ordered pairs where each ordered pair is a sim-specific string key followed by its value (its

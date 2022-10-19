@@ -7,8 +7,8 @@
  */
 
 import getReplacementStringObject from '../getReplacementStringObject.js';
-import getSimUrl from '../getSimUrl.js';
 import getSimHtml from '../getSimHtml.js';
+import getSimUrl from '../getSimUrl.js';
 import logger from '../logger.js';
 
 /**

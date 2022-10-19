@@ -6,9 +6,9 @@
  * @author Liam Mulhall
  */
 
+import { MongoClient } from 'mongodb';
 import config from '../../common/config.js';
 import logger from './logger.js';
-import { MongoClient } from 'mongodb';
 
 let shortTermStringStorageCollection = {};
 

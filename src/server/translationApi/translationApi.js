@@ -1,20 +1,20 @@
 // Copyright 2022, University of Colorado Boulder
 
-import commonEnglishStringKeysAndStrings from './api/tmp/commonEnglishStringKeysAndStrings.js';
-import commonTranslatedStringKeysAndStrings from './api/tmp/commonTranslatedStringKeysAndStrings.js';
 import express from 'express';
 import localeInfo from './api/localeInfo.js';
-import logger from './logger.js';
 import rebuildWithOriginalCredit from './api/rebuildWithOriginalCredit.js';
 import saveTranslation from './api/saveTranslation.js';
 import sha from './api/sha.js';
 import simNames from './api/simNames.js';
-import simSpecificEnglishStringKeysAndStrings from './api/tmp/simSpecificEnglishStringKeysAndStrings.js';
-import simSpecificTranslatedStringKeysAndStrings from './api/tmp/simSpecificTranslatedStringKeysAndStrings.js';
 import simTitles from './api/simTitles.js';
 import submitTranslation from './api/submitTranslation.js';
 import testTranslation from './api/testTranslation.js';
+import commonEnglishStringKeysAndStrings from './api/tmp/commonEnglishStringKeysAndStrings.js';
+import commonTranslatedStringKeysAndStrings from './api/tmp/commonTranslatedStringKeysAndStrings.js';
+import simSpecificEnglishStringKeysAndStrings from './api/tmp/simSpecificEnglishStringKeysAndStrings.js';
+import simSpecificTranslatedStringKeysAndStrings from './api/tmp/simSpecificTranslatedStringKeysAndStrings.js';
 import translationFormData from './api/translationFormData.js';
+import logger from './logger.js';
 
 const rosettaApiServer = express();
 

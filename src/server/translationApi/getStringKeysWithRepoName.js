@@ -6,8 +6,8 @@
  * @author Liam Mulhall
  */
 
-import logger from './logger.js';
 import config from '../../common/config.js';
+import logger from './logger.js';
 
 /**
  * Return a list of ordered pairs where each ordered pair is a REPO_NAME/stringKey string. These strings are extracted
