@@ -6,16 +6,16 @@
  * @author Liam Mulhall
  */
 
+import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Admin from './Admin.jsx';
-import TestTranslation from './TestTranslation.jsx';
 import Help from './Help.jsx';
 import LocaleAndSimForm from './LocaleAndSimForm.jsx';
 import Navbar from './Navbar.jsx';
-import React from 'react';
+import TestTranslation from './TestTranslation.jsx';
 import TranslationForm from './TranslationForm.jsx';
 import TranslationReport from './TranslationReport.jsx';
 import TranslationReportForm from './TranslationReportForm.jsx';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 /**
  * This component defines routes and their respective components. If a user hits a certain route, the specified
