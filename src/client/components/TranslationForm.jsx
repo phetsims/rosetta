@@ -1,8 +1,5 @@
 // Copyright 2021, University of Colorado Boulder
 
-/* eslint-disable no-undef */
-/* eslint-disable prefer-const */
-
 /**
  * We define the form for translations. Once the user has selected the locale and sim they want, they see this
  * component.
