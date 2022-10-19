@@ -4,8 +4,8 @@
 /* eslint-disable react/no-unescaped-entities  */
 
 import axios from 'axios';
-import Xerxes from '../img/xerxes.jpg';
 import { useEffect, useState } from 'react';
+import Xerxes from '../img/xerxes.jpg';
 
 const Sha = () => {
   const [ sha, setSha ] = useState( '' );

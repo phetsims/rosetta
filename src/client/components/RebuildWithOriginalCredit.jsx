@@ -1,8 +1,8 @@
 // Copyright 2022, University of Colorado Boulder
 
-import * as Yup from 'yup';
 import axios from 'axios';
 import { Field, Form, Formik } from 'formik';
+import * as Yup from 'yup';
 
 const RebuildWithOriginalCredit = () => {
   const initialRebuildValues = {

@@ -8,10 +8,10 @@
  * @author Liam Mulhall
  */
 
-import PhetLogo from '../img/phet-logo.png';
-import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import PhetLogo from '../img/phet-logo.png';
 
 /**
  * This component is the navigation bar you see at the top of the page once you've gained access to the translation

@@ -6,10 +6,10 @@
  * @author Liam Mulhall
  */
 
+import { Field, Form, Formik } from 'formik';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import LocaleSelect from './LocaleSelect.jsx';
-import React from 'react';
-import { Field, Form, Formik } from 'formik';
 
 /**
  * This component enables the user to select the locale they want a translation report for.

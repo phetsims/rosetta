@@ -2,8 +2,8 @@
 
 /* eslint-disable react/prop-types */
 
-import React from 'react';
 import { useField } from 'formik';
+import React from 'react';
 import InputErrorMessage from './InputErrorMessage.jsx';
 
 /**

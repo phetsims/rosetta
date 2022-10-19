@@ -9,11 +9,11 @@
  * @author Liam Mulhall
  */
 
-import LocaleSelect from './LocaleSelect.jsx';
+import { Field, Form, Formik } from 'formik';
 import React from 'react';
-import SimSelect from './SimSelect.jsx';
-import { Formik, Form, Field } from 'formik';
 import { useNavigate } from 'react-router-dom';
+import LocaleSelect from './LocaleSelect.jsx';
+import SimSelect from './SimSelect.jsx';
 
 /**
  * This component is a Formik form that contains a select (commonly referred to as a dropdown) for the locale and a
