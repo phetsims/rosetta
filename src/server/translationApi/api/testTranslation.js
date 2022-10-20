@@ -20,11 +20,10 @@ import logger from '../logger.js';
  */
 const testTranslation = async ( req, res ) => {
   try {
-    const simHtmlRes = await getSimHtml( getSimUrl( req.body.simName ) );
-    const simHtml = simHtmlRes.data;
+    const simHtml = await getSimHtml( getSimUrl( req.body.simName ) );
 
     // TODO: We should be able to call this with just simHtml. Fix getStringKeysWithRepoName.
-    const replacementStringObject = getReplacementStringObject( simHtmlRes, req.body );
+    const replacementStringObject = getReplacementStringObject( simHtml, req.body );
     console.log( JSON.stringify( replacementStringObject, null, 4 ) );
     logger.info( 'responding with sim html for translation test' );
     res.send( simHtml );

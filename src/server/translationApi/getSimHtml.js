@@ -20,7 +20,8 @@ const getSimHtml = async simUrl => {
   logger.info( `getting sim html from ${simUrl}` );
   let simHtml;
   try {
-    simHtml = await axios.get( simUrl );
+    const simHtmlRes = await axios.get( simUrl );
+    simHtml = simHtmlRes.data;
   }
   catch( e ) {
     logger.error( e );
