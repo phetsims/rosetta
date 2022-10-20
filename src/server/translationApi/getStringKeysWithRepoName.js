@@ -20,8 +20,6 @@ const getStringKeysWithRepoName = simHtml => {
 
   logger.info( 'getting string keys with repo name from sim html' );
 
-  simHtml = simHtml.data;
-
   /*
   * As of this writing, there's a variable (window.phet.chipper.strings) in a script tag in the sim's HTML file that
   * contains a JavaScript object with locales. Each locale has keys that look like REPO_NAME/stringKey and values that
