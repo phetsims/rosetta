@@ -3,7 +3,7 @@
 /**
  * Provide functionality for the test translation route.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import getReplacementStringObject from '../getReplacementStringObject.js';
