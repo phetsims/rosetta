@@ -24,7 +24,7 @@ const testTranslation = async ( req, res ) => {
     const simHtml = simHtmlRes.data;
 
     // TODO: We should be able to call this with just simHtml. Fix getStringKeysWithRepoName.
-    const replacementStringObject = getReplacementStringObject( simHtmlRes, req.body.translationFormData );
+    const replacementStringObject = getReplacementStringObject( simHtmlRes, req.body );
     console.log( JSON.stringify( replacementStringObject, null, 4 ) );
     logger.info( 'responding with sim html for translation test' );
     res.send( simHtml );
