@@ -9,7 +9,11 @@ const isValidBracePattern = ( translatedValue, englishValue ) => {
     // We want blank translations to be valid. We can bail at this point.
     return true;
   }
+
   let isValid = false;
+
+  // Get arrays of single and double brace expressions.
+  // These brace expressions check for braces and content between the braces.
   const englishSingleBraces = englishValue.match( clientConstants.singleBraceRegex ) || [];
   const englishDoubleBraces = englishValue.match( clientConstants.doubleBraceRegex ) || [];
   const translatedSingleBraces = translatedValue.match( clientConstants.singleBraceRegex ) || [];
