@@ -26,7 +26,9 @@ const translationFormData = async ( req, res ) => {
     const simNames = await getSimNames();
     const simUrl = getSimUrl( req.params.simName );
     const simHtml = await getSimHtml( simUrl );
-    const stringKeysWithRepoName = getStringKeysWithRepoName( simHtml );
+
+    // Here, we want the REPO_NAME/stringKey array rather than the object.
+    const stringKeysWithRepoName = Object.keys( getStringKeysWithRepoName( simHtml ) );
     const categorizedStringKeys = await getCategorizedStringKeys( req.params.simName, simNames, stringKeysWithRepoName );
     const translationFormData = await getTranslationFormData(
       req.params.simName,

@@ -7,12 +7,11 @@ import logger from './logger.js';
 
 const getReplacementStringObject = ( simHtml, translation ) => {
   logger.info( 'getting replacement string object' );
-  const replacementStringObject = {};
 
   // TODO: We should return the object from getStringKeysWithRepoName rather than Object.keys().
   // This will require refactoring in other locations.
   const stringKeysWithRepoName = getStringKeysWithRepoName( simHtml );
-  for ( const stringKeyWithRepoName of stringKeysWithRepoName ) {
+  for ( const stringKeyWithRepoName of Object.keys( stringKeysWithRepoName ) ) {
     const repoName = getRepoNameFromStringKeyWithRepoName( stringKeyWithRepoName );
     const stringKey = getStringKeyFromStringKeyWithRepoName( stringKeyWithRepoName );
     if ( repoName === translation.simName ) {
@@ -23,7 +22,7 @@ const getReplacementStringObject = ( simHtml, translation ) => {
       const simSpecificObject = translation.translationFormData.simSpecific;
       const keyIsPresent = Object.keys( simSpecificObject ).includes( stringKey );
       if ( keyIsPresent ) {
-        replacementStringObject[ stringKeyWithRepoName ] = simSpecificObject[ stringKey ].translated;
+        stringKeysWithRepoName[ stringKeyWithRepoName ] = simSpecificObject[ stringKey ].translated;
       }
     }
     else {
@@ -34,12 +33,12 @@ const getReplacementStringObject = ( simHtml, translation ) => {
       const commonObject = translation.translationFormData.common;
       const keyIsPresent = Object.keys( commonObject ).includes( stringKey );
       if ( keyIsPresent ) {
-        replacementStringObject[ stringKeyWithRepoName ] = commonObject[ stringKey ].translated;
+        stringKeysWithRepoName[ stringKeyWithRepoName ] = commonObject[ stringKey ].translated;
       }
     }
   }
   logger.info( 'got replacement string object; returning it' );
-  return replacementStringObject;
+  return stringKeysWithRepoName;
 };
 
 export default getReplacementStringObject;
