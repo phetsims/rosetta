@@ -4,6 +4,7 @@
 
 import * as Yup from 'yup';
 import isValidBracePattern from './isValidBracePattern.js';
+import clientConstants from './clientConstants.js';
 
 const makeValidationSchema = translationFormData => {
   const subObjects = {};
@@ -17,9 +18,11 @@ const makeValidationSchema = translationFormData => {
       subObjects[ keyType ] = {};
       for ( const key of keys ) {
         const englishValue = translationFormData[ keyType ][ key ].english;
-        if ( englishValue.includes( '{' ) && englishValue.includes( '}' ) ) {
+        const englishSingleBraces = englishValue.match( clientConstants.singleBraceRegex ) || [];
+        const englishDoubleBraces = englishValue.match( clientConstants.doubleBraceRegex ) || [];
+        if ( englishSingleBraces.length > 0 || englishDoubleBraces.length > 0 ) {
           subObjects[ keyType ][ key ] = Yup.object( {
-            translated: Yup.string().test( 'validBracePattern', 'Invalid brace pattern', function foo( value ) {
+            translated: Yup.string().test( 'validBracePattern', 'Placeholders don\'t match English string', function foo( value ) {
               console.log( englishValue );
               console.log( value );
               return isValidBracePattern( value, englishValue );
