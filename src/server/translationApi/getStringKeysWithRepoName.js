@@ -47,7 +47,7 @@ const getStringKeysWithRepoName = simHtml => {
   const parsedStringKeysWithRepoName = JSON.parse( unparsedStringKeysWithRepoName );
 
   logger.info( 'got string keys with repo name from sim html; returning them' );
-  return Object.keys( parsedStringKeysWithRepoName.en );
+  return parsedStringKeysWithRepoName.en;
 };
 
 export default getStringKeysWithRepoName;
