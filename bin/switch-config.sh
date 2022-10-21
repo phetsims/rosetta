@@ -3,6 +3,7 @@
 # This script switches your new and old Rosetta config.
 # This script isn't fool-proof.
 # Don't use it unless you've made a copy of your configs.
+# Author: Liam Mulhall <liammulh@gmail.com>
 
 USAGE="provide either -n to switch to new config or -o to switch to old config"
 

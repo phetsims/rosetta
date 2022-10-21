@@ -1,8 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # We assume that all JSDoc summaries include the @author tag.
 # By searching for files that don't contain the @author tag,
 # we find the files that don't have a JSDoc summary.
+# Author: Liam Mulhall <liammulh@gmail.com>
 
 output_files() {
   grep \
