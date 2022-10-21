@@ -6,8 +6,7 @@
  * @author Liam Mulhall
  */
 
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import useLocaleInfo from '../hooks/useLocaleInfo.jsx';
 
 /**
  * This component is a select (commonly referred to as a dropdown) for locales. The locales in this select look like
@@ -24,19 +23,7 @@ import React, { useEffect, useState } from 'react';
  */
 const LocaleSelect = ( { field } ) => { // eslint-disable-line react/prop-types
 
-  // for storing locale info and
-  const [ localeInfo, setLocaleInfo ] = useState( {} );
-
-  // get locale info
-  useEffect( async () => {
-    try {
-      const localeInfoRes = await axios.get( '/translationApi/localeInfo' );
-      setLocaleInfo( localeInfoRes.data );
-    }
-    catch( e ) {
-      console.error( e );
-    }
-  }, [] );
+  const localeInfo = useLocaleInfo();
 
   // sort the locales by name
   // in other words, sort the languages alphabetically
