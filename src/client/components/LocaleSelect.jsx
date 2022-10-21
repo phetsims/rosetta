@@ -6,7 +6,8 @@
  * @author Liam Mulhall
  */
 
-import useLocaleInfo from '../hooks/useLocaleInfo.jsx';
+import { useContext } from 'react';
+import { LocaleInfoContext } from './RosettaRoutes.jsx';
 
 /**
  * This component is a select (commonly referred to as a dropdown) for locales. The locales in this select look like
@@ -23,7 +24,7 @@ import useLocaleInfo from '../hooks/useLocaleInfo.jsx';
  */
 const LocaleSelect = ( { field } ) => { // eslint-disable-line react/prop-types
 
-  const localeInfo = useLocaleInfo();
+  const localeInfo = useContext( LocaleInfoContext );
 
   // sort the locales by name
   // in other words, sort the languages alphabetically

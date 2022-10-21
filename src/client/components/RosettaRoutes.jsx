@@ -6,8 +6,9 @@
  * @author Liam Mulhall
  */
 
-import React from 'react';
+import React, { createContext } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import useLocaleInfo from '../hooks/useLocaleInfo.jsx';
 import Admin from './Admin.jsx';
 import Help from './Help.jsx';
 import LocaleAndSimForm from './LocaleAndSimForm.jsx';
@@ -17,6 +18,8 @@ import TranslationForm from './TranslationForm.jsx';
 import TranslationReport from './TranslationReport.jsx';
 import TranslationReportForm from './TranslationReportForm.jsx';
 
+const LocaleInfoContext = createContext( {} );
+
 /**
  * This component defines routes and their respective components. If a user hits a certain route, the specified
  * component will be shown.
@@ -25,22 +28,26 @@ import TranslationReportForm from './TranslationReportForm.jsx';
  * @constructor
  */
 const RosettaRoutes = () => {
+  const localeInfo = useLocaleInfo();
   return (
     <BrowserRouter>
       <Navbar/>
       <div className='container'>
-        <Routes>
-          <Route path='/translate/test' element={<TestTranslation/>}/>
-          <Route path='/translate' element={<LocaleAndSimForm/>}/>
-          <Route path='/translate/report/:locale' element={<TranslationReport/>}/>
-          <Route path='/translate/report' element={<TranslationReportForm/>}/>
-          <Route path='/translate/help' element={<Help/>}/>
-          <Route path='/translate/:locale/:simName' element={<TranslationForm/>}/>
-          <Route path='/translate/admin' element={<Admin/>}/>
-        </Routes>
+        <LocaleInfoContext.Provider value={localeInfo}>
+          <Routes>
+            <Route path='/translate/test' element={<TestTranslation/>}/>
+            <Route path='/translate' element={<LocaleAndSimForm/>}/>
+            <Route path='/translate/report/:locale' element={<TranslationReport/>}/>
+            <Route path='/translate/report' element={<TranslationReportForm/>}/>
+            <Route path='/translate/help' element={<Help/>}/>
+            <Route path='/translate/:locale/:simName' element={<TranslationForm/>}/>
+            <Route path='/translate/admin' element={<Admin/>}/>
+          </Routes>
+        </LocaleInfoContext.Provider>
       </div>
     </BrowserRouter>
   );
 };
 
 export default RosettaRoutes;
+export { LocaleInfoContext };
