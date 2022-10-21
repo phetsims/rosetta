@@ -12,7 +12,6 @@ const getReplacementStringObject = async ( simHtml, translation ) => {
   const localeInfo = await getLocaleInfo();
   const direction = localeInfo[ translation.locale ].direction;
 
-  // This will require refactoring in other locations.
   const stringKeysWithRepoName = getStringKeysWithRepoName( simHtml );
   for ( const stringKeyWithRepoName of Object.keys( stringKeysWithRepoName ) ) {
     const repoName = getRepoNameFromStringKeyWithRepoName( stringKeyWithRepoName );
