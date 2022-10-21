@@ -23,7 +23,8 @@ const getReplacementStringObject = async ( simHtml, translation ) => {
       // Add translated key if it has been translated.
       const simSpecificObject = translation.translationFormData.simSpecific;
       const keyIsPresent = Object.keys( simSpecificObject ).includes( stringKey );
-      if ( keyIsPresent ) {
+      const keyIsTranslated = keyIsPresent ? simSpecificObject[ stringKey ].translated !== '' : false;
+      if ( keyIsTranslated ) {
 
         // To understand why we're adding embedding marks, see https://github.com/phetsims/rosetta/issues/27.
         const ltrMark = '\u202a';
@@ -42,8 +43,17 @@ const getReplacementStringObject = async ( simHtml, translation ) => {
       // Add translated key if it has been translated.
       const commonObject = translation.translationFormData.common;
       const keyIsPresent = Object.keys( commonObject ).includes( stringKey );
-      if ( keyIsPresent ) {
-        stringKeysWithRepoName[ stringKeyWithRepoName ] = commonObject[ stringKey ].translated;
+      const keyIsTranslated = keyIsPresent ? commonObject[ stringKey ].translated !== '' : false;
+      if ( keyIsTranslated ) {
+
+        // To understand why we're adding embedding marks, see https://github.com/phetsims/rosetta/issues/27.
+        const ltrMark = '\u202a';
+        const rtlMark = '\u202b';
+        const endDirectionalMark = '\u202c';
+        const translatedValue = commonObject[ stringKey ].translated;
+        stringKeysWithRepoName[ stringKeyWithRepoName ] = direction === 'rtl' ?
+                                                          rtlMark + translatedValue + endDirectionalMark :
+                                                          ltrMark + translatedValue + endDirectionalMark;
       }
     }
   }
