@@ -1,12 +1,16 @@
 // Copyright 2022, University of Colorado Boulder
 
+import getLocaleInfo from './getLocaleInfo.js';
 import getRepoNameFromStringKeyWithRepoName from './getRepoNameFromStringKeyWithRepoName.js';
 import getStringKeyFromStringKeyWithRepoName from './getStringKeyFromStringKeyWithRepoName.js';
 import getStringKeysWithRepoName from './getStringKeysWithRepoName.js';
 import logger from './logger.js';
 
-const getReplacementStringObject = ( simHtml, translation ) => {
+const getReplacementStringObject = async ( simHtml, translation ) => {
   logger.info( 'getting replacement string object' );
+
+  const localeInfo = await getLocaleInfo();
+  const direction = localeInfo[ translation.locale ].direction;
 
   // This will require refactoring in other locations.
   const stringKeysWithRepoName = getStringKeysWithRepoName( simHtml );
@@ -21,7 +25,15 @@ const getReplacementStringObject = ( simHtml, translation ) => {
       const simSpecificObject = translation.translationFormData.simSpecific;
       const keyIsPresent = Object.keys( simSpecificObject ).includes( stringKey );
       if ( keyIsPresent ) {
-        stringKeysWithRepoName[ stringKeyWithRepoName ] = simSpecificObject[ stringKey ].translated;
+
+        // To understand why we're adding embedding marks, see https://github.com/phetsims/rosetta/issues/27.
+        const ltrMark = '\u202a';
+        const rtlMark = '\u202b';
+        const endDirectionalMark = '\u202c';
+        const translatedValue = simSpecificObject[ stringKey ].translated;
+        stringKeysWithRepoName[ stringKeyWithRepoName ] = direction === 'rtl' ?
+                                                          rtlMark + translatedValue + endDirectionalMark :
+                                                          ltrMark + translatedValue + endDirectionalMark;
       }
     }
     else {
