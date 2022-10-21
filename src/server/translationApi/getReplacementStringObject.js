@@ -8,7 +8,6 @@ import logger from './logger.js';
 const getReplacementStringObject = ( simHtml, translation ) => {
   logger.info( 'getting replacement string object' );
 
-  // TODO: We should return the object from getStringKeysWithRepoName rather than Object.keys().
   // This will require refactoring in other locations.
   const stringKeysWithRepoName = getStringKeysWithRepoName( simHtml );
   for ( const stringKeyWithRepoName of Object.keys( stringKeysWithRepoName ) ) {
