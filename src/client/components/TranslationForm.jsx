@@ -99,6 +99,7 @@ const TranslationForm = () => {
                   <TranslationTables
                     translationFormData={translationFormData}
                     {...props}
+                    locale={params.locale}
                   />
                 </ErrorContext.Provider>
                 <TranslationFormButtons

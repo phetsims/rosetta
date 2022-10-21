@@ -41,6 +41,7 @@ const TranslationTables = props => {
           name={`simSpecific.${stringKeyWithoutDots}.translated`}
           stringKey={stringKeyWithDots}
           englishString={englishString}
+          locale={props.locale}
         />
       ] );
     }
@@ -56,6 +57,7 @@ const TranslationTables = props => {
           name={`common.${stringKeyWithoutDots}.translated`}
           stringKey={stringKeyWithDots}
           englishString={englishString}
+          locale={props.locale}
         />
       ] );
     }

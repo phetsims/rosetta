@@ -3,8 +3,9 @@
 /* eslint-disable react/prop-types */
 
 import { useField } from 'formik';
-import React from 'react';
+import React, { useContext } from 'react';
 import InputErrorMessage from './InputErrorMessage.jsx';
+import { LocaleInfoContext } from './RosettaRoutes.jsx';
 
 /**
  * This component is a row in the translation table. It has the string key, the English string, and an input for
@@ -15,6 +16,12 @@ import InputErrorMessage from './InputErrorMessage.jsx';
  * @constructor
  */
 const TranslationRow = props => {
+
+  const localeInfo = useContext( LocaleInfoContext );
+  const direction = localeInfo[ props.locale ].direction;
+  const inputStyle = {
+    textAlign: direction === 'rtl' ? 'right' : 'left'
+  };
 
   // formik has a handful of props that it needs on inputs
   // get field props for the input
@@ -27,7 +34,7 @@ const TranslationRow = props => {
 
       {/* use the spread operator to give the input each of the props in the field object */}
       <td>
-        <input {...field}/>
+        <input {...field} style={inputStyle} dir={direction}/>
         <InputErrorMessage fieldKey={props.keyWithoutDots}/>
       </td>
     </tr>
