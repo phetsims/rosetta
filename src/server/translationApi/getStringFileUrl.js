@@ -18,6 +18,9 @@ import logger from './logger.js';
 const getStringFileUrl = repoName => {
   logger.verbose( `getting ${repoName}'s string file url` );
   logger.verbose( `got ${repoName}'s string file url; returning it` );
+
+  // TODO: Change master to shaOrBranch variable.
+  // TODO: Need SHA for published version of sim, otherwise deleted strings will be missing.
   return `${config.GITHUB_URL}/${repoName}/master/${repoName}-strings_en.json`;
 };
 
