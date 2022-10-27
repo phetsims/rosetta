@@ -11,8 +11,7 @@
  * @author Liam Mulhall
  */
 
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import useWebsiteUserData from '../hooks/useWebsiteUserData.jsx';
 import RosettaRoutes from './RosettaRoutes.jsx';
 
 /**
@@ -30,19 +29,7 @@ import RosettaRoutes from './RosettaRoutes.jsx';
  */
 function Rosetta() {
 
-  // for storing and setting website user data
-  const [ websiteUserData, setWebsiteUserData ] = useState( {} );
-
-  // get website user data
-  useEffect( async () => {
-    try {
-      const websiteUserDataRes = await axios.get( `${window.location.origin}/services/check-login` );
-      setWebsiteUserData( websiteUserDataRes.data );
-    }
-    catch( e ) {
-      console.error( e );
-    }
-  }, [] );
+  const websiteUserData = useWebsiteUserData();
 
   // logic for ensuring only trusted translators or team members have access to the translation tool
   let jsx;
