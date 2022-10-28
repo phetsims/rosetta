@@ -8,6 +8,7 @@
 
 import useSimNames from '../hooks/useSimNames.jsx';
 import useSimTitles from '../hooks/useSimTitles.jsx';
+import LoadingSpinner from './LoadingSpinner.jsx';
 
 /**
  * This component is a select (commonly referred to as a dropdown) for sims.
@@ -16,7 +17,7 @@ import useSimTitles from '../hooks/useSimTitles.jsx';
  * @returns {JSX.Element}
  * @constructor
  */
-const SimSelect = ( { field } ) => { // eslint-disable-line react/prop-types
+const SimSelect = ( { field } ) => {
 
   const simNames = useSimNames();
   const simTitles = useSimTitles();
@@ -34,14 +35,22 @@ const SimSelect = ( { field } ) => { // eslint-disable-line react/prop-types
     );
   }
 
-  // use the spread operator to give the select each of the props in the field object
-  return (
-    <select {...field}>
+  let jsx;
+  if ( simOptions.length === 0 ) {
+    jsx = <LoadingSpinner/>;
+  }
+  else {
 
-      {/* iterate over sim options */}
-      {simOptions}
-    </select>
-  );
+    // use the spread operator to give the select each of the props in the field object
+    jsx = (
+      <select {...field}>
+
+        {/* iterate over sim options */}
+        {simOptions}
+      </select>
+    );
+  }
+  return jsx;
 };
 
 export default SimSelect;
