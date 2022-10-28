@@ -27,7 +27,6 @@ const testTranslation = async ( req, res ) => {
     const originalStringObject = JSON.stringify( getStringKeysWithRepoName( simHtml ) );
     const replacementStringObject = JSON.stringify( await getReplacementStringObject( simHtml, req.body ) );
     const simHtmlWithTranslatedStrings = simHtml.replace( originalStringObject, replacementStringObject );
-    console.log( JSON.stringify( replacementStringObject, null, 4 ) );
     logger.info( 'responding with sim html for translation test' );
     res.send( simHtmlWithTranslatedStrings );
   }
