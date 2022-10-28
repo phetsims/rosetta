@@ -2,6 +2,7 @@
 
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import alertErrorMessage from '../utils/alertErrorMessage.js';
 
 const useLocaleInfo = () => {
   const [ localeInfo, setLocaleInfo ] = useState( {} );
@@ -11,10 +12,9 @@ const useLocaleInfo = () => {
     try {
       const localeInfoRes = await axios.get( '/translationApi/localeInfo' );
       setLocaleInfo( localeInfoRes.data );
-      console.log( localeInfoRes.data );
     }
     catch( e ) {
-      console.error( e );
+      alertErrorMessage( e );
     }
   }, [] );
   return localeInfo;

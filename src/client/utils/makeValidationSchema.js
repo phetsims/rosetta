@@ -3,6 +3,7 @@
 /* eslint-disable prefer-arrow-callback */
 
 import * as Yup from 'yup';
+import alertErrorMessage from './alertErrorMessage.js';
 import isValidBracePattern from './isValidBracePattern.js';
 import clientConstants from './clientConstants.js';
 
@@ -36,7 +37,7 @@ const makeValidationSchema = translationFormData => {
     validationSchema = Yup.object().shape( validationObject );
   }
   catch( e ) {
-    console.error( e );
+    alertErrorMessage( e );
     validationSchema = { error: 'unable to make validation schema' };
   }
   return validationSchema;
