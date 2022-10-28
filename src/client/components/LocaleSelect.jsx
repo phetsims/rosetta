@@ -8,6 +8,7 @@
 
 import { useContext } from 'react';
 import { LocaleInfoContext } from './RosettaRoutes.jsx';
+import LoadingSpinner from './LoadingSpinner.jsx';
 
 /**
  * This component is a select (commonly referred to as a dropdown) for locales. The locales in this select look like
@@ -22,7 +23,7 @@ import { LocaleInfoContext } from './RosettaRoutes.jsx';
  * @returns {JSX.Element}
  * @constructor
  */
-const LocaleSelect = ( { field } ) => { // eslint-disable-line react/prop-types
+const LocaleSelect = ( { field } ) => {
 
   const localeInfo = useContext( LocaleInfoContext );
 
@@ -47,14 +48,22 @@ const LocaleSelect = ( { field } ) => { // eslint-disable-line react/prop-types
     );
   }
 
-  // use the spread operator to give the select each of the props in the field object
-  return (
-    <select {...field}>
+  let jsx;
+  if ( localeOptions.length === 0 ) {
+    jsx = <LoadingSpinner/>;
+  }
+  else {
 
-      {/* iterate over locale options */}
-      {localeOptions}
-    </select>
-  );
+    // use the spread operator to give the select each of the props in the field object
+    jsx = (
+      <select {...field}>
+
+        {/* iterate over locale options */}
+        {localeOptions}
+      </select>
+    );
+  }
+  return jsx;
 };
 
 export default LocaleSelect;
