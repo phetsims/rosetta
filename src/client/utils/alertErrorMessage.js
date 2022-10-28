@@ -6,7 +6,6 @@ const alertErrorMessage = error => {
     
     Please contact phethelp@colorado.edu and include the error message below.
     
-    Error Message:
     ${error}`
   );
 };
