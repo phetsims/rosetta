@@ -23,8 +23,6 @@ const makeValidationSchema = translationFormData => {
         if ( englishSingleBraces.length > 0 || englishDoubleBraces.length > 0 ) {
           subObjects[ keyType ][ key ] = Yup.object( {
             translated: Yup.string().test( 'validBracePattern', 'Placeholders don\'t match English string', function foo( value ) {
-              console.log( englishValue );
-              console.log( value );
               return isValidBracePattern( value, englishValue );
             } )
           } );
