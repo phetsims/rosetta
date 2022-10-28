@@ -6,8 +6,8 @@
  * @author Liam Mulhall
  */
 
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import useSimNames from '../hooks/useSimNames.jsx';
+import useSimTitles from '../hooks/useSimTitles.jsx';
 
 /**
  * This component is a select (commonly referred to as a dropdown) for sims.
@@ -18,22 +18,8 @@ import React, { useEffect, useState } from 'react';
  */
 const SimSelect = ( { field } ) => { // eslint-disable-line react/prop-types
 
-  // for storing and setting sim names
-  const [ simNames, setSimNames ] = useState( [] );
-  const [ simTitles, setSimTitles ] = useState( [] );
-
-  // get sim names
-  useEffect( async () => {
-    try {
-      const simNamesRes = await axios.get( '/translationApi/simNames' );
-      setSimNames( simNamesRes.data );
-      const simTitlesRes = await axios.get( '/translationApi/simTitles' );
-      setSimTitles( simTitlesRes.data );
-    }
-    catch( e ) {
-      console.error( e );
-    }
-  }, [] );
+  const simNames = useSimNames();
+  const simTitles = useSimTitles();
 
   // create a list of sim options to iterate over
   const simOptions = [];
