@@ -6,9 +6,9 @@
  * @author Liam Mulhall
  */
 
-import useSimNames from '../hooks/useSimNames.jsx';
-import useSimTitles from '../hooks/useSimTitles.jsx';
+import { useContext } from 'react';
 import LoadingSpinner from './LoadingSpinner.jsx';
+import { SimNamesContext, SimTitlesContext } from './RosettaRoutes.jsx';
 
 /**
  * This component is a select (commonly referred to as a dropdown) for sims.
@@ -19,8 +19,8 @@ import LoadingSpinner from './LoadingSpinner.jsx';
  */
 const SimSelect = ( { field } ) => {
 
-  const simNames = useSimNames();
-  const simTitles = useSimTitles();
+  const simNames = useContext( SimNamesContext );
+  const simTitles = useContext( SimTitlesContext );
 
   // create a list of sim options to iterate over
   const simOptions = [];
