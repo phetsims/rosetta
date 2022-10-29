@@ -8,7 +8,8 @@
 
 import getCategorizedStringKeys from '../getCategorizedStringKeys.js';
 import getSimHtml from '../getSimHtml.js';
-import getSimNames from '../getSimNames.js';
+import getSimMetadata from '../getSimMetadata.js';
+import getSimNamesAndTitles from '../getSimNamesAndTitles.js';
 import getSimUrl from '../getSimUrl.js';
 import getStringKeysWithRepoName from '../getStringKeysWithRepoName.js';
 import getTranslationFormData from '../getTranslationFormData.js';
@@ -23,7 +24,8 @@ import logger from '../logger.js';
  */
 const translationFormData = async ( req, res ) => {
   try {
-    const simNames = await getSimNames();
+    const simMetadata = await getSimMetadata();
+    const simNames = Object.keys( getSimNamesAndTitles( simMetadata ) );
     const simUrl = getSimUrl( req.params.simName );
     const simHtml = await getSimHtml( simUrl );
 
