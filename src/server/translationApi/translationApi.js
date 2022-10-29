@@ -5,9 +5,7 @@ import localeInfo from './api/localeInfo.js';
 import rebuildWithOriginalCredit from './api/rebuildWithOriginalCredit.js';
 import saveTranslation from './api/saveTranslation.js';
 import sha from './api/sha.js';
-import simNames from './api/simNames.js';
 import simNamesAndTitles from './api/simNamesAndTitles.js';
-import simTitles from './api/simTitles.js';
 import submitTranslation from './api/submitTranslation.js';
 import testTranslation from './api/testTranslation.js';
 import commonEnglishStringKeysAndStrings from './api/tmp/commonEnglishStringKeysAndStrings.js';
@@ -29,8 +27,6 @@ rosettaApiServer.get( '/*', ( req, res, next ) => {
   next();
 } );
 rosettaApiServer.get( '/localeInfo', localeInfo );
-rosettaApiServer.get( '/simNames', simNames );
-rosettaApiServer.get( '/simTitles', simTitles );
 rosettaApiServer.get( '/simNamesAndTitles', simNamesAndTitles );
 rosettaApiServer.get( '/translationFormData/:simName?/:locale?', translationFormData );
 rosettaApiServer.get( '/sha', sha );
