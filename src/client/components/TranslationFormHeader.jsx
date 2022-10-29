@@ -3,7 +3,7 @@
 /* eslint-disable react/prop-types */
 
 import { useContext } from 'react';
-import { LocaleInfoContext } from './RosettaRoutes.jsx';
+import { LocaleInfoContext, SimNamesAndTitlesContext } from './RosettaRoutes.jsx';
 
 const TranslationFormHeader = props => {
 
@@ -13,11 +13,17 @@ const TranslationFormHeader = props => {
     localeName = localeInfo[ props.locale ].name;
   }
 
+  const simNamesAndTitles = useContext( SimNamesAndTitlesContext );
+  let simTitle = 'Loading...';
+  if ( Object.keys( simNamesAndTitles ).length > 0 ) {
+    simTitle = simNamesAndTitles[ props.simName ];
+  }
+
   return (
     <div>
       <h1>Translation Form</h1>
       <h2 className='text-muted'>Locale: {localeName} ({props.locale})</h2>
-      <h2 className='text-muted'>Sim: {props.simName}</h2>
+      <h2 className='text-muted'>Sim: {simTitle}</h2>
     </div>
   );
 };

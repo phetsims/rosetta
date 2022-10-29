@@ -9,8 +9,7 @@
 import React, { createContext } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import useLocaleInfo from '../hooks/useLocaleInfo.jsx';
-import useSimNames from '../hooks/useSimNames.jsx';
-import useSimTitles from '../hooks/useSimTitles.jsx';
+import useSimNamesAndTitles from '../hooks/useSimNamesAndTitles.jsx';
 import Admin from './Admin.jsx';
 import Help from './Help.jsx';
 import LocaleAndSimForm from './LocaleAndSimForm.jsx';
@@ -21,8 +20,7 @@ import TranslationReport from './TranslationReport.jsx';
 import TranslationReportForm from './TranslationReportForm.jsx';
 
 const LocaleInfoContext = createContext( {} );
-const SimNamesContext = createContext( [] );
-const SimTitlesContext = createContext( [] );
+const SimNamesAndTitlesContext = createContext( {} );
 
 /**
  * This component defines routes and their respective components. If a user hits a certain route, the specified
@@ -33,27 +31,23 @@ const SimTitlesContext = createContext( [] );
  */
 const RosettaRoutes = () => {
   const localeInfo = useLocaleInfo();
-  const simNames = useSimNames();
-  const simTitles = useSimTitles();
+  const simNamesAndTitles = useSimNamesAndTitles();
   return (
     <BrowserRouter>
       <Navbar/>
       <div className='container'>
-        {/* TODO: Consolidate these context providers. See <issue-link>.*/}
         <LocaleInfoContext.Provider value={localeInfo}>
-          <SimNamesContext.Provider value={simNames}>
-            <SimTitlesContext.Provider value={simTitles}>
-              <Routes>
-                <Route path='/translate/test' element={<TestTranslation/>}/>
-                <Route path='/translate' element={<LocaleAndSimForm/>}/>
-                <Route path='/translate/report/:locale' element={<TranslationReport/>}/>
-                <Route path='/translate/report' element={<TranslationReportForm/>}/>
-                <Route path='/translate/help' element={<Help/>}/>
-                <Route path='/translate/:locale/:simName' element={<TranslationForm/>}/>
-                <Route path='/translate/admin' element={<Admin/>}/>
-              </Routes>
-            </SimTitlesContext.Provider>
-          </SimNamesContext.Provider>
+          <SimNamesAndTitlesContext.Provider value={simNamesAndTitles}>
+            <Routes>
+              <Route path='/translate/test' element={<TestTranslation/>}/>
+              <Route path='/translate' element={<LocaleAndSimForm/>}/>
+              <Route path='/translate/report/:locale' element={<TranslationReport/>}/>
+              <Route path='/translate/report' element={<TranslationReportForm/>}/>
+              <Route path='/translate/help' element={<Help/>}/>
+              <Route path='/translate/:locale/:simName' element={<TranslationForm/>}/>
+              <Route path='/translate/admin' element={<Admin/>}/>
+            </Routes>
+          </SimNamesAndTitlesContext.Provider>
         </LocaleInfoContext.Provider>
       </div>
     </BrowserRouter>
@@ -61,4 +55,4 @@ const RosettaRoutes = () => {
 };
 
 export default RosettaRoutes;
-export { LocaleInfoContext, SimNamesContext, SimTitlesContext };
+export { LocaleInfoContext, SimNamesAndTitlesContext };
