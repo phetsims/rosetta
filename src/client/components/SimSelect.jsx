@@ -8,7 +8,7 @@
 
 import { useContext } from 'react';
 import LoadingSpinner from './LoadingSpinner.jsx';
-import { SimNamesContext, SimTitlesContext } from './RosettaRoutes.jsx';
+import { SimNamesAndTitlesContext } from './RosettaRoutes.jsx';
 
 /**
  * This component is a select (commonly referred to as a dropdown) for sims.
@@ -19,20 +19,23 @@ import { SimNamesContext, SimTitlesContext } from './RosettaRoutes.jsx';
  */
 const SimSelect = ( { field } ) => {
 
-  const simNames = useContext( SimNamesContext );
-  const simTitles = useContext( SimTitlesContext );
+  const simNamesAndTitles = useContext( SimNamesAndTitlesContext );
+  const simNames = Object.keys( simNamesAndTitles );
+  const simTitles = Object.values( simNamesAndTitles );
 
   // create a list of sim options to iterate over
   const simOptions = [];
-  for ( let i = 0; i < simNames.length; i++ ) {
-    simOptions.push(
-      <option
-        key={simNames[ i ]}
-        value={simNames[ i ]}
-      >
-        {simTitles[ i ]}
-      </option>
-    );
+  if ( simNames.length > 0 ) {
+    for ( let i = 0; i < simNames.length; i++ ) {
+      simOptions.push(
+        <option
+          key={simNames[ i ]}
+          value={simNames[ i ]}
+        >
+          {simTitles[ i ]}
+        </option>
+      );
+    }
   }
 
   let jsx;
