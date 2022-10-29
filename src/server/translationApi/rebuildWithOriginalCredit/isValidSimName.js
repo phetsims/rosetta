@@ -1,6 +1,7 @@
 // Copyright 2022, University of Colorado Boulder
 
-import getSimNames from '../getSimNames.js';
+import getSimMetadata from '../getSimMetadata.js';
+import getSimNamesAndTitles from '../getSimNamesAndTitles.js';
 
 /**
  * Tell whether a sim is in the list of sim names.
@@ -9,7 +10,8 @@ import getSimNames from '../getSimNames.js';
  * @returns {boolean}
  */
 const isValidSimName = async simName => {
-  const listOfSimNames = await getSimNames();
+  const simMetadata = await getSimMetadata();
+  const listOfSimNames = Object.keys( getSimNamesAndTitles( simMetadata ) );
   let ret = false;
   if ( listOfSimNames.includes( simName ) ) {
     ret = true;
