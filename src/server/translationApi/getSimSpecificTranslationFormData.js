@@ -7,6 +7,7 @@
  */
 
 import axios from 'axios';
+import getLatestSimSha from './getLatestSimSha.js';
 import getStringFileUrl from './getStringFileUrl.js';
 import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
 import logger from './logger.js';
@@ -54,7 +55,8 @@ const getSimSpecificTranslationFormData = async (
     let simSpecificEnglishStringFileRes = {};
     let simSpecificEnglishStringKeysAndStrings = {};
     try {
-      simSpecificEnglishStringFileUrl = getStringFileUrl( simName );
+      const latestSha = await getLatestSimSha( simName );
+      simSpecificEnglishStringFileUrl = getStringFileUrl( simName, latestSha );
       simSpecificEnglishStringFileRes = await axios.get( simSpecificEnglishStringFileUrl );
       simSpecificEnglishStringKeysAndStrings = simSpecificEnglishStringFileRes.data;
     }
