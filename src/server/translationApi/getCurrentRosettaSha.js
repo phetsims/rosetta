@@ -7,7 +7,7 @@ import { execSync } from 'node:child_process';
  *
  * @returns {string}
  */
-const getCurrentSha = () => {
+const getCurrentRosettaSha = () => {
   console.log( 'info: trying to get current sha' );
   let retVal;
   try {
@@ -23,4 +23,4 @@ const getCurrentSha = () => {
   return retVal;
 };
 
-export default getCurrentSha;
+export default getCurrentRosettaSha;

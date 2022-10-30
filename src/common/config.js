@@ -9,7 +9,7 @@
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import getCurrentSha from 'server/translationApi/getCurrentSha.js';
+import getCurrentRosettaSha from 'server/translationApi/getCurrentRosettaSha.js';
 
 const pathToConfig = path.join( os.homedir(), '.phet', 'rosetta-config.json' );
 
@@ -17,7 +17,7 @@ let config = {};
 try {
   const unparsedJson = fs.readFileSync( pathToConfig, 'utf8' );
   config = JSON.parse( unparsedJson );
-  config.SHA = getCurrentSha();
+  config.SHA = getCurrentRosettaSha();
 }
 catch( e ) {
   console.error( e );
