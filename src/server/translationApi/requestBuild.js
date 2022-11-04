@@ -19,12 +19,11 @@ import logger from './logger.js';
 const requestBuild = async ( simName, locale, userID ) => {
 
   logger.info( `initiating build request for sim: ${simName}, locale: ${locale}` );
-  const latestVersionOfSim = await getLatestVersionOfSim( simName );
+  const simVersionObject = await getLatestVersionOfSim( simName );
 
-  logger.info( `latest version of the sim: ${latestVersionOfSim}.` );
-  const dependencies = await getDependencies( simName, latestVersionOfSim );
+  logger.info( `latest version of the sim: ${simVersionObject.string}.` );
+  const dependencies = await getDependencies( simName, simVersionObject.string );
 
-  const simVersionObject = SimVersion.parse( latestVersionOfSim );
 
   // See if there is a published phet-io version of the sim we are requesting a build for. If so, add the phet-io brand
   // to the list of brands we are requesting to build. For the history of this, see:
@@ -46,16 +45,17 @@ const requestBuild = async ( simName, locale, userID ) => {
     api: '2.0',
     dependencies: dependencies,
     simName: simName,
-    version: latestVersionOfSim,
+    version: simVersionObject.string,
     locales: [ locale ],
     servers: [ 'production' ],
     brands: brands,
     translatorId: userID,
-    authorizationCode: global.config.buildServerAuthorizationCode
+    authorizationCode: config.BUILD_SERVER_AUTH
   };
 
   // Log the build request without the auth code or dependencies.
-  const keysForLog = Object.keys( requestObject ).filter( key => key !== 'authorizationCode' && key !== 'dependencies' );
+  const keysForLog = Object.keys( requestObject )
+    .filter( key => key !== 'authorizationCode' && key !== 'dependencies' );
   logger.info( 'build request object:' );
   for ( const key of keysForLog ) {
     logger.info( `    ${key}: ${requestObject[ key ]}` );
