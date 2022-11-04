@@ -15,6 +15,8 @@ const gitPull = require( '../perennial/js/common/gitPull' );
 const npmUpdate = require( '../perennial/js/common/npmUpdate.js' );
 const winston = require( 'winston' );
 
+const REPO_DEPENDENCIES = [ 'chipper', 'perennial', 'perennial-alias' ];
+
 const logger = winston.createLogger( {
   format: winston.format.combine(
     winston.format.simple()
@@ -38,23 +40,20 @@ module.exports = grunt => {
    */
   grunt.registerTask( 'update-rosetta', 'This task pulls the latest versions of rosetta and its dependencies.', async function() {
 
-
     // Tell Grunt this is an async task. Note how we use a regular function instead of an arrow function.
     // See https://gruntjs.com/inside-tasks#this.async.
     const done = this.async();
     const errors = [];
 
-    const listOfReposToCloneOrPull = [ 'chipper', 'perennial', 'perennial-alias', 'rosetta' ];
-    for ( const repo of listOfReposToCloneOrPull ) {
+    for ( const repo of REPO_DEPENDENCIES ) {
 
       // Try to clone repos.
       if ( !fs.existsSync( `../${repo}` ) ) {
         try {
-          await cloneRepo( repo );
+          await cloneRepo( repo )
         }
         catch( e ) {
-          logger.error( `issue with clone of ${repo}: ${e}` );
-          errors.push( e );
+          logger.error( `issue with cloning ${repo}: ${e}` )
         }
       }
 
