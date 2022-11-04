@@ -7,9 +7,10 @@ const getLatestVersionOfSim = async simName => {
   let latestVersionOfSim = '';
   try {
     const simMetadata = await getSimMetadata();
-    for ( const project of Object.keys( simMetadata ) ) {
-      if ( simMetadata[ project ].name.includes( simName ) ) {
-        latestVersionOfSim = simMetadata[ project ].version;
+    const projects = simMetadata.projects;
+    for ( const i of Object.keys( projects ) ) {
+      if ( projects[ i ].name.includes( simName ) ) {
+        latestVersionOfSim = projects[ i ].version;
       }
     }
   }
