@@ -143,12 +143,12 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
 
       // 1.1
       if ( translationLeftBlank ) {
-        logger.info( `string for ${stringKey} not translated; not adding it to the translation file for ${repo}` );
+        logger.verbose( `string for ${stringKey} not translated; not adding it to the translation file for ${repo}` );
       }
 
       // 1.2
       else if ( userProvidedInitialTranslation ) {
-        logger.info( `user provided translation for previously untranslated string; adding ${stringKey}'s info to the translation file for ${repo}` );
+        logger.verbose( `user provided translation for previously untranslated string; adding ${stringKey}'s info to the translation file for ${repo}` );
 
         // populate history object
         const newHistoryEntry = {
@@ -167,18 +167,18 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
 
       // 2.1
       else if ( translationErased ) {
-        logger.warn( `blank value submitted for previously translated string ${stringKey}; preserving previous value` );
+        logger.verbose( `blank value submitted for previously translated string ${stringKey}; preserving previous value` );
       }
 
       // 2.2
       else if ( translationUntouched ) {
-        logger.info( `the translation for ${stringKey}'s string was untouched; using old entry` );
+        logger.verbose( `the translation for ${stringKey}'s string was untouched; using old entry` );
         translationFileContentsForRepo[ stringKey ] = oldTranslationFile[ stringKey ];
       }
 
       // 2.3
       else if ( translationModified ) {
-        logger.info( `the translation for ${stringKey}'s string was modified; adding it to the translation file for ${repo}` );
+        logger.verbose( `the translation for ${stringKey}'s string was modified; adding it to the translation file for ${repo}` );
 
         // populate history object
         const newHistoryEntry = {
