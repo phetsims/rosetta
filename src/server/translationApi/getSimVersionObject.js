@@ -3,7 +3,7 @@
 import getSimMetadata from './getSimMetadata.js';
 import logger from './logger.js';
 
-const getLatestVersionOfSim = async simName => {
+const getSimVersionObject = async simName => {
   let latestVersionOfSim = '';
   try {
     const simMetadata = await getSimMetadata();
@@ -21,4 +21,4 @@ const getLatestVersionOfSim = async simName => {
   return latestVersionOfSim;
 };
 
-export default getLatestVersionOfSim;
+export default getSimVersionObject;
