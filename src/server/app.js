@@ -65,7 +65,7 @@ app.listen( config.SERVER_PORT, () => {
   logger.info( 'rosetta started' );
   logger.info( `http://localhost:${config.SERVER_PORT}/translate` );
 
-  const unsafeKeys = [ 'BUILD_SERVER_AUTH', 'GITHUB_PAT', 'SERVER_TOKEN', 'ROSETTA_SESSION_SECRET' ];
+  const unsafeKeys = [ 'BUILD_SERVER_AUTH', 'GITHUB_PAT', 'SERVER_TOKEN' ];
 
   const configKeysToLog = Object.keys( config ).filter( key => !unsafeKeys.includes( key ) );
   logger.info( 'see config below' );
