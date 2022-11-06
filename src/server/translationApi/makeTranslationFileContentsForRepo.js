@@ -85,8 +85,7 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
    *     - solution: add the user's translation to the file
    * (2) there has been a non-blank translation of the string
    *   (2.1) the translator erases the existing translation
-   *     - TODO: Change the solution depending on how JB solves
-   *             these issues in old Rosetta.
+   *     - TODO: Actually need to submit this.
    *     - solution: don't allow user to submit blank
    *             translations (protect against this on both
    *             client and server)
@@ -167,6 +166,8 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
 
       // 2.1
       else if ( translationErased ) {
+
+        // TODO: We actually need to submit here.
         logger.verbose( `blank value submitted for previously translated string ${stringKey}; preserving previous value` );
       }
 
