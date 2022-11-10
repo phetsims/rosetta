@@ -21,5 +21,5 @@ The client uses React. The client has three jobs. It gets data needed to transla
 user interface for translating simulations using the data from the server, and it posts saved or submitted translations
 to the server.
 
-Babel and webpack are used to compile and bundle the React code, respectively. The result of compiling and bundling the
-React code is a directory containing static files. The server serves these static files.
+Vite is used to transpile and bundle the React code. The result of transpiling and bundling the React code is a
+directory containing static files. The server serves these static files.
