@@ -27,10 +27,10 @@ keep this edge case in mind.
 
 ## Setting Up MongoDB for Local Development
 
-1. Install MongoDB. I suggest googling "how to install MongoDB on <your operating system>". As of this writing, MongoDB
-   has nice docs for how to install the Community Edition of MongoDB on Linux, macOS, and Windows. Ensure you have a
-   version of MongoDB that is compatible with the version running on the production server. (Details of the installation
-   are omitted because they will likely change.)
+1. Install MongoDB. I suggest googling "how to install MongoDB on ]<your operating system\>". As of this writing,
+   MongoDB has nice docs for how to install the Community Edition of MongoDB on Linux, macOS, and Windows. Ensure you 
+   have a version of MongoDB that is compatible with the version running on the production server. (Details of the 
+   installation are omitted because they will likely change.)
 2. Once you have MongoDB installed, you need to run MongoDB. If you are following the official docs for installing the
    Community Edition of MongoDB, you should be able to find the official docs for how to run MongoDB. (As of this
    writing, the docs for how to run MongoDB are right beneath the docs for installing MongoDB.) If you are using a
