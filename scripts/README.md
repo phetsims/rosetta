@@ -1,3 +1,5 @@
+# `scripts`
+
 As of this writing (April 2022), Rosetta is still pretty minimalistic, and there are lots of things that come up that
 can't be done through the Web interface.  In fact, at the moment, there really is no administration at all that can be
 performed through the web interface.  As a result, scripts are occasionally written to perform a task that solves some
