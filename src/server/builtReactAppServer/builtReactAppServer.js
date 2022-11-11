@@ -5,7 +5,7 @@ import os from 'os';
 import { URL } from 'url';
 import path from 'path';
 
-const staticAssetsServer = express();
+const builtReactAppServer = express();
 
 // Set up a variable similar to the old __dirname variable.
 // The __dirname variable gets the present working directory.
@@ -19,7 +19,7 @@ const staticAssetsPathWithoutLeadingSlash = staticAssetsPath
   .slice( 1, staticAssetsPath.length );
 
 // If we get any route, hand it over to the React app so that it can do client-side routing.
-staticAssetsServer.get( '/*', ( req, res ) => {
+builtReactAppServer.get( '/*', ( req, res ) => {
   if ( os.platform() === 'win32' ) {
     res.sendFile( path.join( staticAssetsPathWithoutLeadingSlash, 'index.html' ) );
   }
@@ -28,4 +28,4 @@ staticAssetsServer.get( '/*', ( req, res ) => {
   }
 } );
 
-export default staticAssetsServer;
+export default builtReactAppServer;
