@@ -71,6 +71,9 @@ const getSimSpecificTranslationFormData = async (
     let simSpecificTranslatedStringKeysAndStrings = {};
     try {
       simSpecificTranslatedStringFileUrl = getTranslatedStringFileUrl( simName, locale );
+
+      // The user won't be able to see recently committed strings immediately.
+      // See https://github.com/phetsims/rosetta/issues/316.
       simSpecificTranslatedStringFileRes = await axios.get( simSpecificTranslatedStringFileUrl );
       simSpecificTranslatedStringKeysAndStrings = simSpecificTranslatedStringFileRes.data;
     }
