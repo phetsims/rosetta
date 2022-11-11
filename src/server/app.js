@@ -40,6 +40,7 @@ const builtReactFilesPathWithoutLeadingSlash = builtReactFilesPath
   .slice( 1, builtReactFilesPath.length );
 
 /*
+ * NOTE
  * We serve these static files using app as opposed to builtReactAppServer because if we use builtReactAppServer it
  * tries to serve all the files in the static directory as HTML instead of whatever their file type is, e.g. CSS or JS.
  */
