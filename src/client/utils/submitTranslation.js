@@ -11,7 +11,7 @@ const submitTranslation = async ( values, simName, locale ) => {
     try {
       await axios.post( `${clientConstants.translationApiRoute}/submitTranslation`, translation );
       const submissionMessage = 'Translation submitted. ' +
-                                'Your translation should appear on the PhET website in about half an hour.' +
+                                'Your translation should appear on the PhET website in about half an hour. ' +
                                 'It will take about 10 minutes for the translation utility to show the changes you made.';
       alert( submissionMessage );
     }
