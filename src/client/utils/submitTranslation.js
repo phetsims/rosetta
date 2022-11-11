@@ -10,7 +10,10 @@ const submitTranslation = async ( values, simName, locale ) => {
   if ( window.confirm( `Are you sure you want to submit your translation for ${translation.simName} in locale ${translation.locale}?` ) ) {
     try {
       await axios.post( `${clientConstants.translationApiRoute}/submitTranslation`, translation );
-      alert( 'Translation submitted. Your translation should appear on the PhET website in about half an hour.' );
+      const submissionMessage = 'Translation submitted. ' +
+                                'Your translation should appear on the PhET website in about half an hour.' +
+                                'It will take about 10 minutes for the translation utility to show the changes you made.';
+      alert( submissionMessage );
     }
     catch( e ) {
       alertErrorMessage( e );
