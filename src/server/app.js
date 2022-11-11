@@ -3,7 +3,7 @@
 /**
  * This file is the entry point for Rosetta's server-side code. It sets up the Express app, which has two components:
  * (1) the built react app server, and
- * (2) the API server.
+ * (2) the translation API.
  *
  * (1) is responsible for serving the static files generated when we build the React front end. (2) is responsible for
  * returning JSON data that the React front end consumes.
