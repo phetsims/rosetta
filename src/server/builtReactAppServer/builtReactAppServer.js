@@ -12,19 +12,19 @@ const builtReactAppServer = express();
 const __dirname = new URL( '.', import.meta.url ).pathname;
 
 // This is the path to the static files generated when you build the React front end.
-const staticAssetsPath = path.join( __dirname, '..', '..', 'client', 'dist' );
+const builtReactFilesPath = path.join( __dirname, '..', '..', 'client', 'dist' );
 
 // There's some weirdness on Windows; an extra slash is added before the path.
-const staticAssetsPathWithoutLeadingSlash = staticAssetsPath
-  .slice( 1, staticAssetsPath.length );
+const builtReactFilesPathWithoutLeadingSlash = builtReactFilesPath
+  .slice( 1, builtReactFilesPath.length );
 
 // If we get any route, hand it over to the React app so that it can do client-side routing.
 builtReactAppServer.get( '/*', ( req, res ) => {
   if ( os.platform() === 'win32' ) {
-    res.sendFile( path.join( staticAssetsPathWithoutLeadingSlash, 'index.html' ) );
+    res.sendFile( path.join( builtReactFilesPathWithoutLeadingSlash, 'index.html' ) );
   }
   else {
-    res.sendFile( path.join( staticAssetsPath, 'index.html' ) );
+    res.sendFile( path.join( builtReactFilesPath, 'index.html' ) );
   }
 } );
 
