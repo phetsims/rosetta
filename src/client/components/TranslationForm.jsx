@@ -11,6 +11,7 @@ import axios from 'axios';
 import { Form, Formik } from 'formik';
 import React, { createContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import clientConstants from '../utils/clientConstants.js';
 import makeValidationSchema from '../utils/makeValidationSchema.js';
 import saveTranslation from '../utils/saveTranslation.js';
 import submitTranslation from '../utils/submitTranslation.js';
@@ -40,7 +41,7 @@ const TranslationForm = () => {
   useEffect( () => {
     try {
       ( async () => {
-        const translationFormDataRes = await axios.get( `/translationApi/translationFormData/${params.simName}/${params.locale}` );
+        const translationFormDataRes = await axios.get( `${clientConstants.translationApiRoute}/translationFormData/${params.simName}/${params.locale}` );
         setTranslationFormData( translationFormDataRes.data );
       } )();
     }

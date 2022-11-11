@@ -6,12 +6,13 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Xerxes from '../img/xerxes.jpg';
+import clientConstants from '../utils/clientConstants.js';
 
 const Sha = () => {
   const [ sha, setSha ] = useState( '' );
   useEffect( async () => {
     try {
-      const shaRes = await axios.get( '/translationApi/sha' );
+      const shaRes = await axios.get( `${clientConstants.translationApiRoute}/sha` );
       setSha( shaRes.data );
     }
     catch( e ) {

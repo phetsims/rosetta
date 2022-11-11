@@ -2,13 +2,14 @@
 
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import clientConstants from '../utils/clientConstants.js';
 
 const useSimNamesAndTitles = () => {
 
   const [ simNamesAndTitles, setSimNamesAndTitles ] = useState( [] );
   useEffect( async () => {
     try {
-      const simTitlesRes = await axios.get( '/translationApi/simNamesAndTitles' );
+      const simTitlesRes = await axios.get( `${clientConstants.translationApiRoute}/simNamesAndTitles` );
       setSimNamesAndTitles( simTitlesRes.data );
     }
     catch( e ) {

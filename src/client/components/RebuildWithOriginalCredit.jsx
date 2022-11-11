@@ -3,6 +3,7 @@
 import axios from 'axios';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
+import clientConstants from '../utils/clientConstants.js';
 
 const RebuildWithOriginalCredit = () => {
   const initialRebuildValues = {
@@ -11,7 +12,7 @@ const RebuildWithOriginalCredit = () => {
     userId: ''
   };
   const handleSubmit = async values => {
-    await axios.get( `/translationApi/rebuildWithOriginalCredit/${values.sim}/${values.locale}/${values.userId}` );
+    await axios.get( `${clientConstants.translationApiRoute}/rebuildWithOriginalCredit/${values.sim}/${values.locale}/${values.userId}` );
     window.alert( `Rebuild request sent for sim ${values.sim} in locale ${values.locale} with user ID ${values.userId}.` );
   };
   const ValidationSchema = Yup.object().shape( {

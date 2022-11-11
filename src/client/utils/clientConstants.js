@@ -2,5 +2,6 @@
 
 export default {
   singleBraceRegex: /\{\d+\}/g,
-  doubleBraceRegex: /\{\{\w+\}\}/g
+  doubleBraceRegex: /\{\{\w+\}\}/g,
+  translationApiRoute: '/translate/api'
 };
