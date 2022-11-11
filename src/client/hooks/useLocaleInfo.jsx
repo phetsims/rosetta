@@ -3,6 +3,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import alertErrorMessage from '../utils/alertErrorMessage.js';
+import clientConstants from '../utils/clientConstants.js';
 
 const useLocaleInfo = () => {
   const [ localeInfo, setLocaleInfo ] = useState( {} );
@@ -10,7 +11,7 @@ const useLocaleInfo = () => {
   // get locale info
   useEffect( async () => {
     try {
-      const localeInfoRes = await axios.get( '/translationApi/localeInfo' );
+      const localeInfoRes = await axios.get( `${clientConstants.translationApiRoute}/localeInfo` );
       setLocaleInfo( localeInfoRes.data );
     }
     catch( e ) {

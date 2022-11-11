@@ -51,7 +51,7 @@ else {
 }
 
 // Set up route for serving JSON data consumed by the React front end.
-app.use( '/translationApi', translationApi );
+app.use( '/translate/api', translationApi );
 
 // Set up route for serving the static files.
 app.use( '/translate', staticAssetsServer );
