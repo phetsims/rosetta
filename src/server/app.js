@@ -21,7 +21,7 @@ import os from 'os';
 
 // These are components (1) and (2) mentioned above.
 import translationApi from './translationApi/translationApi.js';
-import staticAssetsServer from './staticAssetsServer/staticAssetsServer.js';
+import builtReactAppServer from './builtReactAppServer/builtReactAppServer.js';
 
 const app = express();
 
@@ -54,7 +54,7 @@ else {
 app.use( '/translate/api', translationApi );
 
 // Set up route for serving the static files.
-app.use( '/translate', staticAssetsServer );
+app.use( '/translate', builtReactAppServer );
 
 // Mock website user data for local development.
 if ( config.ENVIRONMENT === 'development' ) {
