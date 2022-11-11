@@ -1,11 +1,38 @@
 # Administration Guide
 
+## Overview
+
+Rosetta, also known as the translation utility, is an app that runs on phet-server2. As of this
+writing, the code on phet-server2 is kept in the directory `/data/share/phet/translation-utility/rosetta`, and Git is
+used to pull updates. When an update is pulled, the `rosetta` process needs to be restarted before the change will take
+effect (see below).
+
+The process is run under the phet-admin account on phet-server2.
+
+The utility is accessed at the URL https://phet.colorado.edu/translate.
+
+## Configuration
+
+There are a number of configuration parameters that are used by Rosetta, and these are generally stored in the
+`~/.phet/rosetta-config.json` file for the account under which the process is being run. To best understand what this
+file contains, take a look at the instances of the file on phet-server2 and phet-server-dev.
+
+## Setting Rosetta to "Maintenance Mode"
+
+Sometimes it's necessary to take Rosetta offline so the updates can be made or so that behind-the-scenes updates to
+translation files can be made. There is a feature for this, and it will cause users to see a page that says something
+like "The PhET translation utility is down for maintenance, please try again later." To put Rosetta into this mode:
+
+1. Make sure that no one is actively using it by looking at the log by following the steps below.
+2. Edit the configuration file `~/.phet/rosetta-config.json` to have the key-value pair `"IS_ENABLED": false`.
+3. Restart Rosetta using the commands described below.
+
+Set the value of enabled back to true and perform another restart to set Rosetta back to normal operation.
+
 ## Update Rosetta
 
-You should be able to simply `grunt update`, but if that doesn't work, you
-might need to use the bootstrap script. From the root of the Rosetta directory,
-issue the command `./bin/bootstrap.sh`. That should install all dependencies you
-need to run Rosetta.
+Before trying to update Rosetta, you need to check its logs (see below), ensure no one is using it, and then stop its
+systemd service (see below). Then, you should be able to simply `sudo -u phet-admin grunt update`.
 
 ## Manage Rosetta's systemd Service
 
@@ -18,6 +45,19 @@ need to run Rosetta.
 
 - Tail Rosetta's logs: `sudo journalctl -f -u rosetta`
 - See also [this tutorial on `journalctl`](https://www.digitalocean.com/community/tutorials/how-to-use-journalctl-to-view-and-manipulate-systemd-logs).
+
+## Testing Rosetta
+
+Since Rosetta can be used at any time, we generally try to avoid taking it down for testing. It is set up to also run on
+phet-server-dev. The directory structure is the same as that used on phet-server2.
+
+The URL to access the version running on phet-server-dev is https://ox-dev.colorado.edu/translate.
+
+On phet-server-dev, the configuration file is generally set up so that the value of the `BABEL_BRANCH` key is set to
+tests. This allows translations to be committed to a different branch of the phetsims/babel repository (where the
+translated string files live) so that they don't affect "real" translations. The downside of this is that there aren't
+many real translations on this branch, so it is sometimes necessary to manually move some over from the master branch
+for more realistic testing.
 
 ## First-Time Setup
 
