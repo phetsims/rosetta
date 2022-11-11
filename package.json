@@ -12,7 +12,6 @@
     "start": "npm run lint && npm run build --workspace=client && node src/server/app.js"
   },
   "devDependencies": {
-    "winston": "^3.8.2",
-    "yup": "^0.32.11"
+    "winston": "^3.8.2"
   }
 }
