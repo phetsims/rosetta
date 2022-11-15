@@ -1,9 +1,10 @@
 // Copyright 2022, University of Colorado Boulder
 
-const SignInInfo = () => {
+const SignInInfo = props => {
   return (
     <div>
-      <p>Signed in as: foo@bar.com</p>
+      {/* eslint-disable-next-line react/prop-types */}
+      <p>Signed in as: {props.websiteUserData.email}</p>
     </div>
   );
 };

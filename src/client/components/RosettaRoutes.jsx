@@ -30,14 +30,15 @@ const SimNamesAndTitlesContext = createContext( {} );
  * @returns {JSX.Element}
  * @constructor
  */
-const RosettaRoutes = () => {
+const RosettaRoutes = props => {
   const localeInfo = useLocaleInfo();
   const simNamesAndTitles = useSimNamesAndTitles();
   return (
     <BrowserRouter>
       <Navbar/>
       <div className='container'>
-        <SignInInfo/>
+        {/* eslint-disable-next-line react/prop-types */}
+        <SignInInfo websiteUserData={props.websiteUserData}/>
         <LocaleInfoContext.Provider value={localeInfo}>
           <SimNamesAndTitlesContext.Provider value={simNamesAndTitles}>
             <Routes>

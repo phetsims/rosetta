@@ -37,7 +37,7 @@ function Rosetta() {
   const notAllowedAccess = websiteUserData.loggedIn && ( !websiteUserData.trustedTranslator && !websiteUserData.teamMember );
   if ( allowedAccess ) {
     jsx = (
-      <RosettaRoutes/>
+      <RosettaRoutes websiteUserData={websiteUserData}/>
     );
   }
   else if ( notAllowedAccess ) {
