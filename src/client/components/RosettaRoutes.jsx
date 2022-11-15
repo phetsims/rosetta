@@ -15,6 +15,7 @@ import Help from './Help.jsx';
 import LocaleAndSimForm from './LocaleAndSimForm.jsx';
 import Navbar from './Navbar.jsx';
 import SignInInfo from './SignInInfo.jsx';
+import SignOutLink from './SignOutLink.jsx';
 import TestTranslation from './TestTranslation.jsx';
 import TranslationForm from './TranslationForm.jsx';
 import TranslationReport from './TranslationReport.jsx';
@@ -39,6 +40,7 @@ const RosettaRoutes = props => {
       <div className='container'>
         {/* eslint-disable-next-line react/prop-types */}
         <SignInInfo websiteUserData={props.websiteUserData}/>
+        <SignOutLink/>
         <LocaleInfoContext.Provider value={localeInfo}>
           <SimNamesAndTitlesContext.Provider value={simNamesAndTitles}>
             <Routes>
