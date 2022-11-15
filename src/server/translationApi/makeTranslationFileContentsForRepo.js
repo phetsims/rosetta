@@ -208,6 +208,10 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
   }
 
   logger.info( `made translation file contents for ${repo}; returning them` );
+
+  if ( JSON.stringify( translationFileContentsForRepo ) === JSON.stringify( oldTranslationFile ) ) {
+    return {};
+  }
   return translationFileContentsForRepo;
 };
 
