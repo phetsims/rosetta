@@ -97,8 +97,8 @@ many real translations on this branch, so it is sometimes necessary to
 manually move some over from the master branch for more realistic
 testing.
 
-First-Time Setup
-----------------
+First-Time Production Setup
+---------------------------
 
 ### Clone Rosetta
 
