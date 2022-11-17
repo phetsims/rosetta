@@ -1,10 +1,22 @@
 // Copyright 2022, University of Colorado Boulder
 
+/**
+ * Create an admin page for viewing information on the running instance of Rosetta, and managing Rosetta.
+ *
+ * @author Liam Mulhall <liammulh@gmail.com>
+ */
+
 import { Link } from 'react-router-dom';
 import useWebsiteUserData from '../hooks/useWebsiteUserData.jsx';
 import RebuildWithOriginalCredit from './RebuildWithOriginalCredit.jsx';
 import Sha from './Sha.jsx';
 
+/**
+ * This component is an admin page for Rosetta. It contains information on the running instance of Rosetta, and has the
+ * potential to allow users to manage Rosetta. It should only be visible to team members.
+ *
+ * @returns {JSX.Element}
+ */
 const Admin = () => {
 
   const websiteUserData = useWebsiteUserData();
