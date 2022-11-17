@@ -3,6 +3,7 @@
 # Copyright 2022, University of Colorado Boulder
 # WARNING: Only run this from the root directory of the rosetta repo.
 # This script gets the bare-minimum repo dependencies for rosetta.
+# It is meant for use in a production environment, hence cloning with HTTPS.
 # Author: Liam Mulhall <liammulh@gmail.com>
 
 function clone_and_update {
