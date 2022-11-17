@@ -1,7 +1,5 @@
 // Copyright 2022, University of Colorado Boulder
 
-/* eslint-disable default-import-match-filename */
-
 /**
  * Export a function that gets a sim's common string keys, their English values, and their translated values.
  *
@@ -12,7 +10,7 @@ import axios from 'axios';
 import getCommonRepos from './getCommonRepos.js';
 import getRepoNameToStringKeys from './getRepoNameToStringKeys.js';
 import getStringFileUrl from './getStringFileUrl.js';
-import getTranslatedStringFile from './getTranslatedStringFileUrl.js';
+import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
 import logger from './logger.js';
 
 /*
@@ -87,7 +85,7 @@ const getCommonTranslationFormData = async (
       let commonTranslatedStringFileRes = {};
       let commonTranslatedStringKeysAndStrings = {};
       try {
-        commonTranslatedStringFileUrl = getTranslatedStringFile( repo, locale );
+        commonTranslatedStringFileUrl = getTranslatedStringFileUrl( repo, locale );
         commonTranslatedStringFileRes = await axios.get( commonTranslatedStringFileUrl );
         commonTranslatedStringKeysAndStrings = commonTranslatedStringFileRes.data;
       }

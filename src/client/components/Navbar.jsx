@@ -1,16 +1,13 @@
 // Copyright 2022, University of Colorado Boulder
 
-/* eslint-disable default-import-match-filename */
-
 /**
  * We define the navigation bar.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import useWebsiteUserData from '../hooks/useWebsiteUserData.jsx';
 import PhetLogo from '../img/phet-logo.png';
 
 /**
@@ -18,19 +15,9 @@ import PhetLogo from '../img/phet-logo.png';
  * tool.
  *
  * @returns {JSX.Element}
- * @constructor
  */
 const Navbar = () => {
-  const [ websiteUserData, setWebsiteUserData ] = useState( {} );
-  useEffect( async () => {
-    try {
-      const websiteUserDataRes = await axios.get( `${window.location.origin}/services/check-login` );
-      setWebsiteUserData( websiteUserDataRes.data );
-    }
-    catch( e ) {
-      console.error( e );
-    }
-  }, [] );
+  const websiteUserData = useWebsiteUserData();
   const shouldShowAdminLink = websiteUserData.loggedIn && websiteUserData.teamMember;
   const adminLinkJsx = (
     <li className='nav-item'>
