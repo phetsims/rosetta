@@ -1,7 +1,6 @@
 // Copyright 2022, University of Colorado Boulder
 
 /* eslint-disable default-import-match-filename  */
-/* eslint-disable react/no-unescaped-entities  */
 
 import axios from 'axios';
 import { useEffect, useState } from 'react';
