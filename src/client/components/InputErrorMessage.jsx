@@ -1,8 +1,20 @@
 // Copyright 2022, University of Colorado Boulder
 
+/**
+ * Create an error message to be displayed underneath an invalid input in the translation form.
+ *
+ * @author Liam Mulhall <liammulh@gmail.com>
+ */
+
 import { useContext } from 'react';
 import { ErrorContext } from './TranslationForm.jsx';
 
+/**
+ * This component is a small error message to be displayed underneath an invalid input in the translation form.
+ *
+ * @param {String} fieldKey - the key for the Formik field (i.e. the input)
+ * @returns {JSX.Element}
+ */
 const InputErrorMessage = ( { fieldKey } ) => {
   const divStyle = {
     color: 'red'
