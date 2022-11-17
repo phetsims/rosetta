@@ -8,9 +8,19 @@ Contents
 - [Overview](#overview)
   - [Server](#server)
   - [Client](#client)
+- [Rosetta Coding Conventions](#rosetta-coding-conventions)
 - [Workflow](#workflow)
   - [IDE and Formatting](#ide-and-formatting)
   - [Local Development](#local-development)
+- [NPM Workspaces](#npm-workspaces)
+  - [Background](#background)
+  - [How Workspaces Are Configured](#how-workspaces-are-configured)
+  - [Installing Dependencies in Workspaces](#installing-dependencies-in-workspaces)
+  - [Running Scripts Defined in a Workspace](#running-scripts-defined-in-a-workspace)
+- [Rosetta Coding Conventions](#rosetta-coding-conventions)
+  - [Modularity](#modularity)
+  - [Exports](#exports)
+  - [Logs](#logs)
 
 Intro
 -----
@@ -66,7 +76,7 @@ I use the JetBrains WebStorm IDE with the PhET code style
 (`/phet-info/ide/idea/phet-idea-codestyle.xml`) to work on Rosetta.
 Students can get any JetBrains IDE for free using their CU credentials.
 PhET employees can get IntelliJ Idea and WebStorm, but I'm not sure
-whether they can get the other JetBrains IDE's.
+whether they can get the other JetBrains IDEs.
 
 Adhering to PhET's code style is a must. The best way to do that is to
 use a JetBrains IDE with the PhET code style mentioned above. I would
@@ -81,3 +91,88 @@ using Vite, and then start the Node/Express server.  When I make a
 change to the client or the server, I simply run the `start` script
 (`npm run start` or `npm start`) to see if my change works and play
 around with Rosetta. When I'm done, I stop the script. Rinse and repeat.
+
+NPM Workspaces
+--------------
+
+### Background
+
+This repository is different from other PhET repositories in that it
+uses [NPM workspaces](https://docs.npmjs.com/cli/v7/using-npm/workspaces).
+NPM workspaces allow you to have multiple `package.json`s in one project.
+
+I (Liam Mulhall) chose to use NPM workspaces because it allows us to
+have a `client` directory that is set up as if it were its own
+repository. Ditto for the `server` directory. The frontend/client
+dependencies are separate from the backend/server dependencies.
+
+### How Workspaces Are Configured
+
+There is a `package.json` in the root of the phetsims/rosetta repository
+that specifies the workspaces. This `package.json` doesn't have any
+dependencies, it just specifies the workspaces, and has some scripts.
+
+### Installing Dependencies in Workspaces
+
+If you need to install a `client` package, you could change your
+directory to the `client` directory and then `npm install` the package.
+This would add the package to the `client` directory's `package.json`.
+Alternatively, you could specify the workspace you want to install a
+package to: `npm install foo --workspace=client` or `npm i foo -w
+client`.
+
+### Running Scripts Defined in a Workspace
+
+If there is a script in the `client` directory/workspace you want to
+run, you could change your directory to `client` and then run the
+script, or you could specify the workspace that has the script: `npm run
+bar --workspace client` or `npm run bar -w client`.
+
+Rosetta Coding Conventions
+--------------------------
+
+### Modularity
+
+Try your best to adhere to the UNIX philosophy of each file doing one
+thing well. If you want to know why we like this philosophy, google it.
+It's a tried-and-true philosophy. Don't worry if this creates lots of
+files. Most modern text editors and IDEs are well-suited to projects
+with lots of files.
+
+### Exports
+
+Please export at the end of a file. It's easier to understand what's
+exported if everything exported is in one place.
+
+That being said, if you are following the modularity philosophy, there
+should be one export per file, and that export should be a component or
+function that matches the file's name.'
+
+### Logs
+
+On the server, we like to log
+
+- when we enter a function,
+- when the function does something important, and
+- when the function finishes or returns.
+
+This way, when we look at the logs we can see when a function is called,
+what it does, what other functions it calls, and when it finishes or
+returns. The idea behind this is to make debugging easier.
+
+On the client, we *do not* use `console` in production.
+
+We try to keep logs lowercase to reduce fatigue when reading logs. We
+also try to keep punctuation in logs to a minimum for the same reason.
+
+```js
+import logger from './logger.js';
+
+logger.info( 'logs are all lowercase' );
+logger.info( 'logs not full sentences' );
+logger.info( 'logs eschew punctuation' );
+
+for ( let i = 0; i < 1000; i++ ) {
+  logger.verbose( 'if a log is going to be called in a loop, consider using the verbose logging level' );
+}
+```
