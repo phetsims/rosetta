@@ -1,9 +1,9 @@
-// Copyright 2021, University of Colorado Boulder
+// Copyright 2022, University of Colorado Boulder
 
 /**
  * We define the locale select. We sort the locales by name. The name is usually the English name of the language.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import { useContext } from 'react';
@@ -21,21 +21,20 @@ import LoadingSpinner from './LoadingSpinner.jsx';
  *
  * @param {Object} field - props used by Formik
  * @returns {JSX.Element}
- * @constructor
  */
 const LocaleSelect = ( { field } ) => {
 
   const localeInfo = useContext( LocaleInfoContext );
 
-  // sort the locales by name
-  // in other words, sort the languages alphabetically
+  // Sort the locales by name.
+  // In other words, sort the languages alphabetically.
   const localeNamesAndCodes = [];
   for ( const localeCode in localeInfo ) {
     localeNamesAndCodes.push( [ localeInfo[ localeCode ].name, localeCode ] );
   }
   localeNamesAndCodes.sort();
 
-  // create a list of locale options to iterate over
+  // Create a list of locale options to iterate over.
   const localeOptions = [];
   for ( const locale of localeNamesAndCodes ) {
     localeOptions.push(
@@ -54,11 +53,11 @@ const LocaleSelect = ( { field } ) => {
   }
   else {
 
-    // use the spread operator to give the select each of the props in the field object
+    // Use the spread operator to give the select each of the props in the field object.
     jsx = (
       <select {...field}>
 
-        {/* iterate over locale options */}
+        {/* Iterate over locale options. */}
         {localeOptions}
       </select>
     );
