@@ -1,7 +1,5 @@
 // Copyright 2022, University of Colorado Boulder
 
-/* eslint-disable default-import-match-filename  */
-
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Xerxes from '../img/xerxes.jpg';

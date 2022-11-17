@@ -32,6 +32,7 @@ module.exports = {
       "error",
       { "allowProperties": true }
     ],
+    "default-import-match-filename": "off",
     "react/no-unescaped-entities": "off"
   },
   "settings": {
