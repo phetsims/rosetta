@@ -1,28 +1,13 @@
 // Copyright 2022, University of Colorado Boulder
 
-/* eslint-disable react/no-unescaped-entities */
-
-import axios from 'axios';
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import useWebsiteUserData from '../hooks/useWebsiteUserData.jsx';
 import RebuildWithOriginalCredit from './RebuildWithOriginalCredit.jsx';
 import Sha from './Sha.jsx';
 
 const Admin = () => {
 
-  // for storing and setting website user data
-  const [ websiteUserData, setWebsiteUserData ] = useState( {} );
-
-  // get website user data
-  useEffect( async () => {
-    try {
-      const websiteUserDataRes = await axios.get( `${window.location.origin}/services/check-login` );
-      setWebsiteUserData( websiteUserDataRes.data );
-    }
-    catch( e ) {
-      console.error( e );
-    }
-  }, [] );
+  const websiteUserData = useWebsiteUserData();
 
   let jsx;
   const allowedAccess = websiteUserData.loggedIn && websiteUserData.teamMember;

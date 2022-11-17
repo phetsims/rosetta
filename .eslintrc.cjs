@@ -31,7 +31,8 @@ module.exports = {
     "require-atomic-updates": [
       "error",
       { "allowProperties": true }
-    ]
+    ],
+    "react/no-unescaped-entities": "off"
   },
   "settings": {
     "react": {
