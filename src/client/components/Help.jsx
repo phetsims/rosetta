@@ -1,9 +1,9 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * Display the help guide.
+ * Create a page that provides help on using Rosetta. It is meant to be used by translators.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import React from 'react';
@@ -13,7 +13,6 @@ import React from 'react';
  * Google Doc that has been published to the web.
  *
  * @returns {JSX.Element}
- * @constructor
  */
 const Help = () => {
 
