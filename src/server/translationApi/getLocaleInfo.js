@@ -23,7 +23,7 @@ const getLocaleInfo = async () => {
   logger.info( 'getting locale info' );
   try {
     const localeInfoValidDurationElapsed = timeOfLastUpdate
-                                           + parseInt( config.VALID_LOCALE_INFO_DURATION, 10 ) < Date.now();
+                                           + Number( config.VALID_LOCALE_INFO_DURATION ) < Date.now();
 
     /*
      * We use cached locale info unless the locale info has become stale (i.e. the valid locale info duration has
