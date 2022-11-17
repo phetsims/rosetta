@@ -6,8 +6,11 @@ Contents
 
 - [Intro](#intro)
 - [Overview](#overview)
-  - [Backend/Server](#backend/server)
-  - [Frontend/Client](#frontend/client)
+  - [Server](#server)
+  - [Client](#client)
+- [Workflow](#workflow)
+  - [IDE and Formatting](#ide-and-formatting)
+  - [Local Development](#local-development)
 
 Intro
 -----
@@ -30,7 +33,7 @@ are as follows:
 Rosetta accomplishes (1) and (2) using the backend/server. Rosetta
 accomplishes (3) using the frontend/client.
 
-### Backend/Server
+### Server
 
 The server uses Node, Express, and MongoDB. The server has five jobs. It
 gathers and packages the data needed to translate sims, it makes the
@@ -40,7 +43,7 @@ it requests builds for translations. Someone who is not familiar with
 Rosetta might think Rosetta builds translations, but that's handled by
 PhET's build server.
 
-### Frontend/Client
+### Client
 
 The client uses React. The client has three jobs. It gets data needed to
 translate sims from the server, it displays a user interface for
