@@ -35,7 +35,7 @@ const getSimMetadata = async () => {
   logger.info( 'getting sim metadata' );
   try {
     const metadataValidDurationElapsed = timeOfLastUpdate +
-                                         parseInt( config.VALID_METADATA_DURATION, 10 ) < Date.now();
+                                         Number( config.VALID_METADATA_DURATION ) < Date.now();
 
     /*
      * We use cached sim metadata unless the sim metadata has become stale (i.e. the valid metadata duration has
