@@ -166,9 +166,17 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
 
       // 2.1
       else if ( translationErased ) {
-
-        // TODO: We actually need to submit here.
-        logger.verbose( `blank value submitted for previously translated string ${stringKey}; preserving previous value` );
+        logger.verbose( `blank value submitted for previously translated string ${stringKey}; submitting blank value` );
+        const newHistoryEntry = {
+          userId: translation.userId,
+          timestamp: translation.timestamp,
+          oldValue: '',
+          newValue: translationFormData[ stringKey ].translated
+        };
+        translationFileContentsForRepo[ stringKey ] = {
+          value: translationFormData[ stringKey ].translated,
+          history: [ newHistoryEntry ]
+        };
       }
 
       // 2.2
