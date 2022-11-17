@@ -6,9 +6,10 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import useWebsiteUserData from '../hooks/useWebsiteUserData.jsx';
 import RebuildWithOriginalCredit from './RebuildWithOriginalCredit.jsx';
+import { WebsiteUserDataContext } from './Rosetta.jsx';
 import Sha from './Sha.jsx';
 
 /**
@@ -19,7 +20,7 @@ import Sha from './Sha.jsx';
  */
 const Admin = () => {
 
-  const websiteUserData = useWebsiteUserData();
+  const websiteUserData = useContext( WebsiteUserDataContext );
 
   let jsx;
   const allowedAccess = websiteUserData.loggedIn && websiteUserData.teamMember;

@@ -6,9 +6,10 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import useWebsiteUserData from '../hooks/useWebsiteUserData.jsx';
 import PhetLogo from '../img/phet-logo.png';
+import { WebsiteUserDataContext } from './Rosetta.jsx';
 
 /**
  * This component is the navigation bar you see at the top of the page once you've gained access to the translation
@@ -17,7 +18,7 @@ import PhetLogo from '../img/phet-logo.png';
  * @returns {JSX.Element}
  */
 const Navbar = () => {
-  const websiteUserData = useWebsiteUserData();
+  const websiteUserData = useContext( WebsiteUserDataContext );
   const shouldShowAdminLink = websiteUserData.loggedIn && websiteUserData.teamMember;
   const adminLinkJsx = (
     <li className='nav-item'>

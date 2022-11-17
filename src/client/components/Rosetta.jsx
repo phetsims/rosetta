@@ -11,8 +11,11 @@
  * @author Liam Mulhall
  */
 
+import { createContext } from 'react';
 import useWebsiteUserData from '../hooks/useWebsiteUserData.jsx';
 import RosettaRoutes from './RosettaRoutes.jsx';
+
+const WebsiteUserDataContext = createContext( {} );
 
 /**
  * If a user is allowed access to the translation tool, this component will contain some header stuff and the routes
@@ -37,7 +40,9 @@ function Rosetta() {
   const notAllowedAccess = websiteUserData.loggedIn && ( !websiteUserData.trustedTranslator && !websiteUserData.teamMember );
   if ( allowedAccess ) {
     jsx = (
-      <RosettaRoutes websiteUserData={websiteUserData}/>
+      <WebsiteUserDataContext.Provider value={websiteUserData}>
+        <RosettaRoutes/>
+      </WebsiteUserDataContext.Provider>
     );
   }
   else if ( notAllowedAccess ) {
@@ -65,4 +70,5 @@ function Rosetta() {
   return jsx;
 }
 
+export { WebsiteUserDataContext };
 export default Rosetta;
