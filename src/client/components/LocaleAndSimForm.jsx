@@ -6,7 +6,7 @@
  *
  * We use the Formik form library here for the sake of consistency.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import { Field, Form, Formik } from 'formik';
@@ -20,15 +20,14 @@ import SimSelect from './SimSelect.jsx';
  * select for the sim. It allows the user to select the locale/sim they would like to translate.
  *
  * @returns {JSX.Element}
- * @constructor
  */
 const LocaleAndSimForm = () => {
 
-  // used to programmatically navigate the user to the translation page
+  // Used to programmatically navigate the user to the translation page.
   const navigate = useNavigate();
 
-  // since our list of locales comes from a file in the chipper repo, the first locale is unlikely to change
-  // if we ever make a sim that comes before acid base solutions alphabetically, this will need to change
+  // Since our list of locales comes from a file in the chipper repo, the first locale is unlikely to change
+  // if we ever make a sim that comes before acid base solutions alphabetically, this will need to change.
   return (
     <div>
       <h1>Select Locale and Sim</h1>
