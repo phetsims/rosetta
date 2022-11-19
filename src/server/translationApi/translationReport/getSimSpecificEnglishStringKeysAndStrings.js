@@ -7,8 +7,15 @@
  * @author Liam Mulhall
  */
 
+// import getCategorizedStringKeys from '../getCategorizedStringKeys.js';
+// import getSimHtml from '../getSimHtml.js';
+// import getSimMetadata from '../getSimMetadata.js';
+// import getSimNamesAndTitles from '../getSimNamesAndTitles.js';
+// import getSimUrl from '../getSimUrl.js';
+// import getStringKeysWithRepoName from '../getStringKeysWithRepoName.js';
+
 import logger from '../logger.js';
-import getEnglishStringKeysAndStrings from './getEnglishStringKeysAndStrings.js';
+import getEnglishStringKeysAndValues from './getEnglishStringKeysAndValues.js';
 
 /**
  * Return a list of ordered pairs where each ordered pair is a sim-specific string key followed by its value (its
@@ -17,14 +24,15 @@ import getEnglishStringKeysAndStrings from './getEnglishStringKeysAndStrings.js'
  *
  * @param {String} simName - sim name
  * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys - string keys categorized into common and sim-specific
+ * @param {String[]} stringKeysWithRepoName - list of REPO_NAME/stringKey extracted from sim HTML
  * @returns {Promise<String[][]>} - ordered pairs of sim-specific English string keys and their values (their strings)
  */
-const getSimSpecificEnglishStringKeysAndStrings = async ( simName, categorizedStringKeys ) => {
+const getSimSpecificEnglishStringKeysAndStrings = async ( simName, categorizedStringKeys, stringKeysWithRepoName ) => {
   logger.info( `getting ${simName}'s sim-specific english string keys and strings` );
   const stringKeysToSimSpecificEnglishStrings = new Map();
   try {
     const simSpecificStringKeys = categorizedStringKeys.simSpecific;
-    const englishStringKeysAndStrings = await getEnglishStringKeysAndStrings( simName );
+    const englishStringKeysAndStrings = await getEnglishStringKeysAndValues( simName, stringKeysWithRepoName );
     const englishStringKeys = Object.keys( englishStringKeysAndStrings );
 
     // for each sim-specific string key...
@@ -34,7 +42,7 @@ const getSimSpecificEnglishStringKeysAndStrings = async ( simName, categorizedSt
       if ( englishStringKeys.includes( stringKey ) ) {
 
         // map the string key to its english value
-        stringKeysToSimSpecificEnglishStrings.set( stringKey, englishStringKeysAndStrings[ stringKey ].value );
+        stringKeysToSimSpecificEnglishStrings.set( stringKey, englishStringKeysAndStrings[ stringKey ] );
       }
       else {
 
@@ -45,7 +53,7 @@ const getSimSpecificEnglishStringKeysAndStrings = async ( simName, categorizedSt
     }
   }
   catch( e ) {
-    logger.error( e );
+    logger.error( `hello: ${e}` );
   }
   logger.info( `got ${simName}'s sim-specific english string keys and strings; returning them` );
 
@@ -53,5 +61,15 @@ const getSimSpecificEnglishStringKeysAndStrings = async ( simName, categorizedSt
   // use spread operator and brackets to return an array
   return [ ...stringKeysToSimSpecificEnglishStrings ];
 };
+
+// ( async () => {
+//   const simUrl = getSimUrl( 'acid-base-solutions' );
+//   const simHtml = await getSimHtml( simUrl );
+//   const stringKeysWithRepoName = getStringKeysWithRepoName( simHtml );
+//   const simName = 'acid-base-solutions';
+//   const cat = await getCategorizedStringKeys( simName, Object.keys( getSimNamesAndTitles( await getSimMetadata() ) ), Object.keys( stringKeysWithRepoName ) );
+//   const res = await getSimSpecificEnglishStringKeysAndStrings( 'acid-base-solutions', cat, stringKeysWithRepoName );
+//   console.log( JSON.stringify( res, null, 4 ) );
+// } )();
 
 export default getSimSpecificEnglishStringKeysAndStrings;
