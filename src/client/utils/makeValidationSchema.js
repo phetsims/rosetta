@@ -1,5 +1,6 @@
 // Copyright 2022, University of Colorado Boulder
 
+// We need to use a vanilla function callback because we need to use the global "this".
 /* eslint-disable prefer-arrow-callback */
 
 import * as Yup from 'yup';
