@@ -1,7 +1,7 @@
 // Copyright 2022, University of Colorado Boulder
 
 // import getLatestSimSha from '../getLatestSimSha.js';
-// import getEnglishStringKeysAndStrings from './getEnglishStringKeysAndStrings.js';
+// import getEnglishStringKeysAndValues from './getEnglishStringKeysAndValues.js';
 // import getTranslatedAndUntranslatedSims from './getTranslatedAndUntranslatedSims.js';
 
 /**
