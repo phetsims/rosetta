@@ -4,7 +4,7 @@ import getCategorizedStringKeys from '../../getCategorizedStringKeys.js';
 import getSimMetadata from '../../getSimMetadata.js';
 import getSimHtml from '../../getSimHtml.js';
 import getSimNamesAndTitles from '../../getSimNamesAndTitles.js';
-import getSimSpecificEnglishStringKeysAndStrings from '../../translationReport/getSimSpecificEnglishStringKeysAndStrings.js';
+import getSimSpecificEnglishStringKeysAndValues from '../../translationReport/getSimSpecificEnglishStringKeysAndValues.js';
 import getSimUrl from '../../getSimUrl.js';
 import getStringKeysWithRepoName from '../../getStringKeysWithRepoName.js';
 import logger from '../../logger.js';
@@ -17,7 +17,7 @@ const simSpecificEnglishStringKeysAndStrings = async ( req, res ) => {
     const simMetadata = await getSimMetadata();
     const simNames = Object.keys( getSimNamesAndTitles( simMetadata ) );
     const categorizedStringKeys = await getCategorizedStringKeys( req.params.simName, simNames, stringKeysWithRepoName );
-    const simSpecificEnglishStringKeysAndStrings = await getSimSpecificEnglishStringKeysAndStrings( req.params.simName, categorizedStringKeys );
+    const simSpecificEnglishStringKeysAndStrings = await getSimSpecificEnglishStringKeysAndValues( req.params.simName, categorizedStringKeys );
     logger.info( `responding with ${req.params.simName}'s sim-specific english string keys and strings` );
     res.json( simSpecificEnglishStringKeysAndStrings );
   }

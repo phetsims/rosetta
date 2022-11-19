@@ -27,8 +27,8 @@ import getEnglishStringKeysAndValues from './getEnglishStringKeysAndValues.js';
  * @param {String[]} stringKeysWithRepoName - list of REPO_NAME/stringKey extracted from sim HTML
  * @returns {Promise<String[][]>} - ordered pairs of sim-specific English string keys and their values (their strings)
  */
-const getSimSpecificEnglishStringKeysAndStrings = async ( simName, categorizedStringKeys, stringKeysWithRepoName ) => {
-  logger.info( `getting ${simName}'s sim-specific english string keys and strings` );
+const getSimSpecificEnglishStringKeysAndValues = async ( simName, categorizedStringKeys, stringKeysWithRepoName ) => {
+  logger.info( `getting ${simName}'s sim-specific english string keys and values` );
   const stringKeysToSimSpecificEnglishStrings = new Map();
   try {
     const simSpecificStringKeys = categorizedStringKeys.simSpecific;
@@ -55,7 +55,7 @@ const getSimSpecificEnglishStringKeysAndStrings = async ( simName, categorizedSt
   catch( e ) {
     logger.error( `hello: ${e}` );
   }
-  logger.info( `got ${simName}'s sim-specific english string keys and strings; returning them` );
+  logger.info( `got ${simName}'s sim-specific english string keys and values; returning them` );
 
 
   // use spread operator and brackets to return an array
@@ -68,8 +68,8 @@ const getSimSpecificEnglishStringKeysAndStrings = async ( simName, categorizedSt
 //   const stringKeysWithRepoName = getStringKeysWithRepoName( simHtml );
 //   const simName = 'acid-base-solutions';
 //   const cat = await getCategorizedStringKeys( simName, Object.keys( getSimNamesAndTitles( await getSimMetadata() ) ), Object.keys( stringKeysWithRepoName ) );
-//   const res = await getSimSpecificEnglishStringKeysAndStrings( 'acid-base-solutions', cat, stringKeysWithRepoName );
+//   const res = await getSimSpecificEnglishStringKeysAndValues( 'acid-base-solutions', cat, stringKeysWithRepoName );
 //   console.log( JSON.stringify( res, null, 4 ) );
 // } )();
 
-export default getSimSpecificEnglishStringKeysAndStrings;
+export default getSimSpecificEnglishStringKeysAndValues;
