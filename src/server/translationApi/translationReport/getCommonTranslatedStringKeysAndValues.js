@@ -1,6 +1,8 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
+ * Export an object that returns an object containing common translated string keys and their values.
+ *
  * @author Liam Mulhall
  */
 
@@ -10,13 +12,22 @@ import getRepoNameToStringKeys from '../getRepoNameToStringKeys.js';
 import getTranslatedStringFileUrl from '../getTranslatedStringFileUrl.js';
 import logger from '../logger.js';
 
+// import getSimNamesAndTitles from '../getSimNamesAndTitles.js';
+// import getSimHtml from '../getSimHtml.js';
+// import getSimMetadata from '../getSimMetadata.js';
+// import getSimUrl from '../getSimUrl.js';
+// import getStringKeysWithRepoName from '../getStringKeysWithRepoName.js';
+// import getCategorizedStringKeys from '../getCategorizedStringKeys.js';
+
 /**
+ * Return an object containing common translated string keys and their values.
+ *
  * @param {String} simName - sim name
  * @param {String} locale - two-letter ISO 639-1 locale code, e.g. es for Spanish
  * @param {String[]} simNames - list of all sim names
  * @param {String[]} stringKeysWithRepoName - stringKey/REPO_NAME we get from a sim's HTML
  * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys - string keys categorized into common and sim-specific
- * @returns {Promise<String[][]>} - ordered pairs of common translated string keys and their values (their strings)
+ * @returns {Promise<Object>} - ordered pairs of common translated string keys and their values (their strings)
  */
 const getCommonTranslatedStringKeysAndValues = async (
   simName,
@@ -26,7 +37,7 @@ const getCommonTranslatedStringKeysAndValues = async (
   categorizedStringKeys
 ) => {
 
-  const commonTranslatedStringKeysAndStrings = new Map();
+  const commonTranslatedStringKeysAndStrings = {};
   const commonStringKeys = categorizedStringKeys.common;
 
   // Get a list of common repos for the sim.
@@ -59,15 +70,17 @@ const getCommonTranslatedStringKeysAndValues = async (
     // Try to get the contents stored at the string file URL.
     try {
       const translatedStringKeysAndStringsRes = await axios.get( translatedStringFileUrl );
-      const translatedStringKeysAndStrings = translatedStringKeysAndStringsRes.data;
+      const translatedStringKeysAndValues = translatedStringKeysAndStringsRes.data;
 
       // For each string key associated with the repo, extract its value from the string file.
       for ( const stringKey of repoNameToStringKeys[ repo ] ) {
-        if ( translatedStringKeysAndStrings[ stringKey ] ) {
-          commonTranslatedStringKeysAndStrings.set( stringKey, translatedStringKeysAndStrings[ stringKey ].value );
+        if ( translatedStringKeysAndValues[ stringKey ] ) {
+          console.log( 'here' );
+          commonTranslatedStringKeysAndStrings[ stringKey ] = translatedStringKeysAndValues[ stringKey ].value;
         }
         else {
-          commonTranslatedStringKeysAndStrings.set( stringKey, '' );
+          console.log( 'there' );
+          commonTranslatedStringKeysAndStrings[ stringKey ] = '';
         }
       }
     }
@@ -77,7 +90,7 @@ const getCommonTranslatedStringKeysAndValues = async (
       if ( e.response.status === 404 ) {
         logger.verbose( `translated string file doesn't exist; setting empty strings for ${repo}` );
         for ( const stringKey of repoNameToStringKeys[ repo ] ) {
-          commonTranslatedStringKeysAndStrings.set( stringKey, '' );
+          commonTranslatedStringKeysAndStrings[ stringKey ] = '';
         }
       }
       else {
@@ -86,23 +99,26 @@ const getCommonTranslatedStringKeysAndValues = async (
     }
   }
 
-  // Sort list according to the order of string keys in common categorized string keys.
-  const sortedCommonTranslatedStringKeysAndStrings = new Map();
-  for ( const stringKey of commonStringKeys ) {
-    const stringValue = commonTranslatedStringKeysAndStrings.get( stringKey );
-
-    // If there is a value for the string key...
-    if ( stringValue ) {
-      sortedCommonTranslatedStringKeysAndStrings.set( stringKey, stringValue );
-    }
-
-    // If there isn't a value for the string key...
-    else {
-      sortedCommonTranslatedStringKeysAndStrings.set( stringKey, '' );
-    }
-  }
-
-  return [ ...sortedCommonTranslatedStringKeysAndStrings ];
+  return commonTranslatedStringKeysAndStrings;
 };
+
+// ( async () => {
+//   const simName = 'acid-base-solutions';
+//   const locale = 'de';
+//   const simMetadata = await getSimMetadata();
+//   const simNames = Object.keys( await getSimNamesAndTitles( simMetadata ) );
+//   const simUrl = getSimUrl( simName );
+//   const simHtml = await getSimHtml( simUrl );
+//   const stringKeysWithRepoName = Object.keys( getStringKeysWithRepoName( simHtml ) );
+//   const categorizedStringKeys = await getCategorizedStringKeys( simName, simNames, stringKeysWithRepoName );
+//   const res = await getCommonTranslatedStringKeysAndValues(
+//     simName,
+//     locale,
+//     simNames,
+//     stringKeysWithRepoName,
+//     categorizedStringKeys
+//   );
+//   console.log( JSON.stringify( res, null, 4 ) );
+// } )();
 
 export default getCommonTranslatedStringKeysAndValues;
