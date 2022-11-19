@@ -23,8 +23,8 @@ import logger from '../logger.js';
  * @param {String[]} stringKeysWithRepoName - string keys with their respective repo names for the specified sim
  * @returns {Promise<String[][]>} - list of ordered pairs of common English string keys and strings
  */
-const getCommonEnglishStringKeysAndStrings = async ( simName, simNames, categorizedStringKeys, stringKeysWithRepoName ) => {
-  logger.info( `getting ${simName}'s common english string keys and strings` );
+const getCommonEnglishStringKeysAndValues = async ( simName, simNames, categorizedStringKeys, stringKeysWithRepoName ) => {
+  logger.info( `getting ${simName}'s common english string keys and values` );
   const stringKeysToCommonEnglishStrings = new Map();
   try {
 
@@ -73,4 +73,4 @@ const getCommonEnglishStringKeysAndStrings = async ( simName, simNames, categori
   return [ ...stringKeysToCommonEnglishStrings ];
 };
 
-export default getCommonEnglishStringKeysAndStrings;
+export default getCommonEnglishStringKeysAndValues;

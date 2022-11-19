@@ -2,7 +2,7 @@
 
 import getCategorizedStringKeys from '../../getCategorizedStringKeys.js';
 import getSimMetadata from '../../getSimMetadata.js';
-import getCommonEnglishStringKeysAndStrings from '../../translationReport/getCommonEnglishStringKeysAndStrings.js';
+import getCommonEnglishStringKeysAndValues from '../../translationReport/getCommonEnglishStringKeysAndValues.js';
 import getSimHtml from '../../getSimHtml.js';
 import getSimNamesAndTitles from '../../getSimNamesAndTitles.js';
 import getSimUrl from '../../getSimUrl.js';
@@ -17,7 +17,7 @@ const commonEnglishStringKeysAndStrings = async ( req, res ) => {
     const simMetadata = await getSimMetadata();
     const simNames = Object.keys( getSimNamesAndTitles( simMetadata ) );
     const categorizedStringKeys = await getCategorizedStringKeys( req.params.simName, simNames, stringKeysWithRepoName );
-    const commonEnglishStringKeysAndStrings = await getCommonEnglishStringKeysAndStrings( req.params.simName, simNames, categorizedStringKeys, stringKeysWithRepoName );
+    const commonEnglishStringKeysAndStrings = await getCommonEnglishStringKeysAndValues( req.params.simName, simNames, categorizedStringKeys, stringKeysWithRepoName );
     logger.info( `responding ${req.params.simName}'s common english string keys and strings` );
     res.json( commonEnglishStringKeysAndStrings );
   }
