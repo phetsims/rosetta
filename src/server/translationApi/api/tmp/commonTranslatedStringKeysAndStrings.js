@@ -2,7 +2,7 @@
 
 import getCategorizedStringKeys from '../../getCategorizedStringKeys.js';
 import getSimMetadata from '../../getSimMetadata.js';
-import getCommonTranslatedStringKeysAndStrings from '../../translationReport/getCommonTranslatedStringKeysAndStrings.js';
+import getCommonTranslatedStringKeysAndValues from '../../translationReport/getCommonTranslatedStringKeysAndValues.js';
 import getSimHtml from '../../getSimHtml.js';
 import getSimNamesAndTitles from '../../getSimNamesAndTitles.js';
 import getSimUrl from '../../getSimUrl.js';
@@ -17,7 +17,7 @@ const commonTranslatedStringKeysAndStrings = async ( req, res ) => {
     const simMetadata = await getSimMetadata();
     const simNames = Object.keys( getSimNamesAndTitles( simMetadata ) );
     const categorizedStringKeys = await getCategorizedStringKeys( req.params.simName, simNames, stringKeysWithRepoName );
-    const commonTranslatedStringKeysAndStrings = await getCommonTranslatedStringKeysAndStrings( req.params.simName, req.params.locale, categorizedStringKeys );
+    const commonTranslatedStringKeysAndStrings = await getCommonTranslatedStringKeysAndValues( req.params.simName, req.params.locale, categorizedStringKeys );
     logger.info( `responding with ${req.params.locale}/${req.params.simName}'s common translated string keys and strings` );
     res.json( commonTranslatedStringKeysAndStrings );
   }

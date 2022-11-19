@@ -25,7 +25,7 @@ import logger from '../logger.js';
  * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys - string keys categorized into common and sim-specific
  * @returns {Promise<String[][]>} - ordered pairs of common translated string keys and their values (their strings)
  */
-const getCommonTranslatedStringKeysAndStrings = async (
+const getCommonTranslatedStringKeysAndValues = async (
   simName,
   locale,
   simNames,
@@ -112,4 +112,4 @@ const getCommonTranslatedStringKeysAndStrings = async (
   return [ ...sortedCommonTranslatedStringKeysAndStrings ];
 };
 
-export default getCommonTranslatedStringKeysAndStrings;
+export default getCommonTranslatedStringKeysAndValues;

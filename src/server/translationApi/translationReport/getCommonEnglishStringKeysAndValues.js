@@ -66,7 +66,7 @@ const getCommonEnglishStringKeysAndValues = async ( simName, simNames, categoriz
   catch( e ) {
     logger.error( e );
   }
-  logger.info( `got ${simName}'s common english string keys and strings; returning them` );
+  logger.info( `got ${simName}'s common english string keys and values; returning them` );
 
 
   // use spread operator and brackets to return an array
