@@ -1,9 +1,6 @@
 // Copyright 2021-2022, University of Colorado Boulder
 
 /**
- * Export a function that returns an array of arrays. Each sub-array has two elements: (1) a sim-specific English
- * string key, and (2) the string corresponding to (1).
- *
  * @author Liam Mulhall
  */
 
@@ -18,36 +15,32 @@ import logger from '../logger.js';
 import getEnglishStringKeysAndValues from './getEnglishStringKeysAndValues.js';
 
 /**
- * Return a list of ordered pairs where each ordered pair is a sim-specific string key followed by its value (its
- * string). This is implemented as an array of arrays where each sub-array has two elements, namely the sim-specific
- * English string key and its string.
- *
  * @param {String} simName - sim name
  * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys - string keys categorized into common and sim-specific
  * @param {String[]} stringKeysWithRepoName - list of REPO_NAME/stringKey extracted from sim HTML
- * @returns {Promise<String[][]>} - ordered pairs of sim-specific English string keys and their values (their strings)
+ * @returns {Promise<Object>} - ordered pairs of sim-specific English string keys and their values (their strings)
  */
 const getSimSpecificEnglishStringKeysAndValues = async ( simName, categorizedStringKeys, stringKeysWithRepoName ) => {
   logger.info( `getting ${simName}'s sim-specific english string keys and values` );
-  const stringKeysToSimSpecificEnglishStrings = new Map();
+  const stringKeysToSimSpecificEnglishStrings = {};
   try {
     const simSpecificStringKeys = categorizedStringKeys.simSpecific;
     const englishStringKeysAndStrings = await getEnglishStringKeysAndValues( simName, stringKeysWithRepoName );
     const englishStringKeys = Object.keys( englishStringKeysAndStrings );
 
-    // for each sim-specific string key...
+    // For each sim-specific string key...
     for ( const stringKey of simSpecificStringKeys ) {
 
-      // if the english string key has a value...
+      // If the english string key has a value...
       if ( englishStringKeys.includes( stringKey ) ) {
 
-        // map the string key to its english value
+        // Map the string key to its english value.
         stringKeysToSimSpecificEnglishStrings.set( stringKey, englishStringKeysAndStrings[ stringKey ] );
       }
       else {
 
-        // we don't display unused string keys and strings to the user
-        // they get stripped out prior to sending them to the client
+        // We don't display unused string keys and strings to the user.
+        // They get stripped out prior to sending them to the client.
         stringKeysToSimSpecificEnglishStrings.set( stringKey, 'no longer used' );
       }
     }
@@ -58,8 +51,8 @@ const getSimSpecificEnglishStringKeysAndValues = async ( simName, categorizedStr
   logger.info( `got ${simName}'s sim-specific english string keys and values; returning them` );
 
 
-  // use spread operator and brackets to return an array
-  return [ ...stringKeysToSimSpecificEnglishStrings ];
+  // Use spread operator and brackets to return an array.
+  return stringKeysToSimSpecificEnglishStrings;
 };
 
 // ( async () => {
