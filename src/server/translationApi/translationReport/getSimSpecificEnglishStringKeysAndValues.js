@@ -3,7 +3,7 @@
 /**
  * Export a function that returns an object containing sim-specific English string keys and their values.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import getCategorizedStringKeys from '../getCategorizedStringKeys.js';
