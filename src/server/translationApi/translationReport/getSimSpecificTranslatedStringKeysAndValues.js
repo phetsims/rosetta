@@ -1,10 +1,7 @@
 // Copyright 2021-2022, University of Colorado Boulder
 
 /**
- * Export a function that returns an array of arrays. Each sub-array has two elements: (1) a sim-specific translated
- * string key, and (2) the string corresponding to (1).
- *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import axios from 'axios';
@@ -12,18 +9,14 @@ import getTranslatedStringFileUrl from '../getTranslatedStringFileUrl.js';
 import logger from '../logger.js';
 
 /**
- * Return a list of ordered pairs where each ordered pair is a sim-specific string key followed by its value (its
- * string). This is implemented as an array of arrays where each sub-array has two elements, namely the sim-specific
- * translated string key and its string.
- *
  * @param {String} simName - sim name
  * @param {String} locale - two-letter ISO 639-1 locale code, e.g. es for Spanish
  * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys - string keys categorized into common and sim-specific
- * @returns {Promise<String[][]>} - ordered pairs of sim-specific translated string keys and their values (their strings)
+ * @returns {Promise<Object>} - sim-specific translated string keys and their values (their strings)
  */
 const getSimSpecificTranslatedStringKeysAndValues = async ( simName, locale, categorizedStringKeys ) => {
   logger.info( `getting ${simName}'s sim-specific translated string keys and values` );
-  const simSpecificTranslatedStringKeysAndStrings = new Map();
+  const simSpecificTranslatedStringKeysAndStrings = {};
   try {
     const simSpecificStringKeys = categorizedStringKeys.simSpecific;
     const translatedStringFileUrl = getTranslatedStringFileUrl( simName, locale );
@@ -32,18 +25,19 @@ const getSimSpecificTranslatedStringKeysAndValues = async ( simName, locale, cat
       const stringKeysAndTranslatedValues = stringKeysAndTranslatedValuesRes.data;
       const translatedStringKeys = Object.keys( stringKeysAndTranslatedValues );
 
-      // for each sim specific string key...
+      // For each sim specific string key...
       for ( const stringKey of simSpecificStringKeys ) {
 
-        // if the translated string key has a value...
+        // If the translated string key has a value...
         if ( translatedStringKeys.includes( stringKey ) ) {
 
-          // map the string key to its translated value
+          // Map the string key to its translated value.
           simSpecificTranslatedStringKeysAndStrings.set( stringKey, stringKeysAndTranslatedValues[ stringKey ].value );
         }
         else {
 
-          // map the string key to an empty string
+          // TODO: Is this correct, given our new empty string policy?
+          // Map the string key to an empty string.
           simSpecificTranslatedStringKeysAndStrings.set( stringKey, '' );
         }
       }
@@ -52,7 +46,7 @@ const getSimSpecificTranslatedStringKeysAndValues = async ( simName, locale, cat
       if ( e.response.status === 404 ) {
         logger.verbose( 'translated string file doesn\'t exist; setting empty strings' );
 
-        // set every string key's value to an empty string
+        // Set every string key's value to an empty string.
         for ( const stringKey of simSpecificStringKeys ) {
           simSpecificTranslatedStringKeysAndStrings.set( stringKey, '' );
         }
@@ -67,9 +61,7 @@ const getSimSpecificTranslatedStringKeysAndValues = async ( simName, locale, cat
   }
   logger.info( `got ${simName}'s sim-specific translated string keys and values; returning them` );
 
-
-  // use spread operator and brackets to return an array
-  return [ ...simSpecificTranslatedStringKeysAndStrings ];
+  return simSpecificTranslatedStringKeysAndStrings;
 };
 
 export default getSimSpecificTranslatedStringKeysAndValues;
