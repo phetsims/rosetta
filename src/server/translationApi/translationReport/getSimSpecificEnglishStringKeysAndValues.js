@@ -6,12 +6,12 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import getCategorizedStringKeys from '../getCategorizedStringKeys.js';
-import getSimHtml from '../getSimHtml.js';
-import getSimMetadata from '../getSimMetadata.js';
-import getSimNamesAndTitles from '../getSimNamesAndTitles.js';
-import getSimUrl from '../getSimUrl.js';
-import getStringKeysWithRepoName from '../getStringKeysWithRepoName.js';
+// import getCategorizedStringKeys from '../getCategorizedStringKeys.js';
+// import getSimHtml from '../getSimHtml.js';
+// import getSimMetadata from '../getSimMetadata.js';
+// import getSimNamesAndTitles from '../getSimNamesAndTitles.js';
+// import getSimUrl from '../getSimUrl.js';
+// import getStringKeysWithRepoName from '../getStringKeysWithRepoName.js';
 
 import logger from '../logger.js';
 import getEnglishStringKeysAndValues from './getEnglishStringKeysAndValues.js';
@@ -57,14 +57,14 @@ const getSimSpecificEnglishStringKeysAndValues = async ( simName, categorizedStr
   return stringKeysToSimSpecificEnglishStrings;
 };
 
-( async () => {
-  const simUrl = getSimUrl( 'acid-base-solutions' );
-  const simHtml = await getSimHtml( simUrl );
-  const stringKeysWithRepoName = getStringKeysWithRepoName( simHtml );
-  const simName = 'acid-base-solutions';
-  const cat = await getCategorizedStringKeys( simName, Object.keys( getSimNamesAndTitles( await getSimMetadata() ) ), Object.keys( stringKeysWithRepoName ) );
-  const res = await getSimSpecificEnglishStringKeysAndValues( 'acid-base-solutions', cat, stringKeysWithRepoName );
-  console.log( JSON.stringify( res, null, 4 ) );
-} )();
+// ( async () => {
+//   const simUrl = getSimUrl( 'acid-base-solutions' );
+//   const simHtml = await getSimHtml( simUrl );
+//   const stringKeysWithRepoName = getStringKeysWithRepoName( simHtml );
+//   const simName = 'acid-base-solutions';
+//   const cat = await getCategorizedStringKeys( simName, Object.keys( getSimNamesAndTitles( await getSimMetadata() ) ), Object.keys( stringKeysWithRepoName ) );
+//   const res = await getSimSpecificEnglishStringKeysAndValues( 'acid-base-solutions', cat, stringKeysWithRepoName );
+//   console.log( JSON.stringify( res, null, 4 ) );
+// } )();
 
 export default getSimSpecificEnglishStringKeysAndValues;
