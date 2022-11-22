@@ -21,7 +21,6 @@ const getTranslatedAndUntranslatedSims = async locale => {
   };
   const translationInfo = await getTranslationInfo();
   for ( const sim in translationInfo ) {
-    console.log( sim );
     if ( translationInfo[ sim ][ locale ].hasTranslation ) {
       translatedAndUntranslatedSims.translated.push( sim );
     }

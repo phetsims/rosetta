@@ -75,11 +75,9 @@ const getCommonTranslatedStringKeysAndValues = async (
       // For each string key associated with the repo, extract its value from the string file.
       for ( const stringKey of repoNameToStringKeys[ repo ] ) {
         if ( translatedStringKeysAndValues[ stringKey ] ) {
-          console.log( 'here' );
           commonTranslatedStringKeysAndStrings[ stringKey ] = translatedStringKeysAndValues[ stringKey ].value;
         }
         else {
-          console.log( 'there' );
           commonTranslatedStringKeysAndStrings[ stringKey ] = '';
         }
       }
