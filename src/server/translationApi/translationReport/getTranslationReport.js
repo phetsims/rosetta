@@ -56,9 +56,9 @@ const getTranslationReport = async locale => {
       categorizedStringKeys,
       stringKeysWithRepoName
     );
-    translationReport[ sim ].numCommonStrings = Object.values( commonEnglishStringKeysAndValues ).filter( value =>
-      value !== 'no longer used'
-    ).length;
+    translationReport[ sim ].numCommonStrings = Object
+      .values( commonEnglishStringKeysAndValues )
+      .filter( value => value !== 'no longer used' ).length;
 
     const commonTranslatedStringKeysAndValues = await getCommonTranslatedStringKeysAndValues(
       sim,
@@ -67,9 +67,9 @@ const getTranslationReport = async locale => {
       stringKeysWithRepoName,
       categorizedStringKeys
     );
-    translationReport[ sim ].numCommonTranslatedStrings = Object.values( commonTranslatedStringKeysAndValues ).filter( value =>
-      value !== ''
-    ).length;
+    translationReport[ sim ].numCommonTranslatedStrings = Object
+      .values( commonTranslatedStringKeysAndValues )
+      .filter( value => value !== '' ).length;
 
     const latestSimSha = await getLatestSimSha( sim );
     const simSpecificEnglishStringKeysAndValues = await getSimSpecificEnglishStringKeysAndValues(
@@ -78,18 +78,18 @@ const getTranslationReport = async locale => {
       categorizedStringKeys,
       stringKeysWithRepoName
     );
-    translationReport[ sim ].numSimSpecificStrings = Object.values( simSpecificEnglishStringKeysAndValues ).filter( value =>
-      value !== 'no longer used'
-    ).length;
+    translationReport[ sim ].numSimSpecificStrings = Object
+      .values( simSpecificEnglishStringKeysAndValues )
+      .filter( value => value !== 'no longer used' ).length;
 
     const simSpecificTranslatedStringKeysAndValues = await getSimSpecificTranslatedStringKeysAndValues(
       sim,
       locale,
       categorizedStringKeys
     );
-    translationReport[ sim ].numSimSpecificTranslatedStrings = Object.values( simSpecificTranslatedStringKeysAndValues ).filter( value =>
-      value !== ''
-    ).length;
+    translationReport[ sim ].numSimSpecificTranslatedStrings = Object
+      .values( simSpecificTranslatedStringKeysAndValues )
+      .filter( value => value !== '' ).length;
 
     counter++;
   }
