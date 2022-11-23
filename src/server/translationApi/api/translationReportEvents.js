@@ -15,9 +15,10 @@ const translationReportEvents = async ( req, res ) => {
   res.writeHead( 200, headers );
 
   const simMetadata = await getSimMetadata();
-  const simNames = Object.keys( getSimNamesAndTitles( simMetadata ) );
+  const simNamesAndTitles = getSimNamesAndTitles( simMetadata );
+  const simNames = Object.keys( simNamesAndTitles );
   for ( const sim of simNames ) {
-    const translationReportObject = await getTranslationReportObject( sim, req.body.locale, simNames );
+    const translationReportObject = await getTranslationReportObject( sim, req.body.locale, simNames, simNamesAndTitles[ sim ] );
     res.write( `data: ${JSON.stringify( translationReportObject )}\n\n` );
   }
 
