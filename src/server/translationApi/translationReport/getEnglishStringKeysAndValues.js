@@ -26,7 +26,7 @@ import logger from '../logger.js';
  * @returns {Promise<Object>} - English string keys and their values (their strings)
  */
 const getEnglishStringKeysAndValues = async ( simOrLibName, stringKeysWithRepoName, shaOrBranch = 'master' ) => {
-  logger.info( 'getting english string keys and strings' );
+  logger.info( 'getting english string keys and values' );
   const englishStringKeysAndValues = {};
   const englishStringFileUrl = `${config.GITHUB_URL}/${simOrLibName}/${shaOrBranch}/${simOrLibName}-strings_en.json`;
   let englishStringData = {};
@@ -38,7 +38,7 @@ const getEnglishStringKeysAndValues = async ( simOrLibName, stringKeysWithRepoNa
     logger.error( 'unable to get english string data' );
     logger.error( e );
   }
-  Object.keys( stringKeysWithRepoName ).forEach( stringKeyWithRepoName => {
+  for ( const stringKeyWithRepoName of stringKeysWithRepoName ) {
     const stringKey = getStringKeyFromStringKeyWithRepoName( stringKeyWithRepoName );
     const repoName = getRepoNameFromStringKeyWithRepoName( stringKeyWithRepoName );
     if ( simOrLibName === repoName ) {
@@ -46,8 +46,8 @@ const getEnglishStringKeysAndValues = async ( simOrLibName, stringKeysWithRepoNa
         englishStringKeysAndValues[ stringKey ] = englishStringData[ stringKey ].value;
       }
     }
-  } );
-  logger.info( 'got english string keys and strings; returning them' );
+  }
+  logger.info( 'got english string keys and values; returning them' );
   return englishStringKeysAndValues;
 };
 
