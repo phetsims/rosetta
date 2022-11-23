@@ -10,8 +10,10 @@ import getCommonTranslatedStringKeysAndValues from './getCommonTranslatedStringK
 import getSimSpecificEnglishStringKeysAndValues from './getSimSpecificEnglishStringKeysAndValues.js';
 import getSimSpecificTranslatedStringKeysAndValues from './getSimSpecificTranslatedStringKeysAndValues.js';
 
-const getTranslationReportObject = async ( simName, locale, simNames ) => {
+const getTranslationReportObject = async ( simName, locale, simNames, simTitle ) => {
   const translationReportObject = {
+    simTitle: simTitle,
+    simName: simName,
     numCommonStrings: null,
     numCommonTranslatedStrings: null,
     numSimSpecificStrings: null,

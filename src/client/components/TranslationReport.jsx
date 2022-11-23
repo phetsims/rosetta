@@ -11,16 +11,14 @@ import { useParams } from 'react-router-dom';
 import clientConstants from '../utils/clientConstants.js';
 
 /**
- * This component allows a user to see a translation report for a given locale (statistics about translations, e.g.
- * number of strings translated, total number of strings, etc.) and allows them to navigate to any of the simulations
- * to translate them.
+ * This component allows a user to see a translation report for a given locale (statistics about translations) and
+ * allows them to navigate to any of the simulations to translate them.
  *
  * @returns {JSX.Element}
  * @constructor
  */
 const TranslationReport = () => {
 
-  // grab the query parameters for later use
   const params = useParams();
 
   const [ reportObjects, setReportObjects ] = useState( [] );
@@ -38,6 +36,20 @@ const TranslationReport = () => {
     }
   }, [ listening, reportObjects ] );
 
+
+  const reportRows = [];
+  for ( const reportObject of reportObjects ) {
+    const simSpecificPercent = ( reportObject.numSimSpecificTranslatedStrings / reportObject.numSimSpecificStrings ) * 100;
+    const commonPercent = ( reportObject.numCommonTranslatedStrings / reportObject.numCommonStrings ) * 100;
+    reportRows.push( (
+      <tr key={reportObject.simName}>
+        <td>{reportObject.simTitle}</td>
+        <td>{simSpecificPercent}% ({reportObject.numSimSpecificTranslatedStrings} of {reportObject.numSimSpecificStrings})</td>
+        <td>{commonPercent}% ({reportObject.numCommonTranslatedStrings} of {reportObject.numCommonStrings})</td>
+      </tr>
+    ) );
+  }
+
   return (
     <div>
       <h1>Translation Report</h1>
@@ -50,19 +62,7 @@ const TranslationReport = () => {
             <th>Common Strings</th>
           </tr>
         </thead>
-        <tbody>
-          {
-            reportObjects.map( ( reportObject, i ) =>
-
-              // TODO: Change i to unique sim name.
-              <tr key={i}>
-                <td>insert sim name here</td>
-                <td>insert percentage here {reportObject.numSimSpecificTranslatedStrings} of {reportObject.numSimSpecificStrings}</td>
-                <td>insert percentage here {reportObject.numCommonTranslatedStrings} of {reportObject.numCommonStrings}</td>
-              </tr>
-            )
-          }
-        </tbody>
+        <tbody>{reportRows}</tbody>
       </table>
     </div>
   );
