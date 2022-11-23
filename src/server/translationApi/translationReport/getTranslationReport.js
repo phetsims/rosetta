@@ -94,9 +94,9 @@ const getTranslationReport = async locale => {
   return translationReport;
 };
 
-( async () => {
-  const translationReport = await getTranslationReport( 'es' );
-  console.log( JSON.stringify( translationReport, null, 4 ) );
-} )();
+// ( async () => {
+//   const translationReport = await getTranslationReport( 'es' );
+//   console.log( JSON.stringify( translationReport, null, 4 ) );
+// } )();
 
 export default getTranslationReport;
