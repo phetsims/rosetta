@@ -8,6 +8,7 @@
 
 import React from 'react';
 import { useParams } from 'react-router-dom';
+import clientConstants from '../utils/clientConstants.js';
 
 /**
  * This component allows a user to see a translation report for a given locale (statistics about translations, e.g.
@@ -21,6 +22,10 @@ const TranslationReport = () => {
 
   // grab the query parameters for later use
   const params = useParams();
+
+  const translationReportUrl = `${clientConstants.translationApiRoute}/translationReportEvents/${params.locale}`;
+  const translationReportSource = new EventSource( translationReportUrl );
+  translationReportSource.onmessage = e => console.log( e.data );
 
   return (
     <div>
