@@ -28,13 +28,7 @@ const getTranslationReport = async locale => {
   const simNames = Object.keys( getSimNamesAndTitles( simMetadata ) );
   const translatedAndUntranslatedSims = await getTranslatedAndUntranslatedSims( locale );
 
-  // TODO: Take out counter when done.
-  let counter = 0;
   for ( const sim of translatedAndUntranslatedSims.translated ) {
-
-    if ( counter > 5 ) {
-      return translationReport;
-    }
 
     if ( translationReport[ sim ] === undefined ) {
       translationReport[ sim ] = {
@@ -50,6 +44,8 @@ const getTranslationReport = async locale => {
     const stringKeysWithRepoName = Object.keys( getStringKeysWithRepoName( simHtml ) );
     const categorizedStringKeys = await getCategorizedStringKeys( sim, simNames, stringKeysWithRepoName );
 
+    const noLongerUsedFlag = 'no longer used';
+
     const commonEnglishStringKeysAndValues = await getCommonEnglishStringKeysAndValues(
       sim,
       simNames,
@@ -58,7 +54,7 @@ const getTranslationReport = async locale => {
     );
     translationReport[ sim ].numCommonStrings = Object
       .values( commonEnglishStringKeysAndValues )
-      .filter( value => value !== 'no longer used' ).length;
+      .filter( value => value !== noLongerUsedFlag ).length;
 
     const commonTranslatedStringKeysAndValues = await getCommonTranslatedStringKeysAndValues(
       sim,
@@ -68,8 +64,9 @@ const getTranslationReport = async locale => {
       categorizedStringKeys
     );
     translationReport[ sim ].numCommonTranslatedStrings = Object
-      .values( commonTranslatedStringKeysAndValues )
-      .filter( value => value !== '' ).length;
+      .keys( commonTranslatedStringKeysAndValues )
+      .filter( key => commonEnglishStringKeysAndValues[ key ] !== ''
+                      && commonEnglishStringKeysAndValues[ key ] !== noLongerUsedFlag ).length;
 
     const latestSimSha = await getLatestSimSha( sim );
     const simSpecificEnglishStringKeysAndValues = await getSimSpecificEnglishStringKeysAndValues(
@@ -80,7 +77,7 @@ const getTranslationReport = async locale => {
     );
     translationReport[ sim ].numSimSpecificStrings = Object
       .values( simSpecificEnglishStringKeysAndValues )
-      .filter( value => value !== 'no longer used' ).length;
+      .filter( value => value !== noLongerUsedFlag ).length;
 
     const simSpecificTranslatedStringKeysAndValues = await getSimSpecificTranslatedStringKeysAndValues(
       sim,
@@ -88,10 +85,9 @@ const getTranslationReport = async locale => {
       categorizedStringKeys
     );
     translationReport[ sim ].numSimSpecificTranslatedStrings = Object
-      .values( simSpecificTranslatedStringKeysAndValues )
-      .filter( value => value !== '' ).length;
-
-    counter++;
+      .keys( simSpecificTranslatedStringKeysAndValues )
+      .filter( key => simSpecificTranslatedStringKeysAndValues[ key ] !== ''
+                      && simSpecificEnglishStringKeysAndValues[ key ] !== noLongerUsedFlag ).length;
   }
 
   console.timeEnd( 'getTranslationReport' );
@@ -99,7 +95,7 @@ const getTranslationReport = async locale => {
 };
 
 ( async () => {
-  const translationReport = await getTranslationReport( 'ab' );
+  const translationReport = await getTranslationReport( 'es' );
   console.log( JSON.stringify( translationReport, null, 4 ) );
 } )();
 
