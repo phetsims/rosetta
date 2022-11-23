@@ -7,6 +7,7 @@
  */
 
 import getCategorizedStringKeys from '../getCategorizedStringKeys.js';
+import getLatestSimSha from '../getLatestSimSha.js';
 import getSimHtml from '../getSimHtml.js';
 import getSimMetadata from '../getSimMetadata.js';
 import getSimNamesAndTitles from '../getSimNamesAndTitles.js';
@@ -24,7 +25,7 @@ const getTranslationReport = async locale => {
   const translationReport = {};
 
   const simMetadata = await getSimMetadata();
-  const simNames = Object.keys( await getSimNamesAndTitles( simMetadata ) );
+  const simNames = Object.keys( getSimNamesAndTitles( simMetadata ) );
   const translatedAndUntranslatedSims = await getTranslatedAndUntranslatedSims( locale );
 
   // TODO: Take out counter when done.
@@ -70,8 +71,10 @@ const getTranslationReport = async locale => {
       commonTranslatedStringKeysAndValues[ key ] !== ''
     ).length;
 
+    const latestSimSha = await getLatestSimSha( sim );
     const simSpecificEnglishStringKeysAndValues = await getSimSpecificEnglishStringKeysAndValues(
       sim,
+      latestSimSha,
       categorizedStringKeys,
       stringKeysWithRepoName
     );
