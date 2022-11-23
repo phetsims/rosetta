@@ -10,6 +10,7 @@ import submitTranslation from './api/submitTranslation.js';
 import testTranslation from './api/testTranslation.js';
 import translationFormData from './api/translationFormData.js';
 import logger from './logger.js';
+import translationReportEvents from './api/translationReportEvents.js';
 
 const rosettaApiServer = express();
 
@@ -27,6 +28,7 @@ rosettaApiServer.get( '/simNamesAndTitles', simNamesAndTitles );
 rosettaApiServer.get( '/translationFormData/:simName?/:locale?', translationFormData );
 rosettaApiServer.get( '/sha', sha );
 rosettaApiServer.get( '/rebuildWithOriginalCredit/:simName?/:locale?/:userId?', rebuildWithOriginalCredit );
+rosettaApiServer.get( '/translationReportEvents', translationReportEvents );
 
 // posts
 rosettaApiServer.post( '/*', ( req, res, next ) => {
