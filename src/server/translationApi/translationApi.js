@@ -8,10 +8,6 @@ import sha from './api/sha.js';
 import simNamesAndTitles from './api/simNamesAndTitles.js';
 import submitTranslation from './api/submitTranslation.js';
 import testTranslation from './api/testTranslation.js';
-import commonEnglishStringKeysAndStrings from './api/tmp/commonEnglishStringKeysAndStrings.js';
-import commonTranslatedStringKeysAndStrings from './api/tmp/commonTranslatedStringKeysAndStrings.js';
-import simSpecificEnglishStringKeysAndStrings from './api/tmp/simSpecificEnglishStringKeysAndStrings.js';
-import simSpecificTranslatedStringKeysAndStrings from './api/tmp/simSpecificTranslatedStringKeysAndStrings.js';
 import translationFormData from './api/translationFormData.js';
 import logger from './logger.js';
 
@@ -31,12 +27,6 @@ rosettaApiServer.get( '/simNamesAndTitles', simNamesAndTitles );
 rosettaApiServer.get( '/translationFormData/:simName?/:locale?', translationFormData );
 rosettaApiServer.get( '/sha', sha );
 rosettaApiServer.get( '/rebuildWithOriginalCredit/:simName?/:locale?/:userId?', rebuildWithOriginalCredit );
-
-// These might be used in the translation report. (Currently unused, hence the tmp directory.)
-rosettaApiServer.get( '/tmp/commonEnglishStringKeysAndStrings/:simName?', commonEnglishStringKeysAndStrings );
-rosettaApiServer.get( '/tmp/simSpecificEnglishStringKeysAndStrings/:simName?', simSpecificEnglishStringKeysAndStrings );
-rosettaApiServer.get( '/tmp/commonTranslatedStringKeysAndStrings/:simName?/:locale?', commonTranslatedStringKeysAndStrings );
-rosettaApiServer.get( '/tmp/simSpecificTranslatedStringKeysAndStrings/:simName?/:locale?', simSpecificTranslatedStringKeysAndStrings );
 
 // posts
 rosettaApiServer.post( '/*', ( req, res, next ) => {
