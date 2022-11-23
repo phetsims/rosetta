@@ -18,6 +18,7 @@ import mockWebsiteUserData from './translationApi/api/mockWebsiteUserData.js';
 import path from 'path';
 import { URL } from 'url';
 import os from 'os';
+import bodyParser from 'body-parser';
 
 // These are components (1) and (2) mentioned above.
 import translationApi from './translationApi/translationApi.js';
@@ -25,8 +26,8 @@ import builtReactAppServer from './builtReactAppServer/builtReactAppServer.js';
 
 const app = express();
 
-// Enable returning JSON.
-app.use( express.json() );
+app.use( bodyParser.json() );
+app.use( bodyParser.urlencoded( { extended: false } ) );
 
 // Set up a variable similar to the old __dirname variable.
 // The __dirname variable gets the present working directory.
