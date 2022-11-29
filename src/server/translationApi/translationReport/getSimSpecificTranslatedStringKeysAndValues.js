@@ -39,6 +39,8 @@ const getSimSpecificTranslatedStringKeysAndValues = async (
       const stringKeysAndTranslatedValuesRes = await axios.get( translatedStringFileUrl );
       const stringKeysAndTranslatedValues = stringKeysAndTranslatedValuesRes.data;
       const translatedStringKeys = Object.keys( stringKeysAndTranslatedValues );
+      // eslint-disable-next-line no-debugger
+      debugger;
 
       // For each sim specific string key...
       for ( const stringKey of simSpecificStringKeys ) {

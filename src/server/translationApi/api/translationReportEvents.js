@@ -18,7 +18,7 @@ const translationReportEvents = async ( req, res ) => {
   const simNamesAndTitles = getSimNamesAndTitles( simMetadata );
   const simNames = Object.keys( simNamesAndTitles );
   for ( const sim of simNames ) {
-    const translationReportObject = await getTranslationReportObject( sim, req.body.locale, simNames, simNamesAndTitles[ sim ] );
+    const translationReportObject = await getTranslationReportObject( sim, req.params.locale, simNames, simNamesAndTitles[ sim ] );
     res.write( `data: ${JSON.stringify( translationReportObject )}\n\n` );
   }
 
