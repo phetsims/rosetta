@@ -27,7 +27,6 @@ const TranslationReport = () => {
 
   useEffect( () => {
     if ( !listening ) {
-      console.log( params.locale );
       const translationReportUrl = `${clientConstants.translationApiRoute}/translationReportEvents/${params.locale}`;
       const translationReportSource = new EventSource( translationReportUrl );
       translationReportSource.onmessage = event => {
