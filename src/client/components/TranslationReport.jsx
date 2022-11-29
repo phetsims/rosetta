@@ -9,6 +9,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import clientConstants from '../utils/clientConstants.js';
+import { Link } from 'react-router-dom';
 
 /**
  * This component allows a user to see a translation report for a given locale (statistics about translations) and
@@ -44,7 +45,7 @@ const TranslationReport = () => {
     const commonPercent = Math.floor( ( reportObject.numCommonTranslatedStrings / reportObject.numCommonStrings ) * 100 );
     reportRows.push( (
       <tr key={reportObject.simName}>
-        <td>{reportObject.simTitle}</td>
+        <td><Link to={`/translate/${params.locale}/${reportObject.simName}`}>{reportObject.simTitle}</Link></td>
         <td>{simSpecificPercent}% ({reportObject.numSimSpecificTranslatedStrings} of {reportObject.numSimSpecificStrings})</td>
         <td>{commonPercent}% ({reportObject.numCommonTranslatedStrings} of {reportObject.numCommonStrings})</td>
       </tr>
