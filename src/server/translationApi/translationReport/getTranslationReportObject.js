@@ -12,8 +12,8 @@ import getSimSpecificTranslatedStringKeysAndValues from './getSimSpecificTransla
 
 const getTranslationReportObject = async ( simName, locale, simNames, simTitle ) => {
   const translationReportObject = {
-    simTitle: simTitle,
     simName: simName,
+    simTitle: simTitle,
     numCommonStrings: null,
     numCommonTranslatedStrings: null,
     numSimSpecificStrings: null,
@@ -46,7 +46,7 @@ const getTranslationReportObject = async ( simName, locale, simNames, simTitle )
   );
   translationReportObject.numCommonTranslatedStrings = Object
     .keys( commonTranslatedStringKeysAndValues )
-    .filter( key => commonEnglishStringKeysAndValues[ key ] !== ''
+    .filter( key => commonTranslatedStringKeysAndValues[ key ] !== ''
                     && commonEnglishStringKeysAndValues[ key ] !== noLongerUsedFlag ).length;
 
   const latestSimSha = await getLatestSimSha( simName );
@@ -67,8 +67,10 @@ const getTranslationReportObject = async ( simName, locale, simNames, simTitle )
   );
   translationReportObject.numSimSpecificTranslatedStrings = Object
     .keys( simSpecificTranslatedStringKeysAndValues )
-    .filter( key => simSpecificTranslatedStringKeysAndValues[ key ] !== ''
-                    && simSpecificEnglishStringKeysAndValues[ key ] !== noLongerUsedFlag ).length;
+    .filter( key => {
+      return simSpecificTranslatedStringKeysAndValues[ key ] !== ''
+             && simSpecificEnglishStringKeysAndValues[ key ] !== noLongerUsedFlag;
+    } ).length;
 
   return translationReportObject;
 };
