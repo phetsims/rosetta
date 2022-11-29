@@ -10,6 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import clientConstants from '../utils/clientConstants.js';
 import { Link } from 'react-router-dom';
+import LoadingSpinner from './LoadingSpinner.jsx';
 
 /**
  * This component allows a user to see a translation report for a given locale (statistics about translations) and
@@ -22,20 +23,26 @@ const TranslationReport = () => {
 
   const params = useParams();
 
-  const [ reportObjects, setReportObjects ] = useState( [] );
   const [ listening, setListening ] = useState( false );
+  const [ reportPopulated, setReportPopulated ] = useState( false );
+  const [ reportObjects, setReportObjects ] = useState( [] );
 
   useEffect( () => {
-    if ( !listening ) {
+    if ( !listening && !reportPopulated ) {
       const translationReportUrl = `${clientConstants.translationApiRoute}/translationReportEvents/${params.locale}`;
       const translationReportSource = new EventSource( translationReportUrl );
       translationReportSource.onmessage = event => {
-        const parsedData = JSON.parse( event.data );
-        setReportObjects( reportObjects => reportObjects.concat( parsedData ) );
+        if ( event.data !== 'closed' ) {
+          const parsedData = JSON.parse( event.data );
+          setReportObjects( reportObjects => reportObjects.concat( parsedData ) );
+        }
+        else {
+          setReportPopulated( true );
+        }
       };
       setListening( true );
     }
-  }, [ listening, reportObjects ] );
+  }, [ listening, reportPopulated, reportObjects ] );
 
 
   const reportRows = [];
@@ -55,6 +62,9 @@ const TranslationReport = () => {
     <div>
       <h1>Translation Report</h1>
       <h2 className='text-muted'>Locale: {params.locale}</h2>
+      {reportPopulated
+       ? <p>The translation report is finished!</p>
+       : <><p>The translation report is being populated...</p><LoadingSpinner/></>}
       <table className='table table-striped'>
         <thead>
           <tr>

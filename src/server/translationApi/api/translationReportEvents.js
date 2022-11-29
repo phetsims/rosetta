@@ -21,6 +21,7 @@ const translationReportEvents = async ( req, res ) => {
     const translationReportObject = await getTranslationReportObject( sim, req.params.locale, simNames, simNamesAndTitles[ sim ] );
     res.write( `data: ${JSON.stringify( translationReportObject )}\n\n` );
   }
+  res.write( 'data: closed\n\n' );
 
   req.on( 'close', () => {
     logger.info( 'closed translation reports events' );
