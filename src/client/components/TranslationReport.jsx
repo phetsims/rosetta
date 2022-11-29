@@ -40,8 +40,8 @@ const TranslationReport = () => {
 
   const reportRows = [];
   for ( const reportObject of reportObjects ) {
-    const simSpecificPercent = ( reportObject.numSimSpecificTranslatedStrings / reportObject.numSimSpecificStrings ) * 100;
-    const commonPercent = ( reportObject.numCommonTranslatedStrings / reportObject.numCommonStrings ) * 100;
+    const simSpecificPercent = Math.floor( ( reportObject.numSimSpecificTranslatedStrings / reportObject.numSimSpecificStrings ) * 100 );
+    const commonPercent = Math.floor( ( reportObject.numCommonTranslatedStrings / reportObject.numCommonStrings ) * 100 );
     reportRows.push( (
       <tr key={reportObject.simName}>
         <td>{reportObject.simTitle}</td>
