@@ -31,7 +31,7 @@ const TranslationReport = () => {
     localeName = localeInfo[ params.locale ].name;
   }
   const simNamesAndTitles = useContext( SimNamesAndTitlesContext );
-  const { reportPopulated, reportObjects, setReportObjects } = useTranslationReportObjects( params.locale );
+  const { reportPopulated, reportObjects } = useTranslationReportObjects( params.locale );
   const reportRows = getTranslationReportRows( simNamesAndTitles, reportObjects, params.locale );
   return (
     <div>
@@ -44,24 +44,15 @@ const TranslationReport = () => {
         <thead>
         <tr>
           <th>Sim Title <SortButton
-            columnName='simTitle'
             reportPopulated={reportPopulated}
-            reportObjects={reportObjects}
-            setReportObjects={setReportObjects}
           />
           </th>
           <th>Sim-Specific Strings <SortButton
-            columnName='simSpecificPercent'
             reportPopulated={reportPopulated}
-            reportObjects={reportObjects}
-            setReportObjects={setReportObjects}
           />
           </th>
           <th>Common Strings <SortButton
-            columnName='commonPercent'
             reportPopulated={reportPopulated}
-            reportObjects={reportObjects}
-            setReportObjects={setReportObjects}
           />
           </th>
         </tr>
