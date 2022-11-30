@@ -15,6 +15,7 @@ import getTranslationReportRows from '../utils/getTranslationReportRows.jsx';
 import LoadingSpinner from './LoadingSpinner.jsx';
 import { LocaleInfoContext, SimNamesAndTitlesContext } from './RosettaRoutes.jsx';
 import SortButton from './SortButton.jsx';
+import clientConstants from '../utils/clientConstants.js';
 
 /**
  * This component allows a user to see a translation report for a given locale (statistics about translations) and
@@ -31,8 +32,11 @@ const TranslationReport = () => {
     localeName = localeInfo[ params.locale ].name;
   }
   const simNamesAndTitles = useContext( SimNamesAndTitlesContext );
-  const { reportPopulated, reportObjects } = useTranslationReportObjects( params.locale );
-  const reportRows = getTranslationReportRows( simNamesAndTitles, reportObjects, params.locale );
+
+  // WARNING: This should be set to null in production!
+  const numberOfEvents = clientConstants.numberOfShortReportEvents;
+  const { reportPopulated, reportObjects } = useTranslationReportObjects( params.locale, numberOfEvents );
+  const reportRows = getTranslationReportRows( simNamesAndTitles, reportObjects, params.locale, numberOfEvents );
   const onClick = () => {
     if ( reportPopulated ) {
       window.alert( 'Sort it!' );

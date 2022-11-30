@@ -2,19 +2,34 @@
 
 import { Link } from 'react-router-dom';
 
-const getTranslationReportRows = ( simNamesAndTitles, reportObjects, locale ) => {
+const getTranslationReportRows = ( simNamesAndTitles, reportObjects, locale, numberOfEvents = null ) => {
 
   const translationReportJsx = {};
 
+  const simNames = Object.keys( simNamesAndTitles );
+
   // Initially, set all rows to loading.
-  for ( const simName of Object.keys( simNamesAndTitles ) ) {
-    translationReportJsx[ simName ] = (
-      <tr key={simName}>
-        <td><Link to={`/translate/${locale}/${simName}`}>{simNamesAndTitles[ simName ]}</Link></td>
-        <td>Loading...</td>
-        <td>Loading...</td>
-      </tr>
-    );
+  if ( !numberOfEvents ) {
+    for ( const simName of simNames ) {
+      translationReportJsx[ simName ] = (
+        <tr key={simName}>
+          <td><Link to={`/translate/${locale}/${simName}`}>{simNamesAndTitles[ simName ]}</Link></td>
+          <td>Loading...</td>
+          <td>Loading...</td>
+        </tr>
+      );
+    }
+  }
+  else {
+    for ( let i = 0; i < numberOfEvents; i++ ) {
+      translationReportJsx[ simNames[ i ] ] = (
+        <tr key={simNames[ i ]}>
+          <td><Link to={`/translate/${locale}/${simNames[ i ]}`}>{simNamesAndTitles[ simNames[ i ] ]}</Link></td>
+          <td>Loading...</td>
+          <td>Loading...</td>
+        </tr>
+      );
+    }
   }
 
   // Overwrite rows for which we have data.
