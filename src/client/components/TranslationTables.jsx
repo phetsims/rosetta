@@ -1,7 +1,6 @@
 // Copyright 2021, University of Colorado Boulder
 
 /* eslint-disable indent */
-/* eslint-disable react/prop-types */
 
 /**
  * We define the sim-specific translation table and the common translation table that will go in the translation form.

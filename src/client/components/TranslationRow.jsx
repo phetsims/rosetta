@@ -1,7 +1,5 @@
 // Copyright 2021, University of Colorado Boulder
 
-/* eslint-disable react/prop-types */
-
 import { useField } from 'formik';
 import React, { useContext } from 'react';
 import InputErrorMessage from './InputErrorMessage.jsx';

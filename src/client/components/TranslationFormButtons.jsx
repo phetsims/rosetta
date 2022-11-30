@@ -1,7 +1,5 @@
 // Copyright 2022, University of Colorado Boulder
 
-/* eslint-disable react/prop-types */
-
 const TranslationFormButtons = props => {
   const disabled = !( props.isValid && props.dirty );
   const grayButton = 'btn btn-secondary mt-2';

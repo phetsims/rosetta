@@ -1,7 +1,5 @@
 // Copyright 2022, University of Colorado Boulder
 
-/* eslint-disable react/prop-types */
-
 import { useContext } from 'react';
 import { LocaleInfoContext, SimNamesAndTitlesContext } from './RosettaRoutes.jsx';
 

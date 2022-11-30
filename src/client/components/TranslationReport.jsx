@@ -10,6 +10,7 @@ import { useParams } from 'react-router-dom';
 import useTranslationReportObjects from '../hooks/useTranslationReportObjects.jsx';
 import getTranslationReportRows from '../utils/getTranslationReportRows.jsx';
 import LoadingSpinner from './LoadingSpinner.jsx';
+import SortButton from './SortButton.jsx';
 
 /**
  * This component allows a user to see a translation report for a given locale (statistics about translations) and
@@ -32,9 +33,9 @@ const TranslationReport = () => {
       <table className='table table-striped'>
         <thead>
           <tr>
-            <th>Sim Title</th>
-            <th>Sim-Specific Strings</th>
-            <th>Common Strings</th>
+            <th>Sim Title <SortButton reportPopulated={reportPopulated}/></th>
+            <th>Sim-Specific Strings <SortButton reportPopulated={reportPopulated}/></th>
+            <th>Common Strings <SortButton reportPopulated={reportPopulated}/></th>
           </tr>
         </thead>
         <tbody>{reportRows}</tbody>
