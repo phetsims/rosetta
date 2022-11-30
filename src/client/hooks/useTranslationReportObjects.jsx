@@ -11,7 +11,7 @@ const useTranslationReportObjects = locale => {
 
   useEffect( () => {
     if ( !listening && !reportPopulated ) {
-      const translationReportUrl = `${clientConstants.translationApiRoute}/translationReportEvents/${locale}`;
+      const translationReportUrl = `${clientConstants.translationApiRoute}/translationReportEvents/${locale}/4`;
       const translationReportSource = new EventSource( translationReportUrl );
 
       // TODO: This doesn't seem to work; fix it.

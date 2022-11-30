@@ -17,9 +17,22 @@ const translationReportEvents = async ( req, res ) => {
   const simMetadata = await getSimMetadata();
   const simNamesAndTitles = getSimNamesAndTitles( simMetadata );
   const simNames = Object.keys( simNamesAndTitles );
-  for ( const sim of simNames ) {
-    const translationReportObject = await getTranslationReportObject( sim, req.params.locale, simNames, simNamesAndTitles[ sim ] );
-    res.write( `data: ${JSON.stringify( translationReportObject )}\n\n` );
+  console.log( `req.params.numberOfEvents =========================== ${req.params.numberOfEvents}` );
+  if ( !req.params.numberOfEvents ) {
+
+    // If number of events hasn't been specified, send events for every sim.
+    for ( const sim of simNames ) {
+      const translationReportObject = await getTranslationReportObject( sim, req.params.locale, simNames, simNamesAndTitles[ sim ] );
+      res.write( `data: ${JSON.stringify( translationReportObject )}\n\n` );
+    }
+  }
+  else {
+
+    // Otherwise, send events for the specified number of sims.
+    for ( let i = 0; i < req.params.numberOfEvents; i++ ) {
+      const translationReportObject = await getTranslationReportObject( simNames[ i ], req.params.locale, simNames, simNamesAndTitles[ simNames[ i ] ] );
+      res.write( `data: ${JSON.stringify( translationReportObject )}\n\n` );
+    }
   }
   res.write( 'data: closed\n\n' );
 
