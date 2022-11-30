@@ -20,6 +20,7 @@ const useTranslationReportObjects = locale => {
         }
         else {
           setReportPopulated( true );
+          translationReportSource.close();
         }
       };
       setListening( true );
