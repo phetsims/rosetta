@@ -33,6 +33,14 @@ const TranslationReport = () => {
   const simNamesAndTitles = useContext( SimNamesAndTitlesContext );
   const { reportPopulated, reportObjects } = useTranslationReportObjects( params.locale );
   const reportRows = getTranslationReportRows( simNamesAndTitles, reportObjects, params.locale );
+  const onClick = () => {
+    if ( reportPopulated ) {
+      window.alert( 'Sort it!' );
+    }
+    else {
+      window.alert( 'Please wait until the report is populated before sorting a column.' );
+    }
+  };
   return (
     <div>
       <h1>Translation Report</h1>
@@ -44,13 +52,13 @@ const TranslationReport = () => {
         <thead>
         <tr>
           <th>Sim Title
-            {reportPopulated ? <SortButton reportPopulated={reportPopulated}/> : <></>}
+            {reportPopulated ? <SortButton onClick={onClick}/> : <></>}
           </th>
           <th>Sim-Specific Strings
-            {reportPopulated ? <SortButton reportPopulated={reportPopulated}/> : <></>}
+            {reportPopulated ? <SortButton onClick={onClick}/> : <></>}
           </th>
           <th>Common Strings
-            {reportPopulated ? <SortButton reportPopulated={reportPopulated}/> : <></>}
+            {reportPopulated ? <SortButton onClick={onClick}/> : <></>}
           </th>
         </tr>
         </thead>
