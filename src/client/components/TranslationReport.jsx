@@ -8,7 +8,7 @@
  * @author Liam Mulhall
  */
 
-import { useContext } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useTranslationReportObjects from '../hooks/useTranslationReportObjects.jsx';
 import getTranslationReportRows from '../utils/getTranslationReportRows.jsx';
@@ -35,15 +35,39 @@ const TranslationReport = () => {
 
   // WARNING: This should be set to null in production!
   const numberOfEvents = clientConstants.numberOfShortReportEvents;
-  const { reportPopulated, reportObjects } = useTranslationReportObjects( params.locale, numberOfEvents );
+  const { reportPopulated, reportObjects, setReportObjects } = useTranslationReportObjects( params.locale, numberOfEvents );
   const reportRows = getTranslationReportRows( simNamesAndTitles, reportObjects, params.locale, numberOfEvents );
-  const onClick = () => {
-    if ( reportPopulated ) {
-      window.alert( 'Sort it!' );
+  const [ sortConfig, setSortConfig ] = useState( null );
+  const sortedReportObjects = useMemo( () => {
+    const sortableReportObjects = [ ...reportObjects ];
+    if ( sortConfig !== null ) {
+      // eslint-disable-next-line no-debugger
+      debugger;
+      sortableReportObjects.sort( ( a, b ) => {
+        if ( a[ sortConfig.columnName ] < b[ sortConfig.columnName ] ) {
+          return sortConfig.direction === 'ascending' ? -1 : 1;
+        }
+        if ( a[ sortConfig.columnName ] > b[ sortConfig.columnName ] ) {
+          return sortConfig.direction === 'ascending' ? 1 : -1;
+        }
+        return 0;
+      } );
     }
-    else {
-      window.alert( 'Please wait until the report is populated before sorting a column.' );
+    return sortableReportObjects;
+  }, [ reportObjects, sortConfig ] );
+  const requestSort = columnName => {
+    window.alert( `Sort ${columnName}!` );
+    let direction = 'ascending';
+    if (
+      sortConfig &&
+      sortConfig.columnName === columnName &&
+      sortConfig.direction === 'ascending'
+    ) {
+      direction = 'descending';
     }
+    setSortConfig( { columnName: columnName, direction: direction } );
+
+    setReportObjects( sortedReportObjects );
   };
   return (
     <div>
@@ -56,13 +80,13 @@ const TranslationReport = () => {
         <thead>
         <tr>
           <th>Sim Title
-            {reportPopulated ? <SortButton onClick={onClick}/> : <></>}
+            {reportPopulated ? <SortButton onClick={() => { requestSort( 'simTitle' );}}/> : <></>}
           </th>
           <th>Sim-Specific Strings
-            {reportPopulated ? <SortButton onClick={onClick}/> : <></>}
+            {reportPopulated ? <SortButton onClick={() => { requestSort( 'simSpecificPercent' );}}/> : <></>}
           </th>
           <th>Common Strings
-            {reportPopulated ? <SortButton onClick={onClick}/> : <></>}
+            {reportPopulated ? <SortButton onClick={() => { requestSort( 'commonPercent' );}}/> : <></>}
           </th>
         </tr>
         </thead>
