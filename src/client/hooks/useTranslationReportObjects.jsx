@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import clientConstants from '../utils/clientConstants.js';
 
-const useTranslationReportObjects = locale => {
+const useTranslationReportObjects = ( locale, numberOfEvents = null ) => {
 
   const [ listening, setListening ] = useState( false );
   const [ reportPopulated, setReportPopulated ] = useState( false );
@@ -11,7 +11,10 @@ const useTranslationReportObjects = locale => {
 
   useEffect( () => {
     if ( !listening && !reportPopulated ) {
-      const translationReportUrl = `${clientConstants.translationApiRoute}/translationReportEvents/${locale}/4`;
+      let translationReportUrl = `${clientConstants.translationApiRoute}/translationReportEvents/${locale}`;
+      if ( numberOfEvents ) {
+        translationReportUrl = `${clientConstants.translationApiRoute}/translationReportEvents/${locale}/${numberOfEvents}`;
+      }
       const translationReportSource = new EventSource( translationReportUrl );
 
       // TODO: This doesn't seem to work; fix it.
