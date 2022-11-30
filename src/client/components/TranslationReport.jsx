@@ -31,7 +31,7 @@ const TranslationReport = () => {
     localeName = localeInfo[ params.locale ].name;
   }
   const simNamesAndTitles = useContext( SimNamesAndTitlesContext );
-  const { reportPopulated, reportObjects } = useTranslationReportObjects( params.locale );
+  const { reportPopulated, reportObjects, setReportObjects } = useTranslationReportObjects( params.locale );
   const reportRows = getTranslationReportRows( simNamesAndTitles, reportObjects, params.locale );
   return (
     <div>
@@ -43,9 +43,27 @@ const TranslationReport = () => {
       <table className='table table-striped'>
         <thead>
         <tr>
-          <th>Sim Title <SortButton reportPopulated={reportPopulated}/></th>
-          <th>Sim-Specific Strings <SortButton reportPopulated={reportPopulated}/></th>
-          <th>Common Strings <SortButton reportPopulated={reportPopulated}/></th>
+          <th>Sim Title <SortButton
+            columnName='simTitle'
+            reportPopulated={reportPopulated}
+            reportObjects={reportObjects}
+            setReportObjects={setReportObjects}
+          />
+          </th>
+          <th>Sim-Specific Strings <SortButton
+            columnName='simSpecificPercent'
+            reportPopulated={reportPopulated}
+            reportObjects={reportObjects}
+            setReportObjects={setReportObjects}
+          />
+          </th>
+          <th>Common Strings <SortButton
+            columnName='commonPercent'
+            reportPopulated={reportPopulated}
+            reportObjects={reportObjects}
+            setReportObjects={setReportObjects}
+          />
+          </th>
         </tr>
         </thead>
         <tbody>{reportRows}</tbody>
