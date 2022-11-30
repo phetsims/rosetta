@@ -13,6 +13,12 @@ const useTranslationReportObjects = locale => {
     if ( !listening && !reportPopulated ) {
       const translationReportUrl = `${clientConstants.translationApiRoute}/translationReportEvents/${locale}`;
       const translationReportSource = new EventSource( translationReportUrl );
+
+      // TODO: This doesn't seem to work; fix it.
+      // If the user navigates away, close events.
+      window.addEventListener( 'unload', () => {
+        translationReportSource.close();
+      } );
       translationReportSource.onmessage = event => {
         if ( event.data !== 'closed' ) {
           const parsedData = JSON.parse( event.data );
