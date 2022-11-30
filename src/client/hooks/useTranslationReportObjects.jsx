@@ -1,0 +1,35 @@
+// Copyright 2022, University of Colorado Boulder
+
+import { useEffect, useState } from 'react';
+import clientConstants from '../utils/clientConstants.js';
+
+const useTranslationReportObjects = locale => {
+
+  const [ listening, setListening ] = useState( false );
+  const [ reportPopulated, setReportPopulated ] = useState( false );
+  const [ reportObjects, setReportObjects ] = useState( [] );
+
+  useEffect( () => {
+    if ( !listening && !reportPopulated ) {
+      const translationReportUrl = `${clientConstants.translationApiRoute}/translationReportEvents/${locale}`;
+      const translationReportSource = new EventSource( translationReportUrl );
+      translationReportSource.onmessage = event => {
+        if ( event.data !== 'closed' ) {
+          const parsedData = JSON.parse( event.data );
+          setReportObjects( reportObjects => reportObjects.concat( parsedData ) );
+        }
+        else {
+          setReportPopulated( true );
+        }
+      };
+      setListening( true );
+    }
+  }, [ listening, reportPopulated, reportObjects ] );
+
+  return {
+    reportPopulated: reportPopulated,
+    reportObjects: reportObjects
+  };
+};
+
+export default useTranslationReportObjects;

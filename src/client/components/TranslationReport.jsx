@@ -6,9 +6,8 @@
  * @author Liam Mulhall
  */
 
-import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import clientConstants from '../utils/clientConstants.js';
+import useTranslationReportObjects from '../hooks/useTranslationReportObjects.jsx';
 import { Link } from 'react-router-dom';
 import LoadingSpinner from './LoadingSpinner.jsx';
 
@@ -23,27 +22,7 @@ const TranslationReport = () => {
 
   const params = useParams();
 
-  const [ listening, setListening ] = useState( false );
-  const [ reportPopulated, setReportPopulated ] = useState( false );
-  const [ reportObjects, setReportObjects ] = useState( [] );
-
-  useEffect( () => {
-    if ( !listening && !reportPopulated ) {
-      const translationReportUrl = `${clientConstants.translationApiRoute}/translationReportEvents/${params.locale}`;
-      const translationReportSource = new EventSource( translationReportUrl );
-      translationReportSource.onmessage = event => {
-        if ( event.data !== 'closed' ) {
-          const parsedData = JSON.parse( event.data );
-          setReportObjects( reportObjects => reportObjects.concat( parsedData ) );
-        }
-        else {
-          setReportPopulated( true );
-        }
-      };
-      setListening( true );
-    }
-  }, [ listening, reportPopulated, reportObjects ] );
-
+  const { reportPopulated, reportObjects } = useTranslationReportObjects( params.locale );
 
   const reportRows = [];
   for ( const reportObject of reportObjects ) {
