@@ -1,7 +1,6 @@
 // Copyright 2022, University of Colorado Boulder
 
 import { Link } from 'react-router-dom';
-import LoadingSpinner from '../components/LoadingSpinner.jsx';
 
 const getTranslationReportRows = ( simNamesAndTitles, reportObjects, locale ) => {
 
@@ -12,8 +11,8 @@ const getTranslationReportRows = ( simNamesAndTitles, reportObjects, locale ) =>
     translationReportJsx[ simName ] = (
       <tr key={simName}>
         <td><Link to={`/translate/${locale}/${simName}`}>{simNamesAndTitles[ simName ]}</Link></td>
-        <td><LoadingSpinner/></td>
-        <td><LoadingSpinner/></td>
+        <td>Loading...</td>
+        <td>Loading...</td>
       </tr>
     );
   }
