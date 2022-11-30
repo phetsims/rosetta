@@ -4,32 +4,41 @@ import { Link } from 'react-router-dom';
 import LoadingSpinner from '../components/LoadingSpinner.jsx';
 
 const getTranslationReportRows = ( simNamesAndTitles, reportObjects, locale ) => {
-  const translationReportRows = [];
-  let lastSimName = '';
+
+  const translationReportJsx = {};
+
+  // Initially, set all rows to loading.
+  for ( const simName of Object.keys( simNamesAndTitles ) ) {
+    translationReportJsx[ simName ] = (
+      <tr key={simName}>
+        <td><Link to={`/translate/${locale}/${simName}`}>{simNamesAndTitles[ simName ]}</Link></td>
+        <td><LoadingSpinner/></td>
+        <td><LoadingSpinner/></td>
+      </tr>
+    );
+  }
+
+  // Overwrite rows for which we have data.
   for ( const reportObject of reportObjects ) {
     const simSpecificPercent = Math.floor( ( reportObject.numSimSpecificTranslatedStrings / reportObject.numSimSpecificStrings ) * 100 );
     const commonPercent = Math.floor( ( reportObject.numCommonTranslatedStrings / reportObject.numCommonStrings ) * 100 );
-    translationReportRows.push( (
-      <tr key={reportObject.simName}>
-        <td><Link to={`/translate/${locale}/${reportObject.simName}`}>{reportObject.simTitle}</Link></td>
-        <td>{simSpecificPercent}% ({reportObject.numSimSpecificTranslatedStrings} of {reportObject.numSimSpecificStrings})</td>
-        <td>{commonPercent}% ({reportObject.numCommonTranslatedStrings} of {reportObject.numCommonStrings})</td>
-      </tr>
-    ) );
-    lastSimName = reportObject.simName;
+    if ( Object.keys( translationReportJsx ).includes( reportObject.simName ) ) {
+      translationReportJsx[ reportObject.simName ] = (
+        <tr key={reportObject.simName}>
+          <td><Link to={`/translate/${locale}/${reportObject.simName}`}>{reportObject.simTitle}</Link></td>
+          <td>{simSpecificPercent}% ({reportObject.numSimSpecificTranslatedStrings} of {reportObject.numSimSpecificStrings})</td>
+          <td>{commonPercent}% ({reportObject.numCommonTranslatedStrings} of {reportObject.numCommonStrings})</td>
+        </tr>
+      );
+    }
   }
 
-  const simNames = Object.keys( simNamesAndTitles );
-  const indexOfLastSimName = simNames.indexOf( lastSimName );
-  for ( let i = indexOfLastSimName; i < simNames.length; i++ ) {
-    translationReportRows.push( (
-      <tr key={simNames[ i ]}>
-        <td><Link to={`/translate/${locale}/${simNames[ i ]}`}>{simNamesAndTitles[ simNames[ i ] ]}</Link></td>
-        <td><LoadingSpinner/></td>
-        <td><LoadingSpinner/></td>
-      </tr>
-    ) );
+  // Return an array of JSX.
+  const translationReportRows = [];
+  for ( const simName of Object.keys( translationReportJsx ) ) {
+    translationReportRows.push( translationReportJsx[ simName ] );
   }
+
   return translationReportRows;
 };
 
