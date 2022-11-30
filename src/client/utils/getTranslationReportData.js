@@ -2,7 +2,9 @@
 
 const getTranslationReportData = ( simNamesAndTitles, reportObjects, locale ) => {
 
-  const translationReportData = {};
+  const translationReportData = {
+    locale: locale
+  };
 
   // Initially, set all data to null.
   for ( const simName of Object.keys( simNamesAndTitles ) ) {
