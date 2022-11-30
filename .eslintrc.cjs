@@ -33,7 +33,8 @@ module.exports = {
       { "allowProperties": true }
     ],
     "default-import-match-filename": "off",
-    "react/no-unescaped-entities": "off"
+    "react/no-unescaped-entities": "off",
+    "react/prop-types": "off"
   },
   "settings": {
     "react": {
