@@ -28,7 +28,7 @@ rosettaApiServer.get( '/simNamesAndTitles', simNamesAndTitles );
 rosettaApiServer.get( '/translationFormData/:simName?/:locale?', translationFormData );
 rosettaApiServer.get( '/sha', sha );
 rosettaApiServer.get( '/rebuildWithOriginalCredit/:simName?/:locale?/:userId?', rebuildWithOriginalCredit );
-rosettaApiServer.get( '/translationReportEvents/:locale?', translationReportEvents );
+rosettaApiServer.get( '/translationReportEvents/:locale?/:numberOfEvents?', translationReportEvents );
 
 // posts
 rosettaApiServer.post( '/*', ( req, res, next ) => {
