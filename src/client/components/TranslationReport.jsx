@@ -43,17 +43,14 @@ const TranslationReport = () => {
       <table className='table table-striped'>
         <thead>
         <tr>
-          <th>Sim Title <SortButton
-            reportPopulated={reportPopulated}
-          />
+          <th>Sim Title
+            {reportPopulated ? <SortButton reportPopulated={reportPopulated}/> : <></>}
           </th>
-          <th>Sim-Specific Strings <SortButton
-            reportPopulated={reportPopulated}
-          />
+          <th>Sim-Specific Strings
+            {reportPopulated ? <SortButton reportPopulated={reportPopulated}/> : <></>}
           </th>
-          <th>Common Strings <SortButton
-            reportPopulated={reportPopulated}
-          />
+          <th>Common Strings
+            {reportPopulated ? <SortButton reportPopulated={reportPopulated}/> : <></>}
           </th>
         </tr>
         </thead>
