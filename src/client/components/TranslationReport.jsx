@@ -13,7 +13,7 @@ import { useParams } from 'react-router-dom';
 import useTranslationReportObjects from '../hooks/useTranslationReportObjects.jsx';
 import getTranslationReportRows from '../utils/getTranslationReportRows.jsx';
 import LoadingSpinner from './LoadingSpinner.jsx';
-import { SimNamesAndTitlesContext } from './RosettaRoutes.jsx';
+import { LocaleInfoContext, SimNamesAndTitlesContext } from './RosettaRoutes.jsx';
 import SortButton from './SortButton.jsx';
 
 /**
@@ -24,14 +24,19 @@ import SortButton from './SortButton.jsx';
  * @constructor
  */
 const TranslationReport = () => {
-  const simNamesAndTitles = useContext( SimNamesAndTitlesContext );
   const params = useParams();
+  const localeInfo = useContext( LocaleInfoContext );
+  let localeName = 'Loading...';
+  if ( Object.keys( localeInfo ).length > 0 ) {
+    localeName = localeInfo[ params.locale ].name;
+  }
+  const simNamesAndTitles = useContext( SimNamesAndTitlesContext );
   const { reportPopulated, reportObjects } = useTranslationReportObjects( params.locale );
   const reportRows = getTranslationReportRows( simNamesAndTitles, reportObjects, params.locale );
   return (
     <div>
       <h1>Translation Report</h1>
-      <h2 className='text-muted'>Locale: {params.locale}</h2>
+      <h2 className='text-muted'>Locale: {localeName}</h2>
       {reportPopulated
        ? <p>The translation report is finished!</p>
        : <><p>The translation report is being populated...</p><LoadingSpinner/></>}
