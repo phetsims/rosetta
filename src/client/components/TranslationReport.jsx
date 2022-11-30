@@ -11,7 +11,6 @@
 import { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import useTranslationReportObjects from '../hooks/useTranslationReportObjects.jsx';
-import getTranslationReportData from '../utils/getTranslationReportData.js';
 import getTranslationReportRows from '../utils/getTranslationReportRows.jsx';
 import LoadingSpinner from './LoadingSpinner.jsx';
 import { LocaleInfoContext, SimNamesAndTitlesContext } from './RosettaRoutes.jsx';
@@ -33,8 +32,6 @@ const TranslationReport = () => {
   }
   const simNamesAndTitles = useContext( SimNamesAndTitlesContext );
   const { reportPopulated, reportObjects } = useTranslationReportObjects( params.locale );
-  const reportData = getTranslationReportData( simNamesAndTitles, reportObjects, params.locale );
-  console.log( JSON.stringify( reportData, null, 4 ) );
   const reportRows = getTranslationReportRows( simNamesAndTitles, reportObjects, params.locale );
   return (
     <div>
