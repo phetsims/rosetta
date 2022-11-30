@@ -35,7 +35,8 @@ const useTranslationReportObjects = locale => {
 
   return {
     reportPopulated: reportPopulated,
-    reportObjects: reportObjects
+    reportObjects: reportObjects,
+    setReportObjects: setReportObjects
   };
 };
 
