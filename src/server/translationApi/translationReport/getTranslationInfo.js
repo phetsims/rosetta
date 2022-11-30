@@ -6,6 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import config from '../../../common/config.js';
 import getLocaleInfo from '../getLocaleInfo.js';
 import getSimMetadata from '../getSimMetadata.js';
 
@@ -21,21 +22,26 @@ const getTranslationInfo = async () => {
   const simMetadata = await getSimMetadata();
   for ( const project of simMetadata.projects ) {
     for ( const sim of project.simulations ) {
-      const simName = sim.name;
-      const localizedSimsList = Object.keys( sim.localizedSimulations );
-      for ( const locale of localesList ) {
-        if ( translationInfo[ simName ] === undefined ) {
-          translationInfo[ simName ] = {};
-        }
-        if ( localizedSimsList.includes( locale ) ) {
-          translationInfo[ simName ][ locale ] = {
-            hasTranslation: true
-          };
-        }
-        else {
-          translationInfo[ simName ][ locale ] = {
-            hasTranslation: false
-          };
+      const wantSimVisible = config.ENVIRONMENT === 'development' ||
+                             ( config.ENVIRONMENT === 'production' &&
+                               ( sim.visible || sim.isPrototype ) );
+      if ( wantSimVisible ) {
+        const simName = sim.name;
+        const localizedSimsList = Object.keys( sim.localizedSimulations );
+        for ( const locale of localesList ) {
+          if ( translationInfo[ simName ] === undefined ) {
+            translationInfo[ simName ] = {};
+          }
+          if ( localizedSimsList.includes( locale ) ) {
+            translationInfo[ simName ][ locale ] = {
+              hasTranslation: true
+            };
+          }
+          else {
+            translationInfo[ simName ][ locale ] = {
+              hasTranslation: false
+            };
+          }
         }
       }
     }
