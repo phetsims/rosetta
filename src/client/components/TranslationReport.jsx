@@ -1,15 +1,19 @@
 // Copyright 2022, University of Colorado Boulder
 
+/* eslint-disable indent */
+
 /**
  * We define the translation report for a given locale.
  *
  * @author Liam Mulhall
  */
 
+import { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import useTranslationReportObjects from '../hooks/useTranslationReportObjects.jsx';
 import getTranslationReportRows from '../utils/getTranslationReportRows.jsx';
 import LoadingSpinner from './LoadingSpinner.jsx';
+import { SimNamesAndTitlesContext } from './RosettaRoutes.jsx';
 import SortButton from './SortButton.jsx';
 
 /**
@@ -20,9 +24,10 @@ import SortButton from './SortButton.jsx';
  * @constructor
  */
 const TranslationReport = () => {
+  const simNamesAndTitles = useContext( SimNamesAndTitlesContext );
   const params = useParams();
   const { reportPopulated, reportObjects } = useTranslationReportObjects( params.locale );
-  const reportRows = getTranslationReportRows( reportObjects, params.locale );
+  const reportRows = getTranslationReportRows( simNamesAndTitles, reportObjects, params.locale );
   return (
     <div>
       <h1>Translation Report</h1>
@@ -32,11 +37,11 @@ const TranslationReport = () => {
        : <><p>The translation report is being populated...</p><LoadingSpinner/></>}
       <table className='table table-striped'>
         <thead>
-          <tr>
-            <th>Sim Title <SortButton reportPopulated={reportPopulated}/></th>
-            <th>Sim-Specific Strings <SortButton reportPopulated={reportPopulated}/></th>
-            <th>Common Strings <SortButton reportPopulated={reportPopulated}/></th>
-          </tr>
+        <tr>
+          <th>Sim Title <SortButton reportPopulated={reportPopulated}/></th>
+          <th>Sim-Specific Strings <SortButton reportPopulated={reportPopulated}/></th>
+          <th>Common Strings <SortButton reportPopulated={reportPopulated}/></th>
+        </tr>
         </thead>
         <tbody>{reportRows}</tbody>
       </table>
