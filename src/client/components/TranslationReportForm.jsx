@@ -28,9 +28,6 @@ const TranslationReportForm = () => {
       <Formik
         initialValues={{ locale: 'ab' }}
         onSubmit={values => {
-          alert( JSON.stringify( values, null, 2 ) );
-
-          {/* navigate the user to the translation report page for the locale they selected when they submit */}
           navigate( `/translate/report/${values.locale}` );
         }}
       >
