@@ -8,7 +8,7 @@
 
 import { useParams } from 'react-router-dom';
 import useTranslationReportObjects from '../hooks/useTranslationReportObjects.jsx';
-import { Link } from 'react-router-dom';
+import getTranslationReportRows from '../utils/getTranslationReportRows.jsx';
 import LoadingSpinner from './LoadingSpinner.jsx';
 
 /**
@@ -19,24 +19,9 @@ import LoadingSpinner from './LoadingSpinner.jsx';
  * @constructor
  */
 const TranslationReport = () => {
-
   const params = useParams();
-
   const { reportPopulated, reportObjects } = useTranslationReportObjects( params.locale );
-
-  const reportRows = [];
-  for ( const reportObject of reportObjects ) {
-    const simSpecificPercent = Math.floor( ( reportObject.numSimSpecificTranslatedStrings / reportObject.numSimSpecificStrings ) * 100 );
-    const commonPercent = Math.floor( ( reportObject.numCommonTranslatedStrings / reportObject.numCommonStrings ) * 100 );
-    reportRows.push( (
-      <tr key={reportObject.simName}>
-        <td><Link to={`/translate/${params.locale}/${reportObject.simName}`}>{reportObject.simTitle}</Link></td>
-        <td>{simSpecificPercent}% ({reportObject.numSimSpecificTranslatedStrings} of {reportObject.numSimSpecificStrings})</td>
-        <td>{commonPercent}% ({reportObject.numCommonTranslatedStrings} of {reportObject.numCommonStrings})</td>
-      </tr>
-    ) );
-  }
-
+  const reportRows = getTranslationReportRows( reportObjects, params.locale );
   return (
     <div>
       <h1>Translation Report</h1>
