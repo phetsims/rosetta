@@ -4,6 +4,7 @@ import getSimMetadata from '../getSimMetadata.js';
 import getSimNamesAndTitles from '../getSimNamesAndTitles.js';
 import logger from '../logger.js';
 import getTranslationReportObject from '../translationReport/getTranslationReportObject.js';
+import { reportObjectCache } from '../translationApi.js';
 
 const translationReportEvents = async ( req, res ) => {
   const headers = {
@@ -17,20 +18,40 @@ const translationReportEvents = async ( req, res ) => {
   const simMetadata = await getSimMetadata();
   const simNamesAndTitles = getSimNamesAndTitles( simMetadata );
   const simNames = Object.keys( simNamesAndTitles );
-  console.log( `req.params.numberOfEvents =========================== ${req.params.numberOfEvents}` );
   if ( !req.params.numberOfEvents ) {
 
     // If number of events hasn't been specified, send events for every sim.
     for ( const sim of simNames ) {
-      const translationReportObject = await getTranslationReportObject( sim, req.params.locale, simNames, simNamesAndTitles[ sim ] );
+      let translationReportObject = reportObjectCache.getObject( req.params.locale, sim );
+      if ( !translationReportObject ) {
+
+        // Cache miss; get the report object the hard way.
+        translationReportObject = await getTranslationReportObject(
+          sim,
+          req.params.locale,
+          simNames,
+          simNamesAndTitles[ sim ]
+        );
+        reportObjectCache.setObject( req.params.locale, sim, translationReportObject );
+      }
       res.write( `data: ${JSON.stringify( translationReportObject )}\n\n` );
     }
   }
   else {
 
     // Otherwise, send events for the specified number of sims.
+    // This is used for debugging.
     for ( let i = 0; i < req.params.numberOfEvents; i++ ) {
-      const translationReportObject = await getTranslationReportObject( simNames[ i ], req.params.locale, simNames, simNamesAndTitles[ simNames[ i ] ] );
+      let translationReportObject = reportObjectCache.getObject( req.params.locale, simNames[ i ] );
+      if ( !translationReportObject ) {
+        translationReportObject = await getTranslationReportObject(
+          simNames[ i ],
+          req.params.locale,
+          simNames,
+          simNamesAndTitles[ simNames[ i ] ]
+        );
+        reportObjectCache.setObject( req.params.locale, simNames[ i ], translationReportObject );
+      }
       res.write( `data: ${JSON.stringify( translationReportObject )}\n\n` );
     }
   }

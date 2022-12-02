@@ -17,8 +17,10 @@ const longTermStorage = githubInterface.repo( 'phetsims/babel' );
  * Save the translation to long-term storage.
  *
  * @param {Object} preparedTranslation - exact translation file contents for each repo in a translation
+ * @returns {Promise.<boolean>}
  */
 const storeTranslationLongTerm = async preparedTranslation => {
+  let longTermStorageRes = null;
   if ( config.PERFORM_STRING_COMMITS ) {
 
     const contents = preparedTranslation.translationFileContents;
@@ -38,7 +40,7 @@ const storeTranslationLongTerm = async preparedTranslation => {
           logger.info( 'trying to update contents of file on github' );
 
           const contentsRes = await longTermStorage.contentsAsync( translationFilePath, config.BABEL_BRANCH );
-          await longTermStorage.updateContentsAsync(
+          longTermStorageRes = await longTermStorage.updateContentsAsync(
             translationFilePath,
             commitMessage,
             fileContents,
@@ -55,7 +57,7 @@ const storeTranslationLongTerm = async preparedTranslation => {
 
             // try to create the file
             logger.info( 'trying to create file on github' );
-            await longTermStorage.createContentsAsync(
+            longTermStorageRes = await longTermStorage.createContentsAsync(
               translationFilePath,
               commitMessage,
               fileContents,
@@ -70,8 +72,8 @@ const storeTranslationLongTerm = async preparedTranslation => {
         }
       }
     }
-
   }
+  return longTermStorageRes;
 };
 
 export default storeTranslationLongTerm;
