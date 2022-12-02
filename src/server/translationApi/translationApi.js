@@ -11,8 +11,11 @@ import testTranslation from './api/testTranslation.js';
 import translationFormData from './api/translationFormData.js';
 import logger from './logger.js';
 import translationReportEvents from './api/translationReportEvents.js';
+import ReportObjectCache from './ReportObjectCache.js';
 
 const rosettaApiServer = express();
+
+const reportObjectCache = new ReportObjectCache();
 
 rosettaApiServer.get( '/', ( req, res ) => {
   res.send( 'Hello API!' );
@@ -40,3 +43,4 @@ rosettaApiServer.post( '/submitTranslation', submitTranslation );
 rosettaApiServer.post( '/testTranslation', testTranslation );
 
 export default rosettaApiServer;
+export { reportObjectCache };

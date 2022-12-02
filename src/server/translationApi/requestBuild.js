@@ -63,7 +63,7 @@ const requestBuild = async ( simName, locale, userID ) => {
 
   // If the sendBuildRequests flag is set to true in the user's rosettaConfig.json, send it! Otherwise, don't send the
   // build request. Do, however, log the theoretical build request for debugging purposes.
-  let buildRequestRes = false;
+  let buildRequestRes = null;
   if ( config.SEND_BUILD_REQUESTS ) {
 
     // Tell the user where we're sending the build request.
@@ -73,15 +73,19 @@ const requestBuild = async ( simName, locale, userID ) => {
     // Try to send the build request.
     try {
       buildRequestRes = await axios.post( url, requestObject );
+      logger.info( `build request status: ${buildRequestRes.status}` );
     }
     catch( e ) {
-      logger.error( e );
+      logger.error( `build request result: ${e}` );
     }
   }
   else {
     logger.warn( 'send build request flag is false; check your config' );
   }
-  return buildRequestRes;
+  return buildRequestRes !== null
+         && buildRequestRes.status
+         && buildRequestRes.status >= 200
+         && buildRequestRes.status < 300;
 }
 
 export default requestBuild;
