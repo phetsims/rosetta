@@ -10,7 +10,7 @@ import LoadingSpinner from './LoadingSpinner.jsx';
 import { SimNamesAndTitlesContext } from './RosettaRoutes.jsx';
 import SortButton from './SortButton.jsx';
 
-const TranslatedSimsTable = ( { locale } ) => {
+const TranslatedSimsTable = ( { locale, localeName } ) => {
 
   const simNamesAndTitles = useContext( SimNamesAndTitlesContext );
 
@@ -38,7 +38,7 @@ const TranslatedSimsTable = ( { locale } ) => {
 
   return (
     <div>
-      <h3>Sims not yet translated into {locale}</h3>
+      <h3>Sims not yet translated into {localeName}</h3>
       {reportPopulated
        ? <p>The translation report is finished!</p>
        : <><p>The translation report is being populated...</p><LoadingSpinner/></>}
