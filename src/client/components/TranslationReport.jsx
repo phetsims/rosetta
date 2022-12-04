@@ -46,7 +46,12 @@ const TranslationReport = () => {
   const { reportPopulated, reportObjects } = useTranslationReportObjects( params.locale, numberOfEvents );
 
   // Get JSX rows to populate the table.
-  const reportRows = getTranslationReportRows( simNamesAndTitles, reportObjects, params.locale, numberOfEvents );
+  const reportRows = getTranslationReportRows(
+    simNamesAndTitles,
+    reportObjects,
+    params.locale,
+    numberOfEvents
+  );
 
   return (
     <div>
