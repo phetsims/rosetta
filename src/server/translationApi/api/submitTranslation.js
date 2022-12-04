@@ -31,8 +31,8 @@ const submitTranslation = async ( req, res ) => {
       const buildRequestRes = await requestBuild( req.body.simName, req.body.locale, req.body.userId );
       if ( buildRequestRes ) {
         logger.info( 'build request succeeded' );
-        res.send( 'translation submitted' );
       }
+      res.send( 'translation submitted' );
     }
     else {
       logger.error( `long term storage of ${req.body.locale}/${req.body.simName} failed` );
