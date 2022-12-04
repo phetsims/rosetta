@@ -32,7 +32,7 @@ const translationReportEvents = async ( req, res ) => {
           simNames,
           simNamesAndTitles[ sim ]
         );
-        reportObjectCache.setObject( req.params.locale, sim, translationReportObject );
+        reportObjectCache.setObject( req.params.locale, sim, translationReportObject, Date.now() );
       }
       res.write( `data: ${JSON.stringify( translationReportObject )}\n\n` );
     }
@@ -50,7 +50,7 @@ const translationReportEvents = async ( req, res ) => {
           simNames,
           simNamesAndTitles[ simNames[ i ] ]
         );
-        reportObjectCache.setObject( req.params.locale, simNames[ i ], translationReportObject );
+        reportObjectCache.setObject( req.params.locale, simNames[ i ], translationReportObject, Date.now() );
       }
       res.write( `data: ${JSON.stringify( translationReportObject )}\n\n` );
     }

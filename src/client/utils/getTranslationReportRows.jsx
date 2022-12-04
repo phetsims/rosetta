@@ -1,6 +1,7 @@
 // Copyright 2022, University of Colorado Boulder
 
 import { Link } from 'react-router-dom';
+import getMinutesElapsed from 'server/translationApi/api/getMinutesElapsed.js';
 import getSortedTranslationReportRows from './getSortedTranslationReportRows.jsx';
 
 const getTranslationReportRows = (
@@ -47,14 +48,27 @@ const getTranslationReportRows = (
 
   // Overwrite rows for which we have data.
   for ( const reportObject of reportObjects ) {
+
+    // If the object is dirty, and there hasn't been enough time for an update, tell the user.
+    // For background on why we do this, see https://github.com/phetsims/rosetta/issues/316.
+    const minutesElapsed = getMinutesElapsed( reportObject.timestamp, Date.now() );
+    const lessThanTenMinutesSinceCache = minutesElapsed < 10;
+    let pendingUpdate = <></>;
+    console.log( `${reportObject.simName} isDirty: ${reportObject.isDirty}` );
+    console.log( `lessthan10 = ${lessThanTenMinutesSinceCache}` );
+    if ( reportObject.isDirty && lessThanTenMinutesSinceCache ) {
+      pendingUpdate = '(pending update) ';
+    }
+
+    // Create the row JSX.
     const simSpecificPercent = Math.floor( ( reportObject.numSimSpecificTranslatedStrings / reportObject.numSimSpecificStrings ) * 100 );
     const commonPercent = Math.floor( ( reportObject.numCommonTranslatedStrings / reportObject.numCommonStrings ) * 100 );
     if ( Object.keys( translationReportJsx ).includes( reportObject.simName ) ) {
       translationReportJsx[ reportObject.simName ] = (
         <tr key={reportObject.simName}>
           <td><Link to={`/translate/${locale}/${reportObject.simName}`}>{reportObject.simTitle}</Link></td>
-          <td>{simSpecificPercent}% ({reportObject.numSimSpecificTranslatedStrings} of {reportObject.numSimSpecificStrings})</td>
-          <td>{commonPercent}% ({reportObject.numCommonTranslatedStrings} of {reportObject.numCommonStrings})</td>
+          <td>{pendingUpdate}{simSpecificPercent}% ({reportObject.numSimSpecificTranslatedStrings} of {reportObject.numSimSpecificStrings})</td>
+          <td>{pendingUpdate}{commonPercent}% ({reportObject.numCommonTranslatedStrings} of {reportObject.numCommonStrings})</td>
         </tr>
       );
     }
