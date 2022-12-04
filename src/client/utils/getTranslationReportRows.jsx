@@ -1,13 +1,21 @@
 // Copyright 2022, University of Colorado Boulder
 
 import { Link } from 'react-router-dom';
+import getSortedTranslationReportRows from './getSortedTranslationReportRows.jsx';
 
 const getTranslationReportRows = (
   simNamesAndTitles,
   reportObjects,
   locale,
+  reportPopulated,
+  sortKey,
+  sortDirection,
   numberOfEvents = null
 ) => {
+
+  if ( reportPopulated ) {
+    return getSortedTranslationReportRows( reportObjects, locale, sortKey, sortDirection );
+  }
 
   const translationReportJsx = {};
 
