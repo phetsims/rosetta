@@ -8,7 +8,7 @@
  * @author Liam Mulhall
  */
 
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useTranslationReportObjects from '../hooks/useTranslationReportObjects.jsx';
 import getTranslationReportRows from '../utils/getTranslationReportRows.jsx';
@@ -45,11 +45,18 @@ const TranslationReport = () => {
   // Get report objects consisting of translation report data.
   const { reportPopulated, reportObjects } = useTranslationReportObjects( params.locale, numberOfEvents );
 
+  // State variables used in sorting the table.
+  const [ sortKey, setSortKey ] = useState( 'simTitle' );
+  const [ sortDirection, setSortDirection ] = useState( 'ascending' );
+
   // Get JSX rows to populate the table.
   const reportRows = getTranslationReportRows(
     simNamesAndTitles,
     reportObjects,
     params.locale,
+    reportPopulated,
+    sortKey,
+    sortDirection,
     numberOfEvents
   );
 
@@ -64,13 +71,49 @@ const TranslationReport = () => {
         <thead>
         <tr>
           <th>Sim Title
-            {reportPopulated ? <SortButton onClick={() => { window.alert( 'simTitle' );}}/> : <></>}
+            {
+              reportPopulated
+              ? <SortButton onClick={() => {
+                setSortKey( 'simTitle' );
+                if ( sortDirection === 'ascending' ) {
+                  setSortDirection( 'descending' );
+                }
+                else {
+                  setSortDirection( 'ascending' );
+                }
+              }}/>
+              : <></>
+            }
           </th>
           <th>Sim-Specific Strings
-            {reportPopulated ? <SortButton onClick={() => { window.alert( 'simSpecificPercent' );}}/> : <></>}
+            {
+              reportPopulated
+              ? <SortButton onClick={() => {
+                setSortKey( 'simSpecificPercent' );
+                if ( sortDirection === 'ascending' ) {
+                  setSortDirection( 'descending' );
+                }
+                else {
+                  setSortDirection( 'ascending' );
+                }
+              }}/>
+              : <></>
+            }
           </th>
           <th>Common Strings
-            {reportPopulated ? <SortButton onClick={() => { window.alert( 'commonPercent' );}}/> : <></>}
+            {
+              reportPopulated
+              ? <SortButton onClick={() => {
+                setSortKey( 'commonPercent' );
+                if ( sortDirection === 'ascending' ) {
+                  setSortDirection( 'descending' );
+                }
+                else {
+                  setSortDirection( 'ascending' );
+                }
+              }}/>
+              : <></>
+            }
           </th>
         </tr>
         </thead>
