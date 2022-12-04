@@ -25,18 +25,29 @@ import clientConstants from '../utils/clientConstants.js';
  * @constructor
  */
 const TranslationReport = () => {
+
+  // Get URL params. (Need locale from params.)
   const params = useParams();
+
+  // Tell user what locale they are seeing the report for.
   const localeInfo = useContext( LocaleInfoContext );
   let localeName = 'Loading...';
   if ( Object.keys( localeInfo ).length > 0 ) {
     localeName = localeInfo[ params.locale ].name;
   }
+
   const simNamesAndTitles = useContext( SimNamesAndTitlesContext );
 
+  // If you want to only see a few rows of stats for debugging, set this variable.
   // WARNING: This should be set to null in production!
   const numberOfEvents = clientConstants.numberOfShortReportEvents;
+
+  // Get report objects consisting of translation report data.
   const { reportPopulated, reportObjects } = useTranslationReportObjects( params.locale, numberOfEvents );
+
+  // Get JSX rows to populate the table.
   const reportRows = getTranslationReportRows( simNamesAndTitles, reportObjects, params.locale, numberOfEvents );
+
   return (
     <div>
       <h1>Translation Report</h1>
