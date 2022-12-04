@@ -2,7 +2,12 @@
 
 import { Link } from 'react-router-dom';
 
-const getTranslationReportRows = ( simNamesAndTitles, reportObjects, locale, numberOfEvents = null ) => {
+const getTranslationReportRows = (
+  simNamesAndTitles,
+  reportObjects,
+  locale,
+  numberOfEvents = null
+) => {
 
   const translationReportJsx = {};
 
