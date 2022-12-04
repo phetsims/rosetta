@@ -55,8 +55,6 @@ const getSortedTranslationReportRows = ( reportObjects, locale, sortKey, sortDir
     const minutesElapsed = getMinutesElapsed( item.timestamp, Date.now() );
     const lessThanTenMinutesSinceCache = minutesElapsed < 10;
     let pendingUpdate = <></>;
-    console.log( `${item.simName} isDirty: ${item.isDirty}` );
-    console.log( `lessthan10 = ${lessThanTenMinutesSinceCache}` );
     if ( item.isDirty && lessThanTenMinutesSinceCache ) {
       pendingUpdate = '(pending update) ';
     }

@@ -44,9 +44,7 @@ class ReportObjectCache {
 
       // For background on why this is here, see https://github.com/phetsims/rosetta/issues/316.
       const minutesElapsed = getMinutesElapsed( this[ locale ][ sim ].timestamp, Date.now() );
-      console.log( `minutesElapsed for ${locale}/${sim} ======= ${minutesElapsed}` );
       const lessThanTenMinutesSinceCache = minutesElapsed < 10;
-      console.log( `lessThan10 for ${locale}/${sim} ======= ${lessThanTenMinutesSinceCache}` );
       if (
         !this[ locale ][ sim ].isDirty
         || ( this[ locale ][ sim ].isDirty && lessThanTenMinutesSinceCache )
