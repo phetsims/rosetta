@@ -1,6 +1,7 @@
 // Copyright 2022, University of Colorado Boulder
 
 import { Link } from 'react-router-dom';
+import getMinutesElapsed from 'server/translationApi/api/getMinutesElapsed.js';
 
 const getReportObjectsWithPercentages = reportObjects => {
   const reportObjectsWithPercents = [];
@@ -15,7 +16,9 @@ const getReportObjectsWithPercentages = reportObjects => {
       numCommonTranslatedStrings: reportObject.numCommonTranslatedStrings,
       simSpecificPercent: simSpecificPercent,
       numSimSpecificStrings: reportObject.numSimSpecificStrings,
-      numSimSpecificTranslatedStrings: reportObject.numSimSpecificTranslatedStrings
+      numSimSpecificTranslatedStrings: reportObject.numSimSpecificTranslatedStrings,
+      isDirty: reportObject.isDirty,
+      timestamp: reportObject.timestamp
     } );
   }
   return reportObjectsWithPercents;
@@ -46,11 +49,23 @@ const getSortedTranslationReportRows = ( reportObjects, locale, sortKey, sortDir
   // Create the array of JSX to render in the translation report.
   const translationReportJsx = [];
   for ( const item of sortedData ) {
+
+    // If the object is dirty, and there hasn't been enough time for an update, tell the user.
+    // For background on why we do this, see https://github.com/phetsims/rosetta/issues/316.
+    const minutesElapsed = getMinutesElapsed( item.timestamp, Date.now() );
+    const lessThanTenMinutesSinceCache = minutesElapsed < 10;
+    let pendingUpdate = <></>;
+    console.log( `${item.simName} isDirty: ${item.isDirty}` );
+    console.log( `lessthan10 = ${lessThanTenMinutesSinceCache}` );
+    if ( item.isDirty && lessThanTenMinutesSinceCache ) {
+      pendingUpdate = '(pending update) ';
+    }
+
     translationReportJsx.push(
       <tr key={item.simName}>
         <td><Link to={`/translate/${locale}/${item.simName}`}>{item.simTitle}</Link></td>
-        <td>{item.simSpecificPercent}% ({item.numSimSpecificTranslatedStrings} of {item.numSimSpecificStrings})</td>
-        <td>{item.commonPercent}% ({item.numCommonTranslatedStrings} of {item.numCommonStrings})</td>
+        <td>{pendingUpdate}{item.simSpecificPercent}% ({item.numSimSpecificTranslatedStrings} of {item.numSimSpecificStrings})</td>
+        <td>{pendingUpdate}{item.commonPercent}% ({item.numCommonTranslatedStrings} of {item.numCommonStrings})</td>
       </tr>
     );
   }

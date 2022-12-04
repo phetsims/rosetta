@@ -1,21 +1,23 @@
 // Copyright 2022, University of Colorado Boulder
 
+import getMinutesElapsed from './api/getMinutesElapsed.js';
+
 class ReportObjectCache {
 
   /**
    * @param locale
    * @param sim
    * @param reportObject
+   * @param timestamp
    * @public
    */
-  setObject( locale, sim, reportObject ) {
+  setObject( locale, sim, reportObject, timestamp ) {
     if ( this[ locale ] === undefined ) {
       this[ locale ] = {};
     }
-    this[ locale ][ sim ] = {
-      reportObject: reportObject,
-      isDirty: false
-    };
+    this[ locale ][ sim ] = reportObject;
+    this[ locale ][ sim ].isDirty = false;
+    this[ locale ][ sim ].timestamp = timestamp;
   }
 
   /**
@@ -38,9 +40,19 @@ class ReportObjectCache {
   getObject( locale, sim ) {
     if ( this[ locale ] !== undefined
          && this[ locale ][ sim ] !== undefined
-         && !this[ locale ][ sim ].isDirty
     ) {
-      return this[ locale ][ sim ].reportObject;
+
+      // For background on why this is here, see https://github.com/phetsims/rosetta/issues/316.
+      const minutesElapsed = getMinutesElapsed( this[ locale ][ sim ].timestamp, Date.now() );
+      console.log( `minutesElapsed for ${locale}/${sim} ======= ${minutesElapsed}` );
+      const lessThanTenMinutesSinceCache = minutesElapsed < 10;
+      console.log( `lessThan10 for ${locale}/${sim} ======= ${lessThanTenMinutesSinceCache}` );
+      if (
+        !this[ locale ][ sim ].isDirty
+        || ( this[ locale ][ sim ].isDirty && lessThanTenMinutesSinceCache )
+      ) {
+        return this[ locale ][ sim ];
+      }
     }
     return null;
   }
