@@ -10,7 +10,9 @@ const useWebsiteUserData = () => {
   // get website user data
   useEffect( async () => {
     try {
-      const websiteUserDataRes = await axios.get( `${window.location.origin}/services/check-login` );
+      const clientConfigRes = await axios.get( '/translate/api/clientConfig' );
+      const clientConfig = clientConfigRes.data;
+      const websiteUserDataRes = await axios.get( clientConfig.websiteUserDataUrl );
       setWebsiteUserData( websiteUserDataRes.data );
     }
     catch( e ) {
