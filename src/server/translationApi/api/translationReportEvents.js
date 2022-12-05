@@ -56,6 +56,7 @@ const translationReportEvents = async ( req, res ) => {
     }
   }
   res.write( 'data: closed\n\n' );
+  res.end();
 
   req.on( 'close', () => {
     logger.info( 'closed translation reports events' );
