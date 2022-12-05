@@ -1,6 +1,7 @@
 // Copyright 2022, University of Colorado Boulder
 
 import express from 'express';
+import clientConfig from './api/clientConfig.js';
 import localeInfo from './api/localeInfo.js';
 import rebuildWithOriginalCredit from './api/rebuildWithOriginalCredit.js';
 import saveTranslation from './api/saveTranslation.js';
@@ -32,6 +33,7 @@ rosettaApiServer.get( '/translationFormData/:simName?/:locale?', translationForm
 rosettaApiServer.get( '/sha', sha );
 rosettaApiServer.get( '/rebuildWithOriginalCredit/:simName?/:locale?/:userId?', rebuildWithOriginalCredit );
 rosettaApiServer.get( '/translationReportEvents/:locale?/:numberOfEvents?', translationReportEvents );
+rosettaApiServer.get( '/clientConfig', clientConfig );
 
 // posts
 rosettaApiServer.post( '/*', ( req, res, next ) => {
