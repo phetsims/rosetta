@@ -4,5 +4,5 @@ export default {
   singleBraceRegex: /\{\d+\}/g,
   doubleBraceRegex: /\{\{\w+\}\}/g,
   translationApiRoute: '/translate/api',
-  numberOfShortReportEvents: 10 // WARNING: Set to null in production!
+  numberOfShortReportEvents: null // WARNING: Set to null in production!
 };
