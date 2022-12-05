@@ -15,7 +15,6 @@ import Help from './Help.jsx';
 import LocaleAndSimForm from './LocaleAndSimForm.jsx';
 import Navbar from './Navbar.jsx';
 import SignInInfo from './SignInInfo.jsx';
-import SignOutLink from './SignOutLink.jsx';
 import TestTranslation from './TestTranslation.jsx';
 import TranslationForm from './TranslationForm.jsx';
 import TranslationReport from './TranslationReport.jsx';
@@ -39,7 +38,6 @@ const RosettaRoutes = () => {
       <Navbar/>
       <div className='container'>
         <SignInInfo/>
-        <SignOutLink/>
         <LocaleInfoContext.Provider value={localeInfo}>
           <SimNamesAndTitlesContext.Provider value={simNamesAndTitles}>
             <Routes>
