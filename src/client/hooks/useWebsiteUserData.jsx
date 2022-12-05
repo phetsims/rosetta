@@ -12,7 +12,10 @@ const useWebsiteUserData = () => {
     try {
       const clientConfigRes = await axios.get( '/translate/api/clientConfig' );
       const clientConfig = clientConfigRes.data;
-      const websiteUserDataRes = await axios.get( clientConfig.websiteUserDataUrl );
+      const websiteUserDataRes = await axios.get(
+        clientConfig.websiteUserDataUrl,
+        { withCredentials: true } // Include cookies so website backend can look up your session.
+      );
       setWebsiteUserData( websiteUserDataRes.data );
     }
     catch( e ) {
