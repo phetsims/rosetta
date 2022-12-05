@@ -63,7 +63,7 @@ function Rosetta() {
         <p>
           You need to sign in to access the PhET Translation Tool.
         </p>
-        <a href={`${window.location.origin}/en/sign-in?dest=${window.location.href}`}>Sign In</a>
+        <a href={`${window.location.origin}/en/sign-in?dest=${encodeURIComponent( window.location.href )}`}>Sign In</a>
       </div>
     );
   }
