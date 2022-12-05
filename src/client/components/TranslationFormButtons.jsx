@@ -14,7 +14,7 @@ const TranslationFormButtons = props => {
           disabled={disabled}
           className={buttonClass}
         >
-          Save Translation
+          Save Translation to Work On Later
         </button>
       </div>
       <div className='mt-2'>
@@ -24,7 +24,7 @@ const TranslationFormButtons = props => {
           disabled={disabled}
           className={buttonClass}
         >
-          Submit Translation
+          Publish Translation to PhET Website
         </button>
       </div>
       <div className='mt-2'>
@@ -34,7 +34,7 @@ const TranslationFormButtons = props => {
           disabled={disabled}
           className={buttonClass}
         >
-          Test Translation
+          Test Translation With Your Strings
         </button>
       </div>
     </div>
