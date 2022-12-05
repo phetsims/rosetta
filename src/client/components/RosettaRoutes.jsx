@@ -36,7 +36,7 @@ const RosettaRoutes = () => {
   return (
     <BrowserRouter>
       <Navbar/>
-      <div className='container'>
+      <div className='container mb-5'>
         <SignInInfo/>
         <LocaleInfoContext.Provider value={localeInfo}>
           <SimNamesAndTitlesContext.Provider value={simNamesAndTitles}>
