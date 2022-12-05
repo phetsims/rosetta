@@ -239,12 +239,12 @@ However, it's good to keep this edge case in mind.
     1. Issue the command `mongosh` to enter the MongoDB shell and note
        the URI for the database. It will probably look something like
        `mongodb://127.0.0.1:27017/<some other stuff>`. If you don't have
-       this URI set in `rosetta-config.env`, set it now. It should be
+       this URI set in `rosetta-config.json`, set it now. It should be
        `DB_URI=mongodb://127.0.0.1:27017` (without the trailing slash).
     2. Now we want to create a database and a collection (analogous to a
        table). To do so, you'll need to have `DB_NAME=rosetta` and
        `DB_SHORT_TERM_STORAGE_COLLECTION_NAME=shortTermTranslationStorage`
-       set in `rosetta-config.env`. When you run Rosetta locally and save a
+       set in `rosetta-config.json`. When you run Rosetta locally and save a
        translation, the `rosetta` database will be created, the short-term
        storage collection will be created and the translation will be
        stored in that collection.  Open a new terminal window, run Rosetta
@@ -261,7 +261,7 @@ However, it's good to keep this edge case in mind.
        successfully, issue `use rosetta` to switch to the `rosetta`
        database and issue `show collections`. You should see the
        `shortTermTranslationStorage` collection. If step 2 didn't work,
-       ensure your key-value pairs in `rosetta-config.env` are correct. To
+       ensure your key-value pairs in `rosetta-config.json` are correct. To
        ensure the translation was stored successfully, issue
        `db.shortTermTranslationStorage.find({userId: 123456})` to find all
        documents where the `userId` field is 123456, the `userId` given to
