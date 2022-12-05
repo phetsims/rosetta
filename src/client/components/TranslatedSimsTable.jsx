@@ -38,7 +38,6 @@ const TranslatedSimsTable = ( { locale, localeName } ) => {
 
   return (
     <div>
-      <h3>Sims translated into {localeName}</h3>
       {reportPopulated
        ? <p>The translation report is finished!</p>
        : <><p>The translation report is being populated...</p><LoadingSpinner/></>}

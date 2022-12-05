@@ -8,7 +8,6 @@
 
 import { useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import NotYetTranslatedSimsTable from './NotYetTranslatedSimsTable.jsx';
 import { LocaleInfoContext } from './RosettaRoutes.jsx';
 import TranslatedSimsTable from './TranslatedSimsTable.jsx';
 
@@ -35,7 +34,6 @@ const TranslationReport = () => {
     <div>
       <h1>Translation Report</h1>
       <h2 className='text-muted'>Locale: {localeName}</h2>
-      <NotYetTranslatedSimsTable locale={params.locale} localeName={localeName}/>
       <TranslatedSimsTable locale={params.locale} localeName={localeName}/>
     </div>
   );
