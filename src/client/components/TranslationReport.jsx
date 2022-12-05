@@ -33,7 +33,7 @@ const TranslationReport = () => {
   return (
     <div>
       <h1>Translation Report</h1>
-      <h2 className='text-muted'>Locale: {localeName}</h2>
+      <h2 className='text-muted'>Locale: {localeName} ({params.locale})</h2>
       <TranslatedSimsTable locale={params.locale} localeName={localeName}/>
     </div>
   );
