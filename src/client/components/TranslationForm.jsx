@@ -4,7 +4,7 @@
  * We define the form for translations. Once the user has selected the locale and sim they want, they see this
  * component.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import axios from 'axios';
@@ -31,13 +31,9 @@ const ErrorContext = createContext( null );
  */
 const TranslationForm = () => {
 
-  // grab the query parameters for later use
   const params = useParams();
 
-  // for storing and setting translation form data
   const [ translationFormData, setTranslationFormData ] = useState( null );
-
-  // get the translation form data for the selected locale and sim
   useEffect( () => {
     try {
       ( async () => {
@@ -65,6 +61,8 @@ const TranslationForm = () => {
     );
   }
   else {
+
+    // Make the Formik form validation schema.
     const validationSchema = makeValidationSchema( translationFormData );
     translationFormJsx = (
       <div>
