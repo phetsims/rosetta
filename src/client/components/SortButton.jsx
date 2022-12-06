@@ -9,7 +9,7 @@
 import arrowUpDown from '../img/arrow-down-up.svg';
 
 /**
- * The sort button has an up-down arrow icon.
+ * The sort button has an up-down arrow icon. It is used in the sortable table for the translation report.
  *
  * @param props
  * @returns {JSX.Element}
