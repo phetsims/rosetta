@@ -26,7 +26,7 @@ const LocaleAndSimForm = () => {
   // Used to programmatically navigate the user to the translation page.
   const navigate = useNavigate();
 
-  // Since our list of locales comes from a file in the chipper repo, the first locale is unlikely to change
+  // Since our list of locales comes from a file in the phetsims/chipper repo, the first locale is unlikely to change
   // if we ever make a sim that comes before acid base solutions alphabetically, this will need to change.
   return (
     <div>
