@@ -3,7 +3,7 @@
 /**
  * We define the sim select.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import { useContext } from 'react';
@@ -15,7 +15,6 @@ import { SimNamesAndTitlesContext } from './RosettaRoutes.jsx';
  *
  * @param {Object} field - props used by Formik
  * @returns {JSX.Element}
- * @constructor
  */
 const SimSelect = ( { field } ) => {
 
@@ -23,7 +22,7 @@ const SimSelect = ( { field } ) => {
   const simNames = Object.keys( simNamesAndTitles );
   const simTitles = Object.values( simNamesAndTitles );
 
-  // create a list of sim options to iterate over
+  // Create a list of sim options to iterate over.
   const simOptions = [];
   if ( simNames.length > 0 ) {
     for ( let i = 0; i < simNames.length; i++ ) {
@@ -44,11 +43,11 @@ const SimSelect = ( { field } ) => {
   }
   else {
 
-    // use the spread operator to give the select each of the props in the field object
+    // Use the spread operator to give the select each of the props in the field object.
     jsx = (
       <select {...field}>
 
-        {/* iterate over sim options */}
+        {/* Iterate over sim options. */}
         {simOptions}
       </select>
     );
