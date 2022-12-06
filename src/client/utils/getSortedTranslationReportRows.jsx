@@ -47,8 +47,6 @@ const getSortedTranslationReportRows = (
   // Get report objects we're interested in.
   const reportObjectsToSort = [];
   for ( const simName of listOfSims ) {
-    // eslint-disable-next-line no-debugger
-    debugger;
     for ( const reportObject of reportObjects ) {
       if ( simName === reportObject.simName ) {
         reportObjectsToSort.push( reportObject );

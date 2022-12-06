@@ -23,7 +23,7 @@ const getTranslationReportObject = async (
     numCommonStrings: null,
     numCommonTranslatedStrings: null,
     numSimSpecificStrings: null,
-    numSimSpecificTranslatedStrings: wantsUntranslated ? 0 : null
+    numSimSpecificTranslatedStrings: wantsUntranslated === 'true' ? 0 : null
   };
 
   const simUrl = getSimUrl( simName );
@@ -66,7 +66,7 @@ const getTranslationReportObject = async (
     .values( simSpecificEnglishStringKeysAndValues )
     .filter( value => value !== noLongerUsedFlag ).length;
 
-  if ( !wantsUntranslated ) {
+  if ( wantsUntranslated === 'false' ) {
     const simSpecificTranslatedStringKeysAndValues = await getSimSpecificTranslatedStringKeysAndValues(
       simName,
       locale,

@@ -29,6 +29,11 @@ const TranslationReport = () => {
     localeName = localeInfo[ params.locale ].name;
   }
 
+  // WARNING: For performance reasons, we get a list of translated sims and a list of
+  // untranslated sims from the sim metadata as opposed to getting the data from
+  // the string files on GitHub. The sim metadata only corresponds to the master branch
+  // of phetsims/babel. Thus, if you have the branch for phetsims/babel set to tests in
+  // your Rosetta config file, the data in the tables won't be correct.
   return (
     <div>
       <h1>Translation Report</h1>
