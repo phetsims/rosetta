@@ -9,6 +9,7 @@
 /* eslint-disable indent */
 
 import { useContext, useState } from 'react';
+import useTranslatedAndUntranslatedSims from '../hooks/useTranslatedAndUntranslatedSims.jsx';
 import useTranslationReportObjects from '../hooks/useTranslationReportObjects.jsx';
 import clientConstants from '../utils/clientConstants.js';
 import getTranslationReportRows from '../utils/getTranslationReportRows.jsx';
@@ -44,77 +45,88 @@ const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => 
   const [ sortKey, setSortKey ] = useState( 'simTitle' );
   const [ sortDirection, setSortDirection ] = useState( 'ascending' );
 
-  // Get JSX rows to populate the table.
-  const reportRows = getTranslationReportRows(
-    simNamesAndTitles,
-    reportObjects,
-    locale,
-    reportPopulated,
-    sortKey,
-    sortDirection,
-    numberOfEvents
-  );
+  const translatedAndUntranslatedSims = useTranslatedAndUntranslatedSims( locale );
 
-  return (
-    <div>
-      <h3>{wantsUntranslated ? `Sims not yet translated into ${localeName}` : `Sims translated into ${localeName}`}</h3>
-      {reportPopulated
-       ? <p>The translation report is finished!</p>
-       : <><p>The translation report is being populated...</p><LoadingSpinner/></>}
-      <table className='table table-striped'>
-        <thead>
-        <tr>
-          <th>Sim Title
-            {
-              reportPopulated
-              ? <SortButton onClick={() => {
-                setSortKey( 'simTitle' );
-                if ( sortDirection === 'ascending' ) {
-                  setSortDirection( 'descending' );
-                }
-                else {
-                  setSortDirection( 'ascending' );
-                }
-              }}/>
-              : <></>
-            }
-          </th>
-          <th>Sim-Specific Strings
-            {
-              reportPopulated
-              ? <SortButton onClick={() => {
-                setSortKey( 'simSpecificPercent' );
-                if ( sortDirection === 'ascending' ) {
-                  setSortDirection( 'descending' );
-                }
-                else {
-                  setSortDirection( 'ascending' );
-                }
-              }}/>
-              : <></>
-            }
-          </th>
-          <th>Common Strings
-            {
-              reportPopulated
-              ? <SortButton onClick={() => {
-                setSortKey( 'commonPercent' );
-                if ( sortDirection === 'ascending' ) {
-                  setSortDirection( 'descending' );
-                }
-                else {
-                  setSortDirection( 'ascending' );
-                }
-              }}/>
-              : <></>
-            }
-          </th>
-        </tr>
-        </thead>
-        <tbody>{reportRows}</tbody>
-      </table>
-    </div>
-  );
+  // Get JSX rows to populate the table.
+  let jsx = <p>Loading...</p>;
+  if ( translatedAndUntranslatedSims !== null ) {
+    const listOfSims = wantsUntranslated
+                       ? translatedAndUntranslatedSims.untranslated
+                       : translatedAndUntranslatedSims.translated;
+
+    const reportRows = getTranslationReportRows(
+      simNamesAndTitles,
+      listOfSims,
+      reportObjects,
+      locale,
+      reportPopulated,
+      sortKey,
+      sortDirection,
+      numberOfEvents
+    );
+
+    jsx = (
+      <div>
+        <h3>{wantsUntranslated ? `Sims not yet translated into ${localeName}` : `Sims translated into ${localeName}`}</h3>
+        {reportPopulated
+         ? <p>The translation report is finished!</p>
+         : <><p>The translation report is being populated...</p><LoadingSpinner/></>}
+        <table className='table table-striped'>
+          <thead>
+          <tr>
+            <th>Sim Title
+              {
+                reportPopulated
+                ? <SortButton onClick={() => {
+                  setSortKey( 'simTitle' );
+                  if ( sortDirection === 'ascending' ) {
+                    setSortDirection( 'descending' );
+                  }
+                  else {
+                    setSortDirection( 'ascending' );
+                  }
+                }}/>
+                : <></>
+              }
+            </th>
+            <th>Sim-Specific Strings
+              {
+                reportPopulated
+                ? <SortButton onClick={() => {
+                  setSortKey( 'simSpecificPercent' );
+                  if ( sortDirection === 'ascending' ) {
+                    setSortDirection( 'descending' );
+                  }
+                  else {
+                    setSortDirection( 'ascending' );
+                  }
+                }}/>
+                : <></>
+              }
+            </th>
+            <th>Common Strings
+              {
+                reportPopulated
+                ? <SortButton onClick={() => {
+                  setSortKey( 'commonPercent' );
+                  if ( sortDirection === 'ascending' ) {
+                    setSortDirection( 'descending' );
+                  }
+                  else {
+                    setSortDirection( 'ascending' );
+                  }
+                }}/>
+                : <></>
+              }
+            </th>
+          </tr>
+          </thead>
+          <tbody>{reportRows}</tbody>
+        </table>
+      </div>
+    );
+  }
+  return jsx;
 };
 
 export default TranslationReportTable;

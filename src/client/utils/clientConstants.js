@@ -10,5 +10,5 @@ export default {
   singleBraceRegex: /\{\d+\}/g,
   doubleBraceRegex: /\{\{\w+\}\}/g,
   translationApiRoute: '/translate/api',
-  numberOfShortReportEvents: null // WARNING: Set to null in production!
+  numberOfShortReportEvents: 3 // WARNING: Set to null in production!
 };

@@ -9,6 +9,7 @@ import sha from './api/sha.js';
 import simNamesAndTitles from './api/simNamesAndTitles.js';
 import submitTranslation from './api/submitTranslation.js';
 import testTranslation from './api/testTranslation.js';
+import translatedAndUntranslatedSims from './api/translatedAndUntranslatedSims.js';
 import translationFormData from './api/translationFormData.js';
 import logger from './logger.js';
 import translationReportEvents from './api/translationReportEvents.js';
@@ -34,6 +35,7 @@ rosettaApiServer.get( '/sha', sha );
 rosettaApiServer.get( '/rebuildWithOriginalCredit/:simName?/:locale?/:userId?', rebuildWithOriginalCredit );
 rosettaApiServer.get( '/translationReportEvents/:locale?/:numberOfEvents?', translationReportEvents );
 rosettaApiServer.get( '/clientConfig', clientConfig );
+rosettaApiServer.get( '/translatedAndUntranslatedSims/:locale?', translatedAndUntranslatedSims );
 
 // posts
 rosettaApiServer.post( '/*', ( req, res, next ) => {

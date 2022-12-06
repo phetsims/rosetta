@@ -6,6 +6,7 @@ import getSortedTranslationReportRows from './getSortedTranslationReportRows.jsx
 
 const getTranslationReportRows = (
   simNamesAndTitles,
+  listOfSims,
   reportObjects,
   locale,
   reportPopulated,
@@ -15,16 +16,20 @@ const getTranslationReportRows = (
 ) => {
 
   if ( reportPopulated ) {
-    return getSortedTranslationReportRows( reportObjects, locale, sortKey, sortDirection );
+    return getSortedTranslationReportRows(
+      listOfSims,
+      reportObjects,
+      locale,
+      sortKey,
+      sortDirection
+    );
   }
 
   const translationReportJsx = {};
 
-  const simNames = Object.keys( simNamesAndTitles );
-
   // Initially, set all rows to loading.
   if ( !numberOfEvents ) {
-    for ( const simName of simNames ) {
+    for ( const simName of listOfSims ) {
       translationReportJsx[ simName ] = (
         <tr key={simName}>
           <td><Link to={`/translate/${locale}/${simName}`}>{simNamesAndTitles[ simName ]}</Link></td>
@@ -36,9 +41,9 @@ const getTranslationReportRows = (
   }
   else {
     for ( let i = 0; i < numberOfEvents; i++ ) {
-      translationReportJsx[ simNames[ i ] ] = (
-        <tr key={simNames[ i ]}>
-          <td><Link to={`/translate/${locale}/${simNames[ i ]}`}>{simNamesAndTitles[ simNames[ i ] ]}</Link></td>
+      translationReportJsx[ listOfSims[ i ] ] = (
+        <tr key={listOfSims[ i ]}>
+          <td><Link to={`/translate/${locale}/${listOfSims[ i ]}`}>{simNamesAndTitles[ listOfSims[ i ] ]}</Link></td>
           <td>Loading...</td>
           <td>Loading...</td>
         </tr>
