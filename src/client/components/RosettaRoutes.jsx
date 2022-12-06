@@ -3,7 +3,7 @@
 /**
  * We use React Router to set up routes for the translation tool.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import React, { createContext } from 'react';
