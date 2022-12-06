@@ -27,8 +27,10 @@ const SimNamesAndTitlesContext = createContext( {} );
  * This component defines routes and their respective components. If a user hits a certain route, the specified
  * component will be shown.
  *
+ * We also set up a fair number of "contexts" in this module. A context is a way of providing data without having to
+ * pass it as props.
+ *
  * @returns {JSX.Element}
- * @constructor
  */
 const RosettaRoutes = () => {
   const localeInfo = useLocaleInfo();
