@@ -109,6 +109,9 @@ I (Liam Mulhall) chose to use NPM workspaces because it allows us to
 have a `client` directory that is set up as if it were its own
 repository. Ditto for the `server` directory. The frontend/client
 dependencies are separate from the backend/server dependencies.
+The workspaces setup also allows us to house the frontend and the
+backend in the same repository, as opposed to housing them in
+separate repositories.
 
 ### How Workspaces Are Configured
 
