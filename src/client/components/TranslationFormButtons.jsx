@@ -1,5 +1,17 @@
 // Copyright 2022, University of Colorado Boulder
 
+/**
+ * Create a set of buttons to be used in the translation form.
+ *
+ * @author Liam Mulhall <liammulh@gmail.com>
+ */
+
+/**
+ * Return the set of buttons used in the translation form.
+ *
+ * @param props
+ * @returns {JSX.Element}
+ */
 const TranslationFormButtons = props => {
   const disabled = !( props.isValid && props.dirty );
   const grayButton = 'btn btn-secondary mt-2';
