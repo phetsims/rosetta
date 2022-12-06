@@ -1,11 +1,27 @@
 // Copyright 2022, University of Colorado Boulder
 
+/**
+ * Send translation report events via server sent events. Each event is an object containing data needed to populate
+ * a translation report table row.
+ *
+ * @author Liam Mulhall <liammulh@gmail.com>
+ */
+
 import getSimMetadata from '../getSimMetadata.js';
 import getSimNamesAndTitles from '../getSimNamesAndTitles.js';
 import logger from '../logger.js';
 import getTranslationReportObject from '../translationReport/getTranslationReportObject.js';
 import { reportObjectCache } from '../translationApi.js';
 
+/**
+ * Set up an "event stream" (google on server sent events) of translation report objects used to populate rows of the
+ * translation report table. We enable the user of this route to specify the number of sims they want report objects
+ * for. Specifying the number of report objects is useful for debugging and testing.
+ *
+ * @param req {Object} - Express request object
+ * @param res {Object} - Express response object
+ * @returns {Promise<Object>}
+ */
 const translationReportEvents = async ( req, res ) => {
   const headers = {
     'Content-Type': 'text/event-stream',
@@ -18,6 +34,8 @@ const translationReportEvents = async ( req, res ) => {
   const simMetadata = await getSimMetadata();
   const simNamesAndTitles = getSimNamesAndTitles( simMetadata );
   const simNames = Object.keys( simNamesAndTitles );
+
+  // This is the default. In production, this param should be set to null.
   if ( !req.params.numberOfEvents ) {
 
     // If number of events hasn't been specified, send events for every sim.
