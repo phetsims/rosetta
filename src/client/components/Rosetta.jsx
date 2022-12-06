@@ -8,7 +8,7 @@
  * Assuming the user is either a trusted translator or a team member, they see the translation tool. We do this by
  * returning the routes component.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import { createContext } from 'react';
@@ -28,7 +28,6 @@ const WebsiteUserDataContext = createContext( {} );
  * them to this page.
  *
  * @returns {JSX.Element}
- * @constructor
  */
 function Rosetta() {
 
