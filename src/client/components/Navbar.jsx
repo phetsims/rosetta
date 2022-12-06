@@ -25,7 +25,6 @@ const Navbar = () => {
       <Link className='nav-link' to='/translate/admin'>Admin</Link>
     </li>
   );
-  const nothingJsx = <div></div>;
   return (
     <nav className='navbar navbar-expand-lg navbar-light bg-light'>
       <div className='container-fluid'>
@@ -46,7 +45,7 @@ const Navbar = () => {
             <li className='nav-item'>
               <Link className='nav-link' to='/translate/help'>Help</Link>
             </li>
-            {shouldShowAdminLink ? adminLinkJsx : nothingJsx}
+            {shouldShowAdminLink ? adminLinkJsx : <></>}
           </ul>
         </div>
       </div>
