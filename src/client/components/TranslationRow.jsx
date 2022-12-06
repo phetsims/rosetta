@@ -17,7 +17,6 @@ import { LocaleInfoContext } from './RosettaRoutes.jsx';
  *
  * @param {Object} props - the props passed to this component
  * @returns {JSX.Element}
- * @constructor
  */
 const TranslationRow = props => {
 
