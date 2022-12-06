@@ -3,7 +3,7 @@
 /**
  * We define the translation report form.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import { Field, Form, Formik } from 'formik';
@@ -15,11 +15,9 @@ import LocaleSelect from './LocaleSelect.jsx';
  * This component enables the user to select the locale they want a translation report for.
  *
  * @returns {JSX.Element}
- * @constructor
  */
 const TranslationReportForm = () => {
 
-  // used to programmatically navigate the user to the translation report page
   const navigate = useNavigate();
 
   return (
