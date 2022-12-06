@@ -1,5 +1,11 @@
 // Copyright 2021, University of Colorado Boulder
 
+/**
+ * Define the component for a table row in the translation form table.
+ *
+ * @author Liam Mulhall <liammulh@gmail.com>
+ */
+
 import { useField } from 'formik';
 import React, { useContext } from 'react';
 import InputErrorMessage from './InputErrorMessage.jsx';
@@ -21,8 +27,8 @@ const TranslationRow = props => {
     textAlign: direction === 'rtl' ? 'right' : 'left'
   };
 
-  // formik has a handful of props that it needs on inputs
-  // get field props for the input
+  // Formik has a handful of props that it needs on inputs.
+  // Get field props for the input.
   const [ field ] = useField( props );
 
   return (
@@ -30,7 +36,7 @@ const TranslationRow = props => {
       <td>{props.stringKey}</td>
       <td>{props.englishString}</td>
 
-      {/* use the spread operator to give the input each of the props in the field object */}
+      {/* Use the spread operator to give the input each of the props in the field object. */}
       <td>
         <input {...field} style={inputStyle} dir={direction}/>
         <InputErrorMessage fieldKey={props.keyWithoutDots}/>
