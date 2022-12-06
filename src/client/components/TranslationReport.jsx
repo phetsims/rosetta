@@ -3,7 +3,7 @@
 /**
  * We define the translation report for a given locale.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import { useContext } from 'react';
