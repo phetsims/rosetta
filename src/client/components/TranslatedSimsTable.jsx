@@ -1,5 +1,11 @@
 // Copyright 2022, University of Colorado Boulder
 
+/**
+ * Create a component that contains a sortable table of translated sims and their string statistics.
+ *
+ * @author Liam Mulhall <liammulh@gmail.com>
+ */
+
 /* eslint-disable indent */
 
 import { useContext, useState } from 'react';
@@ -10,6 +16,14 @@ import LoadingSpinner from './LoadingSpinner.jsx';
 import { SimNamesAndTitlesContext } from './RosettaRoutes.jsx';
 import SortButton from './SortButton.jsx';
 
+/**
+ * Return a sortable table used in the translation report. You can sort it by sim title,
+ * percent of translated sim-specific strings, or percent of translated common strings.
+ *
+ * @param locale - ISO 639-1 locale code, e.g. es for Spanish
+ * @param localeName - the English name of the locale, e.g. Spanish
+ * @returns {JSX.Element}
+ */
 const TranslatedSimsTable = ( { locale, localeName } ) => {
 
   const simNamesAndTitles = useContext( SimNamesAndTitlesContext );
