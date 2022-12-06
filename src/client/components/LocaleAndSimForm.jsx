@@ -34,8 +34,6 @@ const LocaleAndSimForm = () => {
       <Formik
         initialValues={{ locale: 'ab', simName: 'acid-base-solutions' }}
         onSubmit={values => {
-
-          {/* navigate the user to the translation page for the locale/sim they selected when they submit */}
           navigate( `/translate/${values.locale}/${values.simName}` );
         }}
       >
