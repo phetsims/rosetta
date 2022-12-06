@@ -7,7 +7,7 @@
  */
 
 /**
- * Return the set of buttons used in the translation form.
+ * Return the set of buttons used in the translation form. These appear above and below the translation form.
  *
  * @param props
  * @returns {JSX.Element}
