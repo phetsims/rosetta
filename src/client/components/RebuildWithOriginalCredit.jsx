@@ -1,10 +1,22 @@
 // Copyright 2022, University of Colorado Boulder
 
+/**
+ * Create a component with a form for rebuilding a simulation without crediting the "re-submitter" but instead
+ * crediting the original translator. This is used only by Rosetta's maintainers.
+ *
+ * @author Liam Mulhall <liammulh@gmail.com>
+ */
+
 import axios from 'axios';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import clientConstants from '../utils/clientConstants.js';
 
+/**
+ * Create a Formik form for sending a get request based on the supplied sim, locale, and user ID.
+ *
+ * @returns {JSX.Element}
+ */
 const RebuildWithOriginalCredit = () => {
   const initialRebuildValues = {
     sim: '',
