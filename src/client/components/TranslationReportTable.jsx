@@ -20,11 +20,12 @@ import SortButton from './SortButton.jsx';
  * Return a sortable table used in the translation report. You can sort it by sim title,
  * percent of translated sim-specific strings, or percent of translated common strings.
  *
- * @param locale - ISO 639-1 locale code, e.g. es for Spanish
- * @param localeName - the English name of the locale, e.g. Spanish
+ * @param {string} locale - ISO 639-1 locale code, e.g. es for Spanish
+ * @param {string} localeName - the English name of the locale, e.g. Spanish
+ * @param {boolean} wantsUntranslated - whether the caller wants this table to have untranslated sims or translated sims
  * @returns {JSX.Element}
  */
-const TranslatedSimsTable = ( { locale, localeName } ) => {
+const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => {
 
   const simNamesAndTitles = useContext( SimNamesAndTitlesContext );
 
@@ -33,7 +34,11 @@ const TranslatedSimsTable = ( { locale, localeName } ) => {
   const numberOfEvents = clientConstants.numberOfShortReportEvents;
 
   // Get report objects consisting of translation report data.
-  const { reportPopulated, reportObjects } = useTranslationReportObjects( locale, numberOfEvents );
+  const { reportPopulated, reportObjects } = useTranslationReportObjects(
+    locale,
+    wantsUntranslated,
+    numberOfEvents
+  );
 
   // State variables used in sorting the table.
   const [ sortKey, setSortKey ] = useState( 'simTitle' );
@@ -52,6 +57,7 @@ const TranslatedSimsTable = ( { locale, localeName } ) => {
 
   return (
     <div>
+      <h3>{wantsUntranslated ? `Sims not yet translated into ${localeName}` : `Sims translated into ${localeName}`}</h3>
       {reportPopulated
        ? <p>The translation report is finished!</p>
        : <><p>The translation report is being populated...</p><LoadingSpinner/></>}
@@ -111,4 +117,4 @@ const TranslatedSimsTable = ( { locale, localeName } ) => {
   );
 };
 
-export default TranslatedSimsTable;
+export default TranslationReportTable;

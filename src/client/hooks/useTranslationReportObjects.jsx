@@ -14,12 +14,13 @@ import clientConstants from '../utils/clientConstants.js';
  * translation report is populated, i.e. the server is done sending events. Also return a setter function for report
  * objects.
  *
- * @param locale - ISO 639-1 locale code, e.g. zh_TW for Chinese with traditional characters
- * @param numberOfEvents - number of server sent events we want, i.e. number of report objects we want
- * @returns {Object} - object containing report objects, a boolean telling whether the report is populated, and a method
+ * @param {string} locale - ISO 639-1 locale code, e.g. zh_TW for Chinese with traditional characters
+ * @param {boolean} wantsUntranslated - whether the caller wants translation report objects for untranslated sims
+ * @param {number|null} numberOfEvents - number of server sent events we want, i.e. number of report objects we want
+ * @returns {object} - object containing report objects, a boolean telling whether the report is populated, and a method
  *                     for sorting report objects
  */
-const useTranslationReportObjects = ( locale, numberOfEvents = null ) => {
+const useTranslationReportObjects = ( locale, wantsUntranslated, numberOfEvents = null ) => {
 
   const [ listening, setListening ] = useState( false );
   const [ reportPopulated, setReportPopulated ] = useState( false );
@@ -27,9 +28,9 @@ const useTranslationReportObjects = ( locale, numberOfEvents = null ) => {
 
   useEffect( () => {
     if ( !listening && !reportPopulated ) {
-      let translationReportUrl = `${clientConstants.translationApiRoute}/translationReportEvents/${locale}`;
+      let translationReportUrl = `${clientConstants.translationApiRoute}/translationReportEvents/${locale}?wantsUntranslated=${wantsUntranslated}`;
       if ( numberOfEvents ) {
-        translationReportUrl = `${clientConstants.translationApiRoute}/translationReportEvents/${locale}/${numberOfEvents}`;
+        translationReportUrl = `${clientConstants.translationApiRoute}/translationReportEvents/${locale}/${numberOfEvents}?wantsUntranslated=${wantsUntranslated}`;
       }
       const translationReportSource = new EventSource( translationReportUrl );
       translationReportSource.onmessage = event => {

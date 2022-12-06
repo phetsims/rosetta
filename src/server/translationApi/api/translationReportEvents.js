@@ -10,6 +10,7 @@
 import getSimMetadata from '../getSimMetadata.js';
 import getSimNamesAndTitles from '../getSimNamesAndTitles.js';
 import logger from '../logger.js';
+import getTranslatedAndUntranslatedSims from '../translationReport/getTranslatedAndUntranslatedSims.js';
 import getTranslationReportObject from '../translationReport/getTranslationReportObject.js';
 import { reportObjectCache } from '../translationApi.js';
 
@@ -32,7 +33,10 @@ const translationReportEvents = async ( req, res ) => {
 
   const simMetadata = await getSimMetadata();
   const simNamesAndTitles = getSimNamesAndTitles( simMetadata );
-  const simNames = Object.keys( simNamesAndTitles );
+  const translatedAndUntranslatedSims = await getTranslatedAndUntranslatedSims( req.params.locale );
+  const simNames = req.query.wantsUntranslated
+                   ? translatedAndUntranslatedSims.untranslated
+                   : translatedAndUntranslatedSims.translated;
 
   // This is the default. In production, this param should be set to null.
   if ( !req.params.numberOfEvents ) {
@@ -47,7 +51,8 @@ const translationReportEvents = async ( req, res ) => {
           sim,
           req.params.locale,
           simNames,
-          simNamesAndTitles[ sim ]
+          simNamesAndTitles[ sim ],
+          req.query.wantsUntranslated
         );
         reportObjectCache.setObject( req.params.locale, sim, translationReportObject, Date.now() );
       }
@@ -59,15 +64,17 @@ const translationReportEvents = async ( req, res ) => {
     // Otherwise, send events for the specified number of sims.
     // This is used for debugging.
     for ( let i = 0; i < req.params.numberOfEvents; i++ ) {
-      let translationReportObject = reportObjectCache.getObject( req.params.locale, simNames[ i ] );
+      const simName = simNames[ i ];
+      let translationReportObject = reportObjectCache.getObject( req.params.locale, simName );
       if ( !translationReportObject ) {
         translationReportObject = await getTranslationReportObject(
-          simNames[ i ],
+          simName,
           req.params.locale,
           simNames,
-          simNamesAndTitles[ simNames[ i ] ]
+          simNamesAndTitles[ simName ],
+          req.query.wantsUntranslated
         );
-        reportObjectCache.setObject( req.params.locale, simNames[ i ], translationReportObject, Date.now() );
+        reportObjectCache.setObject( req.params.locale, simName, translationReportObject, Date.now() );
       }
       res.write( `data: ${JSON.stringify( translationReportObject )}\n\n` );
     }
