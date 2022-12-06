@@ -5,7 +5,7 @@
 /**
  * We define the sim-specific translation table and the common translation table that will go in the translation form.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import React, { useEffect, useState } from 'react';
@@ -18,18 +18,16 @@ import TranslationRow from './TranslationRow.jsx';
  *
  * @param {Object} props - props passed to this component
  * @returns {JSX.Element}
- * @constructor
  */
 const TranslationTables = props => {
 
-  // for storing and setting sim-specific and common rows
   const [ simSpecificRows, setSimSpecificRows ] = useState( [] );
   const [ commonRows, setCommonRows ] = useState( [] );
 
-  // populate sim-specific and common rows
+  // Populate sim-specific and common rows.
   useEffect( () => {
 
-    // create list of sim-specific rows to iterate over
+    // Create list of sim-specific rows to iterate over.
     for ( const stringKeyWithoutDots in props.translationFormData.simSpecific ) {
       const englishString = props.translationFormData.simSpecific[ stringKeyWithoutDots ].english;
       const stringKeyWithDots = stringKeyWithoutDots.split( '_DOT_' ).join( '.' );
@@ -45,7 +43,7 @@ const TranslationTables = props => {
       ] );
     }
 
-    // create list of common rows to iterate over
+    // Create list of common rows to iterate over.
     for ( const stringKeyWithoutDots in props.translationFormData.common ) {
       const englishString = props.translationFormData.common[ stringKeyWithoutDots ].english;
       const stringKeyWithDots = stringKeyWithoutDots.split( '_DOT_' ).join( '.' );
@@ -60,7 +58,7 @@ const TranslationTables = props => {
         />
       ] );
     }
-  }, [ props.translationFormData ] ); // re-render if there are errors
+  }, [ props.translationFormData ] ); // Re-render if there are errors.
 
   return (
     <div>
@@ -77,7 +75,7 @@ const TranslationTables = props => {
           </thead>
           <tbody>
 
-          {/* iterate over the sim-specific rows */}
+          {/* Iterate over the sim-specific rows. */}
           {simSpecificRows}
           </tbody>
         </table>
@@ -95,7 +93,7 @@ const TranslationTables = props => {
           </thead>
           <tbody>
 
-          {/* iterate over the common rows */}
+          {/* Iterate over the common rows. */}
           {commonRows}
           </tbody>
         </table>
