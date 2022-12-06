@@ -16,7 +16,6 @@ import TranslatedSimsTable from './TranslatedSimsTable.jsx';
  * allows them to navigate to any of the simulations to translate them.
  *
  * @returns {JSX.Element}
- * @constructor
  */
 const TranslationReport = () => {
 
