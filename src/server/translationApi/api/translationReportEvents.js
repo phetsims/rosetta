@@ -20,7 +20,6 @@ import { reportObjectCache } from '../translationApi.js';
  *
  * @param req {Object} - Express request object
  * @param res {Object} - Express response object
- * @returns {Promise<Object>}
  */
 const translationReportEvents = async ( req, res ) => {
   const headers = {
