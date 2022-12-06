@@ -34,9 +34,10 @@ const translationReportEvents = async ( req, res ) => {
   const simMetadata = await getSimMetadata();
   const simNamesAndTitles = getSimNamesAndTitles( simMetadata );
   const translatedAndUntranslatedSims = await getTranslatedAndUntranslatedSims( req.params.locale );
-  const simNames = req.query.wantsUntranslated
-                   ? translatedAndUntranslatedSims.untranslated
-                   : translatedAndUntranslatedSims.translated;
+  let simNames = translatedAndUntranslatedSims.translated;
+  if ( req.query.wantsUntranslated === 'true' ) {
+    simNames = translatedAndUntranslatedSims.untranslated;
+  }
 
   // This is the default. In production, this param should be set to null.
   if ( !req.params.numberOfEvents ) {
