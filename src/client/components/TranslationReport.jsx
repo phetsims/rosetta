@@ -9,7 +9,7 @@
 import { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { LocaleInfoContext } from './RosettaRoutes.jsx';
-import TranslatedSimsTable from './TranslatedSimsTable.jsx';
+import TranslationReportTable from './TranslationReportTable.jsx';
 
 /**
  * This component allows a user to see a translation report for a given locale (statistics about translations) and
@@ -33,7 +33,8 @@ const TranslationReport = () => {
     <div>
       <h1>Translation Report</h1>
       <h2 className='text-muted'>Locale: {localeName} ({params.locale})</h2>
-      <TranslatedSimsTable locale={params.locale} localeName={localeName}/>
+      <TranslationReportTable locale={params.locale} wantsUntranslated={true} localeName={localeName}/>
+      <TranslationReportTable locale={params.locale} wantsUntranslated={false} localeName={localeName}/>
     </div>
   );
 };

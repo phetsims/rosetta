@@ -10,14 +10,20 @@ import getCommonTranslatedStringKeysAndValues from './getCommonTranslatedStringK
 import getSimSpecificEnglishStringKeysAndValues from './getSimSpecificEnglishStringKeysAndValues.js';
 import getSimSpecificTranslatedStringKeysAndValues from './getSimSpecificTranslatedStringKeysAndValues.js';
 
-const getTranslationReportObject = async ( simName, locale, simNames, simTitle ) => {
+const getTranslationReportObject = async (
+  simName,
+  locale,
+  simNames,
+  simTitle,
+  wantsUntranslated
+) => {
   const translationReportObject = {
     simName: simName,
     simTitle: simTitle,
     numCommonStrings: null,
     numCommonTranslatedStrings: null,
     numSimSpecificStrings: null,
-    numSimSpecificTranslatedStrings: null
+    numSimSpecificTranslatedStrings: wantsUntranslated ? 0 : null
   };
 
   const simUrl = getSimUrl( simName );
@@ -60,17 +66,19 @@ const getTranslationReportObject = async ( simName, locale, simNames, simTitle )
     .values( simSpecificEnglishStringKeysAndValues )
     .filter( value => value !== noLongerUsedFlag ).length;
 
-  const simSpecificTranslatedStringKeysAndValues = await getSimSpecificTranslatedStringKeysAndValues(
-    simName,
-    locale,
-    categorizedStringKeys
-  );
-  translationReportObject.numSimSpecificTranslatedStrings = Object
-    .keys( simSpecificTranslatedStringKeysAndValues )
-    .filter( key => {
-      return simSpecificTranslatedStringKeysAndValues[ key ] !== ''
-             && simSpecificEnglishStringKeysAndValues[ key ] !== noLongerUsedFlag;
-    } ).length;
+  if ( !wantsUntranslated ) {
+    const simSpecificTranslatedStringKeysAndValues = await getSimSpecificTranslatedStringKeysAndValues(
+      simName,
+      locale,
+      categorizedStringKeys
+    );
+    translationReportObject.numSimSpecificTranslatedStrings = Object
+      .keys( simSpecificTranslatedStringKeysAndValues )
+      .filter( key => {
+        return simSpecificTranslatedStringKeysAndValues[ key ] !== ''
+               && simSpecificEnglishStringKeysAndValues[ key ] !== noLongerUsedFlag;
+      } ).length;
+  }
 
   return translationReportObject;
 };
