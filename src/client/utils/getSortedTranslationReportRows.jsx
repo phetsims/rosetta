@@ -36,10 +36,28 @@ const sortReportObjectsWithPercentages = ( reportObjectsWithPercentages, sortDir
   } );
 };
 
-const getSortedTranslationReportRows = ( reportObjects, locale, sortKey, sortDirection ) => {
+const getSortedTranslationReportRows = (
+  listOfSims,
+  reportObjects,
+  locale,
+  sortKey,
+  sortDirection
+) => {
+
+  // Get report objects we're interested in.
+  const reportObjectsToSort = [];
+  for ( const simName of listOfSims ) {
+    // eslint-disable-next-line no-debugger
+    debugger;
+    for ( const reportObject of reportObjects ) {
+      if ( simName === reportObject.simName ) {
+        reportObjectsToSort.push( reportObject );
+      }
+    }
+  }
 
   // Get percentages from report objects, and sort the report objects.
-  const reportObjectsWithPercentages = getReportObjectsWithPercentages( reportObjects );
+  const reportObjectsWithPercentages = getReportObjectsWithPercentages( reportObjectsToSort );
   const sortedData = sortReportObjectsWithPercentages(
     reportObjectsWithPercentages,
     sortDirection,
