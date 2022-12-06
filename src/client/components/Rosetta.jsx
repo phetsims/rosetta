@@ -46,7 +46,7 @@ function Rosetta() {
   }
   else if ( notAllowedAccess ) {
     jsx = (
-      <div className='container mb-5'>
+      <div className='container m-5'>
         <h1>PhET Translation Tool</h1>
         <p>
           You need to be a trusted translator to access the PhET Translation Tool. To become a trusted translator,
@@ -57,7 +57,7 @@ function Rosetta() {
   }
   else if ( !websiteUserData.loggedIn ) {
     jsx = (
-      <div className='container mb-5'>
+      <div className='container m-5'>
         <h1>PhET Translation Tool</h1>
         <p>
           You need to sign in to access the PhET Translation Tool.
