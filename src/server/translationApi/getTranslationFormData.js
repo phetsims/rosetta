@@ -84,6 +84,7 @@ const getTranslationFormData = async (
         const userDataRes = await axios.get( config.WEBSITE_USER_DATA_URL );
         const userData = userDataRes.data;
         userId = userData.userId;
+        logger.info( `-----------------------------------> userId = ${userId}` );
       }
 
       // try to get saved translation in short-term storage database
