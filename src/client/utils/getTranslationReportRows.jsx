@@ -1,9 +1,30 @@
 // Copyright 2022, University of Colorado Boulder
 
+/**
+ * Create translation report table rows based on the translation report objects we get from the backend.
+ * These rows contain statistics about translations such as how many sim-specific strings are translated, etc.
+ *
+ * @author Liam Mulhall <liammulh@gmail.com>
+ */
+
 import { Link } from 'react-router-dom';
 import getMinutesElapsed from 'server/translationApi/api/getMinutesElapsed.js';
 import getSortedTranslationReportRows from './getSortedTranslationReportRows.jsx';
 
+/**
+ * Return an array of translation report table rows, i.e. return an array of JSX. These rows are put into the
+ * translation report table.
+ *
+ * @param {Object} simNamesAndTitles - object where keys are sim names and values are sim titles
+ * @param {String[]} listOfSims - list of sim names, either untranslated or translated
+ * @param {Object[]} reportObjects - report objects we get from the backend
+ * @param {String} locale - ISO 639-1 locale code for which the report is being made
+ * @param {Boolean} reportPopulated - boolean telling whether we have all the report objects
+ * @param {String} sortKey - which key to sort by, only used when the report is populated
+ * @param {String} sortDirection - either ascending or descending
+ * @param {Number} numberOfEvents - now used in production; umber of report objects; useful for debugging
+ * @returns {Object[]}
+ */
 const getTranslationReportRows = (
   simNamesAndTitles,
   listOfSims,
