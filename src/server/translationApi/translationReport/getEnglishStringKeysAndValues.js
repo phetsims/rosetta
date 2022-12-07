@@ -3,7 +3,7 @@
 /**
  * Export a function that gets a sim or library's English string keys and their values (their strings).
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import axios from 'axios';
@@ -11,10 +11,6 @@ import config from '../../../common/config.js';
 import getRepoNameFromStringKeyWithRepoName from '../getRepoNameFromStringKeyWithRepoName.js';
 import getStringKeyFromStringKeyWithRepoName from '../getStringKeyFromStringKeyWithRepoName.js';
 import logger from '../logger.js';
-
-// import getSimHtml from '../getSimHtml.js';
-// import getSimUrl from '../getSimUrl.js';
-// import getStringKeysWithRepoName from '../getStringKeysWithRepoName.js';
 
 /**
  * Return sim or library's English string keys and their values (their strings) from the remote repository they live
@@ -50,13 +46,5 @@ const getEnglishStringKeysAndValues = async ( simOrLibName, stringKeysWithRepoNa
   logger.info( 'got english string keys and values; returning them' );
   return englishStringKeysAndValues;
 };
-
-// ( async () => {
-//   const simUrl = getSimUrl( 'acid-base-solutions' );
-//   const simHtml = await getSimHtml( simUrl );
-//   const stringKeysWithRepoName = getStringKeysWithRepoName( simHtml );
-//   const res = await getEnglishStringKeysAndValues( 'acid-base-solutions', stringKeysWithRepoName );
-//   console.log( JSON.stringify( res, null, 4 ) );
-// } )();
 
 export default getEnglishStringKeysAndValues;
