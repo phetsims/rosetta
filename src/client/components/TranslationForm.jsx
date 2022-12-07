@@ -40,6 +40,7 @@ const TranslationForm = () => {
 
   const params = useParams();
   const websiteUserData = useContext( WebsiteUserDataContext );
+  console.log( JSON.stringify( websiteUserData, null, 4 ) );
 
   const [ translationFormData, setTranslationFormData ] = useState( null );
   useEffect( () => {
