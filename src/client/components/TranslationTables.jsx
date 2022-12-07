@@ -22,43 +22,71 @@ import TranslationRow from './TranslationRow.jsx';
 const TranslationTables = props => {
 
   const [ simSpecificRows, setSimSpecificRows ] = useState( [] );
+  const [ sharedRows, setSharedRows ] = useState( [] );
   const [ commonRows, setCommonRows ] = useState( [] );
 
   // Populate sim-specific and common rows.
   useEffect( () => {
 
-    // Create list of sim-specific rows to iterate over.
-    for ( const stringKeyWithoutDots in props.translationFormData.simSpecific ) {
-      const englishString = props.translationFormData.simSpecific[ stringKeyWithoutDots ].english;
-      const stringKeyWithDots = stringKeyWithoutDots.split( '_DOT_' ).join( '.' );
-      setSimSpecificRows( simSpecificRows => [ ...simSpecificRows,
-        <TranslationRow
-          key={stringKeyWithDots}
-          keyWithoutDots={stringKeyWithoutDots}
-          name={`simSpecific.${stringKeyWithoutDots}.translated`}
-          stringKey={stringKeyWithDots}
-          englishString={englishString}
-          locale={props.locale}
-        />
-      ] );
-    }
+    // Key types to iterate over.
+    const KeyTypesEnum = {
+      SIM_SPECIFIC: 'simSpecific',
+      SHARED: 'shared',
+      COMMON: 'common'
+    };
+    Object.freeze( KeyTypesEnum );
 
-    // Create list of common rows to iterate over.
-    for ( const stringKeyWithoutDots in props.translationFormData.common ) {
-      const englishString = props.translationFormData.common[ stringKeyWithoutDots ].english;
-      const stringKeyWithDots = stringKeyWithoutDots.split( '_DOT_' ).join( '.' );
-      setCommonRows( commonRows => [ ...commonRows,
-        <TranslationRow
-          key={stringKeyWithDots}
-          keyWithoutDots={stringKeyWithoutDots}
-          name={`common.${stringKeyWithoutDots}.translated`}
-          stringKey={stringKeyWithDots}
-          englishString={englishString}
-          locale={props.locale}
-        />
-      ] );
+    // Since we have three different "categories" for strings, sim-specific, shared between sims (but not in the common
+    // repos list), and finally common strings shared between many sims, we iterate over those categories, and create
+    // different rows for the tables for each category.
+    for ( const translationFormKey of Object.values( KeyTypesEnum ) ) {
+      console.log( translationFormKey );
+      for ( const stringKeyWithoutDots in props.translationFormData[ translationFormKey ] ) {
+        const englishString = props.translationFormData[ translationFormKey ][ stringKeyWithoutDots ].english;
+        const stringKeyWithDots = stringKeyWithoutDots.split( '_DOT_' ).join( '.' );
+        const jsx = (
+          <TranslationRow
+            key={stringKeyWithDots}
+            keyWithoutDots={stringKeyWithoutDots}
+            name={`simSpecific.${stringKeyWithoutDots}.translated`}
+            stringKey={stringKeyWithDots}
+            englishString={englishString}
+            locale={props.locale}
+          />
+        );
+        if ( translationFormKey === KeyTypesEnum.SIM_SPECIFIC ) {
+          setSimSpecificRows( simSpecificRows => [ ...simSpecificRows, jsx ] );
+        }
+        else if ( translationFormKey === KeyTypesEnum.SHARED ) {
+          setSharedRows( sharedRows => [ ...sharedRows, jsx ] );
+        }
+        else if ( translationFormKey === KeyTypesEnum.COMMON ) {
+          setCommonRows( commonRows => [ ...commonRows, jsx ] );
+        }
+      }
     }
   }, [ props.translationFormData ] ); // Re-render if there are errors.
+
+  const sharedJsx = sharedRows.length > 0 ? (
+    <div className='mt-2'>
+      <h2>Common Strings</h2>
+      <h4 className='text-muted'>(Translating these strings will affect multiple simulations.)</h4>
+      <table className='table table-striped'>
+        <thead>
+        <tr>
+          <th>String Key</th>
+          <th>English String</th>
+          <th>Translation</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {/* Iterate over the common rows. */}
+        {sharedRows}
+        </tbody>
+      </table>
+    </div>
+  ) : <></>;
 
   return (
     <div>
@@ -80,6 +108,7 @@ const TranslationTables = props => {
           </tbody>
         </table>
       </div>
+      {sharedJsx}
       <div className='mt-2'>
         <h2>Common Strings</h2>
         <h4 className='text-muted'>(Translating these strings will affect multiple simulations.)</h4>
