@@ -25,7 +25,8 @@ const getCategorizedStringKeys = async ( simName, simNames, stringKeysWithRepoNa
   logger.info( `getting ${simName}'s categorized string keys` );
   const categorizedStringKeys = {
     common: [],
-    simSpecific: []
+    simSpecific: [],
+    shared: []
   };
   try {
     for ( const stringKeyWithRepoName of stringKeysWithRepoName ) {
@@ -41,9 +42,13 @@ const getCategorizedStringKeys = async ( simName, simNames, stringKeysWithRepoNa
         logger.verbose( 'not categorizing a11y string key' );
       }
       else {
-        if ( simNames.includes( repoName ) ) {
+        if ( repoName === simName ) {
           logger.verbose( `categorizing sim-specific string key: ${stringKeyWithRepoName}` );
           categorizedStringKeys.simSpecific.push( stringKey );
+        }
+        else if ( simNames.includes( repoName ) ) {
+          logger.verbose( `categorizing shared string key: ${stringKeyWithRepoName}` );
+          categorizedStringKeys.shared.push( stringKey );
         }
         else {
           logger.verbose( `categorizing common string key: ${stringKeyWithRepoName}` );
