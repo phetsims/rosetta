@@ -8,7 +8,7 @@
  */
 
 import { Link } from 'react-router-dom';
-import getMinutesElapsed from 'server/translationApi/api/getMinutesElapsed.js';
+import getMinutesElapsed from 'server/translationApi/getMinutesElapsed.js';
 import getSortedTranslationReportRows from './getSortedTranslationReportRows.jsx';
 
 /**
