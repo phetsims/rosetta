@@ -1,5 +1,11 @@
 // Copyright 2022, University of Colorado Boulder
 
+/**
+ * Send the SHA of the running instance of Rosetta.
+ *
+ * @author Liam Mulhall <liammulh@gmail.com>
+ */
+
 import config from '../../../common/config.js';
 import logger from '../logger.js';
 
