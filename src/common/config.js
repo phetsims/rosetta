@@ -3,7 +3,7 @@
 /**
  * This module gets the configuration for Rosetta from ~/.phet/rosetta-config.json.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import fs from 'fs';
