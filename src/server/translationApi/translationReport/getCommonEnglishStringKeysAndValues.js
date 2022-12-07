@@ -3,20 +3,13 @@
 /**
  * Export a function that returns an object containing common English string keys and values for a given simulation.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import axios from 'axios';
 import getCommonRepos from '../getCommonRepos.js';
 import getStringFileUrl from '../getStringFileUrl.js';
 import logger from '../logger.js';
-
-// import getCategorizedStringKeys from '../getCategorizedStringKeys.js';
-// import getSimHtml from '../getSimHtml.js';
-// import getSimMetadata from '../getSimMetadata.js';
-// import getSimNamesAndTitles from '../getSimNamesAndTitles.js';
-// import getSimUrl from '../getSimUrl.js';
-// import getStringKeysWithRepoName from '../getStringKeysWithRepoName.js';
 
 /**
  * Return an object containing common English string keys and values for a given simulation
@@ -77,21 +70,7 @@ const getCommonEnglishStringKeysAndValues = async (
   }
   logger.info( `got ${simName}'s common english string keys and values; returning them` );
 
-
-  // Use spread operator and brackets to return an array.
   return commonEnglishStringKeysAndValues;
 };
-
-// ( async () => {
-//   const simName = 'acid-base-solutions';
-//   const simMetadata = await getSimMetadata();
-//   const simNames = Object.keys( getSimNamesAndTitles( simMetadata ) );
-//   const simUrl = getSimUrl( simName );
-//   const simHtml = await getSimHtml( simUrl );
-//   const stringKeysWithRepoName = getStringKeysWithRepoName( simHtml );
-//   const categorizedStringKeys = await getCategorizedStringKeys( simName, simNames, Object.keys( stringKeysWithRepoName ) );
-//   const res = await getCommonEnglishStringKeysAndValues( simName, simNames, categorizedStringKeys, Object.keys( stringKeysWithRepoName ) );
-//   console.log( JSON.stringify( res, null, 4 ) );
-// } )();
 
 export default getCommonEnglishStringKeysAndValues;
