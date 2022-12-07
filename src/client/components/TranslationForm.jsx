@@ -9,7 +9,13 @@
 
 import axios from 'axios';
 import { Form, Formik } from 'formik';
-import React, { createContext, useEffect, useState } from 'react';
+// eslint-disable-next-line single-line-import
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState
+} from 'react';
 import { useParams } from 'react-router-dom';
 import clientConstants from '../utils/clientConstants.js';
 import makeValidationSchema from '../utils/makeValidationSchema.js';
@@ -17,6 +23,7 @@ import saveTranslation from '../utils/saveTranslation.js';
 import submitTranslation from '../utils/submitTranslation.js';
 import testTranslation from '../utils/testTranslation.js';
 import LoadingSpinner from './LoadingSpinner.jsx';
+import { WebsiteUserDataContext } from './Rosetta.jsx';
 import TranslationFormButtons from './TranslationFormButtons.jsx';
 import TranslationFormHeader from './TranslationFormHeader.jsx';
 import TranslationTables from './TranslationTables.jsx';
@@ -32,12 +39,13 @@ const ErrorContext = createContext( null );
 const TranslationForm = () => {
 
   const params = useParams();
+  const websiteUserData = useContext( WebsiteUserDataContext );
 
   const [ translationFormData, setTranslationFormData ] = useState( null );
   useEffect( () => {
     try {
       ( async () => {
-        const translationFormDataRes = await axios.get( `${clientConstants.translationApiRoute}/translationFormData/${params.simName}/${params.locale}` );
+        const translationFormDataRes = await axios.get( `${clientConstants.translationApiRoute}/translationFormData/${params.simName}/${params.locale}?userId=${websiteUserData.userId}` );
         setTranslationFormData( translationFormDataRes.data );
       } )();
     }

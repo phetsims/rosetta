@@ -9,7 +9,6 @@
  * @author Liam Mulhall
  */
 
-import axios from 'axios';
 import config from '../../common/config.js';
 import getCommonTranslationFormData from './getCommonTranslationFormData.js';
 import { shortTermStringStorageCollection } from './getShortTermStringStorageCollection.js';
@@ -57,7 +56,7 @@ import logger from './logger.js';
  * @param {String[]} simNames - list of all sim names
  * @param {String[]} stringKeysWithRepoName - list of REPO_NAME/stringKey from the sim
  * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys - string keys categorized into common and
- *                                                                            sim-specific
+ * @param userId
  * @returns {Promise<{simSpecific: {}, common: {}}>} - translation form data
  */
 const getTranslationFormData = async (
@@ -65,7 +64,8 @@ const getTranslationFormData = async (
   locale,
   simNames,
   stringKeysWithRepoName,
-  categorizedStringKeys
+  categorizedStringKeys,
+  userId = undefined
 ) => {
   logger.info( 'getting translation form data' );
 
@@ -76,17 +76,8 @@ const getTranslationFormData = async (
       logger.info( 'checking for saved translation' );
 
       // get user id; depends on whether we're running on localhost or on a server
-      let userId;
       if ( config.ENVIRONMENT === 'development' ) {
         userId = config.LOCAL_USER_ID;
-      }
-      else {
-        const userDataRes = await axios.get( config.WEBSITE_USER_DATA_URL );
-        const userData = userDataRes.data;
-        userId = userData.userId;
-
-        // TODO: Remove when done debugging.
-        logger.info( `-----------------------------------> userId = ${userId}` );
       }
 
       // try to get saved translation in short-term storage database
