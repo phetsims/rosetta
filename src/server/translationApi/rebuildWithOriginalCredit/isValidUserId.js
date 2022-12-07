@@ -1,9 +1,23 @@
 // Copyright 2022, University of Colorado Boulder
 
+/**
+ * Tell whether a given user ID is valid, i.e. whether it exists in the file it's supposed to exist in.
+ *
+ * @author Liam Mulhall <liammulh@gmail.com>
+ */
+
 import axios from 'axios';
 import config from '../../../common/config.js';
 import logger from '../logger.js';
 
+/**
+ * Return a boolean for whether the given user ID is in the string file it's supposed to be in.
+ *
+ * @param {String} simName - the name of the sim being rebuilt
+ * @param {String} locale - the locale code of the sim being rebuilt
+ * @param {String} userId - the user ID of the original submitter
+ * @returns {Promise<Boolean>}
+ */
 const isValidUserId = async ( simName, locale, userId ) => {
 
   let ret = false;
