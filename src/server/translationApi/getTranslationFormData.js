@@ -80,6 +80,9 @@ const getTranslationFormData = async (
         userId = config.LOCAL_USER_ID;
       }
 
+      console.log( `-------------------> userId = ${userId}` );
+      console.log( `-------------------> Number(userId) = ${Number( userId )}` );
+
       // try to get saved translation in short-term storage database
       const filter = {
         userId: Number( userId ),
