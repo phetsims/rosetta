@@ -3,7 +3,7 @@
 /**
  * Export a function that tells whether a locale is in the list of locales.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import getLocaleInfo from '../getLocaleInfo.js';
@@ -11,8 +11,8 @@ import getLocaleInfo from '../getLocaleInfo.js';
 /**
  * Tell whether a locale is in the list of locales.
  *
- * @param {string} locale - ISO 639-1 locale code, e.g. es for Spanish
- * @returns {boolean}
+ * @param {String} locale - ISO 639-1 locale code, e.g. es for Spanish
+ * @returns {Boolean}
  */
 const isValidLocale = locale => {
   const localeInfo = getLocaleInfo();
