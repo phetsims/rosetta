@@ -2,7 +2,7 @@
 
 /**
  * Create an Express object for the server that serves the built React app.
- * 
+ *
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
