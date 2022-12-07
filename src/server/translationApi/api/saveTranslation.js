@@ -1,9 +1,9 @@
-// Copyright 2021, University of Colorado Boulder
+// Copyright 2022, University of Colorado Boulder
 
 /**
  * Provide functionality for the save translation API route.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import logger from '../logger.js';
