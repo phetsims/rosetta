@@ -33,6 +33,7 @@ const translationFormData = async ( req, res ) => {
     const stringKeysWithRepoName = Object.keys( getStringKeysWithRepoName( simHtml ) );
     const categorizedStringKeys = await getCategorizedStringKeys( req.params.simName, simNames, stringKeysWithRepoName );
     console.log( `userId = ${req.query.userId}` );
+    console.log( `typeof userId = ${typeof req.query.userId}` );
     const translationFormData = await getTranslationFormData(
       req.params.simName,
       req.params.locale,
