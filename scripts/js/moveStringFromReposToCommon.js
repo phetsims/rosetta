@@ -12,7 +12,7 @@
 
 // modules
 const fs = require( 'fs' );
-const _ = require( 'lodash' ); // eslint-disable-line
+const _ = require( 'lodash' ); // eslint-disable-line require-statement-match
 
 // constants
 const SIMS_WITH_STRING = [

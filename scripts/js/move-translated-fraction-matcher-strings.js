@@ -11,7 +11,7 @@
  */
 
 // modules
-const _ = require( 'lodash' ); // eslint-disable-line
+const _ = require( 'lodash' ); // eslint-disable-line require-statement-match
 const fs = require( 'fs' );
 
 // string keys that need to be moved

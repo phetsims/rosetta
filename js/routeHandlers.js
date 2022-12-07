@@ -10,17 +10,17 @@
 
 
 // Node modules
-const _ = require( 'lodash' ); // eslint-disable-line
+const _ = require( 'lodash' ); // eslint-disable-line require-statement-match
 const axios = require( 'axios' );
 const winston = require( 'winston' );
-const { Pool } = require( 'pg' ); // eslint-disable-line
+const { Pool } = require( 'pg' ); // eslint-disable-line require-statement-match
 
 // server modules
 const localeInfo = require( './localeInfo' );
 const longTermStringStorage = require( './longTermStringStorage' );
 const RosettaConstants = require( './RosettaConstants' );
 const simData = require( './simData' );
-const stringSubmissionQueue = require( './stringSubmissionQueue' ).stringSubmissionQueue; // eslint-disable-line
+const stringSubmissionQueue = require( './stringSubmissionQueue' ).stringSubmissionQueue; // eslint-disable-line no-property-in-require-statement
 const TranslationUtils = require( './TranslationUtils' );
 const escapeHtml = TranslationUtils.escapeHtml;
 const renderErrorPage = require( './renderErrorPage' );

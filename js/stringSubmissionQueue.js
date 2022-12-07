@@ -10,9 +10,9 @@
 
 
 // modules
-const _ = require( 'lodash' ); // eslint-disable-line
+const _ = require( 'lodash' ); // eslint-disable-line require-statement-match
 const longTermStringStorage = require( './longTermStringStorage' );
-const { Pool } = require( 'pg' ); // eslint-disable-line
+const { Pool } = require( 'pg' ); // eslint-disable-line require-statement-match
 const requestBuild = require( './requestBuild' );
 const RosettaConstants = require( './RosettaConstants' );
 const winston = require( 'winston' );

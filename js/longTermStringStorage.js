@@ -16,11 +16,11 @@
 
 
 // modules
-const _ = require( 'lodash' ); // eslint-disable-line
+const _ = require( 'lodash' ); // eslint-disable-line require-statement-match
 const assert = require( 'assert' );
 const axios = require( 'axios' );
 const octonode = require( 'octonode' );
-const Queue = require( 'promise-queue' ); // eslint-disable-line
+const Queue = require( 'promise-queue' ); // eslint-disable-line require-statement-match
 const RosettaConstants = require( './RosettaConstants' );
 const winston = require( 'winston' );
 

@@ -8,7 +8,7 @@
  */
 
 // modules
-const _ = require( 'lodash' ); // eslint-disable-line
+const _ = require( 'lodash' ); // eslint-disable-line require-statement-match
 const fs = require( 'fs' );
 
 // string keys in the sim-specific and common-code string files

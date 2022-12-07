@@ -10,7 +10,7 @@
 
 
 // Node modules
-const _ = require( 'lodash' ); // eslint-disable-line
+const _ = require( 'lodash' ); // eslint-disable-line require-statement-match
 const axios = require( 'axios' );
 const simData = require( './simData' );
 const winston = require( 'winston' );

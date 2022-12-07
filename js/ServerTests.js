@@ -8,9 +8,9 @@
 
 
 // modules
-const _ = require( 'lodash' ); // eslint-disable-line
+const _ = require( 'lodash' ); // eslint-disable-line require-statement-match
 const longTermStringStorage = require( './longTermStringStorage' );
-const nodeFetch = require( 'node-fetch' ); // eslint-disable-line
+const nodeFetch = require( 'node-fetch' ); // eslint-disable-line require-statement-match
 const simData = require( './simData' );
 const winston = require( 'winston' );
 
