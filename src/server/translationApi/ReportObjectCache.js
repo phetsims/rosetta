@@ -1,6 +1,6 @@
 // Copyright 2022, University of Colorado Boulder
 
-import getMinutesElapsed from './api/getMinutesElapsed.js';
+import getMinutesElapsed from './getMinutesElapsed.js';
 
 class ReportObjectCache {
 
