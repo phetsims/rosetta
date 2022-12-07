@@ -70,7 +70,7 @@ const getTranslationFormData = async (
   logger.info( 'getting translation form data' );
 
   // try to get a saved translation from the short-term storage database
-  if ( config.DB_ENABLED === 'true' ) {
+  if ( config.DB_ENABLED ) {
     try {
 
       logger.info( 'checking for saved translation' );

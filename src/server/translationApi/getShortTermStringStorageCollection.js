@@ -12,7 +12,7 @@ import logger from './logger.js';
 
 let shortTermStringStorageCollection = {};
 
-if ( config.DB_ENABLED === 'true' ) {
+if ( config.DB_ENABLED ) {
 
   const client = new MongoClient( config.DB_URI );
 
