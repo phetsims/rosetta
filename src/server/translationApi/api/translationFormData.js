@@ -37,7 +37,8 @@ const translationFormData = async ( req, res ) => {
       req.params.locale,
       simNames,
       stringKeysWithRepoName,
-      categorizedStringKeys
+      categorizedStringKeys,
+      req.query.userId
     );
     logger.info( `responding with ${req.params.locale}/${req.params.simName}'s translation form data` );
     res.header( 'Content-Type', 'application/json' );
