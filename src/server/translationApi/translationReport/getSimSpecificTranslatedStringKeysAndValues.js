@@ -10,13 +10,6 @@ import axios from 'axios';
 import getTranslatedStringFileUrl from '../getTranslatedStringFileUrl.js';
 import logger from '../logger.js';
 
-// import getCategorizedStringKeys from '../getCategorizedStringKeys.js';
-// import getSimHtml from '../getSimHtml.js';
-// import getSimMetadata from '../getSimMetadata.js';
-// import getSimNamesAndTitles from '../getSimNamesAndTitles.js';
-// import getSimUrl from '../getSimUrl.js';
-// import getStringKeysWithRepoName from '../getStringKeysWithRepoName.js';
-
 /**
  * Return an object containing sim-specific translated string keys and values.
  *
@@ -53,7 +46,6 @@ const getSimSpecificTranslatedStringKeysAndValues = async (
         }
         else {
 
-          // TODO: Is this correct, given our new empty string policy?
           // Map the string key to an empty string.
           simSpecificTranslatedStringKeysAndStrings[ stringKey ] = '';
         }
@@ -80,22 +72,5 @@ const getSimSpecificTranslatedStringKeysAndValues = async (
 
   return simSpecificTranslatedStringKeysAndStrings;
 };
-
-// ( async () => {
-//   const simName = 'acid-base-solutions';
-//   const locale = 'ab';
-//   const simMetadata = await getSimMetadata();
-//   const simNames = Object.keys( await getSimNamesAndTitles( simMetadata ) );
-//   const simUrl = getSimUrl( simName );
-//   const simHtml = await getSimHtml( simUrl );
-//   const stringKeysWithRepoName = Object.keys( getStringKeysWithRepoName( simHtml ) );
-//   const categorizedStringKeys = await getCategorizedStringKeys( simName, simNames, stringKeysWithRepoName );
-//   const simSpecificTranslatedStringKeysAndValues = await getSimSpecificTranslatedStringKeysAndValues(
-//     simName,
-//     locale,
-//     categorizedStringKeys
-//   );
-//   console.log( JSON.stringify( simSpecificTranslatedStringKeysAndValues, null, 4 ) );
-// } )();
 
 export default getSimSpecificTranslatedStringKeysAndValues;
