@@ -1,13 +1,12 @@
 // Copyright 2022, University of Colorado Boulder
 
-import axios from 'axios';
 import alertErrorMessage from './alertErrorMessage.js';
+import getWebsiteUserData from './getWebsiteUserData.js';
 
 const makeTranslationObject = async ( values, simName, locale ) => {
   let translation;
   try {
-    const websiteUserDataRes = await axios.get( `${window.location.origin}/services/check-login` );
-    const websiteUserData = websiteUserDataRes.data;
+    const websiteUserData = await getWebsiteUserData();
     translation = {
       userId: websiteUserData.userId,
       timestamp: Date.now(),
