@@ -14,7 +14,6 @@ import storeTranslationShortTerm from '../storeTranslationShortTerm.js';
  *
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
- * @returns {Promise<String>} - success message
  */
 const saveTranslation = async ( req, res ) => {
   try {
