@@ -13,17 +13,14 @@ import getStringKeysWithRepoName from '../getStringKeysWithRepoName.js';
 import logger from '../logger.js';
 
 /**
- * todo: update this when done
+ * Replace the sim's strings with the translator's inputted strings, and send the HTML to the client.
  *
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
- * @returns {} - todo: add type when done
  */
 const testTranslation = async ( req, res ) => {
   try {
     const simHtml = await getSimHtml( getSimUrl( req.body.simName ) );
-
-    // TODO: We should be able to call this with just simHtml. Fix getStringKeysWithRepoName.
     const originalStringObject = JSON.stringify( getStringKeysWithRepoName( simHtml ) );
     const replacementStringObject = JSON.stringify( await getReplacementStringObject( simHtml, req.body ) );
     const simHtmlWithTranslatedStrings = simHtml.replace( originalStringObject, replacementStringObject );
