@@ -12,9 +12,9 @@ import clientConstants from './clientConstants.js';
 /**
  * Return a boolean telling whether a given value has a valid brace pattern.
  *
- * @param {String} translatedValue
- * @param {String} englishValue
- * @returns {Boolean}
+ * @param {String} translatedValue - the user-inputted translated value
+ * @param {String} englishValue - the original English value
+ * @returns {Boolean} - whether the brace pattern is valid
  */
 const isValidBracePattern = ( translatedValue, englishValue ) => {
   if ( translatedValue === undefined ) {
