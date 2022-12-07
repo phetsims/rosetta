@@ -23,7 +23,7 @@ import getSortedTranslationReportRows from './getSortedTranslationReportRows.jsx
  * @param {String} sortKey - which key to sort by, only used when the report is populated
  * @param {String} sortDirection - either ascending or descending
  * @param {Number} numberOfEvents - now used in production; umber of report objects; useful for debugging
- * @returns {Object[]}
+ * @returns {Object[]} - array of report rows, i.e. array of JSX
  */
 const getTranslationReportRows = (
   simNamesAndTitles,
