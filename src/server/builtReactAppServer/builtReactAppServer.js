@@ -1,5 +1,11 @@
 // Copyright 2022, University of Colorado Boulder
 
+/**
+ * Create an Express object for the server that serves the built React app.
+ * 
+ * @author Liam Mulhall <liammulh@gmail.com>
+ */
+
 import express from 'express';
 import os from 'os';
 import { URL } from 'url';
