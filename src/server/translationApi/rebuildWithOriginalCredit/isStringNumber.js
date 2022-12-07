@@ -3,7 +3,7 @@
 /**
  * Export a function that tells whether a string is a string number.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import logger from '../logger.js';
@@ -11,8 +11,8 @@ import logger from '../logger.js';
 /**
  * Helper function. !isNaN is confusing, hence this function.
  *
- * @param {string} stringToTest - a string number like "123"
- * @returns {boolean}
+ * @param {String} stringToTest - a string number like "123"
+ * @returns {Boolean}
  */
 const isStringNumber = stringToTest => {
   if ( typeof stringToTest === 'string' ) {
