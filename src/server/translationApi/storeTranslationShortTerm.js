@@ -18,7 +18,7 @@ import logger from './logger.js';
  * @param translation - translation received from client
  */
 const storeTranslationShortTerm = async translation => {
-  if ( config.DB_ENABLED === 'true' ) {
+  if ( config.DB_ENABLED ) {
     logger.info( `storing ${translation.locale}/${translation.simName} translation in short-term storage` );
     try {
       await deleteSavedTranslation( {
