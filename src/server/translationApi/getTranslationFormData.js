@@ -85,7 +85,7 @@ const getTranslationFormData = async (
 
       // try to get saved translation in short-term storage database
       const filter = {
-        userId: Number( userId ),
+        userId: userId,
         simName: simName,
         locale: locale
       };
