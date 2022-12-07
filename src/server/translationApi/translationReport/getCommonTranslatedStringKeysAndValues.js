@@ -3,7 +3,7 @@
 /**
  * Export an object that returns an object containing common translated string keys and their values.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import axios from 'axios';
@@ -11,13 +11,6 @@ import getCommonRepos from '../getCommonRepos.js';
 import getRepoNameToStringKeys from '../getRepoNameToStringKeys.js';
 import getTranslatedStringFileUrl from '../getTranslatedStringFileUrl.js';
 import logger from '../logger.js';
-
-// import getSimNamesAndTitles from '../getSimNamesAndTitles.js';
-// import getSimHtml from '../getSimHtml.js';
-// import getSimMetadata from '../getSimMetadata.js';
-// import getSimUrl from '../getSimUrl.js';
-// import getStringKeysWithRepoName from '../getStringKeysWithRepoName.js';
-// import getCategorizedStringKeys from '../getCategorizedStringKeys.js';
 
 /**
  * Return an object containing common translated string keys and their values.
@@ -99,24 +92,5 @@ const getCommonTranslatedStringKeysAndValues = async (
 
   return commonTranslatedStringKeysAndStrings;
 };
-
-// ( async () => {
-//   const simName = 'acid-base-solutions';
-//   const locale = 'de';
-//   const simMetadata = await getSimMetadata();
-//   const simNames = Object.keys( await getSimNamesAndTitles( simMetadata ) );
-//   const simUrl = getSimUrl( simName );
-//   const simHtml = await getSimHtml( simUrl );
-//   const stringKeysWithRepoName = Object.keys( getStringKeysWithRepoName( simHtml ) );
-//   const categorizedStringKeys = await getCategorizedStringKeys( simName, simNames, stringKeysWithRepoName );
-//   const res = await getCommonTranslatedStringKeysAndValues(
-//     simName,
-//     locale,
-//     simNames,
-//     stringKeysWithRepoName,
-//     categorizedStringKeys
-//   );
-//   console.log( JSON.stringify( res, null, 4 ) );
-// } )();
 
 export default getCommonTranslatedStringKeysAndValues;
