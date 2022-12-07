@@ -22,8 +22,8 @@ const mockWebsiteUserData = ( req, res ) => {
     userId: config.LOCAL_USER_ID,
     email: 'phet.girl@colorado.edu',
     loggedIn: true,
-    teamMember: false,
-    trustedTranslator: false,
+    teamMember: true,
+    trustedTranslator: true,
     subscribed: true
   };
   logger.info( 'responding with mock website user data' );
