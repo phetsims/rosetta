@@ -3,7 +3,7 @@
 /**
  * Provide functionality for locale info API route.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import getLocaleInfo from '../getLocaleInfo.js';
