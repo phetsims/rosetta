@@ -80,16 +80,12 @@ const getTranslationFormData = async (
         userId = config.LOCAL_USER_ID;
       }
 
-      console.log( `-------------------> userId = ${userId}` );
-      console.log( `-------------------> Number(userId) = ${Number( userId )}` );
-
       // try to get saved translation in short-term storage database
       const filter = {
         userId: userId,
         simName: simName,
         locale: locale
       };
-      console.log( `---------------> filter = ${JSON.stringify( filter, null, 4 )}` );
       const savedTranslation = await shortTermStringStorageCollection.findOne( filter );
       if ( savedTranslation ) {
 
