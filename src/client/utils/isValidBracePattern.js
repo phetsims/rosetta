@@ -1,7 +1,21 @@
 // Copyright 2022, University of Colorado Boulder
 
+/**
+ * Create a function that checks whether a given translated value in the translation form has a valid brace pattern.
+ * The brace patterns are used in PhET sims to insert variables (I think -- I (Liam) am not a sim developer).
+ *
+ * @author Liam Mulhall <liammulh@gmail.com>
+ */
+
 import clientConstants from './clientConstants.js';
 
+/**
+ * Return a boolean telling whether a given value has a valid brace pattern.
+ *
+ * @param {String} translatedValue
+ * @param {String} englishValue
+ * @returns {Boolean}
+ */
 const isValidBracePattern = ( translatedValue, englishValue ) => {
   if ( translatedValue === undefined ) {
 
