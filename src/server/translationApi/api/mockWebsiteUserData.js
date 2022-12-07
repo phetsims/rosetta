@@ -3,7 +3,7 @@
 /**
  * Provide functionality for mock website user data API route.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import config from '../../../common/config.js';
