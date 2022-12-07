@@ -1,8 +1,22 @@
 // Copyright 2022, University of Colorado Boulder
 
+/**
+ * Create an array of sorted translation report table rows based on the key given for sorting.
+ * These rows are JSX.
+ *
+ * @author Liam Mulhall <liammulh@gmail.com>
+ */
+
 import { Link } from 'react-router-dom';
 import getMinutesElapsed from 'server/translationApi/api/getMinutesElapsed.js';
 
+/**
+ * Return an array of translation report objects (i.e. stats used to make translation report rows) that have
+ * percentages of translated sim-specific strings and translated common strings.
+ *
+ * @param {Object[]} reportObjects
+ * @returns {Object[]}
+ */
 const getReportObjectsWithPercentages = reportObjects => {
   const reportObjectsWithPercents = [];
   for ( const reportObject of reportObjects ) {
@@ -24,6 +38,14 @@ const getReportObjectsWithPercentages = reportObjects => {
   return reportObjectsWithPercents;
 };
 
+/**
+ * Sort the report objects with percentages according to the sort key provided, in the direction provided.
+ *
+ * @param {Object[]} reportObjectsWithPercentages - translation report objects with percentages for translated strings
+ * @param {String} sortDirection - ascending or descending
+ * @param {String} sortKey - key to sort by (sim title, sim-specific percentage, or common percentage)
+ * @returns {Object[]} - sorted report objects with percentages
+ */
 const sortReportObjectsWithPercentages = ( reportObjectsWithPercentages, sortDirection, sortKey ) => {
   return reportObjectsWithPercentages.sort( ( a, b ) => {
     if ( sortDirection === 'ascending' ) {
@@ -36,6 +58,16 @@ const sortReportObjectsWithPercentages = ( reportObjectsWithPercentages, sortDir
   } );
 };
 
+/**
+ * Return sorted translation rows, i.e. an array of JSX to put in the translation report table.
+ *
+ * @param {String[]} listOfSims
+ * @param {Object[]} reportObjects
+ * @param {String} locale
+ * @param {String} sortKey
+ * @param {String} sortDirection
+ * @returns {Object[]}
+ */
 const getSortedTranslationReportRows = (
   listOfSims,
   reportObjects,
