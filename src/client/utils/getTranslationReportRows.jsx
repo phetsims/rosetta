@@ -8,7 +8,7 @@
  */
 
 import { Link } from 'react-router-dom';
-import getMinutesElapsed from 'server/translationApi/getMinutesElapsed.js';
+import getMinutesElapsed from 'rosetta/src/common/getMinutesElapsed.js';
 import getSortedTranslationReportRows from './getSortedTranslationReportRows.jsx';
 
 /**

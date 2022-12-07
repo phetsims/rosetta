@@ -8,7 +8,7 @@
  */
 
 import { Link } from 'react-router-dom';
-import getMinutesElapsed from 'server/translationApi/getMinutesElapsed.js';
+import getMinutesElapsed from 'rosetta/src/common/getMinutesElapsed.js';
 
 /**
  * Return an array of translation report objects (i.e. stats used to make translation report rows) that have
