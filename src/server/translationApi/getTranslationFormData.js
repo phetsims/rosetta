@@ -81,7 +81,7 @@ const getTranslationFormData = async (
         userId = config.LOCAL_USER_ID;
       }
       else {
-        const userDataRes = await axios.get( `${config.SERVER_URL}/services/check-login` );
+        const userDataRes = await axios.get( config.WEBSITE_USER_DATA_URL );
         const userData = userDataRes.data;
         userId = userData.userId;
       }
