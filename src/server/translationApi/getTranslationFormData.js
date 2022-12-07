@@ -84,6 +84,8 @@ const getTranslationFormData = async (
         const userDataRes = await axios.get( config.WEBSITE_USER_DATA_URL );
         const userData = userDataRes.data;
         userId = userData.userId;
+
+        // TODO: Remove when done debugging.
         logger.info( `-----------------------------------> userId = ${userId}` );
       }
 
