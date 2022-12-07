@@ -32,7 +32,7 @@ const getSimSpecificEnglishStringKeysAndValues = async ( simName, sha, categoriz
       // If the english string key has a value...
       if ( englishStringKeys.includes( stringKey ) ) {
 
-        // Map the string key to its english value.
+        // Map the string key to its English value.
         stringKeysToSimSpecificEnglishStrings[ stringKey ] = englishStringKeysAndStrings[ stringKey ];
       }
       else {
