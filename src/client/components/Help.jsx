@@ -27,7 +27,7 @@ const Help = () => {
       <div>
         <iframe
           className='border border-dark rounded'
-          src='https://docs.google.com/document/d/e/2PACX-1vTvlrfE9jTezskMwp-3QP6c3pzDBcbM1qH4FY6mKTAMwyZJDEC_oYc-fSW6HWgc4lgq7NTs4yCpXb6x/pub?embedded=true'
+          src='https://docs.google.com/document/d/e/2PACX-1vSZz9K1ris-dRNsLK9ZoG_KtMce1fJ1mlz-NDdk0KVB7Sfk_m18HmOaUKzb_zh6eFSsUwR1x6LCenLR/pub?embedded=true'
           style={iframeStyle}
         >
         </iframe>
