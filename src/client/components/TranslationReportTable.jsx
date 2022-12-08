@@ -68,9 +68,7 @@ const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => 
     jsx = (
       <div>
         <h3>{wantsUntranslated ? `Sims not yet translated into ${localeName}` : `Sims translated into ${localeName}`}</h3>
-        {reportPopulated
-         ? <p>The translation report is finished!</p>
-         : <><p>The translation report is being populated...</p><LoadingSpinner/></>}
+        {reportPopulated ? <></> : <LoadingSpinner/>}
         <table className='table table-striped'>
           <thead>
           <tr>
