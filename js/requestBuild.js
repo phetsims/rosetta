@@ -135,8 +135,7 @@ async function requestBuild( simName, locale, userID ) {
     }
   }
   else {
-    winston.warn( 'The sendBuildRequest flag is set to false in your rosettaConfig.json. Not sending the build request.' );
-    throw new Error( 'Build request unsuccessful. sendBuildRequest = false in rosettaConfig.json.' );
+    winston.warn( 'The sendBuildRequest flag is set to false in config, not sending the build request.' );
   }
   return buildRequestRes;
 }
