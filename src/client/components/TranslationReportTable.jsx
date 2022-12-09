@@ -83,21 +83,21 @@ const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => 
         <tr>
           <th>Sim Title
             {
-              reportPopulated
+              reportPopulated && reportRows.length > 1
               ? <SortButton onClick={() => handleSortButtonClick( 'simTitle' )}/>
               : <></>
             }
           </th>
           <th>Sim-Specific Strings
             {
-              reportPopulated
+              reportPopulated && reportRows.length > 1
               ? <SortButton onClick={() => handleSortButtonClick( 'simSpecificPercent' )}/>
               : <></>
             }
           </th>
           <th>Common Strings
             {
-              reportPopulated
+              reportPopulated && reportRows.length > 1
               ? <SortButton onClick={() => handleSortButtonClick( 'commonPercent' )}/>
               : <></>
             }
