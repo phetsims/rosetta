@@ -65,6 +65,16 @@ const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => 
       numberOfEvents
     );
 
+    const handleSortButtonClick = newSortKey => {
+      setSortKey( newSortKey );
+      if ( sortDirection === 'ascending' ) {
+        setSortDirection( 'descending' );
+      }
+      else {
+        setSortDirection( 'ascending' );
+      }
+    };
+
     jsx = (
       <div>
         <h3>{wantsUntranslated ? `Sims not yet translated into ${localeName}` : `Sims translated into ${localeName}`}</h3>
@@ -75,45 +85,21 @@ const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => 
             <th>Sim Title
               {
                 reportPopulated
-                ? <SortButton onClick={() => {
-                  setSortKey( 'simTitle' );
-                  if ( sortDirection === 'ascending' ) {
-                    setSortDirection( 'descending' );
-                  }
-                  else {
-                    setSortDirection( 'ascending' );
-                  }
-                }}/>
+                ? <SortButton onClick={() => handleSortButtonClick( 'simTitle' )}/>
                 : <></>
               }
             </th>
             <th>Sim-Specific Strings
               {
                 reportPopulated
-                ? <SortButton onClick={() => {
-                  setSortKey( 'simSpecificPercent' );
-                  if ( sortDirection === 'ascending' ) {
-                    setSortDirection( 'descending' );
-                  }
-                  else {
-                    setSortDirection( 'ascending' );
-                  }
-                }}/>
+                ? <SortButton onClick={() => handleSortButtonClick( 'simSpecificPercent' )}/>
                 : <></>
               }
             </th>
             <th>Common Strings
               {
                 reportPopulated
-                ? <SortButton onClick={() => {
-                  setSortKey( 'commonPercent' );
-                  if ( sortDirection === 'ascending' ) {
-                    setSortDirection( 'descending' );
-                  }
-                  else {
-                    setSortDirection( 'ascending' );
-                  }
-                }}/>
+                ? <SortButton onClick={() => handleSortButtonClick( 'commonPercent' )}/>
                 : <></>
               }
             </th>
