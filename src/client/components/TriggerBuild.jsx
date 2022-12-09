@@ -19,7 +19,7 @@ import { WebsiteUserDataContext } from './Rosetta.jsx';
  *
  * @returns {JSX.Element}
  */
-const RebuildWithOriginalCredit = () => {
+const TriggerBuild = () => {
   const initialRebuildValues = {
     sim: '',
     locale: '',
@@ -27,8 +27,13 @@ const RebuildWithOriginalCredit = () => {
   };
   const websiteUserData = useContext( WebsiteUserDataContext );
   const handleSubmit = async values => {
-    await axios.get( `${clientConstants.translationApiRoute}/rebuildWithOriginalCredit/${values.sim}/${values.locale}/${values.userId}?websiteUserData=${websiteUserData}` );
-    window.alert( `Rebuild request sent for sim ${values.sim} in locale ${values.locale} with user ID ${values.userId}.` );
+    if ( websiteUserData.loggedIn && websiteUserData.teamMember ) {
+      await axios.get( `${clientConstants.translationApiRoute}/triggerBuild/${values.sim}/${values.locale}/${values.userId}` );
+      window.alert( `Rebuild request sent for sim ${values.sim} in locale ${values.locale} with user ID ${values.userId}.` );
+    }
+    else {
+      window.alert( 'You do not have correct permissions (logged in and PhET team member) to trigger a build' );
+    }
   };
   const ValidationSchema = Yup.object().shape( {
     sim: Yup.string()
@@ -88,4 +93,4 @@ const RebuildWithOriginalCredit = () => {
   );
 };
 
-export default RebuildWithOriginalCredit;
+export default TriggerBuild;

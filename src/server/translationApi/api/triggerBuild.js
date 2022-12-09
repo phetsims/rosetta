@@ -8,7 +8,7 @@
  */
 
 import logger from '../logger.js';
-import requestRebuildWithOriginalCredit from '../rebuildWithOriginalCredit/requestRebuildWithOriginalCredit.js';
+import requestTriggerBuild from '../triggerBuild/requestTriggerBuild.js';
 
 /**
  * API function. Request a rebuild of the sim with the correct user ID.
@@ -16,14 +16,13 @@ import requestRebuildWithOriginalCredit from '../rebuildWithOriginalCredit/reque
  * @param {Object} req - the Express request object
  * @param {Object} res - the Express response object
  */
-const rebuildWithOriginalCredit = async ( req, res ) => {
+const triggerBuild = async ( req, res ) => {
   logger.info( 'rebuilding with original credit' );
   try {
-    const rebuildRes = await requestRebuildWithOriginalCredit(
+    const rebuildRes = await requestTriggerBuild(
       req.params.simName,
       req.params.locale,
-      req.params.userId,
-      req.query.websiteUserData
+      req.params.userId
     );
     if ( rebuildRes.status >= 200 && rebuildRes.status < 300 ) {
       logger.info( 'rebuilt with original credit' );
@@ -37,4 +36,4 @@ const rebuildWithOriginalCredit = async ( req, res ) => {
   }
 };
 
-export default rebuildWithOriginalCredit;
+export default triggerBuild;

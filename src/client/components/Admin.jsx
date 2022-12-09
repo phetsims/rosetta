@@ -8,7 +8,7 @@
 
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import RebuildWithOriginalCredit from './RebuildWithOriginalCredit.jsx';
+import TriggerBuild from './TriggerBuild.jsx';
 import { WebsiteUserDataContext } from './Rosetta.jsx';
 import Sha from './Sha.jsx';
 
@@ -34,7 +34,7 @@ const Admin = () => {
           phethelp@colorado.edu to help us resolve this.
         </p>
         <Sha/>
-        <RebuildWithOriginalCredit/>
+        <TriggerBuild/>
       </div>
     );
   }
