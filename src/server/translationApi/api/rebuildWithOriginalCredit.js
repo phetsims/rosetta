@@ -22,7 +22,8 @@ const rebuildWithOriginalCredit = async ( req, res ) => {
     const rebuildRes = await requestRebuildWithOriginalCredit(
       req.params.simName,
       req.params.locale,
-      req.params.userId
+      req.params.userId,
+      req.query.websiteUserData
     );
     if ( rebuildRes.status >= 200 && rebuildRes.status < 300 ) {
       logger.info( 'rebuilt with original credit' );

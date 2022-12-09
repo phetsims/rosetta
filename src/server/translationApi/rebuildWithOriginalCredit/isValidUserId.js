@@ -9,6 +9,7 @@
 import axios from 'axios';
 import config from '../../../common/config.js';
 import logger from '../logger.js';
+import isStringNumber from './isStringNumber.js';
 
 /**
  * Return a boolean for whether the given user ID is in the string file it's supposed to be in.
@@ -19,29 +20,29 @@ import logger from '../logger.js';
  * @returns {Promise<Boolean>}
  */
 const isValidUserId = async ( simName, locale, userId ) => {
-
   let ret = false;
+  if ( isStringNumber( userId ) ) {
+    const stringFileUrl = config.GITHUB_URL +
+                          `phetsims/babel/master/${simName}/${simName}-strings_${locale}.json`;
 
-  const stringFileUrl = config.GITHUB_URL +
-                        `phetsims/babel/master/${simName}/${simName}-strings_${locale}.json`;
-
-  // Try to verify whether the supplied user ID exists in the string file for the given sim/locale.
-  try {
-    const stringFileRes = await axios.get( stringFileUrl );
-    const stringFile = stringFileRes.data;
-    const setOfUserIds = new Set();
-    for ( const key of Object.keys( stringFile ) ) {
-      const historyArray = stringFile[ key ].history;
-      for ( const historyEntry of historyArray ) {
-        setOfUserIds.add( historyEntry.userId );
+    // Try to verify whether the supplied user ID exists in the string file for the given sim/locale.
+    try {
+      const stringFileRes = await axios.get( stringFileUrl );
+      const stringFile = stringFileRes.data;
+      const setOfUserIds = new Set();
+      for ( const key of Object.keys( stringFile ) ) {
+        const historyArray = stringFile[ key ].history;
+        for ( const historyEntry of historyArray ) {
+          setOfUserIds.add( historyEntry.userId );
+        }
+      }
+      if ( setOfUserIds.has( userId ) ) {
+        ret = true;
       }
     }
-    if ( setOfUserIds.has( userId ) ) {
-      ret = true;
+    catch( e ) {
+      logger.error( e );
     }
-  }
-  catch( e ) {
-    logger.error( e );
   }
   return ret;
 };
