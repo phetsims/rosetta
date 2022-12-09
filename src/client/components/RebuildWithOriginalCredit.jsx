@@ -11,6 +11,8 @@ import axios from 'axios';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import clientConstants from '../utils/clientConstants.js';
+import { useContext } from 'react';
+import { WebsiteUserDataContext } from './Rosetta.jsx';
 
 /**
  * Create a Formik form for sending a get request based on the supplied sim, locale, and user ID.
@@ -23,8 +25,9 @@ const RebuildWithOriginalCredit = () => {
     locale: '',
     userId: ''
   };
+  const websiteUserData = useContext( WebsiteUserDataContext );
   const handleSubmit = async values => {
-    await axios.get( `${clientConstants.translationApiRoute}/rebuildWithOriginalCredit/${values.sim}/${values.locale}/${values.userId}` );
+    await axios.get( `${clientConstants.translationApiRoute}/rebuildWithOriginalCredit/${values.sim}/${values.locale}/${values.userId}?websiteUserData=${websiteUserData}` );
     window.alert( `Rebuild request sent for sim ${values.sim} in locale ${values.locale} with user ID ${values.userId}.` );
   };
   const ValidationSchema = Yup.object().shape( {
