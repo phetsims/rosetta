@@ -69,8 +69,8 @@ const TranslationTables = props => {
 
   const sharedJsx = sharedRows.length > 0 ? (
     <div className='mt-2'>
-      <h2>Common Strings</h2>
-      <h4 className='text-muted'>(Translating these strings will affect multiple simulations.)</h4>
+      <h2>Shared Strings</h2>
+      <h4 className='text-muted'>(Translating these strings will affect a handful of simulations.)</h4>
       <table className='table table-striped'>
         <thead>
         <tr>
@@ -81,7 +81,7 @@ const TranslationTables = props => {
         </thead>
         <tbody>
 
-        {/* Iterate over the common rows. */}
+        {/* Iterate over the shared rows. */}
         {sharedRows}
         </tbody>
       </table>
@@ -111,7 +111,7 @@ const TranslationTables = props => {
       {sharedJsx}
       <div className='mt-2'>
         <h2>Common Strings</h2>
-        <h4 className='text-muted'>(Translating these strings will affect multiple simulations.)</h4>
+        <h4 className='text-muted'>(Translating these strings will affect many simulations.)</h4>
         <table className='table table-striped'>
           <thead>
           <tr>
