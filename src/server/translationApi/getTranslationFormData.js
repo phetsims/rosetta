@@ -11,6 +11,7 @@
 
 import config from '../../common/config.js';
 import getCommonTranslationFormData from './getCommonTranslationFormData.js';
+import getSharedTranslationFormData from './getSharedTranslationFormData.js';
 import { shortTermStringStorageCollection } from './getShortTermStringStorageCollection.js';
 import getSimSpecificTranslationFormData from './getSimSpecificTranslationFormData.js';
 import logger from './logger.js';
@@ -114,6 +115,12 @@ const getTranslationFormData = async (
       simName,
       locale,
       categorizedStringKeys.simSpecific
+    );
+    translationFormData.shared = await getSharedTranslationFormData(
+      simName,
+      locale,
+      categorizedStringKeys.shared,
+      categorizedStringKeys.sharedSims
     );
     translationFormData.common = await getCommonTranslationFormData(
       simName,
