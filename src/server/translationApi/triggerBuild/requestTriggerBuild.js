@@ -19,16 +19,13 @@ import isValidUserId from './isValidUserId.js';
  * @param {String} locale - locale code of the sim being rebuilt
  * @param {String} userId - user ID of the original submitter
  */
-const requestRebuildWithOriginalCredit = async ( simName, locale, userId, userData ) => {
+const requestTriggerBuild = async ( simName, locale, userId ) => {
   try {
-    if ( userData.loggedIn && userData.teamMember ) {
-      const simNameIsValid = isValidSimName( simName );
-      const localeIsValid = isValidLocale( locale );
-
-      const userIdIsValid = isValidUserId( simName, locale, userId );
-      if ( simNameIsValid && localeIsValid && userIdIsValid ) {
-        await requestBuild( simName, locale, Number( userId ) );
-      }
+    const simNameIsValid = isValidSimName( simName );
+    const localeIsValid = isValidLocale( locale );
+    const userIdIsValid = isValidUserId( simName, locale, userId );
+    if ( simNameIsValid && localeIsValid && userIdIsValid ) {
+      await requestBuild( simName, locale, Number( userId ) );
     }
   }
   catch( e ) {
@@ -36,4 +33,4 @@ const requestRebuildWithOriginalCredit = async ( simName, locale, userId, userDa
   }
 };
 
-export default requestRebuildWithOriginalCredit;
+export default requestTriggerBuild;

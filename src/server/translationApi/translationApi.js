@@ -3,7 +3,7 @@
 import express from 'express';
 import clientConfig from './api/clientConfig.js';
 import localeInfo from './api/localeInfo.js';
-import rebuildWithOriginalCredit from './api/rebuildWithOriginalCredit.js';
+import triggerBuild from './api/triggerBuild.js';
 import saveTranslation from './api/saveTranslation.js';
 import sha from './api/sha.js';
 import simNamesAndTitles from './api/simNamesAndTitles.js';
@@ -32,7 +32,7 @@ rosettaApiServer.get( '/localeInfo', localeInfo );
 rosettaApiServer.get( '/simNamesAndTitles', simNamesAndTitles );
 rosettaApiServer.get( '/translationFormData/:simName?/:locale?', translationFormData );
 rosettaApiServer.get( '/sha', sha );
-rosettaApiServer.get( '/rebuildWithOriginalCredit/:simName?/:locale?/:userId?', rebuildWithOriginalCredit );
+rosettaApiServer.get( '/triggerBuild/:simName?/:locale?/:userId?', triggerBuild );
 rosettaApiServer.get( '/translationReportEvents/:locale?/:numberOfEvents?', translationReportEvents );
 rosettaApiServer.get( '/clientConfig', clientConfig );
 rosettaApiServer.get( '/translatedAndUntranslatedSims/:locale?', translatedAndUntranslatedSims );

@@ -1,4 +1,4 @@
-# `rebuildWithOriginalCredit`
+# `requestTriggerBuild`
 
 ## Background/Context
 
@@ -20,11 +20,11 @@ ID of the most recent translator.
 4. Create and enter your URL in a web browser (you will be asked to sign in if you aren't already). Use the following
    URL pattern:
    ```
-   https://ox-dev.colorado.edu/translate/api/rebuildWithOriginalCredit/{sim-name}/{locale code}/{translator ID}
+   https://ox-dev.colorado.edu/translate/api/requestTriggerBuild/{sim-name}/{locale code}/{translator ID}
    ```
    Example: 
    ```
-   https://phet.colorado.edu/translate/api/rebuildWithOriginalCredit/circuit-construction-kit-ac/fa/333624
+   https://phet.colorado.edu/translate/api/requestTriggerBuild/circuit-construction-kit-ac/fa/333624
    ```
 5. Check Rosetta's logs and the build server's logs as desired. These log files are located on 
    phet-server2/phet-server-dev and will require SSH to view.

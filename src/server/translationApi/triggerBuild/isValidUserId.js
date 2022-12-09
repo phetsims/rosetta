@@ -7,7 +7,7 @@
  */
 
 import axios from 'axios';
-import config from '../../../common/config.js';
+import getTranslatedStringFile from '../getTranslatedStringFileUrl.js';
 import logger from '../logger.js';
 import isStringNumber from './isStringNumber.js';
 
@@ -22,8 +22,7 @@ import isStringNumber from './isStringNumber.js';
 const isValidUserId = async ( simName, locale, userId ) => {
   let ret = false;
   if ( isStringNumber( userId ) ) {
-    const stringFileUrl = config.GITHUB_URL +
-                          `phetsims/babel/master/${simName}/${simName}-strings_${locale}.json`;
+    const stringFileUrl = getTranslatedStringFile( simName, locale );
 
     // Try to verify whether the supplied user ID exists in the string file for the given sim/locale.
     try {
