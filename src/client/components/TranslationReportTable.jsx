@@ -75,38 +75,56 @@ const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => 
       }
     };
 
+    const allSimsTranslated = wantsUntranslated && reportRows.length === 0;
+    const noSimsTranslated = !wantsUntranslated && reportRows.length === 0;
+    let tableJsx = (
+      <table className='table table-striped'>
+        <thead>
+        <tr>
+          <th>Sim Title
+            {
+              reportPopulated
+              ? <SortButton onClick={() => handleSortButtonClick( 'simTitle' )}/>
+              : <></>
+            }
+          </th>
+          <th>Sim-Specific Strings
+            {
+              reportPopulated
+              ? <SortButton onClick={() => handleSortButtonClick( 'simSpecificPercent' )}/>
+              : <></>
+            }
+          </th>
+          <th>Common Strings
+            {
+              reportPopulated
+              ? <SortButton onClick={() => handleSortButtonClick( 'commonPercent' )}/>
+              : <></>
+            }
+          </th>
+        </tr>
+        </thead>
+        <tbody>{reportRows}</tbody>
+      </table>
+    );
+    if ( allSimsTranslated ) {
+      tableJsx = <p>All sims translated.</p>;
+    }
+    else if ( noSimsTranslated ) {
+      tableJsx = <p>No sims translated.</p>;
+    }
+
     jsx = (
       <div>
-        <h3>{wantsUntranslated ? `Sims not yet translated into ${localeName}` : `Sims translated into ${localeName}`}</h3>
+        <h3>
+          {
+            wantsUntranslated
+            ? `Sims not yet translated into ${localeName}`
+            : `Sims translated into ${localeName}`
+          }
+        </h3>
         {reportPopulated ? <></> : <LoadingSpinner/>}
-        <table className='table table-striped'>
-          <thead>
-          <tr>
-            <th>Sim Title
-              {
-                reportPopulated
-                ? <SortButton onClick={() => handleSortButtonClick( 'simTitle' )}/>
-                : <></>
-              }
-            </th>
-            <th>Sim-Specific Strings
-              {
-                reportPopulated
-                ? <SortButton onClick={() => handleSortButtonClick( 'simSpecificPercent' )}/>
-                : <></>
-              }
-            </th>
-            <th>Common Strings
-              {
-                reportPopulated
-                ? <SortButton onClick={() => handleSortButtonClick( 'commonPercent' )}/>
-                : <></>
-              }
-            </th>
-          </tr>
-          </thead>
-          <tbody>{reportRows}</tbody>
-        </table>
+        {tableJsx}
       </div>
     );
   }
