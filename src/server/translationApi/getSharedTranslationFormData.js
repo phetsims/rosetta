@@ -48,28 +48,36 @@ const getSharedTranslationFormData = async (
       }
 
       // Populate string keys and values.
+      const englishKeysAndValues = {};
+      const translatedKeysAndValues = {};
       for ( const stringKey of sharedStringKeys ) {
-
-        // Strip out dots so client doesn't think there are more deeply nested
-        // objects than there really are.
-        const stringKeyWithoutDots = stringKey.replaceAll( '.', '_DOT_' );
-        sharedTranslationFormData[ stringKeyWithoutDots ] = {
-          english: '',
-          translated: ''
-        };
 
         // Populate English string keys and values.
         for ( const stringFile of englishStringFiles ) {
           if ( Object.keys( stringFile ).includes( stringKey ) ) {
-            sharedTranslationFormData[ stringKeyWithoutDots ].english = stringFile[ stringKey ].value;
+            englishKeysAndValues[ stringKey ] = stringFile[ stringKey ].value;
           }
         }
 
         // Populate translated string keys and values.
         for ( const stringFile of translatedStringFiles ) {
           if ( Object.keys( stringFile ).includes( stringKey ) ) {
-            sharedTranslationFormData[ stringKeyWithoutDots ].translated = stringFile[ stringKey ].value;
+            translatedKeysAndValues[ stringKey ] = stringFile[ stringKey ].value;
           }
+        }
+      }
+
+      // Create the shared translation form data object.
+      for ( const stringKey of sharedStringKeys ) {
+
+        // Strip out dots so client doesn't think there are more deeply nested
+        // objects than there really are.
+        const stringKeyWithoutDots = stringKey.replaceAll( '.', '_DOT_' );
+        if ( englishKeysAndValues[ stringKey ] && translatedKeysAndValues[ stringKey ] ) {
+          sharedTranslationFormData[ stringKeyWithoutDots ] = {
+            english: englishKeysAndValues[ stringKey ],
+            translated: translatedKeysAndValues[ stringKey ]
+          };
         }
       }
     }
