@@ -276,8 +276,6 @@ module.exports = {
       winston.error( `sim not found in metadata, simName = ${simName}` );
       return false;
     }
-    console.log( `simName = ${simName}` );
-    console.log( `simInfoObject[ simName ].isPrototype = ${simInfoObject[ simName ].isPrototype}` );
     return simInfoObject[ simName ].isPrototype;
   }
 };
