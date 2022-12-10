@@ -12,7 +12,6 @@ import useLocaleInfo from '../hooks/useLocaleInfo.jsx';
 import useSimNamesAndTitles from '../hooks/useSimNamesAndTitles.jsx';
 import Admin from './Admin.jsx';
 import Help from './Help.jsx';
-import Navbar from './Navbar.jsx';
 import EmailAndSignOut from './EmailAndSignOut.jsx';
 import TranslationForm from './TranslationForm.jsx';
 import TranslationReport from './TranslationReport.jsx';
@@ -35,8 +34,7 @@ const RosettaRoutes = () => {
   const simNamesAndTitles = useSimNamesAndTitles();
   return (
     <BrowserRouter>
-      <Navbar/>
-      <div className='container mb-5'>
+      <div className='container m-5'>
         <EmailAndSignOut/>
         <LocaleInfoContext.Provider value={localeInfo}>
           <SimNamesAndTitlesContext.Provider value={simNamesAndTitles}>
