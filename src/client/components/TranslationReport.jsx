@@ -36,7 +36,6 @@ const TranslationReport = () => {
   // your Rosetta config file, the data in the tables won't be correct.
   return (
     <div>
-      <h2 className='text-muted'>Locale: {localeName} ({params.locale})</h2>
       <TranslationReportTable locale={params.locale} wantsUntranslated={true} localeName={localeName}/>
       <TranslationReportTable locale={params.locale} wantsUntranslated={false} localeName={localeName}/>
     </div>
