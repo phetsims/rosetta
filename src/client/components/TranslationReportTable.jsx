@@ -123,7 +123,7 @@ const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => 
             : `Sims translated into ${localeName}`
           }
         </h3>
-        {reportPopulated ? <></> : <LoadingSpinner/>}
+        {reportPopulated ? <></> : <p>Translation data loading... <LoadingSpinner/></p>}
         {tableJsx}
       </div>
     );
