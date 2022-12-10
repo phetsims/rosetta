@@ -11,7 +11,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import useLocaleInfo from '../hooks/useLocaleInfo.jsx';
 import useSimNamesAndTitles from '../hooks/useSimNamesAndTitles.jsx';
 import Admin from './Admin.jsx';
-import EmailAndSignOut from './EmailAndSignOut.jsx';
+import RosettaHeader from './RosettaHeader.jsx';
 import TranslationForm from './TranslationForm.jsx';
 import TranslationReport from './TranslationReport.jsx';
 import TranslationReportForm from './TranslationReportForm.jsx';
@@ -34,7 +34,7 @@ const RosettaRoutes = () => {
   return (
     <BrowserRouter>
       <div className='container m-5'>
-        <EmailAndSignOut/>
+        <RosettaHeader/>
         <LocaleInfoContext.Provider value={localeInfo}>
           <SimNamesAndTitlesContext.Provider value={simNamesAndTitles}>
             <Routes>
