@@ -24,6 +24,7 @@ import submitTranslation from '../utils/submitTranslation.js';
 import testTranslation from '../utils/testTranslation.js';
 import LoadingSpinner from './LoadingSpinner.jsx';
 import { WebsiteUserDataContext } from './Rosetta.jsx';
+import { LocaleInfoContext } from './RosettaRoutes.jsx';
 import TranslationFormButtons from './TranslationFormButtons.jsx';
 import TranslationFormHeader from './TranslationFormHeader.jsx';
 import TranslationTables from './TranslationTables.jsx';
@@ -70,12 +71,22 @@ const TranslationForm = () => {
   }
   else {
 
+    const localeInfo = useContext( LocaleInfoContext );
+    let localeName = 'Loading...';
+    if ( Object.keys( localeInfo ).length > 0 ) {
+      localeName = localeInfo[ params.locale ].name;
+    }
+
     // Make the Formik form validation schema.
     const validationSchema = makeValidationSchema( translationFormData );
     translationFormJsx = (
       <div>
-        <TranslationFormHeader locale={params.locale} simName={params.simName}/>
-        <Link to={`/translate/${params.locale}`}>Back to Sim List</Link>
+        <TranslationFormHeader
+          locale={params.locale}
+          localeName={localeName}
+          simName={params.simName}
+        />
+        <Link to={`/translate/${params.locale}`}>Back to {localeName} ({params.locale}) Sim List</Link>
         <Formik
           initialValues={translationFormData}
           validationSchema={validationSchema}
