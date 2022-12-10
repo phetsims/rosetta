@@ -81,7 +81,7 @@ const getTranslationReportRows = (
     const lessThanTenMinutesSinceCache = minutesElapsed < 10;
     let pendingUpdate = <></>;
     if ( reportObject.isDirty && lessThanTenMinutesSinceCache ) {
-      pendingUpdate = '(pending update) ';
+      pendingUpdate = ' (pending publication)';
     }
 
     // Create the row JSX.
@@ -90,9 +90,9 @@ const getTranslationReportRows = (
     if ( Object.keys( translationReportJsx ).includes( reportObject.simName ) ) {
       translationReportJsx[ reportObject.simName ] = (
         <tr key={reportObject.simName}>
-          <td><Link to={`/translate/${locale}/${reportObject.simName}`}>{reportObject.simTitle}</Link></td>
-          <td>{pendingUpdate}{simSpecificPercent}% ({reportObject.numSimSpecificTranslatedStrings} of {reportObject.numSimSpecificStrings})</td>
-          <td>{pendingUpdate}{commonPercent}% ({reportObject.numCommonTranslatedStrings} of {reportObject.numCommonStrings})</td>
+          <td><Link to={`/translate/${locale}/${reportObject.simName}`}>{reportObject.simTitle}</Link>{pendingUpdate}</td>
+          <td>{simSpecificPercent}% ({reportObject.numSimSpecificTranslatedStrings} of {reportObject.numSimSpecificStrings})</td>
+          <td>{commonPercent}% ({reportObject.numCommonTranslatedStrings} of {reportObject.numCommonStrings})</td>
         </tr>
       );
     }
