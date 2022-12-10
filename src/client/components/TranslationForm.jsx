@@ -16,7 +16,7 @@ import React, {
   useEffect,
   useState
 } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import clientConstants from '../utils/clientConstants.js';
 import makeValidationSchema from '../utils/makeValidationSchema.js';
 import saveTranslation from '../utils/saveTranslation.js';
@@ -55,6 +55,7 @@ const TranslationForm = () => {
     }
   }, [] );
 
+  const [ isDisabled, setIsDisabled ] = useState( false );
   const [ buttonId, setButtonId ] = useState( '' );
   const handleButtonClick = evt => {
     setButtonId( evt.target.id );
@@ -71,6 +72,9 @@ const TranslationForm = () => {
   if ( Object.keys( localeInfo ).length > 0 ) {
     localeName = localeInfo[ params.locale ].name;
   }
+
+  // For navigating the user programmatically.
+  const navigate = useNavigate();
 
   let translationFormJsx;
   if ( translationFormData === null ) {
@@ -108,7 +112,13 @@ const TranslationForm = () => {
               await saveTranslation( values, params.simName, params.locale );
             }
             else if ( buttonId === 'submit' ) {
+              setIsDisabled( true );
               await submitTranslation( values, params.simName, params.locale, simTitle, localeName );
+
+              // Navigate user back to the sim list. Otherwise, they will be stuck
+              // on the translation form with disabled buttons.
+              alert( `Sending you back to the sim list for ${localeName}.` );
+              navigate( `/translate/${params.locale}` );
             }
             else if ( buttonId === 'test' ) {
               await testTranslation( values, params.simName, params.locale );
@@ -122,6 +132,7 @@ const TranslationForm = () => {
                   simName={params.simName}
                   locale={params.locale}
                   handleButtonClick={handleButtonClick}
+                  isDisabled={isDisabled}
                   {...props}
                 />
                 <ErrorContext.Provider value={props.errors}>
@@ -135,6 +146,7 @@ const TranslationForm = () => {
                   simName={params.simName}
                   locale={params.locale}
                   handleButtonClick={handleButtonClick}
+                  isDisabled={isDisabled}
                   {...props}
                 />
               </Form>
