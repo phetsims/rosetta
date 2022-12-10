@@ -12,7 +12,6 @@ import useLocaleInfo from '../hooks/useLocaleInfo.jsx';
 import useSimNamesAndTitles from '../hooks/useSimNamesAndTitles.jsx';
 import Admin from './Admin.jsx';
 import Help from './Help.jsx';
-import LocaleAndSimForm from './LocaleAndSimForm.jsx';
 import Navbar from './Navbar.jsx';
 import EmailAndSignOut from './EmailAndSignOut.jsx';
 import TranslationForm from './TranslationForm.jsx';
@@ -42,12 +41,11 @@ const RosettaRoutes = () => {
         <LocaleInfoContext.Provider value={localeInfo}>
           <SimNamesAndTitlesContext.Provider value={simNamesAndTitles}>
             <Routes>
-              <Route path='/translate' element={<LocaleAndSimForm/>}/>
-              <Route path='/translate/report/:locale' element={<TranslationReport/>}/>
-              <Route path='/translate/report' element={<TranslationReportForm/>}/>
-              <Route path='/translate/help' element={<Help/>}/>
-              <Route path='/translate/:locale/:simName' element={<TranslationForm/>}/>
+              <Route path='/translate' element={<TranslationReportForm/>}/>
               <Route path='/translate/admin' element={<Admin/>}/>
+              <Route path='/translate/help' element={<Help/>}/>
+              <Route path='/translate/:locale' element={<TranslationReport/>}/>
+              <Route path='/translate/:locale/:simName' element={<TranslationForm/>}/>
             </Routes>
           </SimNamesAndTitlesContext.Provider>
         </LocaleInfoContext.Provider>

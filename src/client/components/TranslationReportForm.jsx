@@ -22,11 +22,11 @@ const TranslationReportForm = () => {
 
   return (
     <div>
-      <h1>Select Locale</h1>
+      <h2>Select Locale</h2>
       <Formik
         initialValues={{ locale: 'ab' }}
         onSubmit={values => {
-          navigate( `/translate/report/${values.locale}` );
+          navigate( `/translate/${values.locale}` );
         }}
       >
         <Form>
@@ -35,7 +35,7 @@ const TranslationReportForm = () => {
           </div>
           <div className='mt-2'>
             <button type='submit' className='btn btn-primary'>
-              Get Translation Report
+              Translate
             </button>
           </div>
         </Form>
