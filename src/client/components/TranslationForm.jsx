@@ -24,7 +24,7 @@ import submitTranslation from '../utils/submitTranslation.js';
 import testTranslation from '../utils/testTranslation.js';
 import LoadingSpinner from './LoadingSpinner.jsx';
 import { WebsiteUserDataContext } from './Rosetta.jsx';
-import { LocaleInfoContext } from './RosettaRoutes.jsx';
+import { LocaleInfoContext, SimNamesAndTitlesContext } from './RosettaRoutes.jsx';
 import TranslationFormButtons from './TranslationFormButtons.jsx';
 import TranslationFormHeader from './TranslationFormHeader.jsx';
 import TranslationTables from './TranslationTables.jsx';
@@ -60,31 +60,41 @@ const TranslationForm = () => {
     setButtonId( evt.target.id );
   };
 
+  const simNamesAndTitles = useContext( SimNamesAndTitlesContext );
+  let simTitle = 'Loading...';
+  if ( Object.keys( simNamesAndTitles ).length > 0 ) {
+    simTitle = simNamesAndTitles[ params.simName ];
+  }
+
+  const localeInfo = useContext( LocaleInfoContext );
+  let localeName = 'Loading...';
+  if ( Object.keys( localeInfo ).length > 0 ) {
+    localeName = localeInfo[ params.locale ].name;
+  }
+
   let translationFormJsx;
   if ( translationFormData === null ) {
     translationFormJsx = (
       <div>
-        <TranslationFormHeader locale={params.locale} simName={params.simName}/>
+        <TranslationFormHeader
+          localeName={localeName}
+          locale={params.locale}
+          simTitle={simTitle}
+        />
         <LoadingSpinner/>
       </div>
     );
   }
   else {
 
-    const localeInfo = useContext( LocaleInfoContext );
-    let localeName = 'Loading...';
-    if ( Object.keys( localeInfo ).length > 0 ) {
-      localeName = localeInfo[ params.locale ].name;
-    }
-
     // Make the Formik form validation schema.
     const validationSchema = makeValidationSchema( translationFormData );
     translationFormJsx = (
       <div>
         <TranslationFormHeader
-          locale={params.locale}
           localeName={localeName}
-          simName={params.simName}
+          locale={params.locale}
+          simTitle={simTitle}
         />
         <Link to={`/translate/${params.locale}`}>Back to {localeName} ({params.locale}) Sim List</Link>
         <Formik
@@ -98,7 +108,7 @@ const TranslationForm = () => {
               await saveTranslation( values, params.simName, params.locale );
             }
             else if ( buttonId === 'submit' ) {
-              await submitTranslation( values, params.simName, params.locale );
+              await submitTranslation( values, params.simName, params.locale, simTitle, localeName );
             }
             else if ( buttonId === 'test' ) {
               await testTranslation( values, params.simName, params.locale );

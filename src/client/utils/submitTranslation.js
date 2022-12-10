@@ -9,7 +9,7 @@
 import axios from 'axios';
 import alertErrorMessage from './alertErrorMessage.js';
 import clientConstants from './clientConstants.js';
-import computeNumStringsTranslated from './computeNumStringsTranslated.js';
+import computeTranslatedStringsData from './computeTranslatedStringsData.js';
 import KeyTypesEnum from './KeyTypesEnum.js';
 import makeTranslationObject from './makeTranslationObject.js';
 
@@ -19,18 +19,28 @@ import makeTranslationObject from './makeTranslationObject.js';
  * @param {Object} values - the values in the translation form
  * @param {String} simName - the name of the sim being translated
  * @param {String} locale - the locale code of the sim being translated
+ * @param {String} simTitle - the sim's title
+ * @param {String} localeName - the name of the language/locale
  */
-const submitTranslation = async ( values, simName, locale ) => {
+const submitTranslation = async (
+  values,
+  simName,
+  locale,
+  simTitle,
+  localeName
+) => {
   console.log( `values = ${JSON.stringify( values, null, 4 )}` );
-  const numStringsTranslated = computeNumStringsTranslated( values );
+  const translatedStringsData = computeTranslatedStringsData( values );
   const translation = await makeTranslationObject( values, simName, locale );
   const messages = {};
   for ( const keyType of Object.values( KeyTypesEnum ) ) {
-    if ( numStringsTranslated[ keyType ] !== undefined ) {
-      messages[ keyType ] = `You have ${numStringsTranslated[ keyType ]} ${keyType} string(s) translated.\n`;
+    if ( translatedStringsData[ keyType ].translated !== undefined ) {
+      messages[ keyType ] = `You have ${translatedStringsData[ keyType ].translated}`
+                            + ` of ${translatedStringsData[ keyType ].total}`
+                            + ` ${translatedStringsData[ keyType ].name} string(s) translated.\n`;
     }
   }
-  let confirmMessage = `For ${translation.simName} in locale ${translation.locale}:\n`;
+  let confirmMessage = `For ${simTitle} in locale ${localeName}:\n`;
   for ( const message of Object.keys( messages ) ) {
     confirmMessage += '    ' + messages[ message ];
   }
@@ -38,9 +48,9 @@ const submitTranslation = async ( values, simName, locale ) => {
   if ( window.confirm( confirmMessage ) ) {
     try {
       await axios.post( `${clientConstants.translationApiRoute}/submitTranslation`, translation );
-      const submissionMessage = 'Translation submitted. ' +
-                                'Your translation should appear on the PhET website in about half an hour. ' +
-                                'It will take about 10 minutes for the translation utility to show the changes you made.';
+      const submissionMessage = 'Translation submitted.' +
+                                ' Your translation should appear on the PhET website in about half an hour.' +
+                                ' It will take about 10 minutes for the translation utility to show the changes you made.';
       alert( submissionMessage );
     }
     catch( e ) {
