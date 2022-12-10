@@ -10,6 +10,7 @@
 
 import React, { useEffect, useState } from 'react';
 import TranslationRow from './TranslationRow.jsx';
+import KeyTypesEnum from '../utils/KeyTypesEnum.js';
 
 /**
  * This component has some headers, some info, and a table for sim-specific strings and common strings. The header
@@ -27,14 +28,6 @@ const TranslationTables = props => {
 
   // Populate sim-specific and common rows.
   useEffect( () => {
-
-    // Key types to iterate over.
-    const KeyTypesEnum = {
-      SIM_SPECIFIC: 'simSpecific',
-      SHARED: 'shared',
-      COMMON: 'common'
-    };
-    Object.freeze( KeyTypesEnum );
 
     // Since we have three different "categories" for strings, sim-specific, shared between sims (but not in the common
     // repos list), and finally common strings shared between many sims, we iterate over those categories, and create
