@@ -7,7 +7,7 @@
  */
 
 import { useContext } from 'react';
-import { LocaleInfoContext, SimNamesAndTitlesContext } from './RosettaRoutes.jsx';
+import { SimNamesAndTitlesContext } from './RosettaRoutes.jsx';
 
 /**
  * Return a component that displays locale info and a sim title for a locale/sim in the translation form.
@@ -18,19 +18,13 @@ import { LocaleInfoContext, SimNamesAndTitlesContext } from './RosettaRoutes.jsx
  */
 const TranslationFormHeader = props => {
 
-  const localeInfo = useContext( LocaleInfoContext );
-  let localeName = 'Loading...';
-  if ( Object.keys( localeInfo ).length > 0 ) {
-    localeName = localeInfo[ props.locale ].name;
-  }
-
   const simNamesAndTitles = useContext( SimNamesAndTitlesContext );
   let simTitle = 'Loading...';
   if ( Object.keys( simNamesAndTitles ).length > 0 ) {
     simTitle = simNamesAndTitles[ props.simName ];
   }
 
-  return <h2 className='text-muted'>Translating {localeName} ({props.locale}) {simTitle}</h2>;
+  return <h2 className='text-muted'>Translating {props.localeName} ({props.locale}) {simTitle}</h2>;
 };
 
 export default TranslationFormHeader;
