@@ -9,6 +9,7 @@
 import axios from 'axios';
 import alertErrorMessage from './alertErrorMessage.js';
 import clientConstants from './clientConstants.js';
+import computeNumStringsTranslated from './computeNumStringsTranslated.js';
 import makeTranslationObject from './makeTranslationObject.js';
 
 /**
@@ -19,8 +20,12 @@ import makeTranslationObject from './makeTranslationObject.js';
  * @param {String} locale - the locale code of the sim being translated
  */
 const submitTranslation = async ( values, simName, locale ) => {
+  const numSimSpecific = computeNumStringsTranslated( values );
   const translation = await makeTranslationObject( values, simName, locale );
-  if ( window.confirm( `Are you sure you want to submit your translation for ${translation.simName} in locale ${translation.locale}?` ) ) {
+  const confirmMessage =
+    `You have translated ${numSimSpecific} strings for ${translation.simName} in locale ${translation.locale}.`
+    + ' Are you sure you want to submit?';
+  if ( window.confirm( confirmMessage ) ) {
     try {
       await axios.post( `${clientConstants.translationApiRoute}/submitTranslation`, translation );
       const submissionMessage = 'Translation submitted. ' +
