@@ -115,7 +115,7 @@ const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => 
     }
 
     jsx = (
-      <div>
+      <div className='mt-4'>
         <h3>
           {
             wantsUntranslated
