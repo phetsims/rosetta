@@ -13,42 +13,48 @@
  * @returns {JSX.Element}
  */
 const TranslationFormButtons = props => {
+  const divStyle = {
+    display: 'flex',
+    flexFlow: 'row wrap'
+  };
   const disabled = !( props.isValid && props.dirty );
-  const grayButton = 'btn btn-secondary mt-2';
-  const blueButton = 'btn btn-primary mt-2';
+  const margin = {
+    marginTop: '20px',
+    marginBottom: '20px',
+    marginRight: '20px'
+  };
+  const grayButton = 'btn btn-secondary';
+  const blueButton = 'btn btn-primary';
   const buttonClass = !( props.isValid && props.dirty ) ? grayButton : blueButton;
   return (
-    <div>
-      <div className='mt-2'>
-        <button
-          id='save'
-          onClick={props.handleButtonClick}
-          disabled={disabled}
-          className={buttonClass}
-        >
-          Save Translation to Work On Later
-        </button>
-      </div>
-      <div className='mt-2'>
-        <button
-          id='submit'
-          onClick={props.handleButtonClick}
-          disabled={disabled}
-          className={buttonClass}
-        >
-          Publish Translation to PhET Website
-        </button>
-      </div>
-      <div className='mt-2'>
-        <button
-          id='test'
-          onClick={props.handleButtonClick}
-          disabled={disabled}
-          className={buttonClass}
-        >
-          Test Translation With Your Strings
-        </button>
-      </div>
+    <div style={divStyle}>
+      <button
+        id='save'
+        onClick={props.handleButtonClick}
+        disabled={disabled}
+        className={buttonClass}
+        style={margin}
+      >
+        Save
+      </button>
+      <button
+        id='submit'
+        onClick={props.handleButtonClick}
+        disabled={disabled}
+        className={buttonClass}
+        style={margin}
+      >
+        Publish
+      </button>
+      <button
+        id='test'
+        onClick={props.handleButtonClick}
+        disabled={disabled}
+        className={buttonClass}
+        style={margin}
+      >
+        Test
+      </button>
     </div>
   );
 };
