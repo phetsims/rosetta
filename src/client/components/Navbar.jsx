@@ -40,9 +40,6 @@ const Navbar = () => {
               <Link className='nav-link' to='/translate'>Translate</Link>
             </li>
             <li className='nav-item'>
-              <Link className='nav-link' to='/translate/report'>Translation Report</Link>
-            </li>
-            <li className='nav-item'>
               <Link className='nav-link' to='/translate/help'>Help</Link>
             </li>
             {shouldShowAdminLink ? adminLinkJsx : <></>}
