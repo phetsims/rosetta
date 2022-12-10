@@ -16,7 +16,7 @@ import React, {
   useEffect,
   useState
 } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import clientConstants from '../utils/clientConstants.js';
 import makeValidationSchema from '../utils/makeValidationSchema.js';
 import saveTranslation from '../utils/saveTranslation.js';
@@ -75,6 +75,7 @@ const TranslationForm = () => {
     translationFormJsx = (
       <div>
         <TranslationFormHeader locale={params.locale} simName={params.simName}/>
+        <Link to={`/translate/${params.locale}`}>Back to Sim List</Link>
         <Formik
           initialValues={translationFormData}
           validationSchema={validationSchema}

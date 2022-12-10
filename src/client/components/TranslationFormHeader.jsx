@@ -30,13 +30,7 @@ const TranslationFormHeader = props => {
     simTitle = simNamesAndTitles[ props.simName ];
   }
 
-  return (
-    <div>
-      <h1>Translation Form</h1>
-      <h2 className='text-muted'>Locale: {localeName} ({props.locale})</h2>
-      <h2 className='text-muted'>Sim: {simTitle}</h2>
-    </div>
-  );
+  return <h2 className='text-muted'>Translating {localeName} ({props.locale}) {simTitle}</h2>;
 };
 
 export default TranslationFormHeader;
