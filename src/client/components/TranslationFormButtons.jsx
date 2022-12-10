@@ -17,7 +17,7 @@ const TranslationFormButtons = props => {
     display: 'flex',
     flexFlow: 'row wrap'
   };
-  const disabled = !( props.isValid && props.dirty );
+  const disabled = !( props.isValid && props.dirty ) || props.isDisabled;
   const margin = {
     marginTop: '20px',
     marginBottom: '20px',
