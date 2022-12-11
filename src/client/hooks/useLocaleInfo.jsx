@@ -8,8 +8,8 @@
 
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import alertErrorMessage from '../utils/alertErrorMessage.js';
-import clientConstants from '../utils/clientConstants.js';
+import alertErrorMessage from '../js/alertErrorMessage.js';
+import clientConstants from '../js/clientConstants.js';
 
 /**
  * Get the locale info from the backend and return it. If the request fails, show an error message.

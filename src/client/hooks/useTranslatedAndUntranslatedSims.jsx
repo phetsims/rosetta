@@ -2,8 +2,8 @@
 
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import alertErrorMessage from '../utils/alertErrorMessage.js';
-import clientConstants from '../utils/clientConstants.js';
+import alertErrorMessage from '../js/alertErrorMessage.js';
+import clientConstants from '../js/clientConstants.js';
 
 const useTranslatedAndUntranslatedSims = locale => {
   const [ translatedAndUntranslatedSims, setTranslatedAndUntranslatedSims ] = useState( null );

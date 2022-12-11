@@ -8,8 +8,8 @@
 
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import alertErrorMessage from '../utils/alertErrorMessage.js';
-import clientConstants from '../utils/clientConstants.js';
+import alertErrorMessage from '../js/alertErrorMessage.js';
+import clientConstants from '../js/clientConstants.js';
 
 /**
  * Get sims names and titles from the backend and return them. Show an error message if the request fails.
