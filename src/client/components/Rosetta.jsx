@@ -11,9 +11,9 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import useConfig from '../hooks/useConfig.jsx';
-import { createContext } from 'react';
-import useWebsiteUserData from '../hooks/useWebsiteUserData.jsx';
+import { useEffect, useState, createContext } from 'react';
+import getConfig from '../js/getConfig.js';
+import getWebsiteUserData from '../js/getWebsiteUserData.js';
 import PhetHomePageLink from './PhetHomePageLink.jsx';
 import RosettaRoutes from './RosettaRoutes.jsx';
 
@@ -33,12 +33,18 @@ const ConfigContext = createContext( {} );
  * @returns {JSX.Element}
  */
 function Rosetta() {
-  const config = useConfig();
-  let jsx;
-  if ( Object.keys( config ).length > 0 && config.common.IS_ENABLED ) {
+  const [ config, setConfig ] = useState( {} );
+  const [ websiteUserData, setWebsiteUserData ] = useState( {} );
+  useEffect( async () => {
 
-    const websiteUserData = useWebsiteUserData();
-
+    // This looks weird. There's a race condition between these two.
+    // The module for getting website user data uses a variable in the config.
+    setConfig( await getConfig() );
+    setWebsiteUserData( await getWebsiteUserData( await getConfig() ) );
+  }, [] );
+  let jsx = <p>Loading...</p>;
+  const rosettaEnabled = Object.keys( config ).length > 0 && config.client.IS_ENABLED;
+  if ( rosettaEnabled ) {
     const allowedAccess = websiteUserData.loggedIn && ( websiteUserData.trustedTranslator || websiteUserData.teamMember );
     const notAllowedAccess = websiteUserData.loggedIn && ( !websiteUserData.trustedTranslator && !websiteUserData.teamMember );
     if ( allowedAccess ) {
