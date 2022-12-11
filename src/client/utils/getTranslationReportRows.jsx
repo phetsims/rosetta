@@ -22,7 +22,6 @@ import getSortedTranslationReportRows from './getSortedTranslationReportRows.jsx
  * @param {Boolean} reportPopulated - boolean telling whether we have all the report objects
  * @param {String} sortKey - which key to sort by, only used when the report is populated
  * @param {String} sortDirection - either ascending or descending
- * @param {Number} numberOfEvents - now used in production; umber of report objects; useful for debugging
  * @returns {Object[]} - array of report rows, i.e. array of JSX
  */
 const getTranslationReportRows = (
@@ -32,8 +31,7 @@ const getTranslationReportRows = (
   locale,
   reportPopulated,
   sortKey,
-  sortDirection,
-  numberOfEvents = null
+  sortDirection
 ) => {
 
   if ( reportPopulated ) {
@@ -49,27 +47,14 @@ const getTranslationReportRows = (
   const translationReportJsx = {};
 
   // Initially, set all rows to loading.
-  if ( !numberOfEvents ) {
-    for ( const simName of listOfSims ) {
-      translationReportJsx[ simName ] = (
-        <tr key={simName}>
-          <td><Link to={`/translate/${locale}/${simName}`}>{simNamesAndTitles[ simName ]}</Link></td>
-          <td>Loading...</td>
-          <td>Loading...</td>
-        </tr>
-      );
-    }
-  }
-  else {
-    for ( let i = 0; i < numberOfEvents; i++ ) {
-      translationReportJsx[ listOfSims[ i ] ] = (
-        <tr key={listOfSims[ i ]}>
-          <td><Link to={`/translate/${locale}/${listOfSims[ i ]}`}>{simNamesAndTitles[ listOfSims[ i ] ]}</Link></td>
-          <td>Loading...</td>
-          <td>Loading...</td>
-        </tr>
-      );
-    }
+  for ( const simName of listOfSims ) {
+    translationReportJsx[ simName ] = (
+      <tr key={simName}>
+        <td><Link to={`/translate/${locale}/${simName}`}>{simNamesAndTitles[ simName ]}</Link></td>
+        <td>Loading...</td>
+        <td>Loading...</td>
+      </tr>
+    );
   }
 
   // Overwrite rows for which we have data.
