@@ -10,7 +10,7 @@
 import axios from 'axios';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import clientConstants from '../utils/clientConstants.js';
+import clientConstants from '../js/clientConstants.js';
 import { useContext } from 'react';
 import { WebsiteUserDataContext } from './Rosetta.jsx';
 

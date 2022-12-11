@@ -17,11 +17,11 @@ import React, {
   useState
 } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import clientConstants from '../utils/clientConstants.js';
-import makeValidationSchema from '../utils/makeValidationSchema.js';
-import saveTranslation from '../utils/saveTranslation.js';
-import submitTranslation from '../utils/submitTranslation.js';
-import testTranslation from '../utils/testTranslation.js';
+import clientConstants from '../js/clientConstants.js';
+import makeValidationSchema from '../js/makeValidationSchema.js';
+import saveTranslation from '../js/saveTranslation.js';
+import submitTranslation from '../js/submitTranslation.js';
+import testTranslation from '../js/testTranslation.js';
 import LoadingSpinner from './LoadingSpinner.jsx';
 import { WebsiteUserDataContext } from './Rosetta.jsx';
 import { LocaleInfoContext, SimNamesAndTitlesContext } from './RosettaRoutes.jsx';

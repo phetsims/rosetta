@@ -11,8 +11,8 @@
 import { useContext, useState } from 'react';
 import useTranslatedAndUntranslatedSims from '../hooks/useTranslatedAndUntranslatedSims.jsx';
 import useTranslationReportObjects from '../hooks/useTranslationReportObjects.jsx';
-import clientConstants from '../utils/clientConstants.js';
-import getTranslationReportRows from '../utils/getTranslationReportRows.jsx';
+import clientConstants from '../js/clientConstants.js';
+import getTranslationReportRows from '../jsx/getTranslationReportRows.jsx';
 import LoadingSpinner from './LoadingSpinner.jsx';
 import { SimNamesAndTitlesContext } from './RosettaRoutes.jsx';
 import SortButton from './SortButton.jsx';

@@ -10,7 +10,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Xerxes from '../img/xerxes.jpg';
-import clientConstants from '../utils/clientConstants.js';
+import clientConstants from '../js/clientConstants.js';
 
 /**
  * Get the SHA of the running instance of Rosetta from the server and display it.
