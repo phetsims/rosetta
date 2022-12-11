@@ -36,6 +36,9 @@ const getLocaleInfo = async () => {
       const localeInfoRes = await axios.get( localeInfoUrl );
       localeInfo = localeInfoRes.data;
 
+      // Delete the English locale; we don't want people translating it.
+      delete localeInfo.en;
+
       // We ignore this ESLint rule because a race condition here won't be problematic.
       /* eslint-disable require-atomic-updates */
       timeOfLastUpdate = Date.now();
