@@ -17,7 +17,7 @@ import logger from '../logger.js';
  */
 const sha = ( req, res ) => {
   logger.info( 'responding with sha' );
-  res.json( { sha: config.SHA } );
+  res.json( { sha: config.server.SHA } );
 };
 
 export default sha;

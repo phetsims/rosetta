@@ -9,7 +9,6 @@
 
 const Gruntfile = require( '../chipper/js/grunt/Gruntfile' );
 const cloneRepo = require( '../perennial/js/common/cloneRepo.js' );
-const config = import('./src/common/config.js');
 const fs = require( 'fs' );
 const gitPull = require( '../perennial/js/common/gitPull' );
 const npmUpdate = require( '../perennial/js/common/npmUpdate.js' );
@@ -21,7 +20,7 @@ const logger = winston.createLogger( {
   format: winston.format.combine(
     winston.format.simple()
   ),
-  level: config.LOGGER_LEVEL,
+  level: 'info',
   transports: [
     new winston.transports.Console()
   ]
