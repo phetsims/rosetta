@@ -6,8 +6,8 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import config from '../../../common/config.js';
 import logger from '../logger.js';
+import getCurrentRosettaSha from '../getCurrentRosettaSha.js';
 
 /**
  * API function. Respond with the current SHA of the running instance of Rosetta.
@@ -17,7 +17,8 @@ import logger from '../logger.js';
  */
 const sha = ( req, res ) => {
   logger.info( 'responding with sha' );
-  res.json( { sha: config.server.SHA } );
+  const sha = getCurrentRosettaSha();
+  res.json( { sha: sha } );
 };
 
 export default sha;
