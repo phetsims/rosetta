@@ -14,7 +14,7 @@ const logger = winston.createLogger( {
     winston.format.colorize(),
     winston.format.simple()
   ),
-  level: config.LOGGER_LEVEL,
+  level: config.server.LOGGER_LEVEL,
   transports: [
     new winston.transports.Console()
   ]

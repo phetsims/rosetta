@@ -13,6 +13,7 @@
 
 import config from '../common/config.js';
 import express from 'express';
+import getCurrentRosettaSha from './translationApi/getCurrentRosettaSha.js';
 import logger from './translationApi/logger.js';
 import mockWebsiteUserData from './translationApi/api/mockWebsiteUserData.js';
 import path from 'path';
@@ -74,4 +75,8 @@ app.listen( config.server.ROSETTA_PORT, () => {
       logger.info( `    ${subKey}: ${config[ key ][ subKey ]}` );
     }
   }
+
+  // Also log Rosetta's SHA.
+  const sha = getCurrentRosettaSha();
+  logger.info( `    SHA: ${sha}` );
 } );
