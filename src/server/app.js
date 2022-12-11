@@ -59,19 +59,19 @@ app.use( '/translate/api', translationApi );
 app.use( '/translate', builtReactAppServer );
 
 // Mock website user data for local development.
-if ( config.ENVIRONMENT === 'development' ) {
+if ( config.common.ENVIRONMENT === 'development' ) {
   app.get( '/services/check-login', mockWebsiteUserData );
 }
 
-app.listen( config.ROSETTA_PORT, () => {
+app.listen( config.server.ROSETTA_PORT, () => {
   logger.info( 'rosetta started' );
-  logger.info( `http://localhost:${config.ROSETTA_PORT}/translate` );
+  logger.info( `http://localhost:${config.server.ROSETTA_PORT}/translate` );
 
-  const unsafeKeys = [ 'BUILD_SERVER_AUTH', 'GITHUB_PAT', 'SERVER_TOKEN' ];
-
-  const configKeysToLog = Object.keys( config ).filter( key => !unsafeKeys.includes( key ) );
+  const configKeysToLog = Object.keys( config ).filter( key => key !== 'secret' );
   logger.info( 'see config below' );
   for ( const key of configKeysToLog ) {
-    logger.info( `    ${key}: ${config[ key ]}` );
+    for ( const subKey of Object.keys( config[ key ] ) ) {
+      logger.info( `    ${subKey}: ${config[ key ][ subKey ]}` );
+    }
   }
 } );

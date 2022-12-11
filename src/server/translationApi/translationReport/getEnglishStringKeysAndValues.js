@@ -24,7 +24,7 @@ import logger from '../logger.js';
 const getEnglishStringKeysAndValues = async ( simOrLibName, stringKeysWithRepoName, shaOrBranch = 'master' ) => {
   logger.info( 'getting english string keys and values' );
   const englishStringKeysAndValues = {};
-  const englishStringFileUrl = `${config.GITHUB_URL}/${simOrLibName}/${shaOrBranch}/${simOrLibName}-strings_en.json`;
+  const englishStringFileUrl = `${config.server.GITHUB_URL}/${simOrLibName}/${shaOrBranch}/${simOrLibName}-strings_en.json`;
   let englishStringData = {};
   try {
     const englishStringDataRes = await axios.get( englishStringFileUrl );

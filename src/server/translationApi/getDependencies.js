@@ -22,7 +22,7 @@ const getDependencies = async ( simName, version ) => {
   let ret;
 
   // Compose the URL where the dependencies should be.
-  const url = `${config.SERVER_URL}/sims/html/${simName}/${version}/dependencies.json`;
+  const url = `${config.server.SERVER_URL}/sims/html/${simName}/${version}/dependencies.json`;
 
   // Get the dependencies.
   logger.info( `getting dependencies from ${url}` );

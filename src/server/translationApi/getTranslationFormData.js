@@ -71,14 +71,14 @@ const getTranslationFormData = async (
   logger.info( 'getting translation form data' );
 
   // try to get a saved translation from the short-term storage database
-  if ( config.DB_ENABLED ) {
+  if ( config.server.DB_ENABLED ) {
     try {
 
       logger.info( 'checking for saved translation' );
 
       // get user id; depends on whether we're running on localhost or on a server
-      if ( config.ENVIRONMENT === 'development' ) {
-        userId = config.LOCAL_USER_ID;
+      if ( config.common.ENVIRONMENT === 'development' ) {
+        userId = config.common.LOCAL_USER_ID;
       }
 
       // try to get saved translation in short-term storage database

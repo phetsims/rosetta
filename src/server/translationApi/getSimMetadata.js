@@ -11,14 +11,14 @@ import config from '../../common/config.js';
 import logger from './logger.js';
 
 // where we get the metadata
-const METADATA_URL = config.SERVER_URL +
+const METADATA_URL = config.server.SERVER_URL +
                      '/services/metadata/1.3/simulations?format=json&type=html&include-unpublished=true&summary';
 
 // the authorization object we must provide in the request
 const METADATA_REQ_OPTIONS = {
   auth: {
     username: 'token',
-    password: config.SERVER_TOKEN
+    password: config.secret.SERVER_TOKEN
   }
 };
 
@@ -35,7 +35,7 @@ const getSimMetadata = async () => {
   logger.info( 'getting sim metadata' );
   try {
     const metadataValidDurationElapsed = timeOfLastUpdate +
-                                         Number( config.VALID_METADATA_DURATION ) < Date.now();
+                                         Number( config.common.VALID_METADATA_DURATION ) < Date.now();
 
     /*
      * We use cached sim metadata unless the sim metadata has become stale (i.e. the valid metadata duration has

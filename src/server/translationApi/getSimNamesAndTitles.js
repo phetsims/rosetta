@@ -18,8 +18,8 @@ import logger from './logger.js';
  */
 const extractSimName = sim => {
   let simName = false;
-  const wantSimVisible = config.ENVIRONMENT === 'development' ||
-                         ( config.ENVIRONMENT === 'production' &&
+  const wantSimVisible = config.common.ENVIRONMENT === 'development' ||
+                         ( config.common.ENVIRONMENT === 'production' &&
                            ( sim.visible || sim.isPrototype ) );
   if ( wantSimVisible ) {
     simName = sim.name;

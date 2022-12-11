@@ -23,7 +23,7 @@ const getLocaleInfo = async () => {
   logger.info( 'getting locale info' );
   try {
     const localeInfoValidDurationElapsed = timeOfLastUpdate
-                                           + Number( config.VALID_LOCALE_INFO_DURATION ) < Date.now();
+                                           + Number( config.server.VALID_LOCALE_INFO_DURATION ) < Date.now();
 
     /*
      * We use cached locale info unless the locale info has become stale (i.e. the valid locale info duration has
@@ -32,7 +32,7 @@ const getLocaleInfo = async () => {
      */
     if ( localeInfoValidDurationElapsed ) {
       logger.info( 'locale info is stale or nonexistent; getting it' );
-      const localeInfoUrl = `${config.GITHUB_URL}/chipper/master/data/localeInfo.json`;
+      const localeInfoUrl = `${config.server.GITHUB_URL}/chipper/master/data/localeInfo.json`;
       const localeInfoRes = await axios.get( localeInfoUrl );
       localeInfo = localeInfoRes.data;
 

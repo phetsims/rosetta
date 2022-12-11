@@ -38,10 +38,10 @@ const getStringKeysWithRepoName = simHtml => {
   * };
   *
   */
-  const re = new RegExp( `${config.STRING_KEYS_WITH_REPO_NAME_IN_HTML_VAR}.*$`, 'm' );
+  const re = new RegExp( `${config.server.STRING_KEYS_WITH_REPO_NAME_IN_HTML_VAR}.*$`, 'm' );
   const stringKeysWithRepoNameAndRestOfHtml = simHtml.match( re );
   const unparsedStringKeysWithRepoName = stringKeysWithRepoNameAndRestOfHtml[ 0 ]
-    .replace( `${config.STRING_KEYS_WITH_REPO_NAME_IN_HTML_VAR} = `, '' )
+    .replace( `${config.server.STRING_KEYS_WITH_REPO_NAME_IN_HTML_VAR} = `, '' )
     .replace( /;$/m, '' );
 
   const parsedStringKeysWithRepoName = JSON.parse( unparsedStringKeysWithRepoName );

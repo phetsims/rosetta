@@ -19,9 +19,9 @@ import logger from './logger.js';
  */
 const getTranslatedStringFile = ( simOrLibName, locale ) => {
   logger.verbose( `getting ${simOrLibName}/${locale}'s translated string file url` );
-  logger.verbose( `getting ${config.GITHUB_URL}/babel/${config.BABEL_BRANCH}/${simOrLibName}/${simOrLibName}-strings_${locale}.json` );
+  logger.verbose( `getting ${config.server.GITHUB_URL}/babel/${config.server.BABEL_BRANCH}/${simOrLibName}/${simOrLibName}-strings_${locale}.json` );
   logger.verbose( `got ${simOrLibName}/${locale}'s translated string file url; returning it` );
-  return `${config.GITHUB_URL}/babel/${config.BABEL_BRANCH}/${simOrLibName}/${simOrLibName}-strings_${locale}.json`;
+  return `${config.server.GITHUB_URL}/babel/${config.server.BABEL_BRANCH}/${simOrLibName}/${simOrLibName}-strings_${locale}.json`;
 };
 
 export default getTranslatedStringFile;

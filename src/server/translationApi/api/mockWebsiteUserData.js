@@ -19,7 +19,7 @@ import logger from '../logger.js';
 const mockWebsiteUserData = ( req, res ) => {
   const mockWebsiteUserData = {
     username: 'PhET Girl',
-    userId: config.LOCAL_USER_ID,
+    userId: config.common.LOCAL_USER_ID,
     email: 'phet.girl@colorado.edu',
     loggedIn: true,
     teamMember: true,

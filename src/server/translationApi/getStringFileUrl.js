@@ -22,7 +22,7 @@ const getStringFileUrl = ( repoName, branchOrSha = 'master' ) => {
 
   // TODO: Change master to shaOrBranch variable.
   // TODO: Need SHA for published version of sim, otherwise deleted strings will be missing.
-  return `${config.GITHUB_URL}/${repoName}/${branchOrSha}/${repoName}-strings_en.json`;
+  return `${config.server.GITHUB_URL}/${repoName}/${branchOrSha}/${repoName}-strings_en.json`;
 };
 
 export default getStringFileUrl;
