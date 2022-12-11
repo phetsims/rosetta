@@ -12,9 +12,9 @@ import logger from './logger.js';
 
 let shortTermStringStorageCollection = {};
 
-if ( config.DB_ENABLED ) {
+if ( config.server.DB_ENABLED ) {
 
-  const client = new MongoClient( config.DB_URI );
+  const client = new MongoClient( config.server.DB_URI );
 
   // try to connect to mongo
   try {
@@ -29,10 +29,10 @@ if ( config.DB_ENABLED ) {
   }
 
   // get the database
-  const database = client.db( config.DB_NAME );
+  const database = client.db( config.server.DB_NAME );
 
   // get the collection (analogous to sql table)
-  shortTermStringStorageCollection = database.collection( config.DB_SHORT_TERM_STORAGE_COLLECTION_NAME );
+  shortTermStringStorageCollection = database.collection( config.server.DB_SHORT_TERM_STORAGE_COLLECTION_NAME );
 
   // close the connection to mongo
   process.on( 'exit', async () => {

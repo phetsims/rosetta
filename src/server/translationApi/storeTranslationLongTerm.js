@@ -10,7 +10,7 @@ import github from 'octonode';
 import config from '../../common/config.js';
 import logger from './logger.js';
 
-const githubInterface = github.client( config.GITHUB_PAT );
+const githubInterface = github.client( config.secret.GITHUB_PAT );
 const longTermStorage = githubInterface.repo( 'phetsims/babel' );
 
 /**
@@ -21,7 +21,7 @@ const longTermStorage = githubInterface.repo( 'phetsims/babel' );
  */
 const storeTranslationLongTerm = async preparedTranslation => {
   let longTermStorageRes = null;
-  if ( config.PERFORM_STRING_COMMITS ) {
+  if ( config.server.PERFORM_STRING_COMMITS ) {
 
     const contents = preparedTranslation.translationFileContents;
     for ( const repo of Object.keys( contents ) ) {
@@ -39,13 +39,13 @@ const storeTranslationLongTerm = async preparedTranslation => {
 
           logger.info( 'trying to update contents of file on github' );
 
-          const contentsRes = await longTermStorage.contentsAsync( translationFilePath, config.BABEL_BRANCH );
+          const contentsRes = await longTermStorage.contentsAsync( translationFilePath, config.server.BABEL_BRANCH );
           longTermStorageRes = await longTermStorage.updateContentsAsync(
             translationFilePath,
             commitMessage,
             fileContents,
             contentsRes[ 0 ].sha,
-            config.BABEL_BRANCH
+            config.server.BABEL_BRANCH
           );
 
           logger.info( 'updated contents of file on github' );
@@ -61,7 +61,7 @@ const storeTranslationLongTerm = async preparedTranslation => {
               translationFilePath,
               commitMessage,
               fileContents,
-              config.BABEL_BRANCH
+              config.server.BABEL_BRANCH
             );
             logger.info( 'created file on github' );
             logger.info( `stored translation of strings in ${repo} long-term` );

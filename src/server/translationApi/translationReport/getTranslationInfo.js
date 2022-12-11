@@ -22,8 +22,8 @@ const getTranslationInfo = async () => {
   const simMetadata = await getSimMetadata();
   for ( const project of simMetadata.projects ) {
     for ( const sim of project.simulations ) {
-      const wantSimVisible = config.ENVIRONMENT === 'development' ||
-                             ( config.ENVIRONMENT === 'production' &&
+      const wantSimVisible = config.common.ENVIRONMENT === 'development' ||
+                             ( config.common.ENVIRONMENT === 'production' &&
                                ( sim.visible || sim.isPrototype ) );
       if ( wantSimVisible ) {
         const simName = sim.name;

@@ -17,7 +17,7 @@ let config = {};
 try {
   const unparsedJson = fs.readFileSync( pathToConfig, 'utf8' );
   config = JSON.parse( unparsedJson );
-  config.SHA = getCurrentRosettaSha();
+  config.common.SHA = getCurrentRosettaSha();
 }
 catch( e ) {
   console.error( e );

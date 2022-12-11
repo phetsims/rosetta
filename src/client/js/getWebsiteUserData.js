@@ -21,10 +21,10 @@ import axios from 'axios';
  * @returns {Promise<Object>}
  */
 const getWebsiteUserData = async () => {
-  const clientConfigRes = await axios.get( '/translate/api/clientConfig' );
-  const clientConfig = clientConfigRes.data;
+  const configRes = await axios.get( '/translate/api/clientConfig' );
+  const config = configRes.data;
   const websiteUserDataRes = await axios.get(
-    clientConfig.websiteUserDataUrl,
+    config.client.WEBSITE_USER_DATA_URL,
     { withCredentials: true } // Include cookies so website backend can look up your session.
   );
   return websiteUserDataRes.data;
