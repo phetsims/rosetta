@@ -2,7 +2,8 @@
 
 /**
  * Define the report object cache class. At startup, we create an object based on this
- * class with cached report objects. These objects are sent to the client to create the
+ * class. As Rosetta gets requests for report objects, they are cached in this report object
+ * cache. (It takes a while to get them.) These objects are sent to the client to create the
  * translation report.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
