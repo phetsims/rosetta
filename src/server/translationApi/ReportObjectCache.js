@@ -1,5 +1,13 @@
 // Copyright 2022, University of Colorado Boulder
 
+/**
+ * Define the report object cache class. At startup, we create an object based on this
+ * class with cached report objects. These objects are sent to the client to create the
+ * translation report.
+ *
+ * @author Liam Mulhall <liammulh@gmail.com>
+ */
+
 import getMinutesElapsed from '../../common/getMinutesElapsed.js';
 
 class ReportObjectCache {
@@ -56,22 +64,8 @@ class ReportObjectCache {
   }
 }
 
-// ( () => {
-//   const repObj1 = {
-//     simName: 'foo',
-//     simTitle: 'Foo',
-//     numCommonStrings: 21,
-//     numCommonTranslatedStrings: 21,
-//     numSimSpecificStrings: 21,
-//     numSimSpecificTranslatedStrings: 21
-//   };
-//   const reportObjectCache = new ReportObjectCache();
-//   reportObjectCache.setObject( 'fo', 'foo', repObj1 );
-//   console.log( JSON.stringify( reportObjectCache, null, 4 ) );
-//   const got = reportObjectCache.getObject( 'fo', 'foo' );
-//   console.log( `got = ${JSON.stringify( got, null, 4 )}` );
-//   reportObjectCache.setDirtyObject( 'fo', 'foo' );
-//   console.log( JSON.stringify( reportObjectCache, null, 4 ) );
-// } )();
-
+// This rule doesn't really apply to Rosetta.
+// This is the only class in the codebase. Otherwise, put this in the ESLint config?
+// For the paper trail on this issue, see https://github.com/phetsims/phet-core/issues/100.
+// eslint-disable-next-line default-export-class-should-register-namespace
 export default ReportObjectCache;
