@@ -8,7 +8,9 @@
  */
 
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
 import getMinutesElapsed from '../../common/getMinutesElapsed.js';
+import { ConfigContext } from '../components/Rosetta.jsx';
 
 /**
  * Return an array of translation report objects (i.e. stats used to make translation report rows) that have
@@ -94,6 +96,10 @@ const getSortedTranslationReportRows = (
     sortKey
   );
 
+  const config = useContext( ConfigContext );
+  const validMetadataDuration = new Date( Number( config.common.VALID_METADATA_DURATION ) );
+  const validMetadataMinutes = validMetadataDuration.getMinutes();
+
   // Create the array of JSX to render in the translation report.
   const translationReportJsx = [];
   for ( const item of sortedData ) {
@@ -101,9 +107,12 @@ const getSortedTranslationReportRows = (
     // If the object is dirty, and there hasn't been enough time for an update, tell the user.
     // For background on why we do this, see https://github.com/phetsims/rosetta/issues/316.
     const minutesElapsed = getMinutesElapsed( item.timestamp, Date.now() );
-    const lessThanTenMinutesSinceCache = minutesElapsed < 10;
+
+    // This is tied to sim metadata because the lists of translated and untranslated sims
+    // are obtained from the sim metadata.
+    const withinMetadataWindow = minutesElapsed < ( validMetadataMinutes * 2 );
     let pendingUpdate = <></>;
-    if ( item.isDirty && lessThanTenMinutesSinceCache ) {
+    if ( item.isDirty && withinMetadataWindow ) {
       pendingUpdate = '(pending update) ';
     }
 
