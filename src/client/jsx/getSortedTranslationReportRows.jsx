@@ -95,8 +95,7 @@ const getSortedTranslationReportRows = (
     sortKey
   );
 
-  const validMetadataDuration = new Date( publicConfig.VALID_METADATA_DURATION );
-  const validMetadataMinutes = validMetadataDuration.getMinutes();
+  const validMetadataMinutes = publicConfig.VALID_METADATA_DURATION / 1000 / 60;
 
   // Create the array of JSX to render in the translation report.
   const translationReportJsx = [];
