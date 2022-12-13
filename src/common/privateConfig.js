@@ -12,14 +12,13 @@ import path from 'path';
 
 const pathToConfig = path.join( os.homedir(), '.phet', 'rosetta-config.json' );
 
-let config = {};
+let privateConfig = { error: 'unable to get configuration file for rosetta' };
 try {
   const unparsedJson = fs.readFileSync( pathToConfig, 'utf8' );
-  config = JSON.parse( unparsedJson );
+  privateConfig = JSON.parse( unparsedJson );
 }
 catch( e ) {
   console.error( e );
-  config = { error: 'unable to get configuration file for rosetta' };
 }
 
-export default config;
+export default privateConfig;

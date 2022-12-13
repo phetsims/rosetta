@@ -7,18 +7,19 @@
  */
 
 import axios from 'axios';
-import config from '../../common/config.js';
+import privateConfig from '../../common/privateConfig.js';
+import publicConfig from '../../common/publicConfig.js';
 import logger from './logger.js';
 
 // where we get the metadata
-const METADATA_URL = config.server.SERVER_URL +
+const METADATA_URL = privateConfig.SERVER_URL +
                      '/services/metadata/1.3/simulations?format=json&type=html&include-unpublished=true&summary';
 
 // the authorization object we must provide in the request
 const METADATA_REQ_OPTIONS = {
   auth: {
     username: 'token',
-    password: config.secret.SERVER_TOKEN
+    password: privateConfig.SERVER_TOKEN
   }
 };
 
@@ -35,7 +36,7 @@ const getSimMetadata = async () => {
   logger.info( 'getting sim metadata' );
   try {
     const metadataValidDurationElapsed = timeOfLastUpdate +
-                                         Number( config.common.VALID_METADATA_DURATION ) < Date.now();
+                                         publicConfig.VALID_METADATA_DURATION < Date.now();
 
     /*
      * We use cached sim metadata unless the sim metadata has become stale (i.e. the valid metadata duration has

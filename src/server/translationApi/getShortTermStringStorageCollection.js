@@ -7,14 +7,14 @@
  */
 
 import { MongoClient } from 'mongodb';
-import config from '../../common/config.js';
+import privateConfig from '../../common/privateConfig.js';
 import logger from './logger.js';
 
 let shortTermStringStorageCollection = {};
 
-if ( config.server.DB_ENABLED ) {
+if ( privateConfig.DB_ENABLED ) {
 
-  const client = new MongoClient( config.server.DB_URI );
+  const client = new MongoClient( privateConfig.DB_URI );
 
   // try to connect to mongo
   try {
@@ -29,10 +29,10 @@ if ( config.server.DB_ENABLED ) {
   }
 
   // get the database
-  const database = client.db( config.server.DB_NAME );
+  const database = client.db( privateConfig.DB_NAME );
 
   // get the collection (analogous to sql table)
-  shortTermStringStorageCollection = database.collection( config.server.DB_SHORT_TERM_STORAGE_COLLECTION_NAME );
+  shortTermStringStorageCollection = database.collection( privateConfig.DB_SHORT_TERM_STORAGE_COLLECTION_NAME );
 
   // close the connection to mongo
   process.on( 'exit', async () => {

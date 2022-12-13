@@ -6,7 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import config from '../../../common/config.js';
+import publicConfig from '../../../common/publicConfig.js';
 import logger from '../logger.js';
 
 /**
@@ -19,7 +19,7 @@ import logger from '../logger.js';
 const mockWebsiteUserData = ( req, res ) => {
   const mockWebsiteUserData = {
     username: 'PhET Girl',
-    userId: config.common.LOCAL_USER_ID,
+    userId: publicConfig.LOCAL_USER_ID,
     email: 'phet.girl@colorado.edu',
     loggedIn: true,
     teamMember: true,

@@ -6,7 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import config from '../../../common/config.js';
+import publicConfig from '../../../common/publicConfig.js';
 import getLocaleInfo from '../getLocaleInfo.js';
 import getSimMetadata from '../getSimMetadata.js';
 
@@ -22,8 +22,8 @@ const getTranslationInfo = async () => {
   const simMetadata = await getSimMetadata();
   for ( const project of simMetadata.projects ) {
     for ( const sim of project.simulations ) {
-      const wantSimVisible = config.common.ENVIRONMENT === 'development' ||
-                             ( config.common.ENVIRONMENT === 'production' &&
+      const wantSimVisible = publicConfig.ENVIRONMENT === 'development' ||
+                             ( publicConfig.ENVIRONMENT === 'production' &&
                                ( sim.visible || sim.isPrototype ) );
       if ( wantSimVisible ) {
         const simName = sim.name;

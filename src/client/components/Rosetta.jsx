@@ -11,14 +11,13 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { useEffect, useState, createContext } from 'react';
-import getConfig from '../js/getConfig.js';
-import getWebsiteUserData from '../js/getWebsiteUserData.js';
+import { createContext } from 'react';
+import useWebsiteUserData from '../hooks/useWebsiteUserData.jsx';
 import PhetHomePageLink from './PhetHomePageLink.jsx';
 import RosettaRoutes from './RosettaRoutes.jsx';
+import publicConfig from '../../common/publicConfig.js';
 
 const WebsiteUserDataContext = createContext( {} );
-const ConfigContext = createContext( {} );
 
 /**
  * If a user is allowed access to the translation tool, this component will contain some header stuff and the routes
@@ -33,27 +32,17 @@ const ConfigContext = createContext( {} );
  * @returns {JSX.Element}
  */
 function Rosetta() {
-  const [ config, setConfig ] = useState( {} );
-  const [ websiteUserData, setWebsiteUserData ] = useState( {} );
-  useEffect( async () => {
-
-    // This looks weird. There's a race condition between these two.
-    // The module for getting website user data uses a variable in the config.
-    setConfig( await getConfig() );
-    setWebsiteUserData( await getWebsiteUserData( await getConfig() ) );
-  }, [] );
+  const websiteUserData = useWebsiteUserData();
   let jsx = <p>Loading...</p>;
-  const rosettaEnabled = Object.keys( config ).length > 0 && config.client.IS_ENABLED;
+  const rosettaEnabled = Object.keys( publicConfig ).length > 0 && publicConfig.IS_ENABLED;
   if ( rosettaEnabled ) {
     const allowedAccess = websiteUserData.loggedIn && ( websiteUserData.trustedTranslator || websiteUserData.teamMember );
     const notAllowedAccess = websiteUserData.loggedIn && ( !websiteUserData.trustedTranslator && !websiteUserData.teamMember );
     if ( allowedAccess ) {
       jsx = (
-        <ConfigContext.Provider value={config}>
-          <WebsiteUserDataContext.Provider value={websiteUserData}>
-            <RosettaRoutes/>
-          </WebsiteUserDataContext.Provider>
-        </ConfigContext.Provider>
+        <WebsiteUserDataContext.Provider value={websiteUserData}>
+          <RosettaRoutes/>
+        </WebsiteUserDataContext.Provider>
       );
     }
     else if ( notAllowedAccess ) {
@@ -93,5 +82,5 @@ function Rosetta() {
   return jsx;
 }
 
-export { ConfigContext, WebsiteUserDataContext };
+export { WebsiteUserDataContext };
 export default Rosetta;

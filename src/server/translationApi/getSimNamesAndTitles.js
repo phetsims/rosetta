@@ -7,7 +7,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import config from '../../common/config.js';
+import publicConfig from '../../common/publicConfig.js';
 import logger from './logger.js';
 
 /**
@@ -18,8 +18,8 @@ import logger from './logger.js';
  */
 const extractSimName = sim => {
   let simName = false;
-  const wantSimVisible = config.common.ENVIRONMENT === 'development' ||
-                         ( config.common.ENVIRONMENT === 'production' &&
+  const wantSimVisible = publicConfig.ENVIRONMENT === 'development' ||
+                         ( publicConfig.ENVIRONMENT === 'production' &&
                            ( sim.visible || sim.isPrototype ) );
   if ( wantSimVisible ) {
     simName = sim.name;

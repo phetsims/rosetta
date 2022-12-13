@@ -5,7 +5,7 @@
 import axios from 'axios';
 import simPhetioMetadata from '../../../../perennial/js/common/simPhetioMetadata.js';
 import SimVersion from '../../../../perennial/js/common/SimVersion.js';
-import config from '../../common/config.js';
+import privateConfig from '../../common/privateConfig.js';
 import getDependencies from './getDependencies.js';
 import getSimVersionObject from './getSimVersionObject.js';
 import logger from './logger.js';
@@ -50,7 +50,7 @@ const requestBuild = async ( simName, locale, userID ) => {
     servers: [ 'production' ],
     brands: brands,
     translatorId: userID,
-    authorizationCode: config.secret.BUILD_SERVER_AUTH
+    authorizationCode: privateConfig.BUILD_SERVER_AUTH
   };
 
   // Log the build request without the auth code or dependencies.
@@ -64,10 +64,10 @@ const requestBuild = async ( simName, locale, userID ) => {
   // If the sendBuildRequests flag is set to true in the user's rosettaConfig.json, send it! Otherwise, don't send the
   // build request. Do, however, log the theoretical build request for debugging purposes.
   let buildRequestRes = null;
-  if ( config.server.SEND_BUILD_REQUESTS ) {
+  if ( privateConfig.SEND_BUILD_REQUESTS ) {
 
     // Tell the user where we're sending the build request.
-    const url = `${config.server.SERVER_URL}/deploy-html-simulation`;
+    const url = `${privateConfig.SERVER_URL}/deploy-html-simulation`;
     logger.info( `sending build request to ${url}` );
 
     // Try to send the build request.

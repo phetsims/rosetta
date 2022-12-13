@@ -1,7 +1,6 @@
 // Copyright 2022, University of Colorado Boulder
 
 import express from 'express';
-import clientConfig from './api/clientConfig.js';
 import localeInfo from './api/localeInfo.js';
 import triggerBuild from './api/triggerBuild.js';
 import saveTranslation from './api/saveTranslation.js';
@@ -34,7 +33,6 @@ rosettaApiServer.get( '/translationFormData/:simName?/:locale?', translationForm
 rosettaApiServer.get( '/sha', sha );
 rosettaApiServer.get( '/triggerBuild/:simName?/:locale?/:userId?', triggerBuild );
 rosettaApiServer.get( '/translationReportEvents/:locale?/:numberOfEvents?', translationReportEvents );
-rosettaApiServer.get( '/clientConfig', clientConfig );
 rosettaApiServer.get( '/translatedAndUntranslatedSims/:locale?', translatedAndUntranslatedSims );
 
 // posts
