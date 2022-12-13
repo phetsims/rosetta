@@ -29,7 +29,8 @@ const submitTranslation = async (
   simTitle,
   localeName
 ) => {
-  console.log( `values = ${JSON.stringify( values, null, 4 )}` );
+
+  let submitted = false;
   const translatedStringsData = computeTranslatedStringsData( values );
   const translation = await makeTranslationObject( values, simName, locale );
   const messages = {};
@@ -55,11 +56,14 @@ const submitTranslation = async (
                                 + ` It will take about ${minutesUntilChanges} minutes for the translation utility to`
                                 + ' show the changes you made.';
       alert( submissionMessage );
+      submitted = true;
     }
     catch( e ) {
       alertErrorMessage( e );
     }
   }
+
+  return submitted;
 };
 
 export default submitTranslation;
