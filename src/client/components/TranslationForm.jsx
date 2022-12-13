@@ -113,12 +113,20 @@ const TranslationForm = () => {
             }
             else if ( buttonId === 'submit' ) {
               setIsDisabled( true );
-              await submitTranslation( values, params.simName, params.locale, simTitle, localeName );
+              const submitted = await submitTranslation( values, params.simName, params.locale, simTitle, localeName );
 
-              // Navigate user back to the sim list. Otherwise, they will be stuck
-              // on the translation form with disabled buttons.
-              alert( `Sending you back to the sim list for ${localeName}.` );
-              navigate( `/translate/${params.locale}` );
+              if ( submitted ) {
+
+                // Navigate user back to the sim list. Otherwise, they will be stuck
+                // on the translation form with disabled buttons.
+                alert( `Sending you back to the sim list for ${localeName}.` );
+                navigate( `/translate/${params.locale}` );
+              }
+              else {
+
+                // Set disabled flag back to false so user can continue their translation.
+                setIsDisabled( false );
+              }
             }
             else if ( buttonId === 'test' ) {
               await testTranslation( values, params.simName, params.locale );
