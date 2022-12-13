@@ -7,6 +7,7 @@
  */
 
 import axios from 'axios';
+import publicConfig from '../../common/publicConfig.js';
 
 /**
  * Return the website user data object.
@@ -18,9 +19,9 @@ import axios from 'axios';
  *
  * @returns {Promise<Object>}
  */
-const getWebsiteUserData = async config => {
+const getWebsiteUserData = async () => {
   const websiteUserDataRes = await axios.get(
-    config.client.WEBSITE_USER_DATA_URL,
+    publicConfig.WEBSITE_USER_DATA_URL,
     { withCredentials: true } // Include cookies so website backend can look up your session.
   );
   return websiteUserDataRes.data;

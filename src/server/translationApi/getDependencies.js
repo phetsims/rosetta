@@ -7,7 +7,7 @@
  */
 
 import axios from 'axios';
-import config from '../../common/config.js';
+import privateConfig from '../../common/privateConfig.js';
 import logger from './logger.js';
 
 /**
@@ -19,24 +19,23 @@ import logger from './logger.js';
  */
 const getDependencies = async ( simName, version ) => {
 
-  let ret;
+  let dependencies = 'error: unable to get dependencies';
 
   // Compose the URL where the dependencies should be.
-  const url = `${config.server.SERVER_URL}/sims/html/${simName}/${version}/dependencies.json`;
+  const url = `${privateConfig.SERVER_URL}/sims/html/${simName}/${version}/dependencies.json`;
 
   // Get the dependencies.
   logger.info( `getting dependencies from ${url}` );
   try {
-    const dependencies = await axios.get( url );
-    const dependenciesJsonObject = dependencies.data;
-    ret = JSON.stringify( dependenciesJsonObject );
+    const dependenciesRes = await axios.get( url );
+    const dependenciesJsonObject = dependenciesRes.data;
+    dependencies = JSON.stringify( dependenciesJsonObject );
   }
   catch( e ) {
-    ret = 'error: unable to get dependencies';
     logger.error( e );
   }
   logger.info( 'returning dependencies' );
-  return ret;
+  return dependencies;
 };
 
 export default getDependencies;

@@ -8,9 +8,8 @@
  */
 
 import { Link } from 'react-router-dom';
-import { useContext } from 'react';
 import getMinutesElapsed from '../../common/getMinutesElapsed.js';
-import { ConfigContext } from '../components/Rosetta.jsx';
+import publicConfig from '../../common/publicConfig.js';
 
 /**
  * Return an array of translation report objects (i.e. stats used to make translation report rows) that have
@@ -96,8 +95,7 @@ const getSortedTranslationReportRows = (
     sortKey
   );
 
-  const config = useContext( ConfigContext );
-  const validMetadataDuration = new Date( Number( config.common.VALID_METADATA_DURATION ) );
+  const validMetadataDuration = new Date( publicConfig.VALID_METADATA_DURATION );
   const validMetadataMinutes = validMetadataDuration.getMinutes();
 
   // Create the array of JSX to render in the translation report.

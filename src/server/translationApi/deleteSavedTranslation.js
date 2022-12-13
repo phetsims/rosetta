@@ -7,7 +7,7 @@
  * @author Liam Mulhall
  */
 
-import config from '../../common/config.js';
+import privateConfig from '../../common/privateConfig.js';
 import { shortTermStringStorageCollection } from './getShortTermStringStorageCollection.js';
 import logger from './logger.js';
 
@@ -17,7 +17,7 @@ import logger from './logger.js';
  * @param {Object} idSimNameAndLocale - an object containing the user ID, sim name, and locale for a translation
  */
 const deleteSavedTranslation = async idSimNameAndLocale => {
-  if ( config.server.DB_ENABLED ) {
+  if ( privateConfig.DB_ENABLED ) {
     logger.info( `attempting to delete old ${idSimNameAndLocale.locale}/${idSimNameAndLocale.simName} translation(s) in short-term storage` );
     try {
       const oldSavedTranslation = await shortTermStringStorageCollection.find( idSimNameAndLocale );

@@ -11,7 +11,8 @@
  * @author Liam Mulhall
  */
 
-import config from '../common/config.js';
+import privateConfig from '../common/privateConfig.js';
+import publicConfig from '../common/publicConfig.js';
 import express from 'express';
 import getCurrentRosettaSha from './translationApi/getCurrentRosettaSha.js';
 import logger from './translationApi/logger.js';
@@ -60,20 +61,25 @@ app.use( '/translate/api', translationApi );
 app.use( '/translate', builtReactAppServer );
 
 // Mock website user data for local development.
-if ( config.common.ENVIRONMENT === 'development' ) {
+if ( publicConfig.ENVIRONMENT === 'development' ) {
   app.get( '/services/check-login', mockWebsiteUserData );
 }
 
-app.listen( config.server.ROSETTA_PORT, () => {
+app.listen( privateConfig.ROSETTA_PORT, () => {
   logger.info( 'rosetta started' );
-  logger.info( `http://localhost:${config.server.ROSETTA_PORT}/translate` );
+  logger.info( `http://localhost:${privateConfig.ROSETTA_PORT}/translate` );
 
-  const configKeysToLog = Object.keys( config ).filter( key => key !== 'secret' );
+  // Log private config keys except for secret ones.
+  const unsafeKeys = [ 'BUILD_SERVER_AUTH', 'GITHUB_PAT', 'SERVER_TOKEN' ];
+  const privateKeysToLog = Object.keys( privateConfig ).filter( key => !unsafeKeys.includes( key ) );
   logger.info( 'see config below' );
-  for ( const key of configKeysToLog ) {
-    for ( const subKey of Object.keys( config[ key ] ) ) {
-      logger.info( `    ${subKey}: ${config[ key ][ subKey ]}` );
-    }
+  for ( const key of privateKeysToLog ) {
+    logger.info( `    ${key}: ${privateConfig[ key ]}` );
+  }
+
+  // Log all public config keys.
+  for ( const key of Object.keys( publicConfig ) ) {
+    logger.info( `    ${key}: ${publicConfig[ key ]}` );
   }
 
   // Also log Rosetta's SHA.

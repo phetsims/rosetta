@@ -9,7 +9,8 @@
  * @author Liam Mulhall
  */
 
-import config from '../../common/config.js';
+import privateConfig from '../../common/privateConfig.js';
+import publicConfig from '../../common/publicConfig.js';
 import getCommonTranslationFormData from './getCommonTranslationFormData.js';
 import getSharedTranslationFormData from './getSharedTranslationFormData.js';
 import { shortTermStringStorageCollection } from './getShortTermStringStorageCollection.js';
@@ -71,14 +72,14 @@ const getTranslationFormData = async (
   logger.info( 'getting translation form data' );
 
   // try to get a saved translation from the short-term storage database
-  if ( config.server.DB_ENABLED ) {
+  if ( privateConfig.DB_ENABLED ) {
     try {
 
       logger.info( 'checking for saved translation' );
 
       // get user id; depends on whether we're running on localhost or on a server
-      if ( config.common.ENVIRONMENT === 'development' ) {
-        userId = config.common.LOCAL_USER_ID;
+      if ( publicConfig.ENVIRONMENT === 'development' ) {
+        userId = publicConfig.LOCAL_USER_ID;
       }
 
       // try to get saved translation in short-term storage database

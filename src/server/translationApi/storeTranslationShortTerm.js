@@ -6,7 +6,7 @@
  * @author Liam Mulhall
  */
 
-import config from '../../common/config.js';
+import privateConfig from '../../common/privateConfig.js';
 import deleteSavedTranslation from './deleteSavedTranslation.js';
 import { shortTermStringStorageCollection } from './getShortTermStringStorageCollection.js';
 import logger from './logger.js';
@@ -18,7 +18,7 @@ import logger from './logger.js';
  * @param translation - translation received from client
  */
 const storeTranslationShortTerm = async translation => {
-  if ( config.server.DB_ENABLED ) {
+  if ( privateConfig.DB_ENABLED ) {
     logger.info( `storing ${translation.locale}/${translation.simName} translation in short-term storage` );
     try {
       await deleteSavedTranslation( {

@@ -7,7 +7,7 @@
  */
 
 import axios from 'axios';
-import config from '../../../common/config.js';
+import privateConfig from '../../../common/privateConfig.js';
 import getRepoNameFromStringKeyWithRepoName from '../getRepoNameFromStringKeyWithRepoName.js';
 import getStringKeyFromStringKeyWithRepoName from '../getStringKeyFromStringKeyWithRepoName.js';
 import logger from '../logger.js';
@@ -24,7 +24,7 @@ import logger from '../logger.js';
 const getEnglishStringKeysAndValues = async ( simOrLibName, stringKeysWithRepoName, shaOrBranch = 'master' ) => {
   logger.info( 'getting english string keys and values' );
   const englishStringKeysAndValues = {};
-  const englishStringFileUrl = `${config.server.GITHUB_URL}/${simOrLibName}/${shaOrBranch}/${simOrLibName}-strings_en.json`;
+  const englishStringFileUrl = `${privateConfig.GITHUB_URL}/${simOrLibName}/${shaOrBranch}/${simOrLibName}-strings_en.json`;
   let englishStringData = {};
   try {
     const englishStringDataRes = await axios.get( englishStringFileUrl );
