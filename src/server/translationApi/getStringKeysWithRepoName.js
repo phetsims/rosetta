@@ -14,7 +14,7 @@ import logger from './logger.js';
  * from a sim's production HTML.
  *
  * @param {Object} simHtml - sim HTML
- * @returns {String[]} - list of REPO_NAME/stringKey from the sim TODO update this to reflect object being returned
+ * @returns {Object} - object of REPO_NAME/stringKey: value
  */
 const getStringKeysWithRepoName = simHtml => {
 
