@@ -10,7 +10,7 @@
 import axios from 'axios';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import clientConstants from '../js/clientConstants.js';
+import publicConfig from '../../common/publicConfig.js';
 import { useContext } from 'react';
 import { WebsiteUserDataContext } from './Rosetta.jsx';
 
@@ -28,7 +28,7 @@ const TriggerBuild = () => {
   const websiteUserData = useContext( WebsiteUserDataContext );
   const handleSubmit = async values => {
     if ( websiteUserData.loggedIn && websiteUserData.teamMember ) {
-      await axios.get( `${clientConstants.translationApiRoute}/triggerBuild/${values.sim}/${values.locale}/${values.userId}` );
+      await axios.get( `${publicConfig.translationApiRoute}/triggerBuild/${values.sim}/${values.locale}/${values.userId}` );
       window.alert( `Rebuild request sent for sim ${values.sim} in locale ${values.locale} with user ID ${values.userId}.` );
     }
     else {

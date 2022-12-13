@@ -8,7 +8,7 @@
 
 import axios from 'axios';
 import alertErrorMessage from './alertErrorMessage.js';
-import clientConstants from './clientConstants.js';
+import publicConfig from '../../common/publicConfig.js';
 import computeTranslatedStringsData from './computeTranslatedStringsData.js';
 import KeyTypesEnum from './KeyTypesEnum.js';
 import makeTranslationObject from './makeTranslationObject.js';
@@ -47,7 +47,7 @@ const submitTranslation = async (
   confirmMessage += 'Are you sure you want to submit?';
   if ( window.confirm( confirmMessage ) ) {
     try {
-      await axios.post( `${clientConstants.translationApiRoute}/submitTranslation`, translation );
+      await axios.post( `${publicConfig.translationApiRoute}/submitTranslation`, translation );
       const submissionMessage = 'Translation submitted.' +
                                 ' Your translation should appear on the PhET website in about half an hour.' +
                                 ' It will take about 10 minutes for the translation utility to show the changes you made.';

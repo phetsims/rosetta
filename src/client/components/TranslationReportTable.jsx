@@ -11,7 +11,7 @@
 import { useContext, useState } from 'react';
 import useTranslatedAndUntranslatedSims from '../hooks/useTranslatedAndUntranslatedSims.jsx';
 import useTranslationReportObjects from '../hooks/useTranslationReportObjects.jsx';
-import clientConstants from '../js/clientConstants.js';
+import publicConfig from '../../common/publicConfig.js';
 import getTranslationReportRows from '../jsx/getTranslationReportRows.jsx';
 import LoadingSpinner from './LoadingSpinner.jsx';
 import { SimNamesAndTitlesContext } from './RosettaRoutes.jsx';
@@ -32,7 +32,7 @@ const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => 
 
   // If you want to only see a few rows of stats for debugging, set this variable.
   // WARNING: This should be set to null in production!
-  const numberOfEvents = clientConstants.numberOfShortReportEvents;
+  const numberOfEvents = publicConfig.numberOfShortReportEvents;
 
   // Get report objects consisting of translation report data.
   const { reportPopulated, reportObjects } = useTranslationReportObjects(

@@ -31,5 +31,9 @@ export default {
   // Determines how long you want to cache sim metadata before getting it fresh. Sim
   // metadata is a big chunk of data, so we cache it.
   // 60 min * 60 s/min * 1000 ms/s = 360,000 ms
-  VALID_METADATA_DURATION: 3600000
+  VALID_METADATA_DURATION: 3600000,
+
+  singleBraceRegex: /\{\d+\}/g,
+  doubleBraceRegex: /\{\{\w+\}\}/g,
+  translationApiRoute: '/translate/api'
 };

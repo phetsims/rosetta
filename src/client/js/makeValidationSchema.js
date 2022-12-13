@@ -11,7 +11,7 @@
 import * as Yup from 'yup';
 import alertErrorMessage from './alertErrorMessage.js';
 import isValidBracePattern from './isValidBracePattern.js';
-import clientConstants from './clientConstants.js';
+import publicConfig from '../../common/publicConfig.js';
 
 /**
  * Return a Yup schema for validating our Formik translation form.
@@ -37,8 +37,8 @@ const makeValidationSchema = translationFormData => {
       subObjects[ keyType ] = {};
       for ( const key of keys ) {
         const englishValue = translationFormData[ keyType ][ key ].english;
-        const englishSingleBraces = englishValue.match( clientConstants.singleBraceRegex ) || [];
-        const englishDoubleBraces = englishValue.match( clientConstants.doubleBraceRegex ) || [];
+        const englishSingleBraces = englishValue.match( publicConfig.singleBraceRegex ) || [];
+        const englishDoubleBraces = englishValue.match( publicConfig.doubleBraceRegex ) || [];
         if ( englishSingleBraces.length > 0 || englishDoubleBraces.length > 0 ) {
 
           // We need to use a regular function here. Yup needs to be able to access the global "this" keyword, and if

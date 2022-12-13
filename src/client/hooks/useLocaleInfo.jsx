@@ -9,7 +9,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import alertErrorMessage from '../js/alertErrorMessage.js';
-import clientConstants from '../js/clientConstants.js';
+import publicConfig from '../../common/publicConfig.js';
 
 /**
  * Get the locale info from the backend and return it. If the request fails, show an error message.
@@ -20,7 +20,7 @@ const useLocaleInfo = () => {
   const [ localeInfo, setLocaleInfo ] = useState( {} );
   useEffect( async () => {
     try {
-      const localeInfoRes = await axios.get( `${clientConstants.translationApiRoute}/localeInfo` );
+      const localeInfoRes = await axios.get( `${publicConfig.translationApiRoute}/localeInfo` );
       setLocaleInfo( localeInfoRes.data );
     }
     catch( e ) {

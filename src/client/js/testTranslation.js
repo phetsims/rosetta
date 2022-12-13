@@ -8,7 +8,7 @@
 
 import axios from 'axios';
 import alertErrorMessage from './alertErrorMessage.js';
-import clientConstants from './clientConstants.js';
+import publicConfig from '../../common/publicConfig.js';
 import makeTranslationObject from './makeTranslationObject.js';
 
 /**
@@ -22,7 +22,7 @@ import makeTranslationObject from './makeTranslationObject.js';
 const testTranslation = async ( values, simName, locale ) => {
   const translation = await makeTranslationObject( values, simName, locale );
   try {
-    const testRes = await axios.post( `${clientConstants.translationApiRoute}/testTranslation`, translation );
+    const testRes = await axios.post( `${publicConfig.translationApiRoute}/testTranslation`, translation );
     const stringSimHtml = testRes.data;
 
     // Open the translated sim in a new tab.
