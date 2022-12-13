@@ -10,7 +10,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Xerxes from '../img/xerxes.jpg';
-import clientConstants from '../js/clientConstants.js';
+import publicConfig from '../../common/publicConfig.js';
 
 /**
  * Get the SHA of the running instance of Rosetta from the server and display it.
@@ -21,7 +21,7 @@ const Sha = () => {
   const [ sha, setSha ] = useState( '' );
   useEffect( async () => {
     try {
-      const shaRes = await axios.get( `${clientConstants.translationApiRoute}/sha` );
+      const shaRes = await axios.get( `${publicConfig.translationApiRoute}/sha` );
       setSha( shaRes.data );
     }
     catch( e ) {

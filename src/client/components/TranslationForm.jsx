@@ -17,7 +17,7 @@ import React, {
   useState
 } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import clientConstants from '../js/clientConstants.js';
+import publicConfig from '../../common/publicConfig.js';
 import makeValidationSchema from '../js/makeValidationSchema.js';
 import saveTranslation from '../js/saveTranslation.js';
 import submitTranslation from '../js/submitTranslation.js';
@@ -46,7 +46,7 @@ const TranslationForm = () => {
   useEffect( () => {
     try {
       ( async () => {
-        const translationFormDataRes = await axios.get( `${clientConstants.translationApiRoute}/translationFormData/${params.simName}/${params.locale}?userId=${websiteUserData.userId}` );
+        const translationFormDataRes = await axios.get( `${publicConfig.translationApiRoute}/translationFormData/${params.simName}/${params.locale}?userId=${websiteUserData.userId}` );
         setTranslationFormData( translationFormDataRes.data );
       } )();
     }

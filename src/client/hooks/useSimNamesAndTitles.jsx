@@ -9,7 +9,7 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import alertErrorMessage from '../js/alertErrorMessage.js';
-import clientConstants from '../js/clientConstants.js';
+import publicConfig from '../../common/publicConfig.js';
 
 /**
  * Get sims names and titles from the backend and return them. Show an error message if the request fails.
@@ -21,7 +21,7 @@ const useSimNamesAndTitles = () => {
   const [ simNamesAndTitles, setSimNamesAndTitles ] = useState( [] );
   useEffect( async () => {
     try {
-      const simTitlesRes = await axios.get( `${clientConstants.translationApiRoute}/simNamesAndTitles` );
+      const simTitlesRes = await axios.get( `${publicConfig.translationApiRoute}/simNamesAndTitles` );
       setSimNamesAndTitles( simTitlesRes.data );
     }
     catch( e ) {

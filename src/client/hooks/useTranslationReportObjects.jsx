@@ -7,7 +7,7 @@
  */
 
 import { useEffect, useState } from 'react';
-import clientConstants from '../js/clientConstants.js';
+import publicConfig from '../../common/publicConfig.js';
 
 /**
  * Return the report objects we get from the backend's server sent events. Also return a boolean telling whether the
@@ -28,9 +28,9 @@ const useTranslationReportObjects = ( locale, wantsUntranslated, numberOfEvents 
 
   useEffect( () => {
     if ( !listening && !reportPopulated ) {
-      let translationReportUrl = `${clientConstants.translationApiRoute}/translationReportEvents/${locale}?wantsUntranslated=${wantsUntranslated}`;
+      let translationReportUrl = `${publicConfig.translationApiRoute}/translationReportEvents/${locale}?wantsUntranslated=${wantsUntranslated}`;
       if ( numberOfEvents ) {
-        translationReportUrl = `${clientConstants.translationApiRoute}/translationReportEvents/${locale}/${numberOfEvents}?wantsUntranslated=${wantsUntranslated}`;
+        translationReportUrl = `${publicConfig.translationApiRoute}/translationReportEvents/${locale}/${numberOfEvents}?wantsUntranslated=${wantsUntranslated}`;
       }
       const translationReportSource = new EventSource( translationReportUrl );
       translationReportSource.onmessage = event => {
