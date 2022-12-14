@@ -3,7 +3,7 @@
 /**
  * Export a function that gets a sim's common string keys, their English values, and their translated values.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import axios from 'axios';
@@ -54,19 +54,12 @@ const getCommonTranslationFormData = async (
   const common = {};
 
   try {
-
-    // we need common repos for the sim
     const commonRepos = await getCommonRepos( simName, simNames, stringKeysWithRepoName );
-
-    // we get an object that maps common repos to lists of string keys that belong to those repos
     const repoNameToStringKeys = getRepoNameToStringKeys( stringKeysWithRepoName, commonRepos, commonStringKeys );
 
-    // for each repo, we want to get an english string file and a translated string file
     for ( const repo of Object.keys( repoNameToStringKeys ) ) {
 
-      // get english file
-      // the english file should exist
-      // if it doesn't exist, we've got a serious problem, houston
+      // The English file should exist.
       let commonEnglishStringFileUrl = '';
       let commonEnglishStringFileRes = {};
       let commonEnglishStringKeysAndStrings = {};
@@ -79,8 +72,7 @@ const getCommonTranslationFormData = async (
         logger.error( e );
       }
 
-      // get translated file
-      // the translated file might not exist
+      // The translated file might not exist.
       let commonTranslatedStringFileUrl = '';
       let commonTranslatedStringFileRes = {};
       let commonTranslatedStringKeysAndStrings = {};
@@ -98,24 +90,15 @@ const getCommonTranslationFormData = async (
         }
       }
 
-      /*
-       * For each string key in a repo, we need to:
-       * (1) get its English value and its translated value, and
-       * (2) add the string key and its English value, translated value, and repo name to the common object.
-       */
       for ( const stringKey of repoNameToStringKeys[ repo ] ) {
 
-        // get english value
-        /*
-         * Here we assume the string key is no longer used, i.e. its string file doesn't have the string key anymore.
-         * It's possible that a sim could have a string "no longer used" so I added a nonsense word "gooble".
-         */
+        // Here we assume the string key is no longer used, i.e. its string file doesn't have the string key anymore.
+        // It's possible that a sim could have a string "no longer used" so I added a nonsense word "gooble".
         let englishValue = 'no longer used gooble';
         if ( Object.keys( commonEnglishStringKeysAndStrings ).includes( stringKey ) ) {
           englishValue = commonEnglishStringKeysAndStrings[ stringKey ].value;
         }
 
-        // get translated value
         let translatedValue = '';
         if ( Object.keys( commonTranslatedStringKeysAndStrings ).includes( stringKey ) ) {
           translatedValue = commonTranslatedStringKeysAndStrings[ stringKey ].value;
@@ -151,7 +134,7 @@ const getCommonTranslationFormData = async (
          */
         const stringKeyWithoutDots = stringKey.replaceAll( '.', '_DOT_' );
 
-        // add the string key, its english value, translated value, and repo name to the common object
+        // Add the string key, its english value, translated value, and repo name to the common object.
         if ( englishValue !== 'no longer used gooble' ) {
           common[ stringKeyWithoutDots ] = {
             english: englishValue,
