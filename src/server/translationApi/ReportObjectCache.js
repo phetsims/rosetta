@@ -43,7 +43,7 @@ class ReportObjectCache {
   /**
    * @param locale
    * @param sim
-   * @returns {*|null}
+   * @returns {Object|null}
    * @public
    */
   getObject( locale, sim ) {
