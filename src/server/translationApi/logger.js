@@ -3,7 +3,7 @@
 /**
  * Export the Winston logger. See Winston's documentation for details on how to set up a logger.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import winston from 'winston';
