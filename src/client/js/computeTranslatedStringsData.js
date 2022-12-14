@@ -9,6 +9,12 @@ import KeyTypesEnum from './KeyTypesEnum.js';
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+/**
+ * Return an object with data about the translated strings in a translation form.
+ *
+ * @param translationValues
+ * @returns {Object}
+ */
 const computeTranslatedStringsData = translationValues => {
   const translatedStringsData = {};
   for ( const keyType of Object.values( KeyTypesEnum ) ) {
