@@ -3,7 +3,7 @@
 /**
  * Export a function that gets a sim's sim-specific string keys, their English values, and their translated values.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import axios from 'axios';
@@ -48,9 +48,7 @@ const getSimSpecificTranslationFormData = async (
 
   try {
 
-    // get english file
-    // the english file should exist
-    // if it doesn't exist, we've got a serious problem, houston
+    // The English file should exist.
     let simSpecificEnglishStringFileUrl = '';
     let simSpecificEnglishStringFileRes = {};
     let simSpecificEnglishStringKeysAndStrings = {};
@@ -64,8 +62,7 @@ const getSimSpecificTranslationFormData = async (
       logger.error( e );
     }
 
-    // get translated file
-    // the translated file might not exist
+    // The translated file might not exist.
     let simSpecificTranslatedStringFileUrl = '';
     let simSpecificTranslatedStringFileRes = {};
     let simSpecificTranslatedStringKeysAndStrings = {};
@@ -86,21 +83,13 @@ const getSimSpecificTranslationFormData = async (
       }
     }
 
-    /*
-     * For each sim-specific string key, we need to:
-     * (1) get the string key's English value,
-     * (2) get the string key's translated value, and
-     * (3) add the string key and its values to the sim-specific object
-     */
     for ( const stringKey of simSpecificStringKeys ) {
 
-      // get the english value
       let englishValue = '';
       if ( simSpecificEnglishStringKeysAndStrings[ stringKey ] ) {
         englishValue = simSpecificEnglishStringKeysAndStrings[ stringKey ].value;
       }
 
-      // get the translated value
       let translatedValue = '';
       if ( simSpecificTranslatedStringKeysAndStrings[ stringKey ] ) {
         translatedValue = simSpecificTranslatedStringKeysAndStrings[ stringKey ].value;
@@ -136,7 +125,6 @@ const getSimSpecificTranslationFormData = async (
        */
       const stringKeyWithoutDots = stringKey.replaceAll( '.', '_DOT_' );
 
-      // add the string key and its values to the sim-specific object
       simSpecific[ stringKeyWithoutDots ] = {
         english: englishValue,
         translated: translatedValue
