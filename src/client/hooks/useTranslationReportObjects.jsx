@@ -16,7 +16,6 @@ import publicConfig from '../../common/publicConfig.js';
  *
  * @param {string} locale - ISO 639-1 locale code, e.g. zh_TW for Chinese with traditional characters
  * @param {boolean} wantsUntranslated - whether the caller wants translation report objects for untranslated sims
- * @param {number|null} numberOfEvents - number of server sent events we want, i.e. number of report objects we want
  * @returns {object} - object containing report objects, a boolean telling whether the report is populated, and a method
  *                     for sorting report objects
  */
