@@ -20,7 +20,7 @@ import publicConfig from '../../common/publicConfig.js';
  * @returns {object} - object containing report objects, a boolean telling whether the report is populated, and a method
  *                     for sorting report objects
  */
-const useTranslationReportObjects = ( locale, wantsUntranslated, numberOfEvents = null ) => {
+const useTranslationReportObjects = ( locale, wantsUntranslated ) => {
 
   const [ listening, setListening ] = useState( false );
   const [ reportPopulated, setReportPopulated ] = useState( false );
@@ -28,10 +28,7 @@ const useTranslationReportObjects = ( locale, wantsUntranslated, numberOfEvents 
 
   useEffect( () => {
     if ( !listening && !reportPopulated ) {
-      let translationReportUrl = `${publicConfig.translationApiRoute}/translationReportEvents/${locale}?wantsUntranslated=${wantsUntranslated}`;
-      if ( numberOfEvents ) {
-        translationReportUrl = `${publicConfig.translationApiRoute}/translationReportEvents/${locale}/${numberOfEvents}?wantsUntranslated=${wantsUntranslated}`;
-      }
+      const translationReportUrl = `${publicConfig.translationApiRoute}/translationReportEvents/${locale}?wantsUntranslated=${wantsUntranslated}`;
       const translationReportSource = new EventSource( translationReportUrl );
       translationReportSource.onmessage = event => {
         if ( event.data !== 'closed' ) {
