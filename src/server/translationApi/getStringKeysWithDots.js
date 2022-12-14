@@ -3,7 +3,7 @@
 /**
  * Export a function that adds dots back to translation form data received from the client.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 /**
