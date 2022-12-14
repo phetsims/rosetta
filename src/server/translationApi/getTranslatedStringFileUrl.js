@@ -4,7 +4,7 @@
  * Export a function that gets a translated sim's string file URL. As of this writing, a translated sim's string file
  * lives in the phetsims/babel repo.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import privateConfig from '../../common/privateConfig.js';
