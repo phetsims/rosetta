@@ -3,7 +3,7 @@
 /**
  * Export a function that stores a translation in short-term storage.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import privateConfig from '../../common/privateConfig.js';
