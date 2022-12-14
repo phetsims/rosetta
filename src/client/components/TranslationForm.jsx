@@ -27,7 +27,7 @@ import { WebsiteUserDataContext } from './Rosetta.jsx';
 import { LocaleInfoContext, SimNamesAndTitlesContext } from './RosettaRoutes.jsx';
 import TranslationFormButtons from './TranslationFormButtons.jsx';
 import TranslationFormHeader from './TranslationFormHeader.jsx';
-import TranslationTables from './TranslationTables.jsx';
+import TranslationFormTables from './TranslationFormTables.jsx';
 
 const ErrorContext = createContext( null );
 
@@ -144,7 +144,7 @@ const TranslationForm = () => {
                   {...props}
                 />
                 <ErrorContext.Provider value={props.errors}>
-                  <TranslationTables
+                  <TranslationFormTables
                     translationFormData={translationFormData}
                     {...props}
                     locale={params.locale}
