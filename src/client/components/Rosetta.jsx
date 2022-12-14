@@ -29,6 +29,8 @@ const WebsiteUserDataContext = createContext( {} );
  * If a user is not signed in, this component will contain some header stuff and a link to sign in that will redirect
  * them to this page.
  *
+ * If Rosetta isn't enabled, a message about Rosetta being down for maintenance will be shown.
+ *
  * @returns {JSX.Element}
  */
 function Rosetta() {
