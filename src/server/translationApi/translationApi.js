@@ -2,7 +2,7 @@
 
 /**
  * Set up routes for the translation API.
- * 
+ *
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
