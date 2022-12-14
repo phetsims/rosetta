@@ -11,7 +11,6 @@
 import { useContext, useState } from 'react';
 import useTranslatedAndUntranslatedSims from '../hooks/useTranslatedAndUntranslatedSims.jsx';
 import useTranslationReportObjects from '../hooks/useTranslationReportObjects.jsx';
-import publicConfig from '../../common/publicConfig.js';
 import getTranslationReportRows from '../jsx/getTranslationReportRows.jsx';
 import LoadingSpinner from './LoadingSpinner.jsx';
 import { SimNamesAndTitlesContext } from './RosettaRoutes.jsx';
@@ -30,15 +29,10 @@ const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => 
 
   const simNamesAndTitles = useContext( SimNamesAndTitlesContext );
 
-  // If you want to only see a few rows of stats for debugging, set this variable.
-  // WARNING: This should be set to null in production!
-  const numberOfEvents = publicConfig.numberOfShortReportEvents;
-
   // Get report objects consisting of translation report data.
   const { reportPopulated, reportObjects } = useTranslationReportObjects(
     locale,
-    wantsUntranslated,
-    numberOfEvents
+    wantsUntranslated
   );
 
   // State variables used in sorting the table.
@@ -61,8 +55,7 @@ const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => 
       locale,
       reportPopulated,
       sortKey,
-      sortDirection,
-      numberOfEvents
+      sortDirection
     );
 
     const handleSortButtonClick = newSortKey => {
