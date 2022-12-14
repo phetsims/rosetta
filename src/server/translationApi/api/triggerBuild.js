@@ -2,7 +2,6 @@
 
 /**
  * Request a rebuild for a sim with the original submitter's user ID.
- * This is what we used to call "trigger build".
  *
  * @author Liam Mulhall <liammulh@gmail.com>
  */
