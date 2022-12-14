@@ -3,7 +3,7 @@
 /**
  * Export a function that returns an array of common repos for a sim.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import getRepoNameFromStringKeyWithRepoName from './getRepoNameFromStringKeyWithRepoName.js';
@@ -23,11 +23,7 @@ const getCommonRepos = async ( simName, simNames, stringKeysWithRepoName ) => {
   const commonRepos = new Set();
   try {
     for ( const stringKeyWithRepoName of stringKeysWithRepoName ) {
-
-      // extract the repo name
       const repoName = getRepoNameFromStringKeyWithRepoName( stringKeyWithRepoName );
-
-      // it can't be a common repo if it's in our list of sim names...
       if ( ( simNames ).includes( repoName ) ) {
         logger.verbose( `${repoName} is in sim names; it's not a common repo` );
       }
