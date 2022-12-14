@@ -3,7 +3,7 @@
 /**
  * Export a function that stores a translation in long-term storage.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import github from 'octonode';
@@ -17,7 +17,7 @@ const longTermStorage = githubInterface.repo( 'phetsims/babel' );
  * Save the translation to long-term storage.
  *
  * @param {Object} preparedTranslation - exact translation file contents for each repo in a translation
- * @returns {Promise.<boolean>}
+ * @returns {Promise.<boolean>} - whether the translation was stored
  */
 const storeTranslationLongTerm = async preparedTranslation => {
   let longTermStorageRes = null;
