@@ -4,7 +4,7 @@
  * Export a function that deletes saved translation(s) (although technically there should only ever be one) that match
  * the provided user ID, sim name, and locale.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import privateConfig from '../../common/privateConfig.js';
