@@ -3,7 +3,7 @@
 /**
  * Export a function that gets metadata for all the sims. We cache the sim metadata. We update it when it's stale.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import axios from 'axios';
@@ -11,11 +11,10 @@ import privateConfig from '../../common/privateConfig.js';
 import publicConfig from '../../common/publicConfig.js';
 import logger from './logger.js';
 
-// where we get the metadata
 const METADATA_URL = privateConfig.SERVER_URL +
                      '/services/metadata/1.3/simulations?format=json&type=html&include-unpublished=true&summary';
 
-// the authorization object we must provide in the request
+// The authorization object we must provide in the request.
 const METADATA_REQ_OPTIONS = {
   auth: {
     username: 'token',
@@ -38,11 +37,9 @@ const getSimMetadata = async () => {
     const metadataValidDurationElapsed = timeOfLastUpdate +
                                          publicConfig.VALID_METADATA_DURATION < Date.now();
 
-    /*
-     * We use cached sim metadata unless the sim metadata has become stale (i.e. the valid metadata duration has
-     * elapsed). Note: This doesn't handle the case where two requests for sim metadata are made in quick succession.
-     * If the translation utility sees a lot of use, it might make sense to handle this case.
-     */
+    // We use cached sim metadata unless the sim metadata has become stale (i.e. the valid metadata duration has
+    // elapsed). Note: This doesn't handle the case where two requests for sim metadata are made in quick succession.
+    // If the translation utility sees a lot of use, it might make sense to handle this case.
     if ( metadataValidDurationElapsed ) {
       logger.info( 'sim metadata is stale or nonexistent; getting it' );
       const simMetadataRes = await axios.get( METADATA_URL, METADATA_REQ_OPTIONS );
