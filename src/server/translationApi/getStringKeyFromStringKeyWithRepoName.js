@@ -3,7 +3,7 @@
 /**
  * Export a utility function that extracts a camelCase string key from a string that looks like REPO_NAME/stringKey.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import logger from './logger.js';
