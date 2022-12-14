@@ -4,7 +4,7 @@
  * Export a function that returns an object where string keys are organized into two categories: (1) common and (2)
  * sim-specific.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import getRepoNameFromStringKeyWithRepoName from './getRepoNameFromStringKeyWithRepoName.js';
@@ -32,12 +32,12 @@ const getCategorizedStringKeys = async ( simName, simNames, stringKeysWithRepoNa
   try {
     for ( const stringKeyWithRepoName of stringKeysWithRepoName ) {
 
-      // get the string key from the string key with repo name
-      // e.g. get fooStringKey from fooStringKey/BAR_REPO
+      // Get the string key from the string key with repo name.
+      // E.g. get fooStringKey from fooStringKey/BAR_REPO.
       const stringKey = getStringKeyFromStringKeyWithRepoName( stringKeyWithRepoName );
 
-      // get the repo name from the string key with repo name
-      // e.g. get bar-repo from fooStringKey/BAR_REPO
+      // Get the repo name from the string key with repo name.
+      // E.g. get bar-repo from fooStringKey/BAR_REPO.
       const repoName = getRepoNameFromStringKeyWithRepoName( stringKeyWithRepoName );
       if ( stringKey.includes( 'a11y' ) ) {
         logger.verbose( 'not categorizing a11y string key' );
