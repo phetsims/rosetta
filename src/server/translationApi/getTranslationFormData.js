@@ -6,7 +6,7 @@
  * if it is a common string key. (Sim-specific string keys don't need a repo name field because it will be obvious to
  * the caller of the function what the sim repo is.)
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import privateConfig from '../../common/privateConfig.js';
@@ -58,7 +58,7 @@ import logger from './logger.js';
  * @param {String[]} simNames - list of all sim names
  * @param {String[]} stringKeysWithRepoName - list of REPO_NAME/stringKey from the sim
  * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys - string keys categorized into common and
- * @param userId
+ * @param {String} userId - user ID number from the website user data
  * @returns {Promise<{simSpecific: {}, common: {}}>} - translation form data
  */
 const getTranslationFormData = async (
@@ -71,20 +71,20 @@ const getTranslationFormData = async (
 ) => {
   logger.info( 'getting translation form data' );
 
-  // try to get a saved translation from the short-term storage database
+  // Try to get a saved translation from the short-term storage database.
   if ( privateConfig.DB_ENABLED ) {
     try {
 
       logger.info( 'checking for saved translation' );
 
-      // get user id; depends on whether we're running on localhost or on a server
+      // Get user id; depends on whether we're running on localhost or on a server.
       if ( publicConfig.ENVIRONMENT === 'development' ) {
         userId = publicConfig.LOCAL_USER_ID;
       }
 
-      // try to get saved translation in short-term storage database
+      // Try to get saved translation in short-term storage database.
       const filter = {
-        userId: userId,
+        userId: userId, // The user ID should be a string since it gets stored in the DB as a string.
         simName: simName,
         locale: locale
       };
@@ -106,7 +106,7 @@ const getTranslationFormData = async (
     logger.warn( 'short-term string storage database not enabled; check your config' );
   }
 
-  // otherwise, get translation form data the normal way
+  // Otherwise, get translation form data the normal way.
   const translationFormData = {
     simSpecific: {},
     common: {}
