@@ -3,7 +3,7 @@
 /**
  * Export a utility function that gets the URL for a sim or library's string file.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import privateConfig from '../../common/privateConfig.js';
@@ -13,7 +13,7 @@ import logger from './logger.js';
  * Return the URL of a repo's string file.
  *
  * @param {String} repoName - remote repository name; should be the same as a sim or library's name
- * @param branchOrSha
+ * @param {String} branchOrSha - branch name of phetsims/babel or the SHA
  * @returns {String} - string file's URL
  */
 const getStringFileUrl = ( repoName, branchOrSha = 'master' ) => {
