@@ -18,7 +18,7 @@ import { LocaleInfoContext } from './RosettaRoutes.jsx';
  * @param {Object} props - the props passed to this component
  * @returns {JSX.Element}
  */
-const TranslationRow = props => {
+const TranslationFormRow = props => {
 
   const localeInfo = useContext( LocaleInfoContext );
   const direction = localeInfo[ props.locale ].direction;
@@ -44,4 +44,4 @@ const TranslationRow = props => {
   );
 };
 
-export default TranslationRow;
+export default TranslationFormRow;

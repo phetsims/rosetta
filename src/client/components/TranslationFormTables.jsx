@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import TranslationRow from './TranslationRow.jsx';
+import TranslationFormRow from './TranslationFormRow.jsx';
 import KeyTypesEnum from '../js/KeyTypesEnum.js';
 
 /**
@@ -20,7 +20,7 @@ import KeyTypesEnum from '../js/KeyTypesEnum.js';
  * @param {Object} props - props passed to this component
  * @returns {JSX.Element}
  */
-const TranslationTables = props => {
+const TranslationFormTables = props => {
 
   const [ simSpecificRows, setSimSpecificRows ] = useState( [] );
   const [ sharedRows, setSharedRows ] = useState( [] );
@@ -38,7 +38,7 @@ const TranslationTables = props => {
         const englishString = props.translationFormData[ translationFormKey ][ stringKeyWithoutDots ].english;
         const stringKeyWithDots = stringKeyWithoutDots.split( '_DOT_' ).join( '.' );
         const jsx = (
-          <TranslationRow
+          <TranslationFormRow
             key={stringKeyWithDots}
             keyWithoutDots={stringKeyWithoutDots}
             name={`simSpecific.${stringKeyWithoutDots}.translated`}
@@ -124,4 +124,4 @@ const TranslationTables = props => {
   );
 };
 
-export default TranslationTables;
+export default TranslationFormTables;
