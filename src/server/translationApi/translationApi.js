@@ -1,5 +1,11 @@
 // Copyright 2022, University of Colorado Boulder
 
+/**
+ * Set up routes for the translation API.
+ * 
+ * @author Liam Mulhall <liammulh@gmail.com>
+ */
+
 import express from 'express';
 import localeInfo from './api/localeInfo.js';
 import triggerBuild from './api/triggerBuild.js';
@@ -22,7 +28,6 @@ rosettaApiServer.get( '/', ( req, res ) => {
   res.send( 'Hello API!' );
 } );
 
-// gets
 rosettaApiServer.get( '/*', ( req, res, next ) => {
   logger.info( `get request received for ${req.url}` );
   next();
@@ -35,7 +40,6 @@ rosettaApiServer.get( '/triggerBuild/:simName?/:locale?/:userId?', triggerBuild 
 rosettaApiServer.get( '/translationReportEvents/:locale?/:numberOfEvents?', translationReportEvents );
 rosettaApiServer.get( '/translatedAndUntranslatedSims/:locale?', translatedAndUntranslatedSims );
 
-// posts
 rosettaApiServer.post( '/*', ( req, res, next ) => {
   logger.info( `post request received for ${req.url}` );
   next();
