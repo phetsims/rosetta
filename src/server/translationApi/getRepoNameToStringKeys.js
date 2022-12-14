@@ -3,7 +3,7 @@
 /**
  * Export a function that maps common repos to lists of string keys in those repos.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import getRepoNameFromStringKeyWithRepoName from './getRepoNameFromStringKeyWithRepoName.js';
