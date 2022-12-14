@@ -1,5 +1,11 @@
 // Copyright 2022, University of Colorado Boulder
 
+/**
+ * Request a build from the build server.
+ *
+ * @author Liam Mulhall <liammulh@gmail.com>
+ */
+
 /* eslint-disable */
 
 import axios from 'axios';
@@ -11,9 +17,11 @@ import getSimVersionObject from './getSimVersionObject.js';
 import logger from './logger.js';
 
 /**
- * @param {string} simName
- * @param {number} userID
- * @param {string} locale
+ * Request a build from the build server for the given sim, locale, and user ID.
+ *
+ * @param {String} simName
+ * @param {String} locale
+ * @param {Number} userID
  * @returns {Promise.<boolean>} - true or false depending on whether the build was sent
  */
 const requestBuild = async ( simName, locale, userID ) => {
