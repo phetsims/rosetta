@@ -3,7 +3,7 @@
 /**
  * Export a connection to the collection (table) of translations saved in the short-term storage database.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import { MongoClient } from 'mongodb';
@@ -16,7 +16,6 @@ if ( privateConfig.DB_ENABLED ) {
 
   const client = new MongoClient( privateConfig.DB_URI );
 
-  // try to connect to mongo
   try {
     ( async () => {
       logger.info( 'establishing connection to database' );
@@ -28,13 +27,10 @@ if ( privateConfig.DB_ENABLED ) {
     logger.error( e );
   }
 
-  // get the database
   const database = client.db( privateConfig.DB_NAME );
 
-  // get the collection (analogous to sql table)
   shortTermStringStorageCollection = database.collection( privateConfig.DB_SHORT_TERM_STORAGE_COLLECTION_NAME );
 
-  // close the connection to mongo
   process.on( 'exit', async () => {
     logger.info( 'closing connection to database' );
     await client.close();
