@@ -1,9 +1,9 @@
-// Copyright 2021, University of Colorado Boulder
+// Copyright 2022, University of Colorado Boulder
 
 /**
  * Export a function that gets ordered pairs of repo name and string key from a sim's HTML.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import privateConfig from '../../common/privateConfig.js';
