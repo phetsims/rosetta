@@ -1,11 +1,26 @@
 // Copyright 2022, University of Colorado Boulder
 
+/**
+ * Create a replacement string object to replace the original string object in a sim's HTML. Used for testing out
+ * translations. When the user clicks the test button, the string object in the sim's HTML is replaced with the
+ * one obtained from this function.
+ *
+ * @author Liam Mulhall <liammulh@gmail.com>
+ */
+
 import getLocaleInfo from './getLocaleInfo.js';
 import getRepoNameFromStringKeyWithRepoName from './getRepoNameFromStringKeyWithRepoName.js';
 import getStringKeyFromStringKeyWithRepoName from './getStringKeyFromStringKeyWithRepoName.js';
 import getStringKeysWithRepoName from './getStringKeysWithRepoName.js';
 import logger from './logger.js';
 
+/**
+ * Return the replacement string object for a given sim and in-progress translation.
+ *
+ * @param simHtml - the sim's HTML
+ * @param translation - the translation the user is working on
+ * @returns {Promise<Object>} - the replacement string object
+ */
 const getReplacementStringObject = async ( simHtml, translation ) => {
   logger.info( 'getting replacement string object' );
 
