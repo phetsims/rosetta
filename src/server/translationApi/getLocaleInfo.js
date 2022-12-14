@@ -25,11 +25,10 @@ const getLocaleInfo = async () => {
     const localeInfoValidDurationElapsed = timeOfLastUpdate
                                            + privateConfig.VALID_LOCALE_INFO_DURATION < Date.now();
 
-    /*
-     * We use cached locale info unless the locale info has become stale (i.e. the valid locale info duration has
-     * elapsed). Note: This doesn't handle the case where two requests for locale info are made in quick succession.
-     * If the translation utility sees a lot of use, it might make sense to handle this case.
-     */
+
+    // We use cached locale info unless the locale info has become stale (i.e. the valid locale info duration has
+    // elapsed). Note: This doesn't handle the case where two requests for locale info are made in quick succession.
+    // If the translation utility sees a lot of use, it might make sense to handle this case.
     if ( localeInfoValidDurationElapsed ) {
       logger.info( 'locale info is stale or nonexistent; getting it' );
       const localeInfoUrl = `${privateConfig.GITHUB_URL}/chipper/master/data/localeInfo.json`;
@@ -40,7 +39,7 @@ const getLocaleInfo = async () => {
       delete localeInfo.en;
 
       // We ignore this ESLint rule because a race condition here won't be problematic.
-      /* eslint-disable require-atomic-updates */
+      // eslint-disable-next-line require-atomic-updates
       timeOfLastUpdate = Date.now();
     }
     else {
