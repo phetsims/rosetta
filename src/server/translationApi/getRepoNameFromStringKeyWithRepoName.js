@@ -4,7 +4,7 @@
  * Export a utility function that extracts a lowercase-kebab (repo-style) repo name (e.g. acid-base-solutions) from
  * a string that looks like REPO_NAME/stringKey.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import logger from './logger.js';

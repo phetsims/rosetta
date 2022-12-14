@@ -3,7 +3,7 @@
 /**
  * Export a function that gets locale info.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import axios from 'axios';

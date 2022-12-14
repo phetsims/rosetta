@@ -3,7 +3,7 @@
 /**
  * Export a function to get a sim's HTML.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import axios from 'axios';
