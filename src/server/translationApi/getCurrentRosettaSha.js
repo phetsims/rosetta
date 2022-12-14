@@ -1,5 +1,11 @@
 // Copyright 2022, University of Colorado Boulder
 
+/**
+ * Get the SHA of the running instance of Rosetta.
+ *
+ * @author Liam Mulhall <liammulh@gmail.com>
+ */
+
 import { execSync } from 'node:child_process';
 
 /**
@@ -8,17 +14,16 @@ import { execSync } from 'node:child_process';
  * @returns {string}
  */
 const getCurrentRosettaSha = () => {
-  let retVal;
+  let sha = 'error: unable to get sha';
   try {
 
     // Slice off the \n from the end of the string.
-    retVal = execSync( 'git rev-parse HEAD' ).toString().slice( 0, 40 );
+    sha = execSync( 'git rev-parse HEAD' ).toString().slice( 0, 40 );
   }
   catch( e ) {
     console.error( e );
-    retVal = `error: ${e}`;
   }
-  return retVal;
+  return sha;
 };
 
 export default getCurrentRosettaSha;
