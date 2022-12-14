@@ -3,7 +3,7 @@
 /**
  * Export a utility function to get a sim's URL.
  *
- * @author Liam Mulhall
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import privateConfig from '../../common/privateConfig.js';
