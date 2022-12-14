@@ -10,6 +10,12 @@ import UserInfo from './UserInfo.jsx';
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+/**
+ * Return a "header" (i.e. info) to be shown at the top of every page on the translation
+ * utility.
+ *
+ * @returns {JSX.Element}
+ */
 const RosettaHeader = () => {
   return (
     <>
