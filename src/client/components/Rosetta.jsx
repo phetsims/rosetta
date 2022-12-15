@@ -38,37 +38,40 @@ function Rosetta() {
   let jsx = <p>Loading...</p>;
   const rosettaEnabled = Object.keys( publicConfig ).length > 0 && publicConfig.IS_ENABLED;
   if ( rosettaEnabled ) {
-    const allowedAccess = websiteUserData.loggedIn && ( websiteUserData.trustedTranslator || websiteUserData.teamMember );
-    const notAllowedAccess = websiteUserData.loggedIn && ( !websiteUserData.trustedTranslator && !websiteUserData.teamMember );
-    if ( allowedAccess ) {
-      jsx = (
-        <WebsiteUserDataContext.Provider value={websiteUserData}>
-          <RosettaRoutes/>
-        </WebsiteUserDataContext.Provider>
-      );
-    }
-    else if ( notAllowedAccess ) {
-      jsx = (
-        <div className='container m-5'>
-          <h1>PhET Translation Utility (HTML5)</h1>
-          <p>
-            You need to be a trusted translator to access the PhET Translation Tool. To become a trusted translator,
-            please send an email to phethelp@gmail.com.
-          </p>
-        </div>
-      );
-    }
-    else if ( !websiteUserData.loggedIn ) {
-      jsx = (
-        <div className='container m-5'>
-          <h1>PhET Translation Utility (HTML5)</h1>
-          <p>
-            You need to sign in to access the PhET Translation Tool.
-          </p>
-          <a href={`${window.location.origin}/en/sign-in?dest=${encodeURIComponent( window.location.href )}`}>Sign In</a>
-        </div>
-      );
-    }
+
+    // const allowedAccess = websiteUserData.loggedIn && ( websiteUserData.trustedTranslator || websiteUserData.teamMember );
+    // const notAllowedAccess = websiteUserData.loggedIn && ( !websiteUserData.trustedTranslator && !websiteUserData.teamMember );
+
+    // if ( allowedAccess ) {
+    jsx = (
+      <WebsiteUserDataContext.Provider value={websiteUserData}>
+        <RosettaRoutes/>
+      </WebsiteUserDataContext.Provider>
+    );
+
+    // }
+    // else if ( notAllowedAccess ) {
+    //   jsx = (
+    //     <div className='container m-5'>
+    //       <h1>PhET Translation Utility (HTML5)</h1>
+    //       <p>
+    //         You need to be a trusted translator to access the PhET Translation Tool. To become a trusted translator,
+    //         please send an email to phethelp@gmail.com.
+    //       </p>
+    //     </div>
+    //   );
+    // }
+    // else if ( !websiteUserData.loggedIn ) {
+    //   jsx = (
+    //     <div className='container m-5'>
+    //       <h1>PhET Translation Utility (HTML5)</h1>
+    //       <p>
+    //         You need to sign in to access the PhET Translation Tool.
+    //       </p>
+    //       <a href={`${window.location.origin}/en/sign-in?dest=${encodeURIComponent( window.location.href )}`}>Sign In</a>
+    //     </div>
+    //   );
+    // }
   }
   else {
     jsx = (
