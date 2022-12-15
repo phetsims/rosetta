@@ -6,7 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { useField } from 'formik';
+import { useField, useFormikContext } from 'formik';
 import React, { useContext } from 'react';
 import InputErrorMessage from './InputErrorMessage.jsx';
 import { LocaleInfoContext } from './RosettaRoutes.jsx';
@@ -30,6 +30,16 @@ const TranslationFormRow = props => {
   // Get field props for the input.
   const [ field ] = useField( props );
 
+  const { setFieldValue } = useFormikContext();
+
+  const handleCopyButtonClick = () => {
+    console.log( `before = ${JSON.stringify( field, null, 4 )}` );
+
+    // setFieldValue( field.name, props.englishString );
+    setFieldValue( field.name, 'Hi, JB!' );
+    console.log( `after = ${JSON.stringify( field, null, 4 )}` );
+  };
+
   return (
     <tr>
       <td>{props.stringKey}</td>
@@ -37,6 +47,7 @@ const TranslationFormRow = props => {
 
       {/* Use the spread operator to give the input each of the props in the field object. */}
       <td>
+        <button type='button' onClick={handleCopyButtonClick}>x</button>
         <input {...field} style={inputStyle} dir={direction}/>
         <InputErrorMessage fieldKey={props.keyWithoutDots}/>
       </td>

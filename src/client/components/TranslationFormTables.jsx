@@ -33,7 +33,6 @@ const TranslationFormTables = props => {
     // repos list), and finally common strings shared between many sims, we iterate over those categories, and create
     // different rows for the tables for each category.
     for ( const translationFormKey of Object.values( KeyTypesEnum ) ) {
-      console.log( translationFormKey );
       for ( const stringKeyWithoutDots in props.translationFormData[ translationFormKey ] ) {
         const englishString = props.translationFormData[ translationFormKey ][ stringKeyWithoutDots ].english;
         const stringKeyWithDots = stringKeyWithoutDots.split( '_DOT_' ).join( '.' );
