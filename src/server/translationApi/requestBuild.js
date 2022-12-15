@@ -37,7 +37,7 @@ const requestBuild = async ( simName, locale, userID ) => {
   // https://github.com/phetsims/phet-io/issues/1874.
   const phetioMetadata = await simPhetioMetadata( { active: true, latest: true } );
   const brands = [ 'phet' ];
-  for ( let i = 0; i < phetioSims.length; i++ ) {
+  for ( let i = 0; i < phetioMetadata.length; i++ ) {
     const phetioSimMetadata = phetioMetadata[ i ];
     const phetioSimVersion = new SimVersion(
       phetioSimMetadata.versionMajor,

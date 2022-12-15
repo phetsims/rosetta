@@ -21,6 +21,7 @@ import { reportObjectCache } from '../translationApi.js';
  * @returns {Promise<String>} - success message
  */
 const submitTranslation = async ( req, res ) => {
+  let submitted = false;
   try {
     logger.info( `sending ${req.body.locale}/${req.body.simName} translation to be prepared for long-term storage` );
     const preparedTranslation = await prepareTranslationForLongTermStorage( req.body );
@@ -32,7 +33,7 @@ const submitTranslation = async ( req, res ) => {
       if ( buildRequestRes ) {
         logger.info( 'build request succeeded' );
       }
-      res.send( 'translation submitted' );
+      submitted = buildRequestRes;
     }
     else {
       logger.error( `long term storage of ${req.body.locale}/${req.body.simName} failed` );
@@ -41,6 +42,7 @@ const submitTranslation = async ( req, res ) => {
   catch( e ) {
     logger.error( e );
   }
+  res.send( submitted );
 };
 
 export default submitTranslation;

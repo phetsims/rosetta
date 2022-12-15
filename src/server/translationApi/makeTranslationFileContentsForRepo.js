@@ -76,6 +76,12 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
   for ( const stringKey of Object.keys( translationFormData ) ) {
     if ( repo === translation.simName || repo === translationFormData[ stringKey ].repo ) {
 
+      // Trim leading and trailing whitespace.
+      // NOTE: If a user deliberately wants a space, this will change
+      // the string from ' ' to '', which makes the string fall back
+      // to English.
+      translationFormData[ stringKey ].translated = translationFormData[ stringKey ].translated.trim();
+
       const stringNotYetTranslated = !oldTranslationFile ||
                                      Object.keys( oldTranslationFile ).length === 0 ||
                                      oldTranslationFile[ stringKey ] === '' ||
