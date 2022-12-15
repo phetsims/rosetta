@@ -12,7 +12,7 @@
  * @returns {JSX.Element}
  */
 const PhetHomePageLink = () => {
-  return <a href={window.location.origin}>PhET Home Page</a>;
+  return <a className='nav-link' href={window.location.origin}>PhET Home Page</a>;
 };
 
 export default PhetHomePageLink;

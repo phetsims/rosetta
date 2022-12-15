@@ -17,11 +17,21 @@ import UserGuideLink from './UserGuideLink.jsx';
  */
 const Nav = () => {
   return (
-    <nav className='mt-4 mb-4'>
-      <Link to='/translate'>Select Locale</Link> |&nbsp;
-      <UserGuideLink/> |&nbsp;
-      <PhetHomePageLink/>
-    </nav>
+    <div className='card mt-4 mb-4'>
+      <div className='card-body'>
+        <ul className='nav nav-pills'>
+          <li className='nav-item'>
+            <Link className='nav-link' to='/translate'>Select Locale</Link>
+          </li>
+          <li className='nav-item'>
+            <UserGuideLink/>
+          </li>
+          <li className='nav-item'>
+            <PhetHomePageLink/>
+          </li>
+        </ul>
+      </div>
+    </div>
   );
 };
 
