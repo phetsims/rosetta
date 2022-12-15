@@ -29,21 +29,22 @@ const getReplacementStringObject = async ( stringKeysWithRepoName, translation )
   for ( const stringKeyWithRepoName of Object.keys( stringKeysWithRepoName ) ) {
     const repoName = getRepoNameFromStringKeyWithRepoName( stringKeyWithRepoName );
     const stringKey = getStringKeyFromStringKeyWithRepoName( stringKeyWithRepoName );
+    const stringKeyWithoutDots = stringKey.replaceAll( '.', '_DOT_' );
     if ( repoName === translation.simName ) {
 
       // We have a sim-specific repo.
 
       // Add translated key if it has been translated.
       const simSpecificObject = translation.translationFormData.simSpecific;
-      const keyIsPresent = Object.keys( simSpecificObject ).includes( stringKey );
-      const keyIsTranslated = keyIsPresent ? simSpecificObject[ stringKey ].translated !== '' : false;
+      const keyIsPresent = Object.keys( simSpecificObject ).includes( stringKeyWithoutDots );
+      const keyIsTranslated = keyIsPresent ? simSpecificObject[ stringKeyWithoutDots ].translated !== '' : false;
       if ( keyIsTranslated ) {
 
         // To understand why we're adding embedding marks, see https://github.com/phetsims/rosetta/issues/27.
         const ltrMark = '\u202a';
         const rtlMark = '\u202b';
         const endDirectionalMark = '\u202c';
-        const translatedValue = simSpecificObject[ stringKey ].translated;
+        const translatedValue = simSpecificObject[ stringKeyWithoutDots ].translated;
         stringKeysWithRepoName[ stringKeyWithRepoName ] = direction === 'rtl' ?
                                                           rtlMark + translatedValue + endDirectionalMark :
                                                           ltrMark + translatedValue + endDirectionalMark;
@@ -55,15 +56,15 @@ const getReplacementStringObject = async ( stringKeysWithRepoName, translation )
 
       // Add translated key if it has been translated.
       const commonObject = translation.translationFormData.common;
-      const keyIsPresent = Object.keys( commonObject ).includes( stringKey );
-      const keyIsTranslated = keyIsPresent ? commonObject[ stringKey ].translated !== '' : false;
+      const keyIsPresent = Object.keys( commonObject ).includes( stringKeyWithoutDots );
+      const keyIsTranslated = keyIsPresent ? commonObject[ stringKeyWithoutDots ].translated !== '' : false;
       if ( keyIsTranslated ) {
 
         // To understand why we're adding embedding marks, see https://github.com/phetsims/rosetta/issues/27.
         const ltrMark = '\u202a';
         const rtlMark = '\u202b';
         const endDirectionalMark = '\u202c';
-        const translatedValue = commonObject[ stringKey ].translated;
+        const translatedValue = commonObject[ stringKeyWithoutDots ].translated;
         stringKeysWithRepoName[ stringKeyWithRepoName ] = direction === 'rtl' ?
                                                           rtlMark + translatedValue + endDirectionalMark :
                                                           ltrMark + translatedValue + endDirectionalMark;
