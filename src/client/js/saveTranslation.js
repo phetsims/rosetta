@@ -22,8 +22,13 @@ const saveTranslation = async ( values, simName, locale ) => {
   const translation = await makeTranslationObject( values, simName, locale );
   if ( window.confirm( `If you have a translation saved for ${translation.simName} in locale ${translation.locale}, it will be overwritten.` ) ) {
     try {
-      await axios.post( `${publicConfig.translationApiRoute}/saveTranslation`, translation );
-      alert( 'Translation saved.' );
+      const savedRes = await axios.post( `${publicConfig.translationApiRoute}/saveTranslation`, translation );
+      if ( savedRes.data ) {
+        window.alert( 'Translation saved.' );
+      }
+      else {
+        window.alert( 'There was an issue with the short-term storage database. Translation not saved.' );
+      }
     }
     catch( e ) {
       alertErrorMessage( e );

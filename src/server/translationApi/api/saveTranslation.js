@@ -18,8 +18,8 @@ import storeTranslationShortTerm from '../storeTranslationShortTerm.js';
 const saveTranslation = async ( req, res ) => {
   try {
     logger.info( `saving ${req.body.locale}/${req.body.simName} translation to short-term storage` );
-    await storeTranslationShortTerm( req.body );
-    res.send( 'translation saved' );
+    const storeResult = await storeTranslationShortTerm( req.body );
+    res.send( storeResult );
   }
   catch( e ) {
     logger.error( e );
