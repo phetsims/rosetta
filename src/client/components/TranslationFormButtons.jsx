@@ -34,6 +34,9 @@ const TranslationFormButtons = props => {
         disabled={disabled}
         className={buttonClass}
         style={margin}
+        data-bs-toggle='tooltip'
+        data-bs-placement='top'
+        title='Save your translation to work on later'
       >
         Save
       </button>
@@ -43,6 +46,9 @@ const TranslationFormButtons = props => {
         disabled={disabled}
         className={buttonClass}
         style={margin}
+        data-bs-toggle='tooltip'
+        data-bs-placement='top'
+        title='Publish your translation to the PhET website'
       >
         Publish
       </button>
@@ -52,6 +58,9 @@ const TranslationFormButtons = props => {
         disabled={disabled}
         className={buttonClass}
         style={margin}
+        data-bs-toggle='tooltip'
+        data-bs-placement='top'
+        title='Test the simulation with your translated strings'
       >
         Test
       </button>
