@@ -101,7 +101,7 @@ const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => 
       </table>
     );
     if ( allSimsTranslated ) {
-      tableJsx = <p>All sims translated.</p>;
+      tableJsx = <p>All sims translated, check percentages.</p>;
     }
     else if ( noSimsTranslated ) {
       tableJsx = <p>No sims translated.</p>;
