@@ -11,23 +11,21 @@
 import getLocaleInfo from './getLocaleInfo.js';
 import getRepoNameFromStringKeyWithRepoName from './getRepoNameFromStringKeyWithRepoName.js';
 import getStringKeyFromStringKeyWithRepoName from './getStringKeyFromStringKeyWithRepoName.js';
-import getStringKeysWithRepoName from './getStringKeysWithRepoName.js';
 import logger from './logger.js';
 
 /**
  * Return the replacement string object for a given sim and in-progress translation.
  *
- * @param simHtml - the sim's HTML
+ * @param stringKeysWithRepoName - object of REPO_NAME/stringKey: value
  * @param translation - the translation the user is working on
  * @returns {Promise<Object>} - the replacement string object
  */
-const getReplacementStringObject = async ( simHtml, translation ) => {
+const getReplacementStringObject = async ( stringKeysWithRepoName, translation ) => {
   logger.info( 'getting replacement string object' );
 
   const localeInfo = await getLocaleInfo();
   const direction = localeInfo[ translation.locale ].direction;
 
-  const stringKeysWithRepoName = getStringKeysWithRepoName( simHtml );
   for ( const stringKeyWithRepoName of Object.keys( stringKeysWithRepoName ) ) {
     const repoName = getRepoNameFromStringKeyWithRepoName( stringKeyWithRepoName );
     const stringKey = getStringKeyFromStringKeyWithRepoName( stringKeyWithRepoName );
