@@ -18,6 +18,7 @@ import logger from './logger.js';
  * @param translation - translation received from client
  */
 const storeTranslationShortTerm = async translation => {
+  let stored = false;
   if ( privateConfig.DB_ENABLED ) {
     logger.info( `storing ${translation.locale}/${translation.simName} translation in short-term storage` );
     try {
@@ -27,7 +28,9 @@ const storeTranslationShortTerm = async translation => {
         locale: translation.locale
       } );
       logger.info( 'inserting new translation' );
-      await shortTermStringStorageCollection.insertOne( translation );
+      const result = await shortTermStringStorageCollection.insertOne( translation );
+      logger.info( `inserted translation with id ${result.insertedId}` );
+      stored = result.acknowledged;
     }
     catch( e ) {
       logger.error( e );
@@ -37,6 +40,7 @@ const storeTranslationShortTerm = async translation => {
   else {
     logger.warn( 'short-term string storage database not enabled; check your config' );
   }
+  return stored;
 };
 
 export default storeTranslationShortTerm;
