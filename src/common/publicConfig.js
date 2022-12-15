@@ -23,7 +23,7 @@ export default {
 
   // Set this to production if you're in production. Set this to development if you're
   // in development.
-  ENVIRONMENT: 'development',
+  ENVIRONMENT: 'production',
 
   // A dummy user ID only used if you have your environment variable set to development.
   LOCAL_USER_ID: 654321,
