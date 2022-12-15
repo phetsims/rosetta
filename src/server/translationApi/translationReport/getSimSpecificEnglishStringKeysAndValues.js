@@ -12,6 +12,10 @@ import getEnglishStringKeysAndValues from './getEnglishStringKeysAndValues.js';
 /**
  * Return an object containing sim-specific English string keys and their values.
  *
+ * NOTE:
+ * Getting sim-specific English string keys and strings is done with SHA whereas the others are done by getting data
+ * from the master branch.
+ *
  * @param {String} simName - sim name
  * @param {String} sha - SHA for the sim
  * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys - string keys categorized into common and sim-specific
