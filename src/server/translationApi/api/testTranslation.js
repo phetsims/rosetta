@@ -21,8 +21,9 @@ import logger from '../logger.js';
 const testTranslation = async ( req, res ) => {
   try {
     const simHtml = await getSimHtml( getSimUrl( req.body.simName ) );
-    const originalStringObject = JSON.stringify( getStringKeysWithRepoName( simHtml ) );
-    const replacementStringObject = JSON.stringify( await getReplacementStringObject( simHtml, req.body ) );
+    const stringKeysWithRepoName = await getStringKeysWithRepoName( simHtml );
+    const originalStringObject = JSON.stringify( stringKeysWithRepoName );
+    const replacementStringObject = JSON.stringify( await getReplacementStringObject( stringKeysWithRepoName, req.body ) );
     const simHtmlWithTranslatedStrings = simHtml.replace( originalStringObject, replacementStringObject );
     logger.info( 'responding with sim html for translation test' );
     res.send( simHtmlWithTranslatedStrings );
