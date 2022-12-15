@@ -83,9 +83,8 @@ const getTranslationFormData = async (
       }
 
       // Try to get saved translation in short-term storage database.
-      // TODO: Check userId is a string number using module in triggerBuild dir?
       const filter = {
-        userId: userId, // The user ID should be a string since it gets stored in the DB as a string.
+        userId: Number( userId ), // The user ID should be a number since it gets stored in the DB as a number.
         simName: simName,
         locale: locale
       };
