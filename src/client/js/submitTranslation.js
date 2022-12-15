@@ -48,15 +48,19 @@ const submitTranslation = async (
   confirmMessage += 'Are you sure you want to submit?';
   if ( window.confirm( confirmMessage ) ) {
     try {
-      await axios.post( `${publicConfig.translationApiRoute}/submitTranslation`, translation );
-      console.log( publicConfig.VALID_METADATA_DURATION );
-      const minutesUntilChanges = publicConfig.VALID_METADATA_DURATION / 1000 / 60;
-      const submissionMessage = 'Translation submitted.'
-                                + ' Your translation should appear on the PhET website in about half an hour.'
-                                + ` It will take about ${minutesUntilChanges} minutes for the translation utility to`
-                                + ' show the changes you made.';
-      alert( submissionMessage );
-      submitted = true;
+      const result = await axios.post( `${publicConfig.translationApiRoute}/submitTranslation`, translation );
+      submitted = result.data;
+      if ( submitted ) {
+        const minutesUntilChanges = publicConfig.VALID_METADATA_DURATION / 1000 / 60;
+        const submissionMessage = 'Translation submitted.'
+                                  + ' Your translation should appear on the PhET website in about half an hour.'
+                                  + ` It will take about ${minutesUntilChanges} minutes for the translation utility to`
+                                  + ' show the changes you made.';
+        window.alert( submissionMessage );
+      }
+      else {
+        window.alert( 'An error occurred. Translation not submitted.' );
+      }
     }
     catch( e ) {
       alertErrorMessage( e );

@@ -16,7 +16,7 @@ import React, {
   useEffect,
   useState
 } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import publicConfig from '../../common/publicConfig.js';
 import makeValidationSchema from '../js/makeValidationSchema.js';
 import saveTranslation from '../js/saveTranslation.js';
@@ -73,9 +73,6 @@ const TranslationForm = () => {
     localeName = localeInfo[ params.locale ].name;
   }
 
-  // For navigating the user programmatically.
-  const navigate = useNavigate();
-
   let translationFormJsx;
   if ( translationFormData === null ) {
     translationFormJsx = (
@@ -113,20 +110,8 @@ const TranslationForm = () => {
             }
             else if ( buttonId === 'submit' ) {
               setIsDisabled( true );
-              const submitted = await submitTranslation( values, params.simName, params.locale, simTitle, localeName );
-
-              if ( submitted ) {
-
-                // Navigate user back to the sim list. Otherwise, they will be stuck
-                // on the translation form with disabled buttons.
-                alert( `Sending you back to the sim list for ${localeName}.` );
-                navigate( `/translate/${params.locale}` );
-              }
-              else {
-
-                // Set disabled flag back to false so user can continue their translation.
-                setIsDisabled( false );
-              }
+              await submitTranslation( values, params.simName, params.locale, simTitle, localeName );
+              setIsDisabled( false );
             }
             else if ( buttonId === 'test' ) {
               await testTranslation( values, params.simName, params.locale );
