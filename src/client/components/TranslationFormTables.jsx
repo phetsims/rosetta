@@ -40,7 +40,7 @@ const TranslationFormTables = props => {
           <TranslationFormRow
             key={stringKeyWithDots}
             keyWithoutDots={stringKeyWithoutDots}
-            name={`simSpecific.${stringKeyWithoutDots}.translated`}
+            name={`${translationFormKey}.${stringKeyWithoutDots}.translated`}
             stringKey={stringKeyWithDots}
             englishString={englishString}
             locale={props.locale}
