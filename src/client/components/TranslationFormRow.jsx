@@ -33,11 +33,7 @@ const TranslationFormRow = props => {
   const { setFieldValue } = useFormikContext();
 
   const handleCopyButtonClick = () => {
-    console.log( `before = ${JSON.stringify( field, null, 4 )}` );
-
-    // setFieldValue( field.name, props.englishString );
-    setFieldValue( field.name, 'Hi, JB!' );
-    console.log( `after = ${JSON.stringify( field, null, 4 )}` );
+    setFieldValue( field.name, props.englishString );
   };
 
   return (
