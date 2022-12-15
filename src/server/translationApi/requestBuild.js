@@ -32,20 +32,36 @@ const requestBuild = async ( simName, locale, userID ) => {
   logger.info( `latest version of the sim: ${simVersionObject.string}.` );
   const dependencies = await getDependencies( simName, simVersionObject.string );
 
-
   // See if there is a published phet-io version of the sim we are requesting a build for. If so, add the phet-io brand
   // to the list of brands we are requesting to build. For the history of this, see:
   // https://github.com/phetsims/phet-io/issues/1874.
-  const phetioSims = await simPhetioMetadata( { active: true, latest: true } );
+  const phetioMetadata = await simPhetioMetadata( { active: true, latest: true } );
   const brands = [ 'phet' ];
   for ( let i = 0; i < phetioSims.length; i++ ) {
-    const phetioSim = phetioSims[ i ];
-    const phetioSimVersion = new SimVersion( phetioSim.versionMajor, phetioSim.versionMinor, phetioSim.versionMaintenance );
-    const nameAndVersionAreSame = phetioSim.name === simName &&
+    const phetioSimMetadata = phetioMetadata[ i ];
+    const phetioSimVersion = new SimVersion(
+      phetioSimMetadata.versionMajor,
+      phetioSimMetadata.versionMinor,
+      phetioSimMetadata.versionMaintenance
+    );
+    const nameAndVersionAreSame = phetioSimMetadata.name === simName &&
                                   phetioSimVersion.major === simVersionObject.major &&
                                   phetioSimVersion.minor === simVersionObject.minor;
+
     if ( nameAndVersionAreSame ) {
-      brands.push( 'phet-io' );
+
+      // It is possible - and has occurred - for the version number of the published phet brand sim to match that of a
+      // previously published phet-io sim that came from a separate branch.  In this case, we DON'T want to request the
+      // phet-io version in the build, since doing so would cause the build server will overwrite the published phet-io
+      // version with the phet brand version.  See https://github.com/phetsims/rosetta/issues/322.
+      const phetioVersionFromSeparateBranch = phetioSimMetadata.versionSuffix !== undefined &&
+                                              phetioSimMetadata.versionSuffix === 'phetio';
+
+      if ( !phetioVersionFromSeparateBranch ) {
+
+        // Add phet-io to the list of brands that will be built.
+        brands.push( 'phet-io' );
+      }
     }
   }
 
