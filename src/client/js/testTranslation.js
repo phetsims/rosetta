@@ -30,7 +30,7 @@ const testTranslation = async ( values, simName, locale ) => {
     win.document.write( stringSimHtml );
   }
   catch( e ) {
-    alertErrorMessage( e );
+    alertErrorMessage( 'In order for the test button to work, you need to enable pop-ups for this website. ' + e );
   }
 };
 
