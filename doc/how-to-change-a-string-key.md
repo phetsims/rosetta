@@ -67,6 +67,7 @@ release.
 [Admin Guide](https://github.com/phetsims/rosetta/blob/master/doc/admin-guide.md) for information on how to do this).
 - [ ] Change the value of the string key on master. This will need to be done in the string file and at all usage
 sites.
+- [ ] Run grunt generate-development-strings in the repo where the change was made.
 - [ ] Build the sim and verify that there are no string errors, then test the built sim and verify the string looks
 correct.
 - [ ] Change the value of the string key on the release branch. Again this will need to be done in the string file and
