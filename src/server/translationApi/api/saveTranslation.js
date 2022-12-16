@@ -16,6 +16,7 @@ import storeTranslationShortTerm from '../storeTranslationShortTerm.js';
  * @param {Object} res - Express response object
  */
 const saveTranslation = async ( req, res ) => {
+  console.log( `-------------------> req.body = ${JSON.stringify( req.body, null, 4 )}` );
   try {
     logger.info( `saving ${req.body.locale}/${req.body.simName} translation to short-term storage` );
     const storeResult = await storeTranslationShortTerm( req.body );
