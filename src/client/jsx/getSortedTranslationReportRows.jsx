@@ -109,7 +109,7 @@ const getSortedTranslationReportRows = (
     // are obtained from the sim metadata.
     const withinMetadataWindow = minutesElapsed < ( validMetadataMinutes * 2 );
     let pendingUpdate = <></>;
-    if ( item.isDirty && withinMetadataWindow ) {
+    if ( item.isDirty || withinMetadataWindow ) {
       pendingUpdate = '(pending update) ';
     }
 
