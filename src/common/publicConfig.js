@@ -26,7 +26,7 @@ export default {
   ENVIRONMENT: 'production',
 
   // A dummy user ID only used if you have your environment variable set to development.
-  LOCAL_USER_ID: 654321,
+  LOCAL_USER_ID: '654321',
 
   // Determines how long you want to cache sim metadata before getting it fresh. Sim
   // metadata is a big chunk of data, so we cache it.
