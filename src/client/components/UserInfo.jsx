@@ -20,7 +20,7 @@ const UserInfo = () => {
   return (
     <>
       <img src={personCircle} alt='person icon' width='20px'/>&nbsp;
-      {websiteUserData.email}
+      Singed in as: {websiteUserData.email}
     </>
   );
 };
