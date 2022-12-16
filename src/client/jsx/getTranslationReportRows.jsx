@@ -71,8 +71,8 @@ const getTranslationReportRows = (
     // are obtained from the sim metadata.
     const withinMetadataWindow = minutesElapsed < ( validMetadataMinutes * 2 );
     let pendingUpdate = <></>;
-    if ( reportObject.isDirty || withinMetadataWindow ) {
-      pendingUpdate = '(pending update) ';
+    if ( reportObject.isDirty && withinMetadataWindow ) {
+      pendingUpdate = ' (pending update)';
     }
 
     // Create the row JSX.
