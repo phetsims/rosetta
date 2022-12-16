@@ -42,8 +42,6 @@ const TranslationForm = () => {
   const params = useParams();
   const websiteUserData = useContext( WebsiteUserDataContext );
 
-  console.log( `__________>> websiteUserData = ${JSON.stringify( websiteUserData, null, 4 )}` );
-
   const [ translationFormData, setTranslationFormData ] = useState( null );
   useEffect( () => {
     try {
