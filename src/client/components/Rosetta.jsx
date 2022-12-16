@@ -27,7 +27,7 @@ const WebsiteUserDataContext = createContext( {} );
  * how to request access to the translation tool.
  *
  * If a user is not signed in, this component will contain some header stuff and a link to sign in that will redirect
- * them to this page.
+ * them to the translation utility.
  *
  * If Rosetta isn't enabled, a message about Rosetta being down for maintenance will be shown.
  *
