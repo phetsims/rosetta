@@ -55,7 +55,7 @@ const TranslationForm = () => {
     catch( e ) {
       console.error( e );
     }
-  }, [] );
+  }, [ websiteUserData ] );
 
   const [ isDisabled, setIsDisabled ] = useState( false );
   const [ buttonId, setButtonId ] = useState( '' );
