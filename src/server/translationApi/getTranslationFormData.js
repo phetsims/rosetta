@@ -88,7 +88,6 @@ const getTranslationFormData = async (
         simName: simName,
         locale: locale
       };
-      console.log( `-------------------------> ${JSON.stringify( filter, null, 4 )}` );
       const savedTranslation = await shortTermStringStorageCollection.findOne( filter );
       if ( savedTranslation ) {
 
