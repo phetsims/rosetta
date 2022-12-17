@@ -19,11 +19,11 @@ export default {
   // production current: https://phet.colorado.edu/services/check-login,
   // dev current: https://phet-direct-dev.colorado.edu/user/check-login,
   // localhost current: http://localhost:16372/services/check-login,
-  WEBSITE_USER_DATA_URL: 'https://phet-direct-dev.colorado.edu/user/check-login',
+  WEBSITE_USER_DATA_URL: 'http://localhost:16372/services/check-login',
 
   // Set this to production if you're in production. Set this to development if you're
   // in development.
-  ENVIRONMENT: 'production',
+  ENVIRONMENT: 'development',
 
   // A dummy user ID only used if you have your environment variable set to development.
   LOCAL_USER_ID: '654321',
