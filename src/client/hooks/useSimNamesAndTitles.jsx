@@ -20,7 +20,6 @@ import publicConfig from '../../common/publicConfig.js';
 const useSimNamesAndTitles = () => {
 
   const websiteUserData = useContext( WebsiteUserDataContext );
-  console.log( JSON.stringify( websiteUserData, null, 4 ) );
 
   const [ simNamesAndTitles, setSimNamesAndTitles ] = useState( [] );
   useEffect( async () => {

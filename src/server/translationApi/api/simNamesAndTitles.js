@@ -18,7 +18,6 @@ import logger from '../logger.js';
  */
 const simNamesAndTitles = async ( req, res ) => {
   logger.info( 'responding with sim names and titles' );
-  console.log( `req.query.isTeamMember = ${req.query.isTeamMember}` );
   res.json( getSimNamesAndTitles( await getSimMetadata(), req.query.isTeamMember ) );
 };
 

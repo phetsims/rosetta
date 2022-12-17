@@ -15,7 +15,10 @@ import getTranslatedAndUntranslatedSims from '../translationReport/getTranslated
  * @param {Object} res - Express response object
  */
 const translatedAndUntranslatedSims = async ( req, res ) => {
-  const translatedAndUntranslatedSims = await getTranslatedAndUntranslatedSims( req.params.locale );
+  const translatedAndUntranslatedSims = await getTranslatedAndUntranslatedSims(
+    req.params.locale,
+    req.query.isTeamMember
+  );
   res.send( translatedAndUntranslatedSims );
 };
 

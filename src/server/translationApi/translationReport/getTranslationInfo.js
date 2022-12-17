@@ -6,26 +6,23 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import publicConfig from '../../../common/publicConfig.js';
 import getLocaleInfo from '../getLocaleInfo.js';
 import getSimMetadata from '../getSimMetadata.js';
 
 /**
  * Return an object that tells whether a given sim/locale combo has a translation.
  *
+ * @param {String} isTeamMember - whether a translator is a team member
  * @returns {Promise<Object>} - translation info
  */
-const getTranslationInfo = async () => {
+const getTranslationInfo = async isTeamMember => {
   const translationInfo = {};
   const localeInfo = await getLocaleInfo();
   const localesList = Object.keys( localeInfo );
   const simMetadata = await getSimMetadata();
   for ( const project of simMetadata.projects ) {
     for ( const sim of project.simulations ) {
-      const wantSimVisible = publicConfig.ENVIRONMENT === 'development' ||
-                             ( publicConfig.ENVIRONMENT === 'production' &&
-                               ( sim.visible || sim.isPrototype ) );
-      if ( wantSimVisible ) {
+      if ( isTeamMember === 'true' || ( sim.visible || sim.isPrototype ) ) {
         const simName = sim.name;
         const localizedSimsList = Object.keys( sim.localizedSimulations );
         for ( const locale of localesList ) {

@@ -13,12 +13,12 @@ import logger from './logger.js';
  * If the sim should be visible, extract its name from the simulations object provided, otherwise return false.
  *
  * @param {Object} sim - simulations object from sim metadata
- * @param {Boolean} isTeamMember - whether a translator is a team member
+ * @param {String} isTeamMember - whether a translator is a team member
  * @returns {Boolean|String} - false if sim shouldn't be visible, sim name otherwise
  */
 const extractSimName = ( sim, isTeamMember ) => {
   let simName = false;
-  if ( isTeamMember || ( sim.visible || sim.isPrototype ) ) {
+  if ( isTeamMember === 'true' || ( sim.visible || sim.isPrototype ) ) {
     simName = sim.name;
   }
   return simName;
@@ -29,7 +29,7 @@ const extractSimName = ( sim, isTeamMember ) => {
  * titles (e.g. Acid-Base Solutions).
  *
  * @param {Object} simMetadata - sim metadata obtained from the PhET website
- * @param {Boolean} isTeamMember - whether a translator is a team member
+ * @param {String} isTeamMember - whether a translator is a team member
  * @returns {Object} - sim names mapped to sim titles
  */
 const getSimNamesAndTitles = ( simMetadata, isTeamMember ) => {
@@ -51,7 +51,6 @@ const getSimNamesAndTitles = ( simMetadata, isTeamMember ) => {
     simNamesAndTitles.error = 'unable to get sim names and titles';
   }
   logger.info( 'returning sim names and titles' );
-  console.log( `--------------------_> ${JSON.stringify( simNamesAndTitles, null, 4 )}` );
   return simNamesAndTitles;
 };
 
