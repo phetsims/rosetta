@@ -7,7 +7,8 @@
  */
 
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { WebsiteUserDataContext } from '../components/Rosetta.jsx';
 import alertErrorMessage from '../js/alertErrorMessage.js';
 import publicConfig from '../../common/publicConfig.js';
 
@@ -18,16 +19,19 @@ import publicConfig from '../../common/publicConfig.js';
  */
 const useSimNamesAndTitles = () => {
 
+  const websiteUserData = useContext( WebsiteUserDataContext );
+  console.log( JSON.stringify( websiteUserData, null, 4 ) );
+
   const [ simNamesAndTitles, setSimNamesAndTitles ] = useState( [] );
   useEffect( async () => {
     try {
-      const simTitlesRes = await axios.get( `${publicConfig.translationApiRoute}/simNamesAndTitles` );
+      const simTitlesRes = await axios.get( `${publicConfig.translationApiRoute}/simNamesAndTitles?isTeamMember=${websiteUserData.teamMember}` );
       setSimNamesAndTitles( simTitlesRes.data );
     }
     catch( e ) {
       alertErrorMessage( e );
     }
-  }, [] );
+  }, [ websiteUserData ] );
   return simNamesAndTitles;
 };
 

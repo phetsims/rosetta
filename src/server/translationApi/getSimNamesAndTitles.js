@@ -7,21 +7,18 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import publicConfig from '../../common/publicConfig.js';
 import logger from './logger.js';
 
 /**
  * If the sim should be visible, extract its name from the simulations object provided, otherwise return false.
  *
- * @param {object} sim - simulations object from sim metadata
- * @returns {boolean|string} - false if sim shouldn't be visible, sim name otherwise
+ * @param {Object} sim - simulations object from sim metadata
+ * @param {Boolean} isTeamMember - whether a translator is a team member
+ * @returns {Boolean|String} - false if sim shouldn't be visible, sim name otherwise
  */
-const extractSimName = sim => {
+const extractSimName = ( sim, isTeamMember ) => {
   let simName = false;
-  const wantSimVisible = publicConfig.ENVIRONMENT === 'development' ||
-                         ( publicConfig.ENVIRONMENT === 'production' &&
-                           ( sim.visible || sim.isPrototype ) );
-  if ( wantSimVisible ) {
+  if ( isTeamMember || ( sim.visible || sim.isPrototype ) ) {
     simName = sim.name;
   }
   return simName;
@@ -31,17 +28,18 @@ const extractSimName = sim => {
  * Return an object containing string lowercase kebab case sim names (e.g. acid-base-solutions) mapped to sim
  * titles (e.g. Acid-Base Solutions).
  *
- * @param {object} simMetadata - sim metadata obtained from the PhET website
- * @returns {object} - sim names mapped to sim titles
+ * @param {Object} simMetadata - sim metadata obtained from the PhET website
+ * @param {Boolean} isTeamMember - whether a translator is a team member
+ * @returns {Object} - sim names mapped to sim titles
  */
-const getSimNamesAndTitles = simMetadata => {
+const getSimNamesAndTitles = ( simMetadata, isTeamMember ) => {
   logger.info( 'getting sim names and titles' );
   const simNamesAndTitles = {};
   try {
     for ( const project of simMetadata.projects ) {
       for ( const sim of project.simulations ) {
         const simTitle = sim.localizedSimulations.en.title;
-        const simName = extractSimName( sim );
+        const simName = extractSimName( sim, isTeamMember );
         if ( simName ) {
           simNamesAndTitles[ simName ] = simTitle;
         }
@@ -53,6 +51,7 @@ const getSimNamesAndTitles = simMetadata => {
     simNamesAndTitles.error = 'unable to get sim names and titles';
   }
   logger.info( 'returning sim names and titles' );
+  console.log( `--------------------_> ${JSON.stringify( simNamesAndTitles, null, 4 )}` );
   return simNamesAndTitles;
 };
 
