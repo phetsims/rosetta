@@ -7,7 +7,8 @@
  */
 
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
+import { WebsiteUserDataContext } from '../components/Rosetta.jsx';
 import alertErrorMessage from '../js/alertErrorMessage.js';
 import publicConfig from '../../common/publicConfig.js';
 
@@ -18,17 +19,18 @@ import publicConfig from '../../common/publicConfig.js';
  * @returns {Object}
  */
 const useTranslatedAndUntranslatedSims = locale => {
+  const websiteUserData = useContext( WebsiteUserDataContext );
   const [ translatedAndUntranslatedSims, setTranslatedAndUntranslatedSims ] = useState( null );
   useEffect( async () => {
     try {
       const translatedAndUntranslatedSimsRes =
-        await axios.get( `${publicConfig.translationApiRoute}/translatedAndUntranslatedSims/${locale}` );
+        await axios.get( `${publicConfig.translationApiRoute}/translatedAndUntranslatedSims/${locale}?isTeamMember=${websiteUserData.teamMember}` );
       setTranslatedAndUntranslatedSims( translatedAndUntranslatedSimsRes.data );
     }
     catch( e ) {
       alertErrorMessage( e );
     }
-  }, [] );
+  }, [ websiteUserData ] );
   return translatedAndUntranslatedSims;
 };
 

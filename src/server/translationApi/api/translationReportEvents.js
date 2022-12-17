@@ -32,8 +32,11 @@ const translationReportEvents = async ( req, res ) => {
   res.writeHead( 200, headers );
 
   const simMetadata = await getSimMetadata();
-  const simNamesAndTitles = getSimNamesAndTitles( simMetadata );
-  const translatedAndUntranslatedSims = await getTranslatedAndUntranslatedSims( req.params.locale );
+  const simNamesAndTitles = getSimNamesAndTitles( simMetadata, req.query.isTeamMember );
+  const translatedAndUntranslatedSims = await getTranslatedAndUntranslatedSims(
+    req.params.locale,
+    req.query.isTeamMember
+  );
   let simNames = translatedAndUntranslatedSims.translated;
   if ( req.query.wantsUntranslated === 'true' ) {
     simNames = translatedAndUntranslatedSims.untranslated;

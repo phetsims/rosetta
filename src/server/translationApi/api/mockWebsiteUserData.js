@@ -22,7 +22,7 @@ const mockWebsiteUserData = ( req, res ) => {
     userId: publicConfig.LOCAL_USER_ID,
     email: 'phet.girl@colorado.edu',
     loggedIn: true,
-    teamMember: true,
+    teamMember: false,
     trustedTranslator: true,
     subscribed: true
   };

@@ -6,8 +6,9 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import publicConfig from '../../common/publicConfig.js';
+import { WebsiteUserDataContext } from '../components/Rosetta.jsx';
 
 /**
  * Return the report objects we get from the backend's server sent events. Also return a boolean telling whether the
@@ -25,9 +26,11 @@ const useTranslationReportObjects = ( locale, wantsUntranslated ) => {
   const [ reportPopulated, setReportPopulated ] = useState( false );
   const [ reportObjects, setReportObjects ] = useState( [] );
 
+  const websiteUserData = useContext( WebsiteUserDataContext );
+
   useEffect( () => {
     if ( !listening && !reportPopulated ) {
-      const translationReportUrl = `${publicConfig.translationApiRoute}/translationReportEvents/${locale}?wantsUntranslated=${wantsUntranslated}`;
+      const translationReportUrl = `${publicConfig.translationApiRoute}/translationReportEvents/${locale}?wantsUntranslated=${wantsUntranslated}&isTeamMember=${websiteUserData.teamMember}`;
       const translationReportSource = new EventSource( translationReportUrl );
       translationReportSource.onmessage = event => {
         if ( event.data !== 'closed' ) {
