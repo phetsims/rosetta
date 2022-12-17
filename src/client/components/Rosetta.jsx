@@ -52,7 +52,7 @@ function Rosetta() {
         <div className='container m-5'>
           <h1>PhET Translation Utility (HTML5)</h1>
           <p>
-            You need to be a trusted translator to access the PhET Translation Tool. To become a trusted translator,
+            You need to be a trusted translator to access the PhET Translation Utility. To become a trusted translator,
             please send an email to phethelp@gmail.com.
           </p>
         </div>
@@ -63,7 +63,7 @@ function Rosetta() {
         <div className='container m-5'>
           <h1>PhET Translation Utility (HTML5)</h1>
           <p>
-            You need to sign in to access the PhET Translation Tool.
+            You need to sign in to access the PhET Translation Utility.
           </p>
           <a href={`${window.location.origin}/en/sign-in?dest=${encodeURIComponent( window.location.href )}`}>Sign In</a>
         </div>
