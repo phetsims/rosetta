@@ -9,7 +9,6 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import translationFormData from 'server/translationApi/api/translationFormData.js';
 import TranslationFormRow from './TranslationFormRow.jsx';
 import KeyTypesEnum from '../js/KeyTypesEnum.js';
 
@@ -60,19 +59,24 @@ const TranslationFormTables = props => {
     }
   }, [ props.translationFormData ] ); // Re-render if there are errors.
 
+  const prototypeWarningStyle = {
+    color: 'red',
+    fontStyle: 'bold'
+  };
   const prototypeWarningJsx = (
-    <p>
-      Warning - This simulation is currently a prototype.
+    <p style={prototypeWarningStyle}>
+      Warning — This simulation is currently a prototype.
       Changes may occur by the time the simulation is fully published
       that may include new strings or will require some strings to be
       re-translated.
     </p>
   );
 
+  console.log( `simIsPrototype = ${props.translationFormData.simIsPrototype}` );
+
   const sharedJsx = sharedRows.length > 0 ? (
     <div className='mt-2'>
       <h2>Shared Strings</h2>
-      {translationFormData.simIsPrototype ? prototypeWarningJsx : <></>}
       <h4 className='text-muted'>Translating these strings will affect a handful of simulations.</h4>
       <table className='table table-striped'>
         <thead>
@@ -95,6 +99,7 @@ const TranslationFormTables = props => {
     <div>
       <div className='mt-2'>
         <h2>Sim-Specific Strings</h2>
+        {props.translationFormData.simIsPrototype ? prototypeWarningJsx : <></>}
         <h4 className='text-muted'>Translating these strings will only affect the selected simulation.</h4>
         <table className='table table-striped'>
           <thead>
