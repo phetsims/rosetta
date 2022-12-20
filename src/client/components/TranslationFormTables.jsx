@@ -9,6 +9,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
+import translationFormData from 'server/translationApi/api/translationFormData.js';
 import TranslationFormRow from './TranslationFormRow.jsx';
 import KeyTypesEnum from '../js/KeyTypesEnum.js';
 
@@ -59,9 +60,19 @@ const TranslationFormTables = props => {
     }
   }, [ props.translationFormData ] ); // Re-render if there are errors.
 
+  const prototypeWarningJsx = (
+    <p>
+      Warning - This simulation is currently a prototype.
+      Changes may occur by the time the simulation is fully published
+      that may include new strings or will require some strings to be
+      re-translated.
+    </p>
+  );
+
   const sharedJsx = sharedRows.length > 0 ? (
     <div className='mt-2'>
       <h2>Shared Strings</h2>
+      {translationFormData.simIsPrototype ? prototypeWarningJsx : <></>}
       <h4 className='text-muted'>Translating these strings will affect a handful of simulations.</h4>
       <table className='table table-striped'>
         <thead>
