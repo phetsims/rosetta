@@ -12,6 +12,7 @@
 import privateConfig from '../../common/privateConfig.js';
 import publicConfig from '../../common/publicConfig.js';
 import getCommonTranslationFormData from './getCommonTranslationFormData.js';
+import getPrototypeStatus from './getPrototypeStatus.js';
 import getSharedTranslationFormData from './getSharedTranslationFormData.js';
 import { shortTermStringStorageCollection } from './getShortTermStringStorageCollection.js';
 import getSimSpecificTranslationFormData from './getSimSpecificTranslationFormData.js';
@@ -108,10 +109,12 @@ const getTranslationFormData = async (
 
   // Otherwise, get translation form data the normal way.
   const translationFormData = {
+    simIsPrototype: false,
     simSpecific: {},
     common: {}
   };
   try {
+    translationFormData.simIsPrototype = await getPrototypeStatus( simName );
     translationFormData.simSpecific = await getSimSpecificTranslationFormData(
       simName,
       locale,
