@@ -10,7 +10,7 @@ import { useField, useFormikContext } from 'formik';
 import React, { useContext } from 'react';
 import InputErrorMessage from './InputErrorMessage.jsx';
 import { LocaleInfoContext } from './RosettaRoutes.jsx';
-import files from '../img/files.svg';
+import boxArrowInRight from '../img/box-arrow-in-right.svg';
 
 /**
  * This component is a row in the translation table. It has the string key, the English string, and an input for
@@ -44,7 +44,9 @@ const TranslationFormRow = props => {
 
       {/* Use the spread operator to give the input each of the props in the field object. */}
       <td>
-        <button className='btn btn-light' type='button' onClick={handleCopyButtonClick}><img src={files} alt='copy icon'/></button>
+        <button className='btn btn-light' type='button' onClick={handleCopyButtonClick}>
+          <img src={boxArrowInRight} alt='copy English value to input icon'/>
+        </button>
         <input {...field} style={inputStyle} dir={direction}/>
         <InputErrorMessage fieldKey={props.keyWithoutDots}/>
       </td>
