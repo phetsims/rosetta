@@ -10,6 +10,7 @@
 import { Link } from 'react-router-dom';
 import getMinutesElapsed from '../../common/getMinutesElapsed.js';
 import publicConfig from '../../common/publicConfig.js';
+import alertErrorMessage from '../js/alertErrorMessage.js';
 
 /**
  * Return an array of translation report objects (i.e. stats used to make translation report rows) that have
@@ -49,13 +50,31 @@ const getReportObjectsWithPercentages = reportObjects => {
  */
 const sortReportObjectsWithPercentages = ( reportObjectsWithPercentages, sortDirection, sortKey ) => {
   return reportObjectsWithPercentages.sort( ( a, b ) => {
+
+    let sortResult = 0;
+
+    // Parameter checking.
+    if ( typeof a[ sortKey ] !== typeof b[ sortKey ] ) {
+      alertErrorMessage( 'Values being sorted are not the same type.' );
+    }
+    const valuesAreStrings = typeof a[ sortKey ] === 'string' && typeof b[ sortKey ] === 'string';
     if ( sortDirection === 'ascending' ) {
-      return a[ sortKey ] > b[ sortKey ] ? 1 : -1;
+      if ( valuesAreStrings ) {
+        sortResult = a[ sortKey ].toLowerCase() > b[ sortKey ].toLowerCase() ? 1 : -1;
+      }
+      else {
+        sortResult = a[ sortKey ] > b[ sortKey ] ? 1 : -1;
+      }
     }
     else if ( sortDirection === 'descending' ) {
-      return a[ sortKey ] > b[ sortKey ] ? -1 : 1;
+      if ( valuesAreStrings ) {
+        sortResult = a[ sortKey ].toLowerCase() > b[ sortKey ].toLowerCase() ? -1 : 1;
+      }
+      else {
+        sortResult = a[ sortKey ] > b[ sortKey ] ? -1 : 1;
+      }
     }
-    return 0;
+    return sortResult;
   } );
 };
 
