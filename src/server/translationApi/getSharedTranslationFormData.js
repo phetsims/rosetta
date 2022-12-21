@@ -41,9 +41,19 @@ const getSharedTranslationFormData = async (
       for ( const sim of sharedSims ) {
         const simFileRes = await axios.get( getStringFileUrl( sim ) );
         englishStringFiles.push( simFileRes.data );
-        const translatedFileRes = await axios.get( getTranslatedStringFile( sim, locale ) );
-        if ( translatedFileRes.status >= 200 && translatedFileRes.status <= 300 ) {
-          translatedStringFiles.push( translatedFileRes.data );
+        try {
+          const translatedFileRes = await axios.get( getTranslatedStringFile( sim, locale ) );
+          if ( translatedFileRes.status >= 200 && translatedFileRes.status <= 300 ) {
+            translatedStringFiles.push( translatedFileRes.data );
+          }
+        }
+        catch( e ) {
+          if ( e.response.status === 404 ) {
+            logger.verbose( `translation file for ${simName} doesn't exist; setting empty strings for ${simName}` );
+          }
+          else {
+            logger.error( e );
+          }
         }
       }
 
@@ -77,6 +87,12 @@ const getSharedTranslationFormData = async (
           sharedTranslationFormData[ stringKeyWithoutDots ] = {
             english: englishKeysAndValues[ stringKey ],
             translated: translatedKeysAndValues[ stringKey ]
+          };
+        }
+        else if ( englishKeysAndValues[ stringKey ] && !translatedKeysAndValues[ stringKey ] ) {
+          sharedTranslationFormData[ stringKeyWithoutDots ] = {
+            english: englishKeysAndValues[ stringKey ],
+            translated: ''
           };
         }
       }
