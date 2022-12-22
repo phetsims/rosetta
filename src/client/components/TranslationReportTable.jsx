@@ -8,6 +8,7 @@
 
 /* eslint-disable indent */
 
+import SortKeyEnum from '../js/SortKeyEnum.js';
 import { useContext, useState } from 'react';
 import useTranslatedAndUntranslatedSims from '../hooks/useTranslatedAndUntranslatedSims.jsx';
 import useTranslationReportObjects from '../hooks/useTranslationReportObjects.jsx';
@@ -36,7 +37,7 @@ const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => 
   );
 
   // State variables used in sorting the table.
-  const [ sortKey, setSortKey ] = useState( 'simTitle' );
+  const [ sortKey, setSortKey ] = useState( SortKeyEnum.SIM_TITLE );
   const [ sortDirection, setSortDirection ] = useState( 'ascending' );
 
   const translatedAndUntranslatedSims = useTranslatedAndUntranslatedSims( locale );
@@ -77,21 +78,21 @@ const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => 
           <th>Sim Title
             {
               reportPopulated && reportRows.length > 1
-              ? <SortButton onClick={() => handleSortButtonClick( 'simTitle' )}/>
+              ? <SortButton onClick={() => handleSortButtonClick( SortKeyEnum.SIM_TITLE )}/>
               : <></>
             }
           </th>
           <th>Sim-Specific Strings
             {
               reportPopulated && reportRows.length > 1
-              ? <SortButton onClick={() => handleSortButtonClick( 'simSpecificPercent' )}/>
+              ? <SortButton onClick={() => handleSortButtonClick( SortKeyEnum.SIM_SPECIFIC_PERCENT )}/>
               : <></>
             }
           </th>
           <th>Common Strings
             {
               reportPopulated && reportRows.length > 1
-              ? <SortButton onClick={() => handleSortButtonClick( 'commonPercent' )}/>
+              ? <SortButton onClick={() => handleSortButtonClick( SortKeyEnum.COMMON_PERCENT )}/>
               : <></>
             }
           </th>
