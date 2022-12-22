@@ -4,7 +4,7 @@ Rosetta Implementation Notes
 Contents
 --------
 
-- [Intro](#intro)
+- [Introduction](#introduction)
 - [Overview](#overview)
   - [Server](#server)
   - [Client](#client)
@@ -26,8 +26,8 @@ Contents
   - [Set Up MongoDB for Local Development](#set-up-mongodb-for-local-development)
   - [Behavior of the Save Button](#behavior-of-the-save-button)
 
-Intro
------
+Introduction
+------------
 
 This document provides an overview of the way the translation utility
 works. The intended audience is developers who need to understand the
