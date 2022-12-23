@@ -8,10 +8,11 @@
 
 /* eslint-disable indent */
 
-import SortKeyEnum from '../js/SortKeyEnum.js';
 import { useContext, useState } from 'react';
 import useTranslatedAndUntranslatedSims from '../hooks/useTranslatedAndUntranslatedSims.jsx';
 import useTranslationReportObjects from '../hooks/useTranslationReportObjects.jsx';
+import SortDirectionEnum from '../js/SortDirectionEnum.js';
+import SortKeyEnum from '../js/SortKeyEnum.js';
 import getTranslationReportRows from '../jsx/getTranslationReportRows.jsx';
 import LoadingSpinner from './LoadingSpinner.jsx';
 import { SimNamesAndTitlesContext } from './RosettaRoutes.jsx';
@@ -38,7 +39,7 @@ const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => 
 
   // State variables used in sorting the table.
   const [ sortKey, setSortKey ] = useState( SortKeyEnum.SIM_TITLE );
-  const [ sortDirection, setSortDirection ] = useState( 'ascending' );
+  const [ sortDirection, setSortDirection ] = useState( SortDirectionEnum.ASCENDING );
 
   const translatedAndUntranslatedSims = useTranslatedAndUntranslatedSims( locale );
 
@@ -61,11 +62,11 @@ const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => 
 
     const handleSortButtonClick = newSortKey => {
       setSortKey( newSortKey );
-      if ( sortDirection === 'ascending' ) {
-        setSortDirection( 'descending' );
+      if ( sortDirection === SortDirectionEnum.ASCENDING ) {
+        setSortDirection( SortDirectionEnum.DESCENDING );
       }
       else {
-        setSortDirection( 'ascending' );
+        setSortDirection( SortDirectionEnum.ASCENDING );
       }
     };
 

@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 import getMinutesElapsed from '../../common/getMinutesElapsed.js';
 import publicConfig from '../../common/publicConfig.js';
 import alertErrorMessage from '../js/alertErrorMessage.js';
+import SortDirectionEnum from '../js/SortDirectionEnum.js';
 
 /**
  * Return an array of translation report objects (i.e. stats used to make translation report rows) that have
@@ -58,7 +59,7 @@ const sortReportObjectsWithPercentages = ( reportObjectsWithPercentages, sortDir
       alertErrorMessage( 'Values being sorted are not the same type.' );
     }
     const valuesAreStrings = typeof a[ sortKey ] === 'string' && typeof b[ sortKey ] === 'string';
-    if ( sortDirection === 'ascending' ) {
+    if ( sortDirection === SortDirectionEnum.ASCENDING ) {
       if ( valuesAreStrings ) {
         sortResult = a[ sortKey ].toLowerCase() > b[ sortKey ].toLowerCase() ? 1 : -1;
       }
@@ -66,7 +67,7 @@ const sortReportObjectsWithPercentages = ( reportObjectsWithPercentages, sortDir
         sortResult = a[ sortKey ] > b[ sortKey ] ? 1 : -1;
       }
     }
-    else if ( sortDirection === 'descending' ) {
+    else if ( sortDirection === SortDirectionEnum.DESCENDING ) {
       if ( valuesAreStrings ) {
         sortResult = a[ sortKey ].toLowerCase() > b[ sortKey ].toLowerCase() ? -1 : 1;
       }
