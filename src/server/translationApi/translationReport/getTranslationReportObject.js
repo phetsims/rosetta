@@ -1,5 +1,7 @@
 // Copyright 2022, University of Colorado Boulder
 
+import privateConfig from '../../../common/privateConfig.js';
+import publicConfig from '../../../common/publicConfig.js';
 import getCategorizedStringKeys from '../getCategorizedStringKeys.js';
 import getLatestSimSha from '../getLatestSimSha.js';
 import getSimHtml from '../getSimHtml.js';
@@ -25,6 +27,25 @@ const getTranslationReportObject = async (
     numSimSpecificStrings: null,
     numSimSpecificTranslatedStrings: wantsUntranslated === 'true' ? 0 : null
   };
+
+  // If the user is in development environment, and they set the short report
+  // flag in their config file to true, just send a bunch of random data.
+  // We do this to short-circuit having to do all the HTTP requests and computations
+  // normally required for translation report objects.
+  if ( publicConfig.ENVIRONMENT === 'development' && privateConfig.SHORT_REPORT ) {
+    const getRandomInt = ( min, max ) => {
+      return Math.floor( Math.random() * ( max - min ) + min );
+    };
+    const NUMERATOR_MIN = 0;
+    const NUMERATOR_MAX = 20;
+    const DENOMINATOR_MIN = 20;
+    const DENOMINATOR_MAX = 100;
+    translationReportObject.numCommonStrings = getRandomInt( DENOMINATOR_MIN, DENOMINATOR_MAX );
+    translationReportObject.numCommonTranslatedStrings = getRandomInt( NUMERATOR_MIN, NUMERATOR_MAX );
+    translationReportObject.numSimSpecificStrings = getRandomInt( DENOMINATOR_MIN, DENOMINATOR_MAX );
+    translationReportObject.numSimSpecificTranslatedStrings = wantsUntranslated === 'true' ? 0 : getRandomInt( DENOMINATOR_MIN, DENOMINATOR_MAX );
+    return translationReportObject;
+  }
 
   const simUrl = getSimUrl( simName );
   const simHtml = await getSimHtml( simUrl );
