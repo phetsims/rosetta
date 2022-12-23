@@ -37,6 +37,12 @@ const TranslationFormRow = props => {
     setFieldValue( field.name, props.englishString );
   };
 
+  const buttonStyle = {
+    border: '0.5px solid',
+    marginRight: '6px',
+    padding: '1px 3px 1px 2px'
+  };
+
   return (
     <tr>
       <td>{props.stringKey}</td>
@@ -44,7 +50,7 @@ const TranslationFormRow = props => {
 
       {/* Use the spread operator to give the input each of the props in the field object. */}
       <td>
-        <button className='btn btn-light' type='button' onClick={handleCopyButtonClick}>
+        <button style={buttonStyle} className='btn btn-light' type='button' onClick={handleCopyButtonClick}>
           <img src={boxArrowInRight} alt='copy English value to input icon'/>
         </button>
         <input {...field} style={inputStyle} dir={direction}/>
