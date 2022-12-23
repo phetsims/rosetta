@@ -114,8 +114,8 @@ const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => 
         <h3>
           {
             wantsUntranslated
-            ? `Sims not yet translated into ${localeName} (${locale})`
-            : `Sims translated into ${localeName} (${locale})`
+            ? `Sims not yet published in ${localeName} (${locale})`
+            : `Sims published in ${localeName} (${locale})`
           }
         </h3>
         {reportPopulated ? <></> : <p>Translation data loading... <LoadingSpinner/></p>}
