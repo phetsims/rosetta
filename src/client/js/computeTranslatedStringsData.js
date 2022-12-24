@@ -46,6 +46,12 @@ const computeTranslatedStringsData = translationValues => {
         }
         translatedStringsData[ keyType ].translated = translatedStringsCount;
       }
+      else {
+
+        // If there aren't any string keys for a given key type, set translated to 0.
+        // Thus, you'd get a message like "0 of 0 {key type} strings translated".
+        translatedStringsData[ keyType ].translated = 0;
+      }
     }
   }
   return translatedStringsData;
