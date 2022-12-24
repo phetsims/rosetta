@@ -16,7 +16,7 @@ import React, {
   useEffect,
   useState
 } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import publicConfig from '../../common/publicConfig.js';
 import makeValidationSchema from '../js/makeValidationSchema.js';
 import saveTranslation from '../js/saveTranslation.js';
@@ -54,14 +54,6 @@ const TranslationForm = () => {
       console.error( e );
     }
   }, [ websiteUserData ] );
-
-  const navigate = useNavigate();
-  const handleBackToSimList = () => {
-    const message = 'If you have unsaved work, it will be lost. Are you sure you want to proceed?';
-    if ( window.confirm( message ) ) {
-      navigate( `/translate/${params.locale}` );
-    }
-  };
 
   const [ isDisabled, setIsDisabled ] = useState( false );
   const [ buttonId, setButtonId ] = useState( '' );
@@ -105,7 +97,7 @@ const TranslationForm = () => {
           locale={params.locale}
           simTitle={simTitle}
         />
-        <button onClick={handleBackToSimList} className='btn btn-primary'>Back to {localeName} ({params.locale}) Sim List</button>
+        <Link to={`/translate/${params.locale}`}>Back to {localeName} ({params.locale}) Sim List</Link>
         <Formik
           initialValues={translationFormData}
           validationSchema={validationSchema}
