@@ -6,6 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import deleteSavedTranslation from '../deleteSavedTranslation.js';
 import logger from '../logger.js';
 import prepareTranslationForLongTermStorage from '../prepareTranslationForLongTermStorage.js';
 import requestBuild from '../requestBuild.js';
@@ -29,6 +30,17 @@ const submitTranslation = async ( req, res ) => {
     const longTermStorageRes = await storeTranslationLongTerm( preparedTranslation );
     if ( longTermStorageRes ) {
       reportObjectCache.setDirtyObject( req.body.locale, req.body.simName );
+      const wasDeleted = deleteSavedTranslation( {
+        userId: req.body.userId,
+        simName: req.body.simName,
+        locale: req.body.locale
+      } );
+      if ( wasDeleted ) {
+        logger.info( 'previously saved translation deleted' );
+      }
+      else {
+        logger.warn( 'either deletion of previously saved translation failed or there was no previously saved translation' );
+      }
       const buildRequestRes = await requestBuild( req.body.simName, req.body.locale, req.body.userId );
       if ( buildRequestRes ) {
         logger.info( 'build request succeeded' );
