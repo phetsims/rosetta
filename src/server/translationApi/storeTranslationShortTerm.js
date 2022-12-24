@@ -22,6 +22,9 @@ const storeTranslationShortTerm = async translation => {
   if ( privateConfig.DB_ENABLED ) {
     logger.info( `storing ${translation.locale}/${translation.simName} translation in short-term storage` );
     try {
+
+      // Try to delete a translation with the same user ID, sim name, and locale.
+      // It's possible there won't be a saved translation; that's fine.
       await deleteSavedTranslation( {
         userId: translation.userId,
         simName: translation.simName,

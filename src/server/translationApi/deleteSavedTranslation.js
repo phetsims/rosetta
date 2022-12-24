@@ -17,13 +17,15 @@ import logger from './logger.js';
  * @param {Object} idSimNameAndLocale - an object containing the user ID, sim name, and locale for a translation
  */
 const deleteSavedTranslation = async idSimNameAndLocale => {
+  let wasDeleted = false;
   if ( privateConfig.DB_ENABLED ) {
     logger.info( `attempting to delete old ${idSimNameAndLocale.locale}/${idSimNameAndLocale.simName} translation(s) in short-term storage` );
     try {
       const oldSavedTranslation = await shortTermStringStorageCollection.find( idSimNameAndLocale );
       if ( oldSavedTranslation ) {
         logger.info( `old saved ${idSimNameAndLocale.locale}/${idSimNameAndLocale.simName} translation(s) with same user id extant; deleting them` );
-        await shortTermStringStorageCollection.deleteMany( idSimNameAndLocale );
+        const deleteResult = await shortTermStringStorageCollection.deleteMany( idSimNameAndLocale );
+        wasDeleted = deleteResult.acknowledged;
       }
       else {
         logger.info( `no saved translation for ${idSimNameAndLocale.locale}/${idSimNameAndLocale.simName} found` );
@@ -37,6 +39,7 @@ const deleteSavedTranslation = async idSimNameAndLocale => {
   else {
     logger.warn( 'short-term string storage database not enabled; check your config' );
   }
+  return wasDeleted;
 };
 
 export default deleteSavedTranslation;
