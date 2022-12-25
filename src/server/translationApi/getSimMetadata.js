@@ -6,6 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import fs from 'fs';
 import axios from 'axios';
 import privateConfig from '../../common/privateConfig.js';
 import publicConfig from '../../common/publicConfig.js';
@@ -34,6 +35,15 @@ let simMetadata;
 const getSimMetadata = async () => {
   logger.info( 'getting sim metadata' );
   try {
+
+    // If working on the translation utility without an internet connection,
+    // mock the sim metadata with your local copy. (This assumes you have
+    // a local copy of sim metadata.)
+    if ( publicConfig.ENVIRONMENT === 'development' && privateConfig.NO_INTERNET ) {
+      logger.info( 'using local copy of sim metadata' );
+      return JSON.parse( fs.readFileSync( './simMetadata.json' ) );
+    }
+
     const metadataValidDurationElapsed = timeOfLastUpdate +
                                          publicConfig.VALID_METADATA_DURATION < Date.now();
 
