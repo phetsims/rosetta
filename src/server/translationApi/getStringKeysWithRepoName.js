@@ -18,7 +18,6 @@ import logger from './logger.js';
  */
 const getStringKeysWithRepoName = simHtml => {
 
-  logger.info( 'getting string keys with repo name from sim html' );
 
   /*
   * As of this writing, there's a variable (window.phet.chipper.strings) in a script tag in the sim's HTML file that
@@ -38,16 +37,24 @@ const getStringKeysWithRepoName = simHtml => {
   * };
   *
   */
-  const re = new RegExp( `${privateConfig.STRING_KEYS_WITH_REPO_NAME_IN_HTML_VAR}.*$`, 'm' );
-  const stringKeysWithRepoNameAndRestOfHtml = simHtml.match( re );
-  const unparsedStringKeysWithRepoName = stringKeysWithRepoNameAndRestOfHtml[ 0 ]
-    .replace( `${privateConfig.STRING_KEYS_WITH_REPO_NAME_IN_HTML_VAR} = `, '' )
-    .replace( /;$/m, '' );
+  let stringKeysWithRepoName = { error: 'unable to get string keys with repo name' };
+  try {
+    logger.info( 'getting string keys with repo name from sim html' );
+    const re = new RegExp( `${privateConfig.STRING_KEYS_WITH_REPO_NAME_IN_HTML_VAR}.*$`, 'm' );
+    const stringKeysWithRepoNameAndRestOfHtml = simHtml.match( re );
+    const unparsedStringKeysWithRepoName = stringKeysWithRepoNameAndRestOfHtml[ 0 ]
+      .replace( `${privateConfig.STRING_KEYS_WITH_REPO_NAME_IN_HTML_VAR} = `, '' )
+      .replace( /;$/m, '' );
 
-  const parsedStringKeysWithRepoName = JSON.parse( unparsedStringKeysWithRepoName );
-
-  logger.info( 'got string keys with repo name from sim html; returning them' );
-  return parsedStringKeysWithRepoName.en;
+    const parsedStringKeysWithRepoName = JSON.parse( unparsedStringKeysWithRepoName );
+    stringKeysWithRepoName = parsedStringKeysWithRepoName.en;
+    logger.info( 'got string keys with repo name from sim html; returning them' );
+  }
+  catch( e ) {
+    logger.warn( 'an error occurred while trying to get string keys with repo name' );
+    logger.error( e );
+  }
+  return stringKeysWithRepoName;
 };
 
 export default getStringKeysWithRepoName;
