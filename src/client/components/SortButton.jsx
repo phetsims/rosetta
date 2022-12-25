@@ -15,8 +15,12 @@ import arrowUpDown from '../img/arrow-down-up.svg';
  * @returns {JSX.Element}
  */
 const SortButton = props => {
+  const buttonStyle = {
+    border: '0.5px solid',
+    marginLeft: '6px'
+  };
   return (
-    <button className='btn btn-light' onClick={props.onClick}>
+    <button style={buttonStyle} className='btn btn-light' onClick={props.onClick}>
       <img src={arrowUpDown} alt='up down arrow icon'/>
     </button>
   );
