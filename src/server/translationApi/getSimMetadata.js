@@ -68,15 +68,11 @@ const getSimMetadata = async () => {
     simMetadata = { error: 'unable to get sim metadata' };
   }
   logger.info( 'returning sim metadata' );
+
+  // Uncomment this code if you want a local copy of sim metadata.
+  // fs.writeFileSync( './simMetadata.json', JSON.stringify( simMetadata, null, 4 ) );
+
   return simMetadata;
 };
-
-// Uncomment this code if you want a local copy of sim metadata.
-// import fs from 'fs';
-//
-// ( async () => {
-//   const simMetadata = await getSimMetadata();
-//   fs.writeFileSync( './simMetadata.json', JSON.stringify( simMetadata, null, 4 ) );
-// } )();
 
 export default getSimMetadata;
