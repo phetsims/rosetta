@@ -7,3 +7,4 @@ package-lock.json
 publicConfig.js
 simMetadata.json
 translationInfo.json
+localeInfo.json

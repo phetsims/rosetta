@@ -54,4 +54,12 @@ const getLocaleInfo = async () => {
   return localeInfo;
 };
 
+// Uncomment this code if you want a local copy of locale info.
+// import fs from 'fs';
+//
+// ( async () => {
+//   const localeInfo = await getLocaleInfo();
+//   fs.writeFileSync( './localeInfo.json', JSON.stringify( localeInfo, null, 4 ) );
+// } )();
+
 export default getLocaleInfo;
