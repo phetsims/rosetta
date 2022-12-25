@@ -50,7 +50,9 @@ const getCategorizedStringKeys = async ( simName, simNames, stringKeysWithRepoNa
         else if ( simNames.includes( repoName ) ) {
           logger.verbose( `categorizing shared string key: ${stringKeyWithRepoName}` );
           categorizedStringKeys.shared.push( stringKey );
-          categorizedStringKeys.sharedSims.push( repoName );
+          if ( !categorizedStringKeys.sharedSims.includes( repoName ) ) {
+            categorizedStringKeys.sharedSims.push( repoName );
+          }
         }
         else {
           logger.verbose( `categorizing common string key: ${stringKeyWithRepoName}` );
