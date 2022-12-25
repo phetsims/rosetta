@@ -9,6 +9,9 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+// Uncomment this import of you want a local copy of translation form data.
+// import fs from 'fs';
+
 import privateConfig from '../../common/privateConfig.js';
 import publicConfig from '../../common/publicConfig.js';
 import getCommonTranslationFormData from './getCommonTranslationFormData.js';
@@ -133,6 +136,9 @@ const getTranslationFormData = async (
       stringKeysWithRepoName,
       categorizedStringKeys.common
     );
+
+    // Uncomment this code if you want a local copy of translation form data.
+    // fs.writeFileSync( './translationFormData.json', JSON.stringify( translationFormData, null, 4 ) );
   }
   catch( e ) {
     logger.error( e );
