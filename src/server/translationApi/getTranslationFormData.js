@@ -77,8 +77,8 @@ const getTranslationFormData = async (
   logger.info( 'getting translation form data' );
 
   // If working on the translation utility without an internet connection,
-  // mock the locale info with your local copy. (This assumes you have
-  // a local copy of locale info.)
+  // mock the translation form data with your local copy. (This assumes you have
+  // a local copy of translation form data.)
   if ( publicConfig.ENVIRONMENT === 'development' && privateConfig.NO_INTERNET ) {
     logger.info( 'using local copy of translation form data' );
     return JSON.parse( fs.readFileSync( './translationFormData.json' ) );
