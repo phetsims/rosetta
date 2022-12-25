@@ -6,6 +6,9 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+// Uncomment this import if you want a local copy of locale info.
+// import fs from 'fs';
+
 import axios from 'axios';
 import privateConfig from '../../common/privateConfig.js';
 import logger from './logger.js';
@@ -51,15 +54,11 @@ const getLocaleInfo = async () => {
     localeInfo = { error: 'unable to get locale info' };
   }
   logger.info( 'got locale info; returning it' );
+
+  // Uncomment this code if you want a local copy of locale info.
+  // fs.writeFileSync( './localeInfo.json', JSON.stringify( localeInfo, null, 4 ) );
+
   return localeInfo;
 };
-
-// Uncomment this code if you want a local copy of locale info.
-// import fs from 'fs';
-//
-// ( async () => {
-//   const localeInfo = await getLocaleInfo();
-//   fs.writeFileSync( './localeInfo.json', JSON.stringify( localeInfo, null, 4 ) );
-// } )();
 
 export default getLocaleInfo;
