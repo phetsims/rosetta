@@ -8,6 +8,7 @@ import getSimHtml from '../getSimHtml.js';
 import getSimUrl from '../getSimUrl.js';
 import getStringKeysWithRepoName from '../getStringKeysWithRepoName.js';
 import logger from '../logger.js';
+import { reportObjectCache } from '../translationApi.js';
 import getCommonEnglishStringKeysAndValues from './getCommonEnglishStringKeysAndValues.js';
 import getCommonTranslatedStringKeysAndValues from './getCommonTranslatedStringKeysAndValues.js';
 import getSimSpecificEnglishStringKeysAndValues from './getSimSpecificEnglishStringKeysAndValues.js';
@@ -111,38 +112,49 @@ const getTranslationReportObject = async (
     // It's possible a sim shares strings with multiple sims, hence the loop.
     for ( const sharedSim of categorizedStringKeys.sharedSims ) {
 
-      // TODO: If there's a report object cached, use that.
-      // Get the English file.
-      const sharedSimUrl = getSimUrl( sharedSim );
-      const sharedSimHtml = await getSimHtml( sharedSimUrl );
-      const sharedStringKeysWithRepoName = Object.keys( getStringKeysWithRepoName( sharedSimHtml ) );
-      const sharedCategorizedStringKeys = await getCategorizedStringKeys( sharedSim, simNames, sharedStringKeysWithRepoName );
-      const latestSimSha = await getLatestSimSha( sharedSim );
-      logger.info( `getting shared sim-specific english string keys and values for ${sharedSim}` );
-      const sharedEnglishStringKeysAndValues = await getSimSpecificEnglishStringKeysAndValues(
-        sharedSim,
-        latestSimSha,
-        sharedCategorizedStringKeys,
-        sharedStringKeysWithRepoName
-      );
-      translationReportObject.numSharedStrings += Object
-        .values( sharedEnglishStringKeysAndValues )
-        .filter( value => value !== noLongerUsedFlag ).length;
+      const cachedSharedObject = reportObjectCache.getObject( locale, sharedSim );
+      if ( cachedSharedObject ) {
+        logger.info( 'using cached translation report object for shared sim stats' );
+        translationReportObject.numSharedStrings = cachedSharedObject.numSimSpecificStrings;
+        translationReportObject.numSharedTranslatedStrings = cachedSharedObject.numSimSpecificTranslatedStrings;
+      }
+      else {
 
-      // Get the translated file.
-      if ( wantsUntranslated === 'false' ) {
-        logger.info( `getting shared sim-specific translated string keys and values for ${sharedSim}` );
-        const sharedTranslatedStringKeysAndValues = await getSimSpecificTranslatedStringKeysAndValues(
+        // If there isn't a cached translation report object, we have to get the stats
+        // the hard way.
+
+        // Get the English file.
+        const sharedSimUrl = getSimUrl( sharedSim );
+        const sharedSimHtml = await getSimHtml( sharedSimUrl );
+        const sharedStringKeysWithRepoName = Object.keys( getStringKeysWithRepoName( sharedSimHtml ) );
+        const sharedCategorizedStringKeys = await getCategorizedStringKeys( sharedSim, simNames, sharedStringKeysWithRepoName );
+        const latestSimSha = await getLatestSimSha( sharedSim );
+        logger.info( `getting shared sim-specific english string keys and values for ${sharedSim}` );
+        const sharedEnglishStringKeysAndValues = await getSimSpecificEnglishStringKeysAndValues(
           sharedSim,
-          locale,
-          sharedCategorizedStringKeys
+          latestSimSha,
+          sharedCategorizedStringKeys,
+          sharedStringKeysWithRepoName
         );
-        translationReportObject.numSharedTranslatedStrings += Object
-          .keys( sharedTranslatedStringKeysAndValues )
-          .filter( key => {
-            return sharedTranslatedStringKeysAndValues[ key ] !== ''
-                   && sharedEnglishStringKeysAndValues[ key ] !== noLongerUsedFlag;
-          } ).length;
+        translationReportObject.numSharedStrings += Object
+          .values( sharedEnglishStringKeysAndValues )
+          .filter( value => value !== noLongerUsedFlag ).length;
+
+        // Get the translated file.
+        if ( wantsUntranslated === 'false' ) {
+          logger.info( `getting shared sim-specific translated string keys and values for ${sharedSim}` );
+          const sharedTranslatedStringKeysAndValues = await getSimSpecificTranslatedStringKeysAndValues(
+            sharedSim,
+            locale,
+            sharedCategorizedStringKeys
+          );
+          translationReportObject.numSharedTranslatedStrings += Object
+            .keys( sharedTranslatedStringKeysAndValues )
+            .filter( key => {
+              return sharedTranslatedStringKeysAndValues[ key ] !== ''
+                     && sharedEnglishStringKeysAndValues[ key ] !== noLongerUsedFlag;
+            } ).length;
+        }
       }
     }
   }
