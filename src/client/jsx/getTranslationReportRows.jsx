@@ -54,6 +54,7 @@ const getTranslationReportRows = (
         <td><Link to={`/translate/${locale}/${simName}`}>{simNamesAndTitles[ simName ]}</Link></td>
         <td>Loading...</td>
         <td>Loading...</td>
+        <td>Loading...</td>
       </tr>
     );
   }
@@ -77,12 +78,20 @@ const getTranslationReportRows = (
 
     // Create the row JSX.
     const simSpecificPercent = Math.floor( ( reportObject.numSimSpecificTranslatedStrings / reportObject.numSimSpecificStrings ) * 100 );
+    let sharedPercent = 0;
+    const hasSharedStrings = reportObject.numSharedStrings && reportObject.numSharedTranslatedStrings;
+    let sharedJsx = <td>N/A</td>;
     const commonPercent = Math.floor( ( reportObject.numCommonTranslatedStrings / reportObject.numCommonStrings ) * 100 );
+    if ( hasSharedStrings ) {
+      sharedPercent = Math.floor( ( reportObject.numSharedTranslatedStrings / reportObject.numSharedStrings ) * 100 );
+      sharedJsx = <td>{sharedPercent}% ({reportObject.numSharedTranslatedStrings} of {reportObject.numSharedStrings})</td>;
+    }
     if ( Object.keys( translationReportJsx ).includes( reportObject.simName ) ) {
       translationReportJsx[ reportObject.simName ] = (
         <tr key={reportObject.simName}>
           <td><Link to={`/translate/${locale}/${reportObject.simName}`}>{reportObject.simTitle}</Link>{pendingUpdate}</td>
           <td>{simSpecificPercent}% ({reportObject.numSimSpecificTranslatedStrings} of {reportObject.numSimSpecificStrings})</td>
+          {sharedJsx}
           <td>{commonPercent}% ({reportObject.numCommonTranslatedStrings} of {reportObject.numCommonStrings})</td>
         </tr>
       );
