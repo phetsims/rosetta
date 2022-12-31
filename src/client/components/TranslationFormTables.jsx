@@ -72,8 +72,6 @@ const TranslationFormTables = props => {
     </p>
   );
 
-  console.log( `simIsPrototype = ${props.translationFormData.simIsPrototype}` );
-
   const sharedJsx = sharedRows.length > 0 ? (
     <div className='mt-2'>
       <h2>Shared Strings</h2>
