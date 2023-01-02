@@ -93,7 +93,7 @@ const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => 
           <th>Shared Strings
             {
               reportPopulated && reportRows.length > 1
-              ? <SortButton onClick={() => handleSortButtonClick( 'need to put sort key here' )}/>
+              ? <SortButton onClick={() => handleSortButtonClick( SortKeyEnum.SHARED_PERCENT )}/>
               : <></>
             }
           </th>
