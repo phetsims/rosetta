@@ -12,6 +12,7 @@ import getMinutesElapsed from '../../common/getMinutesElapsed.js';
 import publicConfig from '../../common/publicConfig.js';
 import alertErrorMessage from '../js/alertErrorMessage.js';
 import SortDirectionEnum from '../js/SortDirectionEnum.js';
+import SortKeyEnum from '../js/SortKeyEnum.js';
 
 /**
  * Return an array of translation report objects (i.e. stats used to make translation report rows) that have
@@ -25,17 +26,18 @@ const getReportObjectsWithPercentages = reportObjects => {
   for ( const reportObject of reportObjects ) {
     const simSpecificPercent = Math.floor( ( reportObject.numSimSpecificTranslatedStrings / reportObject.numSimSpecificStrings ) * 100 );
     const commonPercent = Math.floor( ( reportObject.numCommonTranslatedStrings / reportObject.numCommonStrings ) * 100 );
+    const hasSharedStrings = reportObject.numSharedStrings !== null && reportObject.numSharedTranslatedStrings !== null;
+
+    // By default, set shared percent to 0. We do this because otherwise the table wouldn't be sortable.
+    let sharedPercent = 0;
+    if ( hasSharedStrings ) {
+      sharedPercent = Math.floor( ( reportObject.numSharedTranslatedStrings / reportObject.numSharedStrings ) * 100 );
+    }
     reportObjectsWithPercents.push( {
-      simName: reportObject.simName,
-      simTitle: reportObject.simTitle,
+      ...reportObject,
       commonPercent: commonPercent,
-      numCommonStrings: reportObject.numCommonStrings,
-      numCommonTranslatedStrings: reportObject.numCommonTranslatedStrings,
       simSpecificPercent: simSpecificPercent,
-      numSimSpecificStrings: reportObject.numSimSpecificStrings,
-      numSimSpecificTranslatedStrings: reportObject.numSimSpecificTranslatedStrings,
-      isDirty: reportObject.isDirty,
-      timestamp: reportObject.timestamp
+      sharedPercent: sharedPercent
     } );
   }
   return reportObjectsWithPercents;
@@ -98,6 +100,7 @@ const getSortedTranslationReportRows = (
 ) => {
 
   // Get report objects we're interested in.
+  // We could want to sort the published sims or the unpublished sims.
   const reportObjectsToSort = [];
   for ( const simName of listOfSims ) {
     for ( const reportObject of reportObjects ) {
@@ -133,11 +136,18 @@ const getSortedTranslationReportRows = (
       pendingUpdate = '(pending update) ';
     }
 
+    const hasSharedStrings = item.numSharedStrings !== null && item.numSharedTranslatedStrings !== null;
+    let sharedJsx = <td>N/A</td>;
+    if ( hasSharedStrings ) {
+      sharedJsx = <td>{pendingUpdate}{item[ SortKeyEnum.SHARED_PERCENT ]}% ({item.numSharedTranslatedStrings} of {item.numSharedStrings})</td>;
+    }
+
     translationReportJsx.push(
       <tr key={item.simName}>
         <td><Link to={`/translate/${locale}/${item.simName}`}>{item.simTitle}</Link></td>
-        <td>{pendingUpdate}{item.simSpecificPercent}% ({item.numSimSpecificTranslatedStrings} of {item.numSimSpecificStrings})</td>
-        <td>{pendingUpdate}{item.commonPercent}% ({item.numCommonTranslatedStrings} of {item.numCommonStrings})</td>
+        <td>{pendingUpdate}{item[ SortKeyEnum.SIM_SPECIFIC_PERCENT ]}% ({item.numSimSpecificTranslatedStrings} of {item.numSimSpecificStrings})</td>
+        {sharedJsx}
+        <td>{pendingUpdate}{item[ SortKeyEnum.COMMON_PERCENT ]}% ({item.numCommonTranslatedStrings} of {item.numCommonStrings})</td>
       </tr>
     );
   }

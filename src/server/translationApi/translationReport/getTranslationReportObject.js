@@ -27,7 +27,9 @@ const getTranslationReportObject = async (
     numCommonStrings: null,
     numCommonTranslatedStrings: null,
     numSimSpecificStrings: null,
-    numSimSpecificTranslatedStrings: wantsUntranslated === 'true' ? 0 : null
+    numSimSpecificTranslatedStrings: wantsUntranslated === 'true' ? 0 : null,
+    numSharedStrings: null,
+    numSharedTranslatedStrings: null
   };
 
   // If the user is in development environment, and they set the short report
@@ -46,6 +48,8 @@ const getTranslationReportObject = async (
     translationReportObject.numCommonTranslatedStrings = getRandomInt( NUMERATOR_MIN, NUMERATOR_MAX );
     translationReportObject.numSimSpecificStrings = getRandomInt( DENOMINATOR_MIN, DENOMINATOR_MAX );
     translationReportObject.numSimSpecificTranslatedStrings = wantsUntranslated === 'true' ? 0 : getRandomInt( DENOMINATOR_MIN, DENOMINATOR_MAX );
+    translationReportObject.numSharedStrings = getRandomInt( DENOMINATOR_MIN, DENOMINATOR_MAX );
+    translationReportObject.numSharedTranslatedStrings = getRandomInt( NUMERATOR_MIN, NUMERATOR_MAX );
     return translationReportObject;
   }
 
@@ -106,9 +110,6 @@ const getTranslationReportObject = async (
   // If there are shared strings for this sim, we need to get the stats for those.
   if ( categorizedStringKeys.shared.length > 0 ) {
 
-    translationReportObject.numSharedStrings = 0;
-    translationReportObject.numSharedTranslatedStrings = 0;
-
     // It's possible a sim shares strings with multiple sims, hence the loop.
     for ( const sharedSim of categorizedStringKeys.sharedSims ) {
 
@@ -136,7 +137,7 @@ const getTranslationReportObject = async (
           sharedCategorizedStringKeys,
           sharedStringKeysWithRepoName
         );
-        translationReportObject.numSharedStrings += Object
+        translationReportObject.numSharedStrings = Object
           .values( sharedEnglishStringKeysAndValues )
           .filter( value => value !== noLongerUsedFlag ).length;
 
@@ -148,7 +149,7 @@ const getTranslationReportObject = async (
             locale,
             sharedCategorizedStringKeys
           );
-          translationReportObject.numSharedTranslatedStrings += Object
+          translationReportObject.numSharedTranslatedStrings = Object
             .keys( sharedTranslatedStringKeysAndValues )
             .filter( key => {
               return sharedTranslatedStringKeysAndValues[ key ] !== ''

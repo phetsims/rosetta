@@ -79,7 +79,7 @@ const getTranslationReportRows = (
     // Create the row JSX.
     const simSpecificPercent = Math.floor( ( reportObject.numSimSpecificTranslatedStrings / reportObject.numSimSpecificStrings ) * 100 );
     let sharedPercent = 0;
-    const hasSharedStrings = reportObject.numSharedStrings !== undefined && reportObject.numSharedTranslatedStrings !== undefined;
+    const hasSharedStrings = reportObject.numSharedStrings !== null && reportObject.numSharedTranslatedStrings !== null;
     let sharedJsx = <td>N/A</td>;
     const commonPercent = Math.floor( ( reportObject.numCommonTranslatedStrings / reportObject.numCommonStrings ) * 100 );
     if ( hasSharedStrings ) {
