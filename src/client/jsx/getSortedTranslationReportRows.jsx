@@ -48,35 +48,48 @@ const getReportObjectsWithPercentages = reportObjects => {
  *
  * @param {Object[]} reportObjectsWithPercentages - translation report objects with percentages for translated strings
  * @param {String} sortDirection - ascending or descending
- * @param {String} sortKey - key to sort by (sim title, sim-specific percentage, or common percentage)
+ * @param {String[]} sortKeys - key to sort by (sim title, sim-specific percentage, or common percentage)
  * @returns {Object[]} - sorted report objects with percentages
  */
-const sortReportObjectsWithPercentages = ( reportObjectsWithPercentages, sortDirection, sortKey ) => {
+const sortReportObjectsWithPercentages = ( reportObjectsWithPercentages, sortDirection, sortKeys ) => {
   return reportObjectsWithPercentages.sort( ( a, b ) => {
 
     let sortResult = 0;
 
-    // Parameter checking.
-    if ( typeof a[ sortKey ] !== typeof b[ sortKey ] ) {
-      alertErrorMessage( 'Values being sorted are not the same type.' );
+    // Loop through each of the sort keys.
+    // Return if we are able to sort, otherwise loop again for a tie-breaker.
+    for ( const sortKey of sortKeys ) {
+
+      // Parameter checking.
+      if ( typeof a[ sortKey ] !== typeof b[ sortKey ] ) {
+        alertErrorMessage( 'Values being sorted are not the same type.' );
+      }
+      const valuesAreStrings = typeof a[ sortKey ] === 'string' && typeof b[ sortKey ] === 'string';
+
+      if ( sortDirection === SortDirectionEnum.ASCENDING ) {
+        if ( valuesAreStrings ) {
+          sortResult = a[ sortKey ].toLowerCase() > b[ sortKey ].toLowerCase() ? 1 : -1;
+        }
+        else {
+          sortResult = a[ sortKey ] > b[ sortKey ] ? 1 : -1;
+        }
+      }
+      else if ( sortDirection === SortDirectionEnum.DESCENDING ) {
+        if ( valuesAreStrings ) {
+          sortResult = a[ sortKey ].toLowerCase() > b[ sortKey ].toLowerCase() ? -1 : 1;
+        }
+        else {
+          sortResult = a[ sortKey ] > b[ sortKey ] ? -1 : 1;
+        }
+      }
+
+      // If we were able to sort, return the sort result.
+      // Otherwise, loop again for a tie-breaker.
+      if ( sortResult !== 0 ) {
+        return sortResult;
+      }
     }
-    const valuesAreStrings = typeof a[ sortKey ] === 'string' && typeof b[ sortKey ] === 'string';
-    if ( sortDirection === SortDirectionEnum.ASCENDING ) {
-      if ( valuesAreStrings ) {
-        sortResult = a[ sortKey ].toLowerCase() > b[ sortKey ].toLowerCase() ? 1 : -1;
-      }
-      else {
-        sortResult = a[ sortKey ] > b[ sortKey ] ? 1 : -1;
-      }
-    }
-    else if ( sortDirection === SortDirectionEnum.DESCENDING ) {
-      if ( valuesAreStrings ) {
-        sortResult = a[ sortKey ].toLowerCase() > b[ sortKey ].toLowerCase() ? -1 : 1;
-      }
-      else {
-        sortResult = a[ sortKey ] > b[ sortKey ] ? -1 : 1;
-      }
-    }
+
     return sortResult;
   } );
 };
@@ -87,7 +100,7 @@ const sortReportObjectsWithPercentages = ( reportObjectsWithPercentages, sortDir
  * @param {String[]} listOfSims
  * @param {Object[]} reportObjects
  * @param {String} locale
- * @param {String} sortKey
+ * @param {String[]} sortKeys
  * @param {String} sortDirection
  * @returns {Object[]}
  */
@@ -95,7 +108,7 @@ const getSortedTranslationReportRows = (
   listOfSims,
   reportObjects,
   locale,
-  sortKey,
+  sortKeys,
   sortDirection
 ) => {
 
@@ -115,7 +128,7 @@ const getSortedTranslationReportRows = (
   const sortedData = sortReportObjectsWithPercentages(
     reportObjectsWithPercentages,
     sortDirection,
-    sortKey
+    sortKeys
   );
 
   const validMetadataMinutes = publicConfig.VALID_METADATA_DURATION / 1000 / 60;
