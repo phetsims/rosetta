@@ -26,7 +26,7 @@ const getReportObjectsWithPercentages = reportObjects => {
   for ( const reportObject of reportObjects ) {
     const simSpecificPercent = Math.floor( ( reportObject.numSimSpecificTranslatedStrings / reportObject.numSimSpecificStrings ) * 100 );
     const commonPercent = Math.floor( ( reportObject.numCommonTranslatedStrings / reportObject.numCommonStrings ) * 100 );
-    const hasSharedStrings = reportObject.numSharedStrings !== null && reportObject.numSharedTranslatedStrings !== null;
+    const hasSharedStrings = reportObject.numSharedStrings !== null;
 
     // By default, set shared percent to 0. We do this because otherwise the table wouldn't be sortable.
     let sharedPercent = 0;
@@ -136,7 +136,11 @@ const getSortedTranslationReportRows = (
       pendingUpdate = '(pending update) ';
     }
 
-    const hasSharedStrings = item.numSharedStrings !== null && item.numSharedTranslatedStrings !== null;
+    if ( item.simName === 'atomic-interactions' ) {
+      console.log( JSON.stringify( item, null, 4 ) );
+    }
+
+    const hasSharedStrings = item.numSharedStrings !== null;
     let sharedJsx = <td>N/A</td>;
     if ( hasSharedStrings ) {
       sharedJsx = <td>{pendingUpdate}{item[ SortKeyEnum.SHARED_PERCENT ]}% ({item.numSharedTranslatedStrings} of {item.numSharedStrings})</td>;
