@@ -38,7 +38,7 @@ const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => 
   );
 
   // State variables used in sorting the table.
-  const [ sortKey, setSortKey ] = useState( SortKeyEnum.SIM_TITLE );
+  const [ sortKeys, setSortKeys ] = useState( SortKeyEnum.SIM_TITLE );
   const [ sortDirection, setSortDirection ] = useState( SortDirectionEnum.ASCENDING );
 
   const translatedAndUntranslatedSims = useTranslatedAndUntranslatedSims( locale );
@@ -56,12 +56,12 @@ const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => 
       reportObjects,
       locale,
       reportPopulated,
-      sortKey,
+      sortKeys,
       sortDirection
     );
 
-    const handleSortButtonClick = newSortKey => {
-      setSortKey( newSortKey );
+    const handleSortButtonClick = newSortKeys => {
+      setSortKeys( newSortKeys );
       if ( sortDirection === SortDirectionEnum.ASCENDING ) {
         setSortDirection( SortDirectionEnum.DESCENDING );
       }
