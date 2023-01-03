@@ -21,7 +21,7 @@ import getSortedTranslationReportRows from './getSortedTranslationReportRows.jsx
  * @param {Object[]} reportObjects - report objects we get from the backend
  * @param {String} locale - ISO 639-1 locale code for which the report is being made
  * @param {Boolean} reportPopulated - boolean telling whether we have all the report objects
- * @param {String} sortKey - which key to sort by, only used when the report is populated
+ * @param {String[]} sortKeys - which key to sort by, only used when the report is populated
  * @param {String} sortDirection - either ascending or descending
  * @returns {Object[]} - array of report rows, i.e. array of JSX
  */
@@ -31,7 +31,7 @@ const getTranslationReportRows = (
   reportObjects,
   locale,
   reportPopulated,
-  sortKey,
+  sortKeys,
   sortDirection
 ) => {
 
@@ -40,7 +40,7 @@ const getTranslationReportRows = (
       listOfSims,
       reportObjects,
       locale,
-      sortKey,
+      sortKeys,
       sortDirection
     );
   }

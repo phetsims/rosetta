@@ -156,15 +156,15 @@ const getSortedTranslationReportRows = (
     const hasSharedStrings = item.numSharedStrings !== null;
     let sharedJsx = <td>N/A</td>;
     if ( hasSharedStrings ) {
-      sharedJsx = <td>{pendingUpdate}{item[ SortKeyEnum.SHARED_PERCENT ]}% ({item.numSharedTranslatedStrings} of {item.numSharedStrings})</td>;
+      sharedJsx = <td>{pendingUpdate}{item[ SortKeyEnum.SHARED_PERCENT[ 0 ] ]}% ({item.numSharedTranslatedStrings} of {item.numSharedStrings})</td>;
     }
 
     translationReportJsx.push(
       <tr key={item.simName}>
         <td><Link to={`/translate/${locale}/${item.simName}`}>{item.simTitle}</Link></td>
-        <td>{pendingUpdate}{item[ SortKeyEnum.SIM_SPECIFIC_PERCENT ]}% ({item.numSimSpecificTranslatedStrings} of {item.numSimSpecificStrings})</td>
+        <td>{pendingUpdate}{item[ SortKeyEnum.SIM_SPECIFIC_PERCENT[ 0 ] ]}% ({item.numSimSpecificTranslatedStrings} of {item.numSimSpecificStrings})</td>
         {sharedJsx}
-        <td>{pendingUpdate}{item[ SortKeyEnum.COMMON_PERCENT ]}% ({item.numCommonTranslatedStrings} of {item.numCommonStrings})</td>
+        <td>{pendingUpdate}{item[ SortKeyEnum.COMMON_PERCENT[ 0 ] ]}% ({item.numCommonTranslatedStrings} of {item.numCommonStrings})</td>
       </tr>
     );
   }
