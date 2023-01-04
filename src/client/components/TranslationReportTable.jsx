@@ -83,24 +83,10 @@ const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => 
               : <></>
             }
           </th>
-          <th>Sim-Specific Strings
+          <th>Translated Strings
             {
               reportPopulated && reportRows.length > 1
-              ? <SortButton onClick={() => handleSortButtonClick( SortKeyEnum.SIM_SPECIFIC_PERCENT )}/>
-              : <></>
-            }
-          </th>
-          <th>Shared Strings
-            {
-              reportPopulated && reportRows.length > 1
-              ? <SortButton onClick={() => handleSortButtonClick( SortKeyEnum.SHARED_PERCENT )}/>
-              : <></>
-            }
-          </th>
-          <th>Common Strings
-            {
-              reportPopulated && reportRows.length > 1
-              ? <SortButton onClick={() => handleSortButtonClick( SortKeyEnum.COMMON_PERCENT )}/>
+              ? <SortButton onClick={() => handleSortButtonClick( 'gonna need to change this' )}/>
               : <></>
             }
           </th>

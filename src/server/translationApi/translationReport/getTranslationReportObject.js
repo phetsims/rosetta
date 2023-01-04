@@ -14,6 +14,27 @@ import getCommonTranslatedStringKeysAndValues from './getCommonTranslatedStringK
 import getSimSpecificEnglishStringKeysAndValues from './getSimSpecificEnglishStringKeysAndValues.js';
 import getSimSpecificTranslatedStringKeysAndValues from './getSimSpecificTranslatedStringKeysAndValues.js';
 
+const getPercent = ( numerator, denominator ) => {
+  let percent = null;
+  if ( numerator !== null && denominator !== null ) {
+    percent = Math.floor( ( numerator / denominator ) * 100 );
+  }
+  return percent;
+};
+
+const getTotalStrings = values => {
+  let total = 0;
+  for ( const value of values ) {
+    if ( value === null ) {
+      total += 0;
+    }
+    else {
+      total += value;
+    }
+  }
+  return total;
+};
+
 const getTranslationReportObject = async (
   simName,
   locale,
@@ -26,10 +47,16 @@ const getTranslationReportObject = async (
     simTitle: simTitle,
     numCommonStrings: null,
     numCommonTranslatedStrings: null,
+    percentCommon: null,
     numSimSpecificStrings: null,
     numSimSpecificTranslatedStrings: wantsUntranslated === 'true' ? 0 : null,
+    percentSimSpecific: null,
     numSharedStrings: null,
-    numSharedTranslatedStrings: null
+    numSharedTranslatedStrings: wantsUntranslated === 'true' ? 0 : null,
+    percentShared: null,
+    totalStrings: null,
+    totalTranslatedStrings: null,
+    percentTotal: null
   };
 
   // If the user is in development environment, and they set the short report
@@ -46,10 +73,37 @@ const getTranslationReportObject = async (
     const DENOMINATOR_MAX = 100;
     translationReportObject.numCommonStrings = getRandomInt( DENOMINATOR_MIN, DENOMINATOR_MAX );
     translationReportObject.numCommonTranslatedStrings = getRandomInt( NUMERATOR_MIN, NUMERATOR_MAX );
+    translationReportObject.percentCommon = getPercent(
+      translationReportObject.numCommonTranslatedStrings,
+      translationReportObject.numCommonStrings
+    );
     translationReportObject.numSimSpecificStrings = getRandomInt( DENOMINATOR_MIN, DENOMINATOR_MAX );
     translationReportObject.numSimSpecificTranslatedStrings = wantsUntranslated === 'true' ? 0 : getRandomInt( DENOMINATOR_MIN, DENOMINATOR_MAX );
+    translationReportObject.percentSimSpecific = getPercent(
+      translationReportObject.numSimSpecificTranslatedStrings,
+      translationReportObject.numSimSpecificStrings
+    );
     translationReportObject.numSharedStrings = getRandomInt( DENOMINATOR_MIN, DENOMINATOR_MAX );
     translationReportObject.numSharedTranslatedStrings = getRandomInt( NUMERATOR_MIN, NUMERATOR_MAX );
+    translationReportObject.percentShared = getPercent(
+      translationReportObject.numSharedTranslatedStrings,
+      translationReportObject.numSharedStrings
+    );
+    translationReportObject.totalStrings = getTotalStrings( [
+      translationReportObject.numCommonStrings,
+      translationReportObject.numSimSpecificStrings,
+      translationReportObject.numSharedStrings
+    ] );
+    translationReportObject.totalTranslatedStrings = getTotalStrings( [
+      translationReportObject.numCommonTranslatedStrings,
+      translationReportObject.numSimSpecificTranslatedStrings,
+      translationReportObject.numSharedTranslatedStrings
+    ] );
+    translationReportObject.percentTotal = getPercent(
+      translationReportObject.totalTranslatedStrings,
+      translationReportObject.totalStrings
+    );
+
     return translationReportObject;
   }
 
@@ -82,6 +136,11 @@ const getTranslationReportObject = async (
     .filter( key => commonTranslatedStringKeysAndValues[ key ] !== ''
                     && commonEnglishStringKeysAndValues[ key ] !== noLongerUsedFlag ).length;
 
+  translationReportObject.percentCommon = getPercent(
+    translationReportObject.numCommonTranslatedStrings,
+    translationReportObject.numCommonStrings
+  );
+
   const latestSimSha = await getLatestSimSha( simName );
   const simSpecificEnglishStringKeysAndValues = await getSimSpecificEnglishStringKeysAndValues(
     simName,
@@ -106,6 +165,11 @@ const getTranslationReportObject = async (
                && simSpecificEnglishStringKeysAndValues[ key ] !== noLongerUsedFlag;
       } ).length;
   }
+
+  translationReportObject.percentSimSpecific = getPercent(
+    translationReportObject.numSimSpecificTranslatedStrings,
+    translationReportObject.numSimSpecificStrings
+  );
 
   // If there are shared strings for this sim, we need to get the stats for those.
   if ( categorizedStringKeys.shared.length > 0 ) {
@@ -156,14 +220,29 @@ const getTranslationReportObject = async (
                      && sharedEnglishStringKeysAndValues[ key ] !== noLongerUsedFlag;
             } ).length;
         }
-        else {
-
-          // If we don't have a translation, this is zero.
-          translationReportObject.numSharedTranslatedStrings = 0;
-        }
       }
     }
+
+    translationReportObject.percentShared = getPercent(
+      translationReportObject.numSharedTranslatedStrings,
+      translationReportObject.numSharedStrings
+    );
   }
+
+  translationReportObject.totalStrings = getTotalStrings( [
+    translationReportObject.numCommonStrings,
+    translationReportObject.numSimSpecificStrings,
+    translationReportObject.numSharedStrings
+  ] );
+  translationReportObject.totalTranslatedStrings = getTotalStrings( [
+    translationReportObject.numCommonTranslatedStrings,
+    translationReportObject.numSimSpecificTranslatedStrings,
+    translationReportObject.numSharedTranslatedStrings
+  ] );
+  translationReportObject.percentTotal = getPercent(
+    translationReportObject.totalTranslatedStrings,
+    translationReportObject.totalStrings
+  );
 
   return translationReportObject;
 };
