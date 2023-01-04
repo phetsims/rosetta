@@ -44,7 +44,7 @@ const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => 
   const translatedAndUntranslatedSims = useTranslatedAndUntranslatedSims( locale );
 
   // Get JSX rows to populate the table.
-  let jsx = <p>Loading...</p>;
+  let jsx = <></>;
   if ( translatedAndUntranslatedSims !== null ) {
     const listOfSims = wantsUntranslated
                        ? translatedAndUntranslatedSims.untranslated
