@@ -149,10 +149,6 @@ const getSortedTranslationReportRows = (
       pendingUpdate = '(pending update) ';
     }
 
-    if ( item.simName === 'atomic-interactions' ) {
-      console.log( JSON.stringify( item, null, 4 ) );
-    }
-
     const hasSharedStrings = item.numSharedStrings !== null;
     let sharedJsx = <td>N/A</td>;
     if ( hasSharedStrings ) {
