@@ -3,12 +3,12 @@
 /**
  * NodeJS script to find and print out bad translations of patterns.  A bad translation of a pattern is one where the
  * pattern variable names have been changed, such as changing "{{value}} {{units}}" to "{{val}} {{uns}}".  See
- * for history on the need for this script.
+ * https://github.com/phetsims/rosetta/issues/329 for history on the need for this script.
  *
  * This is intended to be used from the root directory of a checkout of the PhET code base, since it needs the rosetta
  * repo, the babel repo, and the repos for every translated sim.
  *
- * Example usage (from base directory of a checkout)
+ * Example usage (from base directory of a checkout):
  *
  *   node ./rosetta/scripts/js/findBadPatternTranslations.js
  */
@@ -39,10 +39,11 @@ const listOfSimReposWithTranslations = fs.readdirSync( TRANSLATION_STRINGS_REPO_
   }
 );
 
-// Keep track of the number of mismatched pattern so that it can be reported at the end.
+// Keep track of the number of mismatched patterns so that it can be reported at the end.
 let numberOfMismatchedPatternsFound = 0;
 
-// For each sim repo, get the English strings and validate the patterns within it against the translations.
+// For each sim repo for which one or more translations exist, get the English strings and validate the patterns within
+// it against the translations.
 listOfSimReposWithTranslations.forEach( simRepoName => {
 
   // Assemble the path to the English strings file.  IMPORTANT NOTE: This uses the English strings from the master
@@ -66,8 +67,7 @@ listOfSimReposWithTranslations.forEach( simRepoName => {
     translationsMap.set( translationFileName, translatedStringsObject );
   } );
 
-  // For each English string, test if it is a pattern and, if so, verify that all translations of the pattern are
-  // valid.
+  // For each English string, test if it is a pattern and, if so, verify that all translations of the pattern are valid.
   Object.keys( englishStrings ).forEach( stringKey => {
 
     // Skip all accessibility strings, since they are not currently translated.
