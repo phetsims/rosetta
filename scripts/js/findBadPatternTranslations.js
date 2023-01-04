@@ -17,7 +17,7 @@
 const fs = require( 'fs' );
 
 // constants
-const templateVarRegex = /{\{?[\w\d]+\}\}?/g;
+const templateVarRegex = /{\{?\w+}}?/g;
 const TRANSLATION_STRINGS_REPO_PATH = './babel';
 
 // Define a simple assert function to help with debugging.
@@ -55,7 +55,7 @@ listOfSimReposWithTranslations.forEach( simRepoName => {
   assert( fs.lstatSync( pathToEnglishStrings ).isFile(), `sim strings file not found: ${pathToEnglishStrings}` );
 
   // Read in the English strings file.
-  const englishStrings = JSON.parse( fs.readFileSync( pathToEnglishStrings ) );
+  const englishStrings = JSON.parse( fs.readFileSync( pathToEnglishStrings ).toString() );
 
   // Read in all the translated strings and put them in a Map using the file name as the key.
   const translationsMap = new Map();
@@ -63,7 +63,7 @@ listOfSimReposWithTranslations.forEach( simRepoName => {
   const translationFileNames = fs.readdirSync( pathToTranslations );
   translationFileNames.forEach( translationFileName => {
     const translationFilePath = `${pathToTranslations}/${translationFileName}`;
-    const translatedStringsObject = JSON.parse( fs.readFileSync( translationFilePath ) );
+    const translatedStringsObject = JSON.parse( fs.readFileSync( translationFilePath ).toString() );
     translationsMap.set( translationFileName, translatedStringsObject );
   } );
 
