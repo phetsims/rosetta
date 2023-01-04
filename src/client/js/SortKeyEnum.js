@@ -10,9 +10,10 @@
 
 const SortKeyEnum = {
   SIM_TITLE: [ 'simTitle' ],
-  SIM_SPECIFIC_PERCENT: [ 'simSpecificPercent', 'numSimSpecificStrings' ],
-  COMMON_PERCENT: [ 'commonPercent', 'numCommonStrings' ],
-  SHARED_PERCENT: [ 'sharedPercent', 'numSharedStrings' ]
+  TOTAL_STRINGS: [ 'percentTotal, totalTranslatedStrings' ],
+  SIM_SPECIFIC_PERCENT: [ 'percentSimSpecific', 'numSimSpecificStrings' ],
+  COMMON_PERCENT: [ 'percentCommon', 'numCommonStrings' ],
+  SHARED_PERCENT: [ 'percentShared', 'numSharedStrings' ]
 };
 
 Object.freeze( SortKeyEnum );

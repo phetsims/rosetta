@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 import getMinutesElapsed from '../../common/getMinutesElapsed.js';
 import publicConfig from '../../common/publicConfig.js';
 import getSortedTranslationReportRows from './getSortedTranslationReportRows.jsx';
+import infoCircle from '../img/info-circle.svg';
 
 /**
  * Return an array of translation report table rows, i.e. return an array of JSX. These rows are put into the
@@ -75,34 +76,41 @@ const getTranslationReportRows = (
     }
 
     // Create the row JSX.
-    const simSpecificPercent = Math.floor( ( reportObject.numSimSpecificTranslatedStrings / reportObject.numSimSpecificStrings ) * 100 );
-    let sharedPercent = 0;
     const hasSharedStrings = reportObject.numSharedStrings !== null;
     let sharedStatsString = 'N/A';
-    const commonPercent = Math.floor( ( reportObject.numCommonTranslatedStrings / reportObject.numCommonStrings ) * 100 );
     if ( hasSharedStrings ) {
-      sharedPercent = Math.floor( ( reportObject.numSharedTranslatedStrings / reportObject.numSharedStrings ) * 100 );
-      sharedStatsString = `${sharedPercent}% (${reportObject.numSharedTranslatedStrings} of ${reportObject.numSharedStrings})`;
+      sharedStatsString = `${reportObject.percentShared}% (${reportObject.numSharedTranslatedStrings} of ${reportObject.numSharedStrings})`;
     }
-    let totalStrings = reportObject.numSimSpecificStrings +
-                       reportObject.numCommonStrings;
-    let totalTranslatedStrings = reportObject.numSimSpecificTranslatedStrings +
-                                 reportObject.numCommonTranslatedStrings;
-    if ( hasSharedStrings ) {
-      totalStrings += reportObject.numSharedStrings;
-      totalTranslatedStrings += reportObject.numSharedTranslatedStrings;
-    }
-    const simSpecificStatsString = `${simSpecificPercent}% (${reportObject.numSimSpecificTranslatedStrings} of ${reportObject.numSimSpecificStrings})`;
-    const commonStatsString = `${commonPercent}% (${reportObject.numCommonTranslatedStrings} of ${reportObject.numCommonStrings})`;
-    console.log( sharedStatsString );
-    console.log( simSpecificStatsString );
-    console.log( commonStatsString );
-    const totalPercent = Math.floor( ( totalTranslatedStrings / totalStrings ) * 100 );
+    const simSpecificStatsString = `${reportObject.percentSimSpecific}% (${reportObject.numSimSpecificTranslatedStrings} of ${reportObject.numSimSpecificStrings})`;
+    const commonStatsString = `${reportObject.percentCommon}% (${reportObject.numCommonTranslatedStrings} of ${reportObject.numCommonStrings})`;
+    const statsString = `Statistics for ${reportObject.simTitle}:
+      Sim-Specific Strings: ${simSpecificStatsString}  
+      Shared Strings: ${sharedStatsString}
+      Common Strings: ${commonStatsString}`;
+    const buttonStyle = {
+      marginRight: '6px',
+      padding: '0'
+    };
+    const statsInfoJsx = (
+      <button
+        onClick={() => window.alert( statsString )}
+        style={buttonStyle}
+        type='button'
+        className='btn btn-light'
+        data-bs-toggle='tooltip'
+        data-bs-placement='top'
+        title={statsString}>
+        <img src={infoCircle} alt='info icon'/>
+      </button>
+    );
     if ( Object.keys( translationReportJsx ).includes( reportObject.simName ) ) {
       translationReportJsx[ reportObject.simName ] = (
         <tr key={reportObject.simName}>
           <td><Link to={`/translate/${locale}/${reportObject.simName}`}>{reportObject.simTitle}</Link>{pendingUpdate}</td>
-          <td>{totalPercent}% ({totalTranslatedStrings} of {totalStrings})</td>
+          <td>
+            {statsInfoJsx}
+            {reportObject.percentTotal}% ({reportObject.totalTranslatedStrings} of {reportObject.totalStrings})
+          </td>
         </tr>
       );
     }
