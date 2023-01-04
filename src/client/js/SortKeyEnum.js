@@ -10,7 +10,7 @@
 
 const SortKeyEnum = {
   SIM_TITLE: [ 'simTitle' ],
-  TOTAL_STRINGS: [ 'percentTotal, totalTranslatedStrings' ],
+  TOTAL_STRINGS: [ 'percentTotal', 'totalStrings' ],
   SIM_SPECIFIC_PERCENT: [ 'percentSimSpecific', 'numSimSpecificStrings' ],
   COMMON_PERCENT: [ 'percentCommon', 'numCommonStrings' ],
   SHARED_PERCENT: [ 'percentShared', 'numSharedStrings' ]

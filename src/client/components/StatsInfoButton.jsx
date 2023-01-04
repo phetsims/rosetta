@@ -8,7 +8,18 @@
 
 import infoCircle from '../img/info-circle.svg';
 
-const StatsInfoButton = ( { statsString } ) => {
+const StatsInfoButton = ( { reportObject } ) => {
+  const hasSharedStrings = reportObject.numSharedStrings !== null;
+  let sharedStatsString = 'N/A';
+  if ( hasSharedStrings ) {
+    sharedStatsString = `${reportObject.percentShared}% (${reportObject.numSharedTranslatedStrings} of ${reportObject.numSharedStrings})`;
+  }
+  const simSpecificStatsString = `${reportObject.percentSimSpecific}% (${reportObject.numSimSpecificTranslatedStrings} of ${reportObject.numSimSpecificStrings})`;
+  const commonStatsString = `${reportObject.percentCommon}% (${reportObject.numCommonTranslatedStrings} of ${reportObject.numCommonStrings})`;
+  const statsString = `Statistics for ${reportObject.simTitle}:
+      Sim-Specific Strings: ${simSpecificStatsString}  
+      Shared Strings: ${sharedStatsString}
+      Common Strings: ${commonStatsString}`;
   const buttonStyle = {
     marginRight: '6px',
     padding: '0'

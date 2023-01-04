@@ -75,24 +75,12 @@ const getTranslationReportRows = (
       pendingUpdate = ' (pending update)';
     }
 
-    // Create the row JSX.
-    const hasSharedStrings = reportObject.numSharedStrings !== null;
-    let sharedStatsString = 'N/A';
-    if ( hasSharedStrings ) {
-      sharedStatsString = `${reportObject.percentShared}% (${reportObject.numSharedTranslatedStrings} of ${reportObject.numSharedStrings})`;
-    }
-    const simSpecificStatsString = `${reportObject.percentSimSpecific}% (${reportObject.numSimSpecificTranslatedStrings} of ${reportObject.numSimSpecificStrings})`;
-    const commonStatsString = `${reportObject.percentCommon}% (${reportObject.numCommonTranslatedStrings} of ${reportObject.numCommonStrings})`;
-    const statsString = `Statistics for ${reportObject.simTitle}:
-      Sim-Specific Strings: ${simSpecificStatsString}  
-      Shared Strings: ${sharedStatsString}
-      Common Strings: ${commonStatsString}`;
     if ( Object.keys( translationReportJsx ).includes( reportObject.simName ) ) {
       translationReportJsx[ reportObject.simName ] = (
         <tr key={reportObject.simName}>
           <td><Link to={`/translate/${locale}/${reportObject.simName}`}>{reportObject.simTitle}</Link>{pendingUpdate}</td>
           <td>
-            <StatsInfoButton statsString={statsString}/>
+            <StatsInfoButton reportObject={reportObject}/>
             {reportObject.percentTotal}% ({reportObject.totalTranslatedStrings} of {reportObject.totalStrings})
           </td>
         </tr>
