@@ -10,8 +10,8 @@
 import { Link } from 'react-router-dom';
 import getMinutesElapsed from '../../common/getMinutesElapsed.js';
 import publicConfig from '../../common/publicConfig.js';
+import StatsInfoButton from '../components/StatsInfoButton.jsx';
 import getSortedTranslationReportRows from './getSortedTranslationReportRows.jsx';
-import infoCircle from '../img/info-circle.svg';
 
 /**
  * Return an array of translation report table rows, i.e. return an array of JSX. These rows are put into the
@@ -87,28 +87,12 @@ const getTranslationReportRows = (
       Sim-Specific Strings: ${simSpecificStatsString}  
       Shared Strings: ${sharedStatsString}
       Common Strings: ${commonStatsString}`;
-    const buttonStyle = {
-      marginRight: '6px',
-      padding: '0'
-    };
-    const statsInfoJsx = (
-      <button
-        onClick={() => window.alert( statsString )}
-        style={buttonStyle}
-        type='button'
-        className='btn btn-light'
-        data-bs-toggle='tooltip'
-        data-bs-placement='top'
-        title={statsString}>
-        <img src={infoCircle} alt='info icon'/>
-      </button>
-    );
     if ( Object.keys( translationReportJsx ).includes( reportObject.simName ) ) {
       translationReportJsx[ reportObject.simName ] = (
         <tr key={reportObject.simName}>
           <td><Link to={`/translate/${locale}/${reportObject.simName}`}>{reportObject.simTitle}</Link>{pendingUpdate}</td>
           <td>
-            {statsInfoJsx}
+            <StatsInfoButton statsString={statsString}/>
             {reportObject.percentTotal}% ({reportObject.totalTranslatedStrings} of {reportObject.totalStrings})
           </td>
         </tr>
