@@ -156,6 +156,11 @@ const getTranslationReportObject = async (
                      && sharedEnglishStringKeysAndValues[ key ] !== noLongerUsedFlag;
             } ).length;
         }
+        else {
+
+          // If we don't have a translation, this is zero.
+          translationReportObject.numSharedTranslatedStrings = 0;
+        }
       }
     }
   }
