@@ -10,9 +10,9 @@
 import { Link } from 'react-router-dom';
 import getMinutesElapsed from '../../common/getMinutesElapsed.js';
 import publicConfig from '../../common/publicConfig.js';
+import StatsInfoButton from '../components/StatsInfoButton.jsx';
 import alertErrorMessage from '../js/alertErrorMessage.js';
 import SortDirectionEnum from '../js/SortDirectionEnum.js';
-import SortKeyEnum from '../js/SortKeyEnum.js';
 
 /**
  * Return an array of translation report objects (i.e. stats used to make translation report rows) that have
@@ -163,18 +163,13 @@ const getSortedTranslationReportRows = (
       pendingUpdate = '(pending update) ';
     }
 
-    const hasSharedStrings = item.numSharedStrings !== null;
-    let sharedJsx = <td>N/A</td>;
-    if ( hasSharedStrings ) {
-      sharedJsx = <td>{pendingUpdate}{item[ SortKeyEnum.SHARED_PERCENT[ 0 ] ]}% ({item.numSharedTranslatedStrings} of {item.numSharedStrings})</td>;
-    }
-
     translationReportJsx.push(
       <tr key={item.simName}>
-        <td><Link to={`/translate/${locale}/${item.simName}`}>{item.simTitle}</Link></td>
-        <td>{pendingUpdate}{item[ SortKeyEnum.SIM_SPECIFIC_PERCENT[ 0 ] ]}% ({item.numSimSpecificTranslatedStrings} of {item.numSimSpecificStrings})</td>
-        {sharedJsx}
-        <td>{pendingUpdate}{item[ SortKeyEnum.COMMON_PERCENT[ 0 ] ]}% ({item.numCommonTranslatedStrings} of {item.numCommonStrings})</td>
+        <td><Link to={`/translate/${locale}/${item.simName}`}>{item.simTitle}</Link>{pendingUpdate}</td>
+        <td>
+          <StatsInfoButton reportObject={item}/>
+          {item.percentTotal}% ({item.totalTranslatedStrings} of {item.totalStrings})
+        </td>
       </tr>
     );
   }

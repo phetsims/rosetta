@@ -86,7 +86,7 @@ const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => 
           <th>Translated Strings
             {
               reportPopulated && reportRows.length > 1
-              ? <SortButton onClick={() => handleSortButtonClick( 'gonna need to change this' )}/>
+              ? <SortButton onClick={() => handleSortButtonClick( SortKeyEnum.TOTAL_STRINGS )}/>
               : <></>
             }
           </th>
