@@ -44,53 +44,67 @@ const getReportObjectsWithPercentages = reportObjects => {
 };
 
 /**
+ * Return a number used to sort the report objects.
+ *
+ * @param {Object} a - report object A
+ * @param {Object} b - report object B
+ * @param {String} sortKey - key we're using to sort
+ * @param {String} fallbackKey - key we use to break ties
+ * @param {String} sortDirection - ascending or descending
+ */
+const sortReportObjects = ( a, b, sortKey, fallbackKey, sortDirection ) => {
+
+  let sortResult = 0;
+
+  // Parameter checking.
+  if ( typeof a[ sortKey ] !== typeof b[ sortKey ] ) {
+    alertErrorMessage( 'Values being sorted are not the same type.' );
+  }
+  const valuesAreStrings = typeof a[ sortKey ] === 'string' && typeof b[ sortKey ] === 'string';
+
+  // If sort keys are strings, we want to sort them without regard to case.
+  let itemA = a[ sortKey ];
+  let itemB = b[ sortKey ];
+  if ( valuesAreStrings ) {
+    itemA = itemA.toLowerCase();
+    itemB = itemB.toLowerCase();
+  }
+
+  if ( sortDirection === SortDirectionEnum.ASCENDING ) {
+    if ( itemA === itemB && fallbackKey !== null ) {
+      sortResult = sortReportObjects( a, b, fallbackKey, null, sortDirection );
+    }
+    else {
+      sortResult = itemA > itemB ? 1 : -1;
+    }
+  }
+  else if ( sortDirection === SortDirectionEnum.DESCENDING ) {
+    if ( itemA === itemB && fallbackKey !== null ) {
+      sortResult = sortReportObjects( a, b, fallbackKey, null, sortDirection );
+    }
+    else {
+      sortResult = itemA > itemB ? -1 : 1;
+    }
+  }
+  else {
+    alertErrorMessage( 'Sort direction should be either ascending or descending.' );
+  }
+
+  return sortResult;
+};
+
+/**
  * Sort the report objects with percentages according to the sort key provided, in the direction provided.
  *
  * @param {Object[]} reportObjectsWithPercentages - translation report objects with percentages for translated strings
  * @param {String} sortDirection - ascending or descending
- * @param {String[]} sortKeys - key to sort by (sim title, sim-specific percentage, or common percentage)
+ * @param {String[]} sortKeys - array of keys to sort by
  * @returns {Object[]} - sorted report objects with percentages
  */
 const sortReportObjectsWithPercentages = ( reportObjectsWithPercentages, sortDirection, sortKeys ) => {
   return reportObjectsWithPercentages.sort( ( a, b ) => {
-
-    let sortResult = 0;
-
-    // Loop through each of the sort keys.
-    // Return if we are able to sort, otherwise loop again for a tie-breaker.
-    for ( const sortKey of sortKeys ) {
-
-      // Parameter checking.
-      if ( typeof a[ sortKey ] !== typeof b[ sortKey ] ) {
-        alertErrorMessage( 'Values being sorted are not the same type.' );
-      }
-      const valuesAreStrings = typeof a[ sortKey ] === 'string' && typeof b[ sortKey ] === 'string';
-
-      if ( sortDirection === SortDirectionEnum.ASCENDING ) {
-        if ( valuesAreStrings ) {
-          sortResult = a[ sortKey ].toLowerCase() > b[ sortKey ].toLowerCase() ? 1 : -1;
-        }
-        else {
-          sortResult = a[ sortKey ] > b[ sortKey ] ? 1 : -1;
-        }
-      }
-      else if ( sortDirection === SortDirectionEnum.DESCENDING ) {
-        if ( valuesAreStrings ) {
-          sortResult = a[ sortKey ].toLowerCase() > b[ sortKey ].toLowerCase() ? -1 : 1;
-        }
-        else {
-          sortResult = a[ sortKey ] > b[ sortKey ] ? -1 : 1;
-        }
-      }
-
-      // If we were able to sort, return the sort result.
-      // Otherwise, loop again for a tie-breaker.
-      if ( sortResult !== 0 ) {
-        return sortResult;
-      }
-    }
-
-    return sortResult;
+    const fallbackKey = sortKeys.length > 1 ? sortKeys[ 1 ] : null;
+    return sortReportObjects( a, b, sortKeys[ 0 ], fallbackKey, sortDirection );
   } );
 };
 
