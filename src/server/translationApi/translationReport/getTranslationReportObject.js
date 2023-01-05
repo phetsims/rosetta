@@ -11,29 +11,11 @@ import logger from '../logger.js';
 import { reportObjectCache } from '../translationApi.js';
 import getCommonEnglishStringKeysAndValues from './getCommonEnglishStringKeysAndValues.js';
 import getCommonTranslatedStringKeysAndValues from './getCommonTranslatedStringKeysAndValues.js';
+import getPercent from './getPercent.js';
+import getShortReportObject from './getShortReportObject.js';
 import getSimSpecificEnglishStringKeysAndValues from './getSimSpecificEnglishStringKeysAndValues.js';
 import getSimSpecificTranslatedStringKeysAndValues from './getSimSpecificTranslatedStringKeysAndValues.js';
-
-const getPercent = ( numerator, denominator ) => {
-  let percent = null;
-  if ( numerator !== null && denominator !== null ) {
-    percent = Math.floor( ( numerator / denominator ) * 100 );
-  }
-  return percent;
-};
-
-const getTotalStrings = values => {
-  let total = 0;
-  for ( const value of values ) {
-    if ( value === null ) {
-      total += 0;
-    }
-    else {
-      total += value;
-    }
-  }
-  return total;
-};
+import getTotalStats from './getTotalStats.js';
 
 const getTranslationReportObject = async (
   simName,
@@ -64,47 +46,7 @@ const getTranslationReportObject = async (
   // We do this to short-circuit having to do all the HTTP requests and computations
   // normally required for translation report objects.
   if ( publicConfig.ENVIRONMENT === 'development' && privateConfig.SHORT_REPORT ) {
-    const getRandomInt = ( min, max ) => {
-      return Math.floor( Math.random() * ( max - min ) + min );
-    };
-    const NUMERATOR_MIN = 0;
-    const NUMERATOR_MAX = 20;
-    const DENOMINATOR_MIN = 20;
-    const DENOMINATOR_MAX = 100;
-    translationReportObject.numCommonStrings = getRandomInt( DENOMINATOR_MIN, DENOMINATOR_MAX );
-    translationReportObject.numCommonTranslatedStrings = getRandomInt( NUMERATOR_MIN, NUMERATOR_MAX );
-    translationReportObject.percentCommon = getPercent(
-      translationReportObject.numCommonTranslatedStrings,
-      translationReportObject.numCommonStrings
-    );
-    translationReportObject.numSimSpecificStrings = getRandomInt( DENOMINATOR_MIN, DENOMINATOR_MAX );
-    translationReportObject.numSimSpecificTranslatedStrings = wantsUntranslated === 'true' ? 0 : getRandomInt( DENOMINATOR_MIN, DENOMINATOR_MAX );
-    translationReportObject.percentSimSpecific = getPercent(
-      translationReportObject.numSimSpecificTranslatedStrings,
-      translationReportObject.numSimSpecificStrings
-    );
-    translationReportObject.numSharedStrings = getRandomInt( DENOMINATOR_MIN, DENOMINATOR_MAX );
-    translationReportObject.numSharedTranslatedStrings = getRandomInt( NUMERATOR_MIN, NUMERATOR_MAX );
-    translationReportObject.percentShared = getPercent(
-      translationReportObject.numSharedTranslatedStrings,
-      translationReportObject.numSharedStrings
-    );
-    translationReportObject.totalStrings = getTotalStrings( [
-      translationReportObject.numCommonStrings,
-      translationReportObject.numSimSpecificStrings,
-      translationReportObject.numSharedStrings
-    ] );
-    translationReportObject.totalTranslatedStrings = getTotalStrings( [
-      translationReportObject.numCommonTranslatedStrings,
-      translationReportObject.numSimSpecificTranslatedStrings,
-      translationReportObject.numSharedTranslatedStrings
-    ] );
-    translationReportObject.percentTotal = getPercent(
-      translationReportObject.totalTranslatedStrings,
-      translationReportObject.totalStrings
-    );
-
-    return translationReportObject;
+    return getShortReportObject( translationReportObject );
   }
 
   const simUrl = getSimUrl( simName );
@@ -229,22 +171,7 @@ const getTranslationReportObject = async (
     );
   }
 
-  translationReportObject.totalStrings = getTotalStrings( [
-    translationReportObject.numCommonStrings,
-    translationReportObject.numSimSpecificStrings,
-    translationReportObject.numSharedStrings
-  ] );
-  translationReportObject.totalTranslatedStrings = getTotalStrings( [
-    translationReportObject.numCommonTranslatedStrings,
-    translationReportObject.numSimSpecificTranslatedStrings,
-    translationReportObject.numSharedTranslatedStrings
-  ] );
-  translationReportObject.percentTotal = getPercent(
-    translationReportObject.totalTranslatedStrings,
-    translationReportObject.totalStrings
-  );
-
-  return translationReportObject;
+  return getTotalStats( translationReportObject );
 };
 
 export default getTranslationReportObject;
