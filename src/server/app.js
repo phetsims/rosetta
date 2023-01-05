@@ -77,11 +77,6 @@ app.listen( privateConfig.ROSETTA_PORT, () => {
     logger.info( `    ${key}: ${privateConfig[ key ]}` );
   }
 
-  // Log all public config keys.
-  for ( const key of Object.keys( publicConfig ) ) {
-    logger.info( `    ${key}: ${publicConfig[ key ]}` );
-  }
-
   // Also log Rosetta's SHA.
   const sha = getCurrentRosettaSha();
   logger.info( `    SHA: ${sha}` );
