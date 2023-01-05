@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "lint": "grunt --gruntfile Gruntfile.cjs lint",
-    "start": "npm run lint && npm run build --workspace=client && node src/server/app.js"
+    "start": "node ./scripts/js/make-public-config-file.mjs && npm run lint && npm run build --workspace=client && node src/server/app.js"
   },
   "devDependencies": {
     "winston": "^3.8.2"
