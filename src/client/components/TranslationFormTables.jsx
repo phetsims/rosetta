@@ -10,7 +10,7 @@
 
 import React, { useEffect, useState } from 'react';
 import TranslationFormRow from './TranslationFormRow.jsx';
-import KeyTypesEnum from '../js/KeyTypesEnum.js';
+import KeyTypesEnum from '../../common/KeyTypesEnum.js';
 
 /**
  * This component has some headers, some info, and a table for sim-specific strings and common strings. The header
