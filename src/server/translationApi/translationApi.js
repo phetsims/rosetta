@@ -18,7 +18,7 @@ import translatedAndUntranslatedSims from './api/translatedAndUntranslatedSims.j
 import translationFormData from './api/translationFormData.js';
 import logger from './logger.js';
 import translationReportEvents from './api/translationReportEvents.js';
-import ReportObjectCache from './ReportObjectCache.js';
+import ReportObjectCache from './translationReport/ReportObjectCache.js';
 
 const rosettaApiServer = express();
 
