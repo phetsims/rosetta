@@ -8,7 +8,6 @@
  */
 
 import { Link } from 'react-router-dom';
-import getMinutesElapsed from '../../common/getMinutesElapsed.js';
 import publicConfig from '../../common/publicConfig.js';
 import StatsInfoButton from '../components/StatsInfoButton.jsx';
 import getSortedTranslationReportRows from './getSortedTranslationReportRows.jsx';
@@ -58,18 +57,12 @@ const getTranslationReportRows = (
     );
   }
 
-  const validMetadataMinutes = publicConfig.VALID_METADATA_DURATION / 1000 / 60;
-
   // Overwrite rows for which we have data.
   for ( const reportObject of reportObjects ) {
 
-    // If the object is dirty, and there hasn't been enough time for an update, tell the user.
-    // For background on why we do this, see https://github.com/phetsims/rosetta/issues/316.
-    const minutesElapsed = getMinutesElapsed( reportObject.timestamp, Date.now() );
-
     // This is tied to sim metadata because the lists of translated and untranslated sims
     // are obtained from the sim metadata.
-    const withinMetadataWindow = minutesElapsed < ( validMetadataMinutes * 2 );
+    const withinMetadataWindow = ( Date.now() - reportObject.timestamp ) < publicConfig.VALID_METADATA_DURATION;
     let pendingUpdate = <></>;
     if ( reportObject.isDirty && withinMetadataWindow ) {
       pendingUpdate = ' (pending update)';

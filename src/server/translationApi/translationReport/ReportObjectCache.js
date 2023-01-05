@@ -9,7 +9,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import getMinutesElapsed from '../../common/getMinutesElapsed.js';
+import getMinutesElapsed from './getMinutesElapsed.js';
 
 class ReportObjectCache {
 
