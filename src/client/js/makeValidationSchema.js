@@ -44,8 +44,9 @@ const makeValidationSchema = translationFormData => {
           // We need to use a regular function here. Yup needs to be able to access the global "this" keyword, and if
           // you use an anonymous arrow function, it can't do that. (Take this with a grain of salt, I wrote this
           // comment a while after I implemented this.)
+          const placeholderErrorMessage = 'Curly brace pattern does not match English version.';
           subObjects[ keyType ][ key ] = Yup.object( {
-            translated: Yup.string().test( 'validBracePattern', 'Placeholders don\'t match English string', function foo( value ) {
+            translated: Yup.string().test( 'validBracePattern', placeholderErrorMessage, function foo( value ) {
               return isValidBracePattern( value, englishValue );
             } )
           } );

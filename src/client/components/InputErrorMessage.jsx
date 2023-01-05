@@ -8,6 +8,7 @@
 
 import { useContext } from 'react';
 import { ErrorContext } from './TranslationForm.jsx';
+import questionOctagon from '../img/question-octagon.svg';
 
 /**
  * This component is a small error message to be displayed underneath an invalid input in the translation form.
@@ -16,6 +17,27 @@ import { ErrorContext } from './TranslationForm.jsx';
  * @returns {JSX.Element}
  */
 const InputErrorMessage = ( { fieldKey } ) => {
+  const buttonStyle = {
+    marginLeft: '6px'
+  };
+  const tooltip = 'Curly brace patterns must match the English version. ' +
+  'The values inside of the curly braces must also match the English version. ' +
+  'These curly brace patterns are values that dynamically change in the sim.' +
+  'For example, {0}: {1} cannot be translated to {x}: {y}. ' +
+  'However, the order of the {0} and the {1} can change. ' +
+  'So {0}: {1} could be translated to {1}: {0}.';
+  const errorTooltipJsx = (
+    <button
+      onClick={() => window.alert( tooltip )}
+      style={buttonStyle}
+      type='button'
+      className='btn btn-danger'
+      data-bs-toggle='tooltip'
+      data-bs-placement='top'
+      title={tooltip}>
+      <img src={questionOctagon} alt='question icon'/>
+    </button>
+  );
   const divStyle = {
     color: 'red'
   };
@@ -28,7 +50,7 @@ const InputErrorMessage = ( { fieldKey } ) => {
       error.simSpecific[ fieldKey ].translated
     ) {
       const errorMessage = error.simSpecific[ fieldKey ].translated;
-      jsx = <div style={divStyle}>{errorMessage}</div>;
+      jsx = <>{errorTooltipJsx}<div style={divStyle}>{errorMessage}</div></>;
     }
     else if (
       error.common &&
