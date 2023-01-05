@@ -12,6 +12,7 @@ import * as Yup from 'yup';
 import alertErrorMessage from './alertErrorMessage.js';
 import isValidBracePattern from './isValidBracePattern.js';
 import publicConfig from '../../common/publicConfig.js';
+import KeyTypesEnum from '../../common/KeyTypesEnum.js';
 
 /**
  * Return a Yup schema for validating our Formik translation form.
@@ -24,9 +25,8 @@ const makeValidationSchema = translationFormData => {
   let validationSchema;
 
   // We need to iterate over both types of keys.
-  const typesOfKeys = [ 'simSpecific', 'common' ];
   try {
-    for ( const keyType of typesOfKeys ) {
+    for ( const keyType of Object.values( KeyTypesEnum ) ) {
 
       // We have to replace dots in string keys with _DOT_. Otherwise,
       // we might have errors related to the code think there are more
@@ -55,6 +55,7 @@ const makeValidationSchema = translationFormData => {
     }
     const validationObject = {
       simSpecific: Yup.object( subObjects.simSpecific ),
+      shared: Yup.object( subObjects.shared ),
       common: Yup.object( subObjects.common )
     };
     validationSchema = Yup.object().shape( validationObject );
