@@ -51,10 +51,11 @@ const submitTranslation = async (
       const result = await axios.post( `${publicConfig.translationApiRoute}/submitTranslation`, translation );
       submitted = result.data;
       if ( submitted ) {
-        const minutesUntilChanges = publicConfig.VALID_METADATA_DURATION / 1000 / 60;
+        const units = 'hours';
+        const timeUntilChanges = publicConfig.VALID_METADATA_DURATION / 1000 / 60 / 60;
         const submissionMessage = 'Translation submitted.'
                                   + ' Your translation should appear on the PhET website in about half an hour.'
-                                  + ` It will take about ${minutesUntilChanges} minutes for the translation utility to`
+                                  + ` It will take about ${timeUntilChanges} ${units} for the translation utility to`
                                   + ' show the changes you made.';
         window.alert( submissionMessage );
       }
