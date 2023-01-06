@@ -151,14 +151,14 @@ const getSortedTranslationReportRows = (
     // This is tied to sim metadata because the lists of translated and untranslated sims
     // are obtained from the sim metadata.
     const withinMetadataWindow = ( Date.now() - item.timestamp ) < publicConfig.VALID_METADATA_DURATION;
-    let pendingUpdate = <></>;
+    let pendingUpdateMessage = <></>;
     if ( item.isDirty && withinMetadataWindow ) {
-      pendingUpdate = '(pending update) ';
+      pendingUpdateMessage = '(pending update) ';
     }
 
     translationReportJsx.push(
       <tr key={item.simName}>
-        <td><Link to={`/translate/${locale}/${item.simName}`}>{item.simTitle}</Link>{pendingUpdate}</td>
+        <td><Link to={`/translate/${locale}/${item.simName}`}>{item.simTitle}</Link>{pendingUpdateMessage}</td>
         <td>
           <StatsInfoButton reportObject={item}/>
           {item.percentTotal}% ({item.totalTranslatedStrings} of {item.totalStrings})
