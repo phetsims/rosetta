@@ -38,6 +38,15 @@ for the account under which the process is being run. To best understand
 what this file contains, take a look at the instances of the file
 on phet-server2 and phet-server-dev.
 
+As of January 2023, the sign-in process on the website is undergoing some
+flux. In the future, the website user data URL is going to change. Right
+now, the URLs are:
+
+- production future: https://phet-direct.colorado.edu/user/check-login,
+- production current: https://phet.colorado.edu/services/check-login,
+- dev current: https://phet-direct-dev.colorado.edu/user/check-login,
+- localhost current: http://localhost:16372/services/check-login,
+
 Take Offline for Maintenance
 ----------------------------
 
