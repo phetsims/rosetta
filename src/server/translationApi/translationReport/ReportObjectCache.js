@@ -9,7 +9,10 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import getMinutesElapsed from './getMinutesElapsed.js';
+// As of this writing, this is the amount of time the sim metadata from the website could
+// be cached and therefore could be stale. Note that this isn't Rosetta's cached sim
+// metadata, but the website's cached sim metadata.
+const WORST_CASE_SIM_METADATA_STALE_PERIOD = 172800000;
 
 class ReportObjectCache {
 
@@ -50,13 +53,11 @@ class ReportObjectCache {
     if ( this[ locale ] !== undefined
          && this[ locale ][ sim ] !== undefined
     ) {
-
-      // For background on why this is here, see https://github.com/phetsims/rosetta/issues/316.
-      const minutesElapsed = getMinutesElapsed( this[ locale ][ sim ].timestamp, Date.now() );
-      const lessThanTenMinutesSinceCache = minutesElapsed < 10;
+      const withinWebsiteSimMetadataCacheWindow = Date.now() - this[ locale ][ sim ].timestamp
+                                        < WORST_CASE_SIM_METADATA_STALE_PERIOD;
       if (
         !this[ locale ][ sim ].isDirty
-        || ( this[ locale ][ sim ].isDirty && lessThanTenMinutesSinceCache )
+        || ( this[ locale ][ sim ].isDirty && withinWebsiteSimMetadataCacheWindow )
       ) {
         return this[ locale ][ sim ];
       }

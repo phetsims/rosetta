@@ -8,7 +8,6 @@
  */
 
 import { Link } from 'react-router-dom';
-import publicConfig from '../../common/publicConfig.js';
 import StatsInfoButton from '../components/StatsInfoButton.jsx';
 import getSortedTranslationReportRows from './getSortedTranslationReportRows.jsx';
 
@@ -60,11 +59,8 @@ const getTranslationReportRows = (
   // Overwrite rows for which we have data.
   for ( const reportObject of reportObjects ) {
 
-    // This is tied to sim metadata because the lists of translated and untranslated sims
-    // are obtained from the sim metadata.
-    const withinMetadataWindow = ( Date.now() - reportObject.timestamp ) < publicConfig.VALID_METADATA_DURATION;
     let pendingUpdateMessage = <></>;
-    if ( reportObject.isDirty && withinMetadataWindow ) {
+    if ( reportObject.isDirty ) {
       pendingUpdateMessage = ' (pending update)';
     }
 

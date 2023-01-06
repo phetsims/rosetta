@@ -8,7 +8,6 @@
  */
 
 import { Link } from 'react-router-dom';
-import publicConfig from '../../common/publicConfig.js';
 import StatsInfoButton from '../components/StatsInfoButton.jsx';
 import alertErrorMessage from '../js/alertErrorMessage.js';
 import SortDirectionEnum from '../js/SortDirectionEnum.js';
@@ -148,12 +147,9 @@ const getSortedTranslationReportRows = (
   const translationReportJsx = [];
   for ( const item of sortedData ) {
 
-    // This is tied to sim metadata because the lists of translated and untranslated sims
-    // are obtained from the sim metadata.
-    const withinMetadataWindow = ( Date.now() - item.timestamp ) < publicConfig.VALID_METADATA_DURATION;
     let pendingUpdateMessage = <></>;
-    if ( item.isDirty && withinMetadataWindow ) {
-      pendingUpdateMessage = '(pending update) ';
+    if ( item.isDirty ) {
+      pendingUpdateMessage = ' (pending update)';
     }
 
     translationReportJsx.push(
