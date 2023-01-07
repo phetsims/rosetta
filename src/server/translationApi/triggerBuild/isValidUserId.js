@@ -20,7 +20,7 @@ import isStringNumber from './isStringNumber.js';
  * @returns {Promise<Boolean>}
  */
 const isValidUserId = async ( simName, locale, userId ) => {
-  let ret = false;
+  let isValid = false;
   if ( isStringNumber( userId ) ) {
     const stringFileUrl = getTranslatedStringFile( simName, locale );
 
@@ -29,21 +29,35 @@ const isValidUserId = async ( simName, locale, userId ) => {
       const stringFileRes = await axios.get( stringFileUrl );
       const stringFile = stringFileRes.data;
       const setOfUserIds = new Set();
+      let numHistoryArrays = 0;
       for ( const key of Object.keys( stringFile ) ) {
-        const historyArray = stringFile[ key ].history;
-        for ( const historyEntry of historyArray ) {
-          setOfUserIds.add( historyEntry.userId );
+        if ( stringFile[ key ] !== undefined && stringFile[ key ].history !== undefined ) {
+          numHistoryArrays++;
+          const historyArray = stringFile[ key ].history;
+          for ( const historyEntry of historyArray ) {
+            if ( historyEntry.userId !== undefined ) {
+              setOfUserIds.add( historyEntry.userId );
+            }
+          }
         }
       }
       if ( setOfUserIds.has( userId ) ) {
-        ret = true;
+        isValid = true;
+      }
+      else if ( setOfUserIds.size === 0 && numHistoryArrays > 0 ) {
+
+        // If there are exactly zero user IDs, the file might be one of the old files where
+        // translated values were added from legacy sims manually by the developers. This is
+        // a rare-but-valid case. These files where translated values were added manually
+        // don't have history arrays.
+        isValid = true;
       }
     }
     catch( e ) {
       logger.error( e );
     }
   }
-  return ret;
+  return isValid;
 };
 
 export default isValidUserId;
