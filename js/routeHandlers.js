@@ -677,6 +677,14 @@ module.exports.triggerBuild = async function( request, response ) {
         winston.info( 'Supplied user ID is valid.' );
         userIdToSend = request.params.userId;
       }
+      else if ( arrayOfUserIds.length === 0 && isStringNumber( request.params.userId ) ) {
+
+        // There were no user IDs found in the string file.  This can happen when the original file was a set of strings
+        // that was ported from a previous Java or Flash sim.  In other words, this is a rare but valid case, and we
+        // need to handle it.  See https://github.com/phetsims/rosetta/issues/329#issuecomment-1371588737.
+        winston.info( 'No user IDs found in strings file, assuming ported strings file and proceeding with build.' );
+        userIdToSend = request.params.userId;
+      }
       else {
         winston.info( 'User ID was not found in the Babel string file.' );
         const message = 'Invalid user ID.';
