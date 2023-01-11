@@ -50,6 +50,8 @@ const isValidUserId = async ( simName, locale, userId ) => {
         // translated values were added from legacy sims manually by the developers. This is
         // a rare-but-valid case. These files where translated values were added manually
         // don't have history arrays.
+        // See https://github.com/phetsims/rosetta/issues/329#issuecomment-1371588737 for more
+        // info.
         isValid = true;
       }
     }
