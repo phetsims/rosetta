@@ -9,10 +9,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-// As of this writing, this is the amount of time the sim metadata from the website could
-// be cached and therefore could be stale. Note that this isn't Rosetta's cached sim
-// metadata, but the website's cached sim metadata.
-const WORST_CASE_SIM_METADATA_STALE_PERIOD = 172800000;
+import publicConfig from '../../../common/publicConfig.js';
 
 class ReportObjectCache {
 
@@ -53,11 +50,11 @@ class ReportObjectCache {
     if ( this[ locale ] !== undefined
          && this[ locale ][ sim ] !== undefined
     ) {
-      const withinWebsiteSimMetadataCacheWindow = Date.now() - this[ locale ][ sim ].timestamp
-                                        < WORST_CASE_SIM_METADATA_STALE_PERIOD;
+      const withinSimMetadataCacheWindow = Date.now() - this[ locale ][ sim ].timestamp
+                                        < publicConfig.VALID_METADATA_DURATION;
       if (
         !this[ locale ][ sim ].isDirty
-        || ( this[ locale ][ sim ].isDirty && withinWebsiteSimMetadataCacheWindow )
+        || ( this[ locale ][ sim ].isDirty && withinSimMetadataCacheWindow )
       ) {
         return this[ locale ][ sim ];
       }
