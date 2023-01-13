@@ -6,6 +6,8 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import LoadingSpinner from './LoadingSpinner.jsx';
+
 /**
  * Return the set of buttons used in the translation form. These appear above and below the translation form.
  *
@@ -64,6 +66,7 @@ const TranslationFormButtons = props => {
       >
         Test
       </button>
+      {props.testIsLoading ? <LoadingSpinner/> : <></>}
     </div>
   );
 };
