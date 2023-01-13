@@ -57,6 +57,7 @@ const TranslationForm = () => {
 
   const [ isDisabled, setIsDisabled ] = useState( false );
   const [ buttonId, setButtonId ] = useState( '' );
+  const [ testIsLoading, setTestIsLoading ] = useState( false );
   const handleButtonClick = evt => {
     setButtonId( evt.target.id );
   };
@@ -114,7 +115,9 @@ const TranslationForm = () => {
               setIsDisabled( false );
             }
             else if ( buttonId === 'test' ) {
+              setTestIsLoading( true );
               await testTranslation( values, params.simName, params.locale );
+              setTestIsLoading( false );
             }
           }}
         >
@@ -126,6 +129,7 @@ const TranslationForm = () => {
                   locale={params.locale}
                   handleButtonClick={handleButtonClick}
                   isDisabled={isDisabled}
+                  testIsLoading={testIsLoading}
                   {...props}
                 />
                 <ErrorContext.Provider value={props.errors}>
@@ -140,6 +144,7 @@ const TranslationForm = () => {
                   locale={params.locale}
                   handleButtonClick={handleButtonClick}
                   isDisabled={isDisabled}
+                  testIsLoading={testIsLoading}
                   {...props}
                 />
               </Form>
