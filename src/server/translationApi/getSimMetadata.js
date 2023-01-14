@@ -66,6 +66,8 @@ let timeOfLastUpdate = Number.NEGATIVE_INFINITY;
 // mutex.then(). If this is the first call, our initial instance of the mutex promise
 // is a resolved promise, so the code on the critical path will be executed straight
 // away on the next cycle of the event loop."
+//
+// For the history of this, see https://github.com/phetsims/rosetta/issues/351.
 let simMetadataMutex = Promise.resolve();
 
 let simMetadata;
