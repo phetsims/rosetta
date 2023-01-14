@@ -42,8 +42,31 @@ const makePseudoRandomString = length => {
 
 let timeOfLastUpdate = Number.NEGATIVE_INFINITY;
 
-// Boolean to indicate whether there's an existing promise for sim metadata.
-let simMetadataPromise = false;
+// Several of the React components rely on sim metadata in order to render. Thus,
+// it is possible for a "burst" of sim metadata requests to be made. Initially,
+// sim metadata isn't cached in Rosetta's memory. It's a large object, so it
+// takes a non-trivial amount of time to get — maybe 2-3 seconds. Since we
+// are busting the website's sim metadata cache each time we make a request,
+// a burst of requests could tax the server. Thus, we want to have a way to say:
+// "If we've already sent out a request for sim metadata, wait until it's done before
+// you make any more sim metadata requests." You might be thinking, "Wait, isn't that
+// what async/await is for?" Sort of. If we await the sim metadata, the n separate
+// requests are made prior to caching the sim metadata. When we use this mutex pattern
+// (which is sort of a hacky way to have a mutex in JavaScript), we are able to wait
+// for the first request for the sim metadata to complete before the subsequent requests
+// are made. Thus, we only make one request to the website, and the subsequent calls for
+// sim metadata hit Rosetta's cached sim metadata. The way this mutex pattern works is
+// that we initially set it to a resolved promise. I (Liam Mulhall) read about this pattern
+// in the blog post below:
+// https://www.nodejsdesignpatterns.com/blog/node-js-race-conditions/.
+//
+// Here's the author's explanation of the pattern:
+// "The idea is that every time we are invoking the function doingSomethingCritical() we
+// are effectively 'queueing' the execution of the code on the critical path using
+// mutex.then(). If this is the first call, our initial instance of the mutex promise
+// is a resolved promise, so the code on the critical path will be executed straight
+// away on the next cycle of the event loop."
+let simMetadataMutex = Promise.resolve();
 
 let simMetadata;
 
@@ -54,22 +77,30 @@ let simMetadata;
  */
 const getSimMetadata = async () => {
   logger.info( 'getting sim metadata' );
-  try {
 
-    // If working on the translation utility without an internet connection,
-    // mock the sim metadata with your local copy. (This assumes you have
-    // a local copy of sim metadata.)
+  // If working on the translation utility without an internet connection,
+  // mock the sim metadata with your local copy. (This assumes you have
+  // a local copy of sim metadata.)
+  try {
     if ( publicConfig.ENVIRONMENT === 'development' && privateConfig.NO_INTERNET ) {
       logger.info( 'using local copy of sim metadata' );
       return JSON.parse( fs.readFileSync( './simMetadata.json' ) );
     }
+  }
+  catch( e ) {
+    logger.error( 'unable to get sim metadata' );
+    logger.error( e );
+    logger.error( 'this might be because you don\'t have a local copy of sim metadata' );
+  }
+
+  simMetadataMutex = simMetadataMutex.then( async () => {
 
     const metadataValidDurationElapsed = timeOfLastUpdate +
                                          publicConfig.VALID_METADATA_DURATION < Date.now();
 
     // We use cached sim metadata unless the sim metadata has become stale (i.e. the valid metadata duration has
     // elapsed). If there's an existing promise for the sim metadata, we don't enter this block.
-    if ( metadataValidDurationElapsed && !simMetadataPromise ) {
+    if ( metadataValidDurationElapsed ) {
       logger.info( 'sim metadata is stale or nonexistent; getting it' );
 
       // To reduce the amount of time our translators will have to see a note about
@@ -81,16 +112,11 @@ const getSimMetadata = async () => {
       const cacheBustingSimMetadataUrl = METADATA_URL + cacheBustingQueryParam;
       logger.info( `cache-busting sim metadata url: ${cacheBustingSimMetadataUrl}` );
 
-      // This code actually avoids a race condition rather than creates one.
-      // eslint-disable-next-line require-atomic-updates
-      simMetadataPromise = await axios.get(
+      const simMetadataRes = await axios.get(
         METADATA_URL + cacheBustingQueryParam,
         METADATA_REQ_OPTIONS
       );
-      simMetadata = simMetadataPromise.data;
-
-      // Once we have the sim metadata, we can set the promise back to false.
-      simMetadataPromise = false;
+      simMetadata = simMetadataRes.data;
 
       // We ignore this ESLint rule because a race condition here won't be problematic.
       /* eslint-disable require-atomic-updates */
@@ -99,17 +125,18 @@ const getSimMetadata = async () => {
     else {
       logger.info( 'using cached sim metadata' );
     }
-  }
-  catch( e ) {
+
+    return simMetadata;
+  } ).catch( e => {
     logger.error( e );
     simMetadata = { error: 'unable to get sim metadata' };
-  }
+  } );
   logger.info( 'returning sim metadata' );
 
   // Uncomment this code if you want a local copy of sim metadata.
   // fs.writeFileSync( './simMetadata.json', JSON.stringify( simMetadata, null, 4 ) );
 
-  return simMetadata;
+  return simMetadataMutex;
 };
 
 export default getSimMetadata;
