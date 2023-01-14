@@ -55,9 +55,8 @@ let timeOfLastUpdate = Number.NEGATIVE_INFINITY;
 // (which is sort of a hacky way to have a mutex in JavaScript), we are able to wait
 // for the first request for the sim metadata to complete before the subsequent requests
 // are made. Thus, we only make one request to the website, and the subsequent calls for
-// sim metadata hit Rosetta's cached sim metadata. The way this mutex pattern works is
-// that we initially set it to a resolved promise. I (Liam Mulhall) read about this pattern
-// in the blog post below:
+// sim metadata hit Rosetta's cached sim metadata. I (Liam Mulhall) read about this
+// pattern in the blog post below:
 // https://www.nodejsdesignpatterns.com/blog/node-js-race-conditions/.
 //
 // Here's the author's explanation of the pattern:
