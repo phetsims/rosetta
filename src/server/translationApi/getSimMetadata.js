@@ -56,8 +56,7 @@ let timeOfLastUpdate = Number.NEGATIVE_INFINITY;
 // for the first request for the sim metadata to complete before the subsequent requests
 // are made. Thus, we only make one request to the website, and the subsequent calls for
 // sim metadata hit Rosetta's cached sim metadata. I (Liam Mulhall) read about this
-// pattern in the blog post below:
-// https://www.nodejsdesignpatterns.com/blog/node-js-race-conditions/.
+// pattern in https://www.nodejsdesignpatterns.com/blog/node-js-race-conditions/.
 //
 // Here's the author's explanation of the pattern:
 // "We initialize our mutex as an instance of a resolved promise. Every time we are
