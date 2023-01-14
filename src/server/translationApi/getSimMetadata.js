@@ -117,25 +117,27 @@ const getSimMetadata = async () => {
         METADATA_URL + cacheBustingQueryParam,
         METADATA_REQ_OPTIONS
       );
+      logger.info( 'got sim metadata; setting its value' );
       simMetadata = simMetadataRes.data;
 
+      // Uncomment this code if you want a local copy of sim metadata.
+      // fs.writeFileSync( './simMetadata.json', JSON.stringify( simMetadata, null, 4 ) );
+
       // We ignore this ESLint rule because a race condition here won't be problematic.
-      /* eslint-disable require-atomic-updates */
+      // eslint-disable-next-line require-atomic-updates
       timeOfLastUpdate = Date.now();
     }
     else {
       logger.info( 'using cached sim metadata' );
     }
 
+    logger.info( 'returning sim metadata' );
     return simMetadata;
   } ).catch( e => {
     logger.error( e );
     simMetadata = { error: 'unable to get sim metadata' };
   } );
-  logger.info( 'returning sim metadata' );
-
-  // Uncomment this code if you want a local copy of sim metadata.
-  // fs.writeFileSync( './simMetadata.json', JSON.stringify( simMetadata, null, 4 ) );
+  logger.info( 'returning sim metadata mutex' );
 
   return simMetadataMutex;
 };
