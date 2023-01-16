@@ -35,7 +35,7 @@ const simData = require( './simData' );
 //
 //     const simUntranslated = false;
 //
-//     // TODO: There should be some way to figure this out based on the metadata.
+//     // TODO: There should be some way to figure this out based on the metadata. https://github.com/phetsims/rosetta/issues/357
 //     if ( simUntranslated ) {
 //       translationStatusArray.push( 'completely untranslated' );
 //     }
