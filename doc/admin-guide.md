@@ -83,7 +83,7 @@ babel for the user ID of the most recent translator.
 3. Obtain the user ID you wish to use from Babel.
 4. Create and enter your URL in a web browser (you will be asked to sign in if you aren't already). Use the following
    URL pattern: `https://ox-dev.colorado.edu/translate/trigger-build/{sim-name}/{locale code}/{translator ID}`. For
-   example, `https://phet.colorado.edu/translate/trigger-build/circuit-construction-kit-ac/fa/333624`:
+   example, `https://phet.colorado.edu/translate/trigger-build/circuit-construction-kit-ac/fa/333624`
 5. Check Rosetta's logs and the build server's logs as desired. These log files are located on phet-server/ox-dev and
    will require SSH to view.
 6. Make sure your build went through successfully and the translation is published to the website. (This should take
