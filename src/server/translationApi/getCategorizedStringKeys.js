@@ -8,6 +8,8 @@
  */
 
 import getRepoNameFromStringKeyWithRepoName from './getRepoNameFromStringKeyWithRepoName.js';
+import getSimMetadata from './getSimMetadata.js';
+import getSimNamesAndTitles from './getSimNamesAndTitles.js';
 import getStringKeyFromStringKeyWithRepoName from './getStringKeyFromStringKeyWithRepoName.js';
 import logger from './logger.js';
 
@@ -17,12 +19,15 @@ import logger from './logger.js';
  * this so that we can separate them in the frontend translation form.
  *
  * @param {String} simName - sim name
- * @param {String[]} simNames - list of all sim names
  * @param {String[]} stringKeysWithRepoName - string keys with their respective repo names for the specified sim
  * @returns {Promise<Object>} - string keys categorized into common and sim-specific
  */
-const getCategorizedStringKeys = async ( simName, simNames, stringKeysWithRepoName ) => {
+const getCategorizedStringKeys = async ( simName, stringKeysWithRepoName ) => {
   logger.info( `getting ${simName}'s categorized string keys` );
+
+  const simMetadata = await getSimMetadata();
+  const simNames = Object.keys( getSimNamesAndTitles( simMetadata, 'true' ) );
+
   const categorizedStringKeys = {
     common: [],
     simSpecific: [],

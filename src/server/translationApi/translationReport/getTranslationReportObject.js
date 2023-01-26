@@ -52,7 +52,7 @@ const getTranslationReportObject = async (
   const simUrl = getSimUrl( simName );
   const simHtml = await getSimHtml( simUrl );
   const stringKeysWithRepoName = Object.keys( getStringKeysWithRepoName( simHtml ) );
-  const categorizedStringKeys = await getCategorizedStringKeys( simName, simNames, stringKeysWithRepoName );
+  const categorizedStringKeys = await getCategorizedStringKeys( simName, stringKeysWithRepoName );
 
   const noLongerUsedFlag = 'no longer used';
 
@@ -134,7 +134,7 @@ const getTranslationReportObject = async (
         const sharedSimUrl = getSimUrl( sharedSim );
         const sharedSimHtml = await getSimHtml( sharedSimUrl );
         const sharedStringKeysWithRepoName = Object.keys( getStringKeysWithRepoName( sharedSimHtml ) );
-        const sharedCategorizedStringKeys = await getCategorizedStringKeys( sharedSim, simNames, sharedStringKeysWithRepoName );
+        const sharedCategorizedStringKeys = await getCategorizedStringKeys( sharedSim, sharedStringKeysWithRepoName );
         const latestSimSha = await getLatestSimSha( sharedSim );
         logger.info( `getting shared sim-specific english string keys and values for ${sharedSim}` );
         const sharedEnglishStringKeysAndValues = await getSimSpecificEnglishStringKeysAndValues(
