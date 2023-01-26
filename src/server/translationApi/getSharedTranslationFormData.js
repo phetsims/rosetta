@@ -36,11 +36,15 @@ const getSharedTranslationFormData = async (
     try {
 
       // Get string files.
-      const englishStringFiles = [];
+      const englishStringFileObjects = [];
       const translatedStringFiles = [];
       for ( const sim of sharedSims ) {
         const simFileRes = await axios.get( getStringFileUrl( sim ) );
-        englishStringFiles.push( simFileRes.data );
+        const englishStringFileObject = {
+          repo: sim,
+          fileContents: simFileRes.data
+        };
+        englishStringFileObjects.push( englishStringFileObject );
         try {
           const translatedFileRes = await axios.get( getTranslatedStringFile( sim, locale ) );
           if ( translatedFileRes.status >= 200 && translatedFileRes.status <= 300 ) {
@@ -58,14 +62,20 @@ const getSharedTranslationFormData = async (
       }
 
       // Populate string keys and values.
-      const englishKeysAndValues = {};
+      const englishKeyValueAndRepoObjects = {};
       const translatedKeysAndValues = {};
       for ( const stringKey of sharedStringKeys ) {
 
-        // Populate English string keys and values.
-        for ( const stringFile of englishStringFiles ) {
-          if ( Object.keys( stringFile ).includes( stringKey ) ) {
-            englishKeysAndValues[ stringKey ] = stringFile[ stringKey ].value;
+        // Populate English string keys and values. We need a repo associated with each string key
+        // because we need a comprehensive list of repos to iterate over when we make the translation
+        // file contents for this translation. For more context on this, see
+        // https://github.com/phetsims/rosetta/issues/360.
+        for ( const stringFileObject of englishStringFileObjects ) {
+          if ( Object.keys( stringFileObject.fileContents ).includes( stringKey ) ) {
+            englishKeyValueAndRepoObjects[ stringKey ] = {
+              value: stringFileObject.fileContents[ stringKey ].value,
+              repo: stringFileObject.repo
+            };
           }
         }
 
@@ -83,16 +93,31 @@ const getSharedTranslationFormData = async (
         // Strip out dots so client doesn't think there are more deeply nested
         // objects than there really are.
         const stringKeyWithoutDots = stringKey.replaceAll( '.', '_DOT_' );
-        if ( englishKeysAndValues[ stringKey ] && translatedKeysAndValues[ stringKey ] ) {
+        if (
+          englishKeyValueAndRepoObjects[ stringKey ] &&
+          Object.keys( translatedKeysAndValues ).length > 0 &&
+          translatedKeysAndValues[ stringKey ]
+        ) {
+
+          // Ensure each string key in the shared translation form data has a repo
+          // associated with it. For more context on why we do this, see
+          // https://github.com/phetsims/rosetta/issues/360.
           sharedTranslationFormData[ stringKeyWithoutDots ] = {
-            english: englishKeysAndValues[ stringKey ],
-            translated: translatedKeysAndValues[ stringKey ]
+            english: englishKeyValueAndRepoObjects[ stringKey ].value,
+            translated: translatedKeysAndValues[ stringKey ],
+            repo: englishKeyValueAndRepoObjects[ stringKey ].repo
           };
         }
-        else if ( englishKeysAndValues[ stringKey ] && !translatedKeysAndValues[ stringKey ] ) {
+        else if (
+          ( englishKeyValueAndRepoObjects[ stringKey ] &&
+            Object.keys( translatedKeysAndValues ).length === 0 ) ||
+          ( englishKeyValueAndRepoObjects[ stringKey ] &&
+            !translatedKeysAndValues[ stringKey ] )
+        ) {
           sharedTranslationFormData[ stringKeyWithoutDots ] = {
-            english: englishKeysAndValues[ stringKey ],
-            translated: ''
+            english: englishKeyValueAndRepoObjects[ stringKey ].value,
+            translated: '',
+            repo: englishKeyValueAndRepoObjects[ stringKey ].repo
           };
         }
       }
