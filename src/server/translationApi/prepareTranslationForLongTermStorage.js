@@ -22,14 +22,19 @@ const prepareTranslationForLongTermStorage = async translation => {
   logger.info( 'adding back dots to translation form data from client' );
   translation.translationFormData.simSpecific = getStringKeysWithDots( translation.translationFormData.simSpecific );
   translation.translationFormData.common = getStringKeysWithDots( translation.translationFormData.common );
+  translation.translationFormData.shared = getStringKeysWithDots( translation.translationFormData.shared );
 
   // Get a list of repos whose strings are in the translation.
   const repos = [ translation.simName ];
   const commonData = translation.translationFormData.common;
-  for ( const stringKey of Object.keys( commonData ) ) {
-    const commonRepo = commonData[ stringKey ].repo;
-    if ( !repos.includes( commonRepo ) ) {
-      repos.push( commonRepo );
+  const sharedData = translation.translationFormData.shared;
+  const dataObjects = [ commonData, sharedData ];
+  for ( const dataObject of dataObjects ) {
+    for ( const stringKey of Object.keys( dataObject ) ) {
+      const repoName = dataObject[ stringKey ].repo;
+      if ( !repos.includes( repoName ) ) {
+        repos.push( repoName );
+      }
     }
   }
 

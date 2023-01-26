@@ -7,6 +7,8 @@
  */
 
 import axios from 'axios';
+import getSimMetadata from './getSimMetadata.js';
+import getSimNamesAndTitles from './getSimNamesAndTitles.js';
 import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
 import logger from './logger.js';
 
@@ -60,12 +62,25 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
     }
   }
 
+  // Get list of sim names for checking if we're dealing with shared strings. Note how
+  // we're passing true for the second argument. This is to say we're a team member, so
+  // please get all the sims, even the ones that wouldn't normally be visible, e.g. Bumper.
+  // For context on this, see https://github.com/phetsims/rosetta/issues/360 and
+  // https://github.com/phetsims/rosetta/issues/361.
+  const simMetadata = await getSimMetadata();
+  const simNames = Object.keys( getSimNamesAndTitles( simMetadata, 'true' ) );
+
   // Set translation form data variable.
   let translationFormData = {};
   if ( repo === translation.simName ) {
 
     // We're dealing with sim-specific strings.
     translationFormData = translation.translationFormData.simSpecific;
+  }
+  else if ( simNames.includes( repo ) ) {
+
+    // We're dealing with shared strings.
+    translationFormData = translation.translationFormData.shared;
   }
   else {
 
