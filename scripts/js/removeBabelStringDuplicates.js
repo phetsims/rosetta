@@ -7,8 +7,6 @@
  * @author Marla Schulz (PhET Interactive Simulations)
  */
 
-/* eslint-env node */
-
 // modules
 const fs = require( 'fs' );
 
@@ -21,25 +19,26 @@ const REPOS_WITH_STRING_DUPLICATES = [
 REPOS_WITH_STRING_DUPLICATES.forEach( repoName => {
 
   // read the string file and turn it into an object
-  const jsonFile = fs.readFileSync( `./${repoName}/${repoName}-strings_en.json`, 'utf8' );
-  const stringKeys = Object.keys( JSON.parse( jsonFile ) );
+  const enStringFile = fs.readFileSync( `./${repoName}/${repoName}-strings_en.json`, 'utf8' );
+  const enStringKeys = Object.keys( JSON.parse( enStringFile ) );
 
   console.log( `\nlooking for duplicates in ${repoName}\n` );
 
-  // iterate through all translated string files for repoName in babel
   const files = fs.readdirSync( `./babel/${repoName}` );
 
+  // iterate through all translated string files for repoName in babel
   files.forEach( fileName => {
 
     const translatedStringsFileName = `./babel/${repoName}/${fileName}`;
-    const translatedStringsData = JSON.parse( fs.readFileSync( translatedStringsFileName, 'utf8' ) );
+    const translatedStrings = JSON.parse( fs.readFileSync( translatedStringsFileName, 'utf8' ) );
 
-    for ( const key in translatedStringsData ) {
-      !stringKeys.includes( key ) && delete translatedStringsData[ key ];
+    // remove the data of any translated string that's not found in the english strings
+    for ( const key in translatedStrings ) {
+      !enStringKeys.includes( key ) && delete translatedStrings[ key ];
     }
 
     console.log( `writing new file: ${fileName}` );
-    fs.writeFileSync( translatedStringsFileName, JSON.stringify( translatedStringsData, null, 2 ) );
+    fs.writeFileSync( translatedStringsFileName, JSON.stringify( translatedStrings, null, 2 ) );
   } );
 
 } );
