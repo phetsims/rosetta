@@ -65,7 +65,7 @@ const getReplacementStringObject = async ( stringKeysWithRepoName, translation )
   // For context on this, see https://github.com/phetsims/rosetta/issues/360 and
   // https://github.com/phetsims/rosetta/issues/361.
   const simMetadata = await getSimMetadata();
-  const simNames = Object.keys( await getSimNamesAndTitles( simMetadata, 'true' ) );
+  const simNames = Object.keys( getSimNamesAndTitles( simMetadata, 'true' ) );
 
   for ( const stringKeyWithRepoName of Object.keys( stringKeysWithRepoName ) ) {
     const repoName = getRepoNameFromStringKeyWithRepoName( stringKeyWithRepoName );
