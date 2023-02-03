@@ -10,6 +10,8 @@
 import { Link } from 'react-router-dom';
 import StatsInfoButton from '../components/StatsInfoButton.jsx';
 import getSortedTranslationReportRows from './getSortedTranslationReportRows.jsx';
+// eslint-disable-next-line bad-text
+import '../styles/table.css';
 
 /**
  * Return an array of translation report table rows, i.e. return an array of JSX. These rows are put into the

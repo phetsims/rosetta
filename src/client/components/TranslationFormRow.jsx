@@ -11,6 +11,8 @@ import React, { useContext } from 'react';
 import InputErrorMessage from './InputErrorMessage.jsx';
 import { LocaleInfoContext } from './RosettaRoutes.jsx';
 import boxArrowInRight from '../img/box-arrow-in-right.svg';
+// eslint-disable-next-line bad-text
+import '../styles/table.css';
 
 /**
  * This component is a row in the translation table. It has the string key, the English string, and an input for

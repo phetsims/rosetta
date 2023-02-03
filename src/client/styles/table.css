@@ -1,0 +1,10 @@
+:root {
+  --row-width: 450px;
+}
+
+td {
+  min-width: var(--row-width);
+  max-width: var(--row-width);
+  inline-size: var(--row-width);
+  overflow-wrap: break-word;
+}

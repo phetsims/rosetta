@@ -11,6 +11,8 @@ import { Link } from 'react-router-dom';
 import StatsInfoButton from '../components/StatsInfoButton.jsx';
 import alertErrorMessage from '../js/alertErrorMessage.js';
 import SortDirectionEnum from '../js/SortDirectionEnum.js';
+// eslint-disable-next-line bad-text
+import '../styles/table.css';
 
 /**
  * Return an array of translation report objects (i.e. stats used to make translation report rows) that have
@@ -143,6 +145,10 @@ const getSortedTranslationReportRows = (
     sortKeys
   );
 
+  const tdStyle = {
+    width: '30%'
+  };
+
   // Create the array of JSX to render in the translation report.
   const translationReportJsx = [];
   for ( const item of sortedData ) {
@@ -154,8 +160,8 @@ const getSortedTranslationReportRows = (
 
     translationReportJsx.push(
       <tr key={item.simName}>
-        <td><Link to={`/translate/${locale}/${item.simName}`}>{item.simTitle}</Link>{pendingUpdateMessage}</td>
-        <td>
+        <td style={tdStyle}><Link to={`/translate/${locale}/${item.simName}`}>{item.simTitle}</Link>{pendingUpdateMessage}</td>
+        <td style={tdStyle}>
           <StatsInfoButton reportObject={item}/>
           {item.percentTotal}% ({item.totalTranslatedStrings} of {item.totalStrings})
         </td>
