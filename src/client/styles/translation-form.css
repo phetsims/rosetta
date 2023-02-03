@@ -1,0 +1,28 @@
+:root {
+  --default-height: 2em;
+}
+
+textarea {
+  min-height: var(--default-height);
+  height: var(--default-height);
+}
+
+.copy-value-button {
+  border: 1px solid;
+  min-height: var(--default-height);
+  height: var(--default-height);
+}
+
+.copy-value-button:hover {
+
+  /* By default Bootstrap makes the border disappear on hover,
+  so we fix that here. */
+  border: 1px solid;
+}
+
+.copy-value-and-input-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1em;
+}

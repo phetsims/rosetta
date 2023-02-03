@@ -6,13 +6,16 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+// Disable this rule so we can import stylesheets.
+/* eslint-disable bad-text */
+
 import { useField, useFormikContext } from 'formik';
 import React, { useContext } from 'react';
 import InputErrorMessage from './InputErrorMessage.jsx';
 import { LocaleInfoContext } from './RosettaRoutes.jsx';
 import boxArrowInRight from '../img/box-arrow-in-right.svg';
-// eslint-disable-next-line bad-text
 import '../styles/table.css';
+import '../styles/translation-form.css';
 
 /**
  * This component is a row in the translation table. It has the string key, the English string, and an input for
@@ -39,12 +42,6 @@ const TranslationFormRow = props => {
     setFieldValue( field.name, props.englishString );
   };
 
-  const buttonStyle = {
-    border: '0.5px solid',
-    marginRight: '6px',
-    padding: '1px 3px 1px 2px'
-  };
-
   return (
     <tr>
       <td>{props.stringKey}</td>
@@ -52,10 +49,12 @@ const TranslationFormRow = props => {
 
       {/* Use the spread operator to give the input each of the props in the field object. */}
       <td>
-        <button style={buttonStyle} className='btn btn-light' type='button' onClick={handleCopyButtonClick}>
-          <img src={boxArrowInRight} alt='copy English value to input icon'/>
-        </button>
-        <input {...field} style={inputStyle} dir={direction}/>
+        <div className='copy-value-and-input-container'>
+          <button className='copy-value-button btn btn-light' type='button' onClick={handleCopyButtonClick}>
+            <img src={boxArrowInRight} alt='copy English value to input icon'/>
+          </button>
+          <textarea {...field} style={inputStyle} dir={direction}/>
+        </div>
         <InputErrorMessage fieldKey={props.keyWithoutDots}/>
       </td>
     </tr>
