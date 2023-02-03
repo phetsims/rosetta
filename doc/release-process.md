@@ -44,10 +44,9 @@ Do your work on a feature branch. Once you are confident your
 work is ready, you can ask someone to review it, have it tested,
 or merge it into master at your discretion. If you ask someone
 to review your code or if you have it tested, you should only
-merge it into master once the reviewer approves the changes or
-the tester approves the changes. If you merge the work into master
-without review or testing, you need to be confident you aren't
-breaking anything.
+merge it into master once the reviewer or tester approves the
+changes. If you merge the work into master without review or
+testing, you need to be confident you aren't breaking anything.
 
 Use Semantic Versioning
 -----------------------
@@ -77,6 +76,7 @@ Tag Test Versions
   `git tag <new-name> <old-name>`.
 + To edit a tag's message (this will change the metadata of the
   tag, e.g. date and author): `git tag <tag-name> <tag-name>^{} -f -a`.
++ To push your tags to the remote: `git push --tags`.
 + **Remember** to put the SHAs for chipper and perennial in the
   `dependencies.json` file.
 
@@ -87,7 +87,7 @@ Tag Published Versions
   and follow the algorithm described in the section on versioning.
 + To do this: `git tag -a <version-number>`.
 + See the section on tagging test versions for more info on tagging
-  commits.
+  test versions.
 + **Remember** to put the SHAs for chipper and perennial in the
   `dependencies.json` file.
 
