@@ -5,6 +5,7 @@ Contents
 --------
 
 - [Overview](#overview)
+- [Old Rosetta](#old-rosetta)
 - [Configuration](#configuration)
 - [Take Offline for Maintenance](#take-offline-for-maintenance)
 - [Update](#update)
@@ -28,6 +29,13 @@ needs to be restarted before the change will take effect (see below).
 The process is run under the phet-admin account on phet-server2.
 
 The utility is accessed at the URL https://phet.colorado.edu/translate.
+
+Old Rosetta
+-----------
+
+Old Rosetta, or Rosetta 1, lives on a branch in this repository.
+We keep it around in case we ever need to revert to it. The issue
+for this branch is: https://github.com/phetsims/rosetta/issues/365.
 
 Configuration
 -------------
