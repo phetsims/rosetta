@@ -14,28 +14,12 @@ Contents
 Background
 ----------
 
-This document attempts to summarize the release process that John
-Blanco and I (Liam Mulhall) envision for our new version of Rosetta,
+This document attempts to summarize the release process that @jbphet
+and I (Liam Mulhall) envision for our new version of Rosetta,
 which we've taken to calling Rosetta 2.0.
 
-As of this writing, Rosetta 2.0 is almost ready for publication. The
-work for Rosetta 2.0 has all been done on a branch called "twosetta".
-One of the items on our list of things to do before publication is
-to merge the "twosetta" branch into the master branch. This got us
-thinking about the following:
-
-+ Should work be done on a feature branch or should we create
-  release branches?
-+ How do we version Rosetta?
-+ Should we be tagging the SHAs of versions of Rosetta that go
-  into testing?
-+ Should we tag the SHA of versions of Rosetta that are
-  published?
-+ Should we keep track of the SHAs of our PhET dependencies
-  (chipper and perennial) and associate those with our tagged
-  Rosetta SHAs somehow?
-
-Right now, here's what I (Liam Mulhall) have decided to do:
+Rosetta's release process is different from the release process for
+PhET sims. Read on to find out how.
 
 Do Work on Feature Branches
 ---------------------------
@@ -64,20 +48,20 @@ Use Semantic Versioning
 Tag Test Versions
 -----------------
 
-+ To do this: `git tag -a <version-number>-rc-<rc-number>`.
-+ For example: `git tag -a 2.0.0-rc-3`.
++ To do this: `git tag -a <version-number>-rc.<rc-number>`.
++ For example: `git tag -a 2.0.0-rc.3`.
 + This should open up your editor where you can write a
   tag message. In this message, you should at least include
   the GitHub issue where testing was done. Ideally, you should
   also include some background/context for the version.
 + To view a tag's message: `git show <tag-name>`.
-+ For example: `git show 2.0.0-rc-3` (This is a real tag; try it!)
++ For example: `git show 2.0.0-rc.3` (This is a real tag; try it!)
 + To rename a tag (this only works before pushing to the remote):
   `git tag <new-name> <old-name>`.
 + To edit a tag's message (this will change the metadata of the
   tag, e.g. date and author): `git tag <tag-name> <tag-name>^{} -f -a`.
 + To push your tags to the remote: `git push --tags`.
-+ **Remember** to put the SHAs for chipper and perennial in the
++ **Remember** to put the SHAs for chipper and perennial-alias in the
   `dependencies.json` file.
 
 Tag Published Versions
