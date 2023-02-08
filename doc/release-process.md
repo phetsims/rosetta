@@ -72,7 +72,7 @@ Tag Published Versions
 + To do this: `git tag -a <version-number>`.
 + See the section on tagging test versions for more info on tagging
   test versions.
-+ **Remember** to put the SHAs for chipper and perennial in the
++ **Remember** to put the SHAs for chipper and perennial-alias in the
   `dependencies.json` file.
 
 Write Down Dependencies
