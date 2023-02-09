@@ -6,7 +6,6 @@
     "build": "vite build"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.16.0",
     "@babel/preset-react": "^7.16.0",
     "@vitejs/plugin-react": "^2.0.0",
     "eslint-plugin-react": "^7.26.1",
