@@ -12,8 +12,10 @@
     "start": "node ./scripts/js/make-public-config-file.mjs && npm run lint && npm run build --workspace=client && node src/server/app.js"
   },
   "devDependencies": {
+    "@babel/core": "^7.20.12",
     "@babel/eslint-parser": "^7.16.0",
-    "winston": "^3.8.2",
-    "grunt": "^1.4.1"
+    "eslint": "^8.34.0",
+    "grunt": "^1.4.1",
+    "winston": "^3.8.2"
   }
 }
