@@ -11,6 +11,9 @@ import KeyTypesEnum from '../../common/KeyTypesEnum.js';
 import { ErrorContext } from './TranslationForm.jsx';
 import questionOctagon from '../img/question-octagon.svg';
 
+// eslint-disable-next-line bad-text
+import '../styles/input-error.css';
+
 /**
  * This component is a small error message to be displayed underneath an invalid input in the translation form.
  *
@@ -18,9 +21,6 @@ import questionOctagon from '../img/question-octagon.svg';
  * @returns {JSX.Element}
  */
 const InputErrorMessage = ( { fieldKey } ) => {
-  const buttonStyle = {
-    marginLeft: '6px'
-  };
   const tooltip = 'Curly brace patterns must match the English version. ' +
                   'The values inside of the curly braces must also match the English version. ' +
                   'These curly brace patterns are values that dynamically change in the sim.\n\n' +
@@ -34,18 +34,14 @@ const InputErrorMessage = ( { fieldKey } ) => {
   const errorTooltipJsx = (
     <button
       onClick={() => window.alert( tooltip )}
-      style={buttonStyle}
       type='button'
-      className='btn btn-danger'
+      className='btn btn-danger error-button'
       data-bs-toggle='tooltip'
       data-bs-placement='top'
       title={tooltip}>
       <img src={questionOctagon} alt='question icon'/>
     </button>
   );
-  const divStyle = {
-    color: 'red'
-  };
   const error = useContext( ErrorContext );
   let jsx = null;
   if ( Object.keys( error ).length > 0 ) {
@@ -59,7 +55,7 @@ const InputErrorMessage = ( { fieldKey } ) => {
         jsx = (
           <>
             {errorTooltipJsx}
-            <div style={divStyle}>
+            <div className='error-container'>
               {errorMessage}
             </div>
           </>
