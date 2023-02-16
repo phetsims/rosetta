@@ -8,21 +8,24 @@
 
 import getSimMetadata from '../getSimMetadata.js';
 import getSimNamesAndTitles from '../getSimNamesAndTitles.js';
+import logger from '../logger.js';
 
 /**
  * Tell whether a sim is in the list of sim names.
  *
  * @param simName - lowercase kebab-case sim name, e.g. acid-base-solutions
- * @returns {Boolean}
+ * @returns {Promise.<Boolean>}
  */
 const isValidSimName = async simName => {
+  logger.info( `checking if ${simName} is valid` );
   const simMetadata = await getSimMetadata();
-  const listOfSimNames = Object.keys( getSimNamesAndTitles( simMetadata ) );
-  let ret = false;
+  const listOfSimNames = Object.keys( getSimNamesAndTitles( simMetadata, 'true' ) );
+  let isValid = false;
   if ( listOfSimNames.includes( simName ) ) {
-    ret = true;
+    isValid = true;
   }
-  return ret;
+  logger.info( `${simName} is valid = ${isValid}` );
+  return isValid;
 };
 
 export default isValidSimName;

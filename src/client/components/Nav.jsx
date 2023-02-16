@@ -6,8 +6,10 @@
  * @author <liammulh@gmail.com>
  */
 
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import PhetHomePageLink from './PhetHomePageLink.jsx';
+import { WebsiteUserDataContext } from './Rosetta.jsx';
 import UserGuideLink from './UserGuideLink.jsx';
 
 /**
@@ -16,6 +18,8 @@ import UserGuideLink from './UserGuideLink.jsx';
  * @returns {JSX.Element}
  */
 const Nav = () => {
+  const websiteUserData = useContext( WebsiteUserDataContext );
+  const shouldSeeAdminLink = websiteUserData.loggedIn && websiteUserData.teamMember;
   return (
     <div className='card mt-4 mb-4'>
       <div className='card-body'>
@@ -29,6 +33,13 @@ const Nav = () => {
           <li className='nav-item'>
             <PhetHomePageLink/>
           </li>
+          {
+            shouldSeeAdminLink ?
+            <li>
+              <Link className='nav-link' to='/translate/admin'>Admin</Link>
+            </li> :
+            <></>
+          }
         </ul>
       </div>
     </div>

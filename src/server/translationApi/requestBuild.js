@@ -22,7 +22,7 @@ import logger from './logger.js';
  * @param {String} simName
  * @param {String} locale
  * @param {Number} userID
- * @returns {Promise.<boolean>} - true or false depending on whether the build was sent
+ * @returns {Promise.<boolean>} - true or false depending on whether the request to the build server succeeded
  */
 const requestBuild = async ( simName, locale, userID ) => {
 

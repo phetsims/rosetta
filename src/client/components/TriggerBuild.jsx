@@ -14,6 +14,9 @@ import publicConfig from '../../common/publicConfig.js';
 import { useContext } from 'react';
 import { WebsiteUserDataContext } from './Rosetta.jsx';
 
+// eslint-disable-next-line bad-text
+import '../styles/input-error.css';
+
 /**
  * Create a Formik form for sending a get request based on the supplied sim, locale, and user ID.
  *
@@ -28,8 +31,18 @@ const TriggerBuild = () => {
   const websiteUserData = useContext( WebsiteUserDataContext );
   const handleSubmit = async values => {
     if ( websiteUserData.loggedIn && websiteUserData.teamMember ) {
-      await axios.get( `${publicConfig.translationApiRoute}/triggerBuild/${values.sim}/${values.locale}/${values.userId}` );
-      window.alert( `Rebuild request sent for sim ${values.sim} in locale ${values.locale} with user ID ${values.userId}.` );
+      const triggerBuildRes = await axios.get( `${publicConfig.translationApiRoute}/triggerBuild/${values.sim}/${values.locale}/${values.userId}` );
+      if ( triggerBuildRes.status >= 200 && triggerBuildRes.status < 300 ) {
+        if ( triggerBuildRes.data === 'success' ) {
+          window.alert( `Rebuild request sent for sim ${values.sim} in locale ${values.locale} with user ID ${values.userId}.` );
+        }
+        else if ( triggerBuildRes.data === 'failure' ) {
+          window.alert( 'Rebuild request failed. Check the build request flag in your config.' );
+        }
+      }
+      else {
+        window.alert( 'Something went wrong. Build request not sent.' );
+      }
     }
     else {
       window.alert( 'You do not have correct permissions (logged in and PhET team member) to trigger a build' );
@@ -69,17 +82,23 @@ const TriggerBuild = () => {
             <div>
               <label className='mt-2'>Sim:</label><br/>
               <Field type='text' name='sim'/>
-              {errors.sim && touched.sim ? errors.sim : null}
+              <div className='error-container'>
+                {errors.sim && touched.sim ? errors.sim : null}
+              </div>
             </div>
             <div>
               <label className='mt-2'>Locale:</label><br/>
               <Field type='text' name='locale'/>
-              {errors.locale && touched.locale ? errors.locale : null}
+              <div className='error-container'>
+                {errors.locale && touched.locale ? errors.locale : null}
+              </div>
             </div>
             <div>
               <label className='mt-2'>User ID:</label><br/>
               <Field type='text' name='userId'/>
-              {errors.userId && touched.userId ? errors.userId : null}
+              <div className='error-container'>
+                {errors.userId && touched.userId ? errors.userId : null}
+              </div>
             </div>
             <button
               type='submit'

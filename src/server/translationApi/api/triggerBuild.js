@@ -23,9 +23,12 @@ const triggerBuild = async ( req, res ) => {
       req.params.locale,
       req.params.userId
     );
-    if ( rebuildRes.status >= 200 && rebuildRes.status < 300 ) {
+    if ( rebuildRes ) {
       logger.info( 'rebuilt with original credit' );
-      res.end();
+      res.send( 'success' );
+    }
+    else {
+      res.send( 'failure' );
     }
   }
   catch( e ) {

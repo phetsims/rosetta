@@ -18,19 +18,24 @@ import isValidUserId from './isValidUserId.js';
  * @param {String} simName - name of the sim being rebuilt
  * @param {String} locale - locale code of the sim being rebuilt
  * @param {String} userId - user ID of the original submitter
+ * @returns {Promise.<Boolean>} - whether the request succeeded
  */
 const requestTriggerBuild = async ( simName, locale, userId ) => {
+  logger.info( `requesting a trigger build for sim/locale/id ${simName}/${locale}/${userId}` );
+  let requestSuccessful = false;
   try {
-    const simNameIsValid = isValidSimName( simName );
-    const localeIsValid = isValidLocale( locale );
-    const userIdIsValid = isValidUserId( simName, locale, userId );
+    const simNameIsValid = await isValidSimName( simName );
+    const localeIsValid = await isValidLocale( locale );
+    const userIdIsValid = await isValidUserId( simName, locale, userId );
     if ( simNameIsValid && localeIsValid && userIdIsValid ) {
-      await requestBuild( simName, locale, Number( userId ) );
+      requestSuccessful = await requestBuild( simName, locale, Number( userId ) );
     }
   }
   catch( e ) {
     logger.error( e );
   }
+  logger.info( `request of trigger build for sim/locale/id ${simName}/${locale}/${userId} succeeded = ${requestSuccessful}` );
+  return requestSuccessful;
 };
 
 export default requestTriggerBuild;

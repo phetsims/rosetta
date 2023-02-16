@@ -20,8 +20,10 @@ import isStringNumber from './isStringNumber.js';
  * @returns {Promise<Boolean>}
  */
 const isValidUserId = async ( simName, locale, userId ) => {
+  logger.info( `checking if ${userId} is valid` );
   let isValid = false;
   if ( isStringNumber( userId ) ) {
+    logger.info( `user id ${userId} is a string number` );
     const stringFileUrl = getTranslatedStringFile( simName, locale );
 
     // Try to verify whether the supplied user ID exists in the string file for the given sim/locale.
@@ -36,7 +38,7 @@ const isValidUserId = async ( simName, locale, userId ) => {
           const historyArray = stringFile[ key ].history;
           for ( const historyEntry of historyArray ) {
             if ( historyEntry.userId !== undefined ) {
-              setOfUserIds.add( historyEntry.userId );
+              setOfUserIds.add( historyEntry.userId.toString() );
             }
           }
         }
@@ -59,6 +61,7 @@ const isValidUserId = async ( simName, locale, userId ) => {
       logger.error( e );
     }
   }
+  logger.info( `${userId} is valid = ${isValid}` );
   return isValid;
 };
 

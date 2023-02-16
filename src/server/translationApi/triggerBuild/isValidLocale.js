@@ -7,21 +7,24 @@
  */
 
 import getLocaleInfo from '../getLocaleInfo.js';
+import logger from '../logger.js';
 
 /**
  * Tell whether a locale is in the list of locales.
  *
  * @param {String} locale - ISO 639-1 locale code, e.g. es for Spanish
- * @returns {Boolean}
+ * @returns {Promise.<Boolean>}
  */
-const isValidLocale = locale => {
-  const localeInfo = getLocaleInfo();
+const isValidLocale = async locale => {
+  logger.info( `checking if ${locale} is valid` );
+  const localeInfo = await getLocaleInfo();
   const listOfLocales = Object.keys( localeInfo );
-  let ret = false;
+  let isValid = false;
   if ( listOfLocales.includes( locale ) ) {
-    ret = true;
+    isValid = true;
   }
-  return ret;
+  logger.info( `${locale} is valid = ${isValid}` );
+  return isValid;
 };
 
 export default isValidLocale;
