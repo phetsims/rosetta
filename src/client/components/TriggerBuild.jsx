@@ -66,9 +66,9 @@ const TriggerBuild = () => {
   const blueButton = 'btn btn-primary mt-2';
   return (
     <div>
-      <h2>Rebuild With Original Credit</h2>
+      <h2>Trigger Build</h2>
       <p>
-        See documentation for rebuilding a sim with original credit <a href='#'>here</a>.
+        See documentation for trigger build <a href='https://github.com/phetsims/rosetta/blob/master/doc/admin-guide.md#triggering-a-rebuild-without-being-credited'>here</a>.
       </p>
       <Formik initialValues={initialRebuildValues} onSubmit={handleSubmit} validationSchema={ValidationSchema}>
         {(
