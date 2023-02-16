@@ -35,7 +35,12 @@ const LocaleSelect = ( { field } ) => {
   localeNamesAndCodes.sort();
 
   // Create a list of locale options to iterate over.
-  const localeOptions = [];
+  const defaultOptionJsx = (
+    <option key='' value=''>
+      — Select Locale —
+    </option>
+  );
+  const localeOptions = [ defaultOptionJsx ];
   for ( const locale of localeNamesAndCodes ) {
     localeOptions.push(
       <option

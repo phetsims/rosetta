@@ -21,26 +21,28 @@ const TranslationReportForm = () => {
   const navigate = useNavigate();
 
   return (
-    <div>
-      <h2>Select Locale</h2>
-      <Formik
-        initialValues={{ locale: 'ab' }}
-        onSubmit={values => {
+    <Formik
+      initialValues={{ locale: '' }}
+      onSubmit={values => {
+        if ( values.locale === '' ) {
+          window.alert( 'Please select a locale before proceeding.' );
+        }
+        else {
           navigate( `/translate/${values.locale}` );
-        }}
-      >
-        <Form>
-          <div className='mt-2'>
-            <Field name='locale' component={LocaleSelect}/>
-          </div>
-          <div className='mt-2'>
-            <button type='submit' className='btn btn-primary'>
-              Translate
-            </button>
-          </div>
-        </Form>
-      </Formik>
-    </div>
+        }
+      }}
+    >
+      <Form>
+        <div className='mt-2'>
+          <Field name='locale' component={LocaleSelect}/>
+        </div>
+        <div className='mt-2'>
+          <button type='submit' className='btn btn-primary'>
+            Translate
+          </button>
+        </div>
+      </Form>
+    </Formik>
   );
 };
 
