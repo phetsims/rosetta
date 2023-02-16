@@ -7,6 +7,7 @@ Contents
 - [Overview](#overview)
 - [Old Rosetta](#old-rosetta)
 - [Configuration](#configuration)
+- [Triggering a Rebuild Without Being Credited](#triggering-a-rebuild-without-being-credited)
 - [Take Offline for Maintenance](#take-offline-for-maintenance)
 - [Update](#update)
 - [Manage systemd Service](#manage-systemd-service)
@@ -59,6 +60,36 @@ There are some configuration values needed right away by the client-side
 code. We extract these values and write them to the `publicConfig.js` file
 when Rosetta is started. For more info on this, see the README in the
 `src/common` directory.
+
+Triggering a Rebuild Without Being Credited
+-------------------------------------------
+
+### Background/Context
+
+There have been times when a need has arisen to build (or rebuild) a simulation for a non-English locale. While one
+might be tempted to do this via the normal translation interface by making and submitting a small change and then
+reverting it and submitting again, this will unfortunately cause the submitter to be listed on the website as one of
+the credited translators for that simulation. Issue https://github.com/phetsims/perennial/issues/178 describes a
+scenario where the need to trigger builds without being credited arose. To fill this need, a route was added through
+which a PhET team member can trigger a build of a simulation for a given locale. There are three parameters for this
+route: the sim name, the locale, and the user ID that should be credited. The user ID can be obtained by looking in
+babel for the user ID of the most recent translator.
+
+### Instructions
+
+1. If necessary, edit the Babel file for the translation as needed. Commit directly to master.
+2. Make sure the instance of Rosetta that you plan to use has the build request flag set to true its config file. If you're
+   using the public version, this will generally be set to true.
+3. Obtain the user ID you wish to use from Babel.
+4. Go to Rosetta's admin page, scroll down to the trigger build form, and enter the sim name, locale, and user ID. When
+   you're ready, click the "Rebuild" button.
+5. Check Rosetta's logs and the build server's logs as desired. These log files are located on phet-server/ox-dev and
+   will require SSH to view.
+6. Make sure your build went through successfully and the translation is published to the website. (This should take
+   about five minutes.)
+
+To use this, enter this URL in a browser window and then check some time later that the translation was rebuilt. You
+can monitor rosetta and/or the build server log if desired.
 
 Take Offline for Maintenance
 ----------------------------
