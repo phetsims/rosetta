@@ -13,7 +13,7 @@
  */
 const UserGuideLink = () => {
   return (
-    <a target='_blank' rel='noreferrer' className='nav-link' href='https://docs.google.com/document/d/1MS5jrwM_NOD8v0Byr0drgAFB3aBb1_4ixFdMjBNc-C8/edit?usp=sharing'>
+    <a target='_blank' rel='noreferrer' className='nav-link' href='https://docs.google.com/document/d/e/2PACX-1vSYc8f01StQ7e2nQWBA38BZfLoqkm6rkn-F9BzTmxdNgazOzFfLDm5RI-3I3IdKccuBFQpFdT2ST5Px/pub'>
       User Guide
     </a>
   );
