@@ -74,6 +74,8 @@ Tag Published Versions
   test versions.
 + **Remember** to put the SHAs for chipper and perennial-alias in the
   `dependencies.json` file.
++ On the production server, pull the tag for the release version as
+  opposed to pulling the latest commit.
 
 Write Down Dependencies
 -----------------------
