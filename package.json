@@ -9,7 +9,8 @@
   ],
   "scripts": {
     "lint": "grunt --gruntfile Gruntfile.cjs lint",
-    "start": "node ./scripts/js/make-public-config-file.mjs && npm run lint && npm run build --workspace=client && node src/server/app.js"
+    "start": "node ./scripts/js/make-public-config-file.mjs && npm run lint && npm run build --workspace=client && node src/server/app.js",
+    "prod": "node ./scripts/js/make-public-config-file.mjs && npm run build --workspace=client && node src/server/app.js"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
