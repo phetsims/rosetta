@@ -8,6 +8,9 @@
 
 import LoadingSpinner from './LoadingSpinner.jsx';
 
+// eslint-disable-next-line bad-text
+import '../styles/translation-form.css';
+
 /**
  * Return the set of buttons used in the translation form. These appear above and below the translation form.
  *
@@ -15,58 +18,48 @@ import LoadingSpinner from './LoadingSpinner.jsx';
  * @returns {JSX.Element}
  */
 const TranslationFormButtons = props => {
-  const divStyle = {
-    display: 'flex',
-    flexFlow: 'row wrap'
-  };
   const disabled = !( props.isValid && props.dirty ) || props.isDisabled;
-  const margin = {
-    marginTop: '20px',
-    marginBottom: '20px',
-    marginRight: '20px'
-  };
   const grayButton = 'btn btn-secondary';
   const blueButton = 'btn btn-primary';
   const buttonClass = !( props.isValid && props.dirty ) ? grayButton : blueButton;
   return (
-    <div style={divStyle}>
-      <button
-        id='save'
-        onClick={props.handleButtonClick}
-        disabled={disabled}
-        className={buttonClass}
-        style={margin}
-        data-bs-toggle='tooltip'
-        data-bs-placement='top'
-        title='Save your translation to work on later'
-      >
-        Save
-      </button>
-      <button
-        id='submit'
-        onClick={props.handleButtonClick}
-        disabled={disabled}
-        className={buttonClass}
-        style={margin}
-        data-bs-toggle='tooltip'
-        data-bs-placement='top'
-        title='Publish your translation to the PhET website'
-      >
-        Publish
-      </button>
-      <button
-        id='test'
-        onClick={props.handleButtonClick}
-        disabled={disabled}
-        className={buttonClass}
-        style={margin}
-        data-bs-toggle='tooltip'
-        data-bs-placement='top'
-        title='Test the simulation with your translated strings'
-      >
-        Test
-      </button>
-      {props.testIsLoading ? <LoadingSpinner/> : <></>}
+    <div className='card sticky-top mt-4 mb-4'>
+      <div className='card-body save-test-publish-buttons-container'>
+        <button
+          id='save'
+          onClick={props.handleButtonClick}
+          disabled={disabled}
+          className={buttonClass}
+          data-bs-toggle='tooltip'
+          data-bs-placement='top'
+          title='Save your translation to work on later'
+        >
+          Save
+        </button>
+        <button
+          id='submit'
+          onClick={props.handleButtonClick}
+          disabled={disabled}
+          className={buttonClass}
+          data-bs-toggle='tooltip'
+          data-bs-placement='top'
+          title='Publish your translation to the PhET website'
+        >
+          Publish
+        </button>
+        <button
+          id='test'
+          onClick={props.handleButtonClick}
+          disabled={disabled}
+          className={buttonClass}
+          data-bs-toggle='tooltip'
+          data-bs-placement='top'
+          title='Test the simulation with your translated strings'
+        >
+          Test
+        </button>
+        {props.testIsLoading ? <LoadingSpinner/> : <></>}
+      </div>
     </div>
   );
 };

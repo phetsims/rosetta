@@ -139,14 +139,6 @@ const TranslationForm = () => {
                     locale={params.locale}
                   />
                 </ErrorContext.Provider>
-                <TranslationFormButtons
-                  simName={params.simName}
-                  locale={params.locale}
-                  handleButtonClick={handleButtonClick}
-                  isDisabled={isDisabled}
-                  testIsLoading={testIsLoading}
-                  {...props}
-                />
               </Form>
             );
           }}
