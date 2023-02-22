@@ -97,7 +97,7 @@ const getTranslationFormData = async (
 
       // Try to get saved translation in short-term storage database.
       const filter = {
-        userId: userId.toString(), // The user ID should be a string since it's a string we get from website user data.
+        userId: Number( userId ), // See https://github.com/phetsims/rosetta/issues/373.
         simName: simName,
         locale: locale
       };

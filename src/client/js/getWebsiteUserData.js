@@ -24,7 +24,13 @@ const getWebsiteUserData = async () => {
     publicConfig.WEBSITE_USER_DATA_URL,
     { withCredentials: true } // Include cookies so website backend can look up your session.
   );
-  return websiteUserDataRes.data;
+
+  // Convert user ID to number. We do this because on some servers it's a string
+  // and on others it's a number. See https://github.com/phetsims/rosetta/issues/373.
+  const userId = Number( websiteUserDataRes.data.userId );
+  const websiteUserData = websiteUserDataRes.data;
+  websiteUserData.userId = userId;
+  return websiteUserData;
 };
 
 export default getWebsiteUserData;
