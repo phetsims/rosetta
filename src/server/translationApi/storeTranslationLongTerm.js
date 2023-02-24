@@ -20,11 +20,16 @@ const longTermStorage = githubInterface.repo( 'phetsims/babel' );
  * @returns {Promise.<boolean>} - whether the translation was stored
  */
 const storeTranslationLongTerm = async preparedTranslation => {
+  logger.info( 'attempting to store translation long term' );
   let longTermStorageRes = null;
   if ( privateConfig.PERFORM_STRING_COMMITS ) {
 
+    logger.info( 'attempting to perform string commits' );
+
     const contents = preparedTranslation.translationFileContents;
     for ( const repo of Object.keys( contents ) ) {
+
+      logger.info( `iterating over ${repo}` );
 
       // check to see if the object is not empty (i.e. strings were translated in repo)
       if ( Object.keys( contents[ repo ] ).length !== 0 ) {
@@ -73,6 +78,8 @@ const storeTranslationLongTerm = async preparedTranslation => {
       }
     }
   }
+  logger.info( `translation was stored long-term: ${longTermStorageRes}` );
+  logger.info( 'done attempting to store translation long term' );
   return longTermStorageRes;
 };
 

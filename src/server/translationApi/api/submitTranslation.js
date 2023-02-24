@@ -22,6 +22,7 @@ import { reportObjectCache } from '../translationApi.js';
  * @returns {Promise<String>} - success message
  */
 const submitTranslation = async ( req, res ) => {
+  logger.info( 'attempting to submit translation' );
   let submitted = false;
   try {
     logger.info( `sending ${req.body.locale}/${req.body.simName} translation to be prepared for long-term storage` );
@@ -29,6 +30,7 @@ const submitTranslation = async ( req, res ) => {
     logger.info( `sending ${req.body.locale}/${req.body.simName} translation to be stored long-term` );
     const longTermStorageRes = await storeTranslationLongTerm( preparedTranslation );
     if ( longTermStorageRes ) {
+      logger.info( 'successfully stored translation long term' );
       reportObjectCache.setDirtyObject( req.body.locale, req.body.simName );
       const wasDeleted = deleteSavedTranslation( {
         userId: req.body.userId,
@@ -48,12 +50,14 @@ const submitTranslation = async ( req, res ) => {
       submitted = buildRequestRes;
     }
     else {
-      logger.error( `long term storage of ${req.body.locale}/${req.body.simName} failed` );
+      logger.error( `long-term storage of ${req.body.locale}/${req.body.simName} failed` );
     }
   }
   catch( e ) {
     logger.error( e );
   }
+  logger.info( `translation was submitted: ${submitted}` );
+  logger.info( 'done attempting to submit translation' );
   res.send( submitted );
 };
 
