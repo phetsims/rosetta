@@ -174,8 +174,13 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
           explanation: null // this is no longer used, but for some reason we keep it around
         };
 
-        // Add the history entry to the history array.
-        const newHistory = oldTranslationFile[ stringKey ].history.concat( [ newHistoryEntry ] );
+        // Add the history entry to the history array. If the old translation file
+        // was a manually ported legacy (Java/Flash) sim translation, there might
+        // not be a history array. This is a rare-but-valid case that we need to
+        // handle. See https://github.com/phetsims/rosetta/issues/329#issuecomment-1371588737
+        // and https://github.com/phetsims/rosetta/issues/375#issuecomment-1444581287
+        // for more info.
+        const newHistory = ( oldTranslationFile[ stringKey ].history || [] ).concat( [ newHistoryEntry ] );
 
         // Add translated value and history to translation file.
         translationFileContentsForRepo[ stringKey ] = {
