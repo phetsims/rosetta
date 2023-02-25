@@ -180,12 +180,21 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
         // handle. See https://github.com/phetsims/rosetta/issues/329#issuecomment-1371588737
         // and https://github.com/phetsims/rosetta/issues/375#issuecomment-1444581287
         // for more info.
-        const newHistory = ( oldTranslationFile[ stringKey ].history || [] ).concat( [ newHistoryEntry ] );
+        const oldHistoryArray = oldTranslationFile[ stringKey ].history;
+        let newHistoryArray = [];
+        if ( oldHistoryArray ) {
+          logger.verbose( 'old history array present; adding to it' );
+          newHistoryArray = oldHistoryArray.concat( [ newHistoryEntry ] );
+        }
+        else {
+          logger.verbose( 'old history array undefined; creating new one' );
+          newHistoryArray = [ newHistoryEntry ];
+        }
 
         // Add translated value and history to translation file.
         translationFileContentsForRepo[ stringKey ] = {
           value: translationFormData[ stringKey ].translated,
-          history: newHistory
+          history: newHistoryArray
         };
       }
       else {
