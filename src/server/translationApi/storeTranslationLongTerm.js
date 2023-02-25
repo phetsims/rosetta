@@ -72,7 +72,6 @@ const storeTranslationLongTerm = async preparedTranslation => {
                 fileContents,
                 privateConfig.BABEL_BRANCH
               );
-              console.log( `----------> longTermStorageRes = ${JSON.stringify( longTermStorageRes, null, 4 )}` );
               logger.info( 'created file on github' );
               logger.info( `stored translation of strings in ${repo} long-term` );
             }
