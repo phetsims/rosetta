@@ -1,16 +1,16 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * NodeJS script for removing strings that are duplicated in babel subdirectories. This looks at the en json, and will
- * remove any keys in babel translated files that are not in the en string files. Be careful, this is an atypical script
- * that has only yet been useful when a sim is split into a mini-suite with a common repo
- * (number-suite-common,solar-system-common).
+ * NodeJS script for removing translated string keys in babel files that are not in the english strings.
+ * This looks at the en json, and will remove any keys in babel translated files that are not in the en string files.
+ * Be careful, this is an atypical script that has only yet been useful when a sim is split into a mini-suite with a
+ * common repo (number-suite-common,solar-system-common).
  *
  * Good luck!
  *
  * usage:
  * cd root/
- * node rosetta/scripts/js/remove-babel-duplicate-strings.js my-repo
+ * node rosetta/scripts/js/remove-translations-without-english-key.js my-repo
  *
  * @author Chris Klusendorf (PhET Interactive Simulations)
  * @author Marla Schulz (PhET Interactive Simulations)
