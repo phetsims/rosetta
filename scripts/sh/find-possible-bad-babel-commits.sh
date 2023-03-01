@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Copyright 2023, University of Colorado, Boulder
+# Copyright 2023, University of Colorado Boulder
 # Print the commits in Babel where the number of insertions
 # are greater than the number of deletions. I used ChatGPT
 # to write this script. I added a few options to the
