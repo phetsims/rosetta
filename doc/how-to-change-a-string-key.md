@@ -45,7 +45,7 @@ should be made for the simulation, which will cause all translations to be rebui
 
 For common code, the behavior would be similar, but the solution is a bit different. As in the case with a sim string,
 a string key that was changed on master would never be presented to the translator, since it wouldn't be used in the
-published version of any sim.  The solution in this case is to change the key on master, change it in all translations
+published version of any sim. The solution in this case is to change the key on master, change it in all translations
 in babel, then do a maintenance release that rolls in this change to every published simulation that uses the string.
 In some cases, such as a commonly used joist string, this could literally be every single simulation. Yeah, yikes, I
 know.
@@ -116,8 +116,8 @@ keys, and several can be changed at once if necessary.
   using search-and-replace.
 - [ ] Do a maintenance release for every simulation that is currently using this string. This can be quite an
   involved process, and is well beyond the scope of this document, so please refer to
-  https://github.com/phetsims/perennial/blob/master/doc/automated-maintenance-process.md, and you'll also probably need to
-  consult with @jonathanolson.
+  https://github.com/phetsims/perennial/blob/master/doc/automated-maintenance-process.md, and you'll also probably need
+  to consult with @jonathanolson.
 - [ ] Publish the maintanance releases. Make sure that you don't move to the next step until this is complete.
 - [ ] Take Rosetta out of maintenance mode (again, see the
   [Admin Guide](https://github.com/phetsims/rosetta/blob/master/doc/admin-guide.md) for information on how to do this).
