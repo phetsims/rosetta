@@ -88,14 +88,30 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
     translationFormData = translation.translationFormData.common;
   }
 
+  // We want to iterate over the keys contained in the union of the set
+  // of old string keys and the set of string keys in the translation
+  // form data. See https://github.com/phetsims/rosetta/issues/378.
+  const stringKeysToIterateOver = oldTranslationFile ? Object.keys( oldTranslationFile ) : [];
   for ( const stringKey of Object.keys( translationFormData ) ) {
-    if ( repo === translation.simName || repo === translationFormData[ stringKey ].repo ) {
+    if ( !stringKeysToIterateOver.includes( stringKey ) ) {
+      stringKeysToIterateOver.push( stringKey );
+    }
+  }
+
+  for ( const stringKey of stringKeysToIterateOver ) {
+    if (
+      repo === translation.simName ||
+      ( translationFormData[ stringKey ] && repo === translationFormData[ stringKey ].repo ) ||
+      ( oldTranslationFile && oldTranslationFile[ stringKey ] )
+    ) {
 
       // Trim leading and trailing whitespace.
       // NOTE: If a user deliberately wants a space, this will change
       // the string from ' ' to '', which makes the string fall back
       // to English.
-      translationFormData[ stringKey ].translated = translationFormData[ stringKey ].translated.trim();
+      if ( translationFormData[ stringKey ] ) {
+        translationFormData[ stringKey ].translated = translationFormData[ stringKey ].translated.trim();
+      }
 
       const stringNotYetTranslated = !oldTranslationFile ||
                                      Object.keys( oldTranslationFile ).length === 0 ||
@@ -103,9 +119,11 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
                                      !oldTranslationFile[ stringKey ];
 
       const translationLeftBlank = stringNotYetTranslated &&
+                                   translationFormData[ stringKey ] &&
                                    translationFormData[ stringKey ].translated === '';
 
       const userProvidedInitialTranslation = stringNotYetTranslated &&
+                                             translationFormData[ stringKey ] &&
                                              translationFormData[ stringKey ].translated !== '';
 
       const stringHasNonBlankTranslation = oldTranslationFile &&
@@ -113,13 +131,19 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
                                            oldTranslationFile[ stringKey ].value !== '';
 
       const translationErased = stringHasNonBlankTranslation &&
+                                translationFormData[ stringKey ] &&
                                 translationFormData[ stringKey ].translated === '';
 
       const translationUntouched = stringHasNonBlankTranslation &&
+                                   translationFormData[ stringKey ] &&
                                    translationFormData[ stringKey ].translated === oldTranslationFile[ stringKey ].value;
 
       const translationModified = stringHasNonBlankTranslation &&
+                                  translationFormData[ stringKey ] &&
                                   translationFormData[ stringKey ].translated !== oldTranslationFile[ stringKey ].value;
+
+      const stringKeyNotInSim = stringHasNonBlankTranslation &&
+                                !translationFormData[ stringKey ];
 
       if ( translationLeftBlank ) {
         logger.verbose( `string for ${stringKey} not translated; not adding it to the translation file for ${repo}` );
@@ -196,6 +220,11 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
           value: translationFormData[ stringKey ].translated,
           history: newHistoryArray
         };
+      }
+      else if ( stringKeyNotInSim ) {
+
+        // Preserve the unused string key object for other sims.
+        translationFileContentsForRepo[ stringKey ] = oldTranslationFile[ stringKey ];
       }
       else {
 

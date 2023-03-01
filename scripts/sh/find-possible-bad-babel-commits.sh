@@ -6,6 +6,7 @@
 # to write this script. I added a few options to the
 # git log command to filter out commits not made by phet-dev
 # and commits made before we started using Rosetta 2.0.
+# Used in https://github.com/phetsims/rosetta/issues/378.
 # Author: Liam Mulhall <liammulh@gmail.com>
 
 # Run git log and parse output for commit SHA and insertion/deletion counts.
