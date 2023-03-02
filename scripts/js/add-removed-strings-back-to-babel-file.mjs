@@ -24,8 +24,9 @@ import { join } from 'node:path';
 import { existsSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 
-// I got this list from the output of
-// rosetta/scripts/sh/find-babel-files-changed-since-date.sh.
+const DID_NOT_EXIST_OBJECT = {
+  dne: 'file contents did not exist at this sha'
+};
 const PATHS_OF_CHANGED_FILES = [
   'acid-base-solutions/acid-base-solutions-strings_pl.json',
   'acid-base-solutions/acid-base-solutions-strings_sr.json',
@@ -60,10 +61,11 @@ const PATHS_OF_CHANGED_FILES = [
   'states-of-matter/states-of-matter-strings_pl.json',
   'trig-tour/trig-tour-strings_pl.json',
   'vegas/vegas-strings_mk.json',
-  'vegas/vegas-strings_pl.json '
+  'vegas/vegas-strings_pl.json'
 ];
+const PATHS_MAPPED_TO_FILE_CONTENTS = {};
 const BABEL_SHA_BEFORE_ROSETTA_2_DEPLOY = 'e633cf8be7d90fca65e81108e936abcd7ede38cf';
-const BABEL_SHA_CURRENT = '017dda0adb2375f55fb57ebf77aebebc5208ee17';
+const BABEL_SHA_CURRENT = 'aff9531cdbcdf9571ffe3cf3d73afc21de3f2bff';
 
 const cdToBabel = () => {
   const pathToBabel = join( '..', 'babel' );
@@ -79,14 +81,19 @@ const cat = path => {
 };
 
 const getFileContents = path => {
-  let contents = '{"dne": "file contents did not exist at this sha"}';
+  let contents = DID_NOT_EXIST_OBJECT;
   if ( existsSync( path ) ) {
-    contents = cat( path );
+    contents = JSON.parse( cat( path ) );
   }
   return contents;
 };
 
-const PATHS_MAPPED_TO_FILE_CONTENTS = {};
+const printPathAndMessage = ( path, message ) => {
+  const width = 120;
+  const numPaddingToPrint = width - 1 - path.length;
+  console.log( `${path} ${'='.repeat( numPaddingToPrint )}` );
+  console.log( `${message}` );
+};
 
 console.log( 'starting add removed strings script' );
 console.log( `current working directory is ${process.cwd()}` )
@@ -94,12 +101,65 @@ console.log( 'attempting to cd to babel' );
 cdToBabel();
 console.log( `current working directory is ${process.cwd()}` )
 
+// Get the file contents for each path before Rosetta 2.0's deployment
+// and their current contents.
 for ( const path of PATHS_OF_CHANGED_FILES ) {
   PATHS_MAPPED_TO_FILE_CONTENTS[ path ] = {};
   checkout( BABEL_SHA_BEFORE_ROSETTA_2_DEPLOY );
-  PATHS_MAPPED_TO_FILE_CONTENTS[ path ].before = JSON.parse( getFileContents( path ) );
+  PATHS_MAPPED_TO_FILE_CONTENTS[ path ].before = getFileContents( path );
   checkout( BABEL_SHA_CURRENT );
-  PATHS_MAPPED_TO_FILE_CONTENTS[ path ].current = JSON.parse( getFileContents( path ) );
+  PATHS_MAPPED_TO_FILE_CONTENTS[ path ].current = getFileContents( path );
 }
 
-console.log( `----------> PATHS_MAPPED_TO_FILE_CONTENTS = ${JSON.stringify( PATHS_MAPPED_TO_FILE_CONTENTS, null, 4 )}` );
+for ( const path of Object.keys( PATHS_MAPPED_TO_FILE_CONTENTS ) ) {
+
+  const beforeObj = PATHS_MAPPED_TO_FILE_CONTENTS[ path ].before;
+  const currentObj = PATHS_MAPPED_TO_FILE_CONTENTS[ path ].current;
+
+  // Set up booleans.
+  const fileContentsDidNotExistBefore = beforeObj === DID_NOT_EXIST_OBJECT;
+  const fileContentsDoNotExistCurrent = currentObj === DID_NOT_EXIST_OBJECT;
+
+  if ( fileContentsDidNotExistBefore ) {
+    console.log( `${path}: file contents did not exist before` );
+  }
+  else if ( fileContentsDoNotExistCurrent ) {
+
+    // I don't think this should ever be logged.
+    console.log( `${path}: file contents do not exist currently` );
+  }
+  else {
+
+    const beforeKeys = Object.keys( beforeObj );
+    const beforeLen = beforeKeys.length;
+    const currentKeys = Object.keys( currentObj );
+    const currentLen = currentKeys.length;
+
+    if ( beforeLen === currentLen ) {
+
+      // This is kind of strange. We should check the file.
+      printPathAndMessage( path, 'keys are the same' );
+    }
+    else if ( beforeLen < currentLen ) {
+
+      // This is normal, but we should double-check the file just in case.
+      printPathAndMessage( path, 'before keys less than current keys' );
+    }
+    else if ( beforeLen > currentLen ) {
+
+      // This is bad. Keys were probably erroneously deleted.
+      printPathAndMessage( path, 'before keys greater than current keys' );
+
+      // Create a fixed object, which is the before object plus whatever keys were
+      // added in the meantime.
+      console.log( '  setting the fixed object to be the before object' );
+      PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed = beforeObj;
+      for ( const key of currentKeys ) {
+        if ( !beforeKeys.includes( key ) ) {
+          console.log( `    key ${key} was added recently, adding it to the fixed object` )
+          PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed = PATHS_MAPPED_TO_FILE_CONTENTS[ path ].current[ key ];
+        }
+      }
+    }
+  }
+}
