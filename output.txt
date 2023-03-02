@@ -1,0 +1,230 @@
+starting add removed strings script
+current working directory is /Users/liam/,/programs/phet/rosetta
+attempting to cd to babel
+current working directory is /Users/liam/,/programs/phet/babel
+========================================================================================================================
+acid-base-solutions/acid-base-solutions-strings_pl.json
+keys are the same
+  setting the fixed object to be the before object
+========================================================================================================================
+acid-base-solutions/acid-base-solutions-strings_sr.json
+before keys greater than current keys
+  setting the fixed object to be the before object
+    key pattern.0label.1value was added recently, adding it to the fixed object
+    key pH was added recently, adding it to the fixed object
+    key pattern.0value.1units was added recently, adding it to the fixed object
+    key liters was added recently, adding it to the fixed object
+    key pattern.0value.1power was added recently, adding it to the fixed object
+========================================================================================================================
+area-builder/area-builder-strings_pl.json
+before keys less than current keys
+  setting the fixed object to be the before object
+    key invalidValue was added recently, adding it to the fixed object
+========================================================================================================================
+area-model-common/area-model-common-strings_pl.json
+before keys greater than current keys
+  setting the fixed object to be the before object
+========================================================================================================================
+arithmetic/arithmetic-strings_pl.json
+before keys less than current keys
+  setting the fixed object to be the before object
+    key unknownValueIndicator was added recently, adding it to the fixed object
+========================================================================================================================
+atomic-interactions/atomic-interactions-strings_ku.json
+file contents did not exist before
+========================================================================================================================
+beers-law-lab/beers-law-lab-strings_pl.json
+before keys less than current keys
+  setting the fixed object to be the before object
+    key showSolutionVolume was added recently, adding it to the fixed object
+    key showSoluteAmount was added recently, adding it to the fixed object
+    key beakerUnits was added recently, adding it to the fixed object
+    key concentrationMeterUnits was added recently, adding it to the fixed object
+    key units.percent was added recently, adding it to the fixed object
+    key pattern.0percent was added recently, adding it to the fixed object
+    key units.centimeters was added recently, adding it to the fixed object
+    key pattern.0label was added recently, adding it to the fixed object
+    key pattern.0value.1units was added recently, adding it to the fixed object
+    key units.nm was added recently, adding it to the fixed object
+    key pattern.0formula.1name was added recently, adding it to the fixed object
+    key units.mM was added recently, adding it to the fixed object
+    key units.uM was added recently, adding it to the fixed object
+========================================================================================================================
+beers-law-lab/beers-law-lab-strings_pt_BR.json
+before keys less than current keys
+  setting the fixed object to be the before object
+    key units.percent was added recently, adding it to the fixed object
+    key beakerUnits was added recently, adding it to the fixed object
+    key concentrationMeterUnits was added recently, adding it to the fixed object
+    key showSoluteAmount was added recently, adding it to the fixed object
+    key showSolutionVolume was added recently, adding it to the fixed object
+========================================================================================================================
+bending-light/bending-light-strings_pl.json
+before keys less than current keys
+  setting the fixed object to be the before object
+    key miss was added recently, adding it to the fixed object
+    key pattern_0value_percent was added recently, adding it to the fixed object
+    key units_nm was added recently, adding it to the fixed object
+    key wavelengthPattern was added recently, adding it to the fixed object
+    key velocityPattern was added recently, adding it to the fixed object
+    key unknownVelocity was added recently, adding it to the fixed object
+========================================================================================================================
+build-a-molecule/build-a-molecule-strings_mk.json
+file contents did not exist before
+========================================================================================================================
+build-an-atom/build-an-atom-strings_mk.json
+before keys less than current keys
+  setting the fixed object to be the before object
+    key show was added recently, adding it to the fixed object
+    key protonsColonPattern was added recently, adding it to the fixed object
+    key neutronsColonPattern was added recently, adding it to the fixed object
+    key electronsColonPattern was added recently, adding it to the fixed object
+    key chooseYourGame was added recently, adding it to the fixed object
+    key highContrastParticles was added recently, adding it to the fixed object
+========================================================================================================================
+center-and-variability/center-and-variability-strings_rw.json
+keys are the same
+  setting the fixed object to be the before object
+========================================================================================================================
+chains/chains-strings_ab.json
+keys are the same
+  setting the fixed object to be the before object
+========================================================================================================================
+energy-skate-park/energy-skate-park-strings_pl.json
+before keys less than current keys
+  setting the fixed object to be the before object
+    key preferences.metersPerSecondSquared was added recently, adding it to the fixed object
+    key preferences.newtonsPerKilogram was added recently, adding it to the fixed object
+    key preferences.accelerationUnits was added recently, adding it to the fixed object
+    key characterSet.unitedStatesOfAmerica was added recently, adding it to the fixed object
+    key characterSet.africa was added recently, adding it to the fixed object
+    key characterSet.africaModest was added recently, adding it to the fixed object
+    key pathSensor.energyJoulesPattern was added recently, adding it to the fixed object
+    key speedometer.metersPerSecondPattern was added recently, adding it to the fixed object
+    key measuringTape.units was added recently, adding it to the fixed object
+    key heightLabels.zeroM was added recently, adding it to the fixed object
+    key physicalControls.gravityControls.gravityNewtonsPerKilogramPattern was added recently, adding it to the fixed object
+    key physicalControls.gravityControls.gravityMetersPerSecondSquaredPattern was added recently, adding it to the fixed object
+    key physicalControls.massControls.massKilogramsPattern was added recently, adding it to the fixed object
+========================================================================================================================
+fractions-common/fractions-common-strings_pl.json
+before keys greater than current keys
+  setting the fixed object to be the before object
+========================================================================================================================
+greenhouse-effect/greenhouse-effect-strings_sr.json
+before keys less than current keys
+  setting the fixed object to be the before object
+    key screen.layerModel was added recently, adding it to the fixed object
+    key screen.photons was added recently, adding it to the fixed object
+    key sliderAndFluxMeterControls was added recently, adding it to the fixed object
+    key morePhotons was added recently, adding it to the fixed object
+    key infrared was added recently, adding it to the fixed object
+    key absorbingLayers was added recently, adding it to the fixed object
+    key infraredAbsorbance was added recently, adding it to the fixed object
+    key valuePercentPattern was added recently, adding it to the fixed object
+    key sunlight was added recently, adding it to the fixed object
+    key solarIntensity was added recently, adding it to the fixed object
+    key ourSun was added recently, adding it to the fixed object
+    key surfaceAlbedo was added recently, adding it to the fixed object
+    key temperatureUnits was added recently, adding it to the fixed object
+    key temperature.units.kelvin was added recently, adding it to the fixed object
+    key temperature.units.celsius was added recently, adding it to the fixed object
+    key temperature.units.fahrenheit was added recently, adding it to the fixed object
+    key concentrationPanel.carbonDioxideConcentrationPattern was added recently, adding it to the fixed object
+    key concentrationPanel.methaneConcentrationPattern was added recently, adding it to the fixed object
+    key concentrationPanel.nitrousOxideConcentrationPattern was added recently, adding it to the fixed object
+    key temperature.units.valueUnitsPattern was added recently, adding it to the fixed object
+========================================================================================================================
+joist/joist-strings_ku.json
+before keys greater than current keys
+  setting the fixed object to be the before object
+    key ieErrorPage.ieIsNotSupported was added recently, adding it to the fixed object
+    key ieErrorPage.useDifferentBrowser was added recently, adding it to the fixed object
+    key queryParametersWarningDialog.invalidQueryParameters was added recently, adding it to the fixed object
+    key queryParametersWarningDialog.oneOrMoreQueryParameters was added recently, adding it to the fixed object
+    key queryParametersWarningDialog.theSimulationWillStart was added recently, adding it to the fixed object
+    key projectorMode was added recently, adding it to the fixed object
+========================================================================================================================
+joist/joist-strings_mk.json
+file contents did not exist before
+========================================================================================================================
+joist/joist-strings_pl.json
+before keys greater than current keys
+  setting the fixed object to be the before object
+    key credits.title was added recently, adding it to the fixed object
+========================================================================================================================
+joist/joist-strings_pt_BR.json
+before keys less than current keys
+  setting the fixed object to be the before object
+    key preferences.tabs.localization.regionAndCulture.title was added recently, adding it to the fixed object
+========================================================================================================================
+joist/joist-strings_rw.json
+before keys greater than current keys
+  setting the fixed object to be the before object
+========================================================================================================================
+joist/joist-strings_sr.json
+before keys greater than current keys
+  setting the fixed object to be the before object
+========================================================================================================================
+scenery-phet/scenery-phet-strings_ku.json
+before keys greater than current keys
+  setting the fixed object to be the before object
+    key key.k was added recently, adding it to the fixed object
+    key key.l was added recently, adding it to the fixed object
+========================================================================================================================
+scenery-phet/scenery-phet-strings_mk.json
+file contents did not exist before
+========================================================================================================================
+scenery-phet/scenery-phet-strings_pl.json
+before keys greater than current keys
+  setting the fixed object to be the before object
+========================================================================================================================
+scenery-phet/scenery-phet-strings_pt_BR.json
+before keys less than current keys
+  setting the fixed object to be the before object
+    key keyboardHelpDialog.resetAll was added recently, adding it to the fixed object
+    key measuringTapeReadoutPattern was added recently, adding it to the fixed object
+========================================================================================================================
+scenery-phet/scenery-phet-strings_rw.json
+before keys greater than current keys
+  setting the fixed object to be the before object
+========================================================================================================================
+scenery-phet/scenery-phet-strings_sr.json
+before keys greater than current keys
+  setting the fixed object to be the before object
+    key shortCircuit was added recently, adding it to the fixed object
+========================================================================================================================
+shred/shred-strings_mk.json
+file contents did not exist before
+========================================================================================================================
+states-of-matter/states-of-matter-strings_ku.json
+file contents did not exist before
+========================================================================================================================
+states-of-matter/states-of-matter-strings_pl.json
+before keys greater than current keys
+  setting the fixed object to be the before object
+    key argon was added recently, adding it to the fixed object
+    key neon was added recently, adding it to the fixed object
+    key epsilon was added recently, adding it to the fixed object
+    key sigma was added recently, adding it to the fixed object
+========================================================================================================================
+trig-tour/trig-tour-strings_pl.json
+before keys less than current keys
+  setting the fixed object to be the before object
+    key pi was added recently, adding it to the fixed object
+    key cos was added recently, adding it to the fixed object
+    key sin was added recently, adding it to the fixed object
+    key theta was added recently, adding it to the fixed object
+    key numberPiPattern was added recently, adding it to the fixed object
+    key infinitySymbol was added recently, adding it to the fixed object
+    key plusMinus was added recently, adding it to the fixed object
+    key x was added recently, adding it to the fixed object
+    key y was added recently, adding it to the fixed object
+    key valueUnitPattern was added recently, adding it to the fixed object
+========================================================================================================================
+vegas/vegas-strings_mk.json
+file contents did not exist before
+========================================================================================================================
+vegas/vegas-strings_pl.json
+before keys greater than current keys
+  setting the fixed object to be the before object

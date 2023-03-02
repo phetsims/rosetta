@@ -121,12 +121,12 @@ for ( const path of Object.keys( PATHS_MAPPED_TO_FILE_CONTENTS ) ) {
   const fileContentsDoNotExistCurrent = currentObj === DID_NOT_EXIST_OBJECT;
 
   if ( fileContentsDidNotExistBefore ) {
-    console.log( `${path}: file contents did not exist before` );
+    printPathAndMessage( path, 'file contents did not exist before' );
   }
   else if ( fileContentsDoNotExistCurrent ) {
 
     // I don't think this should ever be logged.
-    console.log( `${path}: file contents do not exist currently` );
+    printPathAndMessage( path, 'file contents do not exist currently' );
   }
   else {
 
@@ -149,16 +149,16 @@ for ( const path of Object.keys( PATHS_MAPPED_TO_FILE_CONTENTS ) ) {
 
       // This is bad. Keys were probably erroneously deleted.
       printPathAndMessage( path, 'before keys greater than current keys' );
+    }
 
-      // Create a fixed object, which is the before object plus whatever keys were
-      // added in the meantime.
-      console.log( '  setting the fixed object to be the before object' );
-      PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed = beforeObj;
-      for ( const key of currentKeys ) {
-        if ( !beforeKeys.includes( key ) ) {
-          console.log( `    key ${key} was added recently, adding it to the fixed object` )
-          PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed = PATHS_MAPPED_TO_FILE_CONTENTS[ path ].current[ key ];
-        }
+    // Create a fixed object, which is the before object plus whatever keys were
+    // added in the meantime.
+    console.log( '  setting the fixed object to be the before object' );
+    PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed = beforeObj;
+    for ( const key of currentKeys ) {
+      if ( !beforeKeys.includes( key ) ) {
+        console.log( `    key ${key} was added recently, adding it to the fixed object` )
+        PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed = PATHS_MAPPED_TO_FILE_CONTENTS[ path ].current[ key ];
       }
     }
   }
