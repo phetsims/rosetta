@@ -111,6 +111,10 @@ for ( const path of PATHS_OF_CHANGED_FILES ) {
   PATHS_MAPPED_TO_FILE_CONTENTS[ path ].current = getFileContents( path );
 }
 
+// In this loop, we create an object that contains the contents of
+// each file before Rosetta 2.0's deployment, their current file contents,
+// and the fixed up file contents (i.e. the old contents plus the stuff
+// that was added between the deployment and now).
 for ( const path of Object.keys( PATHS_MAPPED_TO_FILE_CONTENTS ) ) {
 
   const beforeObj = PATHS_MAPPED_TO_FILE_CONTENTS[ path ].before;
