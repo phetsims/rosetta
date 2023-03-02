@@ -7,11 +7,13 @@
  */
 
 import deleteSavedTranslation from '../deleteSavedTranslation.js';
+import getSimMetadata from '../getSimMetadata.js';
 import logger from '../logger.js';
 import prepareTranslationForLongTermStorage from '../prepareTranslationForLongTermStorage.js';
 import requestBuild from '../requestBuild.js';
 import storeTranslationLongTerm from '../storeTranslationLongTerm.js';
 import { reportObjectCache } from '../translationApi.js';
+import getSimNamesAndTitles from '../getSimNamesAndTitles.js';
 
 /**
  * API function. Prepare a user's translation for long-term storage and store the user's translation in long-term
@@ -31,6 +33,26 @@ const submitTranslation = async ( req, res ) => {
     const longTermStorageRes = await storeTranslationLongTerm( preparedTranslation );
     if ( longTermStorageRes ) {
       logger.info( 'successfully stored translation long term' );
+
+      // For each sim repo in the translation, we need to set the sim repo's
+      // report object to dirty. See https://github.com/phetsims/rosetta/issues/379
+      // for more info and background on this.
+      const repos = Object.keys( preparedTranslation.translationFileContents );
+      const simNamesAndTitles = await getSimNamesAndTitles( await getSimMetadata(), 'true' );
+      const simNames = Object.keys( simNamesAndTitles );
+      for ( const repo of repos ) {
+        if ( simNames.includes( repo ) ) {
+
+          // The sim being translated should be included here unless the translator
+          // only translated shared strings and/or common strings.
+          reportObjectCache.setDirtyObject( req.body.locale, repo );
+        }
+      }
+
+      // We redundantly (in some cases) and unnecessarily (in other cases) set
+      // the sim's report object to dirty because it might confuse the translator
+      // if they don't see the "pending update" note next to a sim they just
+      // translated, even though they only translated shared or common strings.
       reportObjectCache.setDirtyObject( req.body.locale, req.body.simName );
       const wasDeleted = deleteSavedTranslation( {
         userId: req.body.userId,
