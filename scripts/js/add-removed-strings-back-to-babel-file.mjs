@@ -20,9 +20,9 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { join } from 'node:path';
-import { existsSync } from 'node:fs';
 import { execSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 
 const DID_NOT_EXIST_OBJECT = {
   dne: 'file contents did not exist at this sha'
@@ -96,10 +96,10 @@ const printPathAndMessage = ( path, message ) => {
 };
 
 console.log( 'starting add removed strings script' );
-console.log( `current working directory is ${process.cwd()}` )
+console.log( `current working directory is ${process.cwd()}` );
 console.log( 'attempting to cd to babel' );
 cdToBabel();
-console.log( `current working directory is ${process.cwd()}` )
+console.log( `current working directory is ${process.cwd()}` );
 
 // Get the file contents for each path before Rosetta 2.0's deployment
 // and their current contents.
@@ -157,7 +157,7 @@ for ( const path of Object.keys( PATHS_MAPPED_TO_FILE_CONTENTS ) ) {
     PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed = beforeObj;
     for ( const key of currentKeys ) {
       if ( !beforeKeys.includes( key ) ) {
-        console.log( `    key ${key} was added recently, adding it to the fixed object` )
+        console.log( `    key ${key} was added recently, adding it to the fixed object` );
         PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed = PATHS_MAPPED_TO_FILE_CONTENTS[ path ].current[ key ];
       }
     }

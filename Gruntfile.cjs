@@ -49,10 +49,10 @@ module.exports = grunt => {
       // Try to clone repos.
       if ( !fs.existsSync( `../${repo}` ) ) {
         try {
-          await cloneRepo( repo )
+          await cloneRepo( repo );
         }
         catch( e ) {
-          logger.error( `issue with cloning ${repo}: ${e}` )
+          logger.error( `issue with cloning ${repo}: ${e}` );
         }
       }
 
