@@ -90,9 +90,9 @@ const getFileContents = path => {
 
 const printPathAndMessage = ( path, message ) => {
   const width = 120;
-  const numPaddingToPrint = width - 1 - path.length;
-  console.log( `${path} ${'='.repeat( numPaddingToPrint )}` );
-  console.log( `${message}` );
+  console.log( '='.repeat( width ) );
+  console.log( path );
+  console.log( message );
 };
 
 console.log( 'starting add removed strings script' );
