@@ -21,8 +21,9 @@
  */
 
 import { execSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { existsSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { isDeepStrictEqual } from 'node:util';
 
 const DID_NOT_EXIST_OBJECT = {
   dne: 'file contents did not exist at this sha'
@@ -65,15 +66,19 @@ const PATHS_OF_CHANGED_FILES = [
 ];
 const PATHS_MAPPED_TO_FILE_CONTENTS = {};
 const BABEL_SHA_BEFORE_ROSETTA_2_DEPLOY = 'e633cf8be7d90fca65e81108e936abcd7ede38cf';
-const BABEL_SHA_CURRENT = 'aff9531cdbcdf9571ffe3cf3d73afc21de3f2bff';
+const BABEL_SHA_CURRENT = 'master';
 
-const cdToBabel = () => {
-  const pathToBabel = join( '..', 'babel' );
-  process.chdir( pathToBabel );
+const cd = dir => {
+  const path = join( '..', dir );
+  process.chdir( path );
 };
 
-const checkout = sha => {
-  execSync( `git checkout ${sha} --quiet` );
+const checkout = shaOrBranch => {
+  execSync( `git checkout ${shaOrBranch} --quiet` );
+};
+
+const pull = () => {
+  execSync( `git pull --quiet` );
 };
 
 const cat = path => {
@@ -95,11 +100,11 @@ const printPathAndMessage = ( path, message ) => {
   console.log( message );
 };
 
-console.log( 'starting add removed strings script' );
-console.log( `current working directory is ${process.cwd()}` );
-console.log( 'attempting to cd to babel' );
-cdToBabel();
-console.log( `current working directory is ${process.cwd()}` );
+console.log( 'info: starting add removed strings script' );
+console.log( `info: current working directory is ${process.cwd()}` );
+console.log( 'info: attempting to cd to babel' );
+cd( 'babel' );
+console.log( `info: current working directory is ${process.cwd()}` );
 
 // Get the file contents for each path before Rosetta 2.0's deployment
 // and their current contents.
@@ -160,10 +165,36 @@ for ( const path of Object.keys( PATHS_MAPPED_TO_FILE_CONTENTS ) ) {
     console.log( '  setting the fixed object to be the before object' );
     PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed = beforeObj;
     for ( const key of currentKeys ) {
-      if ( !beforeKeys.includes( key ) ) {
+      const keyWasAdded = !beforeKeys.includes( key );
+      const stringObjectWasChanged = !isDeepStrictEqual( beforeObj[ key ], currentObj[ key ] );
+      if ( keyWasAdded ) {
         console.log( `    key ${key} was added recently, adding it to the fixed object` );
         PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed = PATHS_MAPPED_TO_FILE_CONTENTS[ path ].current[ key ];
       }
+      else if ( stringObjectWasChanged ) {
+        console.log( `    the string object contents associated with ${key} were changed, adding them` );
+        PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed = PATHS_MAPPED_TO_FILE_CONTENTS[ path ].current[ key ];
+      }
+    }
+  }
+}
+
+// Checkout the master branch of phetsims/babel, then pull.
+if ( process.cwd().includes( 'babel' ) ) {
+  console.log( 'info: cwd includes babel' );
+  console.log( 'info: checking out master branch' );
+  checkout( 'master' );
+  console.log( 'info: checked out master branch' );
+  console.log( 'info: pulling latest changes' );
+  pull();
+  console.log( 'info: pulled latest changes' );
+  for ( const path of PATHS_OF_CHANGED_FILES ) {
+    if ( PATHS_MAPPED_TO_FILE_CONTENTS[ path ] && PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed ) {
+      writeFileSync( path, JSON.stringify( PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed, null, 4 ) );
+      console.log( `write success: wrote file contents for ${path}` );
+    }
+    else {
+      console.log( `ERR: file contents did not exist for ${path}` );
     }
   }
 }
