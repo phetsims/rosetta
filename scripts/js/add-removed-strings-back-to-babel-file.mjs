@@ -176,17 +176,19 @@ for ( const path of Object.keys( PATHS_MAPPED_TO_FILE_CONTENTS ) ) {
 
         // We need to make a new object here with a history array, etc.
 
+        const oldHistoryArray = beforeObj[ key ].history;
+        const mostRecentIndex = oldHistoryArray ? oldHistoryArray.length : null;
+
         // Populate history entry.
         const newHistoryEntry = {
-          userId: currentObj[ key ].userId,
-          timestamp: currentObj[ key ].timestamp,
+          userId: oldHistoryArray ? oldHistoryArray[ mostRecentIndex ].userId : null, // Use the most recent user ID.
+          timestamp: Date.now(),
           oldValue: beforeObj[ key ].value,
           newValue: currentObj[ key ].value,
           explanation: null // This is no longer used, but for some reason we keep it around.
         };
 
         // Create history array.
-        const oldHistoryArray = beforeObj[ key ].history;
         let newHistoryArray = [];
         if ( oldHistoryArray ) {
           console.log( '      old history array present; adding to it' );
