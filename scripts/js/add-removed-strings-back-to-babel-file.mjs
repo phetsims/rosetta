@@ -191,7 +191,7 @@ if ( process.cwd().includes( 'babel' ) ) {
   for ( const path of PATHS_OF_CHANGED_FILES ) {
     if ( PATHS_MAPPED_TO_FILE_CONTENTS[ path ] && PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed ) {
       writeFileSync( path, JSON.stringify( PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed, null, 4 ) );
-      console.log( `write success: wrote file contents for ${path}` );
+      console.log( `file written for: ${path}` );
     }
     else {
       console.log( `ERR: file contents did not exist for ${path}` );
