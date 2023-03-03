@@ -177,7 +177,7 @@ for ( const path of Object.keys( PATHS_MAPPED_TO_FILE_CONTENTS ) ) {
         // We need to make a new object here with a history array, etc.
 
         const oldHistoryArray = beforeObj[ key ].history;
-        const mostRecentIndex = oldHistoryArray ? oldHistoryArray.length : null;
+        const mostRecentIndex = oldHistoryArray ? oldHistoryArray.length - 1 : null;
 
         // Populate history entry.
         const newHistoryEntry = {
