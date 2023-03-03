@@ -179,7 +179,7 @@ for ( const path of Object.keys( PATHS_MAPPED_TO_FILE_CONTENTS ) ) {
   }
 }
 
-// Checkout the master branch of phetsims/babel, then pull.
+// Checkout the master branch of phetsims/babel, then pull, then write files.
 if ( process.cwd().includes( 'babel' ) ) {
   console.log( 'info: cwd includes babel' );
   console.log( 'info: checking out master branch' );
