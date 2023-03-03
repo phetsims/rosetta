@@ -168,12 +168,12 @@ for ( const path of Object.keys( PATHS_MAPPED_TO_FILE_CONTENTS ) ) {
       const keyWasAdded = !beforeKeys.includes( key );
       const stringObjectWasChanged = !isDeepStrictEqual( beforeObj[ key ], currentObj[ key ] );
       if ( keyWasAdded ) {
-        console.log( `    key ${key} was added recently, adding it to the fixed object` );
-        PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed = PATHS_MAPPED_TO_FILE_CONTENTS[ path ].current[ key ];
+        console.log( `    key ${key} was added recently, adding its string object to the fixed object` );
+        PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed[ key ] = PATHS_MAPPED_TO_FILE_CONTENTS[ path ].current[ key ];
       }
       else if ( stringObjectWasChanged ) {
         console.log( `    the string object contents associated with ${key} were changed, adding them` );
-        PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed = PATHS_MAPPED_TO_FILE_CONTENTS[ path ].current[ key ];
+        PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed[ key ] = PATHS_MAPPED_TO_FILE_CONTENTS[ path ].current[ key ];
       }
     }
   }
