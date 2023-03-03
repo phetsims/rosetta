@@ -180,6 +180,7 @@ for ( const path of Object.keys( PATHS_MAPPED_TO_FILE_CONTENTS ) ) {
 }
 
 // Checkout the master branch of phetsims/babel, then pull, then write files.
+const SHOULD_WRITE_FILES = true;
 if ( process.cwd().includes( 'babel' ) ) {
   console.log( 'info: cwd includes babel' );
   console.log( 'info: checking out master branch' );
@@ -190,11 +191,16 @@ if ( process.cwd().includes( 'babel' ) ) {
   console.log( 'info: pulled latest changes' );
   for ( const path of PATHS_OF_CHANGED_FILES ) {
     if ( PATHS_MAPPED_TO_FILE_CONTENTS[ path ] && PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed ) {
-      writeFileSync( path, JSON.stringify( PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed, null, 4 ) );
+      if ( SHOULD_WRITE_FILES ) {
+        writeFileSync( path, JSON.stringify( PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed, null, 4 ) );
+      }
       console.log( `file written for: ${path}` );
     }
     else {
       console.log( `ERR: file contents did not exist for ${path}` );
     }
   }
+}
+else {
+  console.log( 'info: cwd does not include babel; not writing anything' );
 }
