@@ -197,7 +197,7 @@ if ( process.cwd().includes( 'babel' ) ) {
       console.log( `file written for: ${path}` );
     }
     else {
-      console.log( `ERR: file contents did not exist for ${path}` );
+      console.log( `info: file contents did not exist for ${path}` );
     }
   }
 }
