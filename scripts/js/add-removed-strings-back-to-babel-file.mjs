@@ -78,7 +78,7 @@ const checkout = shaOrBranch => {
 };
 
 const pull = () => {
-  execSync( `git pull --quiet` );
+  execSync( 'git pull --quiet' );
 };
 
 const cat = path => {
