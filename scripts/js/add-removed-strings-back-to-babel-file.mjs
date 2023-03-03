@@ -24,6 +24,7 @@ import { execSync } from 'node:child_process';
 import { existsSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
+import logger from 'server/translationApi/logger.js';
 
 const DID_NOT_EXIST_OBJECT = {
   dne: 'file contents did not exist at this sha'
@@ -173,7 +174,35 @@ for ( const path of Object.keys( PATHS_MAPPED_TO_FILE_CONTENTS ) ) {
       }
       else if ( stringObjectWasChanged ) {
         console.log( `    the string object contents associated with ${key} were changed, adding them` );
-        PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed[ key ] = PATHS_MAPPED_TO_FILE_CONTENTS[ path ].current[ key ];
+
+        // We need to make a new object here with a history array, etc.
+
+        // Populate history entry.
+        const newHistoryEntry = {
+          userId: currentObj[ key ].userId,
+          timestamp: currentObj[ key ].timestamp,
+          oldValue: beforeObj[ key ].value,
+          newValue: currentObj[ key ].value,
+          explanation: null // This is no longer used, but for some reason we keep it around.
+        };
+
+        // Create history array.
+        const oldHistoryArray = beforeObj[ key ].history;
+        let newHistoryArray = [];
+        if ( oldHistoryArray ) {
+          console.log( '      old history array present; adding to it' );
+          newHistoryArray = oldHistoryArray.concat( [ newHistoryEntry ] );
+        }
+        else {
+          console.log( '      old history array undefined; creating new one' );
+          newHistoryArray = [ newHistoryEntry ];
+        }
+
+        // Create the new string object.
+        PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed[ key ] = {
+          value: currentObj[ key ].value,
+          history: newHistoryArray
+        };
       }
     }
   }
