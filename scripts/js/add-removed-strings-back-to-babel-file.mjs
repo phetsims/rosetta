@@ -24,7 +24,6 @@ import { execSync } from 'node:child_process';
 import { existsSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
-import logger from 'server/translationApi/logger.js';
 
 const DID_NOT_EXIST_OBJECT = {
   dne: 'file contents did not exist at this sha'
