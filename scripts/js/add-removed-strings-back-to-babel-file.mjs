@@ -166,10 +166,15 @@ for ( const path of Object.keys( PATHS_MAPPED_TO_FILE_CONTENTS ) ) {
     PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed = beforeObj;
     for ( const key of currentKeys ) {
       const keyWasAdded = !beforeKeys.includes( key );
+      const valueIsSame = beforeObj[ key ] ? beforeObj[ key ].value === currentObj[ key ].value : false;
       const stringObjectWasChanged = !isDeepStrictEqual( beforeObj[ key ], currentObj[ key ] );
       if ( keyWasAdded ) {
         console.log( `    key ${key} was added recently, adding its string object to the fixed object` );
         PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed[ key ] = PATHS_MAPPED_TO_FILE_CONTENTS[ path ].current[ key ];
+      }
+      else if ( valueIsSame ) {
+        console.log( `    value for ${key} is the same as the original; adding back original` );
+        PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed[ key ] = PATHS_MAPPED_TO_FILE_CONTENTS[ path ].before[ key ];
       }
       else if ( stringObjectWasChanged ) {
         console.log( `    the string object contents associated with ${key} were changed, adding them` );
@@ -185,7 +190,7 @@ for ( const path of Object.keys( PATHS_MAPPED_TO_FILE_CONTENTS ) ) {
           timestamp: Date.now(),
           oldValue: beforeObj[ key ].value,
           newValue: currentObj[ key ].value,
-          explanation: null // This is no longer used, but for some reason we keep it around.
+          explanation: 'Changed by a script. Part of https://github.com/phetsims/rosetta/issues/380.'
         };
 
         // Create history array.
@@ -222,7 +227,7 @@ if ( process.cwd().includes( 'babel' ) ) {
   for ( const path of PATHS_OF_CHANGED_FILES ) {
     if ( PATHS_MAPPED_TO_FILE_CONTENTS[ path ] && PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed ) {
       if ( SHOULD_WRITE_FILES ) {
-        writeFileSync( path, JSON.stringify( PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed, null, 4 ) );
+        writeFileSync( path, JSON.stringify( PATHS_MAPPED_TO_FILE_CONTENTS[ path ].fixed, null, 2 ) );
       }
       console.log( `file written for: ${path}` );
     }
