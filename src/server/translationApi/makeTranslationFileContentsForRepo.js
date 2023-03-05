@@ -157,7 +157,7 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
         const newHistoryEntry = {
           userId: translation.userId,
           timestamp: translation.timestamp,
-          oldValue: '',
+          oldValue: oldTranslationFile[ stringKey ].value,
           newValue: translationFormData[ stringKey ].translated
         };
         translationFileContentsForRepo[ stringKey ] = {
