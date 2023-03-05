@@ -38,7 +38,7 @@ const submitTranslation = async ( req, res ) => {
       // report object to dirty. See https://github.com/phetsims/rosetta/issues/379
       // for more info and background on this.
       const repos = Object.keys( preparedTranslation.translationFileContents );
-      const simNamesAndTitles = await getSimNamesAndTitles( await getSimMetadata(), 'true' );
+      const simNamesAndTitles = getSimNamesAndTitles( await getSimMetadata(), 'true' );
       const simNames = Object.keys( simNamesAndTitles );
       for ( const repo of repos ) {
         if ( simNames.includes( repo ) ) {

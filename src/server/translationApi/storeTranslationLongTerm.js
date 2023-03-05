@@ -8,6 +8,7 @@
 
 import github from 'octonode';
 import privateConfig from '../../common/privateConfig.js';
+import getReposToStoreLongTerm from './getReposToStoreLongTerm.js';
 import logger from './logger.js';
 
 const githubInterface = github.client( privateConfig.GITHUB_PAT );
@@ -27,7 +28,8 @@ const storeTranslationLongTerm = async preparedTranslation => {
     logger.info( 'attempting to perform string commits' );
 
     const contents = preparedTranslation.translationFileContents;
-    for ( const repo of Object.keys( contents ) ) {
+    const reposToStoreLongTerm = await getReposToStoreLongTerm( preparedTranslation );
+    for ( const repo of reposToStoreLongTerm ) {
 
       logger.info( `iterating over ${repo}` );
 

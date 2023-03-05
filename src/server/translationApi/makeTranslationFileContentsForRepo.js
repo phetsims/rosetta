@@ -6,10 +6,9 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import axios from 'axios';
 import getSimMetadata from './getSimMetadata.js';
 import getSimNamesAndTitles from './getSimNamesAndTitles.js';
-import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
+import getTranslatedStringFile from './getTranslatedStringFile.js';
 import logger from './logger.js';
 
 /**
@@ -44,23 +43,9 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
 
   const translationFileContentsForRepo = {};
 
-  // Get old translation file if one exists.
-  const oldTranslationFileUrl = getTranslatedStringFileUrl( repo, translation.locale );
-  let oldTranslationFile = null;
-  try {
-    const oldTranslationFileRes = await axios.get( oldTranslationFileUrl );
-    if ( oldTranslationFileRes.status !== 404 ) {
-      oldTranslationFile = oldTranslationFileRes.data;
-    }
-  }
-  catch( e ) {
-    if ( e.response.status === 404 ) {
-      logger.warn( `no translation file for ${translation.locale}/${repo}` );
-    }
-    else {
-      logger.error( e );
-    }
-  }
+  // Get old translation file if one exists. This should be a falsey value
+  // if the translation file doesn't exist.
+  const oldTranslationFile = await getTranslatedStringFile( repo, translation.locale );
 
   // Get list of sim names for checking if we're dealing with shared strings. Note how
   // we're passing true for the second argument. This is to say we're a team member, so
@@ -71,7 +56,7 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
   const simNames = Object.keys( getSimNamesAndTitles( simMetadata, 'true' ) );
 
   // Set translation form data variable.
-  let translationFormData = {};
+  let translationFormData;
   if ( repo === translation.simName ) {
 
     // We're dealing with sim-specific strings.
