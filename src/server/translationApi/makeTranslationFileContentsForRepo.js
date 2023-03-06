@@ -10,6 +10,7 @@ import getSimMetadata from './getSimMetadata.js';
 import getSimNamesAndTitles from './getSimNamesAndTitles.js';
 import getTranslatedStringFile from './getTranslatedStringFile.js';
 import logger from './logger.js';
+import makeNewHistoryArray from './makeNewHistoryArray.js';
 
 /**
  * For a given repo, return an object that looks like:
@@ -115,6 +116,10 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
                                            oldTranslationFile[ stringKey ] &&
                                            oldTranslationFile[ stringKey ].value !== '';
 
+      const stringHasBlankTranslation = oldTranslationFile &&
+                                        oldTranslationFile[ stringKey ] &&
+                                        oldTranslationFile[ stringKey ].value === '';
+
       const translationErased = stringHasNonBlankTranslation &&
                                 translationFormData[ stringKey ] &&
                                 translationFormData[ stringKey ].translated === '';
@@ -123,7 +128,7 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
                                    translationFormData[ stringKey ] &&
                                    translationFormData[ stringKey ].translated === oldTranslationFile[ stringKey ].value;
 
-      const translationModified = stringHasNonBlankTranslation &&
+      const translationModified = ( stringHasNonBlankTranslation || stringHasBlankTranslation ) &&
                                   translationFormData[ stringKey ] &&
                                   translationFormData[ stringKey ].translated !== oldTranslationFile[ stringKey ].value;
 
@@ -160,9 +165,12 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
           oldValue: oldTranslationFile[ stringKey ].value,
           newValue: translationFormData[ stringKey ].translated
         };
+
+        const newHistoryArray = makeNewHistoryArray( stringKey, oldTranslationFile, newHistoryEntry );
+
         translationFileContentsForRepo[ stringKey ] = {
           value: translationFormData[ stringKey ].translated,
-          history: [ newHistoryEntry ]
+          history: newHistoryArray
         };
       }
 
@@ -183,22 +191,7 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
           explanation: null // this is no longer used, but for some reason we keep it around
         };
 
-        // Add the history entry to the history array. If the old translation file
-        // was a manually ported legacy (Java/Flash) sim translation, there might
-        // not be a history array. This is a rare-but-valid case that we need to
-        // handle. See https://github.com/phetsims/rosetta/issues/329#issuecomment-1371588737
-        // and https://github.com/phetsims/rosetta/issues/375#issuecomment-1444581287
-        // for more info.
-        const oldHistoryArray = oldTranslationFile[ stringKey ].history;
-        let newHistoryArray = [];
-        if ( oldHistoryArray ) {
-          logger.verbose( 'old history array present; adding to it' );
-          newHistoryArray = oldHistoryArray.concat( [ newHistoryEntry ] );
-        }
-        else {
-          logger.verbose( 'old history array undefined; creating new one' );
-          newHistoryArray = [ newHistoryEntry ];
-        }
+        const newHistoryArray = makeNewHistoryArray( stringKey, oldTranslationFile, newHistoryEntry );
 
         // Add translated value and history to translation file.
         translationFileContentsForRepo[ stringKey ] = {
