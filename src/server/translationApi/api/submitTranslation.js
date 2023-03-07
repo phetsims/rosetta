@@ -7,6 +7,7 @@
  */
 
 import deleteSavedTranslation from '../deleteSavedTranslation.js';
+import getReposToStoreLongTerm from '../getReposToStoreLongTerm.js';
 import getSimMetadata from '../getSimMetadata.js';
 import logger from '../logger.js';
 import prepareTranslationForLongTermStorage from '../prepareTranslationForLongTermStorage.js';
@@ -37,7 +38,7 @@ const submitTranslation = async ( req, res ) => {
       // For each sim repo in the translation, we need to set the sim repo's
       // report object to dirty. See https://github.com/phetsims/rosetta/issues/379
       // for more info and background on this.
-      const repos = Object.keys( preparedTranslation.translationFileContents );
+      const repos = await getReposToStoreLongTerm( preparedTranslation );
       const simNamesAndTitles = getSimNamesAndTitles( await getSimMetadata(), 'true' );
       const simNames = Object.keys( simNamesAndTitles );
       for ( const repo of repos ) {
