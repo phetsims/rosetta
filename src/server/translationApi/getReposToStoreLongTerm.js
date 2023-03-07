@@ -35,10 +35,18 @@ const getReposToStoreLongTerm = async preparedTranslation => {
     }
     else if ( Object.keys( oldTranslationFile ).length > Object.keys( contents[ repo ] ).length ) {
 
-      // There should never be a scenario where the old translation file has more string keys than
-      // the newly created translation file contents.
-      logger.error( `old translation file for ${repo} has more string keys than newly created translation file contents` );
-      logger.warn( 'if you are on the tests branch of babel, the above error might not be something you need to worry about' );
+      // I (Liam Mulhall) think it's possible for an old translation file to have more string keys
+      // than the set of string keys presented to the user. The way this could happen is a version of
+      // a sim is published with a set of string keys S. A user fully translates the sim so that the
+      // translation file has |S| string keys. Then the developer re-publishes the sim with S' string
+      // keys where |S'| < |S|. Then the number of string keys in the old translation file will be greater
+      // than the number of string keys presented to the user.
+      logger.warn( `old translation file for ${repo} has more string keys than newly created translation file contents` );
+
+      // If there are more string keys in the old translation file than are presented to the user, we
+      // might need to update long-term storage. For instance, if a developer removed 3 strings
+      // and then added 2 new ones, we'd need to update long-term storage.
+      reposToStoreLongTerm.push( repo );
     }
     else if ( Object.keys( oldTranslationFile ).length === Object.keys( contents[ repo ] ).length ) {
 
