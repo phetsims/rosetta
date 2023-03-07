@@ -6,7 +6,7 @@ import axios from 'axios';
 
 /**
  * Get a translation file for a given repo and locale if it exists or
- * return a falsey value if the translation file doesn't exist.
+ * return an empty object if the translation file doesn't exist.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
  */
@@ -20,7 +20,7 @@ import axios from 'axios';
  */
 const getTranslatedStringFile = async ( repo, locale ) => {
 
-  let oldTranslationFile = null;
+  let oldTranslationFile = {};
 
   // Get old translation file if one exists.
   const oldTranslationFileUrl = getTranslatedStringFileUrl( repo, locale );

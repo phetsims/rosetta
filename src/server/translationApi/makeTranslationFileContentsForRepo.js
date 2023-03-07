@@ -44,8 +44,6 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
 
   const translationFileContentsForRepo = {};
 
-  // Get old translation file if one exists. This should be a falsey value
-  // if the translation file doesn't exist.
   const oldTranslationFile = await getTranslatedStringFile( repo, translation.locale );
 
   // Get list of sim names for checking if we're dealing with shared strings. Note how

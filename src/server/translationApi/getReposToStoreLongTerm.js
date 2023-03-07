@@ -25,8 +25,6 @@ const getReposToStoreLongTerm = async preparedTranslation => {
   const contents = preparedTranslation.translationFileContents;
   for ( const repo of Object.keys( contents ) ) {
 
-    // Get old translation file if one exists. This should be a falsey value
-    // if the translation file doesn't exist.
     const oldTranslationFile = await getTranslatedStringFile( repo, preparedTranslation.locale );
 
     if ( Object.keys( oldTranslationFile ).length < Object.keys( contents[ repo ] ).length ) {
@@ -40,6 +38,7 @@ const getReposToStoreLongTerm = async preparedTranslation => {
       // There should never be a scenario where the old translation file has more string keys than
       // the newly created translation file contents.
       logger.error( `old translation file for ${repo} has more string keys than newly created translation file contents` );
+      logger.warn( 'if you are on the tests branch of babel, the above error might not be something you need to worry about' );
     }
     else if ( Object.keys( oldTranslationFile ).length === Object.keys( contents[ repo ] ).length ) {
 
