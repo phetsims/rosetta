@@ -37,7 +37,7 @@ const isValidUserId = async ( simName, locale, userId ) => {
           numHistoryArrays++;
           const historyArray = stringFile[ key ].history;
           for ( const historyEntry of historyArray ) {
-            if ( historyEntry.userId !== undefined ) {
+            if ( historyEntry.userId !== undefined && historyEntry.userId !== null ) {
               setOfUserIds.add( historyEntry.userId.toString() );
             }
           }
