@@ -88,6 +88,13 @@ const getSimSpecificTranslationFormData = async (
       let englishValue = '';
       if ( simSpecificEnglishStringKeysAndStrings[ stringKey ] ) {
         englishValue = simSpecificEnglishStringKeysAndStrings[ stringKey ].value;
+
+        // If the English value of the string is empty, it doesn't make sense to present
+        // the string to the translator. The translator won't be able to translate an
+        // empty string. See https://github.com/phetsims/rosetta/issues/388.
+        if ( englishValue === '' ) {
+          continue;
+        }
       }
 
       let translatedValue = '';

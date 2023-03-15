@@ -92,6 +92,16 @@ const getCommonTranslationFormData = async (
 
       for ( const stringKey of repoNameToStringKeys[ repo ] ) {
 
+        // If the English value of the string is empty, it doesn't make sense to present
+        // the string to the translator. The translator won't be able to translate an
+        // empty string. See https://github.com/phetsims/rosetta/issues/388.
+        if (
+          Object.keys( commonEnglishStringKeysAndStrings ).includes( stringKey )
+          && commonEnglishStringKeysAndStrings[ stringKey ].value === ''
+        ) {
+          continue;
+        }
+
         // Here we assume the string key is no longer used, i.e. its string file doesn't have the string key anymore.
         // It's possible that a sim could have a string "no longer used" so I added a nonsense word "gooble".
         let englishValue = 'no longer used gooble';

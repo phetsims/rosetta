@@ -90,6 +90,16 @@ const getSharedTranslationFormData = async (
       // Create the shared translation form data object.
       for ( const stringKey of sharedStringKeys ) {
 
+        // If the English value of the string is empty, it doesn't make sense to present
+        // the string to the translator. The translator won't be able to translate an
+        // empty string. See https://github.com/phetsims/rosetta/issues/388.
+        if (
+          englishKeyValueAndRepoObjects[ stringKey ] &&
+          englishKeyValueAndRepoObjects[ stringKey ].value === ''
+        ) {
+          continue;
+        }
+
         // Strip out dots so client doesn't think there are more deeply nested
         // objects than there really are.
         const stringKeyWithoutDots = stringKey.replaceAll( '.', '_DOT_' );
