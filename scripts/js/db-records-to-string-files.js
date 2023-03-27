@@ -15,6 +15,7 @@
 
 // imports
 const fs = require( 'fs' );
+const unixTimestamp = require( 'unix-timestamp' );
 
 // constants
 const USAGE_STRING = 'Usage: node db-records-to-string-files <path-to-db-data> <locale>';
@@ -71,7 +72,7 @@ stringRecords.forEach( stringRecord => {
     history: [
       {
         userId: stringRecord.userID,
-        timestamp: 1679689977731,
+        timestamp: Math.floor( unixTimestamp.fromDate( stringRecord.timeString ) * 1000 ),
         oldValue: '',
         newValue: stringRecord.translatedStringValue
       }
@@ -80,4 +81,4 @@ stringRecords.forEach( stringRecord => {
 } );
 
 console.log( `translatedStrings = ${JSON.stringify( translatedStrings, null, 2 )}` );
-fs.writeFileSync( './string-info.json', JSON.stringify( translatedStrings ) );
+fs.writeFileSync( './string-info.json', JSON.stringify( translatedStrings, null, 2 ) );
