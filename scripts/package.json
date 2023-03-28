@@ -2,6 +2,7 @@
   "name": "scripts",
   "private": true,
   "devDependencies": {
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "unix-timestamp": "^1.0.3"
   }
 }
