@@ -7,6 +7,7 @@
  */
 
 import axios from 'axios';
+import { NO_LONGER_USED_FLAG } from '../../../common/constants.js';
 import getCommonRepos from '../getCommonRepos.js';
 import getStringFileUrl from '../getStringFileUrl.js';
 import logger from '../logger.js';
@@ -61,7 +62,7 @@ const getCommonEnglishStringKeysAndValues = async (
 
         // We don't display unused string keys and strings to the user.
         // They get stripped out prior to sending them to the client.
-        commonEnglishStringKeysAndValues[ stringKey ] = 'no longer used';
+        commonEnglishStringKeysAndValues[ stringKey ] = NO_LONGER_USED_FLAG;
       }
     }
   }

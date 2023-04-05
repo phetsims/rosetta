@@ -6,6 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import { NO_LONGER_USED_FLAG } from '../../../common/constants.js';
 import logger from '../logger.js';
 import getEnglishStringKeysAndValues from './getEnglishStringKeysAndValues.js';
 
@@ -43,7 +44,7 @@ const getSimSpecificEnglishStringKeysAndValues = async ( simName, sha, categoriz
 
         // We don't display unused string keys and strings to the user.
         // They get stripped out prior to sending them to the client.
-        stringKeysToSimSpecificEnglishStrings[ stringKey ] = 'no longer used';
+        stringKeysToSimSpecificEnglishStrings[ stringKey ] = NO_LONGER_USED_FLAG;
       }
     }
   }

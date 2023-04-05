@@ -7,6 +7,7 @@
  */
 
 import axios from 'axios';
+import { NO_LONGER_USED_FLAG } from '../../common/constants.js';
 import getCommonRepos from './getCommonRepos.js';
 import getRepoNameToStringKeys from './getRepoNameToStringKeys.js';
 import getStringFileUrl from './getStringFileUrl.js';
@@ -103,8 +104,7 @@ const getCommonTranslationFormData = async (
         }
 
         // Here we assume the string key is no longer used, i.e. its string file doesn't have the string key anymore.
-        // It's possible that a sim could have a string "no longer used" so I added a nonsense word "gooble".
-        let englishValue = 'no longer used gooble';
+        let englishValue = NO_LONGER_USED_FLAG;
         if ( Object.keys( commonEnglishStringKeysAndStrings ).includes( stringKey ) ) {
           englishValue = commonEnglishStringKeysAndStrings[ stringKey ].value;
         }
@@ -145,7 +145,7 @@ const getCommonTranslationFormData = async (
         const stringKeyWithoutDots = stringKey.replaceAll( '.', '_DOT_' );
 
         // Add the string key, its english value, translated value, and repo name to the common object.
-        if ( englishValue !== 'no longer used gooble' ) {
+        if ( englishValue !== NO_LONGER_USED_FLAG ) {
           common[ stringKeyWithoutDots ] = {
             english: englishValue,
             translated: translatedValue,
