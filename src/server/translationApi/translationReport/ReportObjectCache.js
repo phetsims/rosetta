@@ -63,8 +63,4 @@ class ReportObjectCache {
   }
 }
 
-// This rule doesn't really apply to Rosetta.
-// This is the only class in the codebase. Otherwise, put this in the ESLint config?
-// For the paper trail on this issue, see https://github.com/phetsims/phet-core/issues/100.
-// eslint-disable-next-line default-export-class-should-register-namespace
 export default ReportObjectCache;

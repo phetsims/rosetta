@@ -36,7 +36,11 @@ module.exports = {
     ],
     'default-import-match-filename': 'off',
     'react/no-unescaped-entities': 'off',
-    'react/prop-types': 'off'
+    'react/prop-types': 'off',
+
+    // This rule doesn't apply to Rosetta.
+    // See https://github.com/phetsims/phet-core/issues/100 for paper trail.
+    'default-export-class-should-register-namespace': 'off'
   },
   settings: {
     react: {
