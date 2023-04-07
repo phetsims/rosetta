@@ -8,31 +8,12 @@
 
 import getSimMetadata from './getSimMetadata.js';
 import getSimNamesAndTitles from './getSimNamesAndTitles.js';
-import getTranslatedStringFile from './getTranslatedStringFile.js';
 import logger from './logger.js';
 import makeNewHistoryArray from './makeNewHistoryArray.js';
+import { longTermStorage } from './translationApi.js';
 
 /**
- * For a given repo, return an object that looks like:
- *
- * {
- *   "stringKeyA": {
- *     "value": "string key A value",
- *     "history": [
- *       {
- *         "userId": 123456,
- *         "timestamp": 1653082097154,
- *         "oldValue": "",
- *         "newValue": "string key A value",
- *         "explanation": null
- *       }
- *     ]
- *   },
- *   "stringKeyB": { ... },
- *   ...
- * }
- *
- * Essentially, it's the translation file contents for the given repo based on the translation provided.
+ * Return the translation file contents for the given repo based on the translation provided.
  *
  * @param repo - the repo name in lowercase-kebab (repo-style)
  * @param translation - the translation object obtained from the client side
@@ -44,7 +25,7 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
 
   const translationFileContentsForRepo = {};
 
-  const oldTranslationFile = await getTranslatedStringFile( repo, translation.locale );
+  const oldTranslationFile = longTermStorage.get( repo, translation.locale );
 
   // Get list of sim names for checking if we're dealing with shared strings. Note how
   // we're passing true for the second argument. This is to say we're a team member, so
@@ -92,7 +73,8 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
       // Trim leading and trailing whitespace.
       // NOTE: If a user deliberately wants a space, this will change
       // the string from ' ' to '', which makes the string fall back
-      // to English.
+      // to English. In this case, they should use a non-breaking space
+      // character instead. A non-breaking space character is &nbsp;.
       if ( translationFormData[ stringKey ] ) {
         translationFormData[ stringKey ].translated = translationFormData[ stringKey ].translated.trim();
       }

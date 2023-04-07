@@ -8,8 +8,8 @@
  */
 
 import { isDeepStrictEqual } from 'node:util';
-import getTranslatedStringFile from './getTranslatedStringFile.js';
 import logger from './logger.js';
+import { longTermStorage } from './translationApi.js';
 
 /**
  * Given a translation that has been prepared for long-term storage,
@@ -25,7 +25,7 @@ const getReposToStoreLongTerm = async preparedTranslation => {
   const contents = preparedTranslation.translationFileContents;
   for ( const repo of Object.keys( contents ) ) {
 
-    const oldTranslationFile = await getTranslatedStringFile( repo, preparedTranslation.locale );
+    const oldTranslationFile = await longTermStorage.get( repo, preparedTranslation.locale );
 
     if ( Object.keys( oldTranslationFile ).length < Object.keys( contents[ repo ] ).length ) {
 

@@ -18,6 +18,8 @@ import logger from '../logger.js';
  */
 const simNamesAndTitles = async ( req, res ) => {
   logger.info( 'responding with sim names and titles' );
+
+  // TODO: Cast the query parameter to a boolean. See https://github.com/phetsims/rosetta/issues/391.
   res.json( getSimNamesAndTitles( await getSimMetadata(), req.query.isTeamMember ) );
 };
 

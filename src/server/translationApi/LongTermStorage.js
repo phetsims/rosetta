@@ -25,10 +25,11 @@ class LongTermStorage {
    * @param {String} simOrLibRepo - repository where the strings come from
    * @param {String} locale - ISO 639-1 locale code, e.g. es for Spanish
    * @param {String|null} branch - phetsims/babel branch to get the translation from
+   * @returns {Promise<Object>} - translation file contents for the given repo and locale if it exists or empty object
    * @public
    */
   async get( simOrLibRepo, locale, branch = null ) {
-    let translatedStringFileContents = null;
+    let translatedStringFileContents = {};
     try {
       const response = await this.octokit.repos.getContent( {
         owner: 'phetsims',
@@ -43,7 +44,9 @@ class LongTermStorage {
       if ( Number( e.response.status ) === 404 ) {
         logger.warn( `no translation file for ${simOrLibRepo} in ${locale}` );
       }
-      logger.error( e );
+      else {
+        logger.error( e );
+      }
     }
     return translatedStringFileContents;
   }

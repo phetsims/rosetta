@@ -8,8 +8,8 @@
 
 import axios from 'axios';
 import getStringFileUrl from './getStringFileUrl.js';
-import getTranslatedStringFile from './getTranslatedStringFileUrl.js';
 import logger from './logger.js';
+import { longTermStorage } from './translationApi.js';
 
 /**
  * Get data needed for rendering shared string translation form table.
@@ -45,20 +45,7 @@ const getSharedTranslationFormData = async (
           fileContents: simFileRes.data
         };
         englishStringFileObjects.push( englishStringFileObject );
-        try {
-          const translatedFileRes = await axios.get( getTranslatedStringFile( sim, locale ) );
-          if ( translatedFileRes.status >= 200 && translatedFileRes.status <= 300 ) {
-            translatedStringFiles.push( translatedFileRes.data );
-          }
-        }
-        catch( e ) {
-          if ( e.response.status === 404 ) {
-            logger.verbose( `translation file for ${simName} doesn't exist; setting empty strings for ${simName}` );
-          }
-          else {
-            logger.error( e );
-          }
-        }
+        translatedStringFiles.push( await longTermStorage.get( sim, locale ) );
       }
 
       // Populate string keys and values.

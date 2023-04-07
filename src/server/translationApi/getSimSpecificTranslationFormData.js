@@ -1,7 +1,8 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * Export a function that gets a sim's sim-specific string keys, their English values, and their translated values.
+ * Export a function that gets a sim's sim-specific string keys, their
+ * English values, and their translated values.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
  */
@@ -9,24 +10,8 @@
 import axios from 'axios';
 import getLatestSimSha from './getLatestSimSha.js';
 import getStringFileUrl from './getStringFileUrl.js';
-import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
 import logger from './logger.js';
-
-/*
- * We want to return an object that looks like:
- *
- * {
- *   stringKeyE: {
- *     english: "Bing",
- *     translated: "Bong",
- *   },
- *   stringKeyF: {
- *     english: "Ding",
- *     translated: "Dong",
- *   }
- *   ...
- * },
- */
+import { longTermStorage } from './translationApi.js';
 
 /**
  * Return an object that contains a sim's sim-specific string keys, their English values, and their translated values.
@@ -63,25 +48,7 @@ const getSimSpecificTranslationFormData = async (
     }
 
     // The translated file might not exist.
-    let simSpecificTranslatedStringFileUrl = '';
-    let simSpecificTranslatedStringFileRes = {};
-    let simSpecificTranslatedStringKeysAndStrings = {};
-    try {
-      simSpecificTranslatedStringFileUrl = getTranslatedStringFileUrl( simName, locale );
-
-      // The user won't be able to see recently committed strings immediately.
-      // See https://github.com/phetsims/rosetta/issues/316.
-      simSpecificTranslatedStringFileRes = await axios.get( simSpecificTranslatedStringFileUrl );
-      simSpecificTranslatedStringKeysAndStrings = simSpecificTranslatedStringFileRes.data;
-    }
-    catch( e ) {
-      if ( e.response.status === 404 ) {
-        logger.verbose( `translation file for ${simName} doesn't exist; setting empty strings for ${simName}` );
-      }
-      else {
-        logger.error( e );
-      }
-    }
+    const simSpecificTranslatedStringKeysAndStrings = await longTermStorage.get( simName, locale );
 
     for ( const stringKey of simSpecificStringKeys ) {
 

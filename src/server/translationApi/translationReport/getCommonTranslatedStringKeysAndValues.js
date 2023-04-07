@@ -6,11 +6,9 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import axios from 'axios';
 import getCommonRepos from '../getCommonRepos.js';
 import getRepoNameToStringKeys from '../getRepoNameToStringKeys.js';
-import getTranslatedStringFileUrl from '../getTranslatedStringFileUrl.js';
-import logger from '../logger.js';
+import { longTermStorage } from '../translationApi.js';
 
 /**
  * Return an object containing common translated string keys and their values.
@@ -57,35 +55,15 @@ const getCommonTranslatedStringKeysAndValues = async (
   // For each common repo from which the sim gets string keys...
   for ( const repo in repoNameToStringKeys ) {
 
-    // Get the string file URL.
-    const translatedStringFileUrl = getTranslatedStringFileUrl( repo, locale );
+    const translatedStringKeysAndValues = await longTermStorage.get( repo, locale );
 
-    // Try to get the contents stored at the string file URL.
-    try {
-      const translatedStringKeysAndStringsRes = await axios.get( translatedStringFileUrl );
-      const translatedStringKeysAndValues = translatedStringKeysAndStringsRes.data;
-
-      // For each string key associated with the repo, extract its value from the string file.
-      for ( const stringKey of repoNameToStringKeys[ repo ] ) {
-        if ( translatedStringKeysAndValues[ stringKey ] ) {
-          commonTranslatedStringKeysAndStrings[ stringKey ] = translatedStringKeysAndValues[ stringKey ].value;
-        }
-        else {
-          commonTranslatedStringKeysAndStrings[ stringKey ] = '';
-        }
-      }
-    }
-    catch( e ) {
-
-      // If there is no string file, then there hasn't been a translation that affects the repo.
-      if ( e.response.status === 404 ) {
-        logger.verbose( `translated string file doesn't exist; setting empty strings for ${repo}` );
-        for ( const stringKey of repoNameToStringKeys[ repo ] ) {
-          commonTranslatedStringKeysAndStrings[ stringKey ] = '';
-        }
+    // For each string key associated with the repo, extract its value from the string file.
+    for ( const stringKey of repoNameToStringKeys[ repo ] ) {
+      if ( translatedStringKeysAndValues[ stringKey ] ) {
+        commonTranslatedStringKeysAndStrings[ stringKey ] = translatedStringKeysAndValues[ stringKey ].value;
       }
       else {
-        logger.error( e );
+        commonTranslatedStringKeysAndStrings[ stringKey ] = '';
       }
     }
   }

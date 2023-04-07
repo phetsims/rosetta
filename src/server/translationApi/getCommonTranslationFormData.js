@@ -11,26 +11,8 @@ import { NO_LONGER_USED_FLAG } from '../../common/constants.js';
 import getCommonRepos from './getCommonRepos.js';
 import getRepoNameToStringKeys from './getRepoNameToStringKeys.js';
 import getStringFileUrl from './getStringFileUrl.js';
-import getTranslatedStringFileUrl from './getTranslatedStringFileUrl.js';
 import logger from './logger.js';
-
-/*
- * We want to return an object that looks like:
- *
- * {
- *   stringKeyA: {
- *     english: "Foo",
- *     translated: "Faa",
- *     repo: "scenery-phet"
- *   },
- *   stringKeyB: {
- *     english: "Bar",
- *     translated: "Bur",
- *     repo: "joist"
- *   }
- *   ...
- * }
- */
+import { longTermStorage } from './translationApi.js';
 
 /**
  * Return an object that contains a sim's common string keys, their English values, and their translated values.
@@ -74,22 +56,7 @@ const getCommonTranslationFormData = async (
       }
 
       // The translated file might not exist.
-      let commonTranslatedStringFileUrl = '';
-      let commonTranslatedStringFileRes = {};
-      let commonTranslatedStringKeysAndStrings = {};
-      try {
-        commonTranslatedStringFileUrl = getTranslatedStringFileUrl( repo, locale );
-        commonTranslatedStringFileRes = await axios.get( commonTranslatedStringFileUrl );
-        commonTranslatedStringKeysAndStrings = commonTranslatedStringFileRes.data;
-      }
-      catch( e ) {
-        if ( e.response.status === 404 ) {
-          logger.verbose( `translation file for ${repo} doesn't exist; setting empty strings for ${repo}` );
-        }
-        else {
-          logger.error( e );
-        }
-      }
+      const commonTranslatedStringKeysAndStrings = await longTermStorage.get( repo, locale );
 
       for ( const stringKey of repoNameToStringKeys[ repo ] ) {
 
@@ -114,34 +81,7 @@ const getCommonTranslationFormData = async (
           translatedValue = commonTranslatedStringKeysAndStrings[ stringKey ].value;
         }
 
-        /*
-         * This strips the dots out of the string keys and replaces them with strings. We do this because the dots cause
-         * the client to think there are more deeply nested keys when there aren't. For example, a string key like
-         *
-         * (A)
-         * "acid-base-solutions.title": {
-         *    "value": "Acid-Base Solutions"
-         * }
-         *
-         * would confuse the client. The client would think that it's looking for something like
-         *
-         * (B)
-         * "acid-base-solutions": {
-         *    "title": {
-         *      "value": "Acid-Base Solutions"
-         *    }
-         * }
-         *
-         * but (B) is obviously wrong. The below snippet makes (A) look like
-         *
-         * (C)
-         * "acid-base-solutions_DOT_title": {
-         *    "value": "Acid-Base Solutions"
-         * }
-         *
-         * and the translation form data is sent to the client as in (C). When we get the translation form data back from
-         * the client in a submission, we transform the data from (C) back to (A).
-         */
+        // For more info on this, see the explanation in the getStringKeysWithDots module.
         const stringKeyWithoutDots = stringKey.replaceAll( '.', '_DOT_' );
 
         // Add the string key, its english value, translated value, and repo name to the common object.

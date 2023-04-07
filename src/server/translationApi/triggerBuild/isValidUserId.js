@@ -6,9 +6,8 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import axios from 'axios';
-import getTranslatedStringFile from '../getTranslatedStringFileUrl.js';
 import logger from '../logger.js';
+import { longTermStorage } from '../translationApi.js';
 import isStringNumber from './isStringNumber.js';
 
 /**
@@ -24,12 +23,10 @@ const isValidUserId = async ( simName, locale, userId ) => {
   let isValid = false;
   if ( isStringNumber( userId ) ) {
     logger.info( `user id ${userId} is a string number` );
-    const stringFileUrl = getTranslatedStringFile( simName, locale );
 
     // Try to verify whether the supplied user ID exists in the string file for the given sim/locale.
     try {
-      const stringFileRes = await axios.get( stringFileUrl );
-      const stringFile = stringFileRes.data;
+      const stringFile = longTermStorage.get( simName, locale );
       const setOfUserIds = new Set();
       let numHistoryArrays = 0;
       for ( const key of Object.keys( stringFile ) ) {

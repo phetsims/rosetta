@@ -18,11 +18,13 @@ import translatedAndUntranslatedSims from './api/translatedAndUntranslatedSims.j
 import translationFormData from './api/translationFormData.js';
 import logger from './logger.js';
 import translationReportEvents from './api/translationReportEvents.js';
+import LongTermStorage from './LongTermStorage.js';
 import ReportObjectCache from './translationReport/ReportObjectCache.js';
 
 const rosettaApiServer = express();
 
 const reportObjectCache = new ReportObjectCache();
+const longTermStorage = new LongTermStorage();
 
 rosettaApiServer.get( '/', ( req, res ) => {
   res.send( 'Hello API!' );
@@ -49,4 +51,4 @@ rosettaApiServer.post( '/submitTranslation', submitTranslation );
 rosettaApiServer.post( '/testTranslation', testTranslation );
 
 export default rosettaApiServer;
-export { reportObjectCache };
+export { reportObjectCache, longTermStorage };
