@@ -17,12 +17,46 @@ const fs = require( 'fs' );
 const axios = require( 'axios' );
 
 // constants
+const INTER_BUILD_DELAY = 360; // in seconds
 const LOCALE = 'az';
 const SIM_LIST = [
-  'curve-fitting',
-  'diffusion'
+  'equality-explorer',
+  'expression-exchange',
+  'fraction-matcher',
+  'fractions-equality',
+  'fractions-intro',
+  'fractions-mixed-numbers',
+  'function-builder-basics',
+  'function-builder',
+  'gas-properties',
+  'gene-expression-essentials',
+  'geometric-optics',
+  'graphing-lines',
+  'graphing-quadratics',
+  'graphing-slope-intercept',
+  'gravity-force-lab-basics',
+  'greenhouse-effect',
+  'make-a-ten',
+  'molecules-and-light',
+  'natural-selection',
+  'neuron',
+  'normal-modes',
+  'number-line-distance',
+  'number-line-integers',
+  'number-line-operations',
+  'proportion-playground',
+  'ratio-and-proportion',
+  'trig-tour',
+  'unit-rates',
+  'vector-addition-equations',
+  'waves-intro',
+  'circuit-construction-kit-dc',
+  'color-vision',
+  'gravity-and-orbits',
+  'gravity-force-lab',
+  'states-of-matter',
+  'wave-interference'
 ];
-const INTER_BUILD_DELAY = 240; // in seconds
 
 /**
  * Helper function to get the user ID for the most recent change of this file.
