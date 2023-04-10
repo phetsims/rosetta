@@ -16,17 +16,16 @@ const octokit = new Octokit( { auth: privateConfig.GITHUB_PAT } );
  * Return the contents of the string file.
  *
  * @param {String} simOrLibRepo - repository where the strings come from
- * @param {String} locale - ISO 639-1 locale code, e.g. es for Spanish
  * @returns {Promise<Object|null>} - string file
  */
-const getStringFile = async ( simOrLibRepo, locale ) => {
+const getStringFile = async simOrLibRepo => {
 
   let stringFile = null;
 
   const owner = 'phetsims';
   const repo = simOrLibRepo;
-  const path = `${simOrLibRepo}-strings_${locale}.json`;
-  const ref = privateConfig.BABEL_BRANCH;
+  const path = `${simOrLibRepo}-strings_en.json`;
+  const ref = 'master';
 
   try {
     const response = await octokit.repos.getContent( {

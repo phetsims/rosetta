@@ -6,11 +6,10 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import axios from 'axios';
 import { NO_LONGER_USED_FLAG } from '../../common/constants.js';
 import getCommonRepos from './getCommonRepos.js';
 import getRepoNameToStringKeys from './getRepoNameToStringKeys.js';
-import getStringFileUrl from './getStringFileUrl.js';
+import getStringFile from './getStringFile.js';
 import logger from './logger.js';
 import { longTermStorage } from './translationApi.js';
 
@@ -43,17 +42,7 @@ const getCommonTranslationFormData = async (
     for ( const repo of Object.keys( repoNameToStringKeys ) ) {
 
       // The English file should exist.
-      let commonEnglishStringFileUrl = '';
-      let commonEnglishStringFileRes = {};
-      let commonEnglishStringKeysAndStrings = {};
-      try {
-        commonEnglishStringFileUrl = getStringFileUrl( repo );
-        commonEnglishStringFileRes = await axios.get( commonEnglishStringFileUrl );
-        commonEnglishStringKeysAndStrings = commonEnglishStringFileRes.data;
-      }
-      catch( e ) {
-        logger.error( e );
-      }
+      const commonEnglishStringKeysAndStrings = await getStringFile( repo );
 
       // The translated file might not exist.
       const commonTranslatedStringKeysAndStrings = await longTermStorage.get( repo, locale );

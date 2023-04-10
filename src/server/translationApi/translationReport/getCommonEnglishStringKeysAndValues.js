@@ -6,10 +6,9 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import axios from 'axios';
 import { NO_LONGER_USED_FLAG } from '../../../common/constants.js';
 import getCommonRepos from '../getCommonRepos.js';
-import getStringFileUrl from '../getStringFileUrl.js';
+import getStringFile from '../getStringFile.js';
 import logger from '../logger.js';
 
 /**
@@ -35,9 +34,7 @@ const getCommonEnglishStringKeysAndValues = async (
     const commonRepos = await getCommonRepos( simName, simNames, stringKeysWithRepoName );
     const stringFiles = [];
     for ( const repo of commonRepos ) {
-      const stringFileUrl = getStringFileUrl( repo );
-      const stringFileRes = await axios.get( stringFileUrl );
-      stringFiles.push( stringFileRes.data );
+      stringFiles.push( await getStringFile( repo ) );
     }
 
     // For each common string key, find its value in one of the string files.

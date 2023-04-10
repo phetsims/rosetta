@@ -15,7 +15,10 @@ const storeEachRepoContents = async ( preparedTranslation, repos ) => {
   for ( const repo of repos ) {
     const repoContents = preparedTranslation.translationFileContents[ repo ];
     const wasStored = await longTermStorage.store( repo, preparedTranslation.locale, repoContents );
-    if ( !wasStored ) {
+
+    // It's possible the repo contents are empty, in which case they shouldn't be stored.
+    const shouldHaveBeenStored = Object.keys( repoContents ).length > 0;
+    if ( !wasStored && shouldHaveBeenStored ) {
       allRepoContentsStored = false;
     }
   }

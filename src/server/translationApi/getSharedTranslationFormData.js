@@ -6,8 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import axios from 'axios';
-import getStringFileUrl from './getStringFileUrl.js';
+import getStringFile from './getStringFile.js';
 import logger from './logger.js';
 import { longTermStorage } from './translationApi.js';
 
@@ -39,10 +38,9 @@ const getSharedTranslationFormData = async (
       const englishStringFileObjects = [];
       const translatedStringFiles = [];
       for ( const sim of sharedSims ) {
-        const simFileRes = await axios.get( getStringFileUrl( sim ) );
         const englishStringFileObject = {
           repo: sim,
-          fileContents: simFileRes.data
+          fileContents: await getStringFile( sim )
         };
         englishStringFileObjects.push( englishStringFileObject );
         translatedStringFiles.push( await longTermStorage.get( sim, locale ) );
