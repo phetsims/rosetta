@@ -7,10 +7,10 @@
  */
 
 import axios from 'axios';
-import alertErrorMessage from './alertErrorMessage.js';
-import publicConfig from '../../common/publicConfig.js';
-import computeTranslatedStringsData from './computeTranslatedStringsData.js';
 import KeyTypesEnum from '../../common/KeyTypesEnum.js';
+import publicConfig from '../../common/publicConfig.js';
+import alertErrorMessage from './alertErrorMessage.js';
+import computeTranslatedStringsData from './computeTranslatedStringsData.js';
 import makeTranslationObject from './makeTranslationObject.js';
 
 /**
@@ -30,7 +30,7 @@ const submitTranslation = async (
   localeName
 ) => {
 
-  let submitted = false;
+  let submitStatus = null;
   const translatedStringsData = computeTranslatedStringsData( values );
   const translation = await makeTranslationObject( values, simName, locale );
   const messages = {};
@@ -49,8 +49,8 @@ const submitTranslation = async (
   if ( window.confirm( confirmMessage ) ) {
     try {
       const result = await axios.post( `${publicConfig.translationApiRoute}/submitTranslation`, translation );
-      submitted = result.data;
-      if ( submitted ) {
+      submitStatus = result.data;
+      if ( submitStatus.allRepoContentsStored && submitStatus.buildRequested ) {
         const units = 'hours';
         const timeUntilChanges = publicConfig.VALID_METADATA_DURATION / 1000 / 60 / 60;
         const submissionMessage = 'Translation submitted.'
@@ -60,7 +60,14 @@ const submitTranslation = async (
         window.alert( submissionMessage );
       }
       else {
-        window.alert( 'An error occurred. Translation not submitted.' );
+        let errorMessage = 'An error occurred while submitting the translation.';
+        if ( !submitStatus.allRepoContentsStored ) {
+          errorMessage += ' Not all translation contents (possibly none) were stored in long-term storage.';
+        }
+        if ( !submitStatus.buildRequested ) {
+          errorMessage += ' The build request was not sent to the build server.';
+        }
+        window.alert( errorMessage );
       }
     }
     catch( e ) {
@@ -68,7 +75,7 @@ const submitTranslation = async (
     }
   }
 
-  return submitted;
+  return submitStatus;
 };
 
 export default submitTranslation;

@@ -110,28 +110,40 @@ class LongTermStorage {
    */
   async store( simOrLibRepo, locale, translationFileContents, branch = null ) {
     let stored = false;
-    logger.info( `attempting to store translation for ${simOrLibRepo}/${locale} in long-term storage` );
-    const sha = await this._getGitShaOfFile( simOrLibRepo, locale, branch );
-    try {
-      const response = await this.octokit.repos.createOrUpdateFileContents( {
-        owner: OWNER,
-        repo: REPO,
-        path: this._getFilePath( simOrLibRepo, locale ),
-        branch: branch ? branch : privateConfig.BABEL_BRANCH,
-        message: `automated commit from rosetta for sim/lib ${simOrLibRepo}, locale ${locale}`,
-        content: Buffer.from(
-          JSON.stringify( translationFileContents, null, 2 ), 'utf-8'
-        ).toString( 'base64' ),
-        sha: sha === '' ? undefined : sha // SHA is required to update a file, not required to create a file.
-      } );
-      if ( response.status >= 200 && response.status < 300 ) {
-        logger.info( `stored translation for ${simOrLibRepo}/${locale} in long-term storage` );
-        logger.verbose( `commit sha: ${response.data.commit.sha}` );
-        stored = true;
+    const emptyTranslationFileContents = Object.keys( translationFileContents ).length === 0;
+    if ( privateConfig.PERFORM_STRING_COMMITS && !emptyTranslationFileContents ) {
+      logger.info( `attempting to store translation for ${simOrLibRepo}/${locale} in long-term storage` );
+      const sha = await this._getGitShaOfFile( simOrLibRepo, locale, branch );
+      try {
+        const response = await this.octokit.repos.createOrUpdateFileContents( {
+          owner: OWNER,
+          repo: REPO,
+          path: this._getFilePath( simOrLibRepo, locale ),
+          branch: branch ? branch : privateConfig.BABEL_BRANCH,
+          message: `automated commit from rosetta for sim/lib ${simOrLibRepo}, locale ${locale}`,
+          content: Buffer.from(
+            JSON.stringify( translationFileContents, null, 2 ), 'utf-8'
+          ).toString( 'base64' ),
+          sha: sha === '' ? undefined : sha // SHA is required to update a file, not required to create a file.
+        } );
+        if ( response.status >= 200 && response.status < 300 ) {
+          logger.info( `stored translation for ${simOrLibRepo}/${locale} in long-term storage` );
+          logger.verbose( `commit sha: ${response.data.commit.sha}` );
+          stored = true;
+        }
+      }
+      catch( e ) {
+        logger.error( e );
       }
     }
-    catch( e ) {
-      logger.error( e );
+    else {
+      if ( !privateConfig.PERFORM_STRING_COMMITS ) {
+        logger.warn( 'config option for committing to long-term storage is false' );
+      }
+      if ( emptyTranslationFileContents ) {
+        logger.warn( `translation file contents for ${simOrLibRepo}/${locale} are empty` );
+      }
+      logger.warn( 'translation will not be stored in long-term storage' );
     }
     return stored;
   }

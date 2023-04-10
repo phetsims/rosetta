@@ -12,7 +12,7 @@ import getSimMetadata from '../getSimMetadata.js';
 import logger from '../logger.js';
 import prepareTranslationForLongTermStorage from '../prepareTranslationForLongTermStorage.js';
 import requestBuild from '../requestBuild.js';
-import storeTranslationLongTerm from '../storeTranslationLongTerm.js';
+import storeEachRepoContents from '../storeEachRepoContents.js';
 import { reportObjectCache } from '../translationApi.js';
 import getSimNamesAndTitles from '../getSimNamesAndTitles.js';
 
@@ -26,19 +26,22 @@ import getSimNamesAndTitles from '../getSimNamesAndTitles.js';
  */
 const submitTranslation = async ( req, res ) => {
   logger.info( 'attempting to submit translation' );
-  let submitted = false;
+  const submitStatus = {
+    allRepoContentsStored: false,
+    buildRequested: false
+  };
   try {
     logger.info( `sending ${req.body.locale}/${req.body.simName} translation to be prepared for long-term storage` );
     const preparedTranslation = await prepareTranslationForLongTermStorage( req.body );
     logger.info( `sending ${req.body.locale}/${req.body.simName} translation to be stored long-term` );
-    const longTermStorageRes = await storeTranslationLongTerm( preparedTranslation );
-    if ( longTermStorageRes ) {
+    const repos = await getReposToStoreLongTerm( preparedTranslation );
+    submitStatus.allRepoContentsStored = await storeEachRepoContents( preparedTranslation, repos );
+    if ( submitStatus.allRepoContentsStored ) {
       logger.info( 'successfully stored translation long term' );
 
       // For each sim repo in the translation, we need to set the sim repo's
       // report object to dirty. See https://github.com/phetsims/rosetta/issues/379
       // for more info and background on this.
-      const repos = await getReposToStoreLongTerm( preparedTranslation );
       const simNamesAndTitles = getSimNamesAndTitles( await getSimMetadata(), 'true' );
       const simNames = Object.keys( simNamesAndTitles );
       for ( const repo of repos ) {
@@ -66,11 +69,10 @@ const submitTranslation = async ( req, res ) => {
       else {
         logger.warn( 'either deletion of previously saved translation failed or there was no previously saved translation' );
       }
-      const buildRequestRes = await requestBuild( req.body.simName, req.body.locale, req.body.userId );
-      if ( buildRequestRes ) {
+      submitStatus.buildRequested = await requestBuild( req.body.simName, req.body.locale, req.body.userId );
+      if ( submitStatus.buildRequested ) {
         logger.info( 'build request succeeded' );
       }
-      submitted = buildRequestRes;
     }
     else {
       logger.error( `long-term storage of ${req.body.locale}/${req.body.simName} failed` );
@@ -79,9 +81,9 @@ const submitTranslation = async ( req, res ) => {
   catch( e ) {
     logger.error( e );
   }
-  logger.info( `translation was submitted: ${submitted}` );
+  logger.info( `build requested: ${submitStatus.buildRequested}` );
   logger.info( 'done attempting to submit translation' );
-  res.send( submitted );
+  res.send( submitStatus );
 };
 
 export default submitTranslation;
