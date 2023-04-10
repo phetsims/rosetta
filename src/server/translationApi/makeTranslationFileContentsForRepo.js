@@ -25,7 +25,7 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
 
   const translationFileContentsForRepo = {};
 
-  const oldTranslationFile = longTermStorage.get( repo, translation.locale );
+  const oldTranslationFile = await longTermStorage.get( repo, translation.locale );
 
   // Get list of sim names for checking if we're dealing with shared strings. Note how
   // we're passing true for the second argument. This is to say we're a team member, so
@@ -64,11 +64,12 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
   }
 
   for ( const stringKey of stringKeysToIterateOver ) {
-    if (
+
+    const ableToCheckStringKeyCases =
       repo === translation.simName ||
       ( translationFormData[ stringKey ] && repo === translationFormData[ stringKey ].repo ) ||
-      ( oldTranslationFile && oldTranslationFile[ stringKey ] )
-    ) {
+      ( oldTranslationFile && oldTranslationFile[ stringKey ] );
+    if ( ableToCheckStringKeyCases ) {
 
       // Trim leading and trailing whitespace.
       // NOTE: If a user deliberately wants a space, this will change
