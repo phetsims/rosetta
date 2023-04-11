@@ -6,9 +6,8 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import axios from 'axios';
-import privateConfig from '../../../common/privateConfig.js';
 import getRepoNameFromStringKeyWithRepoName from '../getRepoNameFromStringKeyWithRepoName.js';
+import getStringFile from '../getStringFile.js';
 import getStringKeyFromStringKeyWithRepoName from '../getStringKeyFromStringKeyWithRepoName.js';
 import logger from '../logger.js';
 
@@ -24,16 +23,7 @@ import logger from '../logger.js';
 const getEnglishStringKeysAndValues = async ( simOrLibName, stringKeysWithRepoName, shaOrBranch = 'master' ) => {
   logger.info( 'getting english string keys and values' );
   const englishStringKeysAndValues = {};
-  const englishStringFileUrl = `${privateConfig.GITHUB_URL}/${simOrLibName}/${shaOrBranch}/${simOrLibName}-strings_en.json`;
-  let englishStringData = {};
-  try {
-    const englishStringDataRes = await axios.get( englishStringFileUrl );
-    englishStringData = englishStringDataRes.data;
-  }
-  catch( e ) {
-    logger.error( 'unable to get english string data' );
-    logger.error( e );
-  }
+  const englishStringData = await getStringFile( simOrLibName, shaOrBranch );
   for ( const stringKeyWithRepoName of stringKeysWithRepoName ) {
     const stringKey = getStringKeyFromStringKeyWithRepoName( stringKeyWithRepoName );
     const repoName = getRepoNameFromStringKeyWithRepoName( stringKeyWithRepoName );
