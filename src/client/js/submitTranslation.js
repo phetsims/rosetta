@@ -58,16 +58,19 @@ const submitTranslation = async (
                                   + ` It will take about ${timeUntilChanges} ${units} for the translation utility to`
                                   + ' show the changes you made.';
         window.alert( submissionMessage );
+
+        // Reload the page to reset the form so that the buttons are disabled
+        // and the form is no longer dirty.
+        window.location.reload();
       }
-      else {
-        let errorMessage = 'An error occurred while submitting the translation.';
-        if ( !submitStatus.allRepoContentsStored ) {
-          errorMessage += ' Not all translation contents (possibly none) were stored in long-term storage.';
-        }
-        if ( !submitStatus.buildRequested ) {
-          errorMessage += ' The build request was not sent to the build server.';
-        }
-        window.alert( errorMessage );
+      else if ( !submitStatus.allRepoContentsStored && submitStatus.buildRequested ) {
+        window.alert( 'Not all translation contents (possibly none) were stored in long-term storage, but the build request was sent to the build server.' );
+      }
+      else if ( submitStatus.allRepoContentsStored && !submitStatus.buildRequested ) {
+        window.alert( 'Your translation was saved to the long-term storage database, but the build request was not sent to the build server.' );
+      }
+      else if ( !submitStatus.allRepoContentsStored && !submitStatus.buildRequested ) {
+        window.alert( 'Your translation was not saved to the long-term storage database, and the build request was not sent to the build server.' );
       }
     }
     catch( e ) {
