@@ -25,7 +25,7 @@ const getSimSpecificTranslatedStringKeysAndValues = async (
   logger.info( `getting ${simName}'s sim-specific translated string keys and values` );
   const simSpecificTranslatedStringKeysAndValues = {};
   const simSpecificStringKeys = categorizedStringKeys.simSpecific;
-  const stringKeysAndTranslatedValues = longTermStorage.get( simName, locale );
+  const stringKeysAndTranslatedValues = await longTermStorage.get( simName, locale );
   const translatedStringKeys = Object.keys( stringKeysAndTranslatedValues );
 
   // For each sim specific string key...
