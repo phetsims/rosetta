@@ -11,6 +11,7 @@ import getStringKeysWithRepoName from '../getStringKeysWithRepoName.js';
 import logger from '../logger.js';
 import getCommonEnglishStringKeysAndValues from './getCommonEnglishStringKeysAndValues.js';
 import getCommonTranslatedStringKeysAndValues from './getCommonTranslatedStringKeysAndValues.js';
+import getSharedTranslatedStringKeysAndValues from './getSharedTranslatedStringKeysAndValues.js';
 import getPercent from './getPercent.js';
 import getShortReportObject from './getShortReportObject.js';
 import getSimSpecificEnglishStringKeysAndValues from './getSimSpecificEnglishStringKeysAndValues.js';
@@ -124,34 +125,16 @@ const getTranslationReportObject = async (
       // for the shared strings.
       const sharedTranslatedStringKeysAndValuesArray = [];
 
-      // Create an array for collecting the English string keys and values
-      // for the shared strings.
-      const sharedEnglishStringKeysAndValuesArray = [];
-
-      // It's possible a sim shares strings with multiple sims, hence the loop.
+      // By convention, it's not possible a sim shares strings with multiple sims, but
+      // as of this writing there's nothing preventing this, hence the loop.
       for ( const sharedSim of categorizedStringKeys.sharedSims ) {
-
-        // Get the English keys and values.
-        const sharedSimUrl = getSimUrl( sharedSim );
-        const sharedSimHtml = await getSimHtml( sharedSimUrl );
-        const sharedStringKeysWithRepoName = Object.keys( getStringKeysWithRepoName( sharedSimHtml ) );
-        const sharedCategorizedStringKeys = await getCategorizedStringKeys( sharedSim, sharedStringKeysWithRepoName );
-        const latestSimSha = await getLatestSimSha( sharedSim );
-        logger.info( `getting shared sim-specific english string keys and values for ${sharedSim}` );
-        const sharedEnglishStringKeysAndValues = await getSimSpecificEnglishStringKeysAndValues(
-          sharedSim,
-          latestSimSha,
-          sharedCategorizedStringKeys,
-          sharedStringKeysWithRepoName
-        );
-        sharedEnglishStringKeysAndValuesArray.push( sharedEnglishStringKeysAndValues );
 
         // Get the translated keys and values.
         logger.info( `getting shared sim-specific translated string keys and values for ${sharedSim}` );
-        const sharedTranslatedStringKeysAndValues = await getSimSpecificTranslatedStringKeysAndValues(
+        const sharedTranslatedStringKeysAndValues = await getSharedTranslatedStringKeysAndValues(
           sharedSim,
           locale,
-          sharedCategorizedStringKeys
+          categorizedStringKeys.shared
         );
         sharedTranslatedStringKeysAndValuesArray.push( sharedTranslatedStringKeysAndValues );
       }
@@ -160,17 +143,12 @@ const getTranslationReportObject = async (
       // string keys and values objects have a value for that key.
       for ( const sharedKey of categorizedStringKeys.shared ) {
         for ( const sharedTranslatedStringKeysAndValues of sharedTranslatedStringKeysAndValuesArray ) {
-          for ( const sharedEnglishStringKeysAndValues of sharedEnglishStringKeysAndValuesArray ) {
-            if (
-              sharedTranslatedStringKeysAndValues[ sharedKey ] &&
-              sharedTranslatedStringKeysAndValues[ sharedKey ] !== '' &&
-              sharedEnglishStringKeysAndValues[ sharedKey ] &&
-              sharedEnglishStringKeysAndValues[ sharedKey ] !== '' &&
-              sharedEnglishStringKeysAndValues[ sharedKey ] !== NO_LONGER_USED_FLAG
-            ) {
-              translationReportObject.numSharedTranslatedStrings++;
-              break;
-            }
+          if (
+            sharedTranslatedStringKeysAndValues[ sharedKey ] &&
+            sharedTranslatedStringKeysAndValues[ sharedKey ] !== ''
+          ) {
+            translationReportObject.numSharedTranslatedStrings++;
+            break;
           }
         }
       }
