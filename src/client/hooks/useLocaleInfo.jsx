@@ -8,8 +8,17 @@
 
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
 import alertErrorMessage from '../js/alertErrorMessage.js';
-import publicConfig from '../../common/publicConfig.js';
+
+const myEnv = import.meta.env.VITE_MY_ENV;
+
+console.log( `----------> ${JSON.stringify( import.meta.env, null, 4 )}` );
+console.log( `----------> ${myEnv}` );
+
+const localeInfoUrl = myEnv === 'dev' ?
+                      `http://localhost:16372${TRANSLATION_API_ROUTE}/localeInfo` :
+                      `${TRANSLATION_API_ROUTE}/localeInfo`;
 
 /**
  * Get the locale info from the backend and return it. If the request fails, show an error message.
@@ -20,7 +29,7 @@ const useLocaleInfo = () => {
   const [ localeInfo, setLocaleInfo ] = useState( {} );
   useEffect( async () => {
     try {
-      const localeInfoRes = await axios.get( `${publicConfig.translationApiRoute}/localeInfo` );
+      const localeInfoRes = await axios.get( localeInfoUrl );
       setLocaleInfo( localeInfoRes.data );
     }
     catch( e ) {

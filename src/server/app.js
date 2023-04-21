@@ -11,26 +11,41 @@
  * @author Liam Mulhall
  */
 
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import os from 'os';
+import path from 'path';
+import { URL } from 'url';
 import privateConfig from '../common/privateConfig.js';
 import publicConfig from '../common/publicConfig.js';
 import express from 'express';
 import mockSignOut from './translationApi/api/mockSignOut.js';
+import builtReactAppServer from './builtReactAppServer/builtReactAppServer.js';
+import mockWebsiteUserData from './translationApi/api/mockWebsiteUserData.js';
 import getCurrentRosettaSha from './translationApi/getCurrentRosettaSha.js';
 import logger from './translationApi/logger.js';
-import mockWebsiteUserData from './translationApi/api/mockWebsiteUserData.js';
-import path from 'path';
-import { URL } from 'url';
-import os from 'os';
-import bodyParser from 'body-parser';
 
 // These are components (1) and (2) mentioned above.
 import translationApi from './translationApi/translationApi.js';
-import builtReactAppServer from './builtReactAppServer/builtReactAppServer.js';
 
 const app = express();
 
+const DEV_SERVER_PORT = 5173;
+
 app.use( bodyParser.json() );
 app.use( bodyParser.urlencoded( { extended: false } ) );
+if ( publicConfig.ENVIRONMENT === 'development' ) {
+
+  // Allow CORS requests from the React front end.
+  // This is only needed for local development.
+  app.use( cors( {
+    origin: `http://127.0.0.1:${DEV_SERVER_PORT}`
+  } ) );
+  app.use( ( req, res, next ) => {
+    res.setHeader( 'Access-Control-Allow-Credentials', 'true' );
+    next();
+  } );
+}
 
 // Set up a variable similar to the old __dirname variable.
 // The __dirname variable gets the present working directory.

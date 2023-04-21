@@ -10,12 +10,16 @@
   ],
   "scripts": {
     "lint": "grunt --gruntfile Gruntfile.cjs lint",
-    "start": "node ./scripts/js/make-public-config-file.mjs && npm run lint && npm run build --workspace=client && node src/server/app.js",
-    "prod": "node ./scripts/js/make-public-config-file.mjs && npm run build --workspace=client && node src/server/app.js"
+    "start-node": "node src/server/app.js",
+    "make-public-config": "node ./scripts/js/make-public-config-file.mjs",
+    "dev": "npm run make-public-config && npm run lint && concurrently \"npm run dev --workspace=client\" \"npm run start-node\"",
+    "start": "npm run make-public-config && npm run lint && npm run build --workspace=client && npm run start-node",
+    "prod": "npm run make-public-config && npm run build --workspace=client && npm run start-node"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
     "@babel/eslint-parser": "^7.16.0",
+    "concurrently": "^8.0.1",
     "eslint": "^8.34.0",
     "grunt": "^1.4.1",
     "winston": "^3.8.2"
