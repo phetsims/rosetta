@@ -36,14 +36,18 @@ Use Semantic Versioning
 -----------------------
 
 + The version of the initial publication of "Rosetta 2.0" will be 2.0.0.
-+ Subsequent releases will follow Semantic Versioning:
++ Subsequent releases will follow Bastardized Semantic Versioning:
   + Given a version number MAJOR.MINOR.PATCH, increment the:
     + MAJOR version when you make incompatible API changes
-    + MINOR version when you add functionality in a backwards compatible
-      manner 
-    + PATCH version when you make backwards compatible bug fixes 
+    + MINOR when you've got big new feature(s)
+    + PATCH when you've got a bug fix(es) and/or minor feature(s) ready
     + Additional labels for pre-release and build metadata are available as
       extensions to the MAJOR.MINOR.PATCH format.
+    + If you are putting a version of rosetta in for testing, you 
+      should tag your commit `MAJOR.MINOR.PATCH-rc.x` where `x` is
+      a number you increment each time you put a version in for 
+      testing. In this context, `rc` stands for "release candidate". 
+      For more info on this, see the section on tagging test versions.
 
 Tag Test Versions
 -----------------
