@@ -10,7 +10,7 @@ import axios from 'axios';
 import { useEffect, useState, useContext } from 'react';
 import { WebsiteUserDataContext } from '../components/Rosetta.jsx';
 import alertErrorMessage from '../js/alertErrorMessage.js';
-import publicConfig from '../../common/publicConfig.js';
+import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
 
 /**
  * Return an object containing a list of translated sims and a list of untranslated sims for the given locale.
@@ -24,7 +24,7 @@ const useTranslatedAndUntranslatedSims = locale => {
   useEffect( async () => {
     try {
       const translatedAndUntranslatedSimsRes =
-        await axios.get( `${publicConfig.translationApiRoute}/translatedAndUntranslatedSims/${locale}?isTeamMember=${websiteUserData.teamMember}` );
+        await axios.get( `${TRANSLATION_API_ROUTE}/translatedAndUntranslatedSims/${locale}?isTeamMember=${websiteUserData.teamMember}` );
       setTranslatedAndUntranslatedSims( translatedAndUntranslatedSimsRes.data );
     }
     catch( e ) {

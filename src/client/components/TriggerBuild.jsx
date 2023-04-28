@@ -10,7 +10,7 @@
 import axios from 'axios';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import publicConfig from '../../common/publicConfig.js';
+import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
 import { useContext } from 'react';
 import { WebsiteUserDataContext } from './Rosetta.jsx';
 
@@ -19,8 +19,6 @@ import '../styles/input-error.css';
 
 /**
  * Create a Formik form for sending a get request based on the supplied sim, locale, and user ID.
- *
- * @returns {JSX.Element}
  */
 const TriggerBuild = () => {
   const initialRebuildValues = {
@@ -31,7 +29,7 @@ const TriggerBuild = () => {
   const websiteUserData = useContext( WebsiteUserDataContext );
   const handleSubmit = async values => {
     if ( websiteUserData.loggedIn && websiteUserData.teamMember ) {
-      const triggerBuildRes = await axios.get( `${publicConfig.translationApiRoute}/triggerBuild/${values.sim}/${values.locale}/${values.userId}` );
+      const triggerBuildRes = await axios.get( `${TRANSLATION_API_ROUTE}/triggerBuild/${values.sim}/${values.locale}/${values.userId}` );
       if ( triggerBuildRes.status >= 200 && triggerBuildRes.status < 300 ) {
         if ( triggerBuildRes.data === 'success' ) {
           window.alert( `Rebuild request sent for sim ${values.sim} in locale ${values.locale} with user ID ${values.userId}.` );

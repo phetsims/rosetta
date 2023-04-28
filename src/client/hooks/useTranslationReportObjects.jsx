@@ -7,7 +7,7 @@
  */
 
 import { useEffect, useState, useContext } from 'react';
-import publicConfig from '../../common/publicConfig.js';
+import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
 import { WebsiteUserDataContext } from '../components/Rosetta.jsx';
 
 /**
@@ -30,7 +30,7 @@ const useTranslationReportObjects = ( locale, wantsUntranslated ) => {
 
   useEffect( () => {
     if ( !listening && !reportPopulated ) {
-      const translationReportUrl = `${publicConfig.translationApiRoute}/translationReportEvents/${locale}?wantsUntranslated=${wantsUntranslated}&isTeamMember=${websiteUserData.teamMember}`;
+      const translationReportUrl = `${TRANSLATION_API_ROUTE}/translationReportEvents/${locale}?wantsUntranslated=${wantsUntranslated}&isTeamMember=${websiteUserData.teamMember}`;
       const translationReportSource = new EventSource( translationReportUrl );
       translationReportSource.onmessage = event => {
         if ( event.data !== 'closed' ) {

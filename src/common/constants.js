@@ -13,8 +13,6 @@ import publicConfig from './publicConfig.js';
 // so I added a nonsense word "gooble".
 export const NO_LONGER_USED_FLAG = 'no longer used gooble';
 
-console.log( `----------> ${publicConfig.environment}` );
-
-export const TRANSLATION_API_ROUTE = publicConfig.environment === 'development' ?
+export const TRANSLATION_API_ROUTE = publicConfig.ENVIRONMENT === 'development' ?
                                      'http://localhost:16372/translate/api' :
                                       '/translate/api';

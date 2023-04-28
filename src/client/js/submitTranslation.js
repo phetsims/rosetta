@@ -12,6 +12,7 @@ import publicConfig from '../../common/publicConfig.js';
 import alertErrorMessage from './alertErrorMessage.js';
 import computeTranslatedStringsData from './computeTranslatedStringsData.js';
 import makeTranslationObject from './makeTranslationObject.js';
+import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
 
 /**
  * Issue a post request to submit a translation for publication to the PhET website.
@@ -48,7 +49,7 @@ const submitTranslation = async (
   confirmMessage += 'Are you sure you want to submit?';
   if ( window.confirm( confirmMessage ) ) {
     try {
-      const result = await axios.post( `${publicConfig.translationApiRoute}/submitTranslation`, translation );
+      const result = await axios.post( `${TRANSLATION_API_ROUTE}/submitTranslation`, translation );
       submitStatus = result.data;
       if ( submitStatus.allRepoContentsStored && submitStatus.buildRequested ) {
         const units = 'hours';

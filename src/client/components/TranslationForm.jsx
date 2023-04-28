@@ -17,7 +17,7 @@ import React, {
   useState
 } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import publicConfig from '../../common/publicConfig.js';
+import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
 import makeValidationSchema from '../js/makeValidationSchema.js';
 import saveTranslation from '../js/saveTranslation.js';
 import submitTranslation from '../js/submitTranslation.js';
@@ -33,9 +33,6 @@ const ErrorContext = createContext( null );
 
 /**
  * This component is a form with a table that is populated by the translation form data that we get from the backend.
- *
- * @returns {JSX.Element}
- * @constructor
  */
 const TranslationForm = () => {
 
@@ -46,7 +43,7 @@ const TranslationForm = () => {
   useEffect( () => {
     try {
       ( async () => {
-        const translationFormDataRes = await axios.get( `${publicConfig.translationApiRoute}/translationFormData/${params.simName}/${params.locale}?userId=${websiteUserData.userId}` );
+        const translationFormDataRes = await axios.get( `${TRANSLATION_API_ROUTE}/translationFormData/${params.simName}/${params.locale}?userId=${websiteUserData.userId}` );
         setTranslationFormData( translationFormDataRes.data );
       } )();
     }

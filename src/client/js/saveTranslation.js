@@ -8,8 +8,8 @@
 
 import axios from 'axios';
 import alertErrorMessage from './alertErrorMessage.js';
-import publicConfig from '../../common/publicConfig.js';
 import makeTranslationObject from './makeTranslationObject.js';
+import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
 
 /**
  * Issue a post request to save a translation to the short-term string storage database.
@@ -21,7 +21,7 @@ import makeTranslationObject from './makeTranslationObject.js';
 const saveTranslation = async ( values, simName, locale ) => {
   const translation = await makeTranslationObject( values, simName, locale );
   try {
-    const savedRes = await axios.post( `${publicConfig.translationApiRoute}/saveTranslation`, translation );
+    const savedRes = await axios.post( `${TRANSLATION_API_ROUTE}/saveTranslation`, translation );
     if ( savedRes.data ) {
       window.alert( 'Translation saved.' );
     }
