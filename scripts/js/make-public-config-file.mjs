@@ -17,7 +17,8 @@ const PUBLIC_CONFIG_VALUES = [
   'WEBSITE_USER_DATA_URL',
   'ENVIRONMENT',
   'LOCAL_USER_ID',
-  'VALID_METADATA_DURATION'
+  'VALID_METADATA_DURATION',
+  'SIGN_OUT_URL'
 ];
 
 // These are constants used in the client-side code. We want them in the public config.

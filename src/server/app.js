@@ -14,6 +14,7 @@
 import privateConfig from '../common/privateConfig.js';
 import publicConfig from '../common/publicConfig.js';
 import express from 'express';
+import mockSignOut from './translationApi/api/mockSignOut.js';
 import getCurrentRosettaSha from './translationApi/getCurrentRosettaSha.js';
 import logger from './translationApi/logger.js';
 import mockWebsiteUserData from './translationApi/api/mockWebsiteUserData.js';
@@ -63,6 +64,7 @@ app.use( '/translate', builtReactAppServer );
 // Mock website user data for local development.
 if ( publicConfig.ENVIRONMENT === 'development' ) {
   app.get( '/services/check-login', mockWebsiteUserData );
+  app.get( '/services/logout', mockSignOut );
 }
 
 app.listen( privateConfig.ROSETTA_PORT, () => {
