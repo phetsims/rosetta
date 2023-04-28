@@ -12,7 +12,6 @@
 // Uncomment this import of you want a local copy of translation form data.
 // import fs from 'fs';
 
-import fs from 'fs';
 import privateConfig from '../../common/privateConfig.js';
 import publicConfig from '../../common/publicConfig.js';
 import getCommonTranslationFormData from './getCommonTranslationFormData.js';
@@ -75,14 +74,6 @@ const getTranslationFormData = async (
   userId = undefined
 ) => {
   logger.info( 'getting translation form data' );
-
-  // If working on the translation utility without an internet connection,
-  // mock the translation form data with your local copy. (This assumes you have
-  // a local copy of translation form data.)
-  if ( publicConfig.ENVIRONMENT === 'development' && privateConfig.NO_INTERNET ) {
-    logger.info( 'using local copy of translation form data' );
-    return JSON.parse( fs.readFileSync( './translationFormData.json' ) );
-  }
 
   // Try to get a saved translation from the short-term storage database.
   if ( privateConfig.DB_ENABLED ) {

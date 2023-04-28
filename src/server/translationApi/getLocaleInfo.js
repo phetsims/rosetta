@@ -10,9 +10,7 @@
 // import fs from 'fs';
 
 import axios from 'axios';
-import fs from 'fs';
 import privateConfig from '../../common/privateConfig.js';
-import publicConfig from '../../common/publicConfig.js';
 import logger from './logger.js';
 
 let timeOfLastUpdate = Number.NEGATIVE_INFINITY;
@@ -27,14 +25,6 @@ let localeInfo;
 const getLocaleInfo = async () => {
   logger.info( 'getting locale info' );
   try {
-
-    // If working on the translation utility without an internet connection,
-    // mock the locale info with your local copy. (This assumes you have
-    // a local copy of locale info.)
-    if ( publicConfig.ENVIRONMENT === 'development' && privateConfig.NO_INTERNET ) {
-      logger.info( 'using local copy of locale info' );
-      return JSON.parse( fs.readFileSync( './localeInfo.json' ) );
-    }
 
     const localeInfoValidDurationElapsed = timeOfLastUpdate
                                            + privateConfig.VALID_LOCALE_INFO_DURATION < Date.now();
