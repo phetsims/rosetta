@@ -37,6 +37,8 @@ into the code.
 Overview
 --------
 
+![Rosetta Architecture](./rosetta-architecture.svg)
+
 Rosetta is PhET's tool for translating its HTML5 simulations. Its jobs
 are as follows:
 
