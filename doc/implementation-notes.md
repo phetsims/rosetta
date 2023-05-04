@@ -39,6 +39,8 @@ Overview
 
 ![Rosetta Architecture](./rosetta-architecture.svg)
 
+[Edit this diagram](https://docs.google.com/drawings/d/1a0bcEKVTQTQ7kgVtWnTPTtj-LpcBpRz69kHJM9UVtYw/edit?usp=sharing)
+
 Rosetta is PhET's tool for translating its HTML5 simulations. Its jobs
 are as follows:
 
