@@ -13,11 +13,11 @@
  *
  * USAGE:
  *
- *   node remove-string-key <repo-name> <string-key>
+ *   node remove-string <repo-name> <string-key>
  *
  * EXAMPLE USAGE:
  *
- *   node ./rosetta/scripts/js/remove-string-key.js joist preferences.tabs.general.simulationSpecificSettings
+ *   node ./rosetta/scripts/js/remove-string.js joist preferences.tabs.general.simulationSpecificSettings
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
@@ -36,7 +36,7 @@ const args = process.argv.slice( 2 );
 
 // Verify that the number of arguments is correct.
 if ( args.length !== 2 ) {
-  logMessageAndAbort( '\nUsage:\n  node remove-string-key <sim-repo-name> <string-change-info>' );
+  logMessageAndAbort( '\nUsage:\n  node remove-string <sim-repo-name> <string-change-info>' );
 }
 const repoName = args[ 0 ];
 const stringKeyToRemove = args[ 1 ];
