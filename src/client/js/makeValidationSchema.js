@@ -11,7 +11,7 @@
 import * as Yup from 'yup';
 import alertErrorMessage from './alertErrorMessage.js';
 import isValidBracePattern from './isValidBracePattern.js';
-import publicConfig from '../../common/publicConfig.js';
+import { SINGLE_BRACE_REGEX, DOUBLE_BRACE_REGEX } from '../../common/constants.js';
 import KeyTypesEnum from '../../common/KeyTypesEnum.js';
 
 /**
@@ -37,8 +37,8 @@ const makeValidationSchema = translationFormData => {
       subObjects[ keyType ] = {};
       for ( const key of keys ) {
         const englishValue = translationFormData[ keyType ][ key ].english;
-        const englishSingleBraces = englishValue.match( publicConfig.singleBraceRegex ) || [];
-        const englishDoubleBraces = englishValue.match( publicConfig.doubleBraceRegex ) || [];
+        const englishSingleBraces = englishValue.match( SINGLE_BRACE_REGEX ) || [];
+        const englishDoubleBraces = englishValue.match( DOUBLE_BRACE_REGEX ) || [];
         if ( englishSingleBraces.length > 0 || englishDoubleBraces.length > 0 ) {
 
           // We need to use a regular function here. Yup needs to be able to access the global "this" keyword, and if

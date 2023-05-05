@@ -21,13 +21,6 @@ const PUBLIC_CONFIG_VALUES = [
   'SIGN_OUT_URL'
 ];
 
-// These are constants used in the client-side code. We want them in the public config.
-const CLIENT_CONSTANTS = {
-  singleBraceRegex: /\{\d+\}/g,
-  doubleBraceRegex: /\{\{\w+\}\}/g,
-  translationApiRoute: '/translate/api'
-};
-
 let publicConfigString = '/* eslint-disable */\n';
 publicConfigString += '// Note: This is a build artifact. Do not modify directly.\n';
 publicConfigString += 'export default {\n';
@@ -46,12 +39,6 @@ for ( const key of Object.keys( privateConfig ) ) {
     const value = addQuotes( key, privateConfig );
     publicConfigString += `  ${key}: ${value},\n`;
   }
-}
-
-// Add the client constants to the file string.
-for ( const key of Object.keys( CLIENT_CONSTANTS ) ) {
-  const value = addQuotes( key, CLIENT_CONSTANTS );
-  publicConfigString += `  ${key}: ${value},\n`;
 }
 
 // Add the ending curly brace.

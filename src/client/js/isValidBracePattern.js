@@ -7,7 +7,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import publicConfig from '../../common/publicConfig.js';
+import { SINGLE_BRACE_REGEX, DOUBLE_BRACE_REGEX } from '../../common/constants.js';
 
 /**
  * Return a boolean telling whether a given value has a valid brace pattern.
@@ -28,10 +28,10 @@ const isValidBracePattern = ( translatedValue, englishValue ) => {
 
   // Get arrays of single and double brace expressions.
   // These brace expressions check for braces and content between the braces.
-  const englishSingleBraces = englishValue.match( publicConfig.singleBraceRegex ) || [];
-  const englishDoubleBraces = englishValue.match( publicConfig.doubleBraceRegex ) || [];
-  const translatedSingleBraces = translatedValue.match( publicConfig.singleBraceRegex ) || [];
-  const translatedDoubleBraces = translatedValue.match( publicConfig.doubleBraceRegex ) || [];
+  const englishSingleBraces = englishValue.match( SINGLE_BRACE_REGEX ) || [];
+  const englishDoubleBraces = englishValue.match( DOUBLE_BRACE_REGEX ) || [];
+  const translatedSingleBraces = translatedValue.match( SINGLE_BRACE_REGEX ) || [];
+  const translatedDoubleBraces = translatedValue.match( DOUBLE_BRACE_REGEX ) || [];
 
   const hasSingleBraces = englishSingleBraces.length > 0;
   const hasDoubleBraces = englishDoubleBraces.length > 0;

@@ -6,7 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import privateConfig from '../../common/privateConfig.js';
+import { STRING_KEYS_WITH_REPO_NAME_IN_HTML_VAR } from '../../common/constants.js';
 import logger from './logger.js';
 
 /**
@@ -40,10 +40,10 @@ const getStringKeysWithRepoName = simHtml => {
   let stringKeysWithRepoName = { error: 'unable to get string keys with repo name' };
   try {
     logger.info( 'getting string keys with repo name from sim html' );
-    const re = new RegExp( `${privateConfig.STRING_KEYS_WITH_REPO_NAME_IN_HTML_VAR}.*$`, 'm' );
+    const re = new RegExp( `${STRING_KEYS_WITH_REPO_NAME_IN_HTML_VAR}.*$`, 'm' );
     const stringKeysWithRepoNameAndRestOfHtml = simHtml.match( re );
     const unparsedStringKeysWithRepoName = stringKeysWithRepoNameAndRestOfHtml[ 0 ]
-      .replace( `${privateConfig.STRING_KEYS_WITH_REPO_NAME_IN_HTML_VAR} = `, '' )
+      .replace( `${STRING_KEYS_WITH_REPO_NAME_IN_HTML_VAR} = `, '' )
       .replace( /;$/m, '' );
 
     const parsedStringKeysWithRepoName = JSON.parse( unparsedStringKeysWithRepoName );

@@ -16,7 +16,7 @@ import { LocaleInfoContext } from './RosettaRoutes.jsx';
 import boxArrowInRight from '../img/box-arrow-in-right.svg';
 import '../styles/table.css';
 import '../styles/translation-form.css';
-import publicConfig from '../../common/publicConfig.js';
+import { SINGLE_BRACE_REGEX, DOUBLE_BRACE_REGEX } from '../../common/constants.js';
 
 /**
  * This component is a row in the translation table. It has the string key, the English string, and an input for
@@ -33,8 +33,8 @@ const TranslationFormRow = props => {
   // If the English string contains one of the curly brace patterns (or both) we want
   // to color the English string and the text area text a different color to indicate
   // to the user this is a special string that requires care.
-  const needsSpecialColoring = publicConfig.singleBraceRegex.test( props.englishString ) ||
-                               publicConfig.doubleBraceRegex.test( props.englishString );
+  const needsSpecialColoring = SINGLE_BRACE_REGEX.test( props.englishString ) ||
+                               DOUBLE_BRACE_REGEX.test( props.englishString );
   const englishStringStyle = {
     color: needsSpecialColoring ? 'blue' : 'black'
   };
