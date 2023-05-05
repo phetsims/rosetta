@@ -8,9 +8,10 @@
 
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import TriggerBuild from './TriggerBuild.jsx';
+import FlushReportObject from './FlushReportObject.jsx';
 import { WebsiteUserDataContext } from './Rosetta.jsx';
 import Sha from './Sha.jsx';
+import TriggerBuild from './TriggerBuild.jsx';
 
 /**
  * This component is an admin page for Rosetta. It contains information on the running instance of Rosetta, and has the
@@ -27,7 +28,7 @@ const Admin = () => {
 
   if ( allowedAccess ) {
     jsx = (
-      <div>
+      <div style={{ backgroundColor: 'linen', padding: '1em' }}>
         <h1>Admin</h1>
         <p>
           If you aren't a PhET Team Member, you shouldn't be seeing this page. Please send an email to
@@ -35,6 +36,7 @@ const Admin = () => {
         </p>
         <Sha/>
         <TriggerBuild/>
+        <FlushReportObject/>
       </div>
     );
   }

@@ -47,19 +47,28 @@ class ReportObjectCache {
    * @public
    */
   getObject( locale, sim ) {
-    if ( this[ locale ] !== undefined
-         && this[ locale ][ sim ] !== undefined
-    ) {
+    if ( this[ locale ] !== undefined && this[ locale ][ sim ] !== undefined ) {
       const withinSimMetadataCacheWindow = Date.now() - this[ locale ][ sim ].timestamp
                                         < publicConfig.VALID_METADATA_DURATION;
-      if (
-        !this[ locale ][ sim ].isDirty
-        || ( this[ locale ][ sim ].isDirty && withinSimMetadataCacheWindow )
-      ) {
+      if ( !this[ locale ][ sim ].isDirty || ( this[ locale ][ sim ].isDirty && withinSimMetadataCacheWindow ) ) {
         return this[ locale ][ sim ];
       }
     }
     return null;
+  }
+
+  /**
+   * @param locale
+   * @param sim
+   * @public
+   */
+  flushObject( locale, sim ) {
+    let flushed = false;
+    if ( this[ locale ] !== undefined && this[ locale ][ sim ] !== undefined ) {
+      delete this[ locale ][ sim ];
+      flushed = true;
+    }
+    return flushed;
   }
 }
 

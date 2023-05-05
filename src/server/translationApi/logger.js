@@ -16,10 +16,10 @@ const logger = winston.createLogger( {
   ),
   level: privateConfig.LOGGER_LEVEL,
   transports: [
-    new winston.transports.Console()
+    new winston.transports.Console(),
 
     // Uncomment the next line to log to a file. This could be useful for debugging.
-    // new winston.transports.File( { filename: 'rosetta.log' } )
+    new winston.transports.File( { filename: 'rosetta.log' } )
   ]
 } );
 

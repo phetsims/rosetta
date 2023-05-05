@@ -13,6 +13,7 @@ Contents
 - [Manage systemd Service](#manage-systemd-service)
 - [View Logs](#view-logs)
 - [Test](#test)
+- [Update Translation Stats](#update-translation-stats)
 - [First-Time Production Setup](#first-time-production-setup)
   - [Clone Rosetta](#clone-rosetta)
   - [Create the systemd Service File](#create-the-systemd-service-file)
@@ -149,6 +150,15 @@ affect "real" translations. The downside of this is that there aren't
 many real translations on this branch, so it is sometimes necessary to
 manually move some over from the master branch for more realistic
 testing.
+
+Update Translation Stats
+------------------------
+
+If you need to update the translation stats for a locale/sim, you can
+go to the admin page and input your sim and locale in the "Flush 
+Report Object" section, then click the "Flush" button, and
+it should remove the old, cached stats. The next time someone views the
+translation report for that sim/locale, the stats should be updated.
 
 First-Time Production Setup
 ---------------------------

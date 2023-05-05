@@ -63,7 +63,7 @@ const TriggerBuild = () => {
   const grayButton = 'btn btn-secondary mt-2';
   const blueButton = 'btn btn-primary mt-2';
   return (
-    <div>
+    <div className='mt-4'>
       <h2>Trigger Build</h2>
       <p>
         See documentation for trigger build <a href='https://github.com/phetsims/rosetta/blob/master/doc/admin-guide.md#triggering-a-rebuild-without-being-credited'>here</a>.
