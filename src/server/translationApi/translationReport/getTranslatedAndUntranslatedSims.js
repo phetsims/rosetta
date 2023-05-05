@@ -12,7 +12,7 @@ import getTranslationInfo from './getTranslationInfo.js';
  * Return an object containing a list of translated sims and untranslated sims for a given locale.
  *
  * @param {String} locale - ISO 639-1 locale code, e.g. es for Spanish
- * @param {String} isTeamMember - whether a translator is a team member
+ * @param {Boolean} isTeamMember - whether a translator is a team member
  * @returns {Promise<{translated: String[], untranslated: String[]}>}
  */
 const getTranslatedAndUntranslatedSims = async ( locale, isTeamMember ) => {

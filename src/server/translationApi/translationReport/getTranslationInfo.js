@@ -12,7 +12,7 @@ import getSimMetadata from '../getSimMetadata.js';
 /**
  * Return an object that tells whether a given sim/locale combo has a translation.
  *
- * @param {String} isTeamMember - whether a translator is a team member
+ * @param {Boolean} isTeamMember - whether a translator is a team member
  * @returns {Promise<Object>} - translation info
  */
 const getTranslationInfo = async isTeamMember => {
@@ -22,7 +22,7 @@ const getTranslationInfo = async isTeamMember => {
   const simMetadata = await getSimMetadata();
   for ( const project of simMetadata.projects ) {
     for ( const sim of project.simulations ) {
-      if ( isTeamMember === 'true' || ( sim.visible || sim.isPrototype ) ) {
+      if ( isTeamMember || ( sim.visible || sim.isPrototype ) ) {
         const simName = sim.name;
         const localizedSimsList = Object.keys( sim.localizedSimulations );
         for ( const locale of localesList ) {

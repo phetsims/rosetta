@@ -15,12 +15,12 @@ import logger from './logger.js';
  * TODO: Cast isTeamMember to a boolean. See https://github.com/phetsims/rosetta/issues/391.
  *
  * @param {Object} sim - simulations object from sim metadata
- * @param {String} isTeamMember - whether a translator is a team member
+ * @param {Boolean} isTeamMember - whether a translator is a team member
  * @returns {Boolean|String} - false if sim shouldn't be visible, sim name otherwise
  */
 const extractSimName = ( sim, isTeamMember ) => {
   let simName = false;
-  if ( isTeamMember === 'true' || ( sim.visible || sim.isPrototype ) ) {
+  if ( isTeamMember || ( sim.visible || sim.isPrototype ) ) {
     simName = sim.name;
   }
   return simName;
@@ -33,7 +33,7 @@ const extractSimName = ( sim, isTeamMember ) => {
  * TODO: Cast isTeamMember to a boolean. See https://github.com/phetsims/rosetta/issues/391.
  *
  * @param {Object} simMetadata - sim metadata obtained from the PhET website
- * @param {String} isTeamMember - whether a translator is a team member
+ * @param {Boolean} isTeamMember - whether a translator is a team member
  * @returns {Object} - sim names mapped to sim titles
  */
 const getSimNamesAndTitles = ( simMetadata, isTeamMember ) => {
