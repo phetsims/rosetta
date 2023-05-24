@@ -32,10 +32,10 @@ const getTranslationReportObject = async (
     numCommonTranslatedStrings: null,
     percentCommon: null,
     numSimSpecificStrings: null,
-    numSimSpecificTranslatedStrings: wantsUntranslated === 'true' ? 0 : null,
+    numSimSpecificTranslatedStrings: wantsUntranslated ? 0 : null,
     percentSimSpecific: null,
     numSharedStrings: null,
-    numSharedTranslatedStrings: wantsUntranslated === 'true' ? 0 : null,
+    numSharedTranslatedStrings: wantsUntranslated ? 0 : null,
     percentShared: null,
     totalStrings: null,
     totalTranslatedStrings: null,
@@ -47,7 +47,7 @@ const getTranslationReportObject = async (
   // We do this to short-circuit having to do all the HTTP requests and computations
   // normally required for translation report objects.
   if ( publicConfig.ENVIRONMENT === 'development' && privateConfig.SHORT_REPORT ) {
-    return getShortReportObject( translationReportObject );
+    return getShortReportObject( translationReportObject, wantsUntranslated );
   }
 
   const simUrl = getSimUrl( simName );
@@ -93,7 +93,7 @@ const getTranslationReportObject = async (
     .values( simSpecificEnglishStringKeysAndValues )
     .filter( value => value !== NO_LONGER_USED_FLAG ).length;
 
-  if ( wantsUntranslated === 'false' ) {
+  if ( !wantsUntranslated ) {
     const simSpecificTranslatedStringKeysAndValues = await getSimSpecificTranslatedStringKeysAndValues(
       simName,
       locale,
@@ -119,7 +119,7 @@ const getTranslationReportObject = async (
     // categorized string keys object.
     translationReportObject.numSharedStrings = categorizedStringKeys.shared.length;
 
-    if ( wantsUntranslated === 'false' ) {
+    if ( !wantsUntranslated ) {
 
       // Create an array for collecting the translated string keys and values
       // for the shared strings.

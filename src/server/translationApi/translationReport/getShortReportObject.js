@@ -42,7 +42,7 @@ const getShortReportObject = ( translationReportObject, wantsUntranslated ) => {
     translationReportObject.numCommonStrings
   );
   translationReportObject.numSimSpecificStrings = getRandomInt( DENOMINATOR_MIN, DENOMINATOR_MAX );
-  translationReportObject.numSimSpecificTranslatedStrings = wantsUntranslated === 'true' ? 0 : getRandomInt( DENOMINATOR_MIN, DENOMINATOR_MAX );
+  translationReportObject.numSimSpecificTranslatedStrings = wantsUntranslated ? 0 : getRandomInt( DENOMINATOR_MIN, DENOMINATOR_MAX );
   translationReportObject.percentSimSpecific = getPercent(
     translationReportObject.numSimSpecificTranslatedStrings,
     translationReportObject.numSimSpecificStrings

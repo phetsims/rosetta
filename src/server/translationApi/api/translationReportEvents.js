@@ -32,10 +32,10 @@ const translationReportEvents = async ( req, res ) => {
   res.writeHead( 200, headers );
 
   const simMetadata = await getSimMetadata();
-  const simNamesAndTitles = getSimNamesAndTitles( simMetadata, req.query.isTeamMember );
+  const simNamesAndTitles = getSimNamesAndTitles( simMetadata, req.query.isTeamMember === 'true' );
   const translatedAndUntranslatedSims = await getTranslatedAndUntranslatedSims(
     req.params.locale,
-    req.query.isTeamMember
+    req.query.isTeamMember === 'true'
   );
   let simNames = translatedAndUntranslatedSims.translated;
   if ( req.query.wantsUntranslated === 'true' ) {
@@ -53,7 +53,7 @@ const translationReportEvents = async ( req, res ) => {
         req.params.locale,
         simNames,
         simNamesAndTitles[ sim ],
-        req.query.wantsUntranslated
+        req.query.wantsUntranslated === 'true'
       );
       reportObjectCache.setObject( req.params.locale, sim, translationReportObject, Date.now() );
     }
