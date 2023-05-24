@@ -7,6 +7,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import getLatestSimSha from './getLatestSimSha.js';
 import getStringFile from './getStringFile.js';
 import logger from './logger.js';
 import { longTermStorage } from './translationApi.js';
@@ -32,7 +33,8 @@ const getSimSpecificTranslationFormData = async (
   try {
 
     // The English file should exist.
-    const simSpecificEnglishStringKeysAndStrings = await getStringFile( simName );
+    const publishedSha = await getLatestSimSha( simName );
+    const simSpecificEnglishStringKeysAndStrings = await getStringFile( simName, publishedSha );
 
     // The translated file might not exist.
     const simSpecificTranslatedStringKeysAndStrings = await longTermStorage.get( simName, locale );
