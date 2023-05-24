@@ -52,6 +52,9 @@ const getSimSpecificTranslationFormData = async (
           continue;
         }
       }
+      else {
+        logger.warn( `string key ${stringKey} in sim, but not found in english file` );
+      }
 
       let translatedValue = '';
       if ( simSpecificTranslatedStringKeysAndStrings[ stringKey ] ) {
