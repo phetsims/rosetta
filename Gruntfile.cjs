@@ -30,12 +30,11 @@ module.exports = grunt => {
   Gruntfile( grunt );
 
   /**
-   * Rosetta depends on a parallel checkout of perennial, so we update perennial as part of updating rosetta.
-   * For the history of this, see:
+   * Rosetta depends on a parallel checkout of perennial, perennial-alias, and chipper, so we update these repos
+   * as part of updating rosetta. For the history of this, see:
    * https://github.com/phetsims/phet-io/issues/1874#issuecomment-1233493616
    *
-   * Basically, rosetta needs to use some code in perennial. We don't want to duplicate the code, so we are adding a
-   * dependency of a parallel perennial checkout.
+   * This task is intended to be used when you are pulling rosetta onto the production server or the test server.
    */
   grunt.registerTask( 'update-rosetta', 'This task pulls the latest versions of rosetta and its dependencies.', async function() {
 
