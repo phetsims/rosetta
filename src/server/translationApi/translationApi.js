@@ -11,6 +11,7 @@ import flushReportObject from './api/flushReportObject.js';
 import localeInfo from './api/localeInfo.js';
 import saveTranslation from './api/saveTranslation.js';
 import sha from './api/sha.js';
+import showStats from './api/showStats.js';
 import simNamesAndTitles from './api/simNamesAndTitles.js';
 import submitTranslation from './api/submitTranslation.js';
 import testTranslation from './api/testTranslation.js';
@@ -43,6 +44,7 @@ rosettaApiServer.get( '/triggerBuild/:simName?/:locale?/:userId?', triggerBuild 
 rosettaApiServer.get( '/translationReportEvents/:locale?', translationReportEvents );
 rosettaApiServer.get( '/translatedAndUntranslatedSims/:locale?', translatedAndUntranslatedSims );
 rosettaApiServer.get( '/flushReportObject/:locale?/:sim?', flushReportObject );
+rosettaApiServer.get( '/showStats', showStats );
 
 rosettaApiServer.post( '/*', ( req, res, next ) => {
   logger.info( `post request received for ${req.url}` );
