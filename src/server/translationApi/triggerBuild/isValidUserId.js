@@ -26,7 +26,7 @@ const isValidUserId = async ( simName, locale, userId ) => {
 
     // Try to verify whether the supplied user ID exists in the string file for the given sim/locale.
     try {
-      const stringFile = longTermStorage.get( simName, locale );
+      const stringFile = await longTermStorage.get( simName, locale );
       const setOfUserIds = new Set();
       let numHistoryArrays = 0;
       for ( const key of Object.keys( stringFile ) ) {
