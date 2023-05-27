@@ -48,19 +48,30 @@ for the account under which the process is being run. To best understand
 what this file contains, take a look at the instances of the file
 on phet-server2 and phet-server-dev.
 
-As of January 2023, the sign-in process on the website is undergoing some
-flux. In the future, the website user data URL is going to change. Right
-now, the URLs are:
+The login info URLs are:
 
-- production future: https://phet-direct.colorado.edu/user/check-login,
-- production current: https://phet.colorado.edu/services/check-login,
-- dev current: https://phet-direct-dev.colorado.edu/user/check-login,
+- phet-server2 current: https://phet-direct.colorado.edu/user/check-login,
+- phet-server2 past: https://phet.colorado.edu/services/check-login,
+- phet-server-dev current: https://phet-direct-dev.colorado.edu/user/check-login,
 - localhost current: http://localhost:16372/services/check-login,
 
 There are some configuration values needed right away by the client-side
 code. We extract these values and write them to the `publicConfig.js` file
 when Rosetta is started. For more info on this, see the README in the
 `src/common` directory.
+
+Logging Out
+-----------
+
+To log a user out, you need to hit a specific API endpoint. The URLs
+are:
+
+- phet-server2 current: https://phet-direct.colorado.edu/logout
+- phet-server-dev current: https://phet-direct-dev.colorado.edu/logout
+  - Verify this with @mattpen.
+- localhost current: http://localhost:16372/services/logout
+
+You need to send credentials in order for the logout to work.
 
 Triggering a Rebuild Without Being Credited
 -------------------------------------------
