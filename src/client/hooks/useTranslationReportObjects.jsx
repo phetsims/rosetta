@@ -6,7 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { useEffect, useState, useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
 import { WebsiteUserDataContext } from '../components/Rosetta.jsx';
 
@@ -17,10 +17,11 @@ import { WebsiteUserDataContext } from '../components/Rosetta.jsx';
  *
  * @param {string} locale - ISO 639-1 locale code, e.g. zh_TW for Chinese with traditional characters
  * @param {boolean} wantsUntranslated - whether the caller wants translation report objects for untranslated sims
+ * @param {boolean} showStats - whether we should show translation stats
  * @returns {object} - object containing report objects, a boolean telling whether the report is populated, and a method
  *                     for sorting report objects
  */
-const useTranslationReportObjects = ( locale, wantsUntranslated ) => {
+const useTranslationReportObjects = ( locale, wantsUntranslated, showStats ) => {
 
   const [ listening, setListening ] = useState( false );
   const [ reportPopulated, setReportPopulated ] = useState( false );
@@ -29,7 +30,7 @@ const useTranslationReportObjects = ( locale, wantsUntranslated ) => {
   const websiteUserData = useContext( WebsiteUserDataContext );
 
   useEffect( () => {
-    if ( !listening && !reportPopulated ) {
+    if ( !listening && !reportPopulated && showStats ) {
       const translationReportUrl = `${TRANSLATION_API_ROUTE}/translationReportEvents/${locale}?wantsUntranslated=${wantsUntranslated}&isTeamMember=${websiteUserData.teamMember}`;
       const translationReportSource = new EventSource( translationReportUrl );
       translationReportSource.onmessage = event => {
@@ -44,8 +45,9 @@ const useTranslationReportObjects = ( locale, wantsUntranslated ) => {
       };
       setListening( true );
     }
-  }, [ listening, reportPopulated, reportObjects ] );
+  }, [ listening, reportPopulated, reportObjects, showStats ] );
 
+  // If showStats is false, this is a dummy object.
   return {
     reportPopulated: reportPopulated,
     reportObjects: reportObjects,

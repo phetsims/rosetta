@@ -1,7 +1,14 @@
 // Copyright 2023, University of Colorado Boulder
 
-// When done, uncomment the following line.
-// import getRemainingGHRequests from '../getRemainingGHRequests.js';
+/**
+ * Route that shows whether a translation report should show
+ * translation statistics.
+ *
+ * @author Liam Mulhall <liammulh@gmail.com>
+ */
+
+import getRemainingGHRequests from '../getRemainingGHRequests.js';
+import logger from '../logger.js';
 
 // We can make 5000 requests per hour, and there are about 100 sims.
 // A typical sim requires 8 requests to get its translation report,
@@ -24,7 +31,12 @@ const REQUEST_LIMIT = 900;
  * @param res - Express response object
  */
 const showStats = async ( req, res ) => {
-  const remainingGHRequests = 800; // When done, make this: await getRemainingGHRequests();
+  const remainingGHRequests = await getRemainingGHRequests();
+  const showStats = remainingGHRequests > REQUEST_LIMIT;
+  logger.info( 'client wants to know whether to show translation stats' );
+  logger.info( `remaining github requests: ${remainingGHRequests}` );
+  logger.info( `request limit is set to: ${REQUEST_LIMIT}` );
+  logger.info( `should show stats: ${showStats}` );
   res.send( remainingGHRequests > REQUEST_LIMIT );
 };
 

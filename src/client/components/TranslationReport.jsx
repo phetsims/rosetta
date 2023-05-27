@@ -8,6 +8,7 @@
 
 import { useContext } from 'react';
 import { useParams } from 'react-router-dom';
+import useShowStats from '../hooks/useShowStats.jsx';
 import { LocaleInfoContext } from './RosettaRoutes.jsx';
 import TranslationReportTable from './TranslationReportTable.jsx';
 
@@ -29,6 +30,9 @@ const TranslationReport = () => {
     localeName = localeInfo[ params.locale ].name;
   }
 
+  // Determine whether we have enough GitHub API requests to show stats.
+  const showStats = useShowStats();
+
   // WARNING: For performance reasons, we get a list of translated sims and a list of
   // untranslated sims from the sim metadata as opposed to getting the data from
   // the string files on GitHub. The sim metadata only corresponds to the master branch
@@ -36,8 +40,18 @@ const TranslationReport = () => {
   // your Rosetta config file, the data in the tables won't be correct.
   return (
     <div>
-      <TranslationReportTable locale={params.locale} wantsUntranslated={true} localeName={localeName}/>
-      <TranslationReportTable locale={params.locale} wantsUntranslated={false} localeName={localeName}/>
+      <TranslationReportTable
+        locale={params.locale}
+        wantsUntranslated={true}
+        localeName={localeName}
+        showStats={showStats}
+      />
+      <TranslationReportTable
+        locale={params.locale}
+        wantsUntranslated={false}
+        localeName={localeName}
+        showStats={showStats}
+      />
     </div>
   );
 };

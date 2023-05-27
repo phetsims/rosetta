@@ -15,6 +15,7 @@ import SortDirectionEnum from '../js/SortDirectionEnum.js';
 import SortKeyEnum from '../js/SortKeyEnum.js';
 import getTranslationReportRows from '../jsx/getTranslationReportRows.jsx';
 import LoadingSpinner from './LoadingSpinner.jsx';
+import NoStatsBanner from './NoStatsBanner.jsx';
 import { SimNamesAndTitlesContext } from './RosettaRoutes.jsx';
 import SortButton from './SortButton.jsx';
 
@@ -25,16 +26,23 @@ import SortButton from './SortButton.jsx';
  * @param {string} locale - ISO 639-1 locale code, e.g. es for Spanish
  * @param {string} localeName - the English name of the locale, e.g. Spanish
  * @param {boolean} wantsUntranslated - whether the caller wants this table to have untranslated sims or translated sims
+ * @param {boolean} showStats - whether we should show stats
  * @returns {JSX.Element}
  */
-const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => {
+const TranslationReportTable = ( {
+                                   locale,
+                                   localeName,
+                                   wantsUntranslated,
+                                   showStats
+                                 } ) => {
 
   const simNamesAndTitles = useContext( SimNamesAndTitlesContext );
 
   // Get report objects consisting of translation report data.
   const { reportPopulated, reportObjects } = useTranslationReportObjects(
     locale,
-    wantsUntranslated
+    wantsUntranslated,
+    showStats
   );
 
   // State variables used in sorting the table.
@@ -57,7 +65,8 @@ const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => 
       locale,
       reportPopulated,
       sortKeys,
-      sortDirection
+      sortDirection,
+      showStats
     );
 
     const handleSortButtonClick = newSortKeys => {
@@ -104,6 +113,7 @@ const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => 
 
     jsx = (
       <div className='mt-4'>
+        {showStats ? <></> : <NoStatsBanner/>}
         <h3>
           {
             wantsUntranslated
@@ -111,7 +121,7 @@ const TranslationReportTable = ( { locale, localeName, wantsUntranslated } ) => 
             : `Sims published in ${localeName} (${locale})`
           }
         </h3>
-        {reportPopulated ? <></> : <p>Translation data loading... <LoadingSpinner/></p>}
+        {reportPopulated || !showStats ? <></> : <p>Translation data loading... <LoadingSpinner/></p>}
         {tableJsx}
       </div>
     );

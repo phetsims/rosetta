@@ -9,9 +9,9 @@
 
 import { Link } from 'react-router-dom';
 import StatsInfoButton from '../components/StatsInfoButton.jsx';
-import getSortedTranslationReportRows from './getSortedTranslationReportRows.jsx';
 // eslint-disable-next-line bad-text
 import '../styles/table.css';
+import getSortedTranslationReportRows from './getSortedTranslationReportRows.jsx';
 
 /**
  * Return an array of translation report table rows, i.e. return an array of JSX. These rows are put into the
@@ -24,6 +24,7 @@ import '../styles/table.css';
  * @param {Boolean} reportPopulated - boolean telling whether we have all the report objects
  * @param {String[]} sortKeys - which key to sort by, only used when the report is populated
  * @param {String} sortDirection - either ascending or descending
+ * @param {Boolean} showStats - whether we should show stats
  * @returns {Object[]} - array of report rows, i.e. array of JSX
  */
 const getTranslationReportRows = (
@@ -33,49 +34,69 @@ const getTranslationReportRows = (
   locale,
   reportPopulated,
   sortKeys,
-  sortDirection
+  sortDirection,
+  showStats
 ) => {
 
-  if ( reportPopulated ) {
-    return getSortedTranslationReportRows(
-      listOfSims,
-      reportObjects,
-      locale,
-      sortKeys,
-      sortDirection
-    );
-  }
-
   const translationReportJsx = {};
+  if ( !showStats ) {
 
-  // Initially, set all rows to loading.
-  for ( const simName of listOfSims ) {
-    translationReportJsx[ simName ] = (
-      <tr key={simName}>
-        <td><Link to={`/translate/${locale}/${simName}`}>{simNamesAndTitles[ simName ]}</Link></td>
-        <td>Loading...</td>
-      </tr>
-    );
-  }
-
-  // Overwrite rows for which we have data.
-  for ( const reportObject of reportObjects ) {
-
-    let pendingUpdateMessage = <></>;
-    if ( reportObject.isDirty ) {
-      pendingUpdateMessage = ' (pending update)';
-    }
-
-    if ( Object.keys( translationReportJsx ).includes( reportObject.simName ) ) {
-      translationReportJsx[ reportObject.simName ] = (
-        <tr key={reportObject.simName}>
-          <td><Link to={`/translate/${locale}/${reportObject.simName}`}>{reportObject.simTitle}</Link>{pendingUpdateMessage}</td>
-          <td>
-            <StatsInfoButton reportObject={reportObject}/>
-            {reportObject.percentTotal}% ({reportObject.totalTranslatedStrings} of {reportObject.totalStrings})
-          </td>
+    // If we are not supposed to show stats (i.e. there are not enough GitHub
+    // API requests left in our hourly limit), then just show a link to the
+    // translation page for each sim.
+    for ( const simName of listOfSims ) {
+      translationReportJsx[ simName ] = (
+        <tr key={simName}>
+          <td><Link to={`/translate/${locale}/${simName}`}>{simNamesAndTitles[ simName ]}</Link></td>
+          <td>--</td>
         </tr>
       );
+    }
+  }
+  else {
+
+    // Otherwise, if we have enough GitHub API requests left in our hourly limit,
+    // then show stats for each sim.
+
+    if ( reportPopulated ) {
+      return getSortedTranslationReportRows(
+        listOfSims,
+        reportObjects,
+        locale,
+        sortKeys,
+        sortDirection
+      );
+    }
+
+    // Initially, set all rows to loading.
+    for ( const simName of listOfSims ) {
+      translationReportJsx[ simName ] = (
+        <tr key={simName}>
+          <td><Link to={`/translate/${locale}/${simName}`}>{simNamesAndTitles[ simName ]}</Link></td>
+          <td>Loading...</td>
+        </tr>
+      );
+    }
+
+    // Overwrite rows for which we have data.
+    for ( const reportObject of reportObjects ) {
+
+      let pendingUpdateMessage = <></>;
+      if ( reportObject.isDirty ) {
+        pendingUpdateMessage = ' (pending update)';
+      }
+
+      if ( Object.keys( translationReportJsx ).includes( reportObject.simName ) ) {
+        translationReportJsx[ reportObject.simName ] = (
+          <tr key={reportObject.simName}>
+            <td><Link to={`/translate/${locale}/${reportObject.simName}`}>{reportObject.simTitle}</Link>{pendingUpdateMessage}</td>
+            <td>
+              <StatsInfoButton reportObject={reportObject}/>
+              {reportObject.percentTotal}% ({reportObject.totalTranslatedStrings} of {reportObject.totalStrings})
+            </td>
+          </tr>
+        );
+      }
     }
   }
 
