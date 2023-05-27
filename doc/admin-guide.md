@@ -83,7 +83,8 @@ babel for the user ID of the most recent translator.
    using the public version, this will generally be set to true.
 3. Obtain the user ID you wish to use from Babel.
 4. Go to Rosetta's admin page, scroll down to the trigger build form, and enter the sim name, locale, and user ID. When
-   you're ready, click the "Rebuild" button.
+   you're ready, click the "Rebuild" button. (You can also hit the API route directly. This is useful if you want to
+   trigger a build from a script.)
 5. Check Rosetta's logs and the build server's logs as desired. These log files are located on phet-server/ox-dev and
    will require SSH to view.
 6. Make sure your build went through successfully and the translation is published to the website. (This should take
