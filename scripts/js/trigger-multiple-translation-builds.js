@@ -3,8 +3,7 @@
 /**
  * This file defines a NodeJS script that can be used to trigger multiple simulation builds.  This is helpful when there
  * are a lot of builds to be done and it would be too time-consuming to do them all through the UI.  See
- * https://github.com/phetsims/rosetta/issues/389.
- *
+ * https://github.com/phetsims/rosetta/issues/389 and https://github.com/phetsims/perennial/issues/326.
  *
  * Usage Example:
  *   node trigger-multiple-translation-builds
@@ -13,84 +12,242 @@
  */
 
 // imports
-const fs = require( 'fs' );
 const axios = require( 'axios' );
+const getMostRecentUserId = require( './getMostRecentUserId.js' );
 
 // constants
-const INTER_BUILD_DELAY = 360; // in seconds
-const LOCALE = 'az';
-const SIM_LIST = [
-  'equality-explorer',
-  'expression-exchange',
-  'fraction-matcher',
-  'fractions-equality',
-  'fractions-intro',
-  'fractions-mixed-numbers',
-  'function-builder-basics',
-  'function-builder',
-  'gas-properties',
-  'gene-expression-essentials',
-  'geometric-optics',
-  'graphing-lines',
-  'graphing-quadratics',
-  'graphing-slope-intercept',
-  'gravity-force-lab-basics',
-  'greenhouse-effect',
-  'make-a-ten',
-  'molecules-and-light',
-  'natural-selection',
-  'neuron',
-  'normal-modes',
-  'number-line-distance',
-  'number-line-integers',
-  'number-line-operations',
-  'proportion-playground',
-  'ratio-and-proportion',
-  'trig-tour',
-  'unit-rates',
-  'vector-addition-equations',
-  'waves-intro',
-  'circuit-construction-kit-dc',
-  'color-vision',
-  'gravity-and-orbits',
-  'gravity-force-lab',
-  'states-of-matter',
-  'wave-interference'
+const INTER_BUILD_DELAY = 2; // in seconds, used to prevent build server from being totally consumed
+const SIM_AND_LOCALE_LIST = [
+
+  {
+    simName: 'ratio-and-proportion',
+    locale: 'bg'
+  },
+  {
+    simName: 'gene-expression-essentials',
+    locale: 'bg'
+  },
+  {
+    simName: 'natural-selection',
+    locale: 'bg'
+  },
+  {
+    simName: 'neuron',
+    locale: 'bg'
+  },
+  {
+    simName: 'build-a-nucleus',
+    locale: 'bg'
+  },
+  {
+    simName: 'waves-intro',
+    locale: 'bg'
+  },
+  {
+    simName: 'waves-intro',
+    locale: 'bg'
+  },
+  {
+    simName: 'circuit-construction-kit-dc-virtual-lab',
+    locale: 'bg'
+  },
+  {
+    simName: 'circuit-construction-kit-dc',
+    locale: 'bg'
+  },
+  {
+    simName: 'circuit-construction-kit-ac',
+    locale: 'bg'
+  },
+  {
+    simName: 'charges-and-fields',
+    locale: 'bg'
+  },
+  {
+    simName: 'capacitor-lab-basics',
+    locale: 'bg'
+  },
+  {
+    simName: 'balloons-and-static-electricity',
+    locale: 'bg'
+  },
+  {
+    simName: 'friction',
+    locale: 'bg'
+  },
+  {
+    simName: 'resistance-in-a-wire',
+    locale: 'bg'
+  },
+  {
+    simName: 'forces-and-motion-basics',
+    locale: 'bg'
+  },
+  {
+    simName: 'friction',
+    locale: 'om'
+  },
+  {
+    simName: 'forces-and-motion-basics',
+    locale: 'om'
+  },
+  {
+    simName: 'geometric-optics',
+    locale: 'om'
+  },
+  {
+    simName: 'quadrilateral',
+    locale: 'ro'
+  },
+  {
+    simName: 'quadrilateral',
+    locale: 'pl'
+  },
+  {
+    simName: 'quadrilateral',
+    locale: 'da'
+  },
+  {
+    simName: 'build-a-nucleus',
+    locale: 'hu'
+  },
+  {
+    simName: 'forces-and-motion-basics',
+    locale: 'om'
+  },
+  {
+    simName: 'geometric-optics',
+    locale: 'om'
+  },
+  {
+    simName: 'mean-share-and-balance',
+    locale: 'om'
+  },
+  {
+    simName: 'geometric-optics-basics',
+    locale: 'om'
+  },
+  {
+    simName: 'number-compare',
+    locale: 'om'
+  },
+  {
+    simName: 'ratio-and-proportion',
+    locale: 'om'
+  },
+  {
+    simName: 'ph-scale',
+    locale: 'om'
+  },
+  {
+    simName: 'beers-law-lab',
+    locale: 'om'
+  },
+  {
+    simName: 'quadrilateral',
+    locale: 'pt_BR'
+  },
+  {
+    simName: 'greenhouse-effect',
+    locale: 'th'
+  },
+  {
+    simName: 'number-play',
+    locale: 'om'
+  },
+  {
+    simName: 'energy-skate-park',
+    locale: 'es'
+  },
+  {
+    simName: 'number-line-integers',
+    locale: 'es'
+  },
+  {
+    simName: 'faradays-law',
+    locale: 'es'
+  },
+  {
+    simName: 'density',
+    locale: 'es'
+  },
+  {
+    simName: 'balloons-and-static-electricity',
+    locale: 'ku'
+  },
+  {
+    simName: 'beers-law-lab',
+    locale: 'ku'
+  },
+  {
+    simName: 'blackbody-spectrum',
+    locale: 'ku'
+  },
+  {
+    simName: 'build-a-nucleus',
+    locale: 'ku'
+  },
+  {
+    simName: 'make-a-ten',
+    locale: 'th'
+  },
+  {
+    simName: 'fraction-matcher',
+    locale: 'ku'
+  },
+  {
+    simName: 'area-model-algebra',
+    locale: 'th'
+  },
+  {
+    simName: 'balloons-and-static-electricity',
+    locale: 'ku'
+  },
+  {
+    simName: 'john-travoltage',
+    locale: 'ku'
+  },
+  {
+    simName: 'vector-addition',
+    locale: 'ku'
+  },
+  {
+    simName: 'energy-skate-park',
+    locale: 'ku'
+  },
+  {
+    simName: 'density',
+    locale: 'ro'
+  },
+  {
+    simName: 'density',
+    locale: 'el'
+  },
+  {
+    simName: 'density',
+    locale: 'kn'
+  },
+  {
+    simName: 'density',
+    locale: 'pl'
+  },
+  {
+    simName: 'density',
+    locale: 'fr'
+  },
+  {
+    simName: 'density',
+    locale: 'it'
+  },
+  {
+    simName: 'quadrilateral',
+    locale: 'da'
+  },
+  {
+    simName: 'density',
+    locale: 'bg'
+  }
 ];
-
-/**
- * Helper function to get the user ID for the most recent change of this file.
- */
-const getMostRecentUserId = ( simName, locale ) => {
-  const stringFileName = `${simName}-strings_${locale}.json`;
-  const stringFilePath = `../../../babel/${simName}/${stringFileName}`;
-  let stringInfo;
-  try {
-    stringInfo = JSON.parse( fs.readFileSync( stringFilePath, { encoding: 'utf8', flag: 'r' } ) );
-  }
-  catch( e ) {
-    console.error( `Strings file not found: ${stringFilePath}, aborting` );
-    process.exit( 1 );
-  }
-
-  let userId;
-  let highestTimestampFound = 0;
-  for ( const stringKey in stringInfo ) {
-    const history = stringInfo[ stringKey ].history;
-    const lastHistoryEntry = history[ history.length - 1 ];
-    if ( lastHistoryEntry.timestamp > highestTimestampFound ) {
-      highestTimestampFound = lastHistoryEntry.timestamp;
-      userId = lastHistoryEntry.userId;
-    }
-  }
-
-  if ( !userId ) {
-    console.error( `No userId recovered for sim ${simName}, locale ${locale}` );
-    process.exit( 1 );
-  }
-
-  return userId;
-};
 
 /**
  * Helper function to that can be used to pause the action in the script.
@@ -103,29 +260,36 @@ const delay = seconds => {
 ( async () => {
 
   // Iterate through the list of sims and submit build requests for each.
-  for ( let i = 0; i < SIM_LIST.length; i++ ) {
-    const simName = SIM_LIST[ i ];
-    const userId = getMostRecentUserId( simName, LOCALE );
-    console.log( `\nRequesting build for sim ${i + 1} of ${SIM_LIST.length}` );
-    console.log( `sim = ${simName}, locale = ${LOCALE}, and userId = ${userId}` );
-    const buildRequestUrl = `https://phet.colorado.edu/translate/api/triggerBuild/${simName}/${LOCALE}/${userId}`;
-    console.log( `buildRequestUrl = ${buildRequestUrl}` );
-    let response;
-    try {
-      response = await axios.get( buildRequestUrl );
-    }
-    catch( err ) {
-      console.log( `  Error when requesting build: ${err}, aborting.` );
-      process.exit( 1 );
-    }
-    if ( response ) {
-      console.log( `  response.status = ${response.status}` );
-      console.log( `  response.data = ${JSON.stringify( response.data )}` );
-    }
+  for ( let i = 0; i < SIM_AND_LOCALE_LIST.length; i++ ) {
+    const simName = SIM_AND_LOCALE_LIST[ i ].simName;
+    const locale = SIM_AND_LOCALE_LIST[ i ].locale;
+    const userId = getMostRecentUserId( simName, locale );
+    if ( userId !== null ) {
 
-    // Delay between each request so as not to overwhelm the build server.
-    if ( i < SIM_LIST.length - 1 ) {
-      await delay( INTER_BUILD_DELAY );
+      console.log( `\nRequesting build for sim ${i + 1} of ${SIM_AND_LOCALE_LIST.length}` );
+      console.log( `sim = ${simName}, locale = ${locale}, and userId = ${userId}` );
+      const buildRequestUrl = `https://phet.colorado.edu/translate/api/triggerBuild/${simName}/${locale}/${userId}`;
+      console.log( `buildRequestUrl = ${buildRequestUrl}` );
+      let response;
+      try {
+        response = await axios.get( buildRequestUrl );
+      }
+      catch( err ) {
+        console.log( `  Error when requesting build: ${err}, aborting.` );
+        process.exit( 1 );
+      }
+      if ( response ) {
+        console.log( `  response.status = ${response.status}` );
+        console.log( `  response.data = ${JSON.stringify( response.data )}` );
+      }
+
+      // Delay between each request so as not to overwhelm the build server.
+      if ( i < SIM_AND_LOCALE_LIST.length - 1 ) {
+        await delay( INTER_BUILD_DELAY );
+      }
+    }
+    else {
+      console.log( `  No user ID found, skipping build for ${simName}, locale ${locale}` );
     }
   }
 } )();
