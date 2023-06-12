@@ -9,6 +9,7 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import FlushReportObject from './FlushReportObject.jsx';
+import LogCredentials from './LogCredentials.jsx';
 import { WebsiteUserDataContext } from './Rosetta.jsx';
 import Sha from './Sha.jsx';
 import TriggerBuild from './TriggerBuild.jsx';
@@ -37,6 +38,7 @@ const Admin = () => {
         <Sha/>
         <TriggerBuild/>
         <FlushReportObject/>
+        <LogCredentials/>
       </div>
     );
   }

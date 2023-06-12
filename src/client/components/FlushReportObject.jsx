@@ -68,7 +68,9 @@ const FlushReportObject = () => {
             <button
               type='submit'
               disabled={!( isValid && dirty )}
-              className={!( isValid && dirty ) ? grayButton : blueButton}>Flush
+              className={!( isValid && dirty ) ? grayButton : blueButton}
+            >
+              Flush
             </button>
           </Form>
         )}

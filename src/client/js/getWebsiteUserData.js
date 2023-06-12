@@ -22,7 +22,7 @@ import publicConfig from '../../common/publicConfig.js';
 const getWebsiteUserData = async () => {
   const websiteUserDataRes = await axios.get(
     publicConfig.WEBSITE_USER_DATA_URL,
-    { withCredentials: true } // Include cookies so website backend can look up your session.
+    { withCredentials: true } // Include cookies so website backend can look up the session.
   );
 
   // Convert user ID to number. We do this because on some servers it's a string
