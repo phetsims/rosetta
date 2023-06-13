@@ -42,7 +42,11 @@ const getWebsiteUserData = async () => {
 
   // Make sure the user ID is a number. We do this because on some servers it's a string and on others it's a number,
   // see https://github.com/phetsims/rosetta/issues/373.
+  console.log( `--> websiteUserDataRes.data.userId = ${websiteUserDataRes.data.userId}` );
+  console.log( `--> typeof websiteUserDataRes.data.userId = ${typeof websiteUserDataRes.data.userId}` );
   const userId = Number( websiteUserDataRes.data.userId );
+  console.log( `--> userId = ${userId}` );
+
   const websiteUserData = websiteUserDataRes.data;
   websiteUserData.userId = userId;
   return websiteUserData;
