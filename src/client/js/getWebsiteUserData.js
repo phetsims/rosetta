@@ -28,8 +28,7 @@ import publicConfig from '../../common/publicConfig.js';
  * For a user that is NOT logged in, it looks like this:
  *
  *   websiteUserData = {
- *     "loggedIn": false,
- *     "userId": null
+ *     "loggedIn": false
  *   }
  *
  * @returns {Promise<Object>}
@@ -40,16 +39,14 @@ const getWebsiteUserData = async () => {
     { withCredentials: true } // Include cookies so website backend can look up the session.
   );
 
-  // Make sure the user ID is a number. We do this because on some servers it's a string and on others it's a number,
-  // see https://github.com/phetsims/rosetta/issues/373.
-  console.log( `--> websiteUserDataRes.data.userId = ${websiteUserDataRes.data.userId}` );
-  console.log( `--> typeof websiteUserDataRes.data.userId = ${typeof websiteUserDataRes.data.userId}` );
-  const userId = Number( websiteUserDataRes.data.userId );
-  console.log( `--> userId = ${userId}` );
-
   const websiteUserData = websiteUserDataRes.data;
-  console.log( `--> websiteUserData = ${JSON.stringify( websiteUserData, null, 2 )}` );
-  websiteUserData.userId = userId;
+
+  // Make sure the user ID is a number if it is present. We do this because on some servers it's a string and on others
+  // it's a number, see https://github.com/phetsims/rosetta/issues/373.
+  if ( typeof websiteUserData.userId === 'string' && !isNaN( websiteUserData.userId ) ) {
+    websiteUserData.userId = Number( websiteUserData.userId );
+  }
+  console.log( `websiteUserData.userId = ${websiteUserData.userId}` );
   return websiteUserData;
 };
 
