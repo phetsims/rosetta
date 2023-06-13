@@ -31,6 +31,7 @@ const makeTranslationObject = async ( values, simName, locale ) => {
       const storedUserId = window.sessionStorage.getItem( 'userId' );
       if ( storedUserId ) {
         console.warn( `Replacing null user ID with stored value ${storedUserId}.` );
+        websiteUserData.userId = Number( storedUserId );
       }
       else {
         console.warn( 'Null user ID found and no stored value available.' );
