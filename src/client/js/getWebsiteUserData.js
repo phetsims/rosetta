@@ -48,6 +48,7 @@ const getWebsiteUserData = async () => {
   console.log( `--> userId = ${userId}` );
 
   const websiteUserData = websiteUserDataRes.data;
+  console.log( `--> websiteUserData = ${JSON.stringify( websiteUserData, null, 2 )}` );
   websiteUserData.userId = userId;
   return websiteUserData;
 };
