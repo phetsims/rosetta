@@ -22,6 +22,20 @@ const makeTranslationObject = async ( values, simName, locale ) => {
   let translation;
   try {
     const websiteUserData = await getWebsiteUserData();
+
+    // Check for a null user ID and, if present, replace it with a value from session storage.  This is part of a
+    // workaround for an issue where null user IDs were being used when sessions expired, see
+    // https://github.com/phetsims/rosetta/issues/412.
+    // TODO: Remove this when better login checking exists, see https://github.com/phetsims/rosetta/issues/413.
+    if ( websiteUserData.userId === null ) {
+      const storedUserId = window.sessionStorage.getItem( 'userId' );
+      if ( storedUserId ) {
+        console.warn( `Replacing null user ID with stored value ${storedUserId}.` );
+      }
+      else {
+        console.warn( 'Null user ID found and no stored value available.' );
+      }
+    }
     translation = {
       userId: websiteUserData.userId,
       timestamp: Date.now(),

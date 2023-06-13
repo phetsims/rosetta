@@ -15,6 +15,7 @@ import getWebsiteUserData from '../js/getWebsiteUserData.js';
 const logUserCredentials = async () => {
   const websiteUserData = await getWebsiteUserData();
   console.log( `websiteUserData = ${JSON.stringify( websiteUserData, null, 2 )}` );
+  console.log( `userId from session storage: ${window.sessionStorage.getItem( 'userId' )}` );
 };
 
 const LogCredentials = () => {

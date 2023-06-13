@@ -46,6 +46,11 @@ function Rosetta() {
           <RosettaRoutes/>
         </WebsiteUserDataContext.Provider>
       );
+
+      // Save the user ID in session storage.  This is part of a workaround for an issue where null user IDs where being
+      // committed when sessions expired, see https://github.com/phetsims/rosetta/issues/412.
+      // TODO: Remove this when better login checking exists, see https://github.com/phetsims/rosetta/issues/413.
+      window.sessionStorage.setItem( 'userId', websiteUserData.userId.toString() );
     }
     else if ( notAllowedAccess ) {
       jsx = (
