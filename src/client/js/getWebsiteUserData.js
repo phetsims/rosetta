@@ -10,12 +10,27 @@ import axios from 'axios';
 import publicConfig from '../../common/publicConfig.js';
 
 /**
- * Return the website user data object.
+ * Get the user data object from website.
  *
- * We get the client config from the server because we need an easy way to tell
- * whether we're in production or development. We need this info because the
- * website's check-login service URL is undergoing some flux as of December 2022, and
- * we need to be able to set it dynamically based on where Rosetta is deployed.
+ * As of June 2023, the object returned by the request to the server when the user is logged in looks like this:
+ *
+ *   websiteUserData = {
+ *     "loggedIn": true,
+ *     "username": "Bob",
+ *     "email": "bob.somebody@somewhere.edu",
+ *     "userId": 4321,
+ *     "teamMember": true,
+ *     "trustedTranslator": true,
+ *     "translatorLocales": null,
+ *     "subscribed": false
+ *   }
+ *
+ * For a user that is NOT logged in, it looks like this:
+ *
+ *   websiteUserData = {
+ *     "loggedIn": false,
+ *     "userId": null
+ *   }
  *
  * @returns {Promise<Object>}
  */
@@ -25,8 +40,8 @@ const getWebsiteUserData = async () => {
     { withCredentials: true } // Include cookies so website backend can look up the session.
   );
 
-  // Convert user ID to number. We do this because on some servers it's a string
-  // and on others it's a number. See https://github.com/phetsims/rosetta/issues/373.
+  // Make sure the user ID is a number. We do this because on some servers it's a string and on others it's a number,
+  // see https://github.com/phetsims/rosetta/issues/373.
   const userId = Number( websiteUserDataRes.data.userId );
   const websiteUserData = websiteUserDataRes.data;
   websiteUserData.userId = userId;
