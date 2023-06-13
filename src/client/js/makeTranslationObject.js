@@ -23,6 +23,7 @@ const makeTranslationObject = async ( values, simName, locale ) => {
   try {
     const websiteUserData = await getWebsiteUserData();
     console.log( `websiteUserData = ${JSON.stringify( websiteUserData )}` );
+    console.log( `websiteUserData.userId = ${websiteUserData.userId}` );
 
     // Check for a null user ID and, if present, replace it with a value from session storage.  This is part of a
     // workaround for an issue where null user IDs were being used when sessions expired, see
@@ -37,6 +38,10 @@ const makeTranslationObject = async ( values, simName, locale ) => {
       else {
         console.warn( 'Null user ID found and no stored value available.' );
       }
+    }
+    else {
+      console.log( 'How is this possible?' );
+      console.log( `typeof websiteUserData.userId = ${typeof websiteUserData.userId}` );
     }
     translation = {
       userId: websiteUserData.userId,
