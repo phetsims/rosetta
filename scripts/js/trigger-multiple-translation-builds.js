@@ -16,7 +16,7 @@ const axios = require( 'axios' );
 const getMostRecentUserId = require( './getMostRecentUserId.js' );
 
 // constants
-const INTER_BUILD_DELAY = 2; // in seconds, used to prevent build server from being totally consumed
+const INTER_BUILD_DELAY = 120; // in seconds, used to prevent build server from being totally consumed
 const SIM_AND_LOCALE_LIST = [
 
   {
@@ -37,10 +37,6 @@ const SIM_AND_LOCALE_LIST = [
   },
   {
     simName: 'build-a-nucleus',
-    locale: 'bg'
-  },
-  {
-    simName: 'waves-intro',
     locale: 'bg'
   },
   {
