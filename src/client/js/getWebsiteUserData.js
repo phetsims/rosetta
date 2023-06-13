@@ -46,7 +46,6 @@ const getWebsiteUserData = async () => {
   if ( typeof websiteUserData.userId === 'string' && !isNaN( websiteUserData.userId ) ) {
     websiteUserData.userId = Number( websiteUserData.userId );
   }
-  console.log( `websiteUserData.userId = ${websiteUserData.userId}` );
   return websiteUserData;
 };
 
