@@ -1,8 +1,7 @@
 // Copyright 2023, University of Colorado Boulder
 
 /**
- * Route that shows whether a translation report should show
- * translation statistics.
+ * Route that shows whether a translation report should show translation statistics.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
  */
