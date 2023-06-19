@@ -6,7 +6,6 @@
  * some translations that were stored there when we cut over from Rosetta 1 to Rosetta 2 in early 2023.  See
  * https://github.com/phetsims/rosetta/issues/389.
  *
- *
  * Usage Example:
  *   node db-records-to-string-files ~/recover-strings/rosetta_1_data.csv az ../../../babel
  *
