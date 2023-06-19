@@ -72,6 +72,9 @@ translationObjects.forEach( translationObject => {
   }
 } );
 
+// Sort the array so that the user with the most recent translation activity is at top of the list.
+translatorList.sort( ( a, b ) => b.mostRecentTimestamp - a.mostRecentTimestamp );
+
 console.log( 'Translator Info:' );
 translatorList.forEach( translatorRecord => {
   console.log( '---------------------' );
