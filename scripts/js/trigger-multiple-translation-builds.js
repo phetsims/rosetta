@@ -17,231 +17,36 @@ const getMostRecentUserId = require( './common/getMostRecentUserId.js' );
 
 // constants
 const INTER_BUILD_DELAY = 120; // in seconds, used to prevent build server from being totally consumed
-const SIM_AND_LOCALE_LIST = [
 
+// List of sim+locals to build.
+const SIM_AND_LOCALE_LIST = [
   {
-    simName: 'ratio-and-proportion',
-    locale: 'bg'
+    simName: 'build-an-atom',
+    locale: 'mk'
   },
   {
-    simName: 'gene-expression-essentials',
-    locale: 'bg'
-  },
-  {
-    simName: 'natural-selection',
-    locale: 'bg'
-  },
-  {
-    simName: 'neuron',
-    locale: 'bg'
-  },
-  {
-    simName: 'build-a-nucleus',
-    locale: 'bg'
-  },
-  {
-    simName: 'waves-intro',
-    locale: 'bg'
-  },
-  {
-    simName: 'circuit-construction-kit-dc-virtual-lab',
-    locale: 'bg'
-  },
-  {
-    simName: 'circuit-construction-kit-dc',
-    locale: 'bg'
-  },
-  {
-    simName: 'circuit-construction-kit-ac',
-    locale: 'bg'
-  },
-  {
-    simName: 'charges-and-fields',
-    locale: 'bg'
-  },
-  {
-    simName: 'capacitor-lab-basics',
-    locale: 'bg'
-  },
-  {
-    simName: 'balloons-and-static-electricity',
-    locale: 'bg'
-  },
-  {
-    simName: 'friction',
-    locale: 'bg'
-  },
-  {
-    simName: 'resistance-in-a-wire',
-    locale: 'bg'
-  },
-  {
-    simName: 'forces-and-motion-basics',
-    locale: 'bg'
-  },
-  {
-    simName: 'friction',
-    locale: 'om'
-  },
-  {
-    simName: 'forces-and-motion-basics',
-    locale: 'om'
-  },
-  {
-    simName: 'geometric-optics',
-    locale: 'om'
-  },
-  {
-    simName: 'quadrilateral',
-    locale: 'ro'
-  },
-  {
-    simName: 'quadrilateral',
+    simName: 'calculus-grapher',
     locale: 'pl'
-  },
-  {
-    simName: 'quadrilateral',
-    locale: 'da'
-  },
-  {
-    simName: 'build-a-nucleus',
-    locale: 'hu'
-  },
-  {
-    simName: 'forces-and-motion-basics',
-    locale: 'om'
-  },
-  {
-    simName: 'geometric-optics',
-    locale: 'om'
-  },
-  {
-    simName: 'mean-share-and-balance',
-    locale: 'om'
-  },
-  {
-    simName: 'geometric-optics-basics',
-    locale: 'om'
-  },
-  {
-    simName: 'number-compare',
-    locale: 'om'
-  },
-  {
-    simName: 'ratio-and-proportion',
-    locale: 'om'
-  },
-  {
-    simName: 'ph-scale',
-    locale: 'om'
-  },
-  {
-    simName: 'beers-law-lab',
-    locale: 'om'
-  },
-  {
-    simName: 'quadrilateral',
-    locale: 'pt_BR'
-  },
-  {
-    simName: 'greenhouse-effect',
-    locale: 'th'
   },
   {
     simName: 'number-play',
-    locale: 'om'
-  },
-  {
-    simName: 'energy-skate-park',
-    locale: 'es'
-  },
-  {
-    simName: 'number-line-integers',
-    locale: 'es'
-  },
-  {
-    simName: 'faradays-law',
-    locale: 'es'
-  },
-  {
-    simName: 'density',
-    locale: 'es'
-  },
-  {
-    simName: 'balloons-and-static-electricity',
-    locale: 'ku'
-  },
-  {
-    simName: 'beers-law-lab',
-    locale: 'ku'
-  },
-  {
-    simName: 'blackbody-spectrum',
-    locale: 'ku'
-  },
-  {
-    simName: 'build-a-nucleus',
-    locale: 'ku'
-  },
-  {
-    simName: 'make-a-ten',
-    locale: 'th'
-  },
-  {
-    simName: 'fraction-matcher',
-    locale: 'ku'
-  },
-  {
-    simName: 'area-model-algebra',
-    locale: 'th'
-  },
-  {
-    simName: 'balloons-and-static-electricity',
-    locale: 'ku'
-  },
-  {
-    simName: 'john-travoltage',
-    locale: 'ku'
-  },
-  {
-    simName: 'vector-addition',
-    locale: 'ku'
-  },
-  {
-    simName: 'energy-skate-park',
-    locale: 'ku'
-  },
-  {
-    simName: 'density',
-    locale: 'ro'
-  },
-  {
-    simName: 'density',
-    locale: 'el'
-  },
-  {
-    simName: 'density',
-    locale: 'kn'
-  },
-  {
-    simName: 'density',
     locale: 'pl'
   },
   {
-    simName: 'density',
-    locale: 'fr'
+    simName: 'faradays-law',
+    locale: 'vi'
   },
   {
-    simName: 'density',
-    locale: 'it'
+    simName: 'forces-and-motion-basics',
+    locale: 'vi'
   },
   {
-    simName: 'quadrilateral',
-    locale: 'da'
+    simName: 'john-travoltage',
+    locale: 'vi'
   },
   {
-    simName: 'density',
-    locale: 'bg'
+    simName: 'my-solar-system',
+    locale: 'sr'
   }
 ];
 

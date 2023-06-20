@@ -24,10 +24,15 @@ module.exports = function getMostRecentUserId( simName, locale ) {
   let highestTimestampFound = 0;
   for ( const stringKey in stringInfo ) {
     const history = stringInfo[ stringKey ].history;
-    const lastHistoryEntry = history[ history.length - 1 ];
-    if ( lastHistoryEntry.timestamp > highestTimestampFound ) {
-      highestTimestampFound = lastHistoryEntry.timestamp;
-      userId = lastHistoryEntry.userId;
+
+    // History isn't always available, since long ago a number of string files were automatically converted from
+    // older Java versions of the sim, so we have to check.
+    if ( history ) {
+      const lastHistoryEntry = history[ history.length - 1 ];
+      if ( lastHistoryEntry.timestamp > highestTimestampFound ) {
+        highestTimestampFound = lastHistoryEntry.timestamp;
+        userId = lastHistoryEntry.userId;
+      }
     }
   }
 
