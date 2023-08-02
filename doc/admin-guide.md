@@ -89,7 +89,7 @@ babel for the user ID of the most recent translator.
 
 ### Instructions
 
-1. If necessary, edit the Babel file for the translation as needed. Commit directly to master.
+1. If you need to change a translation, edit the Babel file for the translation as needed. Commit directly to master.
 2. Make sure the instance of Rosetta that you plan to use has the build request flag set to true its config file. If you're
    using the public version, this will generally be set to true.
 3. Obtain the user ID you wish to use from Babel.
@@ -101,8 +101,12 @@ babel for the user ID of the most recent translator.
 6. Make sure your build went through successfully and the translation is published to the website. (This should take
    about five minutes.)
 
-To use this, enter this URL in a browser window and then check some time later that the translation was rebuilt. You
-can monitor rosetta and/or the build server log if desired.
+_Alternatively..._
+
+When triggering rebuilds in the manner just described, the Rosetta client initiates the build by hitting the Rosetta
+server's API with a particular request.  In some cases, such as when creating a script to do multiple rebuilds, it may
+be desirable to use this API directly.  This is fairly advanced, so it isn't generally recommended unless you know what
+you're doing.  The URL for this is `/translate/api/triggerBuild/{{simName}}/{{locale}}/{{userId}}`.
 
 Take Offline for Maintenance
 ----------------------------
