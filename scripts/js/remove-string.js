@@ -3,7 +3,7 @@
 /**
  * This file defines a NodeJS script that can be used to remove a string from the English string file and all
  * translations.  This should only be done for a string that is fully retired, and there are no published versions of a
- * sim that reference it.  Be particularly careful if using this on common code, since the master versions of common
+ * sim that reference it.  Be particularly careful if using this on common code, since the main versions of common
  * code strings are used for all builds, i.e. we don't branch the translated common-code string files.
  *
  * This was originally created to remove some unused strings from the preferences dialog, see

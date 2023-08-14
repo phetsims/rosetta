@@ -8,7 +8,7 @@
 
 import publicConfig from './publicConfig.js';
 
-// TODO: If all sims are re-published off of master, then this constant is obsolete, and the code associated with it can be removed. See https://github.com/phetsims/rosetta/issues/395.
+// TODO: If all sims are re-published off of main, then this constant is obsolete, and the code associated with it can be removed. See https://github.com/phetsims/rosetta/issues/395.
 // Specifically, see this comment: https://github.com/phetsims/rosetta/issues/395#issuecomment-1536705532.
 // Define a value that indicates that a string is no longer used. It's
 // possible that a sim could have a string "no longer used", so I
@@ -16,7 +16,7 @@ import publicConfig from './publicConfig.js';
 // this constant is to strip out strings that were once used for accessibility like
 // SCENERY_PHET/ResetAllButton.name or JOIST/HomeButton.name. These
 // strings are present in some older sim publications, but not in the
-// master version of their string file(s). Now, all accessibility strings
+// main version of their string file(s). Now, all accessibility strings
 // are prefixed with a11y.
 export const NO_LONGER_USED_FLAG = 'no longer used gooble';
 

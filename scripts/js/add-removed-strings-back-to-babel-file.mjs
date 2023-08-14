@@ -66,7 +66,7 @@ const PATHS_OF_CHANGED_FILES = [
 ];
 const PATHS_MAPPED_TO_FILE_CONTENTS = {};
 const BABEL_SHA_BEFORE_ROSETTA_2_DEPLOY = 'e633cf8be7d90fca65e81108e936abcd7ede38cf';
-const BABEL_SHA_CURRENT = 'master';
+const BABEL_SHA_CURRENT = 'main';
 
 const cd = dir => {
   const path = join( '..', dir );
@@ -214,13 +214,13 @@ for ( const path of Object.keys( PATHS_MAPPED_TO_FILE_CONTENTS ) ) {
   }
 }
 
-// Checkout the master branch of phetsims/babel, then pull, then write files.
+// Checkout the main branch of phetsims/babel, then pull, then write files.
 const SHOULD_WRITE_FILES = true;
 if ( process.cwd().includes( 'babel' ) ) {
   console.log( 'info: cwd includes babel' );
-  console.log( 'info: checking out master branch' );
-  checkout( 'master' );
-  console.log( 'info: checked out master branch' );
+  console.log( 'info: checking out main branch' );
+  checkout( 'main' );
+  console.log( 'info: checked out main branch' );
   console.log( 'info: pulling latest changes' );
   pull();
   console.log( 'info: pulled latest changes' );

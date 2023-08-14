@@ -40,7 +40,7 @@ const FlushReportObject = () => {
     <div className='mt-4'>
       <h2>Flush Report Object</h2>
       <p>
-        See documentation for flushing a report object <a href='https://github.com/phetsims/rosetta/blob/master/doc/admin-guide.md#update-translation-stats'>here</a>.
+        See documentation for flushing a report object <a href='https://github.com/phetsims/rosetta/blob/main/doc/admin-guide.md#update-translation-stats'>here</a>.
       </p>
       <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={ValidationSchema}>
         {(

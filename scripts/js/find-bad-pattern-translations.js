@@ -49,7 +49,7 @@ let numberOfMismatchedPatternsFound = 0;
 // it against the translations.
 listOfSimReposWithTranslations.forEach( simRepoName => {
 
-  // Assemble the path to the English strings file.  IMPORTANT NOTE: This uses the English strings from the master
+  // Assemble the path to the English strings file.  IMPORTANT NOTE: This uses the English strings from the main
   // branch, which isn't quite correct, since it should be using the strings file from the published sim.  However, this
   // works most of the time and is far simpler, so should be adequate for the purposes of this script.
   const pathToRepo = `./${simRepoName}`;

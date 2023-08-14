@@ -19,7 +19,7 @@ const octokit = new Octokit( { auth: privateConfig.GITHUB_PAT } );
  * @param {String} ref - branch or SHA of commit to get the string file from
  * @returns {Promise<Object|null>} - string file
  */
-const getStringFile = async ( simOrLibRepo, ref = 'master' ) => {
+const getStringFile = async ( simOrLibRepo, ref = 'main' ) => {
   let stringFile = null;
   try {
     const response = await octokit.repos.getContent( {

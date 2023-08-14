@@ -26,10 +26,10 @@ Do Work on Feature Branches
 
 Do your work on a feature branch. Once you are confident your
 work is ready, you can ask someone to review it, have it tested,
-or merge it into master at your discretion. If you ask someone
+or merge it into main at your discretion. If you ask someone
 to review your code or if you have it tested, you should only
-merge it into master once the reviewer or tester approves the
-changes. If you merge the work into master without review or
+merge it into main once the reviewer or tester approves the
+changes. If you merge the work into main without review or
 testing, you need to be confident you aren't breaking anything.
 
 Use Semantic Versioning

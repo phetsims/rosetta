@@ -66,7 +66,7 @@ const TriggerBuild = () => {
     <div className='mt-4'>
       <h2>Trigger Build</h2>
       <p>
-        See documentation for trigger build <a href='https://github.com/phetsims/rosetta/blob/master/doc/admin-guide.md#triggering-a-rebuild-without-being-credited'>here</a>.
+        See documentation for trigger build <a href='https://github.com/phetsims/rosetta/blob/main/doc/admin-guide.md#triggering-a-rebuild-without-being-credited'>here</a>.
       </p>
       <Formik initialValues={initialRebuildValues} onSubmit={handleSubmit} validationSchema={ValidationSchema}>
         {(

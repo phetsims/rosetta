@@ -35,7 +35,7 @@ const getLocaleInfo = async () => {
     // If the translation utility sees a lot of use, it might make sense to handle this case.
     if ( localeInfoValidDurationElapsed ) {
       logger.info( 'locale info is stale or nonexistent; getting it' );
-      const localeInfoUrl = `${privateConfig.GITHUB_URL}/chipper/master/data/localeInfo.json`;
+      const localeInfoUrl = `${privateConfig.GITHUB_URL}/chipper/main/data/localeInfo.json`;
       const localeInfoRes = await axios.get( localeInfoUrl );
       localeInfo = localeInfoRes.data;
 

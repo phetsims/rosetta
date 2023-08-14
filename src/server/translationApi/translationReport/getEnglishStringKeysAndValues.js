@@ -17,10 +17,10 @@ import logger from '../logger.js';
  *
  * @param {String} simOrLibName - sim or library (common repo) we want English string keys and strings from
  * @param {String[]} stringKeysWithRepoName - list of REPO_NAME/stringKey extracted from sim HTML
- * @param {String} shaOrBranch - the SHA of the sim you want data from or, by default, the master branch
+ * @param {String} shaOrBranch - the SHA of the sim you want data from or, by default, the main branch
  * @returns {Promise<Object>} - English string keys and their values (their strings)
  */
-const getEnglishStringKeysAndValues = async ( simOrLibName, stringKeysWithRepoName, shaOrBranch = 'master' ) => {
+const getEnglishStringKeysAndValues = async ( simOrLibName, stringKeysWithRepoName, shaOrBranch = 'main' ) => {
   logger.info( 'getting english string keys and values' );
   const englishStringKeysAndValues = {};
   const englishStringData = await getStringFile( simOrLibName, shaOrBranch );

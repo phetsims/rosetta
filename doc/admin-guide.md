@@ -89,7 +89,7 @@ babel for the user ID of the most recent translator.
 
 ### Instructions
 
-1. If you need to change a translation, edit the Babel file for the translation as needed. Commit directly to master.
+1. If you need to change a translation, edit the Babel file for the translation as needed. Commit directly to main.
 2. Make sure the instance of Rosetta that you plan to use has the build request flag set to true its config file. If you're
    using the public version, this will generally be set to true.
 3. Obtain the user ID you wish to use from Babel.
@@ -164,7 +164,7 @@ translations to be committed to a different branch of the phetsims/babel
 repository (where the translated string files live) so that they don't
 affect "real" translations. The downside of this is that there aren't
 many real translations on this branch, so it is sometimes necessary to
-manually move some over from the master branch for more realistic
+manually move some over from the main branch for more realistic
 testing.
 
 Update Translation Stats
