@@ -90,7 +90,8 @@ babel for the user ID of the most recent translator.
 ### Instructions
 
 1. If you need to change a translation, edit the Babel file for the translation as needed. Commit directly to main.
-2. Make sure the instance of Rosetta that you plan to use has the build request flag set to true its config file. If you're
+2. Make sure the instance of Rosetta that you plan to use has the build request flag set to true its config file. If
+   you're
    using the public version, this will generally be set to true.
 3. Obtain the user ID you wish to use from Babel.
 4. Go to Rosetta's admin page, scroll down to the trigger build form, and enter the sim name, locale, and user ID. When
@@ -104,9 +105,9 @@ babel for the user ID of the most recent translator.
 _Alternatively..._
 
 When triggering rebuilds in the manner just described, the Rosetta client initiates the build by hitting the Rosetta
-server's API with a particular request.  In some cases, such as when creating a script to do multiple rebuilds, it may
-be desirable to use this API directly.  This is fairly advanced, so it isn't generally recommended unless you know what
-you're doing.  The URL for this is `/translate/api/triggerBuild/{{simName}}/{{locale}}/{{userId}}`.
+server's API with a particular request. In some cases, such as when creating a script to do multiple rebuilds, it may
+be desirable to use this API directly. This is fairly advanced, so it isn't generally recommended unless you know what
+you're doing. The URL for this is `/translate/api/triggerBuild/{{simName}}/{{locale}}/{{userId}}`.
 
 Take Offline for Maintenance
 ----------------------------
@@ -146,7 +147,8 @@ View Logs
 ---------
 
 - Tail Rosetta's logs: `sudo journalctl -f -u rosetta`
-- See also [this tutorial on `journalctl`](https://www.digitalocean.com/community/tutorials/how-to-use-journalctl-to-view-and-manipulate-systemd-logs).
+- See
+  also [this tutorial on `journalctl`](https://www.digitalocean.com/community/tutorials/how-to-use-journalctl-to-view-and-manipulate-systemd-logs).
 
 Test
 ----
@@ -171,7 +173,7 @@ Update Translation Stats
 ------------------------
 
 If you need to update the translation stats for a locale/sim, you can
-go to the admin page and input your sim and locale in the "Flush 
+go to the admin page and input your sim and locale in the "Flush
 Report Object" section, then click the "Flush" button, and
 it should remove the old, cached stats. The next time someone views the
 translation report for that sim/locale, the stats should be updated.

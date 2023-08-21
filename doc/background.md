@@ -22,5 +22,6 @@ caused some issues, and they are something maintainers should be aware
 of.
 
 Here are some of the issues:
+
 - https://github.com/phetsims/rosetta/issues/329#issuecomment-1371588737
 - https://github.com/phetsims/rosetta/issues/375#issuecomment-1444581287

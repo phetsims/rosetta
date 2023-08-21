@@ -85,8 +85,8 @@ files. The server serves these static files.
 
 #### User Interface
 
-Rosetta's user interface is written in React, and it has three main 
-pages: the select locale page, the select sim page, and the 
+Rosetta's user interface is written in React, and it has three main
+pages: the select locale page, the select sim page, and the
 translation form. The select locale page allows the user to select the
 locale they want to translate in. The select sim page allows the user
 to view the sims that are available to translate in the selected locale,
@@ -96,7 +96,7 @@ selected sim.
 
 #### API
 
-The user interface interacts with the server via API endpoints the 
+The user interface interacts with the server via API endpoints the
 server establishes. These endpoints make it so that the user interface
 can be decoupled from the server.
 
@@ -113,7 +113,7 @@ PhET website also provides an API endpoint for logging a user out.
 
 #### Long-Term String Storage
 
-Long-term string storage is where translations are stored when the user 
+Long-term string storage is where translations are stored when the user
 publishes a translation. As of this writing, long-term storage is a
 GitHub repository.
 
@@ -125,7 +125,7 @@ database on phet-server2.
 
 #### Sim Source Code
 
-The translation statistics on the select sim page need the English 
+The translation statistics on the select sim page need the English
 string files for each sim. Thus, we depend on the string file in the sim
 source code.
 
@@ -133,29 +133,29 @@ Translation Report
 ------------------
 
 The maintainers of Rosetta (@jbphet and @liammulh) tend to refer to the
-select sim page as the translation report. This is the page where 
+select sim page as the translation report. This is the page where
 statistics about how many strings are translated in each sim are
 displayed to the user. (It is also the page where the user selects the
 sim they want to translate.) The translation report was the big feature
 added in Rosetta 2.0.
 
-It works by subscribing to a server sent events (SSE) source on the 
+It works by subscribing to a server sent events (SSE) source on the
 server. The server provides an API endpoint that iterates through a
 list of sims and gets stats about each of them. Once it has the stats
-for a given sim, it sends those stats to whoever is subscribed to 
-the SSE source. The client-side code re-renders the page each time it 
-gets  new stats to display. As of this writing, long-term string 
+for a given sim, it sends those stats to whoever is subscribed to
+the SSE source. The client-side code re-renders the page each time it
+gets new stats to display. As of this writing, long-term string
 storage is the phetsims/babel GitHub repository. Since we need to get
 string files from this repository to generate the report, we need to use
-the GitHub API. We only get 5000 requests per hour, and as of this 
-writing there are about 100 sims, and each sim requires about 8 
-requests, so we can only generate the translation report for about 6 
+the GitHub API. We only get 5000 requests per hour, and as of this
+writing there are about 100 sims, and each sim requires about 8
+requests, so we can only generate the translation report for about 6
 locales per hour. For more info on this, see
 [this comment](https://github.com/phetsims/rosetta/issues/410#issuecomment-1563781403).
 
-Once the translation report for a locale has been generated, it is 
-cached in Rosetta's memory. It will stay in Rosetta's memory until 
-Rosetta is restarted. The translation report objects for each sim 
+Once the translation report for a locale has been generated, it is
+cached in Rosetta's memory. It will stay in Rosetta's memory until
+Rosetta is restarted. The translation report objects for each sim
 containing total strings translated, total strings, etc. will be updated
 if a user publishes a translation. They can also be manually flushed by
 hitting an API route.
@@ -183,7 +183,7 @@ development.
 ### Local Development
 
 I've set the `start` script to lint and transpile/bundle React code
-using Vite, and then start the Node/Express server.  When I make a
+using Vite, and then start the Node/Express server. When I make a
 change to the client or the server, I simply run the `start` script
 (`npm run start` or `npm start`) to see if my change works and play
 around with Rosetta. When I'm done, I stop the script. Rinse and repeat.
@@ -327,42 +327,42 @@ However, it's good to keep this edge case in mind.
    operating system (i.e. Linux or macOS) and your computer uses `systemd`,
    you should be able to issue the command `sudo systemctl start mongod`
    (`mongod` is not a typo; it's _not_ supposed to be `mongodb`) to start
-   MongoDB.  To verify that it's running issue `sudo systemctl status
+   MongoDB. To verify that it's running issue `sudo systemctl status
    mongod`.
 3. Now that MongoDB is installed and running, we need to use the MongoDB
    shell `mongosh` to set up our database.
-    1. Issue the command `mongosh` to enter the MongoDB shell and note
-       the URI for the database. It will probably look something like
-       `mongodb://127.0.0.1:27017/<some other stuff>`. If you don't have
-       this URI set in `rosetta-config.json`, set it now. It should be
-       `DB_URI=mongodb://127.0.0.1:27017` (without the trailing slash).
-    2. Now we want to create a database and a collection (analogous to a
-       table). To do so, you'll need to have `DB_NAME=rosetta` and
-       `DB_SHORT_TERM_STORAGE_COLLECTION_NAME=shortTermTranslationStorage`
-       set in `rosetta-config.json`. When you run Rosetta locally and save a
-       translation, the `rosetta` database will be created, the short-term
-       storage collection will be created and the translation will be
-       stored in that collection.  Open a new terminal window, run Rosetta
-       locally, and save a translation. Alternatively, you could create a
-       database using `mongosh`, by issuing `use rosetta`, but this doesn't
-       create the database until you've stored data in it. You'd have to
-       insert a document into the database using `db.<your collection name
-       here>.insert({name: "Ada Lovelace", age: 205})` to ensure the
-       database is created. This also creates the collection that you
-       specify.
-    3. To ensure the `rosetta` database was created successfully, issue
-       `show databases`. You should see the `rosetta` database. To ensure
-       the `shortTermTranslationStorage` collection was created
-       successfully, issue `use rosetta` to switch to the `rosetta`
-       database and issue `show collections`. You should see the
-       `shortTermTranslationStorage` collection. If step 2 didn't work,
-       ensure your key-value pairs in `rosetta-config.json` are correct. To
-       ensure the translation was stored successfully, issue
-       `db.shortTermTranslationStorage.find({userId: 123456})` to find all
-       documents where the `userId` field is 123456, the `userId` given to
-       the user if Rosetta is being run on localhost. If this command spits
-       out a translation, congratulations are in order because you've
-       successfully installed and set up MongoDB.
+  1. Issue the command `mongosh` to enter the MongoDB shell and note
+     the URI for the database. It will probably look something like
+     `mongodb://127.0.0.1:27017/<some other stuff>`. If you don't have
+     this URI set in `rosetta-config.json`, set it now. It should be
+     `DB_URI=mongodb://127.0.0.1:27017` (without the trailing slash).
+  2. Now we want to create a database and a collection (analogous to a
+     table). To do so, you'll need to have `DB_NAME=rosetta` and
+     `DB_SHORT_TERM_STORAGE_COLLECTION_NAME=shortTermTranslationStorage`
+     set in `rosetta-config.json`. When you run Rosetta locally and save a
+     translation, the `rosetta` database will be created, the short-term
+     storage collection will be created and the translation will be
+     stored in that collection. Open a new terminal window, run Rosetta
+     locally, and save a translation. Alternatively, you could create a
+     database using `mongosh`, by issuing `use rosetta`, but this doesn't
+     create the database until you've stored data in it. You'd have to
+     insert a document into the database using `db.<your collection name
+     here>.insert({name: "Ada Lovelace", age: 205})` to ensure the
+     database is created. This also creates the collection that you
+     specify.
+  3. To ensure the `rosetta` database was created successfully, issue
+     `show databases`. You should see the `rosetta` database. To ensure
+     the `shortTermTranslationStorage` collection was created
+     successfully, issue `use rosetta` to switch to the `rosetta`
+     database and issue `show collections`. You should see the
+     `shortTermTranslationStorage` collection. If step 2 didn't work,
+     ensure your key-value pairs in `rosetta-config.json` are correct. To
+     ensure the translation was stored successfully, issue
+     `db.shortTermTranslationStorage.find({userId: 123456})` to find all
+     documents where the `userId` field is 123456, the `userId` given to
+     the user if Rosetta is being run on localhost. If this command spits
+     out a translation, congratulations are in order because you've
+     successfully installed and set up MongoDB.
 
 ### Behavior of the Save Button
 

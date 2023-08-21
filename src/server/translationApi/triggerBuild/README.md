@@ -22,11 +22,11 @@ ID of the most recent translator.
    ```
    https://ox-dev.colorado.edu/translate/api/requestTriggerBuild/{sim-name}/{locale code}/{translator ID}
    ```
-   Example: 
+   Example:
    ```
    https://phet.colorado.edu/translate/api/requestTriggerBuild/circuit-construction-kit-ac/fa/333624
    ```
-5. Check Rosetta's logs and the build server's logs as desired. These log files are located on 
+5. Check Rosetta's logs and the build server's logs as desired. These log files are located on
    phet-server2/phet-server-dev and will require SSH to view.
 6. Make sure your build went through successfully and the translation is published to the website. (This should take
    about five minutes.)

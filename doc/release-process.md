@@ -43,10 +43,10 @@ Use Semantic Versioning
     + PATCH when you've got a bug fix(es) and/or minor feature(s) ready
     + Additional labels for pre-release and build metadata are available as
       extensions to the MAJOR.MINOR.PATCH format.
-    + If you are putting a version of rosetta in for testing, you 
+    + If you are putting a version of rosetta in for testing, you
       should tag your commit `MAJOR.MINOR.PATCH-rc.x` where `x` is
-      a number you increment each time you put a version in for 
-      testing. In this context, `rc` stands for "release candidate". 
+      a number you increment each time you put a version in for
+      testing. In this context, `rc` stands for "release candidate".
       For more info on this, see the section on tagging test versions.
 
 Tag Test Versions
