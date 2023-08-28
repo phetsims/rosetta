@@ -30,9 +30,8 @@ const TranslationFormRow = props => {
   const localeInfo = useContext( LocaleInfoContext );
   const direction = localeInfo[ props.locale ].direction;
 
-  // If the English string contains one of the curly brace patterns (or both) we want
-  // to color the English string and the text area text a different color to indicate
-  // to the user this is a special string that requires care.
+  // If the English string contains either one of the curly brace patterns, we want to color it differently and make the
+  // text area text a different color to indicate to the user this is a special string that requires care.
   const needsSpecialColoring = SINGLE_BRACE_REGEX.test( props.englishString ) ||
                                DOUBLE_BRACE_REGEX.test( props.englishString );
   const englishStringStyle = {
@@ -40,7 +39,8 @@ const TranslationFormRow = props => {
   };
   const textAreaStyle = {
     textAlign: direction === 'rtl' ? 'right' : 'left',
-    color: needsSpecialColoring ? 'blue' : 'black'
+    color: needsSpecialColoring ? 'blue' : 'black',
+    resize: 'both'
   };
 
   // Formik has a handful of props that it needs on inputs.
