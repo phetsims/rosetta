@@ -29,7 +29,17 @@ const getEnglishStringKeysAndValues = async ( simOrLibName, stringKeysWithRepoNa
     const repoName = getRepoNameFromStringKeyWithRepoName( stringKeyWithRepoName );
     if ( simOrLibName === repoName ) {
       if ( englishStringData[ stringKey ] ) {
-        englishStringKeysAndValues[ stringKey ] = englishStringData[ stringKey ].value;
+
+        // TODO: See https://github.com/phetsims/rosetta/issues/411.  There are one or more sims that use a flag to
+        //       identify strings that shouldn't be presented to users for translation.  This was a short-lived idea,
+        //       but needs to be supported until there are no published sims that still use it.  Once it is no longer
+        //       used, this conditional code can be removed.
+        if ( englishStringData[ stringKey ].visible !== undefined && !englishStringData[ stringKey ].visible ) {
+          logger.warn( `skipping English string where visible flag is false, simOrLibName = ${simOrLibName}, stringKey = ${stringKey}` );
+        }
+        else {
+          englishStringKeysAndValues[ stringKey ] = englishStringData[ stringKey ].value;
+        }
       }
     }
   }
