@@ -12,7 +12,6 @@ import makeTranslationFileContentsForRepo from './makeTranslationFileContentsFor
 
 /**
  * Return an object with the exact translation file contents for each repo in a given translation.
- *
  * @param {Object} translation - translation received from client
  * @returns {Object} - exact translation file contents for each repo in a translation
  */
