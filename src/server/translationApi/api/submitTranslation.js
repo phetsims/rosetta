@@ -7,13 +7,14 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
+import privateConfig from '../../../common/privateConfig.js';
 import deleteSavedTranslation from '../deleteSavedTranslation.js';
 import getReposToStoreLongTerm from '../getReposToStoreLongTerm.js';
 import getSimMetadata from '../getSimMetadata.js';
 import getSimNamesAndTitles from '../getSimNamesAndTitles.js';
 import logger from '../logger.js';
 import prepareTranslationForLongTermStorage from '../prepareTranslationForLongTermStorage.js';
-import requestBuild from '../requestBuild.js';
+import requestBuilds from '../requestBuilds.js';
 import storeEachRepoContents from '../storeEachRepoContents.js';
 import { reportObjectCache } from '../translationApi.js';
 
@@ -22,13 +23,13 @@ import { reportObjectCache } from '../translationApi.js';
  * request that the translated sim be built and published to the website.
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
- * @returns {Promise<String>} - success message
+ * @returns {Promise<Object>} - an object indicating the success or failure of the steps involved
  */
 const submitTranslation = async ( req, res ) => {
-  logger.info( 'attempting to submit translation' );
+  logger.info( 'submitTranslation called' );
   const submissionStatus = {
     allRepoContentsStored: false,
-    buildRequested: false
+    buildRequestsSucceeded: false
   };
   try {
 
@@ -38,11 +39,15 @@ const submitTranslation = async ( req, res ) => {
 
     // Save the new or updated strings to the long-term storage area.  This may include strings for common code and/or
     // the specific sim that the user was working on.
-    logger.info( `sending ${req.body.locale}/${req.body.simName} translation to be stored long-term` );
+    logger.info( `saving strings for sim ${req.body.simName} and locale ${req.body.locale} in long-term storage` );
     const repos = await getReposToStoreLongTerm( preparedTranslation );
     submissionStatus.allRepoContentsStored = await storeEachRepoContents( preparedTranslation, repos );
+
     if ( submissionStatus.allRepoContentsStored ) {
       logger.info( 'successfully stored translation long term' );
+    }
+
+    if ( submissionStatus.allRepoContentsStored || !privateConfig.PERFORM_STRING_COMMITS ) {
 
       // For each sim repo in the translation, we need to set the sim repo's report object to dirty. See
       // https://github.com/phetsims/rosetta/issues/379 for more info and background on this.
@@ -73,11 +78,15 @@ const submitTranslation = async ( req, res ) => {
         logger.info( 'either deletion of previously saved translation from short-term storage failed or there was no previously saved translation' );
       }
 
-      // Since the storage was successful, we can now request a build of the currently published version of the sim for
-      // the new or updated locale.
-      submissionStatus.buildRequested = await requestBuild( req.body.simName, req.body.locale, req.body.userId );
-      if ( submissionStatus.buildRequested ) {
-        logger.info( 'build request succeeded' );
+      // Since the storage was successful, we now request builds of the sim and locale.  This will publish or update the
+      // translated versions of the sim.
+      submissionStatus.buildRequestsSucceeded = await requestBuilds(
+        req.body.simName,
+        req.body.locale,
+        req.body.userId
+      );
+      if ( submissionStatus.buildRequestsSucceeded ) {
+        logger.info( 'build requests succeeded' );
       }
     }
     else {
@@ -87,7 +96,6 @@ const submitTranslation = async ( req, res ) => {
   catch( e ) {
     logger.error( e );
   }
-  logger.info( `build requested: ${submissionStatus.buildRequested}` );
   logger.info( 'done attempting to submit translation' );
   res.send( submissionStatus );
 };

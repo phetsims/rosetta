@@ -7,7 +7,7 @@
  */
 
 import logger from '../logger.js';
-import requestBuild from '../requestBuild.js';
+import requestBuilds from '../requestBuilds.js';
 import isValidLocale from './isValidLocale.js';
 import isValidSimName from './isValidSimName.js';
 import isValidUserId from './isValidUserId.js';
@@ -28,7 +28,7 @@ const requestTriggerBuild = async ( simName, locale, userId ) => {
     const localeIsValid = await isValidLocale( locale );
     const userIdIsValid = await isValidUserId( simName, locale, userId );
     if ( simNameIsValid && localeIsValid && userIdIsValid ) {
-      requestSuccessful = await requestBuild( simName, locale, Number( userId ) );
+      requestSuccessful = await requestBuilds( simName, locale, Number( userId ) );
     }
   }
   catch( e ) {
