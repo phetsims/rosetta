@@ -22,6 +22,7 @@ import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
  * @param {String} locale - the locale code of the sim being translated
  * @param {String} simTitle - the sim's title
  * @param {String} localeName - the name of the language/locale
+ * @returns {Promise<Object|null>}
  */
 const submitTranslation = async (
   values,
@@ -51,7 +52,7 @@ const submitTranslation = async (
     try {
       const result = await axios.post( `${TRANSLATION_API_ROUTE}/submitTranslation`, translation );
       submitStatus = result.data;
-      if ( submitStatus.allRepoContentsStored && submitStatus.buildRequested ) {
+      if ( submitStatus.allRepoContentsStored && submitStatus.buildRequestsSucceeded ) {
         const units = 'hours';
         const timeUntilChanges = publicConfig.VALID_METADATA_DURATION / 1000 / 60 / 60;
         const submissionMessage = 'Translation submitted.'
@@ -64,13 +65,13 @@ const submitTranslation = async (
         // and the form is no longer dirty.
         window.location.reload();
       }
-      else if ( !submitStatus.allRepoContentsStored && submitStatus.buildRequested ) {
+      else if ( !submitStatus.allRepoContentsStored && submitStatus.buildRequestsSucceeded ) {
         window.alert( 'Not all translation contents (possibly none) were stored in long-term storage, but the build request was sent to the build server.' );
       }
-      else if ( submitStatus.allRepoContentsStored && !submitStatus.buildRequested ) {
+      else if ( submitStatus.allRepoContentsStored && !submitStatus.buildRequestsSucceeded ) {
         window.alert( 'Your translation was saved to the long-term storage database, but the build request was not sent to the build server.' );
       }
-      else if ( !submitStatus.allRepoContentsStored && !submitStatus.buildRequested ) {
+      else if ( !submitStatus.allRepoContentsStored && !submitStatus.buildRequestsSucceeded ) {
         window.alert( 'Your translation was not saved to the long-term storage database, and the build request was not sent to the build server.' );
       }
     }
