@@ -116,9 +116,9 @@ const requestBuilds = async ( simName, locale, userID ) => {
     const url = `${privateConfig.SERVER_URL}/deploy-html-simulation`;
     logger.info( `starting to send build requests to ${url}` );
 
-    for ( const bro in buildRequestObjects ) {
+    for ( const bro of buildRequestObjects ) {
 
-      logger.info( `sending build request ${buildRequestObjects.indexOf( bro )} of ${buildRequestObjects.length}` );
+      logger.info( `sending build request ${buildRequestObjects.indexOf( bro ) + 1} of ${buildRequestObjects.length}` );
 
       // Try to send the build request.
       try {
