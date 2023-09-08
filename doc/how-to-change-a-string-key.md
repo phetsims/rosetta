@@ -10,6 +10,16 @@ string key after a simulation has been published and translations have been crea
 it's not particularly easy, and the process includes a number of manual steps. This document describes those steps, and
 provides background information for understanding why the steps are necessary.
 
+In general, it's best to avoid changing string keys if at all possible.  Once a simulation is published, translations
+start coming in pretty fast, and these translation files all use the string keys from the published version.  If a key
+is changed on the main branch after publication, all translation files have to be changed too, but these are used to
+build the current version if changes come in.  To be safe, you need to essentially turn off the translation utility and
+make these changes all at once, then turn it back on.
+
+On top of that, as of 2023 we are maintaining older versions of phet-io sims so that phet-io customers can link to them.
+If a string key is changed, the older version of the phet-io sim wouldn't know about by default, so we'd either need to
+leave both keys and their values around or maintenance release the older phet-io sims.  Not fun.
+
 Background
 ----------
 
@@ -50,7 +60,7 @@ in babel, then do a maintenance release that rolls in this change to every publi
 In some cases, such as a commonly used joist string, this could literally be every single simulation. Yeah, yikes, I
 know.
 
-Changing a String Key for a Simulation
+Steps for Changing a String Key for a Simulation
 --------------------------------------
 
 Below are the steps for changing a string in a simulation (as opposed to common code). This is done as a checklist so
@@ -65,8 +75,7 @@ keys, and several can be changed at once if necessary.
   release.
 - [ ] Put Rosetta into maintenance mode to avoid any translation submissions while this is in progress (see the
   [Admin Guide](https://github.com/phetsims/rosetta/blob/main/doc/admin-guide.md) for information on how to do this).
-- [ ] Change the value of the string key on main. This will need to be done in the string file and at all usage
-  sites.
+- [ ] Change the value of the string key on main. This will need to be done in the string file and at all usage sites.
 - [ ] Run `grunt update` in the repo with the changed string to update the conglomerate string files.
 - [ ] Build the sim and verify that there are no string errors, then test the built sim and verify the string looks
   correct.
@@ -86,6 +95,8 @@ keys, and several can be changed at once if necessary.
   occurred that is used by the sim. Usually this means creating or updating a branch of the repo where the change was
   made and then updating the dependencies list for the dependant simulation. You'll need to do an RC and production
   release for this sim as well.
+- [ ] If there are previous phet-io releases of this sim that are still active, you'll need to change the string keys
+on each of the branches where it exists and do a maintenance release off of that branch.
 - [ ] Take Rosetta out of maintenance mode (again, see the
   [Admin Guide](https://github.com/phetsims/rosetta/blob/main/doc/admin-guide.md) for information on how to do this).
 - [ ] Verify that the string key change worked by going to Rosetta (https://phet.colorado.edu/translate/), selecting the
