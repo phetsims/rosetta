@@ -14,8 +14,8 @@ ID of the most recent translator.
 ## Instructions (Hard Way)
 
 1. If necessary, edit the phetsims/babel file for the translation as needed. Commit directly to main.
-2. Make sure the instance of Rosetta that you plan to use has the flag for sending build requests in its config file
-   set to true.
+2. Make sure the instance of Rosetta that you plan to use has the flag for sending build requests in its config file set
+   to true.
 3. Obtain the user ID you wish to use from phetsims/babel.
 4. Create and enter your URL in a web browser (you will be asked to sign in if you aren't already). Use the following
    URL pattern:

@@ -6,8 +6,8 @@ performed through the web interface. As a result, scripts are occasionally writt
 specific problem. This directory contains those scripts. The idea here is that this can be used, modified, copied and
 adjusted, and so forth when specific tasks need to be done.
 
-Don't expect a lot from these - they aren't written to solve every problem that might come up. They are intended to
-give developers a leg up in some situations.
+Don't expect a lot from these - they aren't written to solve every problem that might come up. They are intended to give
+developers a leg up in some situations.
 
 If you'd like an example of a case where a script was created so that this isn't all so abstract, have a look at
 https://github.com/phetsims/geometric-optics/issues/393.
