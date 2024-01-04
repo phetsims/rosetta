@@ -17,16 +17,16 @@ import logger from './logger.js';
  * @returns {Promise<Object>} - the Axios response to the request for the sim's HTML
  */
 const getSimHtml = async simUrl => {
-  logger.info( `getting sim html from ${simUrl}` );
+  logger.info( `getting sim HTML from ${simUrl}` );
   let simHtml;
   try {
     const simHtmlRes = await axios.get( simUrl );
     simHtml = simHtmlRes.data;
+    logger.info( 'successfully retrieved sim HTML' );
   }
   catch( e ) {
     logger.error( e );
   }
-  logger.info( `got sim html from ${simUrl}; returning it` );
   return simHtml;
 };
 

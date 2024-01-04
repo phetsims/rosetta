@@ -49,8 +49,9 @@ const addEmbeddingMarks = (
 /**
  * Return the replacement string object for a given sim and in-progress translation.
  *
- * @param stringKeysWithRepoName - object of REPO_NAME/stringKey: value
- * @param translation - the translation the user is working on
+ * @param {Object} stringKeysWithRepoName - an object of untranslated string keys and values where each property looks
+ *                                          like this: "REPO_NAME/stringKey": "string value"
+ * @param {Object} translation - the translation the user is working on
  * @returns {Promise<Object>} - the replacement string object
  */
 const getReplacementStringObject = async ( stringKeysWithRepoName, translation ) => {

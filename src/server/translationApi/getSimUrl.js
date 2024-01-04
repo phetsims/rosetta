@@ -16,9 +16,9 @@ import logger from './logger.js';
  * @returns {String} - sim url
  */
 const getSimUrl = simName => {
-  logger.info( `getting ${simName}'s sim url` );
-  logger.info( `got ${simName}'s sim url; returning it` );
-  return `${privateConfig.SERVER_URL}/sims/html/${simName}/latest/${simName}_en.html`;
+  const simUrl = `${privateConfig.SERVER_URL}/sims/html/${simName}/latest/${simName}_en.html`;
+  logger.info( `url requested for ${simName}, returning ${simUrl}` );
+  return simUrl;
 };
 
 export default getSimUrl;

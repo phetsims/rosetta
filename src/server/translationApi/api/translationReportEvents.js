@@ -7,6 +7,8 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import privateConfig from '../../../common/privateConfig.js';
+import publicConfig from '../../../common/publicConfig.js';
 import getSimMetadata from '../getSimMetadata.js';
 import getSimNamesAndTitles from '../getSimNamesAndTitles.js';
 import logger from '../logger.js';
@@ -16,9 +18,7 @@ import { reportObjectCache } from '../translationApi.js';
 
 /**
  * Set up an "event stream" (google on server sent events) of translation report objects used to populate rows of the
- * translation report table. We enable the user of this route to specify the number of sims they want report objects
- * for. Specifying the number of report objects is useful for debugging and testing.
- *
+ * translation report table.
  * @param req {Object} - Express request object
  * @param res {Object} - Express response object
  */
@@ -37,12 +37,19 @@ const translationReportEvents = async ( req, res ) => {
     req.params.locale,
     req.query.isTeamMember === 'true'
   );
-  let simNames = translatedAndUntranslatedSims.translated;
-  if ( req.query.wantsUntranslated === 'true' ) {
-    simNames = translatedAndUntranslatedSims.untranslated;
+  let simNames = req.query.wantsUntranslated === 'true' ?
+                 translatedAndUntranslatedSims.untranslated :
+                 translatedAndUntranslatedSims.translated;
+
+  // If the server is running in the development environment and the configuration is set for a short report, reduce
+  // the number of simulations for which translation report objects are obtained.  This is useful for debugging, since
+  // getting all the data takes several minutes and also can cause us to exceed some GitHub file read limitations.
+  if ( publicConfig.ENVIRONMENT === 'development' && privateConfig.SHORT_REPORT ) {
+    logger.info( 'using abbreviated report due to configuration settings' );
+    simNames = simNames.slice( 0, 3 );
   }
 
-  // If number of events hasn't been specified, send events for every sim.
+  // Loop through the list of sim names, sending events for each.
   for ( const sim of simNames ) {
     let translationReportObject = reportObjectCache.getObject( req.params.locale, sim );
     if ( !translationReportObject ) {
