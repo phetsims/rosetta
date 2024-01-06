@@ -42,7 +42,7 @@ const getStringKeysUsedInSim = async simName => {
     logger.info( 'request for string map file succeeded' );
   }
   catch( e ) {
-    logger.error( `error while requesting string map file: ${e}` );
+    logger.error( `error while requesting string map file for ${simName}: ${e}` );
   }
 
   return stringsUsedInSim;

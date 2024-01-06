@@ -1,20 +1,15 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * The getTranslationReportObject function returns an object containing the information needed to populate a row in the
- * "translation report", which is a report that displays information about how much of each sim is translated for a
- * given locale.
+ * Shared function, see function header for details.
  *
- * @author Liam Mulhall (PhET Interactive Simulations)
  * @author John Blanco (PhET Interactive Simulations)
  */
 
 import { NO_LONGER_USED_FLAG } from '../../../common/constants.js';
 import getCategorizedStringKeys from '../getCategorizedStringKeys.js';
 import getLatestSimSha from '../getLatestSimSha.js';
-import getSimHtml from '../getSimHtml.js';
-import getSimUrl from '../getSimUrl.js';
-import getStringKeysWithRepoName from '../getStringKeysWithRepoName.js';
+import getStringKeysUsedInSim from '../getStringKeysUsedInSim.js';
 import logger from '../logger.js';
 import getCommonEnglishStringKeysAndValues from './getCommonEnglishStringKeysAndValues.js';
 import getCommonTranslatedStringKeysAndValues from './getCommonTranslatedStringKeysAndValues.js';
@@ -24,6 +19,16 @@ import getSimSpecificEnglishStringKeysAndValues from './getSimSpecificEnglishStr
 import getSimSpecificTranslatedStringKeysAndValues from './getSimSpecificTranslatedStringKeysAndValues.js';
 import getTotalStats from './getTotalStats.js';
 
+/**
+ * Get an object containing the information needed to populate a row in the "translation report", which is a report that
+ * displays information about how much of each sim is translated for a given locale.
+ * @param {string} simName
+ * @param {string} locale
+ * @param {string[]} simNames
+ * @param {string} simTitle
+ * @param {boolean} wantsUntranslated
+ * @returns {Promise<Object>}
+ */
 const getTranslationReportObject = async (
   simName,
   locale,
@@ -48,10 +53,16 @@ const getTranslationReportObject = async (
     percentTotal: null
   };
 
-  const simUrl = getSimUrl( simName );
-  const simHtml = await getSimHtml( simUrl );
-  const stringKeysWithRepoName = Object.keys( getStringKeysWithRepoName( simHtml ) );
+  // Get the string keys used by the specified sim.
+  const stringKeysWithRepoName = Object.keys( await getStringKeysUsedInSim( simName ) );
+
+  // Sort the string keys into sim-specific or common-code categories.
   const categorizedStringKeys = await getCategorizedStringKeys( simName, stringKeysWithRepoName );
+
+  // Maintenance Note: In January 2024 there was some work done on this file to make it use the new method for obtaining
+  // the set of used strings.  I (jbphet) started thinking the code below could be simplified to use the string values
+  // from the sim instead of pulling them from the GitHub files they way they do below.  However, I think it may do this
+  // because it needs to identify strings that are no longer used.  Future maintainers of this code should know this.
 
   const commonEnglishStringKeysAndValues = await getCommonEnglishStringKeysAndValues(
     simName,

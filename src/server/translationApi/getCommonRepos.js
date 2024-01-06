@@ -1,7 +1,7 @@
 // Copyright 2021-2022, University of Colorado Boulder
 
 /**
- * Export a function that returns an array of common repos for a sim.
+ * Shared function, see function header for details.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
  */
@@ -10,8 +10,8 @@ import getRepoNameFromStringKeyWithRepoName from './getRepoNameFromStringKeyWith
 import logger from './logger.js';
 
 /**
- * Return an array of lowercase-kebab names of common repos for a given sim. (Common repos are repos that multiple
- * sims use. For example, phetsims/scenery is a common repo.) These repos are sorted alphabetically.
+ * Return an array of lowercase-kebab names of common repos for a given sim. Common repos are repos that multiple
+ * sims use. For example, phetsims/scenery is a common repo. These repos are sorted alphabetically.
  *
  * @param {String} simName - sim name
  * @param {String[]} simNames - list of all sim names
