@@ -7,11 +7,9 @@
  */
 
 import getCategorizedStringKeys from '../getCategorizedStringKeys.js';
-import getSimHtml from '../getSimHtml.js';
 import getSimMetadata from '../getSimMetadata.js';
 import getSimNamesAndTitles from '../getSimNamesAndTitles.js';
-import getSimUrl from '../getSimUrl.js';
-import getStringKeysWithRepoName from '../getStringKeysWithRepoName.js';
+import getStringKeysUsedInSim from '../getStringKeysUsedInSim.js';
 import getTranslationFormData from '../getTranslationFormData.js';
 import logger from '../logger.js';
 
@@ -26,12 +24,15 @@ const translationFormData = async ( req, res ) => {
   try {
     const simMetadata = await getSimMetadata();
     const simNames = Object.keys( getSimNamesAndTitles( simMetadata ) );
-    const simUrl = getSimUrl( req.params.simName );
-    const simHtml = await getSimHtml( simUrl );
 
-    // Here, we want the REPO_NAME/stringKey array rather than the object.
-    const stringKeysWithRepoName = Object.keys( getStringKeysWithRepoName( simHtml ) );
+    // Get a list of the string keys used in the sim, each with the repo name.  An example of what one of these will
+    // look like is 'SUN/a11y.numberSpinnerRoleDescription'.
+    const stringKeysWithRepoName = Object.keys( await getStringKeysUsedInSim( req.params.simName ) );
+
+    // Sort the strings into the categories needed by the translation form.
     const categorizedStringKeys = await getCategorizedStringKeys( req.params.simName, stringKeysWithRepoName );
+
+    // Get the data needed to populate the translation form.
     const translationFormData = await getTranslationFormData(
       req.params.simName,
       req.params.locale,
