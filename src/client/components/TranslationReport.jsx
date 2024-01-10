@@ -1,7 +1,7 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * We define the translation report for a given locale.
+ * Component that defines the translation report for a given locale.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
  */
@@ -33,19 +33,22 @@ const TranslationReport = () => {
   // Determine whether we have enough GitHub API requests to show stats.
   const showStats = useShowStats();
 
-  // WARNING: For performance reasons, we get a list of translated sims and a list of
-  // untranslated sims from the sim metadata as opposed to getting the data from
-  // the string files on GitHub. The sim metadata only corresponds to the main branch
-  // of phetsims/babel. Thus, if you have the branch for phetsims/babel set to tests in
-  // your Rosetta config file, the data in the tables won't be correct.
+  // WARNING: For performance reasons, we get a list of translated sims and a list of untranslated sims from the sim
+  // metadata as opposed to getting the data from the string files on GitHub. The sim metadata only corresponds to the
+  // main branch of phetsims/babel. Thus, if you have the branch for phetsims/babel set to tests in your Rosetta config
+  // file, the data in the tables won't be correct.
   return (
     <div>
+
+      {/* Unpublished sims */}
       <TranslationReportTable
         locale={params.locale}
         wantsUntranslated={true}
         localeName={localeName}
         showStats={showStats}
       />
+
+      {/* Published sims */}
       <TranslationReportTable
         locale={params.locale}
         wantsUntranslated={false}

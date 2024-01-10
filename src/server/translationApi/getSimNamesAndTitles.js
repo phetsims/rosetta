@@ -7,6 +7,9 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import { SIMS_FOR_SHORT_REPORT } from '../../common/constants.js';
+import privateConfig from '../../common/privateConfig.js';
+import publicConfig from '../../common/publicConfig.js';
 import logger from './logger.js';
 
 /**
@@ -50,7 +53,15 @@ const getSimNamesAndTitles = ( simMetadata, isTeamMember ) => {
     logger.error( e );
     simNamesAndTitles.error = 'unable to get sim names and titles';
   }
-  logger.info( 'returning sim names and titles' );
+
+  // If the configuration is set up to deliver a short report, filter the object to include fewer sims.
+  if ( publicConfig.ENVIRONMENT === 'development' && privateConfig.SHORT_REPORT ) {
+    Object.keys( simNamesAndTitles ).forEach( key => {
+      if ( SIMS_FOR_SHORT_REPORT.indexOf( key ) === -1 ) {
+        delete simNamesAndTitles[ key ];
+      }
+    } );
+  }
   return simNamesAndTitles;
 };
 

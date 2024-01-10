@@ -1,25 +1,43 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * Export a function that returns an object that tells whether a given sim/locale combo has a translation.
+ * Shared function, see header for details.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import getLocaleInfo from '../getLocaleInfo.js';
 import getSimMetadata from '../getSimMetadata.js';
 
 /**
- * Return an object that tells whether a given sim/locale combo has a translation.
+ * Return an object that can be used to look up whether a translation exists for any sim+locale combination.
  *
  * @param {Boolean} isTeamMember - whether a translator is a team member
- * @returns {Promise<Object>} - translation info
+ * @returns {Promise<Object>} - an object with sim names for the 1st keys, two-letter locales for the 2nd, and an object
+ *                              with a boolean indicating whether a translation exists.  Here's a rough example:
+ *                              {
+ *                                acid-base-solutions: {
+ *                                  aa: {hasTranslation: false},
+ *                                  ab: {hasTranslation: false},
+ *                                  .
+ *                                  .
+ *                                  .
+ *                                }
+ *                                .
+ *                                .
+ *                                .
+ *                              }
  */
 const getTranslationInfo = async isTeamMember => {
+
+  // Create the object that will be returned.  It will be populated in the subsequent code.
   const translationInfo = {};
-  const localeInfo = await getLocaleInfo();
-  const localesList = Object.keys( localeInfo );
+
+  const localesList = Object.keys( await getLocaleInfo() );
   const simMetadata = await getSimMetadata();
+
+  // Loop through all sims listed in the metadata and all possible locales to populate the object.
   for ( const project of simMetadata.projects ) {
     for ( const sim of project.simulations ) {
       if ( isTeamMember || ( sim.visible || sim.isPrototype ) ) {

@@ -43,6 +43,7 @@ const translationFormData = async ( req, res ) => {
     );
     logger.info( `responding with ${req.params.locale}/${req.params.simName}'s translation form data` );
     res.header( 'Content-Type', 'application/json' );
+    console.log( `translationFormData = ${JSON.stringify( translationFormData, null, 2 )}` );
     res.send( JSON.stringify( translationFormData, null, 2 ) );
   }
   catch( e ) {

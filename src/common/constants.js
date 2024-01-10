@@ -31,3 +31,23 @@ export const DOUBLE_BRACE_REGEX = /\{\{\w+\}\}/g;
 
 // This is the object in the published sim HTML that contains the REPO_NAME/stringKey pairs.
 export const STRING_KEYS_WITH_REPO_NAME_IN_HTML_VAR = 'window.phet.chipper.strings';
+
+// List of the sims included in the short report, which is used for debugging.
+export const SIMS_FOR_SHORT_REPORT = [
+
+  // sim often used for testing because it is first in alphabetical order
+  'acid-base-solutions',
+
+  // sim with lots of translations
+  'build-an-atom',
+
+  // sim that tends to have fewer translations
+  'quadrilateral',
+
+  // sim often used for testing
+  'molecules-and-light'
+
+  // chains and example-sim are omitted as of Jan 9 2024 because there aren't published string map files for them
+  // 'chains',
+  // 'example-sim'
+];

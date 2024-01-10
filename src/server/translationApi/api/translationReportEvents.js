@@ -7,14 +7,15 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import { SIMS_FOR_SHORT_REPORT } from '../../../common/constants.js';
 import privateConfig from '../../../common/privateConfig.js';
 import publicConfig from '../../../common/publicConfig.js';
 import getSimMetadata from '../getSimMetadata.js';
 import getSimNamesAndTitles from '../getSimNamesAndTitles.js';
 import logger from '../logger.js';
+import { reportObjectCache } from '../translationApi.js';
 import getTranslatedAndUntranslatedSims from '../translationReport/getTranslatedAndUntranslatedSims.js';
 import getTranslationReportObject from '../translationReport/getTranslationReportObject.js';
-import { reportObjectCache } from '../translationApi.js';
 
 /**
  * Set up an "event stream" (google on server sent events) of translation report objects used to populate rows of the
@@ -45,8 +46,7 @@ const translationReportEvents = async ( req, res ) => {
   // the number of simulations for which translation report objects are obtained.  This is useful for debugging, since
   // getting all the data takes several minutes and also can cause us to exceed some GitHub file read limitations.
   if ( publicConfig.ENVIRONMENT === 'development' && privateConfig.SHORT_REPORT ) {
-    logger.info( 'using abbreviated report due to configuration settings' );
-    simNames = simNames.slice( 0, 3 );
+    simNames = simNames.filter( simName => SIMS_FOR_SHORT_REPORT.includes( simName ) );
   }
 
   // Loop through the list of sim names, sending events for each.

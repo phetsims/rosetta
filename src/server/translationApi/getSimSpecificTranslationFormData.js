@@ -1,8 +1,7 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * Export a function that gets a sim's sim-specific string keys, their
- * English values, and their translated values.
+ * Export a function that gets a sim's sim-specific string keys, their English values, and their translated values.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
  */
@@ -20,11 +19,7 @@ import { longTermStorage } from './translationApi.js';
  * @param {string[]} simSpecificStringKeys - list of sim-specific string keys
  * @returns {Promise<{}>} - sim-specific string keys, their English values, and their translated values
  */
-const getSimSpecificTranslationFormData = async (
-  simName,
-  locale,
-  simSpecificStringKeys
-) => {
+const getSimSpecificTranslationFormData = async ( simName, locale, simSpecificStringKeys ) => {
 
   logger.info( 'getting sim-specific translation form data' );
 

@@ -20,8 +20,8 @@ import { SimNamesAndTitlesContext } from './RosettaRoutes.jsx';
 import SortButton from './SortButton.jsx';
 
 /**
- * Return a sortable table used in the translation report. You can sort it by sim title,
- * percent of translated sim-specific strings, or percent of translated common strings.
+ * Return a sortable table used in the translation report. The user can sort it by sim title or the percent of
+ * translated strings.
  *
  * @param {string} locale - ISO 639-1 locale code, e.g. es for Spanish
  * @param {string} localeName - the English name of the locale, e.g. Spanish
