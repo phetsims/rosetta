@@ -42,6 +42,13 @@ const getLocaleInfo = async () => {
       // Delete the English locale; we don't want people translating it.
       delete localeInfo.en;
 
+      // Delete any comments embedded in the locale info file.
+      Object.keys( localeInfo ).forEach( key => {
+        if ( key.indexOf( '_comment' ) === 0 ) {
+          delete localeInfo[ key ];
+        }
+      } );
+
       // We ignore this ESLint rule because a race condition here won't be problematic.
       // eslint-disable-next-line require-atomic-updates
       timeOfLastUpdate = Date.now();
