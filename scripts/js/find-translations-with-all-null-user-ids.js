@@ -3,6 +3,8 @@
 /**
  * Script to find all translations that have null values for the user IDs.  Created as part of the work for
  * https://github.com/phetsims/rosetta/issues/412.
+ *
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 const _ = require( 'lodash' );

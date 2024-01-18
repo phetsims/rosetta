@@ -5,6 +5,8 @@
  * moved from number-line-integers to number-line-common, and the string key was renamed.  This script is intended to
  * identify all cases where a translation of this string exists in number-line-integers but does not yet exist in
  * number-line-common and move it.
+ *
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 // modules

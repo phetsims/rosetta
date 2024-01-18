@@ -1,5 +1,9 @@
 // Copyright 2023, University of Colorado Boulder
 
+/**
+ * @author Liam Mu
+ */
+
 import logger from '../logger.js';
 import { reportObjectCache } from '../translationApi.js';
 

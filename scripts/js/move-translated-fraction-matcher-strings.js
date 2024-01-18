@@ -8,6 +8,8 @@
  *
  * EXAMPLE USAGE:
  * node ./js/move-translated-fraction-matcher-strings.js
+ *
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 // modules

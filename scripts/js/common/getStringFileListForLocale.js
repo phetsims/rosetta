@@ -1,5 +1,9 @@
 // Copyright 2023, University of Colorado Boulder
 
+/**
+ * @author John Blanco (PhET Interactive Simulations)
+ */
+
 const assert = require( './assert.js' );
 const getTranslatedStringFileList = require( './getTranslatedStringFileList.js' );
 

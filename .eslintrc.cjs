@@ -1,5 +1,9 @@
 // Copyright 2022, University of Colorado Boulder
 
+/**
+ * @author John Blanco (PhET Interactive Simulations)
+ */
+
 module.exports = {
   env: {
     browser: true,

@@ -1,5 +1,9 @@
 // Copyright 2023, University of Colorado Boulder
 
+/**
+ * @author John Blanco (PhET Interactive Simulations)
+ */
+
 const fs = require( 'fs' );
 const assert = require( './assert.js' );
 
