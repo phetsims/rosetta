@@ -45,7 +45,7 @@ reposToScan.forEach( repo => {
           if ( value.includes( key ) ) {
             const newValue = value.replaceAll( key, replacement );
             console.log( `Replacing ${value} with ${newValue} in ${repo}/${translationFile} for key ${stringKey}` );
-            translation[ stringKey ] = newValue;
+            translation[ stringKey ].value = newValue;
             changed = true;
             globalChanged = true;
           }
