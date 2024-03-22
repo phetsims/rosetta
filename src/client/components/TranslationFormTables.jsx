@@ -1,6 +1,5 @@
 // Copyright 2021, University of Colorado Boulder
-
-/* eslint-disable indent */
+ 
 
 /**
  * We define the sim-specific translation table and the common translation table that will go in the translation form.
@@ -9,8 +8,8 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import TranslationFormRow from './TranslationFormRow.jsx';
 import KeyTypesEnum from '../../common/KeyTypesEnum.js';
+import TranslationFormRow from './TranslationFormRow.jsx';
 
 /**
  * This component has some headers, some info, and a table for sim-specific strings and common strings. The header

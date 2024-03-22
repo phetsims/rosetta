@@ -6,7 +6,6 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-/* eslint-disable indent */
 
 import { useContext, useState } from 'react';
 import useTranslatedAndUntranslatedSims from '../hooks/useTranslatedAndUntranslatedSims.jsx';
