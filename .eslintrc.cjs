@@ -12,8 +12,7 @@ module.exports = {
   extends: [
     'plugin:react/recommended',
     '../chipper/eslint/sim_eslintrc.js',
-    '../chipper/eslint/node_eslintrc.js',
-    '../chipper/eslint/format_eslintrc.js'
+    '../chipper/eslint/node_eslintrc.js'
   ],
   ignorePatterns: [
     'static/*'
