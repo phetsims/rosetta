@@ -8,7 +8,6 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-// eslint-disable-next-line bad-text
 import '../styles/input-error.css';
 import getWebsiteUserData from '../js/getWebsiteUserData.js';
 

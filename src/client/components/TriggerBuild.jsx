@@ -13,8 +13,6 @@ import * as Yup from 'yup';
 import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
 import { useContext } from 'react';
 import { WebsiteUserDataContext } from './Rosetta.jsx';
-
-// eslint-disable-next-line bad-text
 import '../styles/input-error.css';
 
 /**

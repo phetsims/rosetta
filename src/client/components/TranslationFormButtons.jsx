@@ -7,8 +7,6 @@
  */
 
 import LoadingSpinner from './LoadingSpinner.jsx';
-
-// eslint-disable-next-line bad-text
 import '../styles/translation-form.css';
 
 /**

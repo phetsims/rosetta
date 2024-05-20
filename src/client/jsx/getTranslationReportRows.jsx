@@ -9,7 +9,6 @@
 
 import { Link } from 'react-router-dom';
 import StatsInfoButton from '../components/StatsInfoButton.jsx';
-// eslint-disable-next-line bad-text
 import '../styles/table.css';
 import getSortedTranslationReportRows from './getSortedTranslationReportRows.jsx';
 

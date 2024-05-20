@@ -11,7 +11,6 @@ import { Link } from 'react-router-dom';
 import StatsInfoButton from '../components/StatsInfoButton.jsx';
 import alertErrorMessage from '../js/alertErrorMessage.js';
 import SortDirectionEnum from '../js/SortDirectionEnum.js';
-// eslint-disable-next-line bad-text
 import '../styles/table.css';
 
 /**

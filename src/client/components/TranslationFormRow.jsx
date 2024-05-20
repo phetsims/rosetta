@@ -6,9 +6,6 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-// Disable this rule so we can import stylesheets.
-/* eslint-disable bad-text */
-
 import { useField, useFormikContext } from 'formik';
 import React, { useContext } from 'react';
 import InputErrorMessage from './InputErrorMessage.jsx';

@@ -10,8 +10,6 @@ import { useContext } from 'react';
 import KeyTypesEnum from '../../common/KeyTypesEnum.js';
 import { ErrorContext } from './TranslationForm.jsx';
 import questionOctagon from '../img/question-octagon.svg';
-
-// eslint-disable-next-line bad-text
 import '../styles/input-error.css';
 
 /**
