@@ -2,7 +2,7 @@
 
 /**
  * Create a function that checks whether a given translated value in the translation form has a valid brace pattern.
- * The brace patterns are used in PhET sims to insert variables (I think -- I (Liam) am not a sim developer).
+ * The brace patterns are used in PhET sims for strings that can be filled in with variables.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
  */
@@ -12,22 +12,21 @@ import { SINGLE_BRACE_REGEX, DOUBLE_BRACE_REGEX } from '../../common/constants.j
 /**
  * Return a boolean telling whether a given value has a valid brace pattern.
  *
- * @param {String} translatedValue - the user-inputted translated value
+ * @param {String} translatedValue - the user-entered (translated) value
  * @param {String} englishValue - the original English value
  * @returns {Boolean} - whether the brace pattern is valid
  */
 const isValidBracePattern = ( translatedValue, englishValue ) => {
   if ( translatedValue === undefined ) {
 
-    // If the user hasn't supplied a translation yet, the value will be undefined.
-    // We want blank translations to be valid. We can bail at this point.
+    // If the user hasn't supplied a translation yet.  This is considered valid.
     return true;
   }
 
   let isValid = false;
 
-  // Get arrays of single and double brace expressions.
-  // These brace expressions check for braces and content between the braces.
+  // Get arrays of single and double brace expressions. These brace expressions check for braces and content between the
+  // braces.
   const englishSingleBraces = englishValue.match( SINGLE_BRACE_REGEX ) || [];
   const englishDoubleBraces = englishValue.match( DOUBLE_BRACE_REGEX ) || [];
   const translatedSingleBraces = translatedValue.match( SINGLE_BRACE_REGEX ) || [];
@@ -36,8 +35,8 @@ const isValidBracePattern = ( translatedValue, englishValue ) => {
   const hasSingleBraces = englishSingleBraces.length > 0;
   const hasDoubleBraces = englishDoubleBraces.length > 0;
 
-  // Generally, there should only be one type of braces, so both of these should be true.
-  // One of them is working with arrays of length zero.
+  // Generally, there should only be one type of braces, so both of these should be true, though one will generally be
+  // working with zero-length arrays.
   const numSingleBracesIsSame = englishSingleBraces.length === translatedSingleBraces.length;
   const numDoubleBracesIsSame = englishDoubleBraces.length === translatedDoubleBraces.length;
 
