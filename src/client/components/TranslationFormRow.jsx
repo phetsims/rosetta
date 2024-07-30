@@ -8,12 +8,12 @@
 
 import { useField, useFormikContext } from 'formik';
 import React, { useContext } from 'react';
-import InputErrorMessage from './InputErrorMessage.jsx';
-import { LocaleInfoContext } from './RosettaRoutes.jsx';
+import { DOUBLE_BRACE_REGEX, SINGLE_BRACE_REGEX } from '../../common/constants.js';
 import boxArrowInRight from '../img/box-arrow-in-right.svg';
 import '../styles/table.css';
 import '../styles/translation-form.css';
-import { SINGLE_BRACE_REGEX, DOUBLE_BRACE_REGEX } from '../../common/constants.js';
+import InputErrorMessage from './InputErrorMessage.jsx';
+import { LocaleInfoContext } from './RosettaRoutes.jsx';
 
 /**
  * This component is a row in the translation table. It has the string key, the English string, and an input for
@@ -27,16 +27,17 @@ const TranslationFormRow = props => {
   const localeInfo = useContext( LocaleInfoContext );
   const direction = localeInfo[ props.locale ].direction;
 
-  // If the English string contains either one of the curly brace patterns, we want to color it differently and make the
-  // text area text a different color to indicate to the user this is a special string that requires care.
-  const needsSpecialColoring = SINGLE_BRACE_REGEX.test( props.englishString ) ||
-                               DOUBLE_BRACE_REGEX.test( props.englishString );
+  const isPatternString = SINGLE_BRACE_REGEX.test( props.englishString ) ||
+                          DOUBLE_BRACE_REGEX.test( props.englishString );
+
+  // If the English string contains either one of the supported curly brace patterns, we want to color it differently
+  // and make the text area text a different color to indicate that this is a special string that requires care.
   const englishStringStyle = {
-    color: needsSpecialColoring ? 'blue' : 'black'
+    color: isPatternString ? 'blue' : 'black'
   };
   const textAreaStyle = {
     textAlign: direction === 'rtl' ? 'right' : 'left',
-    color: needsSpecialColoring ? 'blue' : 'black',
+    color: isPatternString ? 'blue' : 'black',
     resize: 'both'
   };
 
@@ -63,7 +64,7 @@ const TranslationFormRow = props => {
           </button>
           <textarea {...field} style={textAreaStyle} dir={direction}/>
         </div>
-        <InputErrorMessage fieldKey={props.keyWithoutDots}/>
+        <InputErrorMessage fieldKey={props.keyWithoutDots} isPatternString={isPatternString}/>
       </td>
     </tr>
   );

@@ -87,7 +87,7 @@ const TranslationForm = () => {
   else {
 
     // Make the Formik form validation schema.
-    const validationSchema = makeValidationSchema( translationFormData );
+    const validationSchema = makeValidationSchema( params.simName, translationFormData );
     translationFormJsx = (
       <div>
         <TranslationFormHeader
