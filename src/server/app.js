@@ -16,7 +16,7 @@ import cors from 'cors';
 import os from 'os';
 import path from 'path';
 import { URL } from 'url';
-import privateConfig from '../common/privateConfig.js';
+import privateConfig, { pathToConfig } from '../common/privateConfig.js';
 import publicConfig from '../common/publicConfig.js';
 import express from 'express';
 import mockSignOut from './translationApi/api/mockSignOut.js';
@@ -89,12 +89,14 @@ app.listen( privateConfig.ROSETTA_PORT, () => {
   // Log private config keys except for secret ones.
   const unsafeKeys = [ 'BUILD_SERVER_AUTH', 'GITHUB_PAT', 'SERVER_TOKEN' ];
   const privateKeysToLog = Object.keys( privateConfig ).filter( key => !unsafeKeys.includes( key ) );
-  logger.info( 'see config below' );
+  logger.info( `config (from ${pathToConfig}):` );
   for ( const key of privateKeysToLog ) {
     logger.info( `    ${key}: ${privateConfig[ key ]}` );
   }
 
-  // Also log Rosetta's SHA.
+  // Log some information about the runtime environment that may be useful for debugging.
+  logger.info( 'Runtime environment info:' );
   const sha = getCurrentRosettaSha();
-  logger.info( `    SHA: ${sha}` );
+  logger.info( `    rosetta SHA: ${sha}` );
+  logger.info( `    NodeJS Version: ${process.versions.node}` );
 } );
