@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "echo \"=============> What the hay?\" && vite dev",
     "build": "vite build"
   },
   "devDependencies": {
