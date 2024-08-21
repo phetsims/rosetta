@@ -29,14 +29,17 @@ const getSimNamesAndTitles = ( simMetadata, isTeamMember ) => {
 
         // Decide whether this sim should be included in the list of those presented to the user based on the user's
         // credentials and the metadata associated with the sim.
+
+        // TODO: For debug, remove soon, see https://github.com/phetsims/rosetta/issues/432.
         if ( sim.name === 'normal-modes' ) {
           console.log( `sim = ${JSON.stringify( sim, null, 2 )}` );
         }
+
         if ( isTeamMember || ( sim.visible || sim.isPrototype || sim.isCommunity ) ) {
           simNamesAndTitles[ sim.name ] = sim.localizedSimulations.en.title;
-          console.log( `adding sim.name = ${sim.name}` );
 
           // TODO: For debug, remove soon, see https://github.com/phetsims/rosetta/issues/432.
+          console.log( `adding sim.name = ${sim.name}` );
         }
       }
     }

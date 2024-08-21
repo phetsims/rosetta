@@ -40,7 +40,7 @@ const getTranslationInfo = async isTeamMember => {
   // Loop through all sims listed in the metadata and all possible locales to populate the object.
   for ( const project of simMetadata.projects ) {
     for ( const sim of project.simulations ) {
-      if ( isTeamMember || ( sim.visible || sim.isPrototype ) ) {
+      if ( isTeamMember || ( sim.visible || sim.isPrototype || sim.isCommunity ) ) {
         const simName = sim.name;
         const localizedSimsList = Object.keys( sim.localizedSimulations );
         for ( const locale of localesList ) {
