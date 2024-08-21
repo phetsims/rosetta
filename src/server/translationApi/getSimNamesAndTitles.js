@@ -13,21 +13,6 @@ import publicConfig from '../../common/publicConfig.js';
 import logger from './logger.js';
 
 /**
- * If the sim should be visible, extract its name from the simulations object provided, otherwise return false.
- *
- * @param {Object} sim - simulations object from sim metadata
- * @param {Boolean} isTeamMember - whether a translator is a team member
- * @returns {Boolean|String} - false if sim shouldn't be visible, sim name otherwise
- */
-const extractSimName = ( sim, isTeamMember ) => {
-  let simName = false;
-  if ( isTeamMember || ( sim.visible || sim.isPrototype || sim.isCommunity ) ) {
-    simName = sim.name;
-  }
-  return simName;
-};
-
-/**
  * Return an object containing string lowercase kebab case sim names (e.g. acid-base-solutions) mapped to sim
  * titles (e.g. Acid-Base Solutions).
  *
@@ -41,10 +26,17 @@ const getSimNamesAndTitles = ( simMetadata, isTeamMember ) => {
   try {
     for ( const project of simMetadata.projects ) {
       for ( const sim of project.simulations ) {
-        const simTitle = sim.localizedSimulations.en.title;
-        const simName = extractSimName( sim, isTeamMember );
-        if ( simName ) {
-          simNamesAndTitles[ simName ] = simTitle;
+
+        // Decide whether this sim should be included in the list of those presented to the user based on the user's
+        // credentials and the metadata associated with the sim.
+        if ( sim.name === 'normal-modes' ) {
+          console.log( `sim = ${JSON.stringify( sim, null, 2 )}` );
+        }
+        if ( isTeamMember || ( sim.visible || sim.isPrototype || sim.isCommunity ) ) {
+          simNamesAndTitles[ sim.name ] = sim.localizedSimulations.en.title;
+          console.log( `adding sim.name = ${sim.name}` );
+
+          // TODO: For debug, remove soon, see https://github.com/phetsims/rosetta/issues/432.
         }
       }
     }
@@ -56,6 +48,7 @@ const getSimNamesAndTitles = ( simMetadata, isTeamMember ) => {
 
   // If the configuration is set up to deliver a short report, filter the object to include fewer sims.
   if ( publicConfig.ENVIRONMENT === 'development' && privateConfig.SHORT_REPORT ) {
+    logger.warn( 'using short report (fewer sims) based on configuration settings' );
     Object.keys( simNamesAndTitles ).forEach( key => {
       if ( SIMS_FOR_SHORT_REPORT.indexOf( key ) === -1 ) {
         delete simNamesAndTitles[ key ];
