@@ -105,7 +105,7 @@ const getSimMetadata = async () => {
       simMetadata = simMetadataRes.data;
 
       // Uncomment this code if you want a local copy of sim metadata.
-      // fs.writeFileSync( './simMetadata.json', JSON.stringify( simMetadata, null, 4 ) );
+      // fs.writeFileSync( './simMetadata.json', JSON.stringify( simMetadata, null, 2 ) );
 
       // We ignore this ESLint rule because a race condition here won't be problematic.
       // eslint-disable-next-line require-atomic-updates

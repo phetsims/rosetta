@@ -21,7 +21,7 @@ import logger from './logger.js';
  */
 const extractSimName = ( sim, isTeamMember ) => {
   let simName = false;
-  if ( isTeamMember || ( sim.visible || sim.isPrototype ) ) {
+  if ( isTeamMember || ( sim.visible || sim.isPrototype || sim.isCommunity ) ) {
     simName = sim.name;
   }
   return simName;
