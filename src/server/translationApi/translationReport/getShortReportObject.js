@@ -6,7 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import getPercent from './getPercent.js';
+import getPercentOfTranslatedStrings from './getPercentOfTranslatedStrings.js';
 import getTotalStats from './getTotalStats.js';
 
 /**
@@ -37,19 +37,19 @@ const getShortReportObject = ( translationReportObject, wantsUntranslated ) => {
   const DENOMINATOR_MAX = 100;
   translationReportObject.numCommonStrings = getRandomInt( DENOMINATOR_MIN, DENOMINATOR_MAX );
   translationReportObject.numCommonTranslatedStrings = getRandomInt( NUMERATOR_MIN, NUMERATOR_MAX );
-  translationReportObject.percentCommon = getPercent(
+  translationReportObject.percentCommon = getPercentOfTranslatedStrings(
     translationReportObject.numCommonTranslatedStrings,
     translationReportObject.numCommonStrings
   );
   translationReportObject.numSimSpecificStrings = getRandomInt( DENOMINATOR_MIN, DENOMINATOR_MAX );
   translationReportObject.numSimSpecificTranslatedStrings = wantsUntranslated ? 0 : getRandomInt( DENOMINATOR_MIN, DENOMINATOR_MAX );
-  translationReportObject.percentSimSpecific = getPercent(
+  translationReportObject.percentSimSpecific = getPercentOfTranslatedStrings(
     translationReportObject.numSimSpecificTranslatedStrings,
     translationReportObject.numSimSpecificStrings
   );
   translationReportObject.numSharedStrings = getRandomInt( DENOMINATOR_MIN, DENOMINATOR_MAX );
   translationReportObject.numSharedTranslatedStrings = getRandomInt( NUMERATOR_MIN, NUMERATOR_MAX );
-  translationReportObject.percentShared = getPercent(
+  translationReportObject.percentShared = getPercentOfTranslatedStrings(
     translationReportObject.numSharedTranslatedStrings,
     translationReportObject.numSharedStrings
   );

@@ -13,7 +13,7 @@ import getStringKeysUsedInSim from '../getStringKeysUsedInSim.js';
 import logger from '../logger.js';
 import getCommonEnglishStringKeysAndValues from './getCommonEnglishStringKeysAndValues.js';
 import getCommonTranslatedStringKeysAndValues from './getCommonTranslatedStringKeysAndValues.js';
-import getPercent from './getPercent.js';
+import getPercentOfTranslatedStrings from './getPercentOfTranslatedStrings.js';
 import getSharedTranslatedStringKeysAndValues from './getSharedTranslatedStringKeysAndValues.js';
 import getSimSpecificEnglishStringKeysAndValues from './getSimSpecificEnglishStringKeysAndValues.js';
 import getSimSpecificTranslatedStringKeysAndValues from './getSimSpecificTranslatedStringKeysAndValues.js';
@@ -86,7 +86,7 @@ const getTranslationReportObject = async (
     .filter( key => commonTranslatedStringKeysAndValues[ key ] !== ''
                     && commonEnglishStringKeysAndValues[ key ] !== NO_LONGER_USED_FLAG ).length;
 
-  translationReportObject.percentCommon = getPercent(
+  translationReportObject.percentCommon = getPercentOfTranslatedStrings(
     translationReportObject.numCommonTranslatedStrings,
     translationReportObject.numCommonStrings
   );
@@ -116,7 +116,7 @@ const getTranslationReportObject = async (
       } ).length;
   }
 
-  translationReportObject.percentSimSpecific = getPercent(
+  translationReportObject.percentSimSpecific = getPercentOfTranslatedStrings(
     translationReportObject.numSimSpecificTranslatedStrings,
     translationReportObject.numSimSpecificStrings
   );
@@ -161,7 +161,7 @@ const getTranslationReportObject = async (
       }
     }
 
-    translationReportObject.percentShared = getPercent(
+    translationReportObject.percentShared = getPercentOfTranslatedStrings(
       translationReportObject.numSharedTranslatedStrings,
       translationReportObject.numSharedStrings
     );

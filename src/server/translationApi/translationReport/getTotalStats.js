@@ -6,7 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import getPercent from './getPercent.js';
+import getPercentOfTranslatedStrings from './getPercentOfTranslatedStrings.js';
 import getTotalStrings from './getTotalStrings.js';
 
 /**
@@ -26,7 +26,7 @@ const getTotalStats = translationReportObject => {
     translationReportObject.numSimSpecificTranslatedStrings,
     translationReportObject.numSharedTranslatedStrings
   ] );
-  translationReportObject.percentTotal = getPercent(
+  translationReportObject.percentTotal = getPercentOfTranslatedStrings(
     translationReportObject.totalTranslatedStrings,
     translationReportObject.totalStrings
   );

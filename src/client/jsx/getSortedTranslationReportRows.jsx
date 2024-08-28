@@ -14,8 +14,8 @@ import SortDirectionEnum from '../js/SortDirectionEnum.js';
 import '../styles/table.css';
 
 /**
- * Return an array of translation report objects (i.e. stats used to make translation report rows) that have
- * percentages of translated sim-specific strings and translated common strings.
+ * Return an array of translation report objects (i.e. stats used to make translation report rows) that have percentages
+ * of translated sim-specific strings and translated common strings.
  *
  * @param {Object[]} reportObjects
  * @returns {Object[]}
@@ -57,7 +57,9 @@ const sortReportObjects = ( a, b, sortKey, fallbackKey, sortDirection ) => {
 
   // Parameter checking.
   if ( typeof a[ sortKey ] !== typeof b[ sortKey ] ) {
-    alertErrorMessage( 'Values being sorted are not the same type.' );
+    alertErrorMessage(
+      `Values being sorted are not the same type.\na[ sortKey ] = ${a[ sortKey ]}, b[ sortKey ] = ${b[ sortKey ]}`
+    );
   }
   const valuesAreStrings = typeof a[ sortKey ] === 'string' && typeof b[ sortKey ] === 'string';
 
