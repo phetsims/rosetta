@@ -35,7 +35,7 @@
         ],
         "parserOptions": {
           "project": [
-            "../rosetta/tsconfig.json"
+            "../chipper/tsconfig/eslint-all/tsconfig.json"
           ]
         }
       }
