@@ -10,7 +10,7 @@
  */
 
 import nodeEslintConfig from '../chipper/eslint/node.eslint.config.mjs';
-import reactPlugin from '../chipper/node_modules/eslint-plugin-react';
+import reactPlugin from '../chipper/node_modules/eslint-plugin-react/index.js';
 import globals from '../chipper/node_modules/globals/index.js';
 
 export default [
