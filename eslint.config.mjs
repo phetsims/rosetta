@@ -1,7 +1,12 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * @author John Blanco (PhET Interactive Simulations)
+ * ESlint configuration for rosetta.
+ *
+ * TODO: Review rosetta configuration and test linting, see https://github.com/phetsims/chipper/issues/1451
+ *
+ * @author Sam Reid (PhET Interactive Simulations)
+ * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
 import nodeEslintConfig from '../chipper/eslint/node.eslint.config.mjs';
