@@ -9,8 +9,8 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import reactPlugin from 'eslint-plugin-react';
 import nodeEslintConfig from '../chipper/eslint/node.eslint.config.mjs';
+import reactPlugin from '../chipper/node_modules/eslint-plugin-react';
 import globals from '../chipper/node_modules/globals/index.js';
 
 export default [
