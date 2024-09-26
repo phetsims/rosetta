@@ -1,7 +1,7 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * ESlint configuration for rosetta.
+ * ESLint configuration for rosetta.
  *
  * TODO: JB: Review rosetta configuration and test linting, see https://github.com/phetsims/chipper/issues/1451
  *
