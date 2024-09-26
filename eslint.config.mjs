@@ -3,38 +3,26 @@
 /**
  * ESlint configuration for rosetta.
  *
- * TODO: Review rosetta configuration and test linting, see https://github.com/phetsims/chipper/issues/1451
+ * TODO: JB: Review rosetta configuration and test linting, see https://github.com/phetsims/chipper/issues/1451
  *
  * @author Sam Reid (PhET Interactive Simulations)
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
+import reactPlugin from 'eslint-plugin-react';
 import nodeEslintConfig from '../chipper/eslint/node.eslint.config.mjs';
-import simEslintConfig from '../chipper/eslint/sim.eslint.config.mjs';
 import globals from '../chipper/node_modules/globals/index.js';
-// import babelESLintParser from '@babel/eslint-parser'; // TODO: https://github.com/phetsims/chipper/issues/1451
 
 export default [
-  // 'plugin:react/recommended', // TODO: https://github.com/phetsims/chipper/issues/1451
-  ...simEslintConfig,
+  reactPlugin.configs.flat.recommended,
   ...nodeEslintConfig,
   {
     languageOptions: {
       globals: {
         ...globals.node,
         ...globals.browser
-      },
-      // parser: babelESLintParser,
-      parserOptions: {
-        babelOptions: {
-          presets: [
-            '@babel/preset-react'
-          ]
-        },
-        requireConfigFile: false
       }
     },
-
     rules: {
       'phet/bad-sim-text': 'off',
       'jsx-quotes': [

@@ -20,9 +20,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
-    "@babel/eslint-parser": "^7.16.0",
     "concurrently": "^8.0.1",
     "eslint": "^8.34.0",
+    "eslint-plugin-react": "~7.36.1",
     "grunt": "^1.4.1",
     "winston": "^3.8.2"
   }
