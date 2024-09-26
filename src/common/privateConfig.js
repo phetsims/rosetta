@@ -21,10 +21,10 @@ catch( e ) {
   console.error( e );
 }
 
-// eslint-disable-next-line bad-text
+// eslint-disable-next-line phet/bad-text
 if ( privateConfig.BABEL_BRANCH && privateConfig.BABEL_BRANCH === 'master' ) {
 
-  // eslint-disable-next-line bad-text
+  // eslint-disable-next-line phet/bad-text
   console.error( 'The branch name "master" is no longer supported, please update your config.  Aborting.' );
   throw new Error( 'Invalid branch name for string repo.' );
 }

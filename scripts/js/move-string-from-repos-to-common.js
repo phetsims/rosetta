@@ -8,8 +8,6 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-/* eslint-env node */
-
 // modules
 const fs = require( 'fs' );
 const _ = require( 'lodash' );
