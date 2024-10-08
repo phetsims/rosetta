@@ -3,8 +3,6 @@
 /**
  * ESLint configuration for rosetta.
  *
- * TODO: JB: Review rosetta configuration and test linting, see https://github.com/phetsims/chipper/issues/1451
- *
  * @author Sam Reid (PhET Interactive Simulations)
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
