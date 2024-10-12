@@ -6,6 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  * @author John Blanco
  */
+'use strict';
 
 const Gruntfile = require( '../chipper/js/grunt/Gruntfile' );
 const cloneRepo = require( '../perennial/js/common/cloneRepo.js' );
