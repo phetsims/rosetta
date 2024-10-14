@@ -8,7 +8,7 @@
  */
 'use strict';
 
-const Gruntfile = require( '../chipper/js/grunt/Gruntfile' );
+const Gruntfile = require( '../chipper/Gruntfile' );
 const cloneRepo = require( '../perennial/js/common/cloneRepo.js' );
 const fs = require( 'fs' );
 const gitPull = require( '../perennial/js/common/gitPull' );
