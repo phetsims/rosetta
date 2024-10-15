@@ -16,19 +16,8 @@ const cloneRepo = require( '../../../perennial/js/common/cloneRepo.js' );
 const fs = require( 'fs' );
 const gitPull = require( '../../../perennial/js/common/gitPull' );
 const npmUpdate = require( '../../../perennial/js/common/npmUpdate.js' );
-const winston = require( 'winston' );
 
 const REPO_DEPENDENCIES = [ 'chipper', 'perennial', 'perennial-alias' ];
-
-const logger = winston.createLogger( {
-  format: winston.format.combine(
-    winston.format.simple()
-  ),
-  level: 'info',
-  transports: [
-    new winston.transports.Console()
-  ]
-} );
 
 ( async function() {
   for ( const repo of REPO_DEPENDENCIES ) {
@@ -39,17 +28,17 @@ const logger = winston.createLogger( {
         await cloneRepo( repo );
       }
       catch( e ) {
-        logger.error( `issue with cloning ${repo}: ${e}` );
+        throw new Error( `issue with cloning ${repo}: ${e}` );
       }
     }
 
     // Try to pull repos.
     try {
       const pullResult = await gitPull( repo );
-      logger.info( pullResult );
+      console.log( pullResult );
     }
     catch( e ) {
-      logger.error( `issue with git pull on ${repo}: ${e}` );
+      throw new Error( `issue with git pull on ${repo}: ${e}` );
     }
 
     // Try to update repos.
@@ -57,7 +46,7 @@ const logger = winston.createLogger( {
       await npmUpdate( repo );
     }
     catch( e ) {
-      logger.error( `issue with npm update on ${repo}: ${e}` );
+      throw new Error( `issue with npm update on ${repo}: ${e}` );
     }
   }
 } )();
