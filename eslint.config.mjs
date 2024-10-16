@@ -7,20 +7,26 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import nodeEslintConfig from '../chipper/eslint/node.eslint.config.mjs';
+import { getBrowserConfiguration } from '../chipper/eslint/browser.eslint.config.mjs';
+import getNodeConfiguration from '../chipper/eslint/getNodeConfiguration.mjs';
+import rootEslintConfig from '../chipper/eslint/root.eslint.config.mjs';
 import reactPlugin from '../chipper/node_modules/eslint-plugin-react/index.js';
-import globals from '../chipper/node_modules/globals/index.js';
+
+const browserFiles = [
+  'src/client/**/*'
+];
 
 export default [
   reactPlugin.configs.flat.recommended,
-  ...nodeEslintConfig,
+  ...rootEslintConfig,
+  ...getNodeConfiguration( {
+    files: [ '**/*' ],
+    ignores: browserFiles
+  } ),
+  ...getBrowserConfiguration( {
+    files: browserFiles
+  } ),
   {
-    languageOptions: {
-      globals: {
-        ...globals.node,
-        ...globals.browser
-      }
-    },
     rules: {
       'phet/bad-sim-text': 'off',
       'jsx-quotes': [
@@ -46,6 +52,7 @@ export default [
       }
     }
   }, {
+    // Separate block so that we globally ignore this
     ignores: [
       'static/*'
     ]
