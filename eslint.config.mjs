@@ -7,10 +7,10 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import { getBrowserConfiguration } from '../chipper/eslint/browser.eslint.config.mjs';
-import getNodeConfiguration from '../chipper/eslint/getNodeConfiguration.mjs';
-import rootEslintConfig from '../chipper/eslint/root.eslint.config.mjs';
-import reactPlugin from '../chipper/node_modules/eslint-plugin-react/index.js';
+import { getBrowserConfiguration } from '../perennial-alias/js/eslint/browser.eslint.config.mjs';
+import getNodeConfiguration from '../perennial-alias/js/eslint/getNodeConfiguration.mjs';
+import rootEslintConfig from '../perennial-alias/js/eslint/root.eslint.config.mjs';
+import reactPlugin from '../perennial-alias/node_modules/eslint-plugin-react/index.js';
 
 const browserFiles = [
   'src/client/**/*'
