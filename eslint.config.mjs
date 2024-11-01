@@ -54,7 +54,8 @@ export default [
   }, {
     // Separate block so that we globally ignore this
     ignores: [
-      'static/*'
+      'static/*',
+      'src/client/dist/**/*'
     ]
   }
 ];
