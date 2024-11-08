@@ -33,7 +33,6 @@ export default [
         'error',
         'prefer-single'
       ],
-      'phet/require-statement-match': 'off',
       'require-atomic-updates': [
         'error',
         { allowProperties: true }

@@ -14,7 +14,7 @@
 
 const cloneRepo = require( '../../../perennial/js/common/cloneRepo.js' );
 const fs = require( 'fs' );
-const gitPull = require( '../../../perennial/js/common/gitPull' );
+const gitPull = require( '../../../perennial/js/common/gitPull.js' );
 const npmUpdate = require( '../../../perennial/js/common/npmUpdate.js' );
 
 const REPO_DEPENDENCIES = [ 'chipper', 'perennial', 'perennial-alias' ];
