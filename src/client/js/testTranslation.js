@@ -7,8 +7,8 @@
  */
 
 import axios from 'axios';
-import alertErrorMessage from './alertErrorMessage.js';
 import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
+import alertErrorMessage from './alertErrorMessage.js';
 import makeTranslationObject from './makeTranslationObject.js';
 
 /**

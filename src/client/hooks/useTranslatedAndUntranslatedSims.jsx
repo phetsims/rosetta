@@ -7,10 +7,10 @@
  */
 
 import axios from 'axios';
-import { useEffect, useState, useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
 import { WebsiteUserDataContext } from '../components/Rosetta.jsx';
 import alertErrorMessage from '../js/alertErrorMessage.js';
-import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
 
 /**
  * Return an object containing a list of translated sims and a list of untranslated sims for the given locale.

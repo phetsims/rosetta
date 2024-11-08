@@ -8,8 +8,8 @@
  */
 
 import { getBrowserConfiguration } from '../perennial-alias/js/eslint/config/browser.eslint.config.mjs';
-import getNodeConfiguration from '../perennial-alias/js/eslint/config/util/getNodeConfiguration.mjs';
 import rootEslintConfig from '../perennial-alias/js/eslint/config/root.eslint.config.mjs';
+import getNodeConfiguration from '../perennial-alias/js/eslint/config/util/getNodeConfiguration.mjs';
 import reactPlugin from '../perennial-alias/node_modules/eslint-plugin-react/index.js';
 
 const browserFiles = [

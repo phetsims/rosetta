@@ -6,7 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import alertErrorMessage from '../js/alertErrorMessage.js';
 import getWebsiteUserData from '../js/getWebsiteUserData.js';
 

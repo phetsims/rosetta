@@ -7,9 +7,9 @@
  */
 
 import axios from 'axios';
+import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
 import alertErrorMessage from './alertErrorMessage.js';
 import makeTranslationObject from './makeTranslationObject.js';
-import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
 
 /**
  * Issue a post request to save a translation to the short-term string storage database.

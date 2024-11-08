@@ -8,8 +8,8 @@
 
 import express from 'express';
 import os from 'os';
-import { URL } from 'url';
 import path from 'path';
+import { URL } from 'url';
 
 const builtReactAppServer = express();
 
