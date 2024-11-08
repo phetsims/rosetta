@@ -10,13 +10,8 @@
 import axios from 'axios';
 import { Form, Formik } from 'formik';
 // eslint-disable-next-line phet/single-line-import
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useState
-} from 'react';
-import { useParams, Link } from 'react-router-dom';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
 import makeValidationSchema from '../js/makeValidationSchema.js';
 import saveTranslation from '../js/saveTranslation.js';

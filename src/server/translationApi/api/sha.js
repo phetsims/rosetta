@@ -6,8 +6,8 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import logger from '../logger.js';
 import getCurrentRosettaSha from '../getCurrentRosettaSha.js';
+import logger from '../logger.js';
 
 /**
  * API function. Respond with the current SHA of the running instance of Rosetta.

@@ -7,8 +7,8 @@
  */
 
 import { useContext } from 'react';
-import { LocaleInfoContext } from './RosettaRoutes.jsx';
 import LoadingSpinner from './LoadingSpinner.jsx';
+import { LocaleInfoContext } from './RosettaRoutes.jsx';
 
 /**
  * This component is a select (commonly referred to as a dropdown) for locales. The locales in this select look like

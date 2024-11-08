@@ -9,8 +9,8 @@
 
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import Xerxes from '../img/xerxes.jpg';
 import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
+import Xerxes from '../img/xerxes.jpg';
 
 /**
  * Get the SHA of the running instance of Rosetta from the server and display it.

@@ -13,14 +13,14 @@
 
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import express from 'express';
 import os from 'os';
 import path from 'path';
 import { URL } from 'url';
 import privateConfig, { pathToConfig } from '../common/privateConfig.js';
 import publicConfig from '../common/publicConfig.js';
-import express from 'express';
-import mockSignOut from './translationApi/api/mockSignOut.js';
 import builtReactAppServer from './builtReactAppServer/builtReactAppServer.js';
+import mockSignOut from './translationApi/api/mockSignOut.js';
 import mockWebsiteUserData from './translationApi/api/mockWebsiteUserData.js';
 import getCurrentRosettaSha from './translationApi/getCurrentRosettaSha.js';
 import logger from './translationApi/logger.js';
