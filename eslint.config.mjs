@@ -43,7 +43,11 @@ export default [
 
       // This rule doesn't apply to Rosetta.
       // See https://github.com/phetsims/phet-core/issues/100 for paper trail.
-      'phet/default-export-class-should-register-namespace': 'off'
+      'phet/default-export-class-should-register-namespace': 'off',
+
+      // It isn't clear that rosetta wants to use perennial's node modules via npm-dependencies/. If this isn't true,
+      // please see https://github.com/phetsims/perennial/issues/372 and fix in rosetta.
+      'no-restricted-imports': 'off'
     },
     settings: {
       react: {
