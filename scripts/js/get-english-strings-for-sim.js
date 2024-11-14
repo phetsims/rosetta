@@ -16,7 +16,7 @@
  */
 
 // imports
-const getStringsFromSim = require( './common/getStringsFromSim.js' );
+const getStringsFromSim = require( './common/getStringsFromSim' );
 
 // constants
 const USAGE_STRING = 'Usage: node get-english-strings-for-sim <sim-repo-name>';

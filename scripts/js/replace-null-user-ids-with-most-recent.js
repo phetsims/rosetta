@@ -11,7 +11,7 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-const getTranslatedStringFileList = require( './common/getTranslatedStringFileList.js' );
+const getTranslatedStringFileList = require( './common/getTranslatedStringFileList' );
 const fs = require( 'fs' );
 
 // constants

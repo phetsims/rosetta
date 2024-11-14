@@ -11,7 +11,7 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-const getStringFileListForLocale = require( './common/getStringFileListForLocale.js' );
+const getStringFileListForLocale = require( './common/getStringFileListForLocale' );
 const fs = require( 'fs' );
 
 // constants

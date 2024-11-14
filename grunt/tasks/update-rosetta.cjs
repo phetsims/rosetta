@@ -12,10 +12,10 @@
  */
 'use strict';
 
-const cloneRepo = require( '../../../perennial/js/common/cloneRepo.js' );
+const cloneRepo = require( '../../../perennial/js/common/cloneRepo' );
 const fs = require( 'fs' );
-const gitPull = require( '../../../perennial/js/common/gitPull.js' );
-const npmUpdate = require( '../../../perennial/js/common/npmUpdate.js' );
+const gitPull = require( '../../../perennial/js/common/gitPull' );
+const npmUpdate = require( '../../../perennial/js/common/npmUpdate' );
 
 const REPO_DEPENDENCIES = [ 'chipper', 'perennial', 'perennial-alias' ];
 
