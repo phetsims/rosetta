@@ -9,7 +9,7 @@
 'use strict';
 
 const Gruntfile = require( '../chipper/Gruntfile' );
-const registerTasks = require( '../perennial/js/grunt/util/registerTasks' );
+const registerTasks = require( '../perennial-alias/js/grunt/commonjs/registerTasks' );
 
 module.exports = function( grunt ) {
   Gruntfile( grunt ); // use chipper's gruntfile
