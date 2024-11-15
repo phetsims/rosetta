@@ -8,7 +8,7 @@
  */
 'use strict';
 
-const Gruntfile = require( '../chipper/Gruntfile' );
+const Gruntfile = require( '../chipper/Gruntfile.cjs' );
 const registerTasks = require( '../perennial-alias/js/grunt/commonjs/registerTasks' );
 
 module.exports = function( grunt ) {
