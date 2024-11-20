@@ -5,7 +5,7 @@
  */
 
 const fs = require( 'fs' );
-const assert = require( './assert.js' );
+const assert = require( './assert' );
 
 const DEFAULT_PATH_TO_TRANSLATIONS = '../../../babel';
 

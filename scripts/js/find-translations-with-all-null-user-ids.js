@@ -9,7 +9,7 @@
 
 const _ = require( 'lodash' );
 const fs = require( 'fs' );
-const getTranslatedStringFileList = require( './common/getTranslatedStringFileList.js' );
+const getTranslatedStringFileList = require( './common/getTranslatedStringFileList' );
 
 // Get a list of all translation string files.
 const translationStringFileNames = getTranslatedStringFileList();
