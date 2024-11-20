@@ -13,7 +13,7 @@
 
 // imports
 const axios = require( 'axios' );
-const getMostRecentUserId = require( './common/getMostRecentUserId' );
+const getMostRecentUserId = require( './common/getMostRecentUserId.js' );
 
 // constants
 const INTER_BUILD_DELAY = 120; // in seconds, used to prevent build server from being totally consumed

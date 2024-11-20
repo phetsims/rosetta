@@ -4,8 +4,8 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-const assert = require( './assert' );
-const getTranslatedStringFileList = require( './getTranslatedStringFileList' );
+const assert = require( './assert.js' );
+const getTranslatedStringFileList = require( './getTranslatedStringFileList.js' );
 
 /**
  * Get a list of all translated string files in the local copy of the babel repo for the provided locale.
