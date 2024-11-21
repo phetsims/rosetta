@@ -47,7 +47,10 @@ export default [
 
       // It isn't clear that rosetta wants to use perennial's node modules via npm-dependencies/. If this isn't true,
       // please see https://github.com/phetsims/perennial/issues/372 and fix in rosetta.
-      'no-restricted-imports': 'off'
+      'no-restricted-imports': 'off',
+
+      // Rosetta imports a lot of css and svg files
+      'phet/import-statement-extension': 'off'
     },
     settings: {
       react: {
