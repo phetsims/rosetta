@@ -11,7 +11,7 @@
   "scripts": {
     "lint": "grunt --gruntfile Gruntfile.cjs lint",
     "start-node": "bash ../perennial/bin/sage run src/server/app.js",
-    "dev-node": "npm run start-node",
+    "dev-node": "nodemon src/server/app.js",
     "debug": "npm run make-public-config && npm run build --workspace=client && bash ../perennial/bin/sage run --inspect src/server/app.js",
     "make-public-config": "bash ../perennial/bin/sage run ./scripts/js/make-public-config-file.mjs",
     "dev": "npm run make-public-config && npm run lint && concurrently \"npm run dev --workspace=client\" \"npm run dev-node\"",
