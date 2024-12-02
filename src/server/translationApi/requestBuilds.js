@@ -9,7 +9,7 @@
 
 import axios from 'axios';
 import simPhetioMetadata from '../../../../perennial/js/common/simPhetioMetadata.js';
-import SimVersion from '../../../../perennial/js/common/SimVersion.js';
+import SimVersion from '../../../../perennial/js/browser-and-node/SimVersion.js';
 import privateConfig from '../../common/privateConfig.js';
 import getDependencies from './getDependencies.js';
 import getSimVersionObject from './getSimVersionObject.js';
