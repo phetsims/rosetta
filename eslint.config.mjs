@@ -7,39 +7,18 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import { getBrowserConfiguration } from '../perennial-alias/js/eslint/config/browser.eslint.config.mjs';
-import rootEslintConfig from '../perennial-alias/js/eslint/config/root.eslint.config.mjs';
-import getNodeConfiguration from '../perennial-alias/js/eslint/config/util/getNodeConfiguration.mjs';
-import reactPlugin from '../perennial-alias/node_modules/eslint-plugin-react/index.js';
-
-const browserFiles = [
-  'src/client/**/*'
-];
+import nodeEslintConfig from '../perennial-alias/js/eslint/config/node.eslint.config.mjs';
 
 export default [
-  reactPlugin.configs.flat.recommended,
-  ...rootEslintConfig,
-  ...getNodeConfiguration( {
-    files: [ '**/*' ],
-    ignores: browserFiles
-  } ),
-  ...getBrowserConfiguration( {
-    files: browserFiles
-  } ),
+  ...nodeEslintConfig,
   {
     rules: {
       'phet/bad-sim-text': 'off',
-      'jsx-quotes': [
-        'error',
-        'prefer-single'
-      ],
       'require-atomic-updates': [
         'error',
         { allowProperties: true }
       ],
       'phet/default-import-match-filename': 'off',
-      'react/no-unescaped-entities': 'off',
-      'react/prop-types': 'off',
 
       // This rule doesn't apply to Rosetta.
       // See https://github.com/phetsims/phet-core/issues/100 for paper trail.
@@ -51,17 +30,11 @@ export default [
 
       // Rosetta imports a lot of css and svg files
       'phet/import-statement-extension': 'off'
-    },
-    settings: {
-      react: {
-        version: 'detect'
-      }
     }
   }, {
     // Separate block so that we globally ignore this
     ignores: [
-      'static/*',
-      'src/client/dist/**/*'
+      'static/*'
     ]
   }
 ];
