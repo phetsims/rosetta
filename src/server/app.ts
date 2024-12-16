@@ -2,7 +2,7 @@
 
 /**
  * This file is the entry point for Rosetta's server-side code. It sets up the Express app, which has two components:
- * (1) the built react app server, and
+ * (1) the built React app server, and
  * (2) the translation API.
  *
  * (1) is responsible for serving the static files generated when we build the React front end. (2) is responsible for
@@ -82,13 +82,15 @@ if ( publicConfig.ENVIRONMENT === 'development' ) {
   app.get( '/services/logout', mockSignOut );
 }
 
+// @ts-expect-error - privateConfig is not yet in TS. TODO: - remedy - see https://github.com/phetsims/rosetta/issues/311
 app.listen( privateConfig.ROSETTA_PORT, () => {
   logger.info( 'rosetta started' );
+  // @ts-expect-error - privateConfig is not yet in TS. TODO: - remedy - see https://github.com/phetsims/rosetta/issues/311
   logger.info( `http://localhost:${privateConfig.ROSETTA_PORT}/translate` );
 
   // Log private config keys except for secret ones.
   const unsafeKeys = [ 'BUILD_SERVER_AUTH', 'GITHUB_PAT', 'SERVER_TOKEN' ];
-  const privateKeysToLog = Object.keys( privateConfig ).filter( key => !unsafeKeys.includes( key ) );
+  const privateKeysToLog = ( Object.keys( privateConfig ) as ( keyof typeof privateConfig )[] ).filter( key => !unsafeKeys.includes( key ) );
   logger.info( `config (from ${pathToConfig}):` );
   for ( const key of privateKeysToLog ) {
     logger.info( `    ${key}: ${privateConfig[ key ]}` );

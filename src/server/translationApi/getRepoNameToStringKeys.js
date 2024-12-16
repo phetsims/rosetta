@@ -15,8 +15,8 @@ import getStringKeyFromStringKeyWithRepoName from './getStringKeyFromStringKeyWi
  * @param {String[]} stringKeysWithRepoName - stringKey/REPO_NAME we get from a sim's HTML
  * @param {String[]} commonRepos - list of common repos
  * @param {String[]} commonStringKeys - list of common string keys
- * @returns {{[]}} - an object of objects where the keys are common repo names and their values are
- *                   lists of string keys that belong to those repos
+ * @returns {Object} - an object of objects where the keys are common repo names and their values are
+ *                     lists of string keys that belong to those repos
  */
 const getRepoNameToStringKeys = ( stringKeysWithRepoName, commonRepos, commonStringKeys ) => {
   const repoNameToStringKeys = {};

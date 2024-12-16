@@ -9,19 +9,20 @@
     "scripts"
   ],
   "scripts": {
-    "lint": "grunt --gruntfile Gruntfile.cjs lint",
-    "start-node": "bash ../perennial/bin/sage run src/server/app.js",
-    "dev-node": "nodemon --exec \"bash ../perennial/bin/sage run src/server/app.js",
-    "debug": "npm run make-public-config && npm run build --workspace=client && bash ../perennial/bin/sage run --inspect src/server/app.js",
+    "lint": "grunt lint",
+    "type-check": "grunt type-check",
+    "start-node": "bash ../perennial/bin/sage run src/server/app.ts",
+    "dev-node": "nodemon --exec \"bash ../perennial/bin/sage run src/server/app.ts",
+    "debug": "npm run make-public-config && npm run build --workspace=client && bash ../perennial/bin/sage run --inspect src/server/app.ts",
     "make-public-config": "bash ../perennial/bin/sage run ./scripts/js/make-public-config-file.mjs",
-    "dev": "npm run make-public-config && npm run lint && concurrently \"npm run dev --workspace=client\" \"npm run dev-node\"",
-    "start": "npm run make-public-config && npm run lint && npm run build --workspace=client && npm run start-node",
+    "dev": "npm run make-public-config && npm run lint && npm run type-check && concurrently \"npm run dev --workspace=client\" \"npm run dev-node\"",
+    "start": "npm run make-public-config && npm run lint && npm run type-check && npm run build --workspace=client && npm run start-node",
     "prod": "npm run make-public-config && npm run build --workspace=client && npm run start-node"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.12",
-    "concurrently": "^8.0.1",
-    "grunt": "^1.4.1",
-    "winston": "^3.8.2"
+    "@babel/core": "~7.20.12",
+    "concurrently": "~8.0.1",
+    "grunt": "~1.5.3",
+    "winston": "~3.8.2"
   }
 }

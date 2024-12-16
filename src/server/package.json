@@ -3,14 +3,16 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@octokit/rest": "^19.0.7",
-    "axios": "^0.24.0",
-    "body-parser": "^1.20.1",
-    "cors": "^2.8.5",
-    "dotenv": "^10.0.0",
-    "express": "^4.17.1",
-    "mongodb": "^4.2.0",
-    "nodemon": "^2.0.22",
-    "winston": "^3.3.3"
+    "@types/express": "~5.0.0",
+    "@types/cors": "~2.8.12",
+    "@octokit/rest": "~19.0.7",
+    "axios": "~0.24.0",
+    "body-parser": "~1.20.1",
+    "cors": "~2.8.5",
+    "dotenv": "~10.0.0",
+    "express": "~4.17.1",
+    "mongodb": "~4.2.0",
+    "nodemon": "~2.0.22",
+    "winston": "~3.3.3"
   }
 }
