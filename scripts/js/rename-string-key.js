@@ -14,11 +14,11 @@
  *
  * USAGE:
  *
- * node rename-string-keys <sim-repo-name> <string-change-info>
+ * sage run rename-string-keys <sim-repo-name> <string-change-info>
  *
  * EXAMPLE USAGE:
  *
- * node ./rosetta/scripts/js/rename-string-keys.js geometric-optics ./temp/geometric-optics-changed-strings.csv
+ * sage run ./rosetta/scripts/js/rename-string-keys.js geometric-optics ./temp/geometric-optics-changed-strings.csv
  *
  * @author John Blanco (PhET Interactive Simulations)
  */

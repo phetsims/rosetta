@@ -10,7 +10,7 @@
  *
  * usage:
  * cd root/
- * node rosetta/scripts/js/remove-translations-without-english-key.js my-repo
+ * sage run rosetta/scripts/js/remove-translations-without-english-key.js my-repo
  *
  * @author Chris Klusendorf (PhET Interactive Simulations)
  * @author Marla Schulz (PhET Interactive Simulations)

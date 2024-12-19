@@ -7,7 +7,7 @@
  * https://github.com/phetsims/fraction-matcher/issues/107 for the origin story of this script.
  *
  * EXAMPLE USAGE:
- * node ./js/move-translated-fraction-matcher-strings.js
+ * sage run ./js/move-translated-fraction-matcher-strings.js
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
