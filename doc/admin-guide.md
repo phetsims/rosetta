@@ -12,6 +12,7 @@ Contents
 - [Update](#update)
 - [Manage systemd Service](#manage-systemd-service)
 - [View Logs](#view-logs)
+- [Interact with the Short-Term String Storage Database](#interact-with-the-short-term-string-storage-database)
 - [Test](#test)
 - [Update Translation Stats](#update-translation-stats)
 - [First-Time Production Setup](#first-time-production-setup)
@@ -134,6 +135,25 @@ View Logs
 - Tail Rosetta's logs: `sudo journalctl -f -u rosetta`
 - See
   also [this tutorial on `journalctl`](https://www.digitalocean.com/community/tutorials/how-to-use-journalctl-to-view-and-manipulate-systemd-logs).
+
+Interact with the Short-Term String Storage Database
+----------------------------------------------------
+
+Rosetta allows translators to store strings temporarily without fully submitting them.  This is useful when a translator
+has done some work on a translation, but hasn't fully completed the work and isn't ready to publish the translated sim.
+In this case, the strings are stored in a database on phet-server2. The database a MongoDB database, it runs on
+phet-server2, and it is called `rosetta`.  Below are a list of steps for accessing this DB and potentially changing it.
+
+- Log in to phet-server2
+- Switch to phet-admin
+- Enter the MongoDB shell by typing `mongosh`
+- Select the Rosetta DB by typing `use rosetta`
+- Search for whatever record you want with a command like this: `db.shortTermTranslationStorage.findOne( { simName: 'faradays-electromagnetic-lab', userId: 1234 } )`
+- Some other examples:
+  - `db.shortTermTranslationStorage.findOne( { simName: 'build-an-atom'} )`
+  - `db.shortTermTranslationStorage.findOne()`
+  - `db.shortTermTranslationStorage.findOne( { locale: 'es' } )`
+- A record can be deleted with `findOneAndDelete`
 
 Test
 ----
