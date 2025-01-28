@@ -3,8 +3,6 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@types/express": "~5.0.0",
-    "@types/cors": "~2.8.12",
     "@octokit/rest": "~19.0.7",
     "axios": "~0.24.0",
     "body-parser": "~1.20.1",

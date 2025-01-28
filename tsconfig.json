@@ -5,9 +5,6 @@
     "src/server/**/*",
     "../perennial/js/common/simPhetioMetadata.js"
   ],
-  "exclude": [
-    "**/node_modules/**/*",
-  ],
   "references": [
     {
       "path": "../perennial/js/browser-and-node/tsconfig.json"

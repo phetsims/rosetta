@@ -2,7 +2,7 @@
 
 /**
  * This file is the entry point for Rosetta's server-side code. It sets up the Express app, which has two components:
- * (1) the built react app server, and
+ * (1) the built React app server, and
  * (2) the translation API.
  *
  * (1) is responsible for serving the static files generated when we build the React front end. (2) is responsible for
@@ -11,8 +11,11 @@
  * @author Liam Mulhall
  */
 
+// @ts-expect-error - no types for libs, see https://github.com/phetsims/perennial/issues/428
 import bodyParser from 'body-parser';
+// @ts-expect-error - no types for libs, see https://github.com/phetsims/perennial/issues/428
 import cors from 'cors';
+// @ts-expect-error - no types for libs, see https://github.com/phetsims/perennial/issues/428
 import express from 'express';
 import os from 'os';
 import path from 'path';
@@ -41,6 +44,7 @@ if ( publicConfig.ENVIRONMENT === 'development' ) {
   app.use( cors( {
     origin: `http://127.0.0.1:${DEV_SERVER_PORT}`
   } ) );
+  // @ts-expect-error - no types for libs, see https://github.com/phetsims/perennial/issues/428
   app.use( ( req, res, next ) => {
     res.setHeader( 'Access-Control-Allow-Credentials', 'true' );
     next();
@@ -88,10 +92,11 @@ app.listen( privateConfig.ROSETTA_PORT, () => {
 
   // Log private config keys except for secret ones.
   const unsafeKeys = [ 'BUILD_SERVER_AUTH', 'GITHUB_PAT', 'SERVER_TOKEN' ];
-  const privateKeysToLog = Object.keys( privateConfig ).filter( key => !unsafeKeys.includes( key ) );
   logger.info( `config (from ${pathToConfig}):` );
-  for ( const key of privateKeysToLog ) {
-    logger.info( `    ${key}: ${privateConfig[ key ]}` );
+  for ( const [ key, value ] of Object.entries( privateConfig ) ) {
+    if ( !unsafeKeys.includes( key ) ) {
+      logger.info( `    ${key}: ${value}` );
+    }
   }
 
   // Log some information about the runtime environment that may be useful for debugging.
