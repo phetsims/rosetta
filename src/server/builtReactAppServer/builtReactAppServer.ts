@@ -6,7 +6,6 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-// @ts-expect-error
 import express from 'express';
 import os from 'os';
 import path from 'path';
@@ -26,7 +25,6 @@ const builtReactFilesPathWithoutLeadingSlash = builtReactFilesPath
   .slice( 1, builtReactFilesPath.length );
 
 // If we get any route, hand it over to the React app so that it can do client-side routing.
-// @ts-expect-error
 builtReactAppServer.get( '/*', ( req, res ) => {
   if ( os.platform() === 'win32' ) {
     res.sendFile( path.join( builtReactFilesPathWithoutLeadingSlash, 'index.html' ) );
