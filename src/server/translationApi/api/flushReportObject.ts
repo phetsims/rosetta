@@ -1,13 +1,15 @@
 // Copyright 2023, University of Colorado Boulder
 
 /**
- * @author Liam Mu
+ * @author Liam Mulhall
  */
 
+import { Request, Response } from 'express';
 import logger from '../logger.js';
 import { reportObjectCache } from '../translationApi.js';
 
-const flushReportObject = ( req, res ) => {
+// This is for express
+const flushReportObject = ( req: Request, res: Response ): void => {
   logger.info( `attempting to flush report object for ${req.params.locale} ${req.params.sim}` );
   const flushed = reportObjectCache.flushObject( req.params.locale, req.params.sim );
   if ( flushed ) {
