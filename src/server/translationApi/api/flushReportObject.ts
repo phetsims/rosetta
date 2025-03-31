@@ -4,6 +4,7 @@
  * @author Liam Mulhall
  */
 
+// @ts-expect-error
 import { Request, Response } from 'express';
 import logger from '../logger.js';
 import { reportObjectCache } from '../translationApi.js';

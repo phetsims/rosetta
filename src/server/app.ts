@@ -11,9 +11,11 @@
  * @author Liam Mulhall
  */
 
+// @ts-expect-error - no types for libs, see https://github.com/phetsims/perennial/issues/428
 import bodyParser from 'body-parser';
 // @ts-expect-error - no types for libs, see https://github.com/phetsims/perennial/issues/428
 import cors from 'cors';
+// @ts-expect-error - no types for libs, see https://github.com/phetsims/perennial/issues/428
 import express from 'express';
 import os from 'os';
 import path from 'path';
@@ -42,6 +44,7 @@ if ( publicConfig.ENVIRONMENT === 'development' ) {
   app.use( cors( {
     origin: `http://127.0.0.1:${DEV_SERVER_PORT}`
   } ) );
+  // @ts-expect-error - no types for libs, see https://github.com/phetsims/perennial/issues/428
   app.use( ( req, res, next ) => {
     res.setHeader( 'Access-Control-Allow-Credentials', 'true' );
     next();

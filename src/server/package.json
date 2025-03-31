@@ -11,8 +11,6 @@
     "express": "~4.17.1",
     "mongodb": "~4.2.0",
     "nodemon": "~2.0.22",
-    "winston": "~3.3.3",
-
-    "@types/express": "^5.0.1"
+    "winston": "~3.3.3"
   }
 }
