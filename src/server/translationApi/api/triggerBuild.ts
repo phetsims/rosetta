@@ -6,16 +6,17 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import { Request, Response } from 'express';
 import logger from '../logger.js';
 import requestTriggerBuild from '../triggerBuild/requestTriggerBuild.js';
 
 /**
  * API function. Request a rebuild of the sim with the correct user ID.
  *
- * @param {Object} req - the Express request object
- * @param {Object} res - the Express response object
+ * @param req - the Express request object
+ * @param res - the Express response object
  */
-const triggerBuild = async ( req, res ) => {
+const triggerBuild = async ( req: Request, res: Response ): Promise<void> => {
   logger.info( 'rebuilding with original credit' );
   try {
     const rebuildRes = await requestTriggerBuild(
