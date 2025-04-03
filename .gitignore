@@ -1,5 +1,5 @@
 .DS_Store
-.env
+src/client/.env
 .idea
 dist
 node_modules

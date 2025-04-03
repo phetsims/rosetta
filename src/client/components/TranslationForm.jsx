@@ -12,6 +12,7 @@ import { Form, Formik } from 'formik';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
+import automateTranslation from '../js/automateTranslation.js';
 import makeValidationSchema from '../js/makeValidationSchema.js';
 import saveTranslation from '../js/saveTranslation.js';
 import submitTranslation from '../js/submitTranslation.js';
@@ -108,6 +109,11 @@ const TranslationForm = () => {
             else if ( buttonId === 'test' ) {
               setTestIsLoading( true );
               await testTranslation( values, params.simName, params.locale );
+              setTestIsLoading( false );
+            }
+            else if ( buttonId === 'automate' ) {
+              setTestIsLoading( true );
+              await automateTranslation( values, params.simName, params.locale, simTitle, localeName );
               setTestIsLoading( false );
             }
           }}

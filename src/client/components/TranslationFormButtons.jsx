@@ -20,6 +20,7 @@ const TranslationFormButtons = props => {
   const grayButton = 'btn btn-secondary';
   const blueButton = 'btn btn-primary';
   const buttonClass = !( props.isValid && props.dirty ) ? grayButton : blueButton;
+  const automateButtonClass = 'btn btn-success';
   return (
     <div className='card sticky-top mt-4 mb-4'>
       <div className='card-body save-test-publish-buttons-container'>
@@ -55,6 +56,17 @@ const TranslationFormButtons = props => {
           title='Test the simulation with your translated strings'
         >
           Test
+        </button>
+        <button
+          id='automate'
+          onClick={props.handleButtonClick}
+          disabled={disabled}
+          className={automateButtonClass}
+          data-bs-toggle='tooltip'
+          data-bs-placement='top'
+          title='Automate the translation with machine translation'
+        >
+          Automate (Experimental)
         </button>
         {props.testIsLoading ? <LoadingSpinner/> : <></>}
       </div>
