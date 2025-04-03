@@ -94,7 +94,7 @@ const TranslationForm = () => {
         <Formik
           initialValues={translationFormData}
           validationSchema={validationSchema}
-          onSubmit={async values => {
+          onSubmit={async ( values, { setFieldValue } ) => {
             if ( buttonId === '' ) {
               console.error( 'unable to get button id' );
             }
@@ -113,7 +113,7 @@ const TranslationForm = () => {
             }
             else if ( buttonId === 'automate' ) {
               setTestIsLoading( true );
-              await automateTranslation( values, params.simName, params.locale, simTitle, localeName );
+              await automateTranslation( values, params.simName, params.locale, simTitle, localeName, setFieldValue );
               setTestIsLoading( false );
             }
           }}

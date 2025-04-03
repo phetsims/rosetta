@@ -65,7 +65,8 @@ const automateTranslation = async (
   simName,
   locale,
   simTitle,
-  localeName
+  localeName,
+  setFieldValue
 ) => {
   const translatedValues = { ...values };  // Create a copy of the original values object
 
@@ -86,6 +87,7 @@ const automateTranslation = async (
           updates.push(
             translateWithOpenAI( textToTranslate, simName, localeName ).then( translatedText => {
               obj[ key ] = translatedText;  // Update the 'translated' field once done
+              setFieldValue( `${path}${key}`, translatedText );
             } ).catch( error => {
               console.error( `Error translating ${path}${key}:`, error );
               obj[ key ] = `Error translating ${path}${key}`;  // Add error handling text
