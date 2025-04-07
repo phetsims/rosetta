@@ -1,21 +1,19 @@
 // Copyright 2021-2022, University of Colorado Boulder
 
 /**
- * Export a function that transforms a translation into the format that expected for long-term storage string files.
+ * Transform translation data submitted by a translator into the format needed for long-term storage.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
+import { ClientSubmittedTranslationData } from '../../common/ClientSubmittedTranslationData.js';
+import { MultiRepoTranslationData, StorableTranslationData, TranslationDataForRepo } from './api/StorableTranslationData.js';
 import getStringKeysWithDots from './getStringKeysWithDots.js';
 import logger from './logger.js';
 import makeTranslationFileContentsForRepo from './makeTranslationFileContentsForRepo.js';
 
-/**
- * Return an object with the exact translation file contents for each repo in a given translation.
- * @param {Object} translation - translation received from client
- * @returns {Object} - exact translation file contents for each repo in a translation
- */
-const prepareTranslationForLongTermStorage = async translation => {
+const prepareTranslationForLongTermStorage = async ( translation: ClientSubmittedTranslationData ): Promise<StorableTranslationData> => {
 
   logger.info( `preparing translation of ${translation.locale}/${translation.simName} for long-term storage` );
   logger.info( 'adding back dots to translation form data from client' );
@@ -24,7 +22,7 @@ const prepareTranslationForLongTermStorage = async translation => {
   translation.translationFormData.shared = getStringKeysWithDots( translation.translationFormData.shared );
 
   // Get a list of repos whose strings are in the translation.
-  const repos = [ translation.simName ];
+  const repos: string[] = [ translation.simName ];
   const commonData = translation.translationFormData.common;
   const sharedData = translation.translationFormData.shared;
   const dataObjects = [ commonData, sharedData ];
@@ -37,20 +35,20 @@ const prepareTranslationForLongTermStorage = async translation => {
     }
   }
 
-  // For each repo in the translation, make its translation file contents.
-  const preparedTranslation = {
-    simName: translation.simName,
-    locale: translation.locale,
-    translationFileContents: {}
-  };
+  // For each repo in the translation data and make its translation file contents.
+  const multiRepoTranslationData: MultiRepoTranslationData = {};
   for ( const repo of repos ) {
 
-    // Iterate through each repo and store the translation file contents long-term.
-    preparedTranslation.translationFileContents[ repo ] = await makeTranslationFileContentsForRepo( repo, translation );
+    // TODO: The `as` can be removed once the function is converted to TS, see https://github.com/phetsims/rosetta/issues/311.
+    multiRepoTranslationData[ repo ] = await makeTranslationFileContentsForRepo( repo, translation ) as TranslationDataForRepo;
   }
 
   logger.info( `prepared translation of ${translation.locale}/${translation.simName} for long-term storage` );
-  return preparedTranslation;
+  return {
+    simName: translation.simName,
+    locale: translation.locale,
+    multiRepoTranslationData: multiRepoTranslationData
+  };
 };
 
 export default prepareTranslationForLongTermStorage;

@@ -24,13 +24,7 @@ import makeTranslationObject from './makeTranslationObject.js';
  * @param {String} localeName - the name of the language/locale
  * @returns {Promise<Object|null>}
  */
-const submitTranslation = async (
-  values,
-  simName,
-  locale,
-  simTitle,
-  localeName
-) => {
+const submitTranslation = async ( values, simName, locale, simTitle, localeName ) => {
 
   let submitStatus = null;
   const translatedStringsData = computeTranslatedStringsData( values );

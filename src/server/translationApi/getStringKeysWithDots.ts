@@ -35,13 +35,13 @@
  * and we sent the translation form data to the client as in (C). Now that we have the translation form data back
  * from the client, we transform the data from (C) back to (A).
  *
- * @param {Object} data - either translation.translationFormData.simSpecific or translation.translationFormData.common
- * @returns {Object} - same data, but with dots instead of _DOT_
+ * @param data - either translation.translationFormData.simSpecific or translation.translationFormData.common or translation.translationFormData.shared
+ * @returns same data, but with dots instead of _DOT_
  */
-const getStringKeysWithDots = data => {
-  const newData = {};
+const getStringKeysWithDots = <T>( data: Record<string, T> ): Record<string, T> => {
+  const newData: Record<string, T> = {};
   for ( const stringKey of Object.keys( data ) ) {
-    const stringKeyWithDots = stringKey.replaceAll( '_DOT_', '.' );
+    const stringKeyWithDots = stringKey.replace( /_DOT_/g, '.' );
     newData[ stringKeyWithDots ] = data[ stringKey ];
   }
   return newData;
