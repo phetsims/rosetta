@@ -58,17 +58,10 @@ const getSimSpecificTranslationFormData = async ( simName, locale, simSpecificSt
 
       const stringKeyWithoutDots = stringKey.replaceAll( '.', '_DOT_' );
 
-      // TODO: Remove this conditional code once we're sure all string keys no longer have the legacy "visible" property. See https://github.com/phetsims/rosetta/issues/411.
-      const shouldBeVisible = simSpecificEnglishStringKeysAndStrings[ stringKey ]?.visible !== false;
-      if ( shouldBeVisible ) {
-        simSpecific[ stringKeyWithoutDots ] = {
-          english: englishValue,
-          translated: translatedValue
-        };
-      }
-      else {
-        logger.warn( `legacy visible field false; not adding ${stringKey} to the translation form data` );
-      }
+      simSpecific[ stringKeyWithoutDots ] = {
+        english: englishValue,
+        translated: translatedValue
+      };
     }
   }
   catch( e ) {
