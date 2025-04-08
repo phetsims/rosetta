@@ -53,9 +53,8 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
     translationFormData = translation.translationFormData.common;
   }
 
-  // We want to iterate over the keys contained in the union of the set
-  // of old string keys and the set of string keys in the translation
-  // form data. See https://github.com/phetsims/rosetta/issues/378.
+  // We want to iterate over the keys contained in the union of the set of old string keys and the set of string keys in
+  // the translation form data. See https://github.com/phetsims/rosetta/issues/378.
   const stringKeysToIterateOver = oldTranslationFile ? Object.keys( oldTranslationFile ) : [];
   for ( const stringKey of Object.keys( translationFormData ) ) {
     if ( !stringKeysToIterateOver.includes( stringKey ) ) {
@@ -69,13 +68,13 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
       repo === translation.simName ||
       ( translationFormData[ stringKey ] && repo === translationFormData[ stringKey ].repo ) ||
       ( oldTranslationFile && oldTranslationFile[ stringKey ] );
+
     if ( ableToCheckStringKeyCases ) {
 
       // Trim leading and trailing whitespace.
-      // NOTE: If a user deliberately wants a space, this will change
-      // the string from ' ' to '', which makes the string fall back
-      // to English. In this case, they should use a non-breaking space
-      // character instead. A non-breaking space character is &nbsp;.
+      // NOTE: If a user deliberately wants a space, this will change the string from ' ' to '', which makes the string
+      // fall back to English. In this case, they should use a non-breaking space character instead. A non-breaking
+      // space character is &nbsp;.
       if ( translationFormData[ stringKey ] ) {
         translationFormData[ stringKey ].translated = translationFormData[ stringKey ].translated.trim();
       }

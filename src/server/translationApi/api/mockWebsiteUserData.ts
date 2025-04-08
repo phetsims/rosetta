@@ -6,6 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import { Request, Response } from 'express';
 import publicConfig from '../../../common/publicConfig.js';
 import logger from '../logger.js';
 
@@ -13,10 +14,10 @@ import logger from '../logger.js';
  * API function. Send mock website user data. This is only used for development. You can modify the user data to suit
  * your development needs.
  *
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
+ * @param req - Express request object
+ * @param res - Express response object
  */
-const mockWebsiteUserData = ( req, res ) => {
+const mockWebsiteUserData = ( req: Request, res: Response ): void => {
   const mockWebsiteUserData = {
     username: 'PhET Girl',
     userId: publicConfig.LOCAL_USER_ID,

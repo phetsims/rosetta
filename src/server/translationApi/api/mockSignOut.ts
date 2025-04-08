@@ -6,9 +6,10 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import { Request, Response } from 'express';
 import logger from '../logger.js';
 
-const mockSignOut = ( req, res ) => {
+const mockSignOut = ( req: Request, res: Response ): void => {
   logger.info( 'mocking sign out' );
   res.status( 200 ).send();
 };

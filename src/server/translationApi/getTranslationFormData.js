@@ -65,14 +65,13 @@ import logger from './logger.js';
  * @param {String} userId - user ID number from the website user data
  * @returns {Promise<{simSpecific: {}, common: {}}>} - translation form data
  */
-const getTranslationFormData = async (
-  simName,
-  locale,
-  simNames,
-  stringKeysWithRepoName,
-  categorizedStringKeys,
-  userId = undefined
-) => {
+const getTranslationFormData = async ( simName,
+                                       locale,
+                                       simNames,
+                                       stringKeysWithRepoName,
+                                       categorizedStringKeys,
+                                       userId = undefined ) => {
+
   logger.info( 'getting translation form data' );
 
   // Try to get a saved translation from the short-term storage database.
