@@ -7,8 +7,9 @@
  */
 
 type PrivateConfigDataType = {
-  readonly 'ROSETTA_PORT': number;
   readonly 'PERFORM_STRING_COMMITS' : boolean;
+  readonly 'ROSETTA_PORT': number;
+  readonly 'SERVER_URL' : boolean;
 };
 
 export default {} as PrivateConfigDataType;
