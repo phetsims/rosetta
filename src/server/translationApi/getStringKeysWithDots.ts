@@ -41,7 +41,7 @@
 const getStringKeysWithDots = <T>( data: Record<string, T> ): Record<string, T> => {
   const newData: Record<string, T> = {};
   for ( const stringKey of Object.keys( data ) ) {
-    const stringKeyWithDots = stringKey.replace( /_DOT_/g, '.' );
+    const stringKeyWithDots = stringKey.replaceAll( '_DOT_', '.' );
     newData[ stringKeyWithDots ] = data[ stringKey ];
   }
   return newData;
