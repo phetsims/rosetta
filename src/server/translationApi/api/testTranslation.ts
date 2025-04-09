@@ -1,9 +1,13 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * The testTranslation function provides the functionality for the "test translation" route, which allows a translator
- * to view the simulation with their translated values before submitting them.  The function works by replacing the
- * strings in the sim's HTML file with those entered by the translator and sends the resulting HTML to the client.
+ * The testTranslation function provides the functionality for the "test translation" API route, which allows a
+ * translator to view and interact with the simulation with their translated values before submitting them.  The
+ * function works by retrieving the sim's currently published HTML file, replacing the strings therein with those
+ * entered by the translator, and sending this modified HTML to the client.
+ *
+ * @param req - Express request object, contains the sim name and translation info.
+ * @param res - Express response object * @author Liam Mulhall <liammulh@gmail.com>
  *
  * @author Liam Mulhall <liammulh@gmail.com>
  * @author John Blanco (PhET Interactive Simulations)
@@ -16,15 +20,10 @@ import getSimUrl from '../getSimUrl.js';
 import getStringKeysUsedInSim from '../getStringKeysUsedInSim.js';
 import logger from '../logger.js';
 
-/**
- * Replace the sim's strings with those entered by a translator and send the resulting HTML to the client.
- * @param req - Express request object, contains the sim name and translation info.
- * @param res - Express response object
- */
 const testTranslation = async ( req: Request, res: Response ): Promise<void> => {
   const simName = req.body.simName;
 
-  // return value
+  // response value
   let simHtmlWithTranslatedStrings: string;
 
   try {
@@ -52,6 +51,7 @@ const testTranslation = async ( req: Request, res: Response ): Promise<void> => 
       logger.info( 'responding with sim HTML for translation test' );
     }
     else {
+
       // No string map info found, return an error message that will be displayed to the user.
       simHtmlWithTranslatedStrings = `Error: unable to get string map file sim: ${simName}`;
       logger.error( 'no string map info found' );

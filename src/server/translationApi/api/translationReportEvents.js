@@ -12,6 +12,7 @@ import privateConfig from '../../../common/privateConfig.js';
 import publicConfig from '../../../common/publicConfig.js';
 import getSimMetadata from '../getSimMetadata.js';
 import getSimNamesAndTitles from '../getSimNamesAndTitles.js';
+import isTeamMember from '../isTeamMember.js';
 import logger from '../logger.js';
 import { reportObjectCache } from '../translationApi.js';
 import getTranslatedAndUntranslatedSims from '../translationReport/getTranslatedAndUntranslatedSims.js';
@@ -33,11 +34,9 @@ const translationReportEvents = async ( req, res ) => {
   res.writeHead( 200, headers );
 
   const simMetadata = await getSimMetadata();
-  const simNamesAndTitles = getSimNamesAndTitles( simMetadata, req.query.isTeamMember === 'true' );
-  const translatedAndUntranslatedSims = await getTranslatedAndUntranslatedSims(
-    req.params.locale,
-    req.query.isTeamMember === 'true'
-  );
+  const userIsTeamMember = isTeamMember( req );
+  const simNamesAndTitles = getSimNamesAndTitles( simMetadata, userIsTeamMember );
+  const translatedAndUntranslatedSims = await getTranslatedAndUntranslatedSims( req.params.locale, userIsTeamMember );
   let simNames = req.query.wantsUntranslated === 'true' ?
                  translatedAndUntranslatedSims.untranslated :
                  translatedAndUntranslatedSims.translated;

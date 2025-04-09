@@ -1,32 +1,38 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * Provide functionality for the translation form data API route.
+ * Provide functionality for the "translation form data" route in the Express server.  This function returns the data
+ * needed to populate the translation form for a given sim and locale.
  *
- * @author Liam Mulhall <liammulh@gmail.com>
+ * @param req - Express request object
+ * @param res - Express response object
+ *
+ * @author Liam Mulhall
  */
 
+import { Request, Response } from 'express';
 import getCategorizedStringKeys from '../getCategorizedStringKeys.js';
 import getSimMetadata from '../getSimMetadata.js';
 import getSimNamesAndTitles from '../getSimNamesAndTitles.js';
 import getStringKeysUsedInSim from '../getStringKeysUsedInSim.js';
 import getTranslationFormData from '../getTranslationFormData.js';
+import isTeamMember from '../isTeamMember.js';
 import logger from '../logger.js';
 
 /**
  * API function. Send translation form data.
  *
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @returns {Promise<String>} - translation form data
+ * @param req - Express request object
+ * @param res - Express response object
+ *
+ * @returns A promise that resolves to void.
  */
-const translationFormData = async ( req, res ) => {
+const translationFormData = async ( req: Request, res: Response ): Promise<void> => {
   try {
     const simMetadata = await getSimMetadata();
-    const simNames = Object.keys( getSimNamesAndTitles( simMetadata ) );
+    const simNames = Object.keys( getSimNamesAndTitles( simMetadata, isTeamMember( req ) ) );
 
-    // Get a list of the string keys used in the sim, each with the repo name.  An example of what one of these will
-    // look like is 'SUN/a11y.numberSpinnerRoleDescription'.
+    // Get a list of the string keys used in the sim, each with the repo name.
     const stringKeysWithRepoName = Object.keys( await getStringKeysUsedInSim( req.params.simName ) );
 
     // Sort the strings into the categories needed by the translation form.
@@ -39,14 +45,16 @@ const translationFormData = async ( req, res ) => {
       simNames,
       stringKeysWithRepoName,
       categorizedStringKeys,
-      req.query.userId
+      req.query.userId as string
     );
+
     logger.info( `responding with ${req.params.locale}/${req.params.simName}'s translation form data` );
     res.header( 'Content-Type', 'application/json' );
     res.send( JSON.stringify( translationFormData, null, 2 ) );
   }
   catch( e ) {
     logger.error( e );
+    res.status( 500 ).send( { error: 'An error occurred while processing the request.' } );
   }
 };
 
