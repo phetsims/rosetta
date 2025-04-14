@@ -3,11 +3,11 @@
   "include": [
     "src/common/**/*",
     "src/server/**/*",
-    "../perennial/js/common/simPhetioMetadata.js"
+    "../perennial-alias/js/common/simPhetioMetadata.ts"
   ],
   "references": [
     {
-      "path": "../perennial/js/browser-and-node/tsconfig.json"
+      "path": "../perennial-alias/js/browser-and-node/tsconfig.json"
     }
   ]
 }
