@@ -1,8 +1,8 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * Send translation report events via server sent events. Each event is an object containing data needed to populate
- * a translation report table row.
+ * Send translation report events via server-sent events (SSE). Each event is an object containing data needed to
+ * populate a single row of the translation report.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
  */
@@ -19,7 +19,7 @@ import getTranslatedAndUntranslatedSims from '../translationReport/getTranslated
 import getTranslationReportObject from '../translationReport/getTranslationReportObject.js';
 
 /**
- * Set up an "event stream" (google on server sent events) of translation report objects used to populate rows of the
+ * Set up an "event stream" (search on server-sent events) of translation report objects used to populate rows of the
  * translation report table.
  * @param req {Object} - Express request object
  * @param res {Object} - Express response object
@@ -53,7 +53,7 @@ const translationReportEvents = async ( req, res ) => {
     let translationReportObject = reportObjectCache.getObject( req.params.locale, sim );
     if ( !translationReportObject ) {
 
-      // Cache miss; get the report object the hard way.
+      // Cache miss - get the report object the hard way.
       translationReportObject = await getTranslationReportObject(
         sim,
         req.params.locale,
