@@ -11,6 +11,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
 import Xerxes from '../img/xerxes.jpg';
+import alertErrorMessage from '../js/alertErrorMessage.js';
 
 /**
  * Get the SHA of the running instance of Rosetta from the server and display it.
@@ -23,7 +24,7 @@ const Sha = () => {
       setSha( shaRes.data );
     }
     catch( e ) {
-      console.error( e );
+      alertErrorMessage( e );
     }
   }, [] );
   return (

@@ -12,6 +12,7 @@ import { Form, Formik } from 'formik';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
+import alertErrorMessage from '../js/alertErrorMessage.js';
 import makeValidationSchema from '../js/makeValidationSchema.js';
 import saveTranslation from '../js/saveTranslation.js';
 import submitTranslation from '../js/submitTranslation.js';
@@ -42,7 +43,7 @@ const TranslationForm = () => {
       } )();
     }
     catch( e ) {
-      console.error( e );
+      alertErrorMessage( e );
     }
   }, [ websiteUserData ] );
 
