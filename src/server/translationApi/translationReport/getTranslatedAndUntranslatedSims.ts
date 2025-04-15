@@ -23,10 +23,9 @@ type TranslatedAndUntranslatedSims = {
   untranslated: string[];
 };
 
-const getTranslatedAndUntranslatedSims = async (
-  locale: string,
-  isTeamMember: boolean
-): Promise<TranslatedAndUntranslatedSims> => {
+const getTranslatedAndUntranslatedSims = async ( locale: string,
+                                                 isTeamMember: boolean ): Promise<TranslatedAndUntranslatedSims> => {
+
   // Create the object that will be returned. It will be populated below.
   const translatedAndUntranslatedSims: TranslatedAndUntranslatedSims = {
     translated: [],
