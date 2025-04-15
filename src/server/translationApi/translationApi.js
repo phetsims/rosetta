@@ -54,5 +54,12 @@ rosettaApiServer.post( '/saveTranslation', saveTranslation );
 rosettaApiServer.post( '/submitTranslation', submitTranslation );
 rosettaApiServer.post( '/testTranslation', testTranslation );
 
+rosettaApiServer.post( '/logClientError', ( req, res ) => {
+  const { errorMessage } = req.body;
+  logger.error( `Client error reported: ${errorMessage}` );
+  res.status( 200 ).send( { status: 'logged' } );
+} );
+
+
 export default rosettaApiServer;
 export { reportObjectCache, longTermStorage };
