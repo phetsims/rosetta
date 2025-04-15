@@ -27,7 +27,7 @@ import getTotalStats from './getTotalStats.js';
  * @param {string[]} simNames
  * @param {string} simTitle
  * @param {boolean} wantsUntranslated
- * @returns {Promise<Object>}
+ * @returns {Promise<TranslationReportObject>}
  */
 const getTranslationReportObject = async ( simName,
                                            locale,

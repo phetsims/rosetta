@@ -26,7 +26,7 @@ const getSimNamesAndTitles = ( simMetadata: SimMetadata, isTeamMember: boolean )
   try {
     for ( const project of simMetadata.projects ) {
       for ( const sim of project.simulations ) {
-        if ( isTeamMember || ( sim.visible || sim.isPrototype || sim.isCommunity ) ) {
+        if ( isTeamMember || sim.visible || sim.isPrototype || sim.isCommunity ) {
           simNamesAndTitles[ sim.name ] = sim.localizedSimulations.en.title;
         }
       }
@@ -41,7 +41,7 @@ const getSimNamesAndTitles = ( simMetadata: SimMetadata, isTeamMember: boolean )
   if ( publicConfig.ENVIRONMENT === 'development' && privateConfig.SHORT_REPORT ) {
     logger.warn( 'using short report (fewer sims) based on configuration settings' );
     simNamesAndTitles = Object.fromEntries(
-      Object.entries( simNamesAndTitles ).filter( ( [ key ] ) => !SIMS_FOR_SHORT_REPORT.includes( key ) )
+      Object.entries( simNamesAndTitles ).filter( ( [ key ] ) => SIMS_FOR_SHORT_REPORT.includes( key ) )
     );
   }
   return simNamesAndTitles;
