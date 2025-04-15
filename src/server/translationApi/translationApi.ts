@@ -6,7 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import flushReportObject from './api/flushReportObject.js';
 import localeInfo from './api/localeInfo.js';
 import saveTranslation from './api/saveTranslation.js';
@@ -28,14 +28,15 @@ const rosettaApiServer = express();
 const reportObjectCache = new ReportObjectCache();
 const longTermStorage = new LongTermStorage();
 
-rosettaApiServer.get( '/', ( req, res ) => {
+rosettaApiServer.get( '/', ( req: Request, res: Response ): void => {
   res.send( 'Hello API!' );
 } );
 
-rosettaApiServer.get( '/*', ( req, res, next ) => {
+rosettaApiServer.get( '/*', ( req: Request, res: Response, next: NextFunction ): void => {
   logger.info( `get request received for ${req.url}` );
   next();
 } );
+
 rosettaApiServer.get( '/localeInfo', localeInfo );
 rosettaApiServer.get( '/simNamesAndTitles', simNamesAndTitles );
 rosettaApiServer.get( '/translationFormData/:simName?/:locale?', translationFormData );
@@ -46,7 +47,7 @@ rosettaApiServer.get( '/translatedAndUntranslatedSims/:locale?', translatedAndUn
 rosettaApiServer.get( '/flushReportObject/:locale?/:sim?', flushReportObject );
 rosettaApiServer.get( '/showStats', showStats );
 
-rosettaApiServer.post( '/*', ( req, res, next ) => {
+rosettaApiServer.post( '/*', ( req: Request, res: Response, next: NextFunction ): void => {
   logger.info( `post request received for ${req.url}` );
   next();
 } );
@@ -54,12 +55,11 @@ rosettaApiServer.post( '/saveTranslation', saveTranslation );
 rosettaApiServer.post( '/submitTranslation', submitTranslation );
 rosettaApiServer.post( '/testTranslation', testTranslation );
 
-rosettaApiServer.post( '/logClientError', ( req, res ) => {
-  const { errorMessage } = req.body;
+rosettaApiServer.post( '/logClientError', ( req: Request, res: Response ): void => {
+  const { errorMessage }: { errorMessage: string } = req.body;
   logger.error( `Client error reported: ${errorMessage}` );
   res.status( 200 ).send( { status: 'logged' } );
 } );
-
 
 export default rosettaApiServer;
 export { reportObjectCache, longTermStorage };
