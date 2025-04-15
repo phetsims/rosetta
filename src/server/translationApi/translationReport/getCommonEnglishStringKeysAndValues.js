@@ -1,7 +1,15 @@
 // Copyright 2021-2022, University of Colorado Boulder
 
 /**
- * Export a function that returns an object containing common English string keys and values for a given simulation.
+ * Get an object where the keys are common English string keys used in a simulation and the values are the English
+ * values of the string.  Note that this does NOT indicate which repo the string is from.
+ *
+ * @param {String} simName - sim name
+ * @param {String[]} simNames - list of all sim names
+ * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys - string keys categorized into common and
+ *        sim-specific
+ * @param {String[]} stringKeysWithRepoName - string keys with their respective repo names for the specified sim
+ * @returns {Promise<Object>} - list of ordered pairs of common English string keys and English values
  *
  * @author Liam Mulhall <liammulh@gmail.com>
  */
@@ -11,22 +19,12 @@ import getCommonRepos from '../getCommonRepos.js';
 import getStringFile from '../getStringFile.js';
 import logger from '../logger.js';
 
-/**
- * Return an object containing common English string keys and values for a given simulation
- *
- * @param {String} simName - sim name
- * @param {String[]} simNames - list of all sim names
- * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys - string keys categorized into common and sim-specific
- * @param {String[]} stringKeysWithRepoName - string keys with their respective repo names for the specified sim
- * @returns {Promise<Object>} - list of ordered pairs of common English string keys and strings
- */
-const getCommonEnglishStringKeysAndValues = async (
-  simName,
-  simNames,
-  categorizedStringKeys,
-  stringKeysWithRepoName
-) => {
-  logger.info( `getting ${simName}'s common english string keys and values` );
+const getCommonEnglishStringKeysAndValues = async ( simName,
+                                                    simNames,
+                                                    categorizedStringKeys,
+                                                    stringKeysWithRepoName ) => {
+
+  logger.info( `getting ${simName}'s common English string keys and values` );
   const commonEnglishStringKeysAndValues = {};
   try {
 
@@ -53,12 +51,12 @@ const getCommonEnglishStringKeysAndValues = async (
         }
       }
 
-      // It's possible that the string key won't get mapped to a value.
-      // This can happen if a key-value pair is no longer used.
+      // It's possible that the string key won't get mapped to a value. This can happen if a key-value pair is no longer
+      // used.
       if ( !stringKeyMapped ) {
 
-        // We don't display unused string keys and strings to the user.
-        // They get stripped out prior to sending them to the client.
+        // We don't display unused string keys and strings to the user. They get stripped out prior to sending them to
+        // the client.
         commonEnglishStringKeysAndValues[ stringKey ] = NO_LONGER_USED_FLAG;
       }
     }
@@ -66,7 +64,7 @@ const getCommonEnglishStringKeysAndValues = async (
   catch( e ) {
     logger.error( e );
   }
-  logger.info( `got ${simName}'s common english string keys and values; returning them` );
+  logger.info( `got ${simName}'s common English string keys and values; returning them` );
 
   return commonEnglishStringKeysAndValues;
 };
