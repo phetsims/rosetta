@@ -1,7 +1,11 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * Shared function, see header for details.
+ * Get an object that can be used to look up whether a translation exists for any sim+locale combination.
+ *
+ * @param isTeamMember - whether a translator is a team member
+ * @returns A promise resolving to an object with sim names for the 1st keys, two-letter locales for the 2nd, and an object
+ *          with a boolean indicating whether a translation exists.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
  * @author John Blanco (PhET Interactive Simulations)
@@ -10,29 +14,12 @@
 import getLocaleInfo from '../getLocaleInfo.js';
 import getSimMetadata from '../getSimMetadata.js';
 
-/**
- * Return an object that can be used to look up whether a translation exists for any sim+locale combination.
- *
- * @param {Boolean} isTeamMember - whether a translator is a team member
- * @returns {Promise<Object>} - an object with sim names for the 1st keys, two-letter locales for the 2nd, and an object
- *                              with a boolean indicating whether a translation exists.  Here's a rough example:
- *                              {
- *                                acid-base-solutions: {
- *                                  aa: {hasTranslation: false},
- *                                  ab: {hasTranslation: false},
- *                                  .
- *                                  .
- *                                  .
- *                                }
- *                                .
- *                                .
- *                                .
- *                              }
- */
-const getTranslationInfo = async isTeamMember => {
+type TranslationInfo = Record<string, Record<string, { hasTranslation: boolean }>>;
 
-  // Create the object that will be returned.  It will be populated in the subsequent code.
-  const translationInfo = {};
+const getTranslationInfo = async ( isTeamMember: boolean ): Promise<TranslationInfo> => {
+
+  // Create the object that will be returned. It will be populated in the subsequent code.
+  const translationInfo: TranslationInfo = {};
 
   const localesList = Object.keys( await getLocaleInfo() );
   const simMetadata = await getSimMetadata();
@@ -44,32 +31,17 @@ const getTranslationInfo = async isTeamMember => {
         const simName = sim.name;
         const localizedSimsList = Object.keys( sim.localizedSimulations );
         for ( const locale of localesList ) {
-          if ( translationInfo[ simName ] === undefined ) {
+          if ( !translationInfo[ simName ] ) {
             translationInfo[ simName ] = {};
           }
-          if ( localizedSimsList.includes( locale ) ) {
-            translationInfo[ simName ][ locale ] = {
-              hasTranslation: true
-            };
-          }
-          else {
-            translationInfo[ simName ][ locale ] = {
-              hasTranslation: false
-            };
-          }
+          translationInfo[ simName ][ locale ] = {
+            hasTranslation: localizedSimsList.includes( locale )
+          };
         }
       }
     }
   }
   return translationInfo;
 };
-
-// Uncomment this code if you want a local copy of translation info.
-// import fs from 'fs';
-//
-// ( async () => {
-//   const translationInfo = await getTranslationInfo();
-//   fs.writeFileSync( './translationInfo.json', JSON.stringify( translationInfo, null, 4 ) );
-// } )();
 
 export default getTranslationInfo;
