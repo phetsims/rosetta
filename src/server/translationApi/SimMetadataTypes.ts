@@ -140,6 +140,7 @@ export type SimulationType = {
   topicIds: number[];
   id: number;
   localizedSimulations: Record<LocaleType, LocalizedSimulationType>;
+  visible?: boolean;
   hasPrototype?: boolean;
   isPrototype?: boolean;
   isCommunity?: boolean;
