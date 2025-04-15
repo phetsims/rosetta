@@ -17,7 +17,7 @@ const octokit = new Octokit( { auth: privateConfig.GITHUB_PAT } );
  *
  * @param {String} simOrLibRepo - repository where the strings come from
  * @param {String} ref - branch or SHA of commit to get the string file from
- * @returns {Promise<Object|null>} - string file
+ * @returns {Promise<TranslationDataForRepo|null>} - string file
  */
 const getStringFile = async ( simOrLibRepo, ref = 'main' ) => {
   let stringFile = null;

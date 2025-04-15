@@ -22,7 +22,7 @@ type TranslationValueEntry = {
 };
 
 // Translation data for a single repo.  The keys are the string keys, the values are the translated strings and their
-// history.
+// history.  This is essentially the format of the data that is stored in the translation JSON files.
 export type TranslationDataForRepo = Record<string, TranslationValueEntry>;
 
 // The collection of translation data for all repos in a translation.  The keys are the repo names.

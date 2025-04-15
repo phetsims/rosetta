@@ -2,14 +2,13 @@
 
 /**
  * Get an object where the keys are common English string keys used in a simulation and the values are the English
- * values of the string.  Note that this does NOT indicate which repo the string is from.
+ * values of the string. Note that this does NOT indicate which repo the string is from.
  *
- * @param {String} simName - sim name
- * @param {String[]} simNames - list of all sim names
- * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys - string keys categorized into common and
- *        sim-specific
- * @param {String[]} stringKeysWithRepoName - string keys with their respective repo names for the specified sim
- * @returns {Promise<Object>} - list of ordered pairs of common English string keys and English values
+ * @param simName - sim name
+ * @param simNames - list of all sim names
+ * @param categorizedStringKeys - string keys categorized into common and sim-specific
+ * @param stringKeysWithRepoName - string keys with their respective repo names for the specified sim
+ * @returns A promise resolving to an object with common English string keys and their values
  *
  * @author Liam Mulhall <liammulh@gmail.com>
  */
@@ -19,18 +18,27 @@ import getCommonRepos from '../getCommonRepos.js';
 import getStringFile from '../getStringFile.js';
 import logger from '../logger.js';
 
-const getCommonEnglishStringKeysAndValues = async ( simName,
-                                                    simNames,
-                                                    categorizedStringKeys,
-                                                    stringKeysWithRepoName ) => {
+type CategorizedStringKeys = {
+  simSpecific: string[];
+  common: string[];
+  shared?: string[];
+};
+
+type StringFile = Record<string, { value: string }>;
+
+const getCommonEnglishStringKeysAndValues = async ( simName: string,
+                                                    simNames: string[],
+                                                    categorizedStringKeys: CategorizedStringKeys,
+                                                    stringKeysWithRepoName: string[] ): Promise<Record<string, string>> => {
 
   logger.info( `getting ${simName}'s common English string keys and values` );
-  const commonEnglishStringKeysAndValues = {};
+  const commonEnglishStringKeysAndValues: Record<string, string> = {};
+
   try {
 
-    // For each common repo, get the string file.
+    // For each common repo, get the string file contents.
     const commonRepos = await getCommonRepos( simName, simNames, stringKeysWithRepoName );
-    const stringFiles = [];
+    const stringFiles: StringFile[] = [];
     for ( const repo of commonRepos ) {
       stringFiles.push( await getStringFile( repo ) );
     }
@@ -45,7 +53,7 @@ const getCommonEnglishStringKeysAndValues = async ( simName,
 
         // Find the key in the file that matches the string key we're interested in.
         const matchingKey = Object.keys( stringFile ).find( key => key === stringKey );
-        if ( stringFile[ matchingKey ] ) {
+        if ( matchingKey && stringFile[ matchingKey ] ) {
           commonEnglishStringKeysAndValues[ stringKey ] = stringFile[ matchingKey ].value;
           stringKeyMapped = true;
         }
