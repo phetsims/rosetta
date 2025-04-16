@@ -18,11 +18,10 @@ import logger from './logger.js';
  * @param stringKeysWithRepoName - string keys with their respective repo names for the specified sim
  * @returns A promise resolving to a list of common repos for a sim
  */
-const getCommonRepos = async (
-  simName: string,
-  simNames: string[],
-  stringKeysWithRepoName: string[]
-): Promise<string[]> => {
+const getCommonRepos = async ( simName: string,
+                               simNames: string[],
+                               stringKeysWithRepoName: string[] ): Promise<string[]> => {
+
   logger.info( `getting ${simName}'s common repos` );
   const commonRepos: Set<string> = new Set<string>();
   try {
