@@ -13,18 +13,22 @@ import logger from './logger.js';
  * Return an array of lowercase-kebab names of common repos for a given sim. Common repos are repos that multiple
  * sims use. For example, phetsims/scenery is a common repo. These repos are sorted alphabetically.
  *
- * @param {String} simName - sim name
- * @param {String[]} simNames - list of all sim names
- * @param {String[]} stringKeysWithRepoName - string keys with their respective repo names for the specified sim
- * @returns {Promise<String[]>} - list of common repos for a sim
+ * @param simName - sim name
+ * @param simNames - list of all sim names
+ * @param stringKeysWithRepoName - string keys with their respective repo names for the specified sim
+ * @returns A promise resolving to a list of common repos for a sim
  */
-const getCommonRepos = async ( simName, simNames, stringKeysWithRepoName ) => {
+const getCommonRepos = async (
+  simName: string,
+  simNames: string[],
+  stringKeysWithRepoName: string[]
+): Promise<string[]> => {
   logger.info( `getting ${simName}'s common repos` );
-  const commonRepos = new Set();
+  const commonRepos: Set<string> = new Set<string>();
   try {
     for ( const stringKeyWithRepoName of stringKeysWithRepoName ) {
       const repoName = getRepoNameFromStringKeyWithRepoName( stringKeyWithRepoName );
-      if ( ( simNames ).includes( repoName ) ) {
+      if ( simNames.includes( repoName ) ) {
         logger.verbose( `${repoName} is in sim names; it's not a common repo` );
       }
       else {
