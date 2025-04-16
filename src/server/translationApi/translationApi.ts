@@ -6,9 +6,10 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import express, { Request, Response, NextFunction } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import flushReportObject from './api/flushReportObject.js';
 import localeInfo from './api/localeInfo.js';
+import logClientError from './api/logClientError.js';
 import saveTranslation from './api/saveTranslation.js';
 import sha from './api/sha.js';
 import showStats from './api/showStats.js';
@@ -55,11 +56,7 @@ rosettaApiServer.post( '/saveTranslation', saveTranslation );
 rosettaApiServer.post( '/submitTranslation', submitTranslation );
 rosettaApiServer.post( '/testTranslation', testTranslation );
 
-rosettaApiServer.post( '/logClientError', ( req: Request, res: Response ): void => {
-  const { errorMessage }: { errorMessage: string } = req.body;
-  logger.error( `Client error reported: ${errorMessage}` );
-  res.status( 200 ).send( { status: 'logged' } );
-} );
+rosettaApiServer.post( '/logClientError', logClientError );
 
 export default rosettaApiServer;
 export { reportObjectCache, longTermStorage };
