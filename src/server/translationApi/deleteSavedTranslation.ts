@@ -11,19 +11,30 @@ import privateConfig from '../../common/privateConfig.js';
 import { shortTermStringStorageCollection } from './getShortTermStringStorageCollection.js';
 import logger from './logger.js';
 
+type IdSimNameAndLocale = {
+  userId: number;
+  simName: string;
+  locale: string;
+};
+
 /**
  * Delete any translations that match the provided user ID, sim name, and locale.
  *
- * @param {Object} idSimNameAndLocale - an object containing the user ID, sim name, and locale for a translation
+ * @param idSimNameAndLocale - an object containing the user ID, sim name, and locale for a translation
+ * @returns A promise resolving to a boolean indicating whether the deletion was successful
  */
-const deleteSavedTranslation = async idSimNameAndLocale => {
+const deleteSavedTranslation = async ( idSimNameAndLocale: IdSimNameAndLocale ): Promise<boolean> => {
   let wasDeleted = false;
   if ( privateConfig.DB_ENABLED ) {
-    logger.info( `attempting to delete old ${idSimNameAndLocale.locale}/${idSimNameAndLocale.simName} translation(s) in short-term storage` );
+    logger.info(
+      `attempting to delete old ${idSimNameAndLocale.locale}/${idSimNameAndLocale.simName} translation(s) in short-term storage`
+    );
     try {
-      const oldSavedTranslation = await shortTermStringStorageCollection.find( idSimNameAndLocale );
+      const oldSavedTranslation = shortTermStringStorageCollection.find( idSimNameAndLocale );
       if ( oldSavedTranslation ) {
-        logger.info( `old saved ${idSimNameAndLocale.locale}/${idSimNameAndLocale.simName} translation(s) with same user id extant; deleting them` );
+        logger.info(
+          `old saved ${idSimNameAndLocale.locale}/${idSimNameAndLocale.simName} translation(s) with same user id extant; deleting them`
+        );
         const deleteResult = await shortTermStringStorageCollection.deleteMany( idSimNameAndLocale );
         wasDeleted = deleteResult.acknowledged;
       }
@@ -34,7 +45,9 @@ const deleteSavedTranslation = async idSimNameAndLocale => {
     catch( e ) {
       logger.error( e );
     }
-    logger.info( `done attempting to delete ${idSimNameAndLocale.locale}/${idSimNameAndLocale.simName} translation(s) in short-term storage` );
+    logger.info(
+      `done attempting to delete ${idSimNameAndLocale.locale}/${idSimNameAndLocale.simName} translation(s) in short-term storage`
+    );
   }
   else {
     logger.warn( 'short-term string storage database not enabled; check your config' );
