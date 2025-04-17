@@ -6,8 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import axios from 'axios';
-import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
+import logError from './logError.js';
 
 /**
  * Alert the user that an error occurred.
@@ -16,9 +15,7 @@ import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
  */
 async function alertErrorMessage( error ) {
   // Attempt to notify the server of the error
-  const response = await axios.post( `${TRANSLATION_API_ROUTE}/logClientError`, {
-    errorMessage: error.toString()
-  } );
+  const response = logError( error );
 
   window.alert(
     `The translation utility experienced an error.
