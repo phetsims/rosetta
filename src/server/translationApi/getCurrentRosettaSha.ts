@@ -11,9 +11,9 @@ import { execSync } from 'node:child_process';
 /**
  * Return the current SHA of the running instance of Rosetta.
  *
- * @returns {string}
+ * @returns A string representing the current SHA or an error message if unable to retrieve it.
  */
-const getCurrentRosettaSha = () => {
+const getCurrentRosettaSha = (): string => {
   let sha = 'error: unable to get sha';
   try {
 
