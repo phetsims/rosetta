@@ -40,6 +40,10 @@ type PrivateConfigDataType = {
 
   // whether to generate a short translation report, which is useful for debugging without hitting GitHub excessively
   readonly 'SHORT_REPORT' : boolean;
+
+  // Winston's logger severity level, as specified by RFC5424:
+  // assumed to be numerically ascending from most important to least important.
+  readonly LOGGER_LEVEL : string;
 };
 
 export default {} as PrivateConfigDataType;
