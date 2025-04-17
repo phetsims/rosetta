@@ -35,6 +35,9 @@ type PrivateConfigDataType = {
   // whether to perform string commits to long-term storage, which is GitHub as of this writing
   readonly 'PERFORM_STRING_COMMITS' : boolean;
 
+  // URL of the server where the phet-io sims are hosted
+  readonly PHET_IO_SERVER_URL : string;
+
   // port number for the server portion of Rosetta
   readonly 'ROSETTA_PORT': number;
 
@@ -44,7 +47,7 @@ type PrivateConfigDataType = {
   // the authorization token needed for metadata requests from the PhET server(s)
   readonly 'SERVER_TOKEN' : string;
 
-  // the URL of the PhET server where metadata requests and build server requests are sent
+  // the URL of the PhET server where sims live, and where metadata requests and build server requests are sent
   readonly 'SERVER_URL' : boolean;
 
   // whether to generate a short translation report, which is useful for debugging without hitting GitHub excessively

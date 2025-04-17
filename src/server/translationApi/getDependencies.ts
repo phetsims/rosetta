@@ -7,20 +7,19 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import axios from 'axios';
 import privateConfig from '../../common/privateConfig.js';
+import { Brand } from './Brand.js';
 import logger from './logger.js';
 
 /**
  * Get the dependencies for the specified simulation and version.
  *
- * @param {string} simName
- * @param {string} version
- * @param {string} [brand] - The brand of the sim for which the dependencies are needed.  Valid values are 'phet' or
- *                           'phet-io'.
- * @returns {Promise.<string>} - JSON data with dependencies
+ * @param simName - The name of the simulation.
+ * @param version - The version of the simulation.
+ * @param brand - The brand of the sim for which the dependencies are needed. Valid values are 'phet' or 'phet-io'.
+ * @returns A promise resolving to a string containing JSON data with dependencies.
  */
-const getDependencies = async ( simName, version, brand = 'phet' ) => {
+const getDependencies = async ( simName: string, version: string, brand: Brand = 'phet' ): Promise<string> => {
 
   let dependencies = 'error: unable to get dependencies';
 
@@ -41,9 +40,14 @@ const getDependencies = async ( simName, version, brand = 'phet' ) => {
   // Get the dependencies.
   logger.info( `getting dependencies from ${dependenciesUrl}` );
   try {
-    const dependenciesRes = await axios.get( dependenciesUrl );
-    const dependenciesJsonObject = dependenciesRes.data;
-    dependencies = JSON.stringify( dependenciesJsonObject );
+    const response = await fetch( dependenciesUrl );
+    if ( response.ok ) {
+      const dependenciesJsonObject = await response.json();
+      dependencies = JSON.stringify( dependenciesJsonObject );
+    }
+    else {
+      logger.error( `error getting dependencies: ${response.status} ${response.statusText}, returning error object` );
+    }
   }
   catch( e ) {
     logger.error( `unable to obtain dependencies for ${simName} version ${version}, error = ${e}` );
