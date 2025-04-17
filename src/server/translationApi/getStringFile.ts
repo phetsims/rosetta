@@ -8,6 +8,7 @@
 
 import { Octokit } from '@octokit/rest';
 import privateConfig from '../../common/privateConfig.js';
+import { TranslationDataForRepo } from './api/StorableTranslationData.js';
 import logger from './logger.js';
 
 const octokit = new Octokit( { auth: privateConfig.GITHUB_PAT } );
@@ -15,11 +16,14 @@ const octokit = new Octokit( { auth: privateConfig.GITHUB_PAT } );
 /**
  * Return the contents of the string file.
  *
- * @param {String} simOrLibRepo - repository where the strings come from
- * @param {String} ref - branch or SHA of commit to get the string file from
- * @returns {Promise<TranslationDataForRepo|null>} - string file
+ * @param simOrLibRepo - repository where the strings come from
+ * @param ref - branch or SHA of commit to get the string file from
+ * @returns string file
  */
-const getStringFile = async ( simOrLibRepo, ref = 'main' ) => {
+const getStringFile = async (
+  simOrLibRepo: string,
+  ref = 'main'
+): Promise<TranslationDataForRepo> => {
   let stringFile = null;
   try {
     const response = await octokit.repos.getContent( {
@@ -28,8 +32,10 @@ const getStringFile = async ( simOrLibRepo, ref = 'main' ) => {
       path: `${simOrLibRepo}-strings_en.json`,
       ref: ref
     } );
-    const content = Buffer.from( response.data.content, 'base64' ).toString( 'utf-8' );
-    stringFile = JSON.parse( content );
+    if ( 'content' in response.data && response.data.content ) {
+      const content = Buffer.from( response.data.content, 'base64' ).toString( 'utf-8' );
+      stringFile = JSON.parse( content );
+    }
   }
   catch( e ) {
     logger.error( e );

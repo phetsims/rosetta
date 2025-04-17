@@ -23,6 +23,12 @@ type PrivateConfigDataType = {
   // whether the short-term storage database is enabled
   readonly 'DB_ENABLED' : boolean;
 
+  // the Personal Access Token (PAT) for GitHub, used to authenticate requests to the GitHub API
+  readonly GITHUB_PAT : string;
+
+  // Winston's logger severity level. We only use error, warn, verbose, and info.
+  readonly LOGGER_LEVEL : string;
+
   // whether to perform string commits to long-term storage, which is GitHub as of this writing
   readonly 'PERFORM_STRING_COMMITS' : boolean;
 
@@ -40,10 +46,6 @@ type PrivateConfigDataType = {
 
   // whether to generate a short translation report, which is useful for debugging without hitting GitHub excessively
   readonly 'SHORT_REPORT' : boolean;
-
-  // Winston's logger severity level, as specified by RFC5424:
-  // assumed to be numerically ascending from most important to least important.
-  readonly LOGGER_LEVEL : string;
 };
 
 export default {} as PrivateConfigDataType;
