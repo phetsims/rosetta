@@ -6,6 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import { ClientSubmittedTranslationData } from '../../common/ClientSubmittedTranslationData.js';
 import privateConfig from '../../common/privateConfig.js';
 import deleteSavedTranslation from './deleteSavedTranslation.js';
 import { shortTermStringStorageCollection } from './getShortTermStringStorageCollection.js';
@@ -17,7 +18,7 @@ import logger from './logger.js';
  *
  * @param translation - translation received from client
  */
-const storeTranslationShortTerm = async translation => {
+const storeTranslationShortTerm = async ( translation: ClientSubmittedTranslationData ): Promise<boolean> => {
   let stored = false;
   if ( privateConfig.DB_ENABLED ) {
     logger.info( `storing ${translation.locale}/${translation.simName} translation in short-term storage` );
@@ -41,7 +42,7 @@ const storeTranslationShortTerm = async translation => {
     logger.info( `stored ${translation.locale}/${translation.simName} translation in short-term storage` );
   }
   else {
-    logger.warn( 'short-term string storage database not enabled; check your config' );
+    logger.warn( 'short-term string storage database not enabled, skipping storage operation' );
   }
   return stored;
 };
