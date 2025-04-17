@@ -8,6 +8,9 @@
 
 type PrivateConfigDataType = {
 
+  // the branch of the phetsims/babel repo to use for long-term storage, useful for debugging
+  readonly BABEL_BRANCH: string;
+
   // authentication token needed to request builds from the build server
   readonly 'BUILD_SERVER_AUTH' : string;
 

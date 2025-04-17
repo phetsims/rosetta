@@ -1,22 +1,27 @@
 // Copyright 2023, University of Colorado Boulder
 
-import { Octokit } from '@octokit/rest';
-import privateConfig from '../../common/privateConfig.js';
-import logger from './logger.js';
-
 /**
  * Define a class that can be used to interface with long-term storage.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import { RequestError } from '@octokit/request-error';
+import { Octokit } from '@octokit/rest';
+import privateConfig from '../../common/privateConfig.js';
+import logger from './logger.js';
+
 const OWNER = 'phetsims';
 const REPO = 'babel';
 
+// Define type for translation file contents
+type TranslationFileContents = Record<string, unknown>;
+
 class LongTermStorage {
 
-  constructor() {
+  private octokit: Octokit;
 
+  public constructor() {
     // Create the Octokit instance. Octokit is a library that
     // allows us to interface with the GitHub API.
     this.octokit = new Octokit( { auth: privateConfig.GITHUB_PAT } );
@@ -25,27 +30,29 @@ class LongTermStorage {
   /**
    * Get the path to a translation file in the phetsims/babel repo.
    *
-   * @param {String} simOrLibRepo - repository where the strings come from
-   * @param {String} locale - ISO 639-1 locale code, e.g. es for Spanish
-   * @returns {String} - path to the translation file
-   * @private
+   * @param simOrLibRepo - repository where the strings come from
+   * @param locale - ISO 639-1 locale code, e.g. es for Spanish
+   * @returns path to the translation file
    */
-  _getFilePath( simOrLibRepo, locale ) {
+  private _getFilePath( simOrLibRepo: string, locale: string ): string {
     return `${simOrLibRepo}/${simOrLibRepo}-strings_${locale}.json`;
   }
 
   /**
    * Get a translation for a given repo and locale if it exists.
    *
-   * @param {String} simOrLibRepo - repository where the strings come from
-   * @param {String} locale - ISO 639-1 locale code, e.g. es for Spanish
-   * @param {String|null} branch - phetsims/babel branch to get the translation from
-   * @returns {Promise<Object>} - translation file contents for the given repo and locale if it exists or empty object
-   * @public
+   * @param simOrLibRepo - repository where the strings come from
+   * @param locale - ISO 639-1 locale code, e.g. es for Spanish
+   * @param branch - phetsims/babel branch to get the translation from
+   * @returns translation file contents for the given repo and locale if it exists or empty object
    */
-  async get( simOrLibRepo, locale, branch = null ) {
+  public async get(
+    simOrLibRepo: string,
+    locale: string,
+    branch: string | null = null
+  ): Promise<TranslationFileContents> {
     logger.info( `attempting to get translation for ${simOrLibRepo}/${locale} from long-term storage` );
-    let translatedStringFileContents = {};
+    let translatedStringFileContents: TranslationFileContents = {};
     try {
       const response = await this.octokit.repos.getContent( {
         owner: OWNER,
@@ -53,15 +60,19 @@ class LongTermStorage {
         path: this._getFilePath( simOrLibRepo, locale ),
         ref: branch ? branch : privateConfig.BABEL_BRANCH
       } );
-      const content = Buffer.from( response.data.content, 'base64' ).toString( 'utf-8' );
-      translatedStringFileContents = JSON.parse( content );
+
+      if ( 'content' in response.data && response.data.content ) {
+        const content = Buffer.from( response.data.content, 'base64' ).toString( 'utf-8' );
+        translatedStringFileContents = JSON.parse( content );
+      }
     }
-    catch( e ) {
-      if ( Number( e.response.status ) === 404 ) {
+    catch( error ) {
+      // Type guard to check if error matches the structure of Octokit errors
+      if ( error instanceof RequestError && error.status === 404 ) {
         logger.warn( `no translation file for ${simOrLibRepo} in ${locale}` );
       }
       else {
-        logger.error( e );
+        logger.error( error );
       }
     }
     return translatedStringFileContents;
@@ -70,13 +81,16 @@ class LongTermStorage {
   /**
    * Get the SHA of a translation file in the phetsims/babel repo.
    *
-   * @param {String} simOrLibRepo - repository where the strings come from
-   * @param {String} locale - ISO 639-1 locale code, e.g. es for Spanish
-   * @param {String} branch - phetsims/babel branch to get the translation from
-   * @returns {Promise<String>} - the SHA of the translation file
-   * @private
+   * @param simOrLibRepo - repository where the strings come from
+   * @param locale - ISO 639-1 locale code, e.g. es for Spanish
+   * @param branch - phetsims/babel branch to get the translation from
+   * @returns the SHA of the translation file
    */
-  async _getGitShaOfFile( simOrLibRepo, locale, branch = null ) {
+  private async _getGitShaOfFile(
+    simOrLibRepo: string,
+    locale: string,
+    branch: string | null = null
+  ): Promise<string> {
     let sha = '';
     try {
       const response = await this.octokit.repos.getContent( {
@@ -85,14 +99,16 @@ class LongTermStorage {
         path: this._getFilePath( simOrLibRepo, locale ),
         ref: branch ? branch : privateConfig.BABEL_BRANCH
       } );
-      sha = response.data.sha;
+      if ( 'sha' in response.data && response.data.sha ) {
+        sha = response.data.sha;
+      }
     }
-    catch( e ) {
-      if ( Number( e.response.status ) === 404 ) {
+    catch( error ) {
+      if ( error instanceof RequestError && error.status === 404 ) {
         logger.warn( `no translation file for ${simOrLibRepo} in ${locale}` );
       }
       else {
-        logger.error( e );
+        logger.error( error );
       }
     }
     return sha;
@@ -101,14 +117,18 @@ class LongTermStorage {
   /**
    * Store a translation in long-term storage.
    *
-   * @param {String} simOrLibRepo - repository where the strings come from
-   * @param {String} locale - ISO 639-1 locale code, e.g. es for Spanish
-   * @param {Object} translationFileContents - translation file contents
-   * @param {String} branch - phetsims/babel branch to store the translation in
-   * @returns {Promise<Boolean>} - whether the translation was stored
-   * @public
+   * @param simOrLibRepo - repository where the strings come from
+   * @param locale - ISO 639-1 locale code, e.g. es for Spanish
+   * @param translationFileContents - translation file contents
+   * @param branch - phetsims/babel branch to store the translation in
+   * @returns whether the translation was stored
    */
-  async store( simOrLibRepo, locale, translationFileContents, branch = null ) {
+  public async store(
+    simOrLibRepo: string,
+    locale: string,
+    translationFileContents: TranslationFileContents,
+    branch: string | null = null
+  ): Promise<boolean> {
     let stored = false;
     const emptyTranslationFileContents = Object.keys( translationFileContents ).length === 0;
     if ( privateConfig.PERFORM_STRING_COMMITS && !emptyTranslationFileContents ) {
