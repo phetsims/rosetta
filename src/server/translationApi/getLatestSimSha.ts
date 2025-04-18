@@ -11,10 +11,10 @@ import getDependencies from './getDependencies.js';
 /**
  * Return the SHA of the most recently published (latest) version of the supplied sim.
  *
- * @param {string} simName - lowercase kebab case sim name, e.g. acid-base-solutions
- * @returns {Promise<string>}
+ * @param simName - lowercase kebab case sim name, e.g. acid-base-solutions
+ * @returns the SHA as a string
  */
-const getLatestSimSha = async simName => {
+const getLatestSimSha = async ( simName: string ): Promise<string> => {
   const depsString = await getDependencies( simName, 'latest' );
   const depsObject = JSON.parse( depsString );
   return depsObject[ simName ].sha;

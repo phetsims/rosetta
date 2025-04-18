@@ -29,6 +29,9 @@ type PrivateConfigDataType = {
   // the Personal Access Token (PAT) for GitHub, used to authenticate requests to the GitHub API
   readonly GITHUB_PAT : string;
 
+  // the URL of the GitHub repository where long-term storage is located
+  readonly GITHUB_URL : string;
+
   // Winston's logger severity level. We only use error, warn, verbose, and info.
   readonly LOGGER_LEVEL : string;
 
@@ -52,6 +55,9 @@ type PrivateConfigDataType = {
 
   // whether to generate a short translation report, which is useful for debugging without hitting GitHub excessively
   readonly 'SHORT_REPORT' : boolean;
+
+  // the duration in milliseconds that locale info is valid for
+  readonly 'VALID_LOCALE_INFO_DURATION' : number;
 };
 
 export default {} as PrivateConfigDataType;
