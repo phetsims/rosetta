@@ -1,7 +1,7 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * Export a function that maps common repos to lists of string keys in those repos.
+ * Export a shared function, see function header for details.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
  */
@@ -10,16 +10,19 @@ import getRepoNameFromStringKeyWithRepoName from './getRepoNameFromStringKeyWith
 import getStringKeyFromStringKeyWithRepoName from './getStringKeyFromStringKeyWithRepoName.js';
 
 /**
- * Return an object that maps common repos to lists of string keys in those repos.
+ * Return an object that maps common repo names (e.g. joist) to lists of string keys in those repos.
  *
- * @param {String[]} stringKeysWithRepoName - stringKey/REPO_NAME we get from a sim's HTML
- * @param {String[]} commonRepos - list of common repos
- * @param {String[]} commonStringKeys - list of common string keys
- * @returns {Object} - an object of objects where the keys are common repo names and their values are
- *                     lists of string keys that belong to those repos
+ * @param stringKeysWithRepoName - list of stringKey/REPO_NAME we get from a sim's string map, e.g.
+ *                                 "JOIST/preferences.title".
+ * @param commonRepos - list of common repos
+ * @param commonStringKeys - list of common string keys
+ * @returns An object where the keys are common repo names and their values are lists of string keys that belong to each repo
  */
-const getRepoNameToStringKeys = ( stringKeysWithRepoName, commonRepos, commonStringKeys ) => {
-  const repoNameToStringKeys = {};
+const getRepoNameToStringKeys = ( stringKeysWithRepoName: string[],
+                                  commonRepos: string[],
+                                  commonStringKeys: string[] ): Record<string, string[]> => {
+
+  const repoNameToStringKeys: Record<string, string[]> = {};
   for ( const stringKeyWithRepoName of stringKeysWithRepoName ) {
     const stringKey = getStringKeyFromStringKeyWithRepoName( stringKeyWithRepoName );
     const repoName = getRepoNameFromStringKeyWithRepoName( stringKeyWithRepoName );
