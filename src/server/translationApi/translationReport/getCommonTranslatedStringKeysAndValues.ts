@@ -6,29 +6,32 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import { CategorizedStringKeys } from '../getCategorizedStringKeys.js';
 import getCommonRepos from '../getCommonRepos.js';
 import getRepoNameToStringKeys from '../getRepoNameToStringKeys.js';
 import { longTermStorage } from '../translationApi.js';
 
+type StringFile = Record<string, string>;
+
 /**
  * Return an object containing common translated string keys and their values.
  *
- * @param {String} simName - sim name
- * @param {String} locale - two-letter ISO 639-1 locale code, e.g. es for Spanish
- * @param {String[]} simNames - list of all sim names
- * @param {String[]} stringKeysWithRepoName - stringKey/REPO_NAME we get from a sim's HTML
- * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys - string keys categorized into common and sim-specific
- * @returns {Promise<Object>} - ordered pairs of common translated string keys and their values (their strings)
+ * @param simName - sim name
+ * @param locale - two-letter ISO 639-1 locale code, e.g. es for Spanish
+ * @param simNames - list of all sim names
+ * @param stringKeysWithRepoName - stringKey/REPO_NAME we get from a sim's HTML
+ * @param categorizedStringKeys - string keys categorized into common and sim-specific
+ * @returns - ordered pairs of common translated string keys and their values (their strings)
  */
 const getCommonTranslatedStringKeysAndValues = async (
-  simName,
-  locale,
-  simNames,
-  stringKeysWithRepoName,
-  categorizedStringKeys
-) => {
+  simName: string,
+  locale: string,
+  simNames: string[],
+  stringKeysWithRepoName: string[],
+  categorizedStringKeys: CategorizedStringKeys
+): Promise<StringFile> => {
 
-  const commonTranslatedStringKeysAndStrings = {};
+  const commonTranslatedStringKeysAndStrings: StringFile = {};
   const commonStringKeys = categorizedStringKeys.common;
 
   // Get a list of common repos for the sim.

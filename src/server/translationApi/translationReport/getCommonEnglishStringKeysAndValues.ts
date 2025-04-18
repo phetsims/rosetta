@@ -14,15 +14,10 @@
  */
 
 import { NO_LONGER_USED_FLAG } from '../../../common/constants.js';
+import { CategorizedStringKeys } from '../getCategorizedStringKeys.js';
 import getCommonRepos from '../getCommonRepos.js';
 import getStringFile from '../getStringFile.js';
 import logger from '../logger.js';
-
-type CategorizedStringKeys = {
-  simSpecific: string[];
-  common: string[];
-  shared?: string[];
-};
 
 type StringFile = Record<string, { value: string }>;
 

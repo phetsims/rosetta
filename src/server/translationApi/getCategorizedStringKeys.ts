@@ -20,7 +20,7 @@ import getSimNamesAndTitles from './getSimNamesAndTitles.js';
 import getStringKeyFromStringKeyWithRepoName from './getStringKeyFromStringKeyWithRepoName.js';
 import logger from './logger.js';
 
-type CategorizedStringKeys = {
+export type CategorizedStringKeys = {
   common: string[];
   simSpecific: string[];
   shared: string[];

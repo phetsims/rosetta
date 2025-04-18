@@ -16,7 +16,7 @@ export type HistoryEntry = {
   explanation?: string | null;
 };
 
-type TranslationValueEntry = {
+export type TranslationValueEntry = {
   value: string;
   history: HistoryEntry[];
 };
