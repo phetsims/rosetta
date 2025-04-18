@@ -6,12 +6,19 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import { StorableTranslationData } from './api/StorableTranslationData.js';
 import logger from './logger.js';
 import { longTermStorage } from './translationApi.js';
 
-const storeEachRepoContents = async ( preparedTranslation, repos ) => {
-  logger.info( `attempting to store new or updated translation data for ${preparedTranslation.locale}/${preparedTranslation.simName} in long-term storage` );
+const storeEachRepoContents = async ( preparedTranslation: StorableTranslationData,
+                                      repos: string[] ): Promise<boolean> => {
+
+  logger.info(
+    `attempting to store new or updated translation data for ${preparedTranslation.locale}/${preparedTranslation.simName} in long-term storage`
+  );
+
   let allTranslationDataStored = true;
+
   for ( const repo of repos ) {
     const translationData = preparedTranslation.multiRepoTranslationData[ repo ];
     const wasStored = await longTermStorage.store( repo, preparedTranslation.locale, translationData );
@@ -22,8 +29,12 @@ const storeEachRepoContents = async ( preparedTranslation, repos ) => {
       allTranslationDataStored = false;
     }
   }
+
   logger.info( `all translation data sets were stored: ${allTranslationDataStored}` );
-  logger.info( `done attempting to store translation data sets for ${preparedTranslation.locale}/${preparedTranslation.simName} long term` );
+  logger.info(
+    `done attempting to store translation data sets for ${preparedTranslation.locale}/${preparedTranslation.simName} long term`
+  );
+
   return allTranslationDataStored;
 };
 
