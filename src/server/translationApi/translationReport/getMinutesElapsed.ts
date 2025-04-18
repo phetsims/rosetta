@@ -11,9 +11,9 @@
  *
  * @param millisecondsA - chronologically first time
  * @param millisecondsB - chronologically second time
- * @returns {Number} - number of minutes elapsed between timestamps
+ * @returns - number of minutes elapsed between timestamps
  */
-const getMinutesElapsed = ( millisecondsA, millisecondsB ) => {
+const getMinutesElapsed = ( millisecondsA: number, millisecondsB: number ): number => {
   return ( millisecondsB - millisecondsA ) / 1000 / 60;
 };
 

@@ -9,10 +9,10 @@
 /**
  * Given an array of numbers, return the sum. Disregard values if they are null.
  *
- * @param {Number[]} values
- * @returns {Number}
+ * @paramvalues
+ * @returns - Sum of all values in the array, disregarding null values.
  */
-const getTotalStrings = values => {
+const getTotalStrings = ( values: ( number | null )[] ): number => {
   let total = 0;
   for ( const value of values ) {
     if ( value === null ) {
