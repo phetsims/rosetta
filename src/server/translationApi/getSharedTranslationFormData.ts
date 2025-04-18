@@ -6,27 +6,34 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import { TranslationDataForRepo } from './api/StorableTranslationData.js';
 import getStringFile from './getStringFile.js';
 import logger from './logger.js';
 import { longTermStorage } from './translationApi.js';
 
+type EnglishStringFileContents = Record<string, { value: string }>;
+type SharedTranslationFormData = Record<string, {
+  english: string;
+  translated: string;
+  repo: string;
+}>;
+
 /**
  * Get data needed for rendering shared string translation form table.
  *
- * @param {String} simName - name of sim we're getting data for
- * @param {String} locale - locale code of sim
- * @param {String[]} sharedStringKeys - list of shared string keys
- * @param {String[]} sharedSims - list of sims that share string keys
- * @returns {Promise<Object>} - shared translation form data
+ * @param simName - name of sim we're getting data for
+ * @param locale - locale code of sim
+ * @param sharedStringKeys - list of shared string keys
+ * @param sharedSims - list of sims that share string keys
+ * @returns A promise resolving to shared translation form data
  */
-const getSharedTranslationFormData = async (
-  simName,
-  locale,
-  sharedStringKeys,
-  sharedSims
-) => {
+const getSharedTranslationFormData = async ( simName: string,
+                                             locale: string,
+                                             sharedStringKeys: string[],
+                                             sharedSims: string[] ): Promise<SharedTranslationFormData> => {
+
   logger.info( 'getting shared translation form data' );
-  const sharedTranslationFormData = {};
+  const sharedTranslationFormData: SharedTranslationFormData = {};
 
   // As of this writing, most sims do not have shared strings. Thus, we add a
   // check here to ensure there are shared string keys before making request
@@ -35,8 +42,8 @@ const getSharedTranslationFormData = async (
     try {
 
       // Get string files.
-      const englishStringFileObjects = [];
-      const translatedStringFiles = [];
+      const englishStringFileObjects: { repo: string; fileContents: EnglishStringFileContents }[] = [];
+      const translatedStringFiles: TranslationDataForRepo[] = [];
       for ( const sim of sharedSims ) {
         const englishStringFileObject = {
           repo: sim,
@@ -47,14 +54,11 @@ const getSharedTranslationFormData = async (
       }
 
       // Populate string keys and values.
-      const englishKeyValueAndRepoObjects = {};
-      const translatedKeysAndValues = {};
+      const englishKeyValueAndRepoObjects: Record<string, { value: string; repo: string }> = {};
+      const translatedKeysAndValues: Record<string, string> = {};
       for ( const stringKey of sharedStringKeys ) {
 
-        // Populate English string keys and values. We need a repo associated with each string key
-        // because we need a comprehensive list of repos to iterate over when we make the translation
-        // file contents for this translation. For more context on this, see
-        // https://github.com/phetsims/rosetta/issues/360.
+        // Populate English string keys and values.
         for ( const stringFileObject of englishStringFileObjects ) {
           if ( Object.keys( stringFileObject.fileContents ).includes( stringKey ) ) {
             englishKeyValueAndRepoObjects[ stringKey ] = {
@@ -75,28 +79,19 @@ const getSharedTranslationFormData = async (
       // Create the shared translation form data object.
       for ( const stringKey of sharedStringKeys ) {
 
-        // If the English value of the string is empty, it doesn't make sense to present
-        // the string to the translator. The translator won't be able to translate an
-        // empty string. See https://github.com/phetsims/rosetta/issues/388.
-        if (
-          englishKeyValueAndRepoObjects[ stringKey ] &&
-          englishKeyValueAndRepoObjects[ stringKey ].value === ''
-        ) {
+        // If the English value of the string is empty, it doesn't make sense to present the string to the translator.
+        // The translator won't be able to translate an empty string. See https://github.com/phetsims/rosetta/issues/388.
+        if ( englishKeyValueAndRepoObjects[ stringKey ] && englishKeyValueAndRepoObjects[ stringKey ].value === '' ) {
           continue;
         }
 
-        // Strip out dots so client doesn't think there are more deeply nested
-        // objects than there really are.
+        // Strip out dots so client doesn't think there are more deeply nested objects than there really are.
         const stringKeyWithoutDots = stringKey.replaceAll( '.', '_DOT_' );
         if (
           englishKeyValueAndRepoObjects[ stringKey ] &&
           Object.keys( translatedKeysAndValues ).length > 0 &&
           translatedKeysAndValues[ stringKey ]
         ) {
-
-          // Ensure each string key in the shared translation form data has a repo
-          // associated with it. For more context on why we do this, see
-          // https://github.com/phetsims/rosetta/issues/360.
           sharedTranslationFormData[ stringKeyWithoutDots ] = {
             english: englishKeyValueAndRepoObjects[ stringKey ].value,
             translated: translatedKeysAndValues[ stringKey ],
