@@ -12,10 +12,10 @@ import logger from './logger.js';
 /**
  * Return a sim's URL.
  *
- * @param {String} simName - sim name
- * @returns {String} - sim url
+ * @param simName - sim name
+ * @returns - sim url
  */
-const getSimUrl = simName => {
+const getSimUrl = ( simName: string ): string => {
   const simUrl = `${privateConfig.SERVER_URL}/sims/html/${simName}/latest/${simName}_en.html`;
   logger.info( `url requested for ${simName}, returning ${simUrl}` );
   return simUrl;
