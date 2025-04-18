@@ -21,23 +21,20 @@ type SharedTranslationFormData = Record<string, {
 /**
  * Get data needed for rendering shared string translation form table.
  *
- * @param simName - name of sim we're getting data for
  * @param locale - locale code of sim
  * @param sharedStringKeys - list of shared string keys
  * @param sharedSims - list of sims that share string keys
  * @returns A promise resolving to shared translation form data
  */
-const getSharedTranslationFormData = async ( simName: string,
-                                             locale: string,
+const getSharedTranslationFormData = async ( locale: string,
                                              sharedStringKeys: string[],
                                              sharedSims: string[] ): Promise<SharedTranslationFormData> => {
 
   logger.info( 'getting shared translation form data' );
   const sharedTranslationFormData: SharedTranslationFormData = {};
 
-  // As of this writing, most sims do not have shared strings. Thus, we add a
-  // check here to ensure there are shared string keys before making request
-  // for string files.
+  // As of this writing, most sims do not have shared strings. Thus, we add a check here to ensure there are shared
+  // string keys before making request for string files.
   if ( sharedStringKeys.length > 0 ) {
     try {
 

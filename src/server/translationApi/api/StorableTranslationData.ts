@@ -29,8 +29,14 @@ export type TranslationDataForRepo = Record<string, TranslationValueEntry>;
 export type MultiRepoTranslationData = Record<string, TranslationDataForRepo>;
 
 type StorableTranslationData = {
-  locale: string;
+
+  // The name of the simulation for which this translation was submitted, e.g. 'molarity-and-molar-volume'.
   simName: string;
+
+  // The locale for the translation, e.g. 'es' for Spanish.
+  locale: string;
+
+  // All the repo & string keys & strings that represent the translation.
   multiRepoTranslationData: MultiRepoTranslationData;
 };
 

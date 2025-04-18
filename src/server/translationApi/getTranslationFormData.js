@@ -123,7 +123,6 @@ const getTranslationFormData = async ( simName,
       categorizedStringKeys.simSpecific
     );
     translationFormData.shared = await getSharedTranslationFormData(
-      simName,
       locale,
       categorizedStringKeys.shared,
       categorizedStringKeys.sharedSims
