@@ -8,7 +8,7 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-type HistoryEntry = {
+export type HistoryEntry = {
   userId: number;
   timestamp: number;
   oldValue: string;

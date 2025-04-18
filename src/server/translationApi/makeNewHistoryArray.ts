@@ -5,22 +5,8 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import { HistoryEntry, TranslationDataForRepo } from './api/StorableTranslationData.js';
 import logger from './logger.js';
-
-// Define the type for a single history entry
-type HistoryEntry = {
-  userId: string;
-  timestamp: string;
-  oldValue: string;
-  newValue: string;
-  explanation?: string | null; // Optional field
-};
-
-// Define the type for the old translation file
-type OldTranslationFile = Record<string, {
-  history?: HistoryEntry[]; // Optional history array
-  value?: string; // Other possible properties
-}>;
 
 /**
  * Add the history entry to the history array. If the old translation file
@@ -37,7 +23,7 @@ type OldTranslationFile = Record<string, {
  */
 const makeNewHistoryArray = (
     stringKey: string,
-  oldTranslationFile: OldTranslationFile,
+  oldTranslationFile: TranslationDataForRepo,
   newHistoryEntry: HistoryEntry
 ): HistoryEntry[] => {
   const oldHistoryArray = oldTranslationFile[ stringKey ]?.history;
