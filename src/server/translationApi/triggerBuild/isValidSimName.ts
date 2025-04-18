@@ -14,12 +14,12 @@ import logger from '../logger.js';
  * Tell whether a sim is in the list of sim names.
  *
  * @param simName - lowercase kebab-case sim name, e.g. acid-base-solutions
- * @returns {Promise.<Boolean>}
+ * @returns - whether the sim name is valid
  */
-const isValidSimName = async simName => {
+const isValidSimName = async ( simName: string ): Promise<boolean> => {
   logger.info( `checking if ${simName} is valid` );
   const simMetadata = await getSimMetadata();
-  const listOfSimNames = Object.keys( getSimNamesAndTitles( simMetadata, 'true' ) );
+  const listOfSimNames = Object.keys( getSimNamesAndTitles( simMetadata, true ) );
   let isValid = false;
   if ( listOfSimNames.includes( simName ) ) {
     isValid = true;

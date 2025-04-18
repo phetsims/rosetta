@@ -13,12 +13,15 @@ import isStringNumber from './isStringNumber.js';
 /**
  * Return a boolean for whether the given user ID is in the string file it's supposed to be in.
  *
- * @param {String} simName - the name of the sim being rebuilt
- * @param {String} locale - the locale code of the sim being rebuilt
- * @param {String} userId - the user ID of the original submitter
- * @returns {Promise<Boolean>}
+ * @param simName - the name of the sim being rebuilt
+ * @param locale - the locale code of the sim being rebuilt
+ * @param userId - the user ID of the original submitter
+ * @returns - whether the user ID is valid
  */
-const isValidUserId = async ( simName, locale, userId ) => {
+const isValidUserId = async (
+  simName: string,
+  locale: string,
+  userId: string ): Promise<boolean> => {
   logger.info( `checking if ${userId} is valid` );
   let isValid = false;
   if ( isStringNumber( userId ) ) {

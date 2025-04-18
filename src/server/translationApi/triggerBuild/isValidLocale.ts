@@ -12,10 +12,10 @@ import logger from '../logger.js';
 /**
  * Tell whether a locale is in the list of locales.
  *
- * @param {String} locale - ISO 639-1 locale code, e.g. es for Spanish
- * @returns {Promise.<Boolean>}
+ * @param locale - ISO 639-1 locale code, e.g. es for Spanish
+ * @returns - whether the locale is valid
  */
-const isValidLocale = async locale => {
+const isValidLocale = async ( locale: string ): Promise<boolean> => {
   logger.info( `checking if ${locale} is valid` );
   const localeInfo = await getLocaleInfo();
   const listOfLocales = Object.keys( localeInfo );

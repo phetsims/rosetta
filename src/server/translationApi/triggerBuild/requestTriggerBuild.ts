@@ -15,12 +15,15 @@ import isValidUserId from './isValidUserId.js';
 /**
  * Perform a build request using the correct user ID.
  *
- * @param {String} simName - name of the sim being rebuilt
- * @param {String} locale - locale code of the sim being rebuilt
- * @param {String} userId - user ID of the original submitter
- * @returns {Promise.<Boolean>} - whether the request succeeded
+ * @param simName - name of the sim being rebuilt
+ * @param locale - locale code of the sim being rebuilt
+ * @param userId - user ID of the original submitter
+ * @returns - whether the request succeeded
  */
-const requestTriggerBuild = async ( simName, locale, userId ) => {
+const requestTriggerBuild = async (
+  simName: string,
+  locale: string,
+  userId: string ): Promise<boolean> => {
   logger.info( `requesting a trigger build for sim/locale/id ${simName}/${locale}/${userId}` );
   let requestSuccessful = false;
   try {
