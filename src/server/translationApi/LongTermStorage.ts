@@ -22,8 +22,8 @@ class LongTermStorage {
   private octokit: Octokit;
 
   public constructor() {
-    // Create the Octokit instance. Octokit is a library that
-    // allows us to interface with the GitHub API.
+
+    // Create the Octokit instance. Octokit is a library that allows us to interface with the GitHub API.
     this.octokit = new Octokit( { auth: privateConfig.GITHUB_PAT } );
   }
 
