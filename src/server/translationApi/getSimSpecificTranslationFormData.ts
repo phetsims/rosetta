@@ -11,19 +11,26 @@ import getStringFile from './getStringFile.js';
 import logger from './logger.js';
 import { longTermStorage } from './translationApi.js';
 
+type SimSpecificStringKey = {
+  english: string;
+  translated: string;
+};
+
+type SimSpecificStringKeysAndStrings = Record<string, SimSpecificStringKey>;
+
 /**
  * Return an object that contains a sim's sim-specific string keys, their English values, and their translated values.
  *
- * @param {String} simName - sim name
- * @param {String} locale - two-letter ISO 639-1 locale code, e.g. es for Spanish
- * @param {string[]} simSpecificStringKeys - list of sim-specific string keys
- * @returns {Promise<{}>} - sim-specific string keys, their English values, and their translated values
+ * @param simName - sim name
+ * @param locale - two-letter ISO 639-1 locale code, e.g. es for Spanish
+ * @param simSpecificStringKeys - list of sim-specific string keys
+ * @returns - sim-specific string keys, their English values, and their translated values
  */
-const getSimSpecificTranslationFormData = async ( simName, locale, simSpecificStringKeys ) => {
+const getSimSpecificTranslationFormData = async ( simName: string, locale: string, simSpecificStringKeys: string[] ): Promise<SimSpecificStringKeysAndStrings> => {
 
   logger.info( 'getting sim-specific translation form data' );
 
-  const simSpecific = {};
+  const simSpecific: SimSpecificStringKeysAndStrings = {};
 
   try {
 

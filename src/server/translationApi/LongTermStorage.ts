@@ -9,13 +9,11 @@
 import { RequestError } from '@octokit/request-error';
 import { Octokit } from '@octokit/rest';
 import privateConfig from '../../common/privateConfig.js';
+import { TranslationDataForRepo } from './api/StorableTranslationData.js';
 import logger from './logger.js';
 
 const OWNER = 'phetsims';
 const REPO = 'babel';
-
-// Define type for translation file contents
-type TranslationFileContents = Record<string, unknown>;
 
 class LongTermStorage {
 
@@ -50,9 +48,9 @@ class LongTermStorage {
     simOrLibRepo: string,
     locale: string,
     branch: string | null = null
-  ): Promise<TranslationFileContents> {
+  ): Promise<TranslationDataForRepo> {
     logger.info( `attempting to get translation for ${simOrLibRepo}/${locale} from long-term storage` );
-    let translatedStringFileContents: TranslationFileContents = {};
+    let translatedStringFileContents: TranslationDataForRepo = {};
     try {
       const response = await this.octokit.repos.getContent( {
         owner: OWNER,
@@ -126,7 +124,7 @@ class LongTermStorage {
   public async store(
     simOrLibRepo: string,
     locale: string,
-    translationFileContents: TranslationFileContents,
+    translationFileContents: TranslationDataForRepo,
     branch: string | null = null
   ): Promise<boolean> {
     let stored = false;
