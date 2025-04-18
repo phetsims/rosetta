@@ -13,27 +13,34 @@ import getStringFile from './getStringFile.js';
 import logger from './logger.js';
 import { longTermStorage } from './translationApi.js';
 
+type CommonTranslationFormData = Record<
+  string,
+  {
+    english: string;
+    translated: string;
+    repo: string;
+  }
+>;
+
 /**
  * Return an object that contains a sim's common string keys, their English values, and their translated values.
  *
- * @param {String} simName - sim name
- * @param {String} locale - two-letter ISO 639-1 locale code, e.g. es for Spanish
- * @param {String[]} simNames - string keys categorized into common and sim-specific
- * @param {String[]} stringKeysWithRepoName - list of REPO_NAME/stringKey from the sim
- * @param {string[]} commonStringKeys - list of common string keys for the sim
- * @returns {Promise<{}>} - common string keys, their English values, and their translated values
+ * @param simName - sim name
+ * @param locale - two-letter ISO 639-1 locale code, e.g. es for Spanish
+ * @param simNames - string keys categorized into common and sim-specific
+ * @param stringKeysWithRepoName - list of REPO_NAME/stringKey from the sim
+ * @param commonStringKeys - list of common string keys for the sim
+ * @returns A promise resolving to an object containing common string keys, their English values, and their translated values
  */
-const getCommonTranslationFormData = async (
-  simName,
-  locale,
-  simNames,
-  stringKeysWithRepoName,
-  commonStringKeys
-) => {
+const getCommonTranslationFormData = async ( simName: string,
+                                             locale: string,
+                                             simNames: string[],
+                                             stringKeysWithRepoName: string[],
+                                             commonStringKeys: string[] ): Promise<CommonTranslationFormData> => {
 
   logger.info( 'getting common translation form data' );
 
-  const common = {};
+  const common: CommonTranslationFormData = {};
 
   try {
     const commonRepos = await getCommonRepos( simName, simNames, stringKeysWithRepoName );
@@ -49,12 +56,11 @@ const getCommonTranslationFormData = async (
 
       for ( const stringKey of repoNameToStringKeys[ repo ] ) {
 
-        // If the English value of the string is empty, it doesn't make sense to present
-        // the string to the translator. The translator won't be able to translate an
-        // empty string. See https://github.com/phetsims/rosetta/issues/388.
+        // If the English value of the string is empty, it doesn't make sense to present the string to the translator.
+        // The translator won't be able to translate an empty string. See https://github.com/phetsims/rosetta/issues/388.
         if (
-          Object.keys( commonEnglishStringKeysAndStrings ).includes( stringKey )
-          && commonEnglishStringKeysAndStrings[ stringKey ].value === ''
+          Object.keys( commonEnglishStringKeysAndStrings ).includes( stringKey ) &&
+          commonEnglishStringKeysAndStrings[ stringKey ].value === ''
         ) {
           continue;
         }
@@ -73,7 +79,7 @@ const getCommonTranslationFormData = async (
         // For more info on this, see the explanation in the getStringKeysWithDots module.
         const stringKeyWithoutDots = stringKey.replaceAll( '.', '_DOT_' );
 
-        // Add the string key, its english value, translated value, and repo name to the common object.
+        // Add the string key, its English value, translated value, and repo name to the common object.
         if ( englishValue !== NO_LONGER_USED_FLAG ) {
           common[ stringKeyWithoutDots ] = {
             english: englishValue,
