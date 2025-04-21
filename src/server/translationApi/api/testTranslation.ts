@@ -14,6 +14,7 @@
  */
 
 import { Request, Response } from 'express';
+import { ClientSubmittedTranslationData } from '../../../common/ClientSubmittedTranslationData.js';
 import getReplacementStringObject from '../getReplacementStringObject.js';
 import getSimHtml from '../getSimHtml.js';
 import getSimUrl from '../getSimUrl.js';
@@ -36,7 +37,10 @@ const testTranslation = async ( req: Request, res: Response ): Promise<void> => 
 
       // Get an object with the string keys and any translated strings that the user has provided. If the user hasn't
       // provided a value for a given key the English value will be left unchanged.
-      const stringKeysAndTestValues = await getReplacementStringObject( stringKeysAndEnglishValues, req.body );
+      const stringKeysAndTestValues = await getReplacementStringObject(
+        stringKeysAndEnglishValues,
+        req.body as ClientSubmittedTranslationData
+      );
 
       // Get the currently published HTML for the simulation that is being tested.
       const simHtml = await getSimHtml( getSimUrl( simName ) );

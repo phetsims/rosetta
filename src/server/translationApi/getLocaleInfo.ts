@@ -4,18 +4,24 @@
  * Export a function that gets locale info.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import privateConfig from '../../common/privateConfig.js';
 import logger from './logger.js';
 
-let timeOfLastUpdate: number = Number.NEGATIVE_INFINITY;
+export type LanguageDirection = 'ltr' | 'rtl';
 
-type LocaleInfoEntry = {
+export type LocaleInfoEntry = {
   name: string;
   localizedName: string;
-  direction: string;
+  direction: LanguageDirection;
 };
+
+export type LocaleInfo = Record<string, LocaleInfoEntry>;
+
+// The time of the last update of the locale info. This is used to determine if the locale info is stale.
+let timeOfLastUpdate: number = Number.NEGATIVE_INFINITY;
 
 // The most recently obtained locale info.  This is the cached data.
 let localeInfo: Record<string, LocaleInfoEntry> | { error: string };
@@ -28,7 +34,7 @@ let currentUpdatePromise: Promise<Record<string, LocaleInfoEntry> | { error: str
  *
  * @returns A promise resolving to locale info, i.e., names of locales and ISO 639-1 locale codes.
  */
-const getLocaleInfo = async (): Promise<Record<string, LocaleInfoEntry> | { error: string }> => {
+const getLocaleInfo = async (): Promise<LocaleInfo | { error: string }> => {
   logger.info( 'getting locale info' );
 
   if ( currentUpdatePromise ) {

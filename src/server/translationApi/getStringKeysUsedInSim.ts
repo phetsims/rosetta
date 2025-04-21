@@ -22,22 +22,23 @@
 import privateConfig from '../../common/privateConfig.js';
 import logger from './logger.js';
 
-type StringKeys = Record<string, string>;
+// TODO: See https://github.com/phetsims/rosetta/issues/311 - Consolidate with the common type.
+export type StringKeysAndValues = Record<string, string>;
 
-const getStringKeysUsedInSim = async ( simName: string ): Promise<StringKeys> => {
+const getStringKeysUsedInSim = async ( simName: string ): Promise<StringKeysAndValues> => {
 
   // Assemble the URL for the English string map.
   const stringMapUrl = `${privateConfig.SERVER_URL}/sims/html/${simName}/latest/english-string-map.json`;
 
   logger.info( `getting string map from ${stringMapUrl}` );
 
-  let stringsUsedInSim: StringKeys = {};
+  let stringsUsedInSim: StringKeysAndValues = {};
 
   // Request the string map file.
   try {
     const response = await fetch( stringMapUrl );
     if ( response.ok ) {
-      stringsUsedInSim = ( await response.json() ) as StringKeys;
+      stringsUsedInSim = ( await response.json() ) as StringKeysAndValues;
       logger.info( 'request for string map file succeeded' );
     }
     else {
