@@ -8,14 +8,17 @@
 
 import getPercentOfTranslatedStrings from './getPercentOfTranslatedStrings.js';
 import getTotalStrings from './getTotalStrings.js';
+import TranslationReportObject from './TranslationReportObject.js';
 
 /**
  * Return the translation report object with total stats.
  *
- * @param {Object} translationReportObject - translation report object without total stats
- * @returns {Object}
+ * @param translationReportObject - translation report object without total stats
+ * @returns - translation report object with total stats
  */
-const getTotalStats = translationReportObject => {
+const getTotalStats = (
+  translationReportObject: TranslationReportObject
+): TranslationReportObject => {
   translationReportObject.totalStrings = getTotalStrings( [
     translationReportObject.numCommonStrings,
     translationReportObject.numSimSpecificStrings,

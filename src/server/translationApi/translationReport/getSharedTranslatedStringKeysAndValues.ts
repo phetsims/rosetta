@@ -6,24 +6,25 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import { StringKeysAndValues } from '../api/StorableTranslationData.js';
 import logger from '../logger.js';
 import { longTermStorage } from '../translationApi.js';
 
 /**
  * Return a shared sim's translated string keys and their values.
  *
- * @param {String} simName - name of the mother sim
- * @param {String} locale - locale of the translated strings
- * @param {String[]} sharedKeys - list of shared string keys in the child sim
- * @returns {Promise<Object>}
+ * @param simName - name of the mother sim
+ * @param locale - locale of the translated strings
+ * @param sharedKeys - list of shared string keys in the child sim
+ * @returns - shared translated string keys and their values (their translated strings)
  */
 const getSharedTranslatedStringKeysAndValues = async (
-  simName,
-  locale,
-  sharedKeys
-) => {
+  simName: string,
+  locale: string,
+  sharedKeys: string[]
+): Promise<StringKeysAndValues> => {
   logger.info( `getting ${simName}'s shared translated string keys and values` );
-  const sharedTranslatedStringKeysAndValues = {};
+  const sharedTranslatedStringKeysAndValues: StringKeysAndValues = {};
   const stringKeysAndTranslatedValues = await longTermStorage.get( simName, locale );
   const translatedStringKeys = Object.keys( stringKeysAndTranslatedValues );
 

@@ -18,24 +18,24 @@ import getSharedTranslatedStringKeysAndValues from './getSharedTranslatedStringK
 import getSimSpecificEnglishStringKeysAndValues from './getSimSpecificEnglishStringKeysAndValues.js';
 import getSimSpecificTranslatedStringKeysAndValues from './getSimSpecificTranslatedStringKeysAndValues.js';
 import getTotalStats from './getTotalStats.js';
+import TranslationReportObject from './TranslationReportObject.js';
 
 /**
  * Get an object containing the information needed to populate a row in the "translation report", which is a report that
  * displays information about how much of each sim is translated for a given locale.
- * @param {string} simName
- * @param {string} locale
- * @param {string[]} simNames
- * @param {string} simTitle
- * @param {boolean} wantsUntranslated
- * @returns {Promise<TranslationReportObject>}
+ * @param simName
+ * @param locale
+ * @param simNames
+ * @param simTitle
+ * @param wantsUntranslated
  */
-const getTranslationReportObject = async ( simName,
-                                           locale,
-                                           simNames,
-                                           simTitle,
-                                           wantsUntranslated ) => {
+const getTranslationReportObject = async ( simName: string,
+                                           locale: string,
+                                           simNames: string[],
+                                           simTitle: string,
+                                           wantsUntranslated: boolean ): Promise<TranslationReportObject> => {
 
-  const translationReportObject = {
+  const translationReportObject: TranslationReportObject = {
     simName: simName,
     simTitle: simTitle,
     numCommonStrings: null,
@@ -116,7 +116,7 @@ const getTranslationReportObject = async ( simName,
   }
 
   translationReportObject.percentSimSpecific = getPercentOfTranslatedStrings(
-    translationReportObject.numSimSpecificTranslatedStrings,
+    translationReportObject.numSimSpecificTranslatedStrings!,
     translationReportObject.numSimSpecificStrings
   );
 
@@ -153,7 +153,7 @@ const getTranslationReportObject = async ( simName,
             sharedTranslatedStringKeysAndValues[ sharedKey ] &&
             sharedTranslatedStringKeysAndValues[ sharedKey ] !== ''
           ) {
-            translationReportObject.numSharedTranslatedStrings++;
+            translationReportObject.numSharedTranslatedStrings && translationReportObject.numSharedTranslatedStrings++;
             break;
           }
         }
@@ -161,7 +161,7 @@ const getTranslationReportObject = async ( simName,
     }
 
     translationReportObject.percentShared = getPercentOfTranslatedStrings(
-      translationReportObject.numSharedTranslatedStrings,
+      translationReportObject.numSharedTranslatedStrings!,
       translationReportObject.numSharedStrings
     );
   }

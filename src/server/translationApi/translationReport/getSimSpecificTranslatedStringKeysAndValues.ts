@@ -6,24 +6,26 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import { StringKeysAndValues } from '../api/StorableTranslationData.js';
+import { CategorizedStringKeys } from '../getCategorizedStringKeys.js';
 import logger from '../logger.js';
 import { longTermStorage } from '../translationApi.js';
 
 /**
  * Return an object containing sim-specific translated string keys and values.
  *
- * @param {String} simName - sim name
- * @param {String} locale - two-letter ISO 639-1 locale code, e.g. es for Spanish
- * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys - string keys categorized into common and sim-specific
- * @returns {Promise<Object>} - sim-specific translated string keys and their values (their strings)
+ * @param simName - sim name
+ * @param locale - two-letter ISO 639-1 locale code, e.g. es for Spanish
+ * @param categorizedStringKeys - string keys categorized into common and sim-specific
+ * @returns - sim-specific translated string keys and their values (their strings)
  */
 const getSimSpecificTranslatedStringKeysAndValues = async (
-  simName,
-  locale,
-  categorizedStringKeys
-) => {
+  simName: string,
+  locale: string,
+  categorizedStringKeys: CategorizedStringKeys
+): Promise<StringKeysAndValues> => {
   logger.info( `getting ${simName}'s sim-specific translated string keys and values` );
-  const simSpecificTranslatedStringKeysAndValues = {};
+  const simSpecificTranslatedStringKeysAndValues: StringKeysAndValues = {};
   const simSpecificStringKeys = categorizedStringKeys.simSpecific;
   const stringKeysAndTranslatedValues = await longTermStorage.get( simName, locale );
   const translatedStringKeys = Object.keys( stringKeysAndTranslatedValues );

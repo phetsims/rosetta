@@ -1,7 +1,4 @@
 // Copyright 2023, University of Colorado Boulder
-
-import logger from '../logger.js';
-
 /**
  * Helper function that gets percentage value from 0 to 100 of translated strings.  This handles a few special cases
  * that are specific to how Rosetta's reports work.
@@ -9,8 +6,22 @@ import logger from '../logger.js';
  * @author Liam Mulhall <liammulh@gmail.com>
  * @author John Blanco (PhET Interactive Simulations)
  */
-const getPercentOfTranslatedStrings = ( numberOfTranslatedStrings, totalNumberOfStrings ) => {
-  let percent = null;
+
+import logger from '../logger.js';
+
+/**
+ * Helper function that gets percentage value from 0 to 100 of translated strings.  This handles a few special cases
+ * that are specific to how Rosetta's reports work.
+ *
+ * @param numberOfTranslatedStrings - number of translated strings
+ * @param totalNumberOfStrings - total number of strings
+ * @returns - percentage of translated strings, or null if either number is null
+ */
+const getPercentOfTranslatedStrings = (
+  numberOfTranslatedStrings: number,
+  totalNumberOfStrings: number
+): number | null => {
+  let percent: number | null = null;
   if ( numberOfTranslatedStrings !== null && totalNumberOfStrings !== null ) {
 
     if ( numberOfTranslatedStrings > totalNumberOfStrings ) {

@@ -8,6 +8,10 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
+
+// An object that matches a set string-key to their values, which could be translated or English.
+export type StringKeysAndValues = Record<string, string>;
+
 export type HistoryEntry = {
   userId: number;
   timestamp: number;

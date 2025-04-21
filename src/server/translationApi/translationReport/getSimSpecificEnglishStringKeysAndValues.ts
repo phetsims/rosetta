@@ -7,6 +7,8 @@
  */
 
 import { NO_LONGER_USED_FLAG } from '../../../common/constants.js';
+import { StringKeysAndValues } from '../api/StorableTranslationData.js';
+import { CategorizedStringKeys } from '../getCategorizedStringKeys.js';
 import logger from '../logger.js';
 import getEnglishStringKeysAndValues from './getEnglishStringKeysAndValues.js';
 
@@ -17,15 +19,20 @@ import getEnglishStringKeysAndValues from './getEnglishStringKeysAndValues.js';
  * Getting sim-specific English string keys and strings is done with SHA whereas the others are done by getting data
  * from the main branch.
  *
- * @param {String} simName - sim name
- * @param {String} sha - SHA for the sim
- * @param {{simSpecific: String[], common: String[]}} categorizedStringKeys - string keys categorized into common and sim-specific
- * @param {String[]} stringKeysWithRepoName - list of REPO_NAME/stringKey extracted from sim HTML
- * @returns {Promise<Object>} - sim-specific English string keys and their values (their strings)
+ * @param simName - sim name
+ * @param sha - SHA for the sim
+ * @param categorizedStringKeys - string keys categorized into common and sim-specific
+ * @param stringKeysWithRepoName - list of REPO_NAME/stringKey extracted from sim HTML
+ * @returns - sim-specific English string keys and their values (their strings)
  */
-const getSimSpecificEnglishStringKeysAndValues = async ( simName, sha, categorizedStringKeys, stringKeysWithRepoName ) => {
+const getSimSpecificEnglishStringKeysAndValues = async (
+  simName: string,
+  sha: string,
+  categorizedStringKeys: CategorizedStringKeys,
+  stringKeysWithRepoName: string[]
+): Promise<StringKeysAndValues> => {
   logger.info( `getting ${simName}'s sim-specific english string keys and values` );
-  const stringKeysToSimSpecificEnglishStrings = {};
+  const stringKeysToSimSpecificEnglishStrings: StringKeysAndValues = {};
   try {
     const simSpecificStringKeys = categorizedStringKeys.simSpecific;
     const englishStringKeysAndStrings = await getEnglishStringKeysAndValues( simName, stringKeysWithRepoName, sha );
