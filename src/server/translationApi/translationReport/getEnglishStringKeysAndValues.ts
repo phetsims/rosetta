@@ -13,32 +13,29 @@ import getStringKeyFromStringKeyWithRepoName from '../getStringKeyFromStringKeyW
 import logger from '../logger.js';
 
 /**
- * Return sim or library's English string keys and their values (their strings) from the remote repository they live
- * in.
+ * Return sim or library's English string keys and their values, which are the strings that appear in the simulation,
+ * from the remote repository in which they live.
  *
  * @param simOrLibName - sim or library (common repo) we want English string keys and strings from
  * @param stringKeysWithRepoName - list of REPO_NAME/stringKey extracted from sim HTML
  * @param shaOrBranch - the SHA of the sim you want data from or, by default, the main branch
  * @returns - English string keys and their values (their strings)
  */
-const getEnglishStringKeysAndValues = async (
-  simOrLibName: string,
-  stringKeysWithRepoName: string[],
-  shaOrBranch = 'main'
-): Promise<StringKeysAndValues> => {
-  logger.info( 'getting english string keys and values' );
+const getEnglishStringKeysAndValues = async ( simOrLibName: string,
+                                              stringKeysWithRepoName: string[],
+                                              shaOrBranch = 'main' ): Promise<StringKeysAndValues> => {
+
+  logger.info( 'getting English string keys and values' );
   const englishStringKeysAndValues: StringKeysAndValues = {};
   const englishStringData = await getStringFile( simOrLibName, shaOrBranch );
   for ( const stringKeyWithRepoName of stringKeysWithRepoName ) {
     const stringKey = getStringKeyFromStringKeyWithRepoName( stringKeyWithRepoName );
     const repoName = getRepoNameFromStringKeyWithRepoName( stringKeyWithRepoName );
-    if ( simOrLibName === repoName ) {
-      if ( englishStringData[ stringKey ] ) {
-        englishStringKeysAndValues[ stringKey ] = englishStringData[ stringKey ].value;
-      }
+    if ( simOrLibName === repoName && englishStringData[ stringKey ] ) {
+      englishStringKeysAndValues[ stringKey ] = englishStringData[ stringKey ].value;
     }
   }
-  logger.info( 'got english string keys and values; returning them' );
+  logger.info( 'got English string keys and values, returning them' );
   return englishStringKeysAndValues;
 };
 
