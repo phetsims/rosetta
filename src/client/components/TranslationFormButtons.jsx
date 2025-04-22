@@ -6,6 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import { useSearchParams } from 'react-router-dom';
 import LoadingSpinner from './LoadingSpinner.jsx';
 import '../styles/translation-form.css';
 
@@ -16,6 +17,8 @@ import '../styles/translation-form.css';
  * @returns {JSX.Element}
  */
 const TranslationFormButtons = props => {
+  const [ searchParams ] = useSearchParams();
+  const showAutomate = searchParams.has( 'showAutomate' );
   const disabled = !( props.isValid && props.dirty ) || props.isDisabled;
   const grayButton = 'btn btn-secondary';
   const blueButton = 'btn btn-primary';
@@ -57,17 +60,19 @@ const TranslationFormButtons = props => {
         >
           Test
         </button>
-        <button
-          id='automate'
-          onClick={props.handleButtonClick}
-          disabled={disabled}
-          className={automateButtonClass}
-          data-bs-toggle='tooltip'
-          data-bs-placement='top'
-          title='Automate the translation with machine translation'
-        >
-          Automate (Experimental)
-        </button>
+        { showAutomate && (
+          <button
+            id='automate'
+            onClick={props.handleButtonClick}
+            disabled={disabled}
+            className={automateButtonClass}
+            data-bs-toggle='tooltip'
+            data-bs-placement='top'
+            title='Automate the translation with machine translation'
+          >
+            Automate (Experimental)
+          </button>
+        ) }
         {props.testIsLoading ? <LoadingSpinner/> : <></>}
       </div>
     </div>
