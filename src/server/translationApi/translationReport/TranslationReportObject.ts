@@ -27,6 +27,8 @@ type TranslationReportObject = {
   totalStrings: number | null;
   totalTranslatedStrings: number | null;
   percentTotal: number | null;
+  isDirty?: boolean;
+  timestamp?: number;
 };
 
 export default TranslationReportObject;

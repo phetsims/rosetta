@@ -18,8 +18,7 @@ import logger from '../logger.js';
 import { reportObjectCache } from '../translationApi.js';
 import getTranslatedAndUntranslatedSims from '../translationReport/getTranslatedAndUntranslatedSims.js';
 import getTranslationReportObject from '../translationReport/getTranslationReportObject.js';
-
-type TranslationReportObject = Record<string, unknown>;
+import TranslationReportObject from '../translationReport/TranslationReportObject.js';
 
 /**
  * Set up an "event stream" (search on server-sent events) of translation report objects used to populate rows of the
