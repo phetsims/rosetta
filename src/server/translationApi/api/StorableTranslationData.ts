@@ -8,7 +8,11 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-type HistoryEntry = {
+
+// An object that matches a set string-key to their values, which could be translated or English.
+export type StringKeysAndValues = Record<string, string>;
+
+export type HistoryEntry = {
   userId: number;
   timestamp: number;
   oldValue: string;
@@ -16,21 +20,27 @@ type HistoryEntry = {
   explanation?: string | null;
 };
 
-type TranslationValueEntry = {
+export type TranslationValueEntry = {
   value: string;
   history: HistoryEntry[];
 };
 
 // Translation data for a single repo.  The keys are the string keys, the values are the translated strings and their
-// history.
+// history.  This is essentially the format of the data that is stored in the translation JSON files.
 export type TranslationDataForRepo = Record<string, TranslationValueEntry>;
 
 // The collection of translation data for all repos in a translation.  The keys are the repo names.
 export type MultiRepoTranslationData = Record<string, TranslationDataForRepo>;
 
 type StorableTranslationData = {
-  locale: string;
+
+  // The name of the simulation for which this translation was submitted, e.g. 'molarity-and-molar-volume'.
   simName: string;
+
+  // The locale for the translation, e.g. 'es' for Spanish.
+  locale: string;
+
+  // All the repo & string keys & strings that represent the translation.
   multiRepoTranslationData: MultiRepoTranslationData;
 };
 

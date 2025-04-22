@@ -1,7 +1,11 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * Provide functionality for locale info API route.
+ * Provide functionality for locale info API route.  Responds with the locale info that we get from the phetsims/chipper
+ * repository.
+ *
+ * @param req - Express request object
+ * @param res - Express response object
  *
  * @author Liam Mulhall <liammulh@gmail.com>
  */
@@ -10,13 +14,6 @@ import { Request, Response } from 'express';
 import getLocaleInfo from '../getLocaleInfo.js';
 import logger from '../logger.js';
 
-/**
- * API function. Send the locale info that we get from the phetsims/chipper repository.
- *
- * @param req - Express request object
- * @param res - Express response object
- * @returns Promise that resolves after sending the response
- */
 const localeInfo = async ( req: Request, res: Response ): Promise<void> => {
   try {
     const localeInfo = await getLocaleInfo();

@@ -6,12 +6,17 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import logError from './logError.js';
+
 /**
  * Alert the user that an error occurred.
  *
  * @param error - the error message to be displayed
  */
-const alertErrorMessage = error => {
+async function alertErrorMessage( error ) {
+  // Attempt to notify the server of the error
+  const response = logError( error );
+
   window.alert(
     `The translation utility experienced an error.
     
@@ -19,6 +24,8 @@ const alertErrorMessage = error => {
     
     ${error}`
   );
-};
+
+  return response;
+}
 
 export default alertErrorMessage;

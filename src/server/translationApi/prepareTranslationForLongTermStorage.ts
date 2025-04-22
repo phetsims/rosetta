@@ -8,7 +8,7 @@
  */
 
 import { ClientSubmittedTranslationData } from '../../common/ClientSubmittedTranslationData.js';
-import { MultiRepoTranslationData, StorableTranslationData, TranslationDataForRepo } from './api/StorableTranslationData.js';
+import { MultiRepoTranslationData, StorableTranslationData } from './api/StorableTranslationData.js';
 import getStringKeysWithDots from './getStringKeysWithDots.js';
 import logger from './logger.js';
 import makeTranslationFileContentsForRepo from './makeTranslationFileContentsForRepo.js';
@@ -38,9 +38,7 @@ const prepareTranslationForLongTermStorage = async ( translation: ClientSubmitte
   // For each repo in the translation data and make its translation file contents.
   const multiRepoTranslationData: MultiRepoTranslationData = {};
   for ( const repo of repos ) {
-
-    // TODO: The `as` can be removed once the function is converted to TS, see https://github.com/phetsims/rosetta/issues/311.
-    multiRepoTranslationData[ repo ] = await makeTranslationFileContentsForRepo( repo, translation ) as TranslationDataForRepo;
+    multiRepoTranslationData[ repo ] = await makeTranslationFileContentsForRepo( repo, translation );
   }
 
   logger.info( `prepared translation of ${translation.locale}/${translation.simName} for long-term storage` );

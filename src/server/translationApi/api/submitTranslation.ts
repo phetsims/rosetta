@@ -7,6 +7,7 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
+import { Request, Response } from 'express';
 import { ClientSubmittedTranslationData } from '../../../common/ClientSubmittedTranslationData.js';
 import privateConfig from '../../../common/privateConfig.js';
 import deleteSavedTranslation from '../deleteSavedTranslation.js';
@@ -18,12 +19,6 @@ import prepareTranslationForLongTermStorage from '../prepareTranslationForLongTe
 import requestBuilds from '../requestBuilds.js';
 import storeEachRepoContents from '../storeEachRepoContents.js';
 import { reportObjectCache } from '../translationApi.js';
-import { Request, Response } from 'express';
-
-export type SubmissionStatus = {
-  allRepoContentsStored: boolean;
-  buildRequestsSucceeded: boolean;
-};
 
 /**
  * Submit a translation, which means to store the new or updated translation strings in long-term storage and then
@@ -31,7 +26,7 @@ export type SubmissionStatus = {
  * @param req - Express request object
  * @param res - Express response object
  */
-const submitTranslation = async ( req: Request, res: Response ): Promise<SubmissionStatus> => {
+const submitTranslation = async ( req: Request, res: Response ): Promise<void> => {
 
   logger.info( 'submitTranslation called' );
   const submissionStatus = {
@@ -110,8 +105,6 @@ const submitTranslation = async ( req: Request, res: Response ): Promise<Submiss
   }
   logger.info( 'done attempting to submit translation' );
   res.send( submissionStatus );
-
-  return submissionStatus;
 };
 
 export default submitTranslation;

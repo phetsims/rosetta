@@ -11,16 +11,12 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-type StringEntry = {
+export type StringEntry = {
   english: string;
   translated: string;
 };
 
-type CommonStringEntry = StringEntry & {
-  repo: string;
-};
-
-type SharedStringEntry = StringEntry & {
+export type StringEntryWithRepo = StringEntry & {
   repo: string;
 };
 
@@ -30,10 +26,10 @@ type TranslationFormData = {
   simSpecific: Record<string, StringEntry>;
 
   // string keys and values for shared strings, such as those in shared repos that are not common code
-  shared: Record<string, SharedStringEntry>;
+  shared: Record<string, StringEntryWithRepo>;
 
   // string keys and values for common code strings, such as those in joist, sun, etc.
-  common: Record<string, CommonStringEntry>;
+  common: Record<string, StringEntryWithRepo>;
 
   // whether this sim is a prototype
   simIsPrototype: boolean;

@@ -8,7 +8,8 @@
 
 import publicConfig from './publicConfig.js';
 
-// TODO: If all sims are re-published off of main, then this constant is obsolete, and the code associated with it can be removed. See https://github.com/phetsims/rosetta/issues/395.
+// TODO: See https://github.com/phetsims/rosetta/issues/395.  If all sims are re-published off of main at some point
+//       after May 2023, then this constant is obsolete, and the code associated with it can be removed.
 // Specifically, see this comment: https://github.com/phetsims/rosetta/issues/395#issuecomment-1536705532.
 // Define a value that indicates that a string is no longer used. It's
 // possible that a sim could have a string "no longer used", so I
@@ -45,8 +46,10 @@ export const SIMS_FOR_SHORT_REPORT = [
   // sim that tends to have fewer translations
   'quadrilateral',
 
-  // sim often used for testing
-  'molecules-and-light'
+  // Include atomic-interactions and states-of-matter because the former shares most strings with the latter, so this
+  // allows us to test the behavior of 'shared' strings.
+  'states-of-matter',
+  'atomic-interactions'
 
   // chains and example-sim are omitted as of Jan 9 2024 because there aren't published string map files for them
   // 'chains',
