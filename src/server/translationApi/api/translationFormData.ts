@@ -45,7 +45,7 @@ const translationFormData = async ( req: Request, res: Response ): Promise<void>
       simNames,
       stringKeysWithRepoName,
       categorizedStringKeys,
-      req.query.userId as string
+      req.query.userId ? Number( req.query.userId ) : 0
     );
 
     logger.info( `responding with ${req.params.locale}/${req.params.simName}'s translation form data` );

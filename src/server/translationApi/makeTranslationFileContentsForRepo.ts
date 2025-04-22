@@ -6,6 +6,9 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import { ClientSubmittedTranslationData } from '../../common/ClientSubmittedTranslationData.js';
+import { StringEntry, StringEntryWithRepo } from '../../common/TranslationFormData.js';
+import { HistoryEntry, TranslationDataForRepo } from './api/StorableTranslationData.js';
 import getSimMetadata from './getSimMetadata.js';
 import getSimNamesAndTitles from './getSimNamesAndTitles.js';
 import logger from './logger.js';
@@ -17,26 +20,27 @@ import { longTermStorage } from './translationApi.js';
  *
  * @param repo - the repo name in lowercase-kebab (repo-style)
  * @param translation - the translation object obtained from the client side
- * @returns {Promise<Object>}
+ * @returns A promise resolving to the translation file contents for the repo
  */
-const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
+const makeTranslationFileContentsForRepo = async (
+  repo: string,
+  translation: ClientSubmittedTranslationData )
+  : Promise<TranslationDataForRepo> => {
 
   logger.info( `making translation file contents for ${repo}` );
 
-  const translationFileContentsForRepo = {};
+  const translationFileContentsForRepo: TranslationDataForRepo = {};
 
-  const oldTranslationFile = await longTermStorage.get( repo, translation.locale );
+  const oldTranslationFile: TranslationDataForRepo | null = await longTermStorage.get( repo, translation.locale );
 
-  // Get list of sim names for checking if we're dealing with shared strings. Note how
-  // we're passing true for the second argument. This is to say we're a team member, so
-  // please get all the sims, even the ones that wouldn't normally be visible, e.g. Bumper.
-  // For context on this, see https://github.com/phetsims/rosetta/issues/360 and
+  // Get list of sim names for checking if we're dealing with shared strings. Note how we're passing true for the second
+  // argument. This is to say we're a team member, so please get all the sims, even the ones that wouldn't normally be
+  // visible, e.g. Bumper. For context on this, see https://github.com/phetsims/rosetta/issues/360 and
   // https://github.com/phetsims/rosetta/issues/361.
   const simMetadata = await getSimMetadata();
-  const simNames = Object.keys( getSimNamesAndTitles( simMetadata, 'true' ) );
+  const simNames = Object.keys( getSimNamesAndTitles( simMetadata, true ) );
 
-  // Set translation form data variable.
-  let translationFormData;
+  let translationFormData: Record<string, StringEntry> | Record<string, StringEntryWithRepo>;
   if ( repo === translation.simName ) {
 
     // We're dealing with sim-specific strings.
@@ -66,22 +70,21 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
 
     const ableToCheckStringKeyCases =
       repo === translation.simName ||
-      ( translationFormData[ stringKey ] && repo === translationFormData[ stringKey ].repo ) ||
+      ( translationFormData[ stringKey ] && 'repo' in translationFormData[ stringKey ] && repo === translationFormData[ stringKey ].repo ) ||
       ( oldTranslationFile && oldTranslationFile[ stringKey ] );
 
     if ( ableToCheckStringKeyCases ) {
 
-      // Trim leading and trailing whitespace.
-      // NOTE: If a user deliberately wants a space, this will change the string from ' ' to '', which makes the string
-      // fall back to English. In this case, they should use a non-breaking space character instead. A non-breaking
-      // space character is &nbsp;.
+      // Trim leading and trailing whitespace.  NOTE: If a user deliberately wants a space, this will change the string
+      // from ' ' to '', which makes the string fall back to English. In this case, they should use a non-breaking space
+      // character instead. A non-breaking space character is &nbsp;.
       if ( translationFormData[ stringKey ] ) {
         translationFormData[ stringKey ].translated = translationFormData[ stringKey ].translated.trim();
       }
 
       const stringNotYetTranslated = !oldTranslationFile ||
                                      Object.keys( oldTranslationFile ).length === 0 ||
-                                     oldTranslationFile[ stringKey ] === '' ||
+                                     oldTranslationFile[ stringKey ].value === '' ||
                                      !oldTranslationFile[ stringKey ];
 
       const translationLeftBlank = stringNotYetTranslated &&
@@ -118,7 +121,6 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
       if ( translationLeftBlank ) {
         logger.verbose( `string for ${stringKey} not translated; not adding it to the translation file for ${repo}` );
       }
-
       else if ( userProvidedInitialTranslation ) {
         logger.verbose( `user provided translation for previously untranslated string; adding ${stringKey}'s info to the translation file for ${repo}` );
 
@@ -136,29 +138,30 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
           history: [ newHistoryEntry ]
         };
       }
-
       else if ( translationErased ) {
         logger.verbose( `blank value submitted for previously translated string ${stringKey}; submitting blank value` );
-        const newHistoryEntry = {
+        const newHistoryEntry: HistoryEntry = {
           userId: translation.userId,
           timestamp: translation.timestamp,
           oldValue: oldTranslationFile[ stringKey ].value,
           newValue: translationFormData[ stringKey ].translated
         };
 
-        const newHistoryArray = makeNewHistoryArray( stringKey, oldTranslationFile, newHistoryEntry );
+        const newHistoryArray = makeNewHistoryArray(
+          stringKey,
+          oldTranslationFile,
+          newHistoryEntry
+        );
 
         translationFileContentsForRepo[ stringKey ] = {
           value: translationFormData[ stringKey ].translated,
           history: newHistoryArray
         };
       }
-
       else if ( translationUntouched ) {
         logger.verbose( `the translation for ${stringKey}'s string was untouched; using old entry` );
         translationFileContentsForRepo[ stringKey ] = oldTranslationFile[ stringKey ];
       }
-
       else if ( translationModified ) {
         logger.verbose( `the translation for ${stringKey}'s string was modified; adding it to the translation file for ${repo}` );
 
@@ -192,11 +195,13 @@ const makeTranslationFileContentsForRepo = async ( repo, translation ) => {
     }
   }
 
-  logger.info( `made translation file contents for ${repo}; returning them` );
-
+  // Return an empty object if the translation file hasn't changed.
   if ( JSON.stringify( translationFileContentsForRepo ) === JSON.stringify( oldTranslationFile ) ) {
+    logger.info( `translation file contents unchanged for ${repo}, returning empty object` );
     return {};
   }
+
+  logger.info( `made translation file contents for ${repo}, returning them` );
   return translationFileContentsForRepo;
 };
 
