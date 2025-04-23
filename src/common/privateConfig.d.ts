@@ -35,6 +35,9 @@ type PrivateConfigDataType = {
   // Winston's logger severity level. We only use error, warn, verbose, and info.
   readonly LOGGER_LEVEL : string;
 
+  // OpenAI API key, used for automatic translation
+  readonly OPENAI_API_KEY : string;
+
   // whether to perform string commits to long-term storage, which is GitHub as of this writing
   readonly 'PERFORM_STRING_COMMITS' : boolean;
 

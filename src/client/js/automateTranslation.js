@@ -1,52 +1,46 @@
 // Copyright 2025, University of Colorado Boulder
 
 /**
- * Creates an automatic translation of the text using OpenAI's API.
+ * Creates an automatic translation of the text using the server-side automated translation endpoint.
  *
  * @author Agustín Vallejo
  */
 
-import { OpenAI } from 'openai'; // OpenAI SDK
 
-const key = import.meta.env.VITE_OPENAI_API_KEY;
-
-const client = new OpenAI( {
-  apiKey: key,
-  dangerouslyAllowBrowser: true
-} );
+import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
+import logError from './logError.js';
 
 /**
- * Function to translate text using OpenAI
+ * Function to translate text using the server-side automated translation endpoint.
  * @param {String} text - The text to translate
  * @param {String} simName - The name of the simulation being translated
  * @param {String} locale - The target language code
  * @returns {Promise<String>} - The translated text
  */
-const translateWithOpenAI = async ( text, simName, locale ) => {
-  const prompt = `
-    Translate from English to ${locale}. The strings belong to a STEM educational simulation about ${simName}, 
-    so in case of doubt, use a scientific term. Respect the title casing when translating 
-    (i.e. 'Number of Atoms' should go to 'Número de Átomos' and so on). If for some reason you cannot translate a string,
-    please return the original string. Do not add any extra text or explanation, just return the translation.
-   
-    The following is the string to translate: \n
-  `;
-
+const translateWithAI = async ( text, simName, locale ) => {
   try {
-    const completion = await client.chat.completions.create( {
-      model: 'gpt-4o',
-      messages: [
-        { role: 'system', content: prompt },
-        { role: 'user', content: text }
-      ]
-    } );
-
-    const result = completion.choices[ 0 ].message.content.trim();
-    console.log( text, result );
-    return result;
+    const res = await fetch(
+      `${TRANSLATION_API_ROUTE}/automateTranslation`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify( {
+          text: text,
+          simName: simName,
+          locale: locale
+        } )
+      }
+    );
+    if ( !res.ok ) {
+      const errMsg = res.statusText;
+      logError( 'Error translating via server:', errMsg );
+      return 'ERROR';
+    }
+    const data = await res.json();
+    return data.translation;
   }
   catch( error ) {
-    console.error( 'Error translating with OpenAI:', error );
+    logError( 'Error translating via server:', error );
     throw error;
   }
 };
@@ -58,6 +52,7 @@ const translateWithOpenAI = async ( text, simName, locale ) => {
  * @param {String} locale - The locale code of the simulation being translated
  * @param {String} simTitle - The simulation title
  * @param {String} localeName - The name of the language/locale
+ * @param {Function} setFieldValue - Function to update the form field values
  * @returns {Promise<Object|null>} - The status of the translation submission
  */
 const automateTranslation = async (
@@ -85,7 +80,7 @@ const automateTranslation = async (
         if ( textToTranslate ) {
           // Add the async operation to the updates array
           updates.push(
-            translateWithOpenAI( textToTranslate, simName, localeName ).then( translatedText => {
+            translateWithAI( textToTranslate, simName, localeName ).then( translatedText => {
               obj[ key ] = translatedText;  // Update the 'translated' field once done
               setFieldValue( `${path}${key}`, translatedText );
             } ).catch( error => {

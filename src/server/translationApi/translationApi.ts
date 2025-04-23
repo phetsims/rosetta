@@ -7,6 +7,7 @@
  */
 
 import express, { NextFunction, Request, Response } from 'express';
+import automateTranslation from './api/automateTranslation.js';
 import flushReportObject from './api/flushReportObject.js';
 import localeInfo from './api/localeInfo.js';
 import logClientError from './api/logClientError.js';
@@ -55,6 +56,7 @@ rosettaApiServer.post( '/*', ( req: Request, res: Response, next: NextFunction )
 rosettaApiServer.post( '/saveTranslation', saveTranslation );
 rosettaApiServer.post( '/submitTranslation', submitTranslation );
 rosettaApiServer.post( '/testTranslation', testTranslation );
+rosettaApiServer.post( '/automateTranslation', automateTranslation );
 
 rosettaApiServer.post( '/logClientError', logClientError );
 
