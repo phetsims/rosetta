@@ -64,6 +64,8 @@ const automateTranslation = async (
   setFieldValue
 ) => {
   const translatedValues = { ...values };  // Create a copy of the original values object
+  // Track which fields have been automatically translated
+  const updatedPaths = [];
 
   // Iterate through the values and translate any missing 'translated' fields
   const translateFields = async ( obj, path = '' ) => {
@@ -80,13 +82,18 @@ const automateTranslation = async (
         if ( textToTranslate ) {
           // Add the async operation to the updates array
           updates.push(
-            translateWithAI( textToTranslate, simName, localeName ).then( translatedText => {
-              obj[ key ] = translatedText;  // Update the 'translated' field once done
-              setFieldValue( `${path}${key}`, translatedText );
-            } ).catch( error => {
-              console.error( `Error translating ${path}${key}:`, error );
-              obj[ key ] = `Error translating ${path}${key}`;  // Add error handling text
-            } )
+            translateWithAI( textToTranslate, simName, localeName )
+              .then( translatedText => {
+                const fieldPath = `${path}${key}`;
+                obj[ key ] = translatedText;  // Update the 'translated' field once done
+                setFieldValue( fieldPath, translatedText );
+                // Record this field as AI-translated
+                updatedPaths.push( fieldPath );
+              } )
+              .catch( error => {
+                console.error( `Error translating ${path}${key}:`, error );
+                obj[ key ] = `Error translating ${path}${key}`;  // Add error handling text
+              } )
           );
         }
       }
@@ -100,12 +107,10 @@ const automateTranslation = async (
   // Start translating the values object
   await translateFields( translatedValues );
 
-  debugger; // eslint-disable-line no-debugger
-
   // After translation, we can send the translated values to the server or handle them further
   console.log( 'Translated Values:', translatedValues );
-
-  return translatedValues;
+  // Return list of fields that were automatically translated
+  return updatedPaths;
 };
 
 export default automateTranslation;

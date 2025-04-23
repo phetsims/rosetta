@@ -51,6 +51,12 @@ const TranslationForm = () => {
   const [ isDisabled, setIsDisabled ] = useState( false );
   const [ buttonId, setButtonId ] = useState( '' );
   const [ testIsLoading, setTestIsLoading ] = useState( false );
+  // Track AI-translated fields for metadata and styling
+  const [ aiTranslatedFields, setAiTranslatedFields ] = useState( new Set() );
+  // Reset AI-translated metadata when form data changes
+  useEffect( () => {
+    setAiTranslatedFields( new Set() );
+  }, [ translationFormData ] );
   const handleButtonClick = evt => {
     setButtonId( evt.target.id );
   };
@@ -114,8 +120,11 @@ const TranslationForm = () => {
             }
             else if ( buttonId === 'automate' ) {
               setTestIsLoading( true );
-              await automateTranslation( values, params.simName, params.locale, simTitle, localeName, setFieldValue );
+              // Perform AI translation and capture which fields were updated
+              const updated = await automateTranslation( values, params.simName, params.locale, simTitle, localeName, setFieldValue );
               setTestIsLoading( false );
+              // Store AI-translated field paths for UI metadata
+              setAiTranslatedFields( new Set( updated ) );
             }
           }}
         >
@@ -135,6 +144,8 @@ const TranslationForm = () => {
                     translationFormData={translationFormData}
                     {...props}
                     locale={params.locale}
+                    aiTranslatedFields={aiTranslatedFields}
+                    setAiTranslatedFields={setAiTranslatedFields}
                   />
                 </ErrorContext.Provider>
               </Form>

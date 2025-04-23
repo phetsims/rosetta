@@ -16,11 +16,23 @@ const client = new OpenAI( {
   dangerouslyAllowBrowser: true
 } );
 
+const MOCK_TRANSLATE = true;
+const sleep = ( ms: number ) =>
+  new Promise<void>( resolve => setTimeout( resolve, ms ) );
+
 const automateTranslation = async ( req: Request, res: Response ): Promise<void> => {
   logger.info( 'Began automatic translation request' );
   const { text, simName, locale } = req.body;
   if ( typeof text !== 'string' || typeof simName !== 'string' || typeof locale !== 'string' ) {
     res.status( 400 ).json( { error: 'Missing or invalid parameters: text, simName, locale are required.' } );
+    return;
+  }
+
+  if ( MOCK_TRANSLATE ) {
+    await sleep( 100 );
+    res.json( {
+      translation: text
+    } );
     return;
   }
 
