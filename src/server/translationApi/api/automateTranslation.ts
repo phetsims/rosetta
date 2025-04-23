@@ -16,6 +16,7 @@ const client = new OpenAI( {
   dangerouslyAllowBrowser: true
 } );
 
+// This flag and function used for testing to avoid making many calls to the OpenAI API
 const MOCK_TRANSLATE = true;
 const sleep = ( ms: number ) =>
   new Promise<void>( resolve => setTimeout( resolve, ms ) );
@@ -28,8 +29,9 @@ const automateTranslation = async ( req: Request, res: Response ): Promise<void>
     return;
   }
 
+  // Simulate the API call. Used only for testing.
   if ( MOCK_TRANSLATE ) {
-    await sleep( 100 );
+    await sleep( 500 );
     res.json( {
       translation: text
     } );

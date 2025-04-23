@@ -120,11 +120,15 @@ const TranslationForm = () => {
             }
             else if ( buttonId === 'automate' ) {
               setTestIsLoading( true );
-              // Perform AI translation and capture which fields were updated
-              const updated = await automateTranslation( values, params.simName, params.locale, simTitle, localeName, setFieldValue );
+              // Clear previous AI flags and flag each field as it's translated
+              setAiTranslatedFields( new Set() );
+              // Wrap Formik's setter to record AI-translated fields as they complete
+              const aiSetFieldValue = ( field, value ) => {
+                setFieldValue( field, value );
+                setAiTranslatedFields( prev => new Set( prev ).add( field ) );
+              };
+              await automateTranslation( values, params.simName, params.locale, simTitle, localeName, aiSetFieldValue );
               setTestIsLoading( false );
-              // Store AI-translated field paths for UI metadata
-              setAiTranslatedFields( new Set( updated ) );
             }
           }}
         >

@@ -76,7 +76,17 @@ const TranslationFormRow = props => {
           <button className='btn btn-light' type='button' onClick={handleCopyButtonClick}>
             ➡️
           </button>
-          <textarea {...field} style={textAreaStyle} dir={direction}/>
+          <textarea
+            {...field}
+            style={textAreaStyle}
+            dir={direction}
+            onChange={ e => {
+              field.onChange( e );
+              if ( aiPending ) {
+                handleAiAccept();
+              }
+            } }
+          />
           { aiPending && (
             <>
               <button type='button' className='btn btn-light' onClick={handleAiAccept}>✅</button>
