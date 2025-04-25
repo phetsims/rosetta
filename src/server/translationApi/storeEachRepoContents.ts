@@ -6,7 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { StorableTranslationData } from './api/StorableTranslationData.js';
+import { StorableTranslationData } from './StorableTranslationData.js';
 import logger from './logger.js';
 import { longTermStorage } from './translationApi.js';
 

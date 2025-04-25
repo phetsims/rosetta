@@ -6,7 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { StringKeysAndValues } from '../api/StorableTranslationData.js';
+import { StringKeysAndValues } from '../StorableTranslationData.js';
 import getRepoNameFromStringKeyWithRepoName from '../getRepoNameFromStringKeyWithRepoName.js';
 import getStringFile from '../getStringFile.js';
 import getStringKeyFromStringKeyWithRepoName from '../getStringKeyFromStringKeyWithRepoName.js';

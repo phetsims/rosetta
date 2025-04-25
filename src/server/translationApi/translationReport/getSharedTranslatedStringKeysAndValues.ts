@@ -6,7 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { StringKeysAndValues } from '../api/StorableTranslationData.js';
+import { StringKeysAndValues } from '../StorableTranslationData.js';
 import logger from '../logger.js';
 import { longTermStorage } from '../translationApi.js';
 

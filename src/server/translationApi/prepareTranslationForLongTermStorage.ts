@@ -8,7 +8,7 @@
  */
 
 import { ClientSubmittedTranslationData } from '../../common/ClientSubmittedTranslationData.js';
-import { MultiRepoTranslationData, StorableTranslationData } from './api/StorableTranslationData.js';
+import { MultiRepoTranslationData, StorableTranslationData } from './StorableTranslationData.js';
 import getStringKeysWithDots from './getStringKeysWithDots.js';
 import logger from './logger.js';
 import makeTranslationFileContentsForRepo from './makeTranslationFileContentsForRepo.js';

@@ -21,7 +21,7 @@ import logger from './logger.js';
  * Check for a saved translation and, if one doesn't exist or can't be obtained, get Thea simulation's string keys,
  * the English value for those keys, the translated values if they exist, and the repo name for common-code and shared
  * string keys. (Sim-specific string keys don't need a repo name field because it will be obvious to the caller of the
- * function what the sim repo is.)
+ * function what the sim repo is).
  *
  * @param simName - sim name
  * @param locale - two-letter ISO 639-1 locale code, e.g. es for Spanish

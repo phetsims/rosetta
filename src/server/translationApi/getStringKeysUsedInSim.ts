@@ -21,9 +21,7 @@
 
 import privateConfig from '../../common/privateConfig.js';
 import logger from './logger.js';
-
-// TODO: See https://github.com/phetsims/rosetta/issues/311 - Consolidate with the common type.
-export type StringKeysAndValues = Record<string, string>;
+import { StringKeysAndValues } from './StorableTranslationData.js';
 
 const getStringKeysUsedInSim = async ( simName: string ): Promise<StringKeysAndValues> => {
 

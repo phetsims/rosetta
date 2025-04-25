@@ -6,7 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { TranslationDataForRepo } from './api/StorableTranslationData.js';
+import { StringKeysAndValues, TranslationDataForRepo } from './StorableTranslationData.js';
 import getStringFile from './getStringFile.js';
 import logger from './logger.js';
 import { longTermStorage } from './translationApi.js';
@@ -52,7 +52,7 @@ const getSharedTranslationFormData = async ( locale: string,
 
       // Populate string keys and values.
       const englishKeyValueAndRepoObjects: Record<string, { value: string; repo: string }> = {};
-      const translatedKeysAndValues: Record<string, string> = {};
+      const translatedKeysAndValues: StringKeysAndValues = {};
       for ( const stringKey of sharedStringKeys ) {
 
         // Populate English string keys and values.

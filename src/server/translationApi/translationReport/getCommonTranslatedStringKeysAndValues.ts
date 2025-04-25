@@ -9,9 +9,8 @@
 import { CategorizedStringKeys } from '../getCategorizedStringKeys.js';
 import getCommonRepos from '../getCommonRepos.js';
 import getRepoNameToStringKeys from '../getRepoNameToStringKeys.js';
+import { StringKeysAndValues } from '../StorableTranslationData.js';
 import { longTermStorage } from '../translationApi.js';
-
-type StringFile = Record<string, string>;
 
 /**
  * Return an object containing common translated string keys and their values.
@@ -29,9 +28,9 @@ const getCommonTranslatedStringKeysAndValues = async (
   simNames: string[],
   stringKeysWithRepoName: string[],
   categorizedStringKeys: CategorizedStringKeys
-): Promise<StringFile> => {
+): Promise<StringKeysAndValues> => {
 
-  const commonTranslatedStringKeysAndStrings: StringFile = {};
+  const commonTranslatedStringKeysAndStrings: StringKeysAndValues = {};
   const commonStringKeys = categorizedStringKeys.common;
 
   // Get a list of common repos for the sim.

@@ -9,7 +9,7 @@
  */
 
 
-// An object that matches a set string-key to their values, which could be translated or English.
+// An object that matches string keys to their values.  The values can be English strings or translated strings.
 export type StringKeysAndValues = Record<string, string>;
 
 export type HistoryEntry = {

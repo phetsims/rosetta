@@ -18,6 +18,7 @@ import { CategorizedStringKeys } from '../getCategorizedStringKeys.js';
 import getCommonRepos from '../getCommonRepos.js';
 import getStringFile from '../getStringFile.js';
 import logger from '../logger.js';
+import { StringKeysAndValues } from '../StorableTranslationData.js';
 
 type StringFile = Record<string, { value: string }>;
 
@@ -27,7 +28,7 @@ const getCommonEnglishStringKeysAndValues = async ( simName: string,
                                                     stringKeysWithRepoName: string[] ): Promise<Record<string, string>> => {
 
   logger.info( `getting ${simName}'s common English string keys and values` );
-  const commonEnglishStringKeysAndValues: Record<string, string> = {};
+  const commonEnglishStringKeysAndValues: StringKeysAndValues = {};
 
   try {
 
