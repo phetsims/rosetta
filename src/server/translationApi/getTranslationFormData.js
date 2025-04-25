@@ -118,11 +118,11 @@ const getTranslationFormData = async (
   };
   try {
     translationFormData.simIsPrototype = await getPrototypeStatus( simName );
-    translationFormData.simSpecific = await getSimSpecificTranslationFormData(
+    translationFormData.simSpecific = getSortedStringsObject( await getSimSpecificTranslationFormData(
       simName,
       locale,
       categorizedStringKeys.simSpecific
-    );
+    ) );
     translationFormData.shared = await getSharedTranslationFormData(
       simName,
       locale,
@@ -145,6 +145,47 @@ const getTranslationFormData = async (
   }
   logger.info( 'got translation form data; returning it' );
   return translationFormData;
+};
+
+/**
+ * Sort the strings object by title, screen, and other keys. This is done to keep the title and screens at the top of
+ * the translation form. See https://github.com/phetsims/rosetta/issues/454 for more detail on the motivation for this.
+ * @param {Object} strings - The strings object to sort.
+ * @returns {Object} A new object with sorted keys.
+ */
+const getSortedStringsObject = ( strings ) => {
+  const titleKeys = [];
+  const screenKeys = [];
+  const otherKeys = [];
+
+  // Categorize keys.
+  Object.keys( strings ).forEach( key => {
+    if ( key.includes( '.title' ) || key.includes( '_DOT_title' ) ) {
+      titleKeys.push( key );
+    }
+    else if ( key.includes( 'screen.' ) || key.includes( 'screen_DOT_' ) ) {
+      screenKeys.push( key );
+    }
+    else {
+      otherKeys.push( key );
+    }
+  } );
+
+  // Sort each category.
+  titleKeys.sort();
+  screenKeys.sort();
+  otherKeys.sort();
+
+  // Combine sorted keys.
+  const sortedKeys = [ ...titleKeys, ...screenKeys, ...otherKeys ];
+
+  // Create a new object with sorted keys.
+  const sortedObject = {};
+  sortedKeys.forEach( key => {
+    sortedObject[ key ] = strings[ key ];
+  } );
+
+  return sortedObject;
 };
 
 export default getTranslationFormData;
