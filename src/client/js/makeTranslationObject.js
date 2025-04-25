@@ -11,7 +11,7 @@ import alertErrorMessage from './alertErrorMessage.js';
 import getWebsiteUserData from './getWebsiteUserData.js';
 
 /**
- * Return an object with the data needed for submitting the sim for publication.
+ * Return an object with the data needed for submitting the sim for publication, saving it for later, or testing it.
  *
  * @param {Object} values - values we get from the translation form
  * @param {String} simName - name of the sim being translated

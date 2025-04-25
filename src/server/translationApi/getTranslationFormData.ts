@@ -8,7 +8,7 @@
 
 import privateConfig from '../../common/privateConfig.js';
 import publicConfig from '../../common/publicConfig.js';
-import { TranslationFormData } from '../../common/TranslationFormData.js';
+import { StringEntry, TranslationFormData } from '../../common/TranslationFormData.js';
 import { CategorizedStringKeys } from './getCategorizedStringKeys.js';
 import getCommonTranslationFormData from './getCommonTranslationFormData.js';
 import getPrototypeStatus from './getPrototypeStatus.js';
@@ -81,11 +81,11 @@ const getTranslationFormData = async ( simName: string,
 
   try {
     translationFormData.simIsPrototype = await getPrototypeStatus( simName );
-    translationFormData.simSpecific = await getSimSpecificTranslationFormData(
+    translationFormData.simSpecific = getSortedStringsObject( await getSimSpecificTranslationFormData(
       simName,
       locale,
       categorizedStringKeys.simSpecific
-    );
+    ) );
     translationFormData.shared = await getSharedTranslationFormData(
       locale,
       categorizedStringKeys.shared,
@@ -104,6 +104,47 @@ const getTranslationFormData = async ( simName: string,
   }
   logger.info( 'got translation form data; returning it' );
   return translationFormData;
+};
+
+/**
+ * Sort the strings object by title, screen, and other keys.  This is done to keep the title and screens at the top of
+ * the translation form.  See https://github.com/phetsims/rosetta/issues/454 for more detail on the motivation for this.
+ * @param strings - The strings object to sort.
+ * @returns A new object with sorted keys.
+ */
+const getSortedStringsObject = ( strings: Record<string, StringEntry> ): Record<string, StringEntry> => {
+  const titleKeys: string[] = [];
+  const screenKeys: string[] = [];
+  const otherKeys: string[] = [];
+
+  // Categorize keys.
+  Object.keys( strings ).forEach( key => {
+    if ( key.includes( '.title' ) || key.includes( '_DOT_title' ) ) {
+      titleKeys.push( key );
+    }
+    else if ( key.includes( 'screen.' ) || key.includes( 'screen_DOT_' ) ) {
+      screenKeys.push( key );
+    }
+    else {
+      otherKeys.push( key );
+    }
+  } );
+
+  // Sort each category.
+  titleKeys.sort();
+  screenKeys.sort();
+  otherKeys.sort();
+
+  // Combine sorted keys.
+  const sortedKeys = [ ...titleKeys, ...screenKeys, ...otherKeys ];
+
+  // Create a new object with sorted keys.
+  const sortedObject: Record<string, StringEntry> = {};
+  sortedKeys.forEach( key => {
+    sortedObject[ key ] = strings[ key ];
+  } );
+
+  return sortedObject;
 };
 
 export default getTranslationFormData;
