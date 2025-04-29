@@ -16,9 +16,8 @@ import TranslationReportObject from './TranslationReportObject.js';
  * @param translationReportObject - translation report object without total stats
  * @returns - translation report object with total stats
  */
-const getTotalStats = (
-  translationReportObject: TranslationReportObject
-): TranslationReportObject => {
+const getTotalStats = ( translationReportObject: TranslationReportObject ): TranslationReportObject => {
+
   translationReportObject.totalStrings = getTotalStrings( [
     translationReportObject.numCommonStrings,
     translationReportObject.numSimSpecificStrings,

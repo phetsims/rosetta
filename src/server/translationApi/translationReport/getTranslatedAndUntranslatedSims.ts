@@ -32,7 +32,7 @@ const getTranslatedAndUntranslatedSims = async ( locale: string,
     untranslated: []
   };
 
-  // Get an object that lists all sims and the translation status for every locale.
+  // Get an object that lists all sims and the translation status for every locale (among other things).
   const translationInfo: TranslationInfo = await getTranslationInfo( isTeamMember );
 
   // If the environment is configured for short reports, reduce the list of sims included here.
