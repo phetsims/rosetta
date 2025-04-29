@@ -27,7 +27,8 @@ export type CategorizedStringKeys = {
   sharedSims: string[];
 };
 
-const getCategorizedStringKeys = async ( simName: string, stringKeysWithRepoName: string[] ): Promise<CategorizedStringKeys> => {
+const getCategorizedStringKeys = async ( simName: string,
+                                         stringKeysWithRepoName: string[] ): Promise<CategorizedStringKeys> => {
 
   logger.info( `getting ${simName}'s categorized string keys` );
 

@@ -43,10 +43,9 @@ const addEmbeddingMarks = ( stringsObject: StringsObject,
     const rtlMark = '\u202b';
     const endDirectionalMark = '\u202c';
     const translatedValue = stringsObject[ stringKeyWithoutDots ].translated;
-    stringKeysWithRepoName[ stringKeyWithRepoName ] =
-      direction === 'rtl'
-      ? rtlMark + translatedValue + endDirectionalMark
-      : ltrMark + translatedValue + endDirectionalMark;
+    stringKeysWithRepoName[ stringKeyWithRepoName ] = direction === 'rtl' ?
+                                                      rtlMark + translatedValue + endDirectionalMark :
+                                                      ltrMark + translatedValue + endDirectionalMark;
   }
 };
 

@@ -8,7 +8,7 @@
 
 import { ClientSubmittedTranslationData } from '../../common/ClientSubmittedTranslationData.js';
 import { StringEntry, StringEntryWithRepo } from '../../common/TranslationFormData.js';
-import { HistoryEntry, TranslationDataForRepo } from './api/StorableTranslationData.js';
+import { HistoryEntry, TranslationDataForRepo } from './StorableTranslationData.js';
 import getSimMetadata from './getSimMetadata.js';
 import getSimNamesAndTitles from './getSimNamesAndTitles.js';
 import logger from './logger.js';
@@ -83,9 +83,8 @@ const makeTranslationFileContentsForRepo = async (
       }
 
       const stringNotYetTranslated = !oldTranslationFile ||
-                                     Object.keys( oldTranslationFile ).length === 0 ||
-                                     oldTranslationFile[ stringKey ].value === '' ||
-                                     !oldTranslationFile[ stringKey ];
+                                     !( stringKey in oldTranslationFile ) ||
+                                     oldTranslationFile[ stringKey ].value === '';
 
       const translationLeftBlank = stringNotYetTranslated &&
                                    translationFormData[ stringKey ] &&

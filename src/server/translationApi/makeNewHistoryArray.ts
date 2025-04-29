@@ -5,7 +5,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { HistoryEntry, TranslationDataForRepo } from './api/StorableTranslationData.js';
+import { HistoryEntry, TranslationDataForRepo } from './StorableTranslationData.js';
 import logger from './logger.js';
 
 /**

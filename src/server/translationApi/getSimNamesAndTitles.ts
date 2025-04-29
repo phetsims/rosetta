@@ -44,6 +44,7 @@ const getSimNamesAndTitles = ( simMetadata: SimMetadata, isTeamMember: boolean )
       Object.entries( simNamesAndTitles ).filter( ( [ key ] ) => SIMS_FOR_SHORT_REPORT.includes( key ) )
     );
   }
+
   return simNamesAndTitles;
 };
 

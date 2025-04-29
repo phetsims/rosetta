@@ -100,9 +100,10 @@ const submitTranslation = async ( req: Request, res: Response ): Promise<void> =
       logger.error( `long-term storage of ${req.body.locale}/${req.body.simName} failed` );
     }
   }
-  catch( e ) {
-    logger.error( e );
+  catch( error ) {
+    logger.error( `error while attempting to submit translation: ${error}` );
   }
+
   logger.info( 'done attempting to submit translation' );
   res.send( submissionStatus );
 };

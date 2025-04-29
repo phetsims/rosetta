@@ -9,7 +9,7 @@
 import { RequestError } from '@octokit/request-error';
 import { Octokit } from '@octokit/rest';
 import privateConfig from '../../common/privateConfig.js';
-import { TranslationDataForRepo } from './api/StorableTranslationData.js';
+import { TranslationDataForRepo } from './StorableTranslationData.js';
 import logger from './logger.js';
 
 const OWNER = 'phetsims';

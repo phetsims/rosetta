@@ -8,15 +8,16 @@
  */
 
 import privateConfig from '../../common/privateConfig.js';
-import { Brand } from './Brand.js';
 import logger from './logger.js';
+
+export type Brand = 'phet' | 'phet-io';
 
 /**
  * Get the dependencies for the specified simulation and version.
  *
  * @param simName - The name of the simulation.
  * @param version - The version of the simulation.
- * @param brand - The brand of the sim for which the dependencies are needed. Valid values are 'phet' or 'phet-io'.
+ * @param brand - The brand of the sim for which the dependencies are needed, e.g. 'phet' or 'phet-io'.
  * @returns A promise resolving to a string containing JSON data with dependencies.
  */
 const getDependencies = async ( simName: string, version: string, brand: Brand = 'phet' ): Promise<string> => {
