@@ -10,6 +10,7 @@ import { Request, Response } from 'express';
 import { OpenAI } from 'openai'; // OpenAI SDK
 import privateConfig from '../../../common/privateConfig.js';
 import logger from '../logger.js';
+import { automationCache } from '../translationApi.js';
 
 const client = new OpenAI( {
   apiKey: privateConfig.OPENAI_API_KEY,
@@ -20,21 +21,45 @@ const client = new OpenAI( {
 const MOCK_TRANSLATE = true;
 const sleep = ( ms: number ) =>
   new Promise<void>( resolve => setTimeout( resolve, ms ) );
+const mockTranslate = ( text: string ): string => {
+  // This is a mock translation function that reverses the string, except ones that have {
+  return text.includes( '{' ) ? text : text
+    .split( '' )
+    .reverse()
+    .join( '' );
+};
 
 const automateTranslation = async ( req: Request, res: Response ): Promise<void> => {
   logger.info( 'Began automatic translation request' );
-  const { text, simName, locale } = req.body;
-  if ( typeof text !== 'string' || typeof simName !== 'string' || typeof locale !== 'string' ) {
-    res.status( 400 ).json( { error: 'Missing or invalid parameters: text, simName, locale are required.' } );
+  const { locale, simName, stringKey, textToTranslate } = req.body;
+  if (
+    typeof locale !== 'string' ||
+    typeof simName !== 'string' ||
+    typeof stringKey !== 'string' ||
+    typeof textToTranslate !== 'string'
+  ) {
+    res.status( 400 ).json( { error: 'Missing or invalid parameters: locale, simName, stringKey and text are required.' } );
+    return;
+  }
+
+  // Check for existing translations in the cache
+  const cachedTranslation = automationCache.getObject( locale, simName, stringKey );
+  if ( cachedTranslation !== null ) {
+    res.json( {
+      translation: `**${cachedTranslation}`
+    } );
     return;
   }
 
   // Simulate the API call. Used only for testing.
   if ( MOCK_TRANSLATE ) {
+    // This is a mock translation function that reverses the string but preserves {} structure.
+    const mockTranslatedText = mockTranslate( textToTranslate );
     await sleep( 500 );
     res.json( {
-      translation: text
+      translation: mockTranslatedText
     } );
+    automationCache.setObject( locale, simName, stringKey, mockTranslatedText );
     return;
   }
 
@@ -53,15 +78,15 @@ const automateTranslation = async ( req: Request, res: Response ): Promise<void>
       model: 'gpt-4o',
       messages: [
         { role: 'system', content: prompt },
-        { role: 'user', content: text }
+        { role: 'user', content: textToTranslate }
       ]
     } );
 
-    const result = completion.choices[ 0 ].message.content!.trim();
-    console.log( text, result );
+    const translatedValue = completion.choices[ 0 ].message.content!.trim();
     res.json( {
-      translation: result
+      translation: translatedValue
     } );
+    automationCache.setObject( locale, simName, stringKey, translatedValue );
   }
   catch( error ) {
     logger.error( 'Error in automateTranslation endpoint:', error );

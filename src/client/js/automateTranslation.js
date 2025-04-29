@@ -12,12 +12,13 @@ import logError from './logError.js';
 
 /**
  * Function to translate text using the server-side automated translation endpoint.
- * @param {String} text - The text to translate
- * @param {String} simName - The name of the simulation being translated
  * @param {String} locale - The target language code
+ * @param {String} simName - The name of the simulation being translated
+ * @param {String} stringKey - The key for the string in the translation form
+ * @param {String} textToTranslate - The text to translate
  * @returns {Promise<String>} - The translated text
  */
-const translateWithAI = async ( text, simName, locale ) => {
+const translateWithAI = async ( locale, simName, stringKey, textToTranslate ) => {
   try {
     const res = await fetch(
       `${TRANSLATION_API_ROUTE}/automateTranslation`,
@@ -25,9 +26,10 @@ const translateWithAI = async ( text, simName, locale ) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify( {
-          text: text,
+          locale: locale,
           simName: simName,
-          locale: locale
+          stringKey: stringKey,
+          textToTranslate: textToTranslate
         } )
       }
     );
@@ -64,6 +66,7 @@ const automateTranslation = async (
   setFieldValue
 ) => {
   const translatedValues = { ...values };  // Create a copy of the original values object
+
   // Track which fields have been automatically translated
   const updatedPaths = [];
 
@@ -82,7 +85,7 @@ const automateTranslation = async (
         if ( textToTranslate ) {
           // Add the async operation to the updates array
           updates.push(
-            translateWithAI( textToTranslate, simName, localeName )
+            translateWithAI( localeName, simName, path, textToTranslate )
               .then( translatedText => {
                 const fieldPath = `${path}${key}`;
                 obj[ key ] = translatedText;  // Update the 'translated' field once done
