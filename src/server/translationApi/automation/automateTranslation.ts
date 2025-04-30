@@ -7,18 +7,23 @@
 
 
 import { Request, Response } from 'express';
-import { OpenAI } from 'openai'; // OpenAI SDK
 import privateConfig from '../../../common/privateConfig.js';
 import logger from '../logger.js';
 import { automationCache } from '../translationApi.js';
 
-const client = new OpenAI( {
-  apiKey: privateConfig.OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true
-} );
+// Return types for the Open Router fetch function
+type OpenRouterResponse = {
+  choices: ( NonStreamingChoice )[];
+};
+
+type NonStreamingChoice = {
+  message: {
+    content: string | null;
+  };
+};
 
 // This flag and function used for testing to avoid making many calls to the OpenAI API
-const MOCK_TRANSLATE = true;
+const MOCK_TRANSLATE = false;
 const sleep = ( ms: number ) =>
   new Promise<void>( resolve => setTimeout( resolve, ms ) );
 const mockTranslate = ( text: string ): string => {
@@ -44,8 +49,9 @@ const automateTranslation = async ( req: Request, res: Response ): Promise<void>
   // Check for existing translations in the cache
   const cachedTranslation = automationCache.getObject( locale, simName, stringKey );
   if ( cachedTranslation !== null ) {
+    logger.info( 'Cache value found, using cache' );
     res.json( {
-      translation: `**${cachedTranslation}`
+      translation: `${cachedTranslation}`
     } );
     return;
   }
@@ -72,24 +78,37 @@ const automateTranslation = async ( req: Request, res: Response ): Promise<void>
     If for some reason you cannot translate a string, please return the original string. Do not add any extra text or
     explanation, just return the translation.\n\n
     The following is the string to translate:\n
+    ${textToTranslate}
     `;
 
   try {
-    const model = 'gpt-4o';
-    const completion = await client.chat.completions.create( {
-      model: model,
-      messages: [
-        { role: 'system', content: prompt },
-        { role: 'user', content: textToTranslate }
-      ]
+    // Go to https://openrouter.ai/rankings/translation?view=week to compare the current best model for translation
+    const model = 'google/gemini-flash-1.5-8b';
+    const response = await fetch( 'https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${privateConfig.OPENROUTER_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify( {
+        model: model,
+        messages: [
+          {
+            role: 'user',
+            content: prompt
+          }
+        ]
+      } )
     } );
 
-    const translatedValue = completion.choices[ 0 ].message.content!.trim();
+    const data = await response.json() as OpenRouterResponse;
+    const translatedValue = data.choices[ 0 ].message.content;
+
     res.json( {
       translation: translatedValue,
       model: model
     } );
-    automationCache.setObject( locale, simName, stringKey, translatedValue );
+    automationCache.setObject( locale, simName, stringKey, translatedValue! );
   }
   catch( error ) {
     logger.error( 'Error in automateTranslation endpoint:', error );
