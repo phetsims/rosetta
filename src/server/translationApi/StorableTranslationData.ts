@@ -17,6 +17,9 @@ export type HistoryEntry = {
   timestamp: number;
   oldValue: string;
   newValue: string;
+  aiSuggestedValue?: string; // Only used if the AI suggestion is edited or rejected
+  aiTranslated?: boolean; // If not present, defaults to false
+  aiModel?: string;
   explanation?: string | null;
 };
 

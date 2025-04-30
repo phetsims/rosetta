@@ -55,9 +55,10 @@ const automateTranslation = async ( req: Request, res: Response ): Promise<void>
   if ( MOCK_TRANSLATE ) {
     // This is a mock translation function that reverses the string but preserves {} structure.
     const mockTranslatedText = mockTranslate( textToTranslate );
-    await sleep( 500 );
+    await sleep( 0 );
     res.json( {
-      translation: mockTranslatedText
+      translation: mockTranslatedText,
+      model: 'mock-model'
     } );
     automationCache.setObject( locale, simName, stringKey, mockTranslatedText );
     return;
@@ -68,14 +69,16 @@ const automateTranslation = async ( req: Request, res: Response ): Promise<void>
     Translate from English to ${locale}. The strings belong to a STEM educational simulation about ${simName},
     so in case of doubt, use a related scientific term. Respect the title casing when translating
     (i.e. 'Number of Atoms' should go to 'Número de Átomos' and so on) and respect the bracket notation and format {{}}.
+    And preserve the key within brackets, i.e {{numberOfAtoms}} should NOT be translated.
     If for some reason you cannot translate a string, please return the original string. Do not add any extra text or
     explanation, just return the translation.\n\n
     The following is the string to translate:\n
     `;
 
   try {
+    const model = 'gpt-4o';
     const completion = await client.chat.completions.create( {
-      model: 'gpt-4o',
+      model: model,
       messages: [
         { role: 'system', content: prompt },
         { role: 'user', content: textToTranslate }
@@ -84,7 +87,8 @@ const automateTranslation = async ( req: Request, res: Response ): Promise<void>
 
     const translatedValue = completion.choices[ 0 ].message.content!.trim();
     res.json( {
-      translation: translatedValue
+      translation: translatedValue,
+      model: model
     } );
     automationCache.setObject( locale, simName, stringKey, translatedValue );
   }

@@ -88,8 +88,11 @@ const automateTranslation = async (
             translateWithAI( localeName, simName, path, textToTranslate )
               .then( translatedText => {
                 const fieldPath = `${path}${key}`;
-                obj[ key ] = translatedText;  // Update the 'translated' field once done
                 setFieldValue( fieldPath, translatedText );
+                obj[ key ] = translatedText;
+                obj.aiSuggestedValue = translatedText;
+                obj.aiTranslated = true;
+                obj.aiModel = 'gpt-4o';
                 // Record this field as AI-translated
                 updatedPaths.push( fieldPath );
               } )
