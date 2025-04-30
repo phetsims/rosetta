@@ -33,7 +33,9 @@ const TranslationFormRow = props => {
   const englishStringStyle = {
     color: isPatternString ? 'blue' : 'black'
   };
-  // Determine if this field was auto-translated by AI
+  // Determine if this field has a pending AI suggestion from form values
+  const { setFieldValue } = useFormikContext();
+  const objPath = props.name.replace( /\.translated$/, '' );
   const aiPending = props.aiTranslatedFields && props.aiTranslatedFields.has( props.name );
   // Determine text area styling, orange for AI pending, blue for pattern strings, otherwise black
   const textAreaStyle = {
@@ -45,8 +47,6 @@ const TranslationFormRow = props => {
   // Formik has a handful of props that it needs on inputs.
   // Get field props for the input.
   const [ field ] = useField( props );
-
-  const { setFieldValue } = useFormikContext();
   // Handlers for AI validation actions
   const handleAiAccept = () => {
     const newSet = new Set( props.aiTranslatedFields );
@@ -54,11 +54,11 @@ const TranslationFormRow = props => {
     props.setAiTranslatedFields( newSet );
   };
   const handleAiDeny = () => {
-    // Clear the translation
+    // Clear the translation and the pending AI flag upon denial
     setFieldValue( props.name, '' );
-    const newSet = new Set( props.aiTranslatedFields );
-    newSet.delete( props.name );
-    props.setAiTranslatedFields( newSet );
+    setFieldValue( `${objPath}.aiTranslated`, false );
+    setFieldValue( `${objPath}.aiSuggestedValue`, '' );
+    setFieldValue( `${objPath}.aiModel`, '' );
   };
 
   const handleCopyButtonClick = () => {

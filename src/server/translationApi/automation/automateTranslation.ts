@@ -30,7 +30,6 @@ const mockTranslate = ( text: string ): string => {
 };
 
 const automateTranslation = async ( req: Request, res: Response ): Promise<void> => {
-  logger.info( 'Began automatic translation request' );
   const { locale, simName, stringKey, textToTranslate } = req.body;
   if (
     typeof locale !== 'string' ||

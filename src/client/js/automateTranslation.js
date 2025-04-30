@@ -88,7 +88,13 @@ const automateTranslation = async (
             translateWithAI( localeName, simName, path, textToTranslate )
               .then( translatedText => {
                 const fieldPath = `${path}${key}`;
+                // Update the translated field
                 setFieldValue( fieldPath, translatedText );
+                // Update AI metadata fields in Formik values
+                setFieldValue( `${path}aiSuggestedValue`, translatedText );
+                setFieldValue( `${path}aiTranslated`, true );
+                setFieldValue( `${path}aiModel`, 'gpt-4o' );
+                // Update local copy for consistency
                 obj[ key ] = translatedText;
                 obj.aiSuggestedValue = translatedText;
                 obj.aiTranslated = true;
