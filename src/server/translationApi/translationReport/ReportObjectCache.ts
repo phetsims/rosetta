@@ -1,12 +1,12 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * Define the report object cache class. At startup, we create an object based on this
- * class. As Rosetta gets requests for report objects, they are cached in this report object
- * cache. (It takes a while to get them.) These objects are sent to the client to create the
- * translation report.
+ * Cache for translation report objects. This is used to cache the translation report objects so they don't have to be
+ * rebuilt all the time, since it takes time and a bunch of requests to long-term storage to create them.  At startup,
+ * we create an instance of this class. As Rosetta gets requests for report objects, they are cached here.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import publicConfig from '../../../common/publicConfig.js';
@@ -18,10 +18,11 @@ class ReportObjectCache {
   private cache: Record<string, Record<string, TranslationReportObject>> = {};
 
   /**
-   * @param locale
-   * @param sim
-   * @param reportObject
-   * @param timestamp
+   * Set the object in the cache. This is used to store the report object.
+   * @param locale - two-letter locale code
+   * @param sim - sim name in kabob case, e.g. 'energy-skate-park'
+   * @param reportObject - the report object to store
+   * @param timestamp - the times at which the object was created in ms since epoch (Date.now() format)
    */
   public setObject(
     locale: string,
@@ -38,8 +39,7 @@ class ReportObjectCache {
   }
 
   /**
-   * @param locale
-   * @param sim
+   * Mark a report object as dirty if it is present in the cache. This is used to force an update on the next access.
    */
   public setDirtyObject( locale: string, sim: string ): void {
     if ( this.cache[ locale ] !== undefined && this.cache[ locale ][ sim ] !== undefined ) {
@@ -53,26 +53,28 @@ class ReportObjectCache {
    * @returns The cached report object or null if not available/valid
    */
   public getObject( locale: string, sim: string ): TranslationReportObject | null {
+    let reportObject: TranslationReportObject | null = null;
     if ( this.cache[ locale ] !== undefined && this.cache[ locale ][ sim ] !== undefined ) {
-      if ( this.cache[ locale ][ sim ].timestamp ) {
-        const withinSimMetadataCacheWindow = Date.now() - this.cache[ locale ][ sim ].timestamp
-                                             < publicConfig.VALID_METADATA_DURATION;
-        if ( !this.cache[ locale ][ sim ].isDirty || ( this.cache[ locale ][ sim ].isDirty && withinSimMetadataCacheWindow ) ) {
-          return this.cache[ locale ][ sim ];
-        }
+      const withinSimMetadataCacheWindow = Date.now() - this.cache[ locale ][ sim ].timestamp
+                                           < publicConfig.VALID_METADATA_DURATION;
+      if ( !this.cache[ locale ][ sim ].isDirty && withinSimMetadataCacheWindow ) {
+        reportObject = this.cache[ locale ][ sim ];
+        logger.info( `ReportObjectCache.getObject: returning cached report object for ${locale}/${sim}` );
       }
       else {
-        logger.error( `ReportObjectCache: getObject: ${locale}/${sim} has no timestamp` );
+        logger.info( `ReportObjectCache.getObject: report object for ${locale}/${sim} dirty or stale, returning null` );
       }
-
     }
-    return null;
+    else {
+      logger.info( `ReportObjectCache.getObject: report object for ${locale}/${sim} not found, returning null` );
+    }
+    return reportObject;
   }
 
   /**
    * @param locale
    * @param sim
-   * @returns Whether the object was successfully flushed
+   * @returns - whether the object was successfully flushed
    */
   public flushObject( locale: string, sim: string ): boolean {
     let flushed = false;

@@ -49,7 +49,9 @@ const getTranslationReportObject = async ( simName: string,
     percentShared: null,
     totalStrings: null,
     totalTranslatedStrings: null,
-    percentTotal: null
+    percentTotal: null,
+    isDirty: true,
+    timestamp: Number.NEGATIVE_INFINITY
   };
 
   // Get the information needed to populate the translation report object.
@@ -168,6 +170,10 @@ const getTranslationReportObject = async ( simName: string,
         translationReportObject.numSharedStrings
       );
     }
+
+    // Since we made it to this point, consider the object to be valid.
+    translationReportObject.isDirty = false;
+    translationReportObject.timestamp = Date.now();
   }
   catch( e ) {
     logger.error( `error while obtaining info for translation report object, report may be inaccurate, error = ${e}` );

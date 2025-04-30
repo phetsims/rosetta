@@ -58,7 +58,7 @@ const translationReportEvents = async ( req: Request, res: Response ): Promise<v
   for ( const sim of simNames ) {
 
     let translationReportObject: TranslationReportObject | null = reportObjectCache.getObject(
-      req.params.local,
+      req.params.locale,
       sim
     );
 

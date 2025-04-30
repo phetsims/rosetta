@@ -27,8 +27,8 @@ type TranslationReportObject = {
   totalStrings: number | null;
   totalTranslatedStrings: number | null;
   percentTotal: number | null;
-  isDirty?: boolean;
-  timestamp?: number;
+  isDirty: boolean; // used by the cache to mark the object as dirty and force an update on the next access
+  timestamp: number; // used by the cache to decide if the report object should be updated
 };
 
 export default TranslationReportObject;
