@@ -64,7 +64,7 @@ const translationReportEvents = async ( req: Request, res: Response ): Promise<v
 
     if ( !translationReportObject ) {
 
-      // Cache miss - get the report object the hard way.
+      // Cache miss - get the report object the hard way, i.e. pulling info from long-term storage.
       translationReportObject = await getTranslationReportObject(
         sim,
         req.params.locale,
