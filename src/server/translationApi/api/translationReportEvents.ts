@@ -18,7 +18,6 @@ import logger from '../logger.js';
 import { reportObjectCache } from '../translationApi.js';
 import getTranslatedAndUntranslatedSims from '../translationReport/getTranslatedAndUntranslatedSims.js';
 import getTranslationReportObject from '../translationReport/getTranslationReportObject.js';
-import TranslationReportObject from '../translationReport/TranslationReportObject.js';
 
 /**
  * Set up an "event stream" (search on server-sent events) of translation report objects used to populate rows of the
@@ -57,10 +56,7 @@ const translationReportEvents = async ( req: Request, res: Response ): Promise<v
   // Loop through the list of sim names, sending events for each.
   for ( const sim of simNames ) {
 
-    let translationReportObject: TranslationReportObject | null = reportObjectCache.getObject(
-      req.params.locale,
-      sim
-    );
+    let translationReportObject = reportObjectCache.getObject( req.params.locale, sim );
 
     if ( !translationReportObject ) {
 
