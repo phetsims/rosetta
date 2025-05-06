@@ -6,9 +6,10 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { useSearchParams } from 'react-router-dom';
+import { useContext } from 'react';
 import LoadingSpinner from './LoadingSpinner.jsx';
 import '../styles/translation-form.css';
+import { WebsiteUserDataContext } from './Rosetta.jsx';
 
 /**
  * Return the set of buttons used in the translation form. These appear above and below the translation form.
@@ -17,8 +18,8 @@ import '../styles/translation-form.css';
  * @returns {JSX.Element}
  */
 const TranslationFormButtons = props => {
-  const [ searchParams ] = useSearchParams();
-  const showAutomate = searchParams.has( 'showAutomate' );
+  const websiteUserData = useContext( WebsiteUserDataContext );
+  const showAutomate = websiteUserData.teamMember; // Only show automation feature if user is a team member
   const disabled = !( props.isValid && props.dirty ) || props.isDisabled;
   const grayButton = 'btn btn-secondary';
   const blueButton = 'btn btn-primary';
