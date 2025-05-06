@@ -101,14 +101,23 @@ const automateTranslation = async ( req: Request, res: Response ): Promise<void>
       } )
     } );
 
-    const data = await response.json() as OpenRouterResponse;
-    const translatedValue = data.choices[ 0 ].message.content;
+    try {
+      const data = await response.json() as OpenRouterResponse;
+      const translatedValue = data.choices[ 0 ].message.content;
 
-    res.json( {
-      translation: translatedValue,
-      model: model
-    } );
-    automationCache.setObject( locale, simName, stringKey, translatedValue! );
+      res.json( {
+        translation: translatedValue,
+        model: model
+      } );
+      automationCache.setObject( locale, simName, stringKey, translatedValue! );
+    }
+    catch( e ) {
+      res.json( {
+        translation: '', // Sending empty translation if there's an error retrieving the translated value
+        model: model
+      } );
+      logger.error( 'Error parsing OpenRouter response:', e );
+    }
   }
   catch( error ) {
     logger.error( 'Error in automateTranslation endpoint:', error );
