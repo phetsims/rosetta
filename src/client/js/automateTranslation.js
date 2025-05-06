@@ -38,8 +38,7 @@ const translateWithAI = async ( locale, simName, stringKey, textToTranslate ) =>
       logError( 'Error translating via server:', errMsg );
       return 'ERROR';
     }
-    const data = await res.json();
-    return data.translation;
+    return await res.json();
   }
   catch( error ) {
     logError( 'Error translating via server:', error );
@@ -86,19 +85,21 @@ const automateTranslation = async (
           // Add the async operation to the updates array
           updates.push(
             translateWithAI( localeName, simName, path, textToTranslate )
-              .then( translatedText => {
+              .then( data => {
+                const model = data.model;
+                const translatedText = data.translation.trim();
                 const fieldPath = `${path}${key}`;
                 // Update the translated field
                 setFieldValue( fieldPath, translatedText );
                 // Update AI metadata fields in Formik values
                 setFieldValue( `${path}aiSuggestedValue`, translatedText );
                 setFieldValue( `${path}aiTranslated`, true );
-                setFieldValue( `${path}aiModel`, 'gpt-4o' );
+                setFieldValue( `${path}aiModel`, model );
                 // Update local copy for consistency
                 obj[ key ] = translatedText;
                 obj.aiSuggestedValue = translatedText;
                 obj.aiTranslated = true;
-                obj.aiModel = 'gpt-4o';
+                obj.aiModel = model;
                 // Record this field as AI-translated
                 updatedPaths.push( fieldPath );
               } )
