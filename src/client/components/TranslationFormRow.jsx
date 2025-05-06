@@ -57,8 +57,6 @@ const TranslationFormRow = props => {
     // Clear the translation and the pending AI flag upon denial
     setFieldValue( props.name, '' );
     setFieldValue( `${objPath}.aiTranslated`, false );
-    setFieldValue( `${objPath}.aiSuggestedValue`, '' );
-    setFieldValue( `${objPath}.aiModel`, '' );
   };
 
   const handleCopyButtonClick = () => {

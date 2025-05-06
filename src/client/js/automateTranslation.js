@@ -117,8 +117,22 @@ const automateTranslation = async (
   };
 
 
-  // Start translating the values object
-  await translateFields( translatedValues );
+// Define the explicit order
+  const order = [ 'simSpecific', 'shared', 'common' ];
+
+// First process simSpecific, shared, common
+  for ( const key of order ) {
+    if ( translatedValues[ key ] !== undefined ) {
+      await translateFields( translatedValues[ key ], key + '.' );
+    }
+  }
+
+// Then process all other keys not in the order
+  for ( const key of Object.keys( translatedValues ) ) {
+    if ( !order.includes( key ) ) {
+      await translateFields( translatedValues[ key ], key + '.' );
+    }
+  }
 
   // After translation, we can send the translated values to the server or handle them further
   console.log( 'Translated Values:', translatedValues );
