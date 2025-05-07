@@ -14,6 +14,7 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
+import privateConfig from '../../common/privateConfig.js';
 import getRepoNameFromStringKeyWithRepoName from './getRepoNameFromStringKeyWithRepoName.js';
 import getSimMetadata from './getSimMetadata.js';
 import getSimNamesAndTitles from './getSimNamesAndTitles.js';
@@ -51,7 +52,7 @@ const getCategorizedStringKeys = async ( simName: string,
       // Get the repo name from the string key with repo name.
       const repoName = getRepoNameFromStringKeyWithRepoName( stringKeyWithRepoName );
 
-      if ( stringKey.includes( 'a11y' ) ) {
+      if ( !privateConfig.TRANSLATE_A11Y && stringKey.startsWith( 'a11y' ) ) {
         logger.verbose( 'not categorizing a11y string key' );
       }
       else {

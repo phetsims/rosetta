@@ -23,7 +23,6 @@ type NonStreamingChoice = {
 };
 
 // This flag and function used for testing to avoid making many calls to the OpenAI API
-const MOCK_TRANSLATE = false;
 const sleep = ( ms: number ) =>
   new Promise<void>( resolve => setTimeout( resolve, ms ) );
 const mockTranslate = ( text: string ): string => {
@@ -57,7 +56,7 @@ const automateTranslation = async ( req: Request, res: Response ): Promise<void>
   }
 
   // Simulate the API call. Used only for testing.
-  if ( MOCK_TRANSLATE ) {
+  if ( privateConfig.TRANSLATE_MOCK ) {
     // This is a mock translation function that reverses the string but preserves {} structure.
     const mockTranslatedText = mockTranslate( textToTranslate );
     await sleep( 0 );
@@ -83,7 +82,7 @@ const automateTranslation = async ( req: Request, res: Response ): Promise<void>
 
   try {
     // Go to https://openrouter.ai/rankings/translation?view=week to compare the current best model for translation
-    const model = 'google/gemini-flash-1.5-8b';
+    const model = 'google/gemini-2.0-flash-001';
     const response = await fetch( 'https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
