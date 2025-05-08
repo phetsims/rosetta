@@ -5,8 +5,8 @@
  * created to move the "Projector Mode" string to joist.  See
  * https://github.com/phetsims/joist/issues/342.
  *
- * Run the script from Rosetta's root directory with:
- * sage run rosetta/scripts/js/move-string-from-repos-to-common.js
+ * Run the script from the Rosetta directory with:
+ * sage run scripts/js/move-string-from-repos-to-common.js
  *
  * @author John Blanco (PhET Interactive Simulations)
  * @author Marla Schulz (PhET Interactive Simulations)
@@ -24,6 +24,7 @@ const SIMS_WITH_STRING = [
 
 const TARGET_REPO = 'target-common-repo';
 const STRING = 'stringKey';
+const TARGET_STRING_KEY = 'target.stringKey';
 
 // helper function
 function extractLocaleFromFileName( fileName ) {
@@ -64,13 +65,13 @@ SIMS_WITH_STRING.forEach( simName => {
           const stringsData = JSON.parse( fs.readFileSync( targetStringFileName, 'utf8' ) );
 
           // Do not add translations that already exist in the target file.
-          if ( stringsData[ STRING ] ) {
+          if ( stringsData[ TARGET_STRING_KEY ] ) {
             console.log( 'WARNING: string already exists in translation file: ', targetStringFileName );
             console.log( 'Reading next file without adding string.' );
           }
           else {
             // add in the new translated value
-            stringsData[ STRING ] = stringsObject[ stringKey ];
+            stringsData[ TARGET_STRING_KEY ] = stringsObject[ stringKey ];
 
             // write the modified string file
             console.log( 'adding new string to file: ', stringFileName );
@@ -80,7 +81,7 @@ SIMS_WITH_STRING.forEach( simName => {
         else {
           console.log( 'WARNING: target file does not exist: ', targetStringFileName );
           const newStringsData = {
-            [ STRING ]: stringsObject[ stringKey ]
+            [ TARGET_STRING_KEY ]: stringsObject[ stringKey ]
           };
 
           console.log( 'creating new file with string data:', newStringsData );
