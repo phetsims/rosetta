@@ -12,6 +12,7 @@
 
 import { Request, Response } from 'express';
 import getCategorizedStringKeys from '../getCategorizedStringKeys.js';
+import getFluentFileUsedInSim from '../getFluentFileUsedInSim.js';
 import getSimMetadata from '../getSimMetadata.js';
 import getSimNamesAndTitles from '../getSimNamesAndTitles.js';
 import getStringKeysUsedInSim from '../getStringKeysUsedInSim.js';
@@ -35,6 +36,8 @@ const translationFormData = async ( req: Request, res: Response ): Promise<void>
     // Get a list of the string keys used in the sim, each with the repo name.
     const stringKeysWithRepoName = Object.keys( await getStringKeysUsedInSim( req.params.simName ) );
 
+    const fluentFileContents = await getFluentFileUsedInSim( req.params.simName );
+
     // Sort the strings into the categories needed by the translation form.
     const categorizedStringKeys = await getCategorizedStringKeys( req.params.simName, stringKeysWithRepoName );
 
@@ -45,6 +48,7 @@ const translationFormData = async ( req: Request, res: Response ): Promise<void>
       simNames,
       stringKeysWithRepoName,
       categorizedStringKeys,
+      fluentFileContents,
       req.query.userId ? Number( req.query.userId ) : 0
     );
 

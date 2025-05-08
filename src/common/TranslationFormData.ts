@@ -33,6 +33,9 @@ type TranslationFormData = {
 
   // whether this sim is a prototype
   simIsPrototype: boolean;
+
+  // fluent string contents
+  fluent: string;
 };
 
 export type { TranslationFormData };

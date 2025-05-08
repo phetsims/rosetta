@@ -36,6 +36,7 @@ const getTranslationFormData = async ( simName: string,
                                        simNames: string[],
                                        stringKeysWithRepoName: string[],
                                        categorizedStringKeys: CategorizedStringKeys,
+                                       fluentFileContents: string,
                                        userId: number ): Promise<TranslationFormData> => {
 
   logger.info( 'getting translation form data' );
@@ -76,7 +77,8 @@ const getTranslationFormData = async ( simName: string,
     simIsPrototype: false,
     simSpecific: {},
     common: {},
-    shared: {}
+    shared: {},
+    fluent: ''
   };
 
   try {
@@ -98,6 +100,7 @@ const getTranslationFormData = async ( simName: string,
       stringKeysWithRepoName,
       categorizedStringKeys.common
     );
+    translationFormData.fluent = fluentFileContents;
   }
   catch( e ) {
     logger.error( e );
