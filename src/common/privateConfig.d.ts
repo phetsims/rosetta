@@ -35,6 +35,9 @@ type PrivateConfigDataType = {
   // Winston's logger severity level. We only use error, warn, verbose, and info.
   readonly LOGGER_LEVEL : string;
 
+  // OpenRouter API key, used for automatic translation
+  readonly OPENROUTER_API_KEY : string;
+
   // whether to perform string commits to long-term storage, which is GitHub as of this writing
   readonly 'PERFORM_STRING_COMMITS' : boolean;
 
@@ -55,6 +58,12 @@ type PrivateConfigDataType = {
 
   // whether to generate a short translation report, which is useful for debugging without hitting GitHub excessively
   readonly 'SHORT_REPORT' : boolean;
+
+  // wether to expose a11y keys and translate them
+  readonly TRANSLATE_A11Y : boolean;
+
+  // wether to use the real translation api or a mock one
+  readonly TRANSLATE_MOCK : boolean;
 
   // the duration in milliseconds that locale info is valid for
   readonly 'VALID_LOCALE_INFO_DURATION' : number;

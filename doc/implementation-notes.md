@@ -283,7 +283,7 @@ keep this edge case in mind.
    It should be
    `DB_URI=mongodb://127.0.0.1:27017` (without the trailing slash).
 2. Now we want to create a database and a collection (analogous to a table). To do so, you'll need to
-   have `DB_NAME=rosetta` and
+   have `DB_ENABLED=true`, `DB_NAME=rosetta` and
    `DB_SHORT_TERM_STORAGE_COLLECTION_NAME=shortTermTranslationStorage`
    set in `rosetta-config.json`. When you run Rosetta locally and save a translation, the `rosetta` database will be
    created, the short-term storage collection will be created and the translation will be stored in that collection.
