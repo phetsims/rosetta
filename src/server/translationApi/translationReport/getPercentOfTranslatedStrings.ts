@@ -21,6 +21,7 @@ const getPercentOfTranslatedStrings = (
   numberOfTranslatedStrings: number,
   totalNumberOfStrings: number
 ): number | null => {
+
   let percent: number | null = null;
   if ( numberOfTranslatedStrings !== null && totalNumberOfStrings !== null ) {
 

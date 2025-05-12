@@ -31,9 +31,6 @@ export const SINGLE_BRACE_REGEX = /\{\d+\}/g;
 export const DOUBLE_BRACE_REGEX = /\{\{\w+\}\}/g;
 export const TRIPLE_BRACE_REGEX = /\{\{\{\w+\}\}\}/g;
 
-// This is the object in the published sim HTML that contains the REPO_NAME/stringKey pairs.
-export const STRING_KEYS_WITH_REPO_NAME_IN_HTML_VAR = 'window.phet.chipper.strings';
-
 // List of the sims included in the short report, which is used for debugging.
 export const SIMS_FOR_SHORT_REPORT = [
 

@@ -40,19 +40,15 @@ const getDependencies = async ( simName: string, version: string, brand: Brand =
 
   // Get the dependencies.
   logger.info( `getting dependencies from ${dependenciesUrl}` );
-  try {
-    const response = await fetch( dependenciesUrl );
-    if ( response.ok ) {
-      const dependenciesJsonObject = await response.json();
-      dependencies = JSON.stringify( dependenciesJsonObject );
-    }
-    else {
-      logger.error( `error getting dependencies: ${response.status} ${response.statusText}, returning error object` );
-    }
+  const response = await fetch( dependenciesUrl );
+  if ( response.ok ) {
+    const dependenciesJsonObject = await response.json();
+    dependencies = JSON.stringify( dependenciesJsonObject );
   }
-  catch( e ) {
-    logger.error( `unable to obtain dependencies for ${simName} version ${version}, error = ${e}` );
-    throw new Error( 'unable to obtain dependencies' );
+  else {
+    const errorMessage = `error getting dependencies for ${simName}, status = ${response.status}, text = ${response.statusText}`;
+    logger.error( errorMessage );
+    throw new Error( errorMessage );
   }
   logger.info( 'returning dependencies' );
   return dependencies;

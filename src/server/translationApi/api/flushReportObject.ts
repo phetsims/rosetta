@@ -13,9 +13,11 @@ const flushReportObject = ( req: Request, res: Response ): void => {
   logger.info( `attempting to flush report object for ${req.params.locale} ${req.params.sim}` );
   const flushed = reportObjectCache.flushObject( req.params.locale, req.params.sim );
   if ( flushed ) {
+    logger.info( `flushed report object for ${req.params.locale} ${req.params.sim}` );
     res.send( 'success' );
   }
   else {
+    logger.info( `no report object for ${req.params.locale} ${req.params.sim} found, no flush performed` );
     res.send( 'failure' );
   }
 };
