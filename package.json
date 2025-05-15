@@ -12,7 +12,7 @@
     "lint": "grunt lint",
     "type-check": "grunt type-check",
     "start-node": "bash ../perennial/bin/sage run src/server/app.ts",
-    "dev-node": "nodemon --exec \"bash ../perennial/bin/sage run src/server/app.ts",
+    "dev-node": "nodemon --exec \"bash ../perennial/bin/sage run src/server/app.ts\"",
     "debug": "npm run make-public-config && npm run build --workspace=client && bash ../perennial/bin/sage run --inspect src/server/app.ts",
     "make-public-config": "bash ../perennial/bin/sage run ./scripts/js/make-public-config-file.mjs",
     "dev": "npm run make-public-config && npm run lint && npm run type-check && concurrently \"npm run dev --workspace=client\" \"npm run dev-node\"",
