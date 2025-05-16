@@ -55,16 +55,26 @@ const automateTranslation = async ( req: Request, res: Response ): Promise<void>
     return;
   }
 
-  // Simulate the API call. Used only for testing.
-  if ( privateConfig.TRANSLATE_MOCK ) {
+  // If we'll fake the automatic translation, use the mockTranslate function
+  if ( privateConfig.FAKE_AUTOMATIC_TRANSLATION ) {
     // This is a mock translation function that reverses the string but preserves {} structure.
     const mockTranslatedText = mockTranslate( textToTranslate );
     await sleep( 0 );
     res.json( {
       translation: mockTranslatedText,
-      model: 'mock-model'
+      model: 'test-model'
     } );
     automationCache.setObject( locale, simName, stringKey, mockTranslatedText );
+    return;
+  }
+  else if ( !privateConfig.OPENROUTER_API_KEY ) {
+    // If we will use the real automatic translation, make sure the API key is set
+    res.json( {
+      translation: '',
+      model: ''
+    } );
+    logger.error( 'No OpenRouter API key provided. Please set the OPENROUTER_API_KEY environment variable.' );
+    automationCache.setObject( locale, simName, stringKey, '' );
     return;
   }
 

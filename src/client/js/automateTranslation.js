@@ -88,6 +88,12 @@ const automateTranslation = async (
               .then( data => {
                 const model = data.model;
                 const translatedText = data.translation.trim();
+
+                // If no translation was provided, don't mark as updated (won't show the revision buttons)
+                if ( translatedText === '' ) {
+                  return;
+                }
+
                 const fieldPath = `${path}${key}`;
                 // Update the translated field
                 setFieldValue( fieldPath, translatedText );
@@ -100,6 +106,7 @@ const automateTranslation = async (
                 obj.aiSuggestedValue = translatedText;
                 obj.aiTranslated = true;
                 obj.aiModel = model;
+
                 // Record this field as AI-translated
                 updatedPaths.push( fieldPath );
               } )

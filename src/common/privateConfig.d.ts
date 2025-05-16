@@ -26,6 +26,9 @@ type PrivateConfigDataType = {
   // whether the short-term storage database is enabled
   readonly 'DB_ENABLED' : boolean;
 
+  // wether to use the real translation api or a mock one
+  readonly FAKE_AUTOMATIC_TRANSLATION : boolean;
+
   // the Personal Access Token (PAT) for GitHub, used to authenticate requests to the GitHub API
   readonly GITHUB_PAT : string;
 
@@ -61,9 +64,6 @@ type PrivateConfigDataType = {
 
   // wether to expose a11y keys and translate them
   readonly TRANSLATE_A11Y : boolean;
-
-  // wether to use the real translation api or a mock one
-  readonly TRANSLATE_MOCK : boolean;
 
   // the duration in milliseconds that locale info is valid for
   readonly 'VALID_LOCALE_INFO_DURATION' : number;
