@@ -14,6 +14,7 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
+import privateConfig from '../../common/privateConfig.js';
 import getRepoNameFromStringKeyWithRepoName from './getRepoNameFromStringKeyWithRepoName.js';
 import getSimMetadata from './getSimMetadata.js';
 import getSimNamesAndTitles from './getSimNamesAndTitles.js';
@@ -51,7 +52,8 @@ const getCategorizedStringKeys = async ( simName: string,
       // Get the repo name from the string key with repo name.
       const repoName = getRepoNameFromStringKeyWithRepoName( stringKeyWithRepoName );
 
-      if ( stringKey.includes( 'a11y' ) ) {
+      // Only show a11y keys if the option is enabled. If it's disabled or even if it's not used, the fallback is not showing a11y keys.
+      if ( !privateConfig.TRANSLATE_A11Y && stringKey.startsWith( 'a11y' ) ) {
         logger.verbose( 'not categorizing a11y string key' );
       }
       else {

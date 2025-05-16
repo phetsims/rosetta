@@ -9,7 +9,6 @@
 import { useField, useFormikContext } from 'formik';
 import React, { useContext } from 'react';
 import { DOUBLE_BRACE_REGEX, SINGLE_BRACE_REGEX } from '../../common/constants.js';
-import boxArrowInRight from '../img/box-arrow-in-right.svg';
 import '../styles/table.css';
 import '../styles/translation-form.css';
 import InputErrorMessage from './InputErrorMessage.jsx';
@@ -30,22 +29,35 @@ const TranslationFormRow = props => {
   const isPatternString = SINGLE_BRACE_REGEX.test( props.englishString ) ||
                           DOUBLE_BRACE_REGEX.test( props.englishString );
 
-  // If the English string contains either one of the supported curly brace patterns, we want to color it differently
-  // and make the text area text a different color to indicate that this is a special string that requires care.
+  // If the English string contains either one of the supported curly brace patterns, color it differently
   const englishStringStyle = {
     color: isPatternString ? 'blue' : 'black'
   };
+  // Determine if this field has a pending AI suggestion from form values
+  const { setFieldValue } = useFormikContext();
+  const objPath = props.name.replace( /\.translated$/, '' );
+  const aiPending = props.aiTranslatedFields && props.aiTranslatedFields.has( props.name );
+  // Determine text area styling, orange for AI pending, blue for pattern strings, otherwise black
   const textAreaStyle = {
     textAlign: direction === 'rtl' ? 'right' : 'left',
-    color: isPatternString ? 'blue' : 'black',
+    color: aiPending ? 'orange' : ( isPatternString ? 'blue' : 'black' ),
     resize: 'both'
   };
 
   // Formik has a handful of props that it needs on inputs.
   // Get field props for the input.
   const [ field ] = useField( props );
-
-  const { setFieldValue } = useFormikContext();
+  // Handlers for AI validation actions
+  const handleAiAccept = () => {
+    const newSet = new Set( props.aiTranslatedFields );
+    newSet.delete( props.name );
+    props.setAiTranslatedFields( newSet );
+  };
+  const handleAiDeny = () => {
+    // Clear the translation and the pending AI flag upon denial
+    setFieldValue( props.name, '' );
+    setFieldValue( `${objPath}.aiTranslated`, false );
+  };
 
   const handleCopyButtonClick = () => {
     setFieldValue( field.name, props.englishString );
@@ -59,10 +71,26 @@ const TranslationFormRow = props => {
       {/* Use the spread operator to give the input each of the props in the field object. */}
       <td>
         <div className='copy-value-and-input-container'>
-          <button className='copy-value-button btn btn-light' type='button' onClick={handleCopyButtonClick}>
-            <img src={boxArrowInRight} alt='copy English value to input icon'/>
+          <button className='btn btn-light' type='button' onClick={handleCopyButtonClick}>
+            ➡️
           </button>
-          <textarea {...field} style={textAreaStyle} dir={direction}/>
+          <textarea
+            {...field}
+            style={textAreaStyle}
+            dir={direction}
+            onChange={ e => {
+              field.onChange( e );
+              if ( aiPending ) {
+                handleAiAccept();
+              }
+            } }
+          />
+          { aiPending && (
+            <>
+              <button type='button' className='btn btn-light' onClick={handleAiAccept}>✅</button>
+              <button type='button' className='btn btn-light' onClick={handleAiDeny}>❌</button>
+            </>
+          ) }
         </div>
         <InputErrorMessage fieldKey={props.keyWithoutDots} isPatternString={isPatternString}/>
       </td>

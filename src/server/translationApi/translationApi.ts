@@ -20,6 +20,8 @@ import translatedAndUntranslatedSims from './api/translatedAndUntranslatedSims.j
 import translationFormData from './api/translationFormData.js';
 import translationReportEvents from './api/translationReportEvents.js';
 import triggerBuild from './api/triggerBuild.js';
+import automateTranslation from './automation/automateTranslation.js';
+import AutomationCache from './automation/AutomationCache.js';
 import logger from './logger.js';
 import LongTermStorage from './LongTermStorage.js';
 import ReportObjectCache from './translationReport/ReportObjectCache.js';
@@ -27,6 +29,7 @@ import ReportObjectCache from './translationReport/ReportObjectCache.js';
 const rosettaApiServer = express();
 
 const reportObjectCache = new ReportObjectCache();
+const automationCache = new AutomationCache();
 const longTermStorage = new LongTermStorage();
 
 rosettaApiServer.get( '/', ( req: Request, res: Response ): void => {
@@ -55,8 +58,9 @@ rosettaApiServer.post( '/*', ( req: Request, res: Response, next: NextFunction )
 rosettaApiServer.post( '/saveTranslation', saveTranslation );
 rosettaApiServer.post( '/submitTranslation', submitTranslation );
 rosettaApiServer.post( '/testTranslation', testTranslation );
+rosettaApiServer.post( '/automateTranslation', automateTranslation );
 
 rosettaApiServer.post( '/logClientError', logClientError );
 
 export default rosettaApiServer;
-export { reportObjectCache, longTermStorage };
+export { reportObjectCache, automationCache, longTermStorage };

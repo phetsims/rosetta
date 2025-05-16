@@ -6,8 +6,10 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import { useContext } from 'react';
 import LoadingSpinner from './LoadingSpinner.jsx';
 import '../styles/translation-form.css';
+import { WebsiteUserDataContext } from './Rosetta.jsx';
 
 /**
  * Return the set of buttons used in the translation form. These appear above and below the translation form.
@@ -16,10 +18,13 @@ import '../styles/translation-form.css';
  * @returns {JSX.Element}
  */
 const TranslationFormButtons = props => {
+  const websiteUserData = useContext( WebsiteUserDataContext );
+  const showAutomate = websiteUserData.teamMember; // Only show automation feature if user is a team member
   const disabled = !( props.isValid && props.dirty ) || props.isDisabled;
   const grayButton = 'btn btn-secondary';
   const blueButton = 'btn btn-primary';
   const buttonClass = !( props.isValid && props.dirty ) ? grayButton : blueButton;
+  const automateButtonClass = 'btn btn-success';
   return (
     <div className='card sticky-top mt-4 mb-4'>
       <div className='card-body save-test-publish-buttons-container'>
@@ -56,6 +61,19 @@ const TranslationFormButtons = props => {
         >
           Test
         </button>
+        { showAutomate && (
+          <button
+            id='automate'
+            onClick={props.handleButtonClick}
+            disabled={disabled}
+            className={automateButtonClass}
+            data-bs-toggle='tooltip'
+            data-bs-placement='top'
+            title='Automate the translation with machine translation'
+          >
+            Automate (Experimental)
+          </button>
+        ) }
         {props.testIsLoading ? <LoadingSpinner/> : <></>}
       </div>
     </div>

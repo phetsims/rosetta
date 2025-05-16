@@ -13,6 +13,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
 import alertErrorMessage from '../js/alertErrorMessage.js';
+import automateTranslation from '../js/automateTranslation.js';
 import makeValidationSchema from '../js/makeValidationSchema.js';
 import saveTranslation from '../js/saveTranslation.js';
 import submitTranslation from '../js/submitTranslation.js';
@@ -50,6 +51,14 @@ const TranslationForm = () => {
   const [ isDisabled, setIsDisabled ] = useState( false );
   const [ buttonId, setButtonId ] = useState( '' );
   const [ testIsLoading, setTestIsLoading ] = useState( false );
+
+  // Track AI-translated fields for metadata and styling
+  const [ aiTranslatedFields, setAiTranslatedFields ] = useState( new Set() );
+
+  // Reset AI-translated metadata when form data changes
+  useEffect( () => {
+    setAiTranslatedFields( new Set() );
+  }, [ translationFormData ] );
   const handleButtonClick = evt => {
     setButtonId( evt.target.id );
   };
@@ -94,7 +103,7 @@ const TranslationForm = () => {
         <Formik
           initialValues={translationFormData}
           validationSchema={validationSchema}
-          onSubmit={async values => {
+          onSubmit={async ( values, { setFieldValue } ) => {
             if ( buttonId === '' ) {
               console.error( 'unable to get button id' );
             }
@@ -109,6 +118,18 @@ const TranslationForm = () => {
             else if ( buttonId === 'test' ) {
               setTestIsLoading( true );
               await testTranslation( values, params.simName, params.locale );
+              setTestIsLoading( false );
+            }
+            else if ( buttonId === 'automate' ) {
+              setTestIsLoading( true );
+              // Clear previous AI flags and flag each field as it's translated
+              setAiTranslatedFields( new Set() );
+              // Wrap Formik's setter to record AI-translated fields as they complete
+              const aiSetFieldValue = ( field, value ) => {
+                setFieldValue( field, value );
+                setAiTranslatedFields( prev => new Set( prev ).add( field ) );
+              };
+              await automateTranslation( values, params.simName, params.locale, simTitle, localeName, aiSetFieldValue );
               setTestIsLoading( false );
             }
           }}
@@ -129,6 +150,8 @@ const TranslationForm = () => {
                     translationFormData={translationFormData}
                     {...props}
                     locale={params.locale}
+                    aiTranslatedFields={aiTranslatedFields}
+                    setAiTranslatedFields={setAiTranslatedFields}
                   />
                 </ErrorContext.Provider>
               </Form>
