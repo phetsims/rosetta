@@ -81,11 +81,15 @@ const getTranslationFormData = async ( simName: string,
 
   try {
     translationFormData.simIsPrototype = await getPrototypeStatus( simName );
-    translationFormData.simSpecific = getSortedStringsObject( await getSimSpecificTranslationFormData(
+    const unsortedSimSpecificFormData = await getSimSpecificTranslationFormData(
       simName,
       locale,
       categorizedStringKeys.simSpecific
-    ) );
+    );
+
+    // Sort the object so that the strings are in the order we want them to be in the translation form.
+    translationFormData.simSpecific = getSortedStringsObject( simName, unsortedSimSpecificFormData );
+
     translationFormData.shared = await getSharedTranslationFormData(
       locale,
       categorizedStringKeys.shared,
@@ -109,24 +113,34 @@ const getTranslationFormData = async ( simName: string,
 /**
  * Sort the strings object by title, screen, and other keys.  This is done to keep the title and screens at the top of
  * the translation form.  See https://github.com/phetsims/rosetta/issues/454 for more detail on the motivation for this.
+ * @param simName - The name of the simulation whose strings are being sorted.
  * @param strings - The strings object to sort.
  * @returns A new object with sorted keys.
  */
-const getSortedStringsObject = ( strings: Record<string, StringEntry> ): Record<string, StringEntry> => {
+const getSortedStringsObject = ( simName: string, strings: Record<string, StringEntry> ): Record<string, StringEntry> => {
   const titleKeys: string[] = [];
   const screenKeys: string[] = [];
   const otherKeys: string[] = [];
 
+  let titleKey: string | null = null;
+
   // Categorize keys.
-  Object.keys( strings ).forEach( key => {
-    if ( key.includes( '.title' ) || key.includes( '_DOT_title' ) ) {
-      titleKeys.push( key );
+  Object.keys( strings ).forEach( stringKey => {
+    if ( stringKey.includes( '.title' ) || stringKey.includes( '_DOT_title' ) ) {
+
+      // If the key is a title key, save it for later so that we can put it at the very top.
+      if ( stringKey.includes( simName ) ) {
+        titleKey = stringKey;
+      }
+      else {
+        titleKeys.push( stringKey );
+      }
     }
-    else if ( key.includes( 'screen.' ) || key.includes( 'screen_DOT_' ) ) {
-      screenKeys.push( key );
+    else if ( stringKey.includes( 'screen.' ) || stringKey.includes( 'screen_DOT_' ) ) {
+      screenKeys.push( stringKey );
     }
     else {
-      otherKeys.push( key );
+      otherKeys.push( stringKey );
     }
   } );
 
@@ -134,6 +148,11 @@ const getSortedStringsObject = ( strings: Record<string, StringEntry> ): Record<
   titleKeys.sort();
   screenKeys.sort();
   otherKeys.sort();
+
+  // Put the sim title key at the top of the list.
+  if ( titleKey ) {
+    titleKeys.unshift( titleKey );
+  }
 
   // Combine sorted keys.
   const sortedKeys = [ ...titleKeys, ...screenKeys, ...otherKeys ];
