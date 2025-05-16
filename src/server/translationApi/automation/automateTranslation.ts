@@ -74,7 +74,6 @@ const automateTranslation = async ( req: Request, res: Response ): Promise<void>
       model: ''
     } );
     logger.error( 'No OpenRouter API key provided. Please set the OPENROUTER_API_KEY environment variable.' );
-    automationCache.setObject( locale, simName, stringKey, '' );
     return;
   }
 
@@ -130,7 +129,12 @@ const automateTranslation = async ( req: Request, res: Response ): Promise<void>
   }
   catch( error ) {
     logger.error( 'Error in automateTranslation endpoint:', error );
-    throw error;
+
+    // If we will use the real automatic translation, make sure the API key is set
+    res.json( {
+      translation: '',
+      model: ''
+    } );
   }
 };
 
