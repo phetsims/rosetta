@@ -1,10 +1,12 @@
-// Copyright 2022, University of Colorado Boulder
+// Copyright 2025, University of Colorado Boulder
 
 /**
  * Define the automation cache class. At startup, we create an object based on this
  * class. As Rosetta gets requests for automating translations, they are cached in this object
  * cache. (It takes a while to get them.) These objects are sent to the client to retrieve
  * existing translations.
+ *
+ * TODO: Include AI model in the cache! https://github.com/phetsims/rosetta/issues/451
  *
  * @author Agustín Vallejo
  */

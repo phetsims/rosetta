@@ -23,8 +23,6 @@ type NonStreamingChoice = {
 };
 
 // This flag and function used for testing to avoid making many calls to the OpenAI API
-const sleep = ( ms: number ) =>
-  new Promise<void>( resolve => setTimeout( resolve, ms ) );
 const mockTranslate = ( text: string ): string => {
   // This is a mock translation function that reverses the string, except ones that have {
   return text.includes( '{' ) ? text : text
@@ -48,7 +46,7 @@ const automateTranslation = async ( req: Request, res: Response ): Promise<void>
   // Check for existing translations in the cache
   const cachedTranslation = automationCache.getObject( locale, simName, stringKey );
   if ( cachedTranslation !== null ) {
-    logger.info( 'Cache value found, using cache' );
+    logger.info( 'Automation cache value found, using it.' );
     res.json( {
       translation: `${cachedTranslation}`
     } );
@@ -59,16 +57,14 @@ const automateTranslation = async ( req: Request, res: Response ): Promise<void>
   if ( privateConfig.FAKE_AUTOMATIC_TRANSLATION ) {
     // This is a mock translation function that reverses the string but preserves {} structure.
     const mockTranslatedText = mockTranslate( textToTranslate );
-    await sleep( 0 );
     res.json( {
       translation: mockTranslatedText,
-      model: 'test-model'
+      model: 'fake-model'
     } );
-    automationCache.setObject( locale, simName, stringKey, mockTranslatedText );
     return;
   }
   else if ( !privateConfig.OPENROUTER_API_KEY ) {
-    // If we will use the real automatic translation, make sure the API key is set
+    // If we use the real automatic translation, make sure the API key is set
     res.json( {
       translation: '',
       model: ''
@@ -83,6 +79,8 @@ const automateTranslation = async ( req: Request, res: Response ): Promise<void>
     so in case of doubt, use a related scientific term. Respect the title casing when translating
     (i.e. 'Number of Atoms' should go to 'Número de Átomos' and so on) and respect the bracket notation and format {{}}.
     And preserve the key within brackets, i.e {{numberOfAtoms}} should NOT be translated.
+    If the string is a single letter, return the same letter in the target language if possible.
+    Make sure the string length is similar to the original string, so it fits in the UI.
     If for some reason you cannot translate a string, please return the original string. Do not add any extra text or
     explanation, just return the translation.\n\n
     The following is the string to translate:\n

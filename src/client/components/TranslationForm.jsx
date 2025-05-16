@@ -51,8 +51,10 @@ const TranslationForm = () => {
   const [ isDisabled, setIsDisabled ] = useState( false );
   const [ buttonId, setButtonId ] = useState( '' );
   const [ testIsLoading, setTestIsLoading ] = useState( false );
+
   // Track AI-translated fields for metadata and styling
   const [ aiTranslatedFields, setAiTranslatedFields ] = useState( new Set() );
+
   // Reset AI-translated metadata when form data changes
   useEffect( () => {
     setAiTranslatedFields( new Set() );
