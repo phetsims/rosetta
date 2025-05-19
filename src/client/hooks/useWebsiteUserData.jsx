@@ -7,7 +7,7 @@
  */
 
 import { useEffect, useState } from 'react';
-import alertErrorMessage from '../js/alertErrorMessage.js';
+import alertErrorMessage from '../js/alertErrorMessage';
 import getWebsiteUserData from '../js/getWebsiteUserData.js';
 
 /**

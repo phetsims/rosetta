@@ -10,7 +10,7 @@ import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
 import { WebsiteUserDataContext } from '../components/Rosetta.jsx';
-import alertErrorMessage from '../js/alertErrorMessage.js';
+import alertErrorMessage from '../js/alertErrorMessage';
 
 /**
  * Get sims names and titles from the backend and return them. Show an error message if the request fails.

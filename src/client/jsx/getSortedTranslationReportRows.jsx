@@ -9,7 +9,7 @@
 
 import { Link } from 'react-router-dom';
 import StatsInfoButton from '../components/StatsInfoButton.jsx';
-import alertErrorMessage from '../js/alertErrorMessage.js';
+import alertErrorMessage from '../js/alertErrorMessage';
 import SortDirectionEnum from '../js/SortDirectionEnum.js';
 import '../styles/table.css';
 

@@ -10,7 +10,7 @@ import axios from 'axios';
 import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
 import KeyTypesEnum from '../../common/KeyTypesEnum.js';
 import publicConfig from '../../common/publicConfig.js';
-import alertErrorMessage from './alertErrorMessage.js';
+import alertErrorMessage from './alertErrorMessage';
 import computeTranslatedStringsData from './computeTranslatedStringsData.js';
 import makeTranslationObject from './makeTranslationObject.js';
 

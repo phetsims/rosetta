@@ -7,7 +7,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import alertErrorMessage from './alertErrorMessage.js';
+import alertErrorMessage from './alertErrorMessage';
 import getWebsiteUserData from './getWebsiteUserData.js';
 
 /**

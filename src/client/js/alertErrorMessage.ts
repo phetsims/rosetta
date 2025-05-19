@@ -13,7 +13,7 @@ import logError from './logError.js';
  *
  * @param error - the error message to be displayed
  */
-async function alertErrorMessage( error ) {
+async function alertErrorMessage( error: string ): Promise<Response> {
   // Attempt to notify the server of the error
   const response = logError( error );
 

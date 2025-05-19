@@ -9,7 +9,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
-import alertErrorMessage from '../js/alertErrorMessage.js';
+import alertErrorMessage from '../js/alertErrorMessage';
 
 /**
  * Get the locale info from the backend and return it. If the request fails, show an error message.

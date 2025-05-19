@@ -8,7 +8,7 @@
 
 import axios from 'axios';
 import publicConfig from '../../common/publicConfig.js';
-import alertErrorMessage from './alertErrorMessage.js';
+import alertErrorMessage from './alertErrorMessage';
 
 /**
  * Send request to PhET server to sign the user out.
