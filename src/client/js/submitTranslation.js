@@ -7,12 +7,12 @@
  */
 
 import axios from 'axios';
-import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
-import KeyTypesEnum from '../../common/KeyTypesEnum.js';
-import publicConfig from '../../common/publicConfig.js';
+import { TRANSLATION_API_ROUTE } from '../../common/constants';
+import KeyTypesEnum from '../../common/KeyTypesEnum';
+import publicConfig from '../../common/publicConfig';
 import alertErrorMessage from './alertErrorMessage';
-import computeTranslatedStringsData from './computeTranslatedStringsData.js';
-import makeTranslationObject from './makeTranslationObject.js';
+import computeTranslatedStringsData from './computeTranslatedStringsData';
+import makeTranslationObject from './makeTranslationObject';
 
 /**
  * Issue a post request to submit a translation for publication to the PhET website.

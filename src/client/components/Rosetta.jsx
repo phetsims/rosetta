@@ -12,10 +12,10 @@
  */
 
 import { createContext } from 'react';
-import publicConfig from '../../common/publicConfig.js';
-import useWebsiteUserData from '../hooks/useWebsiteUserData.jsx';
-import PhetHomePageLink from './PhetHomePageLink.jsx';
-import RosettaRoutes from './RosettaRoutes.jsx';
+import publicConfig from '../../common/publicConfig';
+import useWebsiteUserData from '../hooks/useWebsiteUserData';
+import PhetHomePageLink from './PhetHomePageLink';
+import RosettaRoutes from './RosettaRoutes';
 
 const WebsiteUserDataContext = createContext( {} );
 

@@ -8,7 +8,7 @@
 
 import { useContext } from 'react';
 import personCircle from '../img/person-circle.svg';
-import { WebsiteUserDataContext } from './Rosetta.jsx';
+import { WebsiteUserDataContext } from './Rosetta';
 
 /**
  * Display user's sign-in info obtained from website user data.

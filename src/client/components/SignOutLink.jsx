@@ -9,7 +9,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import signOut from '../js/signOut.js';
+import signOut from '../js/signOut';
 
 /**
  * Return a re-usable sign-out button.

@@ -9,7 +9,7 @@
 
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
+import { TRANSLATION_API_ROUTE } from '../../common/constants';
 import alertErrorMessage from '../js/alertErrorMessage';
 
 /**

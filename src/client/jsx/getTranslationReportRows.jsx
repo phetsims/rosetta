@@ -8,9 +8,9 @@
  */
 
 import { Link } from 'react-router-dom';
-import StatsInfoButton from '../components/StatsInfoButton.jsx';
+import StatsInfoButton from '../components/StatsInfoButton';
 import '../styles/table.css';
-import getSortedTranslationReportRows from './getSortedTranslationReportRows.jsx';
+import getSortedTranslationReportRows from './getSortedTranslationReportRows';
 
 /**
  * Return an array of translation report table rows, i.e. return an array of JSX. These rows are put into the

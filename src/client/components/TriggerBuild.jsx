@@ -11,8 +11,8 @@ import axios from 'axios';
 import { Field, Form, Formik } from 'formik';
 import { useContext } from 'react';
 import * as Yup from 'yup';
-import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
-import { WebsiteUserDataContext } from './Rosetta.jsx';
+import { TRANSLATION_API_ROUTE } from '../../common/constants';
+import { WebsiteUserDataContext } from './Rosetta';
 import '../styles/input-error.css';
 
 /**

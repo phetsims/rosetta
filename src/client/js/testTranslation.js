@@ -7,9 +7,9 @@
  */
 
 import axios from 'axios';
-import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
+import { TRANSLATION_API_ROUTE } from '../../common/constants';
 import alertErrorMessage from './alertErrorMessage';
-import makeTranslationObject from './makeTranslationObject.js';
+import makeTranslationObject from './makeTranslationObject';
 
 /**
  * Use the backend to replace the sim's strings with the user's inputted strings, then open a new tab with the sim with

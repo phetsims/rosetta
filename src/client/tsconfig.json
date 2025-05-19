@@ -13,8 +13,7 @@
   ],
   "compilerOptions": {
     "moduleResolution": "Node",
-    "module": "ESNext",
-    "target": "ESNext",
+    "lib": [ "DOM" ],
     "allowImportingTsExtensions": true,
     "moduleSuffixes": [".ts", ""]
   }

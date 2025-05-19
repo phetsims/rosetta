@@ -8,9 +8,9 @@
 
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import PhetHomePageLink from './PhetHomePageLink.jsx';
-import { WebsiteUserDataContext } from './Rosetta.jsx';
-import UserGuideLink from './UserGuideLink.jsx';
+import PhetHomePageLink from './PhetHomePageLink';
+import { WebsiteUserDataContext } from './Rosetta';
+import UserGuideLink from './UserGuideLink';
 
 /**
  * Display user info, and several links.

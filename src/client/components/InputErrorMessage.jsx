@@ -9,9 +9,9 @@
  */
 
 import { useContext } from 'react';
-import KeyTypesEnum from '../../common/KeyTypesEnum.js';
+import KeyTypesEnum from '../../common/KeyTypesEnum';
 import questionOctagon from '../img/question-octagon.svg';
-import { ErrorContext } from './TranslationForm.jsx';
+import { ErrorContext } from './TranslationForm';
 import '../styles/input-error.css';
 
 const CURLY_BRACE_INFO_MESSAGE = 'Curly brace patterns must match the English version. ' +

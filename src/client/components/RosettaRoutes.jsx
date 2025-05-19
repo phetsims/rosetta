@@ -8,13 +8,13 @@
 
 import React, { createContext } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import useLocaleInfo from '../hooks/useLocaleInfo.jsx';
-import useSimNamesAndTitles from '../hooks/useSimNamesAndTitles.jsx';
-import Admin from './Admin.jsx';
-import RosettaHeader from './RosettaHeader.jsx';
-import TranslationForm from './TranslationForm.jsx';
-import TranslationReport from './TranslationReport.jsx';
-import TranslationReportForm from './TranslationReportForm.jsx';
+import useLocaleInfo from '../hooks/useLocaleInfo';
+import useSimNamesAndTitles from '../hooks/useSimNamesAndTitles';
+import Admin from './Admin';
+import RosettaHeader from './RosettaHeader';
+import TranslationForm from './TranslationForm';
+import TranslationReport from './TranslationReport';
+import TranslationReportForm from './TranslationReportForm';
 
 const LocaleInfoContext = createContext( {} );
 const SimNamesAndTitlesContext = createContext( {} );

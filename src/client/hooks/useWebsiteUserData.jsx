@@ -8,7 +8,7 @@
 
 import { useEffect, useState } from 'react';
 import alertErrorMessage from '../js/alertErrorMessage';
-import getWebsiteUserData from '../js/getWebsiteUserData.js';
+import getWebsiteUserData from '../js/getWebsiteUserData';
 
 /**
  * Return the website user data we get from the PhET website.

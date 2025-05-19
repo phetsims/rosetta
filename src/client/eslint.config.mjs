@@ -8,7 +8,7 @@
  */
 
 import browserEslintConfig from '../../../perennial-alias/js/eslint/config/browser.eslint.config.mjs';
-import reactPlugin from '../../../perennial-alias/node_modules/eslint-plugin-react/index.js';
+import reactPlugin from '../../../perennial-alias/node_modules/eslint-plugin-react/index';
 
 export default [
   reactPlugin.configs.flat.recommended,

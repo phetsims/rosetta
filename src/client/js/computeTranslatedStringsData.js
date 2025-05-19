@@ -1,6 +1,6 @@
 // Copyright 2022, University of Colorado Boulder
 
-import KeyTypesEnum from '../../common/KeyTypesEnum.js';
+import KeyTypesEnum from '../../common/KeyTypesEnum';
 
 /**
  * Compute the number of strings translated in the translation form. To be presented to user

@@ -6,7 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import logError from './logError.js';
+import logError from './logError';
 
 /**
  * Alert the user that an error occurred.

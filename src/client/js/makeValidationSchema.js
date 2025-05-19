@@ -10,10 +10,10 @@
 /* eslint-disable prefer-arrow-callback */
 
 import * as Yup from 'yup';
-import { DOUBLE_BRACE_REGEX, SINGLE_BRACE_REGEX } from '../../common/constants.js';
-import KeyTypesEnum from '../../common/KeyTypesEnum.js';
+import { DOUBLE_BRACE_REGEX, SINGLE_BRACE_REGEX } from '../../common/constants';
+import KeyTypesEnum from '../../common/KeyTypesEnum';
 import alertErrorMessage from './alertErrorMessage';
-import isValidBracePattern from './isValidBracePattern.js';
+import isValidBracePattern from './isValidBracePattern';
 
 /**
  * Return a Yup schema for validating our Formik translation form.

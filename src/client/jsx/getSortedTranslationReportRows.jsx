@@ -8,9 +8,9 @@
  */
 
 import { Link } from 'react-router-dom';
-import StatsInfoButton from '../components/StatsInfoButton.jsx';
+import StatsInfoButton from '../components/StatsInfoButton';
 import alertErrorMessage from '../js/alertErrorMessage';
-import SortDirectionEnum from '../js/SortDirectionEnum.js';
+import SortDirectionEnum from '../js/SortDirectionEnum';
 import '../styles/table.css';
 
 /**

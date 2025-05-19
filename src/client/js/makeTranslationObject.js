@@ -8,7 +8,7 @@
  */
 
 import alertErrorMessage from './alertErrorMessage';
-import getWebsiteUserData from './getWebsiteUserData.js';
+import getWebsiteUserData from './getWebsiteUserData';
 
 /**
  * Return an object with the data needed for submitting the sim for publication, saving it for later, or testing it.

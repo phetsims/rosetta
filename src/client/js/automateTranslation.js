@@ -7,8 +7,8 @@
  */
 
 
-import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
-import logError from './logError.js';
+import { TRANSLATION_API_ROUTE } from '../../common/constants';
+import logError from './logError';
 
 /**
  * Function to translate text using the server-side automated translation endpoint.

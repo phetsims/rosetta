@@ -1,8 +1,8 @@
 // Copyright 2022, University of Colorado Boulder
 
-import Nav from './Nav.jsx';
-import SignOutLink from './SignOutLink.jsx';
-import UserInfo from './UserInfo.jsx';
+import Nav from './Nav';
+import SignOutLink from './SignOutLink';
+import UserInfo from './UserInfo';
 
 /**
  * Create a header to be displayed on every page of the translation utility.

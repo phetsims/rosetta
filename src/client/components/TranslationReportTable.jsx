@@ -8,15 +8,15 @@
 
 
 import { useContext, useState } from 'react';
-import useTranslatedAndUntranslatedSims from '../hooks/useTranslatedAndUntranslatedSims.jsx';
-import useTranslationReportObjects from '../hooks/useTranslationReportObjects.jsx';
-import SortDirectionEnum from '../js/SortDirectionEnum.js';
-import SortKeyEnum from '../js/SortKeyEnum.js';
-import getTranslationReportRows from '../jsx/getTranslationReportRows.jsx';
-import LoadingSpinner from './LoadingSpinner.jsx';
-import NoStatsBanner from './NoStatsBanner.jsx';
-import { SimNamesAndTitlesContext } from './RosettaRoutes.jsx';
-import SortButton from './SortButton.jsx';
+import useTranslatedAndUntranslatedSims from '../hooks/useTranslatedAndUntranslatedSims';
+import useTranslationReportObjects from '../hooks/useTranslationReportObjects';
+import SortDirectionEnum from '../js/SortDirectionEnum';
+import SortKeyEnum from '../js/SortKeyEnum';
+import getTranslationReportRows from '../jsx/getTranslationReportRows';
+import LoadingSpinner from './LoadingSpinner';
+import NoStatsBanner from './NoStatsBanner';
+import { SimNamesAndTitlesContext } from './RosettaRoutes';
+import SortButton from './SortButton';
 
 /**
  * Return a sortable table used in the translation report. The user can sort it by sim title or the percent of

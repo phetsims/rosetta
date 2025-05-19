@@ -8,8 +8,8 @@
 
 import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
-import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
-import { WebsiteUserDataContext } from '../components/Rosetta.jsx';
+import { TRANSLATION_API_ROUTE } from '../../common/constants';
+import { WebsiteUserDataContext } from '../components/Rosetta';
 import alertErrorMessage from '../js/alertErrorMessage';
 
 /**

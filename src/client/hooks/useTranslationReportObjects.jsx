@@ -7,8 +7,8 @@
  */
 
 import { useContext, useEffect, useState } from 'react';
-import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
-import { WebsiteUserDataContext } from '../components/Rosetta.jsx';
+import { TRANSLATION_API_ROUTE } from '../../common/constants';
+import { WebsiteUserDataContext } from '../components/Rosetta';
 
 /**
  * Return the report objects we get from the backend's server sent events. Also return a boolean telling whether the

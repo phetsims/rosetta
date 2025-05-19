@@ -8,11 +8,11 @@
 
 import { useField, useFormikContext } from 'formik';
 import React, { useContext } from 'react';
-import { DOUBLE_BRACE_REGEX, SINGLE_BRACE_REGEX } from '../../common/constants.js';
+import { DOUBLE_BRACE_REGEX, SINGLE_BRACE_REGEX } from '../../common/constants';
 import '../styles/table.css';
 import '../styles/translation-form.css';
-import InputErrorMessage from './InputErrorMessage.jsx';
-import { LocaleInfoContext } from './RosettaRoutes.jsx';
+import InputErrorMessage from './InputErrorMessage';
+import { LocaleInfoContext } from './RosettaRoutes';
 
 /**
  * This component is a row in the translation table. It has the string key, the English string, and an input for

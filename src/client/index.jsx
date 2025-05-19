@@ -8,7 +8,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Rosetta from './components/Rosetta.jsx';
+import Rosetta from './components/Rosetta';
 
 ReactDOM.render(
   <Rosetta/>,

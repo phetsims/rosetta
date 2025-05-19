@@ -7,7 +7,7 @@
  */
 
 import axios from 'axios';
-import publicConfig from '../../common/publicConfig.js';
+import publicConfig from '../../common/publicConfig';
 
 /**
  * Get the user data object from website.

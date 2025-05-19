@@ -7,9 +7,9 @@
  */
 
 import { useContext } from 'react';
-import LoadingSpinner from './LoadingSpinner.jsx';
+import LoadingSpinner from './LoadingSpinner';
 import '../styles/translation-form.css';
-import { WebsiteUserDataContext } from './Rosetta.jsx';
+import { WebsiteUserDataContext } from './Rosetta';
 
 /**
  * Return the set of buttons used in the translation form. These appear above and below the translation form.

@@ -9,7 +9,7 @@
  */
 
 import '../styles/input-error.css';
-import getWebsiteUserData from '../js/getWebsiteUserData.js';
+import getWebsiteUserData from '../js/getWebsiteUserData';
 
 const logUserCredentials = async () => {
   const websiteUserData = await getWebsiteUserData();

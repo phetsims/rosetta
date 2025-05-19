@@ -7,7 +7,7 @@
 import axios from 'axios';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
+import { TRANSLATION_API_ROUTE } from '../../common/constants';
 
 const FlushReportObject = () => {
   const initialValues = {

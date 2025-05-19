@@ -8,9 +8,9 @@
 
 import { useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import useShowStats from '../hooks/useShowStats.jsx';
-import { LocaleInfoContext } from './RosettaRoutes.jsx';
-import TranslationReportTable from './TranslationReportTable.jsx';
+import useShowStats from '../hooks/useShowStats';
+import { LocaleInfoContext } from './RosettaRoutes';
+import TranslationReportTable from './TranslationReportTable';
 
 /**
  * This component allows a user to see a translation report for a given locale (statistics about translations) and
