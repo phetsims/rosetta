@@ -1,0 +1,21 @@
+{
+  "extends": "../../../perennial-alias/tsconfig/tsconfig-node.json",
+  "include": [
+    "**/*",
+  ],
+  "exclude": [
+    "eslint.config.mjs"
+  ],
+  "references": [
+    {
+      "path": "../../../perennial-alias/js/browser-and-node/tsconfig.json"
+    }
+  ],
+  "compilerOptions": {
+    "moduleResolution": "Node",
+    "module": "ESNext",
+    "target": "ESNext",
+    "allowImportingTsExtensions": true,
+    "moduleSuffixes": [".ts", ""]
+  }
+}

@@ -9,6 +9,7 @@
   "devDependencies": {
     "@babel/preset-react": "^7.16.0",
     "@vitejs/plugin-react": "^2.0.0",
+    "@types/react": "19.1.4",
     "eslint-plugin-react": "^7.26.1",
     "formik": "^2.2.9",
     "history": "^5.1.0",
