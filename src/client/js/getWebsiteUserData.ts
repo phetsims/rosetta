@@ -6,8 +6,18 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import axios from 'axios';
 import publicConfig from '../../common/publicConfig';
+
+type WebsiteUserData = {
+  loggedIn: boolean;
+  username?: string;
+  email?: string;
+  userId?: number | string; // some servers use a string for userId https://github.com/phetsims/rosetta/issues/373
+  teamMember?: boolean;
+  trustedTranslator?: boolean;
+  translatorLocales?: string[] | null;
+  subscribed?: boolean;
+};
 
 /**
  * Get the user data object from website.
@@ -31,19 +41,22 @@ import publicConfig from '../../common/publicConfig';
  *     "loggedIn": false
  *   }
  *
- * @returns {Promise<Object>}
  */
-const getWebsiteUserData = async () => {
-  const websiteUserDataRes = await axios.get(
+const getWebsiteUserData = async (): Promise<WebsiteUserData> => {
+  const response = await fetch(
     publicConfig.WEBSITE_USER_DATA_URL,
-    { withCredentials: true } // Include cookies so website backend can look up the session.
+    { credentials: 'include' } // Include cookies so website backend can look up the session.
   );
 
-  const websiteUserData = websiteUserDataRes.data;
+  if ( !response.ok ) {
+    throw new Error( `Failed to fetch user data: ${response.status} ${response.statusText}` );
+  }
+
+  const websiteUserData: WebsiteUserData = await response.json();
 
   // Make sure the user ID is a number if it is present. We do this because on some servers it's a string and on others
   // it's a number, see https://github.com/phetsims/rosetta/issues/373.
-  if ( typeof websiteUserData.userId === 'string' && !isNaN( websiteUserData.userId ) ) {
+  if ( typeof websiteUserData.userId === 'string' && !isNaN( Number( websiteUserData.userId ) ) ) {
     websiteUserData.userId = Number( websiteUserData.userId );
   }
   return websiteUserData;
