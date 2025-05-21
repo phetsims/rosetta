@@ -3,9 +3,6 @@
   "include": [
     "**/*",
   ],
-  "exclude": [
-    "eslint.config.mjs"
-  ],
   "references": [
     {
       "path": "../../../perennial-alias/js/browser-and-node/tsconfig.json"
@@ -13,8 +10,6 @@
   ],
   "compilerOptions": {
     "moduleResolution": "Node",
-    "lib": [ "DOM" ],
-    "allowImportingTsExtensions": true,
-    "moduleSuffixes": [".ts", ""]
+    "lib": [ "DOM" ]
   }
 }

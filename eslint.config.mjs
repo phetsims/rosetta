@@ -7,10 +7,12 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
+import browserEslintConfig from '../perennial-alias/js/eslint/config/browser.eslint.config.mjs';
 import nodeEslintConfig from '../perennial-alias/js/eslint/config/node.eslint.config.mjs';
 
 export default [
   ...nodeEslintConfig,
+  ...browserEslintConfig,
   {
     rules: {
       'phet/bad-sim-text': 'off',
@@ -29,12 +31,19 @@ export default [
       'no-restricted-imports': 'off',
 
       // Rosetta imports a lot of css and svg files
-      'phet/import-statement-extension': 'off'
+      'phet/import-statement-extension': 'off',
+      'jsx-quotes': [
+        'error',
+        'prefer-single'
+      ],
+      'react/no-unescaped-entities': 'off',
+      'react/prop-types': 'off'
     }
   }, {
     // Separate block so that we globally ignore this
     ignores: [
-      'static/*'
+      'static/*',
+      'src/client/dist/**/*'
     ]
   }
 ];

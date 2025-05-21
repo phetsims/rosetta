@@ -11,12 +11,8 @@ import { DOUBLE_BRACE_REGEX, SINGLE_BRACE_REGEX, TRIPLE_BRACE_REGEX } from '../.
 
 /**
  * Return a boolean telling whether a given value has a valid brace pattern.
- *
- * @param {String} translatedValue - the user-entered (translated) value
- * @param {String} englishValue - the original English value
- * @returns {Boolean} - whether the brace pattern is valid
  */
-const isValidBracePattern = ( translatedValue, englishValue ) => {
+const isValidBracePattern = ( translatedValue: string, englishValue: string ): boolean => {
   if ( translatedValue === undefined ) {
 
     // If the user hasn't supplied a translation yet.  This is considered valid.
@@ -48,13 +44,13 @@ const isValidBracePattern = ( translatedValue, englishValue ) => {
     let numMatches = 0;
     const braceExprList = hasSingleBraces ? englishSingleBraces :
                           hasDoubleBraces ? englishDoubleBraces :
-                          null;
+                            [];
     if ( braceExprList ) {
       for ( const braceExpr of braceExprList ) {
-        if ( translatedSingleBraces.includes( braceExpr ) ) {
+        if ( translatedSingleBraces.includes( braceExpr as never ) ) {
           numMatches++;
         }
-        else if ( translatedDoubleBraces.includes( braceExpr ) ) {
+        else if ( translatedDoubleBraces.includes( braceExpr as never ) ) {
           numMatches++;
         }
       }
