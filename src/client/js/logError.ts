@@ -11,7 +11,7 @@ import { TRANSLATION_API_ROUTE } from '../../common/constants';
 /**
  * @param error - the error message to be sent to the server
  */
-async function logError( error ) {
+async function logError( error: string ): Promise<Response> {
   // Attempt to notify the server of the error
   return fetch( `${TRANSLATION_API_ROUTE}/logClientError`, {
     method: 'POST', // HTTP method

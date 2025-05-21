@@ -6,30 +6,26 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import axios from 'axios';
 import publicConfig from '../../common/publicConfig';
 import alertErrorMessage from './alertErrorMessage';
 
 /**
  * Send request to PhET server to sign the user out.
- *
- * @returns {Promise<void>}
  */
-const signOut = async () => {
+const signOut = async (): Promise<void> => {
   try {
-    const signOutRes = await axios( {
-      url: publicConfig.SIGN_OUT_URL,
-      method: 'get',
-      withCredentials: true
+    const response = await fetch( publicConfig.SIGN_OUT_URL, {
+      method: 'GET',
+      credentials: 'include'
     } );
 
     // If the sign-out request was successful, redirect the user to the home page.
-    if ( signOutRes.status >= 200 && signOutRes.status < 300 ) {
+    if ( response.ok ) {
       window.location.href = window.location.origin;
     }
   }
   catch( e ) {
-    alertErrorMessage( e );
+    await alertErrorMessage( String( e ) );
   }
 };
 
