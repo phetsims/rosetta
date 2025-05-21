@@ -10,3 +10,12 @@
 export type TranslationFormValues = {
   [ key: string ]: string | boolean | TranslationFormValues;
 };
+
+export type TranslationValues = {
+  [ keyType: string ]: { // simSpecific, shared, common
+    [ stringKey: string ]: {
+      translated: string;
+      english: string;
+    };
+  };
+};

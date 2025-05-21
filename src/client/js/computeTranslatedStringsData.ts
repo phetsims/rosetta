@@ -1,7 +1,5 @@
 // Copyright 2022, University of Colorado Boulder
 
-import KeyTypesEnum from '../../common/KeyTypesEnum';
-
 /**
  * Compute the number of strings translated in the translation form. To be presented to user
  * before they submit their translation.
@@ -9,19 +7,29 @@ import KeyTypesEnum from '../../common/KeyTypesEnum';
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import KeyTypesEnum from '../../common/KeyTypesEnum';
+import { TranslationValues } from '../clientTypes.js';
+
+type TranslatedStringsData = {
+  [ key: string ]: {
+    name: string;
+    translated: number;
+    total: number;
+  };
+};
+
 /**
  * Return an object with data about the translated strings in a translation form.
- *
- * @param translationValues
- * @returns {Object}
  */
-const computeTranslatedStringsData = translationValues => {
-  const translatedStringsData = {};
+const computeTranslatedStringsData = ( translationValues: TranslationValues ): TranslatedStringsData => {
+  const translatedStringsData: TranslatedStringsData = {};
   for ( const keyType of Object.values( KeyTypesEnum ) ) {
     if ( translationValues[ keyType ] ) {
-      if ( translatedStringsData[ keyType ] === undefined ) {
-        translatedStringsData[ keyType ] = {};
-      }
+      translatedStringsData[ keyType ] = {
+        name: '',
+        translated: 0,
+        total: 0
+      };
 
       // Set names for the data.
       if ( keyType === 'simSpecific' ) {
@@ -47,7 +55,6 @@ const computeTranslatedStringsData = translationValues => {
         translatedStringsData[ keyType ].translated = translatedStringsCount;
       }
       else {
-
         // If there aren't any string keys for a given key type, set translated to 0.
         // Thus, you'd get a message like "0 of 0 {key type} strings translated".
         translatedStringsData[ keyType ].translated = 0;
