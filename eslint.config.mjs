@@ -26,6 +26,10 @@ export default [
       // See https://github.com/phetsims/phet-core/issues/100 for paper trail.
       'phet/default-export-class-should-register-namespace': 'off',
 
+      '@typescript-eslint/consistent-indexed-object-style': 'off',
+
+      'phet/no-object-spread-on-non-literals': 'off',
+
       // It isn't clear that rosetta wants to use perennial's node modules via npm-dependencies/. If this isn't true,
       // please see https://github.com/phetsims/perennial/issues/372 and fix in rosetta.
       'no-restricted-imports': 'off',

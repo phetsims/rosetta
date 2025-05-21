@@ -8,17 +8,14 @@
 
 import axios from 'axios';
 import { TRANSLATION_API_ROUTE } from '../../common/constants';
+import { TranslationFormValues } from '../clientTypes.js';
 import alertErrorMessage from './alertErrorMessage';
 import makeTranslationObject from './makeTranslationObject';
 
 /**
  * Issue a post request to save a translation to the short-term string storage database.
- *
- * @param {Object} values - the values in the translation form
- * @param {String} simName - the name of the sim
- * @param {String} locale - the locale code
  */
-const saveTranslation = async ( values, simName, locale ) => {
+const saveTranslation = async ( values: TranslationFormValues, simName: string, locale: string ): Promise<void> => {
   const translation = await makeTranslationObject( values, simName, locale );
   try {
     const savedRes = await axios.post( `${TRANSLATION_API_ROUTE}/saveTranslation`, translation );
@@ -30,7 +27,7 @@ const saveTranslation = async ( values, simName, locale ) => {
     }
   }
   catch( e ) {
-    alertErrorMessage( e );
+    await alertErrorMessage( e as string );
   }
 };
 

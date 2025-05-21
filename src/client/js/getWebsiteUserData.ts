@@ -8,11 +8,11 @@
 
 import publicConfig from '../../common/publicConfig';
 
-type WebsiteUserData = {
+export type WebsiteUserData = {
   loggedIn: boolean;
+  userId: number | string; // some servers use a string for userId https://github.com/phetsims/rosetta/issues/373
   username?: string;
   email?: string;
-  userId?: number | string; // some servers use a string for userId https://github.com/phetsims/rosetta/issues/373
   teamMember?: boolean;
   trustedTranslator?: boolean;
   translatorLocales?: string[] | null;
