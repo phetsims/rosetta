@@ -6,46 +6,66 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import axios from 'axios';
 import { TRANSLATION_API_ROUTE } from '../../common/constants';
 import KeyTypesEnum from '../../common/KeyTypesEnum';
 import publicConfig from '../../common/publicConfig';
+import { TranslationValues } from '../clientTypes.js';
 import alertErrorMessage from './alertErrorMessage';
 import computeTranslatedStringsData from './computeTranslatedStringsData';
 import makeTranslationObject from './makeTranslationObject';
 
+type SubmitStatus = {
+  allRepoContentsStored: boolean;
+  buildRequestsSucceeded: boolean;
+};
+
+type Message = { [key: string]: string };
+
 /**
  * Issue a post request to submit a translation for publication to the PhET website.
- *
- * @param {Object} values - the values in the translation form
- * @param {String} simName - the name of the sim being translated
- * @param {String} locale - the locale code of the sim being translated
- * @param {String} simTitle - the sim's title
- * @param {String} localeName - the name of the language/locale
- * @returns {Promise<Object|null>}
  */
-const submitTranslation = async ( values, simName, locale, simTitle, localeName ) => {
+const submitTranslation = async (
+  values: TranslationValues,
+  simName: string,
+  locale: string,
+  simTitle: string,
+  localeName: string
+): Promise<SubmitStatus | null> => {
 
-  let submitStatus = null;
   const translatedStringsData = computeTranslatedStringsData( values );
   const translation = await makeTranslationObject( values, simName, locale );
-  const messages = {};
+  const messages: Message = {};
+
   for ( const keyType of Object.values( KeyTypesEnum ) ) {
-    if ( translatedStringsData[ keyType ].translated !== undefined ) {
+    if ( translatedStringsData[ keyType ]?.translated !== undefined ) {
       messages[ keyType ] = `You have ${translatedStringsData[ keyType ].translated}`
                             + ` of ${translatedStringsData[ keyType ].total}`
                             + ` ${translatedStringsData[ keyType ].name} string(s) translated.\n`;
     }
   }
+
   let confirmMessage = `For ${simTitle} in locale ${localeName}:\n`;
   for ( const message of Object.keys( messages ) ) {
     confirmMessage += '    ' + messages[ message ];
   }
   confirmMessage += 'Are you sure you want to submit?';
+
   if ( window.confirm( confirmMessage ) ) {
     try {
-      const result = await axios.post( `${TRANSLATION_API_ROUTE}/submitTranslation`, translation );
-      submitStatus = result.data;
+      const response = await fetch( `${TRANSLATION_API_ROUTE}/submitTranslation`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify( translation )
+      } );
+
+      if ( !response.ok ) {
+        throw new Error( `Failed to submit translation: ${response.status} ${response.statusText}` );
+      }
+
+      const submitStatus: SubmitStatus = await response.json();
+
       if ( submitStatus.allRepoContentsStored && submitStatus.buildRequestsSucceeded ) {
         const units = 'hours';
         const timeUntilChanges = publicConfig.VALID_METADATA_DURATION / 1000 / 60 / 60;
@@ -70,11 +90,11 @@ const submitTranslation = async ( values, simName, locale, simTitle, localeName 
       }
     }
     catch( e ) {
-      alertErrorMessage( e );
+      await alertErrorMessage( e as string );
     }
   }
 
-  return submitStatus;
+  return null;
 };
 
 export default submitTranslation;
