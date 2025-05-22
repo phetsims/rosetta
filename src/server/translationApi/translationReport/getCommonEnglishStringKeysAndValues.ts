@@ -1,14 +1,7 @@
 // Copyright 2021-2022, University of Colorado Boulder
 
 /**
- * Get an object where the keys are common English string keys used in a simulation and the values are the English
- * values of the string. Note that this does NOT indicate which repo the string is from.
- *
- * @param simName - sim name
- * @param simNames - list of all sim names
- * @param categorizedStringKeys - string keys categorized into common and sim-specific
- * @param stringKeysWithRepoName - string keys with their respective repo names for the specified sim
- * @returns A promise resolving to an object with common English string keys and their values
+ * Export a shared function, see header for details.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
  */
@@ -22,6 +15,16 @@ import { StringKeysAndValues } from '../StorableTranslationData.js';
 
 type StringFile = Record<string, { value: string }>;
 
+/**
+ * Get an object where the keys are common English string keys used in a simulation and the values are the English
+ * values of the string. Note that this does NOT indicate which repo the string is from.
+ *
+ * @param simName - sim name
+ * @param simNames - list of all sim names
+ * @param categorizedStringKeys - string keys categorized into common and sim-specific
+ * @param stringKeysWithRepoName - string keys with their respective repo names for the specified sim
+ * @returns A promise resolving to an object with common English string keys and their values
+ */
 const getCommonEnglishStringKeysAndValues = async ( simName: string,
                                                     simNames: string[],
                                                     categorizedStringKeys: CategorizedStringKeys,

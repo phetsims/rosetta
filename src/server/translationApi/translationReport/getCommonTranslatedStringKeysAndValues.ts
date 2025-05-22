@@ -36,22 +36,8 @@ const getCommonTranslatedStringKeysAndValues = async (
   // Get a list of common repos for the sim.
   const commonRepos = await getCommonRepos( simName, simNames, stringKeysWithRepoName );
 
-  /*
-   * We want a data structure that looks like:
-   *
-   * {
-   *   repoName1: [stringKeyA, stringKeyB, stringKeyC]
-   *   repoName2: [stringKeyD, stringKeyE, stringKeyF]
-   *   repoName3: [stringKeyG, stringKeyH, stringKeyI]
-   *   ...
-   *   repoNameN: [stringKeyX, stringKeyY, stringKeyZ]
-   * }
-   *
-   * For each repo, we will get its string file. Then we will get the value for each string key in the list of string
-   * keys for that repo.
-   */
-
-  // Create the above data structure.
+  // Get a structure where the keys are the repo names that contain strings used in the sim and the values are lists of
+  // string keys that are actually used in the sim.
   const repoNameToStringKeys = getRepoNameToStringKeys( stringKeysWithRepoName, commonRepos, commonStringKeys );
 
   // For each common repo from which the sim gets string keys...
