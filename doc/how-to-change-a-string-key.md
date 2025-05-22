@@ -137,3 +137,13 @@ keys, and several can be changed at once if necessary.
   and simulation combinations for which values were recorded above.
 
 If the verification fails, you'll need to figure out why and fix it (obviously).
+
+Notes on Deletion of String Keys
+--------------------------------
+
+- If a string needs to be deleted from a sim, generally due to some sort of redesign, it's fine to remove it from the
+  sim-specific English string file, but we generally leave them in the translated string files. This is because we
+  maintain some older versions of phet-io sims and when the older version is rebuilt the translations will need all the
+  string keys and values that were used in that version.
+- As of this writing (May 2025), it is generally never a good idea to delete a common-code string key unless you're sure
+  that there are no published phet or phet-io versions of the sim that will ever need to be rebuilt.
