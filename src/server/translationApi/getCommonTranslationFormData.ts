@@ -96,7 +96,18 @@ const getCommonTranslationFormData = async ( simName: string,
 
   logger.info( 'got common translation form data; returning it' );
 
-  return common;
+  const commonKeys = Object.keys( common );
+  const a11yKeys = commonKeys.filter( key => key.includes( 'a11y' ) ).sort();
+  const otherKeys = commonKeys.filter( key => !key.includes( 'a11y' ) ).sort();
+  const sortedCommon: CommonTranslationFormData = {};
+  otherKeys.forEach( key => {
+    sortedCommon[ key ] = common[ key ];
+  } );
+  a11yKeys.forEach( key => {
+    sortedCommon[ key ] = common[ key ];
+  } );
+
+  return sortedCommon;
 };
 
 export default getCommonTranslationFormData;

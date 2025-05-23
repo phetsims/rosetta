@@ -121,14 +121,16 @@ const getSortedStringsObject = ( simName: string, strings: Record<string, String
   const titleKeys: string[] = [];
   const screenKeys: string[] = [];
   const otherKeys: string[] = [];
+  const a11yKeys: string[] = [];
 
   let titleKey: string | null = null;
 
-  // Categorize keys.
+  // Categorize keys, separating out accessibility ('a11y') keys to appear at the end.
   Object.keys( strings ).forEach( stringKey => {
-    if ( stringKey.includes( '.title' ) || stringKey.includes( '_DOT_title' ) ) {
-
-      // If the key is a title key, save it for later so that we can put it at the very top.
+    if ( stringKey.includes( 'a11y' ) ) {
+      a11yKeys.push( stringKey );
+    }
+    else if ( stringKey.includes( '.title' ) || stringKey.includes( '_DOT_title' ) ) {
       if ( stringKey.includes( simName ) ) {
         titleKey = stringKey;
       }
@@ -144,18 +146,19 @@ const getSortedStringsObject = ( simName: string, strings: Record<string, String
     }
   } );
 
-  // Sort each category.
+  // Sort each category, including a11y keys.
   titleKeys.sort();
   screenKeys.sort();
   otherKeys.sort();
+  a11yKeys.sort();
 
   // Put the sim title key at the top of the list.
   if ( titleKey ) {
     titleKeys.unshift( titleKey );
   }
 
-  // Combine sorted keys.
-  const sortedKeys = [ ...titleKeys, ...screenKeys, ...otherKeys ];
+  // Combine sorted keys, with a11y keys at the end.
+  const sortedKeys = [ ...titleKeys, ...screenKeys, ...otherKeys, ...a11yKeys ];
 
   // Create a new object with sorted keys.
   const sortedObject: Record<string, StringEntry> = {};

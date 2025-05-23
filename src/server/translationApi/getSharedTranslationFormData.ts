@@ -6,9 +6,9 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { StringKeysAndValues, TranslationDataForRepo } from './StorableTranslationData.js';
 import getStringFile from './getStringFile.js';
 import logger from './logger.js';
+import { StringKeysAndValues, TranslationDataForRepo } from './StorableTranslationData.js';
 import { longTermStorage } from './translationApi.js';
 
 type EnglishStringFileContents = Record<string, { value: string }>;
@@ -113,6 +113,18 @@ const getSharedTranslationFormData = async ( locale: string,
       logger.error( e );
     }
   }
+
+  const SharedDataKeys = Object.keys( sharedTranslationFormData );
+  const a11yKeys = SharedDataKeys.filter( key => key.includes( 'a11y' ) ).sort();
+  const otherKeys = SharedDataKeys.filter( key => !key.includes( 'a11y' ) ).sort();
+  const sortedSharedData: SharedTranslationFormData = {};
+  otherKeys.forEach( key => {
+    sortedSharedData[ key ] = sharedTranslationFormData[ key ];
+  } );
+  a11yKeys.forEach( key => {
+    sortedSharedData[ key ] = sharedTranslationFormData[ key ];
+  } );
+
   logger.info( 'returning shared translation form data' );
   return sharedTranslationFormData;
 };
