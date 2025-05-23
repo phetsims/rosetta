@@ -8,13 +8,13 @@
  * @author <liammulh@gmail.com>
  */
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import React, { ReactElement, useCallback, useEffect, useRef, useState } from 'react';
 import signOut from '../js/signOut';
 
 /**
  * Return a re-usable sign-out button.
  */
-const SignOutLink = () => {
+const SignOutLink = (): ReactElement => {
   const [ isSending, setIsSending ] = useState( false );
   const isMounted = useRef( true );
 

@@ -6,15 +6,19 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import React, { ReactElement } from 'react';
+
+type HeaderProps = {
+  localeName: string;
+  locale: string;
+  simTitle: string;
+};
+
 /**
  * Display info about the sim/locale the user is translating.
- *
- * @param localeName
- * @param locale
- * @param simTitle
- * @returns {JSX.Element}
  */
-const TranslationFormHeader = ( { localeName, locale, simTitle } ) => {
+const TranslationFormHeader = (
+  { localeName, locale, simTitle }: HeaderProps ): ReactElement => {
   return <h2>Translating {localeName} ({locale}) {simTitle}</h2>;
 };
 

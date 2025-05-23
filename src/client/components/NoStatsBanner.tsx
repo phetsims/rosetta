@@ -8,7 +8,9 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-const NoStatsBanner = () => {
+import React, { ReactElement } from 'react';
+
+const NoStatsBanner = (): ReactElement => {
   return (
     <div className='alert alert-warning' role='alert'>
       Translation stats are unavailable right now. You can

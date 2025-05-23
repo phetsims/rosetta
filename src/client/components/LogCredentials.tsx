@@ -9,15 +9,16 @@
  */
 
 import '../styles/input-error.css';
+import React, { ReactElement } from 'react';
 import getWebsiteUserData from '../js/getWebsiteUserData';
 
-const logUserCredentials = async () => {
+const logUserCredentials = async (): Promise<void> => {
   const websiteUserData = await getWebsiteUserData();
   console.log( `websiteUserData = ${JSON.stringify( websiteUserData, null, 2 )}` );
   console.log( `userId from session storage: ${window.sessionStorage.getItem( 'userId' )}` );
 };
 
-const LogCredentials = () => {
+const LogCredentials = (): ReactElement => {
   const blueButton = 'btn btn-primary mt-2';
   return (
     <div className='mt-4'>
