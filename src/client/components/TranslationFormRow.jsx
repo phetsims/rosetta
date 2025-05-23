@@ -33,6 +33,13 @@ const TranslationFormRow = props => {
   const englishStringStyle = {
     color: isPatternString ? 'blue' : 'black'
   };
+
+  const isA11yStringKey = props.stringKey.includes( 'a11y' );
+
+  const stringKeyStyle = {
+    fontStyle: isA11yStringKey ? 'italic' : 'normal'
+  };
+
   // Determine if this field has a pending AI suggestion from form values
   const { setFieldValue } = useFormikContext();
   const objPath = props.name.replace( /\.translated$/, '' );
@@ -65,7 +72,7 @@ const TranslationFormRow = props => {
 
   return (
     <tr>
-      <td>{props.stringKey}</td>
+      <td style={stringKeyStyle}>{props.stringKey}</td>
       <td style={englishStringStyle}>{props.englishString}</td>
 
       {/* Use the spread operator to give the input each of the props in the field object. */}
