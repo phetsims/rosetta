@@ -7,7 +7,6 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { TRANSLATION_API_ROUTE } from '../../common/constants';
 import alertErrorMessage from '../js/alertErrorMessage';
@@ -17,20 +16,28 @@ import alertErrorMessage from '../js/alertErrorMessage';
  * If the request fails, show an error message. For more info on
  * why we need this boolean, see
  * https://github.com/phetsims/rosetta/issues/410#issuecomment-1563781403.
- *
- * @returns {Object} - locale info with locale codes and locale names
  */
-const useShowStats = () => {
-  const [ showStats, setShowStats ] = useState( false );
-  useEffect( async () => {
-    try {
-      const showStatsRes = await axios.get( `${TRANSLATION_API_ROUTE}/showStats` );
-      setShowStats( showStatsRes.data );
-    }
-    catch( e ) {
-      alertErrorMessage( e );
-    }
+const useShowStats = (): boolean => {
+  const [ showStats, setShowStats ] = useState<boolean>( false );
+
+  useEffect( () => {
+    const fetchShowStats = async (): Promise<void> => {
+      try {
+        const response = await fetch( `${TRANSLATION_API_ROUTE}/showStats` );
+        if ( !response.ok ) {
+          throw new Error( `HTTP error! Status: ${response.status}` );
+        }
+        const data = await response.json();
+        setShowStats( data );
+      }
+      catch( e ) {
+        void alertErrorMessage( e as string );
+      }
+    };
+
+    void fetchShowStats();
   }, [] );
+
   return showStats;
 };
 

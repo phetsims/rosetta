@@ -11,13 +11,14 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { createContext } from 'react';
+import React, { createContext, ReactElement } from 'react';
 import publicConfig from '../../common/publicConfig';
 import useWebsiteUserData from '../hooks/useWebsiteUserData';
+import { WebsiteUserData } from '../js/getWebsiteUserData.js';
 import PhetHomePageLink from './PhetHomePageLink';
 import RosettaRoutes from './RosettaRoutes';
 
-const WebsiteUserDataContext = createContext( {} );
+const WebsiteUserDataContext = createContext<WebsiteUserData>( {} as WebsiteUserData );
 
 /**
  * If a user is allowed access to the translation tool, this component will contain some header stuff and the routes
@@ -30,16 +31,16 @@ const WebsiteUserDataContext = createContext( {} );
  * them to the translation utility.
  *
  * If Rosetta isn't enabled, a message about Rosetta being down for maintenance will be shown.
- *
- * @returns {JSX.Element}
  */
-function Rosetta() {
-  const websiteUserData = useWebsiteUserData();
-  let jsx = <p>Loading...</p>;
+const Rosetta: React.FC = (): ReactElement => {
+  const websiteUserData = useWebsiteUserData() as WebsiteUserData;
+  let jsx: ReactElement = <p>Loading...</p>;
   const rosettaEnabled = Object.keys( publicConfig ).length > 0 && publicConfig.IS_ENABLED;
+
   if ( rosettaEnabled ) {
     const allowedAccess = websiteUserData.loggedIn && ( websiteUserData.trustedTranslator || websiteUserData.teamMember );
     const notAllowedAccess = websiteUserData.loggedIn && ( !websiteUserData.trustedTranslator && !websiteUserData.teamMember );
+
     if ( allowedAccess ) {
       jsx = (
         <WebsiteUserDataContext.Provider value={websiteUserData}>
@@ -86,8 +87,9 @@ function Rosetta() {
       </div>
     );
   }
+
   return jsx;
-}
+};
 
 export { WebsiteUserDataContext };
 export default Rosetta;

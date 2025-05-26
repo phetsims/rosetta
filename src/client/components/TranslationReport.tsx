@@ -6,28 +6,30 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { useContext } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import useShowStats from '../hooks/useShowStats';
 import { LocaleInfoContext } from './RosettaRoutes';
 import TranslationReportTable from './TranslationReportTable';
 
+type TranslationReportParams = {
+  locale: string;
+};
+
 /**
  * This component allows a user to see a translation report for a given locale (statistics about translations) and
  * allows them to navigate to any of the simulations to translate them.
- *
- * @returns {JSX.Element}
  */
-const TranslationReport = () => {
+const TranslationReport: React.FC = (): ReactElement => {
 
   // Get URL params. (Need locale from params.)
-  const params = useParams();
+  const params = useParams<TranslationReportParams>();
 
   // Tell user what locale they are seeing the report for.
   const localeInfo = useContext( LocaleInfoContext );
   let localeName = 'Loading...';
   if ( Object.keys( localeInfo ).length > 0 ) {
-    localeName = localeInfo[ params.locale ].name;
+    localeName = localeInfo[ params.locale! ].name;
   }
 
   // Determine whether we have enough GitHub API requests to show stats.
@@ -39,10 +41,9 @@ const TranslationReport = () => {
   // file, the data in the tables won't be correct.
   return (
     <div>
-
       {/* Unpublished sims */}
       <TranslationReportTable
-        locale={params.locale}
+        locale={params.locale!}
         wantsUntranslated={true}
         localeName={localeName}
         showStats={showStats}
@@ -50,7 +51,7 @@ const TranslationReport = () => {
 
       {/* Published sims */}
       <TranslationReportTable
-        locale={params.locale}
+        locale={params.locale!}
         wantsUntranslated={false}
         localeName={localeName}
         showStats={showStats}

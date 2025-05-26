@@ -6,8 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-
-import { useContext, useState } from 'react';
+import React, { ReactElement, useContext, useState } from 'react';
 import useTranslatedAndUntranslatedSims from '../hooks/useTranslatedAndUntranslatedSims';
 import useTranslationReportObjects from '../hooks/useTranslationReportObjects';
 import SortDirectionEnum from '../js/SortDirectionEnum';
@@ -18,22 +17,23 @@ import NoStatsBanner from './NoStatsBanner';
 import { SimNamesAndTitlesContext } from './RosettaRoutes';
 import SortButton from './SortButton';
 
+type TranslationReportTableProps = {
+  locale: string;
+  localeName: string;
+  wantsUntranslated: boolean;
+  showStats: boolean;
+};
+
 /**
  * Return a sortable table used in the translation report. The user can sort it by sim title or the percent of
  * translated strings.
- *
- * @param {string} locale - ISO 639-1 locale code, e.g. es for Spanish
- * @param {string} localeName - the English name of the locale, e.g. Spanish
- * @param {boolean} wantsUntranslated - whether the caller wants this table to have untranslated sims or translated sims
- * @param {boolean} showStats - whether we should show stats
- * @returns {JSX.Element}
  */
-const TranslationReportTable = ( {
-                                   locale,
-                                   localeName,
-                                   wantsUntranslated,
-                                   showStats
-                                 } ) => {
+const TranslationReportTable: React.FC<TranslationReportTableProps> = ( {
+                                                                          locale,
+                                                                          localeName,
+                                                                          wantsUntranslated,
+                                                                          showStats
+                                                                        } ): ReactElement => {
 
   const simNamesAndTitles = useContext( SimNamesAndTitlesContext );
 
@@ -51,7 +51,7 @@ const TranslationReportTable = ( {
   const translatedAndUntranslatedSims = useTranslatedAndUntranslatedSims( locale );
 
   // Get JSX rows to populate the table.
-  let jsx = <></>;
+  let jsx: ReactElement = <></>;
   if ( translatedAndUntranslatedSims !== null ) {
     const listOfSims = wantsUntranslated
                        ? translatedAndUntranslatedSims.untranslated
@@ -68,7 +68,7 @@ const TranslationReportTable = ( {
       showStats
     );
 
-    const handleSortButtonClick = newSortKeys => {
+    const handleSortButtonClick = ( newSortKeys: string[] ): void => {
       setSortKeys( newSortKeys );
       if ( sortDirection === SortDirectionEnum.ASCENDING ) {
         setSortDirection( SortDirectionEnum.DESCENDING );
@@ -80,34 +80,38 @@ const TranslationReportTable = ( {
 
     const allSimsTranslated = wantsUntranslated && reportRows.length === 0;
     const noSimsTranslated = !wantsUntranslated && reportRows.length === 0;
-    let tableJsx = (
-      <table className='table table-striped'>
-        <thead>
-        <tr>
-          <th>Sim Title
-            {
-              reportPopulated && reportRows.length > 1
-              ? <SortButton onClick={() => handleSortButtonClick( SortKeyEnum.SIM_TITLE )}/>
-              : <></>
-            }
-          </th>
-          <th>Translated Strings
-            {
-              reportPopulated && reportRows.length > 1
-              ? <SortButton onClick={() => handleSortButtonClick( SortKeyEnum.TOTAL_STRINGS )}/>
-              : <></>
-            }
-          </th>
-        </tr>
-        </thead>
-        <tbody>{reportRows}</tbody>
-      </table>
-    );
+    let tableJsx: ReactElement;
+
     if ( allSimsTranslated ) {
       tableJsx = <p>All sims translated, check percentages.</p>;
     }
     else if ( noSimsTranslated ) {
       tableJsx = <p>No sims translated.</p>;
+    }
+    else {
+      tableJsx = (
+        <table className='table table-striped'>
+          <thead>
+          <tr>
+            <th>Sim Title
+              {
+                reportPopulated && reportRows.length > 1
+                ? <SortButton onClick={() => handleSortButtonClick( SortKeyEnum.SIM_TITLE )}/>
+                : <></>
+              }
+            </th>
+            <th>Translated Strings
+              {
+                reportPopulated && reportRows.length > 1
+                ? <SortButton onClick={() => handleSortButtonClick( SortKeyEnum.TOTAL_STRINGS )}/>
+                : <></>
+              }
+            </th>
+          </tr>
+          </thead>
+          <tbody>{reportRows}</tbody>
+        </table>
+      );
     }
 
     jsx = (

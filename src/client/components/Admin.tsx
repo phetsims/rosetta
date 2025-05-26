@@ -6,8 +6,9 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { useContext } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { WebsiteUserData } from '../clientTypes';
 import FlushReportObject from './FlushReportObject';
 import LogCredentials from './LogCredentials';
 import { WebsiteUserDataContext } from './Rosetta';
@@ -17,14 +18,12 @@ import TriggerBuild from './TriggerBuild';
 /**
  * This component is an admin page for Rosetta. It contains information on the running instance of Rosetta, and has the
  * potential to allow users to manage Rosetta. It should only be visible to team members.
- *
- * @returns {JSX.Element}
  */
-const Admin = () => {
+const Admin: React.FC = (): ReactElement => {
 
-  const websiteUserData = useContext( WebsiteUserDataContext );
+  const websiteUserData = useContext( WebsiteUserDataContext ) as WebsiteUserData;
 
-  let jsx;
+  let jsx: ReactElement;
   const allowedAccess = websiteUserData.loggedIn && websiteUserData.teamMember;
 
   if ( allowedAccess ) {

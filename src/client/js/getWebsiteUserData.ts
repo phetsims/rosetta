@@ -7,17 +7,7 @@
  */
 
 import publicConfig from '../../common/publicConfig';
-
-export type WebsiteUserData = {
-  loggedIn: boolean;
-  userId: number | string; // some servers use a string for userId https://github.com/phetsims/rosetta/issues/373
-  username?: string;
-  email?: string;
-  teamMember?: boolean;
-  trustedTranslator?: boolean;
-  translatorLocales?: string[] | null;
-  subscribed?: boolean;
-};
+import { WebsiteUserData } from '../clientTypes';
 
 /**
  * Get the user data object from website.

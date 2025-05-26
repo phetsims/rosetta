@@ -7,37 +7,33 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import React, { ReactElement } from 'react';
 import { Link } from 'react-router-dom';
-import StatsInfoButton from '../components/StatsInfoButton';
+import { ReportObject, SimNamesAndTitles } from '../clientTypes';
 import '../styles/table.css';
+import StatsInfoButton from '../components/StatsInfoButton';
 import getSortedTranslationReportRows from './getSortedTranslationReportRows';
+
+type TranslationReport = {
+  [ key: string ]: ReactElement;
+};
 
 /**
  * Return an array of translation report table rows, i.e. return an array of JSX. These rows are put into the
  * translation report table.
- *
- * @param {Object} simNamesAndTitles - object where keys are sim names and values are sim titles
- * @param {String[]} listOfSims - list of sim names, either untranslated or translated
- * @param {Object[]} reportObjects - report objects we get from the backend
- * @param {String} locale - ISO 639-1 locale code for which the report is being made
- * @param {Boolean} reportPopulated - boolean telling whether we have all the report objects
- * @param {String[]} sortKeys - which key to sort by, only used when the report is populated
- * @param {String} sortDirection - either ascending or descending
- * @param {Boolean} showStats - whether we should show stats
- * @returns {Object[]} - array of report rows, i.e. array of JSX
  */
 const getTranslationReportRows = (
-  simNamesAndTitles,
-  listOfSims,
-  reportObjects,
-  locale,
-  reportPopulated,
-  sortKeys,
-  sortDirection,
-  showStats
-) => {
+  simNamesAndTitles: SimNamesAndTitles,
+  listOfSims: string[],
+  reportObjects: ReportObject[],
+  locale: string,
+  reportPopulated: boolean,
+  sortKeys: string[],
+  sortDirection: string,
+  showStats: boolean
+): ReactElement[] => {
 
-  const translationReportJsx = {};
+  const translationReportJsx: TranslationReport = {};
   if ( !showStats ) {
 
     // If we are not supposed to show stats (i.e. there are not enough GitHub
@@ -46,7 +42,7 @@ const getTranslationReportRows = (
     for ( const simName of listOfSims ) {
       translationReportJsx[ simName ] = (
         <tr key={simName}>
-          <td><Link to={`/translate/${locale}/${simName}`}>{simNamesAndTitles[ simName ]}</Link></td>
+          <td><Link to={`/translate/${locale}/${simName}`}>{simNamesAndTitles[ simName ].title}</Link></td>
           <td>--</td>
         </tr>
       );
@@ -71,7 +67,7 @@ const getTranslationReportRows = (
     for ( const simName of listOfSims ) {
       translationReportJsx[ simName ] = (
         <tr key={simName}>
-          <td><Link to={`/translate/${locale}/${simName}`}>{simNamesAndTitles[ simName ]}</Link></td>
+          <td><Link to={`/translate/${locale}/${simName}`}>{simNamesAndTitles[ simName ].title}</Link></td>
           <td>Loading...</td>
         </tr>
       );
@@ -80,9 +76,9 @@ const getTranslationReportRows = (
     // Overwrite rows for which we have data.
     for ( const reportObject of reportObjects ) {
 
-      let pendingUpdateMessage = <></>;
+      let pendingUpdateMessage: ReactElement = <></>;
       if ( reportObject.isDirty ) {
-        pendingUpdateMessage = ' (pending update)';
+        pendingUpdateMessage = <> (pending update)</>;
       }
 
       if ( Object.keys( translationReportJsx ).includes( reportObject.simName ) ) {
@@ -100,7 +96,7 @@ const getTranslationReportRows = (
   }
 
   // Return an array of JSX.
-  const translationReportRows = [];
+  const translationReportRows: ReactElement[] = [];
   for ( const simName of Object.keys( translationReportJsx ) ) {
     translationReportRows.push( translationReportJsx[ simName ] );
   }

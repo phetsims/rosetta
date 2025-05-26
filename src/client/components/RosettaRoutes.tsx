@@ -6,8 +6,9 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import React, { createContext } from 'react';
+import React, { createContext, ReactElement } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { LocaleInfo, SimNamesAndTitles } from '../clientTypes';
 import useLocaleInfo from '../hooks/useLocaleInfo';
 import useSimNamesAndTitles from '../hooks/useSimNamesAndTitles';
 import Admin from './Admin';
@@ -16,21 +17,20 @@ import TranslationForm from './TranslationForm';
 import TranslationReport from './TranslationReport';
 import TranslationReportForm from './TranslationReportForm';
 
-const LocaleInfoContext = createContext( {} );
-const SimNamesAndTitlesContext = createContext( {} );
+const LocaleInfoContext = createContext<LocaleInfo>( {} as LocaleInfo );
+const SimNamesAndTitlesContext = createContext<SimNamesAndTitles>( {} as SimNamesAndTitles );
 
 /**
  * This component defines routes and their respective components. If a user hits a certain route, the specified
  * component will be shown.
  *
- * We also set up a fair number of "contexts" in this module. A context is a way of providing data without having to
+ * We also set up a fair number of 'contexts' in this module. A context is a way of providing data without having to
  * pass it as props.
- *
- * @returns {JSX.Element}
  */
-const RosettaRoutes = () => {
+const RosettaRoutes: React.FC = (): ReactElement => {
   const localeInfo = useLocaleInfo();
   const simNamesAndTitles = useSimNamesAndTitles();
+
   return (
     <BrowserRouter>
       <div className='container m-5'>

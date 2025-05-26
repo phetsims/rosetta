@@ -7,21 +7,26 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import React, { ReactElement } from 'react';
 import { Link } from 'react-router-dom';
+import { ReportObject } from '../clientTypes.js';
 import StatsInfoButton from '../components/StatsInfoButton';
 import alertErrorMessage from '../js/alertErrorMessage';
 import SortDirectionEnum from '../js/SortDirectionEnum';
 import '../styles/table.css';
 
+type ReportObjectWithPercentages = ReportObject & {
+  commonPercent: number;
+  simSpecificPercent: number;
+  sharedPercent: number;
+};
+
 /**
  * Return an array of translation report objects (i.e. stats used to make translation report rows) that have percentages
  * of translated sim-specific strings and translated common strings.
- *
- * @param {Object[]} reportObjects
- * @returns {Object[]}
  */
-const getReportObjectsWithPercentages = reportObjects => {
-  const reportObjectsWithPercents = [];
+const getReportObjectsWithPercentages = ( reportObjects: ReportObject[] ): ReportObjectWithPercentages[] => {
+  const reportObjectsWithPercents: ReportObjectWithPercentages[] = [];
   for ( const reportObject of reportObjects ) {
     const simSpecificPercent = Math.floor( ( reportObject.numSimSpecificTranslatedStrings / reportObject.numSimSpecificStrings ) * 100 );
     const commonPercent = Math.floor( ( reportObject.numCommonTranslatedStrings / reportObject.numCommonStrings ) * 100 );
@@ -30,7 +35,7 @@ const getReportObjectsWithPercentages = reportObjects => {
     // By default, set shared percent to 0. We do this because otherwise the table wouldn't be sortable.
     let sharedPercent = 0;
     if ( hasSharedStrings ) {
-      sharedPercent = Math.floor( ( reportObject.numSharedTranslatedStrings / reportObject.numSharedStrings ) * 100 );
+      sharedPercent = Math.floor( ( reportObject.numSharedTranslatedStrings / reportObject.numSharedStrings! ) * 100 );
     }
     reportObjectsWithPercents.push( {
       ...reportObject,
@@ -44,21 +49,20 @@ const getReportObjectsWithPercentages = reportObjects => {
 
 /**
  * Return a number used to sort the report objects.
- *
- * @param {Object} a - report object A
- * @param {Object} b - report object B
- * @param {String} sortKey - key we're using to sort
- * @param {String} fallbackKey - key we use to break ties
- * @param {String} sortDirection - ascending or descending
  */
-const sortReportObjects = ( a, b, sortKey, fallbackKey, sortDirection ) => {
-
+const sortReportObjects = (
+  a: ReportObjectWithPercentages,
+  b: ReportObjectWithPercentages,
+  sortKey: string,
+  fallbackKey: string | null,
+  sortDirection: string
+): number => {
   let sortResult = 0;
 
   // Parameter checking.
   if ( typeof a[ sortKey ] !== typeof b[ sortKey ] ) {
-    alertErrorMessage(
-      `Values being sorted are not the same type.\na[ sortKey ] = ${a[ sortKey ]}, b[ sortKey ] = ${b[ sortKey ]}`
+    void alertErrorMessage(
+      'Values being sorted are not the same type.'
     );
   }
   const valuesAreStrings = typeof a[ sortKey ] === 'string' && typeof b[ sortKey ] === 'string';
@@ -67,8 +71,8 @@ const sortReportObjects = ( a, b, sortKey, fallbackKey, sortDirection ) => {
   let itemA = a[ sortKey ];
   let itemB = b[ sortKey ];
   if ( valuesAreStrings ) {
-    itemA = itemA.toLowerCase();
-    itemB = itemB.toLowerCase();
+    itemA = ( itemA as string ).toLowerCase();
+    itemB = ( itemB as string ).toLowerCase();
   }
 
   if ( sortDirection === SortDirectionEnum.ASCENDING ) {
@@ -76,7 +80,7 @@ const sortReportObjects = ( a, b, sortKey, fallbackKey, sortDirection ) => {
       sortResult = sortReportObjects( a, b, fallbackKey, null, sortDirection );
     }
     else {
-      sortResult = itemA > itemB ? 1 : -1;
+      sortResult = itemA! > itemB! ? 1 : -1;
     }
   }
   else if ( sortDirection === SortDirectionEnum.DESCENDING ) {
@@ -84,11 +88,11 @@ const sortReportObjects = ( a, b, sortKey, fallbackKey, sortDirection ) => {
       sortResult = sortReportObjects( a, b, fallbackKey, null, sortDirection );
     }
     else {
-      sortResult = itemA > itemB ? -1 : 1;
+      sortResult = itemA! > itemB! ? -1 : 1;
     }
   }
   else {
-    alertErrorMessage( 'Sort direction should be either ascending or descending.' );
+    void alertErrorMessage( 'Sort direction should be either ascending or descending.' as string );
   }
 
   return sortResult;
@@ -96,14 +100,13 @@ const sortReportObjects = ( a, b, sortKey, fallbackKey, sortDirection ) => {
 
 /**
  * Sort the report objects with percentages according to the sort key provided, in the direction provided.
- *
- * @param {Object[]} reportObjectsWithPercentages - translation report objects with percentages for translated strings
- * @param {String} sortDirection - ascending or descending
- * @param {String[]} sortKeys - array of keys to sort by
- * @returns {Object[]} - sorted report objects with percentages
  */
-const sortReportObjectsWithPercentages = ( reportObjectsWithPercentages, sortDirection, sortKeys ) => {
-  return reportObjectsWithPercentages.sort( ( a, b ) => {
+const sortReportObjectsWithPercentages = (
+  reportObjectsWithPercentages: ReportObjectWithPercentages[],
+  sortDirection: string,
+  sortKeys: string[]
+): ReportObjectWithPercentages[] => {
+  return [ ...reportObjectsWithPercentages ].sort( ( a, b ) => {
     const fallbackKey = sortKeys.length > 1 ? sortKeys[ 1 ] : null;
     return sortReportObjects( a, b, sortKeys[ 0 ], fallbackKey, sortDirection );
   } );
@@ -111,25 +114,17 @@ const sortReportObjectsWithPercentages = ( reportObjectsWithPercentages, sortDir
 
 /**
  * Return sorted translation rows, i.e. an array of JSX to put in the translation report table.
- *
- * @param {String[]} listOfSims
- * @param {Object[]} reportObjects
- * @param {String} locale
- * @param {String[]} sortKeys
- * @param {String} sortDirection
- * @returns {Object[]}
  */
 const getSortedTranslationReportRows = (
-  listOfSims,
-  reportObjects,
-  locale,
-  sortKeys,
-  sortDirection
-) => {
-
+  listOfSims: string[],
+  reportObjects: ReportObject[],
+  locale: string,
+  sortKeys: string[],
+  sortDirection: string
+): ReactElement[] => {
   // Get report objects we're interested in.
   // We could want to sort the published sims or the unpublished sims.
-  const reportObjectsToSort = [];
+  const reportObjectsToSort: ReportObject[] = [];
   for ( const simName of listOfSims ) {
     for ( const reportObject of reportObjects ) {
       if ( simName === reportObject.simName ) {
@@ -151,12 +146,11 @@ const getSortedTranslationReportRows = (
   };
 
   // Create the array of JSX to render in the translation report.
-  const translationReportJsx = [];
+  const translationReportJsx: ReactElement[] = [];
   for ( const item of sortedData ) {
-
-    let pendingUpdateMessage = <></>;
+    let pendingUpdateMessage: ReactElement = <></>;
     if ( item.isDirty ) {
-      pendingUpdateMessage = ' (pending update)';
+      pendingUpdateMessage = <> (pending update)</>;
     }
 
     translationReportJsx.push(

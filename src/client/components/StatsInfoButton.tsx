@@ -7,20 +7,8 @@
  */
 
 import React from 'react';
+import { ReportObject } from '../clientTypes';
 import infoCircle from '../img/info-circle.svg';
-
-type ReportObject = {
-  simTitle: string;
-  percentSimSpecific: number;
-  numSimSpecificTranslatedStrings: number;
-  numSimSpecificStrings: number;
-  percentShared: number;
-  numSharedTranslatedStrings: number;
-  numSharedStrings: number | null;
-  percentCommon: number;
-  numCommonTranslatedStrings: number;
-  numCommonStrings: number;
-};
 
 type StatsInfoButtonProps = {
   reportObject: ReportObject;
