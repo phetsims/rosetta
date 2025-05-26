@@ -6,9 +6,23 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import LoadingSpinner from './LoadingSpinner';
 import { LocaleInfoContext } from './RosettaRoutes';
+
+type LocaleInfo = {
+  [ localeCode: string ]: {
+    name: string;
+  };
+};
+
+type FieldProps = {
+  [ key: string ]: string;
+};
+
+type LocaleSelectProps = {
+  field: FieldProps;
+};
 
 /**
  * This component is a select (commonly referred to as a dropdown) for locales. The locales in this select look like
@@ -18,17 +32,13 @@ import { LocaleInfoContext } from './RosettaRoutes';
  * Spanish (es)
  *
  * and so on. We have the English name of the language followed by the locale code in parentheses.
- *
- * @param {Object} field - props used by Formik
- * @returns {JSX.Element}
  */
-const LocaleSelect = ( { field } ) => {
-
-  const localeInfo = useContext( LocaleInfoContext );
+const LocaleSelect: React.FC<LocaleSelectProps> = ( { field } ) => {
+  const localeInfo = useContext( LocaleInfoContext ) as LocaleInfo;
 
   // Sort the locales by name.
   // In other words, sort the languages alphabetically.
-  const localeNamesAndCodes = [];
+  const localeNamesAndCodes: [ string, string ][] = [];
   for ( const localeCode in localeInfo ) {
     localeNamesAndCodes.push( [ localeInfo[ localeCode ].name, localeCode ] );
   }
@@ -57,11 +67,9 @@ const LocaleSelect = ( { field } ) => {
     jsx = <LoadingSpinner/>;
   }
   else {
-
     // Use the spread operator to give the select each of the props in the field object.
     jsx = (
       <select {...field}>
-
         {/* Iterate over locale options. */}
         {localeOptions}
       </select>

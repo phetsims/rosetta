@@ -11,17 +11,19 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import LocaleSelect from './LocaleSelect';
 
+type FormValues = {
+  locale: string;
+};
+
 /**
  * This component enables the user to select the locale they want a translation report for.
- *
- * @returns {JSX.Element}
  */
-const TranslationReportForm = () => {
+const TranslationReportForm: React.FC = () => {
 
   const navigate = useNavigate();
 
   return (
-    <Formik
+    <Formik<FormValues>
       initialValues={{ locale: '' }}
       onSubmit={values => {
         if ( values.locale === '' ) {

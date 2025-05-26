@@ -1,33 +1,49 @@
 // Copyright 2023, University of Colorado Boulder
 
 /**
- * @author Liam Mu
+ * This component allows users to flush a report object for a specific sim and locale.
+ *
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import axios from 'axios';
 import { Field, Form, Formik } from 'formik';
+import React from 'react';
 import * as Yup from 'yup';
 import { TRANSLATION_API_ROUTE } from '../../common/constants';
 
-const FlushReportObject = () => {
-  const initialValues = {
+type FormValues = {
+  sim: string;
+  locale: string;
+};
+
+const FlushReportObject: React.FC = () => {
+  const initialValues: FormValues = {
     sim: '',
     locale: ''
   };
-  const handleSubmit = async values => {
-    const flushReportObjectRes = await axios.get( `${TRANSLATION_API_ROUTE}/flushReportObject/${values.locale}/${values.sim}` );
-    if ( flushReportObjectRes.status >= 200 && flushReportObjectRes.status < 300 ) {
-      if ( flushReportObjectRes.data === 'success' ) {
-        window.alert( `Report object flushed for sim ${values.sim} in locale ${values.locale}.` );
+
+  const handleSubmit = async ( values: FormValues ) => {
+    try {
+      const response = await fetch( `${TRANSLATION_API_ROUTE}/flushReportObject/${values.locale}/${values.sim}` );
+
+      if ( response.ok ) {
+        const data = await response.text();
+        if ( data === 'success' ) {
+          window.alert( `Report object flushed for sim ${values.sim} in locale ${values.locale}.` );
+        }
+        else if ( data === 'failure' ) {
+          window.alert( 'Report object flush failed.' );
+        }
       }
-      else if ( flushReportObjectRes.data === 'failure' ) {
-        window.alert( 'Report object flush failed.' );
+      else {
+        window.alert( 'Something went wrong. Report object not flushed.' );
       }
     }
-    else {
-      window.alert( 'Something went wrong. Report object not flushed.' );
+    catch( error ) {
+      window.alert( 'Request failed. Report object not flushed.' );
     }
   };
+
   const ValidationSchema = Yup.object().shape( {
     sim: Yup.string()
       .required( 'Required' )
@@ -38,22 +54,27 @@ const FlushReportObject = () => {
       .min( 2, 'Too short' )
       .max( 5, 'Too long' )
   } );
+
   const grayButton = 'btn btn-secondary mt-2';
   const blueButton = 'btn btn-primary mt-2';
+
   return (
     <div className='mt-4'>
       <h2>Flush Report Object</h2>
       <p>
         See documentation for flushing a report object <a href='https://github.com/phetsims/rosetta/blob/main/doc/admin-guide.md#update-translation-stats'>here</a>.
       </p>
-      <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={ValidationSchema}>
-        {(
-          {
-            errors,
-            touched,
-            isValid,
-            dirty
-          } ) => (
+      <Formik<FormValues>
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validationSchema={ValidationSchema}
+      >
+        {( {
+             errors,
+             touched,
+             isValid,
+             dirty
+           } ) => (
           <Form>
             <div>
               <label className='mt-2'>Sim:</label><br/>

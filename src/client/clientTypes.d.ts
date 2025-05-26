@@ -57,6 +57,6 @@ export type TranslationFormRowProps = {
   stringKey: string;
   englishString: string;
   locale: string;
-  aiTranslatedFields: string[] | null;
-  setAiTranslatedFields: ( fields: string[] ) => void;
+  aiTranslatedFields: Set<string> | null;
+  setAiTranslatedFields: ( fields: Set<string> ) => void;
 };
