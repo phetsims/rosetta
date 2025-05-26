@@ -8,7 +8,7 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import { useContext } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import KeyTypesEnum from '../../common/KeyTypesEnum';
 import questionOctagon from '../img/question-octagon.svg';
 import { ErrorContext } from './TranslationForm';
@@ -25,12 +25,20 @@ const CURLY_BRACE_INFO_MESSAGE = 'Curly brace patterns must match the English ve
                                  'The rules above apply to string keys with double curly braces as well.\n\n' +
                                  'For further guidance, please read the user guide.';
 
-/**
- * @param {String} fieldKey - the key for the Formik field (i.e. the input)
- * @param {boolean} isPatternString - whether the field is for a template pattern string, e.g. '{{speed}} km/h'
- * @returns {JSX.Element}
- */
-const InputErrorMessage = ( { fieldKey, isPatternString } ) => {
+type InputErrorMessageProps = {
+  fieldKey: string;
+  isPatternString: boolean;
+};
+
+type ErrorType = {
+  [ keyType: string ]: {
+    [ key: string ]: {
+      translated?: string;
+    };
+  };
+};
+
+const InputErrorMessage: React.FC<InputErrorMessageProps> = ( { fieldKey, isPatternString } ): ReactElement | null => {
 
   const additionalInfoButton = (
     <button
@@ -43,9 +51,11 @@ const InputErrorMessage = ( { fieldKey, isPatternString } ) => {
       <img src={questionOctagon} alt='question icon'/>
     </button>
   );
-  const error = useContext( ErrorContext );
-  let jsx = null;
-  if ( Object.keys( error ).length > 0 ) {
+
+  const error = useContext( ErrorContext ) as ErrorType | null;
+  let jsx: ReactElement | null = null;
+
+  if ( error && Object.keys( error ).length > 0 ) {
     for ( const keyType of Object.values( KeyTypesEnum ) ) {
       if (
         error[ keyType ] &&
@@ -55,7 +65,6 @@ const InputErrorMessage = ( { fieldKey, isPatternString } ) => {
         const errorMessage = error[ keyType ][ fieldKey ].translated;
         jsx = (
           <>
-
             {/*include the button with info about curly brace patterns if the field is such a pattern*/}
             {isPatternString ? additionalInfoButton : <></>}
             <div className='error-container'>

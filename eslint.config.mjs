@@ -34,6 +34,8 @@ export default [
       // please see https://github.com/phetsims/perennial/issues/372 and fix in rosetta.
       'no-restricted-imports': 'off',
 
+      'no-void': 'off',
+
       // Rosetta imports a lot of css and svg files
       'phet/import-statement-extension': 'off',
       'jsx-quotes': [

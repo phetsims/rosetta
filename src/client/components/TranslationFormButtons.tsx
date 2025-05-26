@@ -6,25 +6,36 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import LoadingSpinner from './LoadingSpinner';
 import '../styles/translation-form.css';
 import { WebsiteUserDataContext } from './Rosetta';
 
+// TODO: Probably remove this when WebsiteUserDataContext is properly typed https://github.com/phetsims/rosetta/issues/311
+type WebsiteUserData = {
+  teamMember: boolean; // Indicates if the user is a team member
+};
+
+type TranslationFormButtonsProps = {
+  isValid: boolean;
+  dirty: boolean;
+  isDisabled: boolean;
+  testIsLoading: boolean;
+  handleButtonClick: ( event: React.MouseEvent<HTMLButtonElement> ) => void;
+};
+
 /**
  * Return the set of buttons used in the translation form. These appear above and below the translation form.
- *
- * @param props
- * @returns {JSX.Element}
  */
-const TranslationFormButtons = props => {
-  const websiteUserData = useContext( WebsiteUserDataContext );
+const TranslationFormButtons: React.FC<TranslationFormButtonsProps> = props => {
+  const websiteUserData = useContext( WebsiteUserDataContext ) as WebsiteUserData;
   const showAutomate = websiteUserData.teamMember; // Only show automation feature if user is a team member
   const disabled = !( props.isValid && props.dirty ) || props.isDisabled;
   const grayButton = 'btn btn-secondary';
   const blueButton = 'btn btn-primary';
   const buttonClass = !( props.isValid && props.dirty ) ? grayButton : blueButton;
   const automateButtonClass = 'btn btn-success';
+
   return (
     <div className='card sticky-top mt-4 mb-4'>
       <div className='card-body save-test-publish-buttons-container'>
@@ -61,7 +72,7 @@ const TranslationFormButtons = props => {
         >
           Test
         </button>
-        { showAutomate && (
+        {showAutomate && (
           <button
             id='automate'
             onClick={props.handleButtonClick}
@@ -73,7 +84,7 @@ const TranslationFormButtons = props => {
           >
             Automate (Experimental)
           </button>
-        ) }
+        )}
         {props.testIsLoading ? <LoadingSpinner/> : <></>}
       </div>
     </div>

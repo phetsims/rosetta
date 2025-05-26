@@ -19,3 +19,26 @@ export type TranslationValues = {
     };
   };
 };
+
+// Below types used for the TranslationFormRow component
+export type LocaleInfo = {
+  [locale: string]: {
+    direction: 'ltr' | 'rtl';
+  };
+};
+
+export type TextAreaStyle = {
+  textAlign: 'left' | 'right';
+  color: string;
+  resize: 'both';
+};
+
+export type TranslationFormRowProps = {
+  keyWithoutDots: string;
+  name: string;
+  stringKey: string;
+  englishString: string;
+  locale: string;
+  aiTranslatedFields: Set<string> | null;
+  setAiTranslatedFields: ( fields: Set<string> ) => void;
+};

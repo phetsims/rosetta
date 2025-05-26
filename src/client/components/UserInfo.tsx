@@ -6,17 +6,19 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import personCircle from '../img/person-circle.svg';
 import { WebsiteUserDataContext } from './Rosetta';
 
+type WebsiteUserDataType = {
+  email: string;
+};
+
 /**
  * Display user's sign-in info obtained from website user data.
- *
- * @returns {JSX.Element}
  */
-const UserInfo = () => {
-  const websiteUserData = useContext( WebsiteUserDataContext );
+const UserInfo: React.FC = () => {
+  const websiteUserData = useContext( WebsiteUserDataContext ) as WebsiteUserDataType;
   return (
     <>
       <img src={personCircle} alt='person icon' width='20px'/>&nbsp;

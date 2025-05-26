@@ -1,14 +1,32 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- *
+ * Info button that displays statistics about the translation for a specific sim.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import React from 'react';
 import infoCircle from '../img/info-circle.svg';
 
-const StatsInfoButton = ( { reportObject } ) => {
+type ReportObject = {
+  simTitle: string;
+  percentSimSpecific: number;
+  numSimSpecificTranslatedStrings: number;
+  numSimSpecificStrings: number;
+  percentShared: number;
+  numSharedTranslatedStrings: number;
+  numSharedStrings: number | null;
+  percentCommon: number;
+  numCommonTranslatedStrings: number;
+  numCommonStrings: number;
+};
+
+type StatsInfoButtonProps = {
+  reportObject: ReportObject;
+};
+
+const StatsInfoButton: React.FC<StatsInfoButtonProps> = ( { reportObject } ) => {
   const hasSharedStrings = reportObject.numSharedStrings !== null;
   let sharedStatsString = 'N/A';
   if ( hasSharedStrings ) {
@@ -17,7 +35,7 @@ const StatsInfoButton = ( { reportObject } ) => {
   const simSpecificStatsString = `${reportObject.percentSimSpecific}% (${reportObject.numSimSpecificTranslatedStrings} of ${reportObject.numSimSpecificStrings})`;
   const commonStatsString = `${reportObject.percentCommon}% (${reportObject.numCommonTranslatedStrings} of ${reportObject.numCommonStrings})`;
   const statsString = `Statistics for ${reportObject.simTitle}:
-      Sim-Specific Strings: ${simSpecificStatsString}  
+      Sim-Specific Strings: ${simSpecificStatsString}
       Shared Strings: ${sharedStatsString}
       Common Strings: ${commonStatsString}`;
   const buttonStyle = {
