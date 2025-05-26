@@ -1,22 +1,21 @@
 // Copyright 2022, University of Colorado Boulder
 
-import Nav from './Nav';
-import SignOutLink from './SignOutLink';
-import UserInfo from './UserInfo';
-
 /**
  * Create a header to be displayed on every page of the translation utility.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import React from 'react';
+import Nav from './Nav';
+import SignOutLink from './SignOutLink';
+import UserInfo from './UserInfo';
+
 /**
  * Return a "header" (i.e. info) to be shown at the top of every page on the translation
  * utility.
- *
- * @returns {JSX.Element}
  */
-const RosettaHeader = () => {
+const RosettaHeader: React.FC = () => {
   return (
     <>
       <h1>PhET Translation Utility (HTML5)</h1>

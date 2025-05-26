@@ -1,5 +1,4 @@
 // Copyright 2021, University of Colorado Boulder
- 
 
 /**
  * We define the sim-specific translation table and the common translation table that will go in the translation form.
@@ -9,17 +8,15 @@
 
 import React from 'react';
 import KeyTypesEnum from '../../common/KeyTypesEnum';
+import { TranslationFormTablesProps } from '../clientTypes.js';
 import TranslationFormRow from './TranslationFormRow';
 
 /**
  * This component has some headers, some info, and a table for sim-specific strings and common strings. The header
  * tells the user whether the table is for sim-specific strings or common strings; the info tells the user what will
  * happen if they translate the strings; and the table has rows of string key, English string, and input.
- *
- * @param {Object} props - props passed to this component
- * @returns {JSX.Element}
  */
-const TranslationFormTables = props => {
+const TranslationFormTables: React.FC<TranslationFormTablesProps> = props => {
 
   // Build rows for sim-specific, shared, and common categories on each render
   const simSpecificRows = [];

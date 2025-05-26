@@ -20,6 +20,24 @@ export type TranslationValues = {
   };
 };
 
+// Types for TranslationFormTables
+export type TranslationFormData = {
+  [ keyType: string ]: {
+    [ stringKeyWithoutDots: string ]: {
+      english: string;
+    };
+  };
+} & {
+  simIsPrototype: boolean;
+};
+
+export type TranslationFormTablesProps = {
+  translationFormData: TranslationFormData;
+  locale: string;
+  aiTranslatedFields: string[];
+  setAiTranslatedFields: ( fields: string[] ) => void;
+};
+
 // Below types used for the TranslationFormRow component
 export type LocaleInfo = {
   [locale: string]: {
@@ -39,6 +57,6 @@ export type TranslationFormRowProps = {
   stringKey: string;
   englishString: string;
   locale: string;
-  aiTranslatedFields: Set<string> | null;
-  setAiTranslatedFields: ( fields: Set<string> ) => void;
+  aiTranslatedFields: string[] | null;
+  setAiTranslatedFields: ( fields: string[] ) => void;
 };
