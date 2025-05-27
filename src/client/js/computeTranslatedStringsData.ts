@@ -8,7 +8,7 @@
  */
 
 import KeyTypesEnum from '../../common/KeyTypesEnum';
-import { TranslationFormData } from '../clientTypes.js';
+import { TranslationFormData } from '../../common/TranslationFormData.js';
 
 type TranslatedStringsData = {
   [ key: string ]: {

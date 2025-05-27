@@ -7,6 +7,8 @@
  * @author Agustín Vallejo
  */
 
+import { StringEntry } from '../common/TranslationFormData.js';
+
 export type SimNamesAndTitles = {
   [ simName: string ]: string;
 };
@@ -44,14 +46,10 @@ export type TranslationFormRowProps = {
   englishString: string;
 } & LocaleAndAIMetadata;
 
-
 // Types for TranslationFormTables
 export type TranslationFormData = {
   [ keyType: string ]: { // simSpecific, shared, common
-    [ stringKeyWithoutDots: string ]: {
-      english: string;
-      translated: string;
-    };
+    [ stringKeyWithoutDots: string ]: StringEntry;
   };
   simIsPrototype: boolean;
   errors: ErrorContextType; // errors for the form, if any

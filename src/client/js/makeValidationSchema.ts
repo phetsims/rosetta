@@ -12,7 +12,7 @@
 import * as Yup from 'yup';
 import { DOUBLE_BRACE_REGEX, SINGLE_BRACE_REGEX } from '../../common/constants';
 import KeyTypesEnum from '../../common/KeyTypesEnum';
-import { TranslationFormData } from '../clientTypes.js';
+import { TranslationFormData } from '../../common/TranslationFormData.js';
 import alertErrorMessage from './alertErrorMessage';
 import isValidBracePattern from './isValidBracePattern';
 

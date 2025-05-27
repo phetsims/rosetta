@@ -6,7 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-const KeyTypesEnum = {
+const KeyTypesEnum: { [ key: string ]: 'simSpecific' | 'shared' | 'common' } = {
   SIM_SPECIFIC: 'simSpecific',
   SHARED: 'shared',
   COMMON: 'common'

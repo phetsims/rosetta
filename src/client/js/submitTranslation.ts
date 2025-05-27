@@ -9,7 +9,7 @@
 import { TRANSLATION_API_ROUTE } from '../../common/constants';
 import KeyTypesEnum from '../../common/KeyTypesEnum';
 import publicConfig from '../../common/publicConfig';
-import { TranslationFormData } from '../clientTypes.js';
+import { TranslationFormData } from '../../common/TranslationFormData.js';
 import alertErrorMessage from './alertErrorMessage';
 import computeTranslatedStringsData from './computeTranslatedStringsData';
 import makeTranslationObject from './makeTranslationObject';
