@@ -17,6 +17,8 @@ type WebsiteUserData = {
 };
 
 type TranslationFormButtonsProps = {
+  simName: string;
+  locale: string;
   isValid: boolean;
   dirty: boolean;
   isDisabled: boolean;

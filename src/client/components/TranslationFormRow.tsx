@@ -11,7 +11,7 @@ import React, { ReactElement, useContext } from 'react';
 import { DOUBLE_BRACE_REGEX, SINGLE_BRACE_REGEX } from '../../common/constants';
 import '../styles/table.css';
 import '../styles/translation-form.css';
-import { LocaleInfo, TextAreaStyle, TranslationFormRowProps } from '../clientTypes';
+import { TextAreaStyle, TranslationFormRowProps } from '../clientTypes';
 import InputErrorMessage from './InputErrorMessage';
 import { LocaleInfoContext } from './RosettaRoutes';
 
@@ -21,7 +21,7 @@ import { LocaleInfoContext } from './RosettaRoutes';
  */
 const TranslationFormRow: React.FC<TranslationFormRowProps> = ( props ): ReactElement => {
 
-  const localeInfo = useContext( LocaleInfoContext ) as LocaleInfo;
+  const localeInfo = useContext( LocaleInfoContext );
   const direction = localeInfo[ props.locale ].direction;
 
   const isPatternString = SINGLE_BRACE_REGEX.test( props.englishString ) ||

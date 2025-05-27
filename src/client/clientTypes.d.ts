@@ -38,20 +38,27 @@ export type TranslationValues = {
 
 // Types for TranslationFormTables
 export type TranslationFormData = {
-  [ keyType: string ]: {
+  [ keyType: string ]: { // simSpecific, shared, common
     [ stringKeyWithoutDots: string ]: {
       english: string;
+      translated: string;
     };
   };
 } & {
   simIsPrototype: boolean;
+  errors: ErrorContextType; // errors for the form, if any
 };
+
+// TODO: Try to use Record https://github.com/phetsims/rosetta/issues/311
+export type ErrorContextType = {
+  [ key: string ]: string;
+} | null;
 
 export type TranslationFormTablesProps = {
   translationFormData: TranslationFormData;
   locale: string;
-  aiTranslatedFields: string[];
-  setAiTranslatedFields: ( fields: string[] ) => void;
+  aiTranslatedFields: Set<string> | null;
+  setAiTranslatedFields: ( fields: Set<string> ) => void;
 };
 
 // Below types used for the TranslationFormRow component
