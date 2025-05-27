@@ -12,9 +12,7 @@ export type TranslationFormValues = {
 };
 
 export type SimNamesAndTitles = {
-  [ simName: string ]: {
-    title: string;
-  };
+  [ simName: string ]: string;
 };
 
 // For getWebsiteUserData and others

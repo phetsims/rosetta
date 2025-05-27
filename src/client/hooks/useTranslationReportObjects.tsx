@@ -1,62 +1,56 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * Create a custom hook for getting translation report objects from the backend.
+ * Create a custom hook for getting translation report objects (sent via server sent events) from the backend.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
 import { useContext, useEffect, useState } from 'react';
 import { TRANSLATION_API_ROUTE } from '../../common/constants';
-import { ReportObject } from '../clientTypes.js';
+import { ReportObject, WebsiteUserData } from '../clientTypes';
 import { WebsiteUserDataContext } from '../components/Rosetta';
-import alertErrorMessage from '../js/alertErrorMessage';
 
-type TranslationReportReturn = {
+type TranslationReportHookResult = {
   reportPopulated: boolean;
   reportObjects: ReportObject[];
   setReportObjects: React.Dispatch<React.SetStateAction<ReportObject[]>>;
 };
 
 /**
- * Return the report objects we get from the backend. Also return a boolean telling whether the
- * translation report is populated, and a setter function for report objects.
+ * Return the report objects we get from the backend's server sent events. Also return a boolean telling whether the
+ * translation report is populated, i.e. the server is done sending events. Also return a setter function for report
+ * objects.
  */
 const useTranslationReportObjects = (
   locale: string,
   wantsUntranslated: boolean,
   showStats: boolean
-): TranslationReportReturn => {
+): TranslationReportHookResult => {
 
+  const [ listening, setListening ] = useState<boolean>( false );
   const [ reportPopulated, setReportPopulated ] = useState<boolean>( false );
   const [ reportObjects, setReportObjects ] = useState<ReportObject[]>( [] );
 
-  const websiteUserData = useContext( WebsiteUserDataContext );
+  const websiteUserData = useContext<WebsiteUserData>( WebsiteUserDataContext );
 
   useEffect( () => {
-    if ( !reportPopulated && showStats ) {
-      const fetchTranslationReport = async (): Promise<void> => {
-        try {
-          const response = await fetch(
-            `${TRANSLATION_API_ROUTE}/translationReport/${locale}?wantsUntranslated=${wantsUntranslated}&isTeamMember=${websiteUserData.teamMember}`
-          );
-
-          if ( !response.ok ) {
-            throw new Error( `HTTP error! Status: ${response.status}` );
-          }
-
-          const data = await response.json();
-          setReportObjects( data );
-          setReportPopulated( true );
+    if ( !listening && !reportPopulated && showStats ) {
+      const translationReportUrl = `${TRANSLATION_API_ROUTE}/translationReportEvents/${locale}?wantsUntranslated=${wantsUntranslated}&isTeamMember=${websiteUserData.teamMember}`;
+      const translationReportSource = new EventSource( translationReportUrl );
+      translationReportSource.onmessage = event => {
+        if ( event.data !== 'closed' ) {
+          const parsedData = JSON.parse( event.data ) as ReportObject;
+          setReportObjects( reportObjects => reportObjects.concat( parsedData ) );
         }
-        catch( e ) {
-          void alertErrorMessage( e as string );
+        else {
+          setReportPopulated( true );
+          translationReportSource.close();
         }
       };
-
-      void fetchTranslationReport();
+      setListening( true );
     }
-  }, [ locale, wantsUntranslated, reportPopulated, showStats, websiteUserData ] );
+  }, [ listening, reportPopulated, locale, wantsUntranslated, websiteUserData.teamMember, showStats ] );
 
   // If showStats is false, this is a dummy object.
   return {

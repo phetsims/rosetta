@@ -42,7 +42,7 @@ const getTranslationReportRows = (
     for ( const simName of listOfSims ) {
       translationReportJsx[ simName ] = (
         <tr key={simName}>
-          <td><Link to={`/translate/${locale}/${simName}`}>{simNamesAndTitles[ simName ].title}</Link></td>
+          <td><Link to={`/translate/${locale}/${simName}`}>{simNamesAndTitles[ simName ]}</Link></td>
           <td>--</td>
         </tr>
       );
@@ -67,7 +67,7 @@ const getTranslationReportRows = (
     for ( const simName of listOfSims ) {
       translationReportJsx[ simName ] = (
         <tr key={simName}>
-          <td><Link to={`/translate/${locale}/${simName}`}>{simNamesAndTitles[ simName ].title}</Link></td>
+          <td><Link to={`/translate/${locale}/${simName}`}>{simNamesAndTitles[ simName ]}</Link></td>
           <td>Loading...</td>
         </tr>
       );
