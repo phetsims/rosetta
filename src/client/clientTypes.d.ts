@@ -7,6 +7,7 @@
  * @author Agustín Vallejo
  */
 
+import ReportObject from '../common/ReportObject.js';
 import { StringEntry } from '../common/TranslationFormData.js';
 
 export type SimNamesAndTitles = {
@@ -68,33 +69,6 @@ export type LocaleInfo = {
   };
 };
 
-// Report Object used widely
-export type ReportObject = {
-  simTitle: string;
-  simName: string; // Do we need simName AND title?
-  isDirty: boolean;
-
-  numSimSpecificTranslatedStrings: number;
-  numSimSpecificStrings: number;
-
-  numSharedTranslatedStrings: number;
-  numSharedStrings: number | null;
-
-  numCommonTranslatedStrings: number;
-  numCommonStrings: number;
-
-  totalTranslatedStrings: number;
-  totalStrings: number;
-
-  percentSimSpecific: number; // This is present in the raw object
-  percentShared: number; // This is present in the raw object
-  percentCommon: number; // This is present in the raw object
-  percentTotal: number; // This is also present in the raw object
-
-  // The general index signature is kept as per original, though it makes strict typing harder.
-  [ key: string ]: string | number | boolean | null;
-};
-
 // This type represents a ReportObject after its percentages have been calculated/re-calculated
 // by `getReportObjectsWithCalculatedPercentages`. These calculated percentages
 // are specifically named `commonPercent`, `simSpecificPercent`, and `sharedPercent` in the original logic.
@@ -103,4 +77,5 @@ export type ReportObjectWithCalculatedPercentages = ReportObject & {
   commonPercent: number; // The calculated common percentage
   simSpecificPercent: number; // The calculated sim-specific percentage
   sharedPercent: number; // The calculated shared percentage
+  totalPercent: number; // Optional total percentage, if applicable
 };

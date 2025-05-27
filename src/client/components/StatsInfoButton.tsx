@@ -7,21 +7,21 @@
  */
 
 import React from 'react';
-import { ReportObject } from '../clientTypes';
+import { ReportObjectWithCalculatedPercentages } from '../clientTypes';
 import infoCircle from '../img/info-circle.svg';
 
 type StatsInfoButtonProps = {
-  reportObject: ReportObject;
+  reportObject: ReportObjectWithCalculatedPercentages;
 };
 
 const StatsInfoButton: React.FC<StatsInfoButtonProps> = ( { reportObject } ) => {
   const hasSharedStrings = reportObject.numSharedStrings !== null;
   let sharedStatsString = 'N/A';
   if ( hasSharedStrings ) {
-    sharedStatsString = `${reportObject.percentShared}% (${reportObject.numSharedTranslatedStrings} of ${reportObject.numSharedStrings})`;
+    sharedStatsString = `${reportObject.sharedPercent}% (${reportObject.numSharedTranslatedStrings} of ${reportObject.numSharedStrings})`;
   }
-  const simSpecificStatsString = `${reportObject.percentSimSpecific}% (${reportObject.numSimSpecificTranslatedStrings} of ${reportObject.numSimSpecificStrings})`;
-  const commonStatsString = `${reportObject.percentCommon}% (${reportObject.numCommonTranslatedStrings} of ${reportObject.numCommonStrings})`;
+  const simSpecificStatsString = `${reportObject.simSpecificPercent}% (${reportObject.numSimSpecificTranslatedStrings} of ${reportObject.numSimSpecificStrings})`;
+  const commonStatsString = `${reportObject.commonPercent}% (${reportObject.numCommonTranslatedStrings} of ${reportObject.numCommonStrings})`;
   const statsString = `Statistics for ${reportObject.simTitle}:
       Sim-Specific Strings: ${simSpecificStatsString}
       Shared Strings: ${sharedStatsString}

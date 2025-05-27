@@ -31,11 +31,17 @@ const getReportObjectsWithCalculatedPercentages = ( reportObjects: ReportObject[
       sharedPercent = Math.floor( ( reportObject.numSharedTranslatedStrings / reportObject.numSharedStrings ) * 100 );
     }
 
+    let totalPercent = 0;
+    if ( reportObject.totalStrings > 0 ) {
+      totalPercent = Math.floor( ( reportObject.totalTranslatedStrings / reportObject.totalStrings ) * 100 );
+    }
+
     objectsWithCalculatedPercents.push( {
       ...reportObject,
       commonPercent: commonPercent,
       simSpecificPercent: simSpecificPercent,
-      sharedPercent: sharedPercent
+      sharedPercent: sharedPercent,
+      totalPercent: totalPercent
     } );
   }
   return objectsWithCalculatedPercents;

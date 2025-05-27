@@ -10,12 +10,12 @@
  */
 
 import publicConfig from '../../../common/publicConfig.js';
+import ReportObject from '../../../common/ReportObject.js';
 import logger from '../logger.js';
-import TranslationReportObject from './TranslationReportObject.js';
 
 class ReportObjectCache {
 
-  private cache: Record<string, Record<string, TranslationReportObject>> = {};
+  private cache: Record<string, Record<string, ReportObject>> = {};
 
   /**
    * Set the object in the cache. This is used to store the report object.
@@ -27,7 +27,7 @@ class ReportObjectCache {
   public setObject(
     locale: string,
     sim: string,
-    reportObject: TranslationReportObject,
+    reportObject: ReportObject,
     timestamp: number
   ): void {
     if ( this.cache[ locale ] === undefined ) {
@@ -52,8 +52,8 @@ class ReportObjectCache {
    * @param sim
    * @returns The cached report object or null if not available/valid
    */
-  public getObject( locale: string, sim: string ): TranslationReportObject | null {
-    let reportObject: TranslationReportObject | null = null;
+  public getObject( locale: string, sim: string ): ReportObject | null {
+    let reportObject: ReportObject | null = null;
     if ( this.cache[ locale ] !== undefined && this.cache[ locale ][ sim ] !== undefined ) {
       const withinSimMetadataCacheWindow = Date.now() - this.cache[ locale ][ sim ].timestamp
                                            < publicConfig.VALID_METADATA_DURATION;

@@ -7,18 +7,17 @@
  */
 
 import { NO_LONGER_USED_FLAG } from '../../../common/constants.js';
+import ReportObject from '../../../common/ReportObject.js';
 import getCategorizedStringKeys from '../getCategorizedStringKeys.js';
 import getLatestSimSha from '../getLatestSimSha.js';
 import getStringKeysUsedInSim from '../getStringKeysUsedInSim.js';
 import logger from '../logger.js';
 import getCommonEnglishStringKeysAndValues from './getCommonEnglishStringKeysAndValues.js';
 import getCommonTranslatedStringKeysAndValues from './getCommonTranslatedStringKeysAndValues.js';
-import getPercentOfTranslatedStrings from './getPercentOfTranslatedStrings.js';
 import getSharedTranslatedStringKeysAndValues from './getSharedTranslatedStringKeysAndValues.js';
 import getSimSpecificEnglishStringKeysAndValues from './getSimSpecificEnglishStringKeysAndValues.js';
 import getSimSpecificTranslatedStringKeysAndValues from './getSimSpecificTranslatedStringKeysAndValues.js';
 import getTotalStats from './getTotalStats.js';
-import TranslationReportObject from './TranslationReportObject.js';
 
 /**
  * Get an object containing the information needed to populate a row in the "translation report", which is a report that
@@ -33,23 +32,19 @@ const getTranslationReportObject = async ( simName: string,
                                            locale: string,
                                            simNames: string[],
                                            simTitle: string,
-                                           wantsUntranslated: boolean ): Promise<TranslationReportObject> => {
+                                           wantsUntranslated: boolean ): Promise<ReportObject> => {
 
-  const translationReportObject: TranslationReportObject = {
+  const translationReportObject: ReportObject = {
     simName: simName,
     simTitle: simTitle,
-    numCommonStrings: null,
-    numCommonTranslatedStrings: null,
-    percentCommon: null,
-    numSimSpecificStrings: null,
-    numSimSpecificTranslatedStrings: wantsUntranslated ? 0 : null,
-    percentSimSpecific: null,
-    numSharedStrings: null,
-    numSharedTranslatedStrings: wantsUntranslated ? 0 : null,
-    percentShared: null,
-    totalStrings: null,
-    totalTranslatedStrings: null,
-    percentTotal: null,
+    numCommonStrings: 0,
+    numCommonTranslatedStrings: 0,
+    numSimSpecificStrings: 0,
+    numSimSpecificTranslatedStrings: 0,
+    numSharedStrings: 0,
+    numSharedTranslatedStrings: 0,
+    totalStrings: 0,
+    totalTranslatedStrings: 0,
     isDirty: true,
     timestamp: Number.NEGATIVE_INFINITY
   };
@@ -90,11 +85,6 @@ const getTranslationReportObject = async ( simName: string,
       .filter( key => commonTranslatedStringKeysAndValues[ key ] !== ''
                       && commonEnglishStringKeysAndValues[ key ] !== NO_LONGER_USED_FLAG ).length;
 
-    translationReportObject.percentCommon = getPercentOfTranslatedStrings(
-      translationReportObject.numCommonTranslatedStrings,
-      translationReportObject.numCommonStrings
-    );
-
     const latestSimSha = await getLatestSimSha( simName );
     const simSpecificEnglishStringKeysAndValues = await getSimSpecificEnglishStringKeysAndValues(
       simName,
@@ -119,11 +109,6 @@ const getTranslationReportObject = async ( simName: string,
                  && simSpecificEnglishStringKeysAndValues[ key ] !== NO_LONGER_USED_FLAG;
         } ).length;
     }
-
-    translationReportObject.percentSimSpecific = getPercentOfTranslatedStrings(
-      translationReportObject.numSimSpecificTranslatedStrings!,
-      translationReportObject.numSimSpecificStrings
-    );
 
     // If there are shared strings for this sim, we need to get the stats for those.
     if ( categorizedStringKeys.shared.length > 0 ) {
@@ -164,11 +149,6 @@ const getTranslationReportObject = async ( simName: string,
           }
         }
       }
-
-      translationReportObject.percentShared = getPercentOfTranslatedStrings(
-        translationReportObject.numSharedTranslatedStrings!,
-        translationReportObject.numSharedStrings
-      );
     }
 
     // Since we made it to this point, consider the object to be valid.

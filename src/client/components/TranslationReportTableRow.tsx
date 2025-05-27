@@ -31,7 +31,7 @@ const TranslationReportTableRow: React.FC<TranslationReportTableRowProps> = ( { 
       <td style={tdStyle}><Link to={`/translate/${locale}/${item.simName}`}>{item.simTitle}</Link>{pendingUpdateMessage}</td>
       <td style={tdStyle}>
         <StatsInfoButton reportObject={item}/>
-        {item.percentTotal}% ({item.totalTranslatedStrings} of {item.totalStrings})
+        {item.totalPercent}% ({item.totalTranslatedStrings} of {item.totalStrings})
       </td>
     </tr>
   );
