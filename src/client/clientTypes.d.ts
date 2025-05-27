@@ -7,10 +7,6 @@
  * @author Agustín Vallejo
  */
 
-export type TranslationFormValues = {
-  [ key: string ]: string | boolean | TranslationFormValues;
-};
-
 export type SimNamesAndTitles = {
   [ simName: string ]: string;
 };
@@ -27,14 +23,27 @@ export type WebsiteUserData = {
   subscribed?: boolean;
 };
 
-export type TranslationValues = {
-  [ keyType: string ]: { // simSpecific, shared, common
-    [ stringKey: string ]: {
-      translated: string;
-      english: string;
-    };
-  };
+export type TranslationFormValues = {
+  [ key: string ]: string | boolean | TranslationFormValues;
 };
+
+type LocaleAndAIMetadata = {
+  locale: string;
+  aiTranslatedFields: Set<string> | null;
+  setAiTranslatedFields: ( fields: Set<string> ) => void;
+};
+
+export type TranslationFormTablesProps = {
+  translationFormData: TranslationFormData;
+} & LocaleAndAIMetadata;
+
+export type TranslationFormRowProps = {
+  keyWithoutDots: string;
+  name: string;
+  stringKey: string;
+  englishString: string;
+} & LocaleAndAIMetadata;
+
 
 // Types for TranslationFormTables
 export type TranslationFormData = {
@@ -44,7 +53,6 @@ export type TranslationFormData = {
       translated: string;
     };
   };
-} & {
   simIsPrototype: boolean;
   errors: ErrorContextType; // errors for the form, if any
 };
@@ -54,13 +62,6 @@ export type ErrorContextType = {
   [ key: string ]: string;
 } | null;
 
-export type TranslationFormTablesProps = {
-  translationFormData: TranslationFormData;
-  locale: string;
-  aiTranslatedFields: Set<string> | null;
-  setAiTranslatedFields: ( fields: Set<string> ) => void;
-};
-
 // Below types used for the TranslationFormRow component
 export type LocaleInfo = {
   [locale: string]: {
@@ -69,25 +70,8 @@ export type LocaleInfo = {
   };
 };
 
-export type TextAreaStyle = {
-  textAlign: 'left' | 'right';
-  color: string;
-  resize: 'both';
-};
-
-export type TranslationFormRowProps = {
-  keyWithoutDots: string;
-  name: string;
-  stringKey: string;
-  englishString: string;
-  locale: string;
-  aiTranslatedFields: Set<string> | null;
-  setAiTranslatedFields: ( fields: Set<string> ) => void;
-};
-
 // Report Object used widely
 // TODO: HIGHLY improvable https://github.com/phetsims/rosetta/issues/311
-
 export type ReportObject = {
   simTitle: string;
   percentSimSpecific: number;

@@ -12,7 +12,7 @@
 import * as Yup from 'yup';
 import { DOUBLE_BRACE_REGEX, SINGLE_BRACE_REGEX } from '../../common/constants';
 import KeyTypesEnum from '../../common/KeyTypesEnum';
-import { TranslationValues } from '../clientTypes';
+import { TranslationFormData } from '../clientTypes.js';
 import alertErrorMessage from './alertErrorMessage';
 import isValidBracePattern from './isValidBracePattern';
 
@@ -27,7 +27,7 @@ type ValidationSubObjects = {
  */
 const makeValidationSchema = (
   simRepoName: string,
-  translationFormData: TranslationValues
+  translationFormData: TranslationFormData
 ): Yup.AnyObjectSchema | { error: string } => {
   const subObjects: ValidationSubObjects = {};
   let validationSchema: Yup.AnyObjectSchema | { error: string };

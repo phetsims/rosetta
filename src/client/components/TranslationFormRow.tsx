@@ -11,9 +11,15 @@ import React, { ReactElement, useContext } from 'react';
 import { DOUBLE_BRACE_REGEX, SINGLE_BRACE_REGEX } from '../../common/constants';
 import '../styles/table.css';
 import '../styles/translation-form.css';
-import { TextAreaStyle, TranslationFormRowProps } from '../clientTypes';
+import { TranslationFormRowProps } from '../clientTypes';
 import InputErrorMessage from './InputErrorMessage';
 import { LocaleInfoContext } from './RosettaRoutes';
+
+type TextAreaStyle = {
+  textAlign: 'left' | 'right';
+  color: string;
+  resize: 'both';
+};
 
 /**
  * This component is a row in the translation table. It has the string key, the English string, and an input for

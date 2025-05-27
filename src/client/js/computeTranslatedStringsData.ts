@@ -8,7 +8,7 @@
  */
 
 import KeyTypesEnum from '../../common/KeyTypesEnum';
-import { TranslationValues } from '../clientTypes.js';
+import { TranslationFormData } from '../clientTypes.js';
 
 type TranslatedStringsData = {
   [ key: string ]: {
@@ -21,7 +21,7 @@ type TranslatedStringsData = {
 /**
  * Return an object with data about the translated strings in a translation form.
  */
-const computeTranslatedStringsData = ( translationValues: TranslationValues ): TranslatedStringsData => {
+const computeTranslatedStringsData = ( translationValues: TranslationFormData ): TranslatedStringsData => {
   const translatedStringsData: TranslatedStringsData = {};
   for ( const keyType of Object.values( KeyTypesEnum ) ) {
     if ( translationValues[ keyType ] ) {

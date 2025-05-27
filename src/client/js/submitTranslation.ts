@@ -9,7 +9,7 @@
 import { TRANSLATION_API_ROUTE } from '../../common/constants';
 import KeyTypesEnum from '../../common/KeyTypesEnum';
 import publicConfig from '../../common/publicConfig';
-import { TranslationValues } from '../clientTypes.js';
+import { TranslationFormData } from '../clientTypes.js';
 import alertErrorMessage from './alertErrorMessage';
 import computeTranslatedStringsData from './computeTranslatedStringsData';
 import makeTranslationObject from './makeTranslationObject';
@@ -25,7 +25,7 @@ type Message = { [key: string]: string };
  * Issue a post request to submit a translation for publication to the PhET website.
  */
 const submitTranslation = async (
-  values: TranslationValues,
+  values: TranslationFormData,
   simName: string,
   locale: string,
   simTitle: string,
