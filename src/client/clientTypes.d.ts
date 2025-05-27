@@ -69,35 +69,38 @@ export type LocaleInfo = {
 };
 
 // Report Object used widely
-// TODO: HIGHLY improvable https://github.com/phetsims/rosetta/issues/311
 export type ReportObject = {
   simTitle: string;
-  percentSimSpecific: number;
+  simName: string; // Do we need simName AND title?
+  isDirty: boolean;
+
   numSimSpecificTranslatedStrings: number;
   numSimSpecificStrings: number;
-  percentShared: number;
+
   numSharedTranslatedStrings: number;
   numSharedStrings: number | null;
-  percentCommon: number;
+
   numCommonTranslatedStrings: number;
   numCommonStrings: number;
-  simName: string;
-  isDirty: boolean;
+
   totalTranslatedStrings: number;
   totalStrings: number;
-  percentTotal: number;
 
-  key?: string;
-  type?: string;
-  locale?: string;
-  untranslated?: boolean;
-  translation?: string;
-  stats?: {
-    totalKeys: number;
-    translatedKeys: number;
-    untranslatedKeys: number;
-    percentageTranslated: number;
-  };
+  percentSimSpecific: number; // This is present in the raw object
+  percentShared: number; // This is present in the raw object
+  percentCommon: number; // This is present in the raw object
+  percentTotal: number; // This is also present in the raw object
 
-  [ key: string ]: string | number | boolean | { [ key: string ]: number } | null; // Allow for additional properties that may be added later
+  // The general index signature is kept as per original, though it makes strict typing harder.
+  [ key: string ]: string | number | boolean | null;
+};
+
+// This type represents a ReportObject after its percentages have been calculated/re-calculated
+// by `getReportObjectsWithCalculatedPercentages`. These calculated percentages
+// are specifically named `commonPercent`, `simSpecificPercent`, and `sharedPercent` in the original logic.
+// They effectively override or provide the definitive values for sorting and display.
+export type ReportObjectWithCalculatedPercentages = ReportObject & {
+  commonPercent: number; // The calculated common percentage
+  simSpecificPercent: number; // The calculated sim-specific percentage
+  sharedPercent: number; // The calculated shared percentage
 };
