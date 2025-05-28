@@ -8,7 +8,7 @@
  */
 
 import ReportObject from '../common/ReportObject.js';
-import { StringEntry } from '../common/TranslationFormData.js';
+import { TranslationFormData } from '../common/TranslationFormData.js';
 
 export type SimNamesAndTitles = {
   [ simName: string ]: string;
@@ -38,6 +38,7 @@ type LocaleAndAIMetadata = {
 
 export type TranslationFormTablesProps = {
   translationFormData: TranslationFormData;
+  enableA11y: boolean;
 } & LocaleAndAIMetadata;
 
 export type TranslationFormRowProps = {
@@ -45,21 +46,8 @@ export type TranslationFormRowProps = {
   name: string;
   stringKey: string;
   englishString: string;
+  enableA11y: boolean;
 } & LocaleAndAIMetadata;
-
-// Types for TranslationFormTables
-export type TranslationFormData = {
-  [ keyType: string ]: { // simSpecific, shared, common
-    [ stringKeyWithoutDots: string ]: StringEntry;
-  };
-  simIsPrototype: boolean;
-  errors: ErrorContextType; // errors for the form, if any
-};
-
-// TODO: Try to use Record https://github.com/phetsims/rosetta/issues/311
-export type ErrorContextType = {
-  [ key: string ]: string;
-} | null;
 
 // Below types used for the TranslationFormRow component
 export type LocaleInfo = {

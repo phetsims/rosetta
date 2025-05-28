@@ -7,7 +7,7 @@
  */
 
 import { TRANSLATION_API_ROUTE } from '../../common/constants';
-import { TranslationFormValues } from '../clientTypes.js';
+import { TranslationFormData } from '../../common/TranslationFormData.js';
 import alertErrorMessage from './alertErrorMessage';
 import logError from './logError.js';
 import makeTranslationObject from './makeTranslationObject';
@@ -20,7 +20,7 @@ import makeTranslationObject from './makeTranslationObject';
  * @param simName - name of the sim
  * @param locale - locale code for the sim
  */
-const testTranslation = async ( values: TranslationFormValues, simName: string, locale: string ): Promise<void> => {
+const testTranslation = async ( values: TranslationFormData, simName: string, locale: string ): Promise<void> => {
   const translation = await makeTranslationObject( values, simName, locale );
   try {
     const response = await fetch( `${TRANSLATION_API_ROUTE}/testTranslation`, {

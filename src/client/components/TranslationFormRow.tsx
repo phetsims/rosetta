@@ -25,7 +25,7 @@ type TextAreaStyle = {
  * This component is a row in the translation table. It has the string key, the English string, and an input for
  * translating the English string.
  */
-const TranslationFormRow: React.FC<TranslationFormRowProps> = ( props ): ReactElement => {
+const TranslationFormRow: React.FC<TranslationFormRowProps> = ( props ): ReactElement | null => {
 
   const localeInfo = useContext( LocaleInfoContext );
   const direction = localeInfo[ props.locale ].direction;
@@ -39,6 +39,10 @@ const TranslationFormRow: React.FC<TranslationFormRowProps> = ( props ): ReactEl
   };
 
   const isA11yStringKey = props.stringKey.includes( 'a11y' );
+
+  if ( isA11yStringKey && !props.enableA11y ) {
+    return null;
+  }
 
   const stringKeyStyle = {
     fontStyle: isA11yStringKey ? 'italic' : 'normal'

@@ -11,7 +11,8 @@ import { Form, Formik, FormikHelpers, FormikProps } from 'formik';
 import React, { createContext, ReactElement, useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { TRANSLATION_API_ROUTE } from '../../common/constants';
-import { ErrorContextType, LocaleInfo, SimNamesAndTitles, TranslationFormData as ClientTranslationFormData, WebsiteUserData } from '../clientTypes';
+import { ErrorContextType, TranslationFormData } from '../../common/TranslationFormData.js';
+import { LocaleInfo, SimNamesAndTitles, WebsiteUserData } from '../clientTypes';
 import alertErrorMessage from '../js/alertErrorMessage';
 import automateTranslation from '../js/automateTranslation';
 import makeValidationSchema from '../js/makeValidationSchema';
@@ -40,7 +41,7 @@ const TranslationForm: React.FC = (): ReactElement => {
   const params = useParams<TranslationFormParams>();
   const websiteUserData = useContext<WebsiteUserData>( WebsiteUserDataContext );
 
-  const [ translationFormData, setTranslationFormData ] = useState<ClientTranslationFormData | null>( null );
+  const [ translationFormData, setTranslationFormData ] = useState<TranslationFormData | null>( null );
 
   useEffect( () => {
     const fetchData = async (): Promise<void> => {
@@ -68,6 +69,7 @@ const TranslationForm: React.FC = (): ReactElement => {
 
   // Track AI-translated fields for metadata and styling
   const [ aiTranslatedFields, setAiTranslatedFields ] = useState<Set<string>>( new Set() );
+  const [ enableA11y, setEnableA11y ] = useState<boolean>( false );
 
   // Reset AI-translated metadata when form data changes
   useEffect( () => {
@@ -117,7 +119,7 @@ const TranslationForm: React.FC = (): ReactElement => {
         <Formik
           initialValues={translationFormData}
           validationSchema={validationSchema}
-          onSubmit={async ( values: ClientTranslationFormData, { setFieldValue }: FormikHelpers<ClientTranslationFormData> ) => {
+          onSubmit={async ( values: TranslationFormData, { setFieldValue }: FormikHelpers<TranslationFormData> ) => {
             if ( buttonId === '' ) {
               console.error( 'unable to get button id' );
             }
@@ -156,7 +158,7 @@ const TranslationForm: React.FC = (): ReactElement => {
             }
           }}
         >
-          {( props: FormikProps<ClientTranslationFormData> ) => {
+          {( props: FormikProps<TranslationFormData> ) => {
             // Convert Formik errors to compatible format for ErrorContext
             const contextErrors: ErrorContextType = Object.keys( props.errors ).length > 0 ?
                                                     props.errors as unknown as ErrorContextType : null;
@@ -169,6 +171,8 @@ const TranslationForm: React.FC = (): ReactElement => {
                   handleButtonClick={handleButtonClick}
                   isDisabled={isDisabled}
                   testIsLoading={testIsLoading}
+                  enableA11y={enableA11y}
+                  setEnableA11y={setEnableA11y}
                   {...props}
                 />
                 <ErrorContext.Provider value={contextErrors}>
@@ -178,6 +182,7 @@ const TranslationForm: React.FC = (): ReactElement => {
                     locale={params.locale || ''}
                     aiTranslatedFields={aiTranslatedFields}
                     setAiTranslatedFields={setAiTranslatedFields}
+                    enableA11y={enableA11y}
                   />
                 </ErrorContext.Provider>
               </Form>

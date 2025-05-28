@@ -33,6 +33,13 @@ type TranslationFormData = {
 
   // whether this sim is a prototype
   simIsPrototype: boolean;
+
+  errors: ErrorContextType; // errors for the form, if any
 };
+
+// TODO: Try to use Record https://github.com/phetsims/rosetta/issues/311
+export type ErrorContextType = {
+  [ key: string ]: string;
+} | null;
 
 export type { TranslationFormData };

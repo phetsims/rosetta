@@ -7,7 +7,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { TranslationFormValues } from '../clientTypes.js';
+import { TranslationFormData } from '../../common/TranslationFormData.js';
 import getWebsiteUserData from './getWebsiteUserData';
 
 export type TranslationObject = {
@@ -15,13 +15,13 @@ export type TranslationObject = {
   timestamp: number;
   simName: string;
   locale: string;
-  translationFormData: TranslationFormValues;
+  translationFormData: TranslationFormData;
 };
 
 /**
  * Return an object with the data needed for submitting the sim for publication, saving it for later, or testing it.
  */
-const makeTranslationObject = async ( values: TranslationFormValues, simName: string, locale: string ): Promise<TranslationObject> => {
+const makeTranslationObject = async ( values: TranslationFormData, simName: string, locale: string ): Promise<TranslationObject> => {
   const websiteUserData = await getWebsiteUserData();
 
   // Check for a user ID and if it's missing, replace it with a value from session storage.  This is part of a

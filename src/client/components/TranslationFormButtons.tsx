@@ -24,6 +24,8 @@ type TranslationFormButtonsProps = {
   isDisabled: boolean;
   testIsLoading: boolean;
   handleButtonClick: ( event: React.MouseEvent<HTMLButtonElement> ) => void;
+  enableA11y: boolean;
+  setEnableA11y: ( enable: boolean ) => void;
 };
 
 /**
@@ -38,9 +40,16 @@ const TranslationFormButtons: React.FC<TranslationFormButtonsProps> = props => {
   const buttonClass = !( props.isValid && props.dirty ) ? grayButton : blueButton;
   const automateButtonClass = 'btn btn-success';
 
+  // Container style for vertical alignment
+  const containerStyle = {
+    display: 'flex',
+    alignItems: 'center', // This vertically centers all items
+    gap: '0.5rem' // Add spacing between items
+  };
+
   return (
     <div className='card sticky-top mt-4 mb-4'>
-      <div className='card-body save-test-publish-buttons-container'>
+      <div className='card-body' style={containerStyle}>
         <button
           id='save'
           onClick={props.handleButtonClick}
@@ -88,6 +97,18 @@ const TranslationFormButtons: React.FC<TranslationFormButtonsProps> = props => {
           </button>
         )}
         {props.testIsLoading ? <LoadingSpinner/> : <></>}
+        <div className='form-check form-check-inline ms-3' style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <input
+            type='checkbox'
+            className='form-check-input'
+            id='enableA11y'
+            checked={props.enableA11y}
+            onChange={ e => props.setEnableA11y( e.target.checked ) }
+          />
+          <label className='form-check-label' htmlFor='enableA11y'>
+              Enable a11y ♿
+          </label>
+        </div>
       </div>
     </div>
   );

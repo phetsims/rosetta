@@ -36,6 +36,7 @@ const TranslationFormTables: React.FC<TranslationFormTablesProps> = props => {
           locale={props.locale}
           aiTranslatedFields={props.aiTranslatedFields}
           setAiTranslatedFields={props.setAiTranslatedFields}
+          enableA11y={props.enableA11y}
         />
       );
       if ( translationFormKey === KeyTypesEnum.SIM_SPECIFIC ) {

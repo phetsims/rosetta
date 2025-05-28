@@ -8,12 +8,17 @@
 
 
 import { TRANSLATION_API_ROUTE } from '../../common/constants';
-import { TranslationFormValues } from '../clientTypes.js';
+import { TranslationFormData } from '../../common/TranslationFormData.js';
 import logError from './logError';
 
 type TranslationResponse = {
   translation: string;
   model: string;
+};
+
+// Generic type for the values in the automated translation form
+type TranslationFormAIValues = {
+  [ key: string ]: string | boolean | TranslationFormAIValues;
 };
 
 /**
@@ -55,20 +60,20 @@ const translateWithAI = async (
  * Automates the translation of all strings and updates the values object.
  */
 const automateTranslation = async (
-  values: TranslationFormValues,
+  values: TranslationFormData,
   simName: string,
   locale: string,
   simTitle: string,
   localeName: string,
   setFieldValue: ( fieldPath: string, value: string | boolean ) => void
 ): Promise<string[]> => {
-  const translatedValues = { ...values };  // Create a copy of the original values object
+  const translatedValues = { ...values } as TranslationFormAIValues;  // Create a copy of the original values object
 
   // Track which fields have been automatically translated
   const updatedPaths: string[] = [];
 
   // Iterate through the values and translate any missing 'translated' fields
-  const translateFields = async ( obj: TranslationFormValues, path = '' ) => {
+  const translateFields = async ( obj: TranslationFormAIValues, path = '' ) => {
     const updates = []; // Store promises to update each translated field
 
     for ( const key in obj ) {
@@ -128,14 +133,14 @@ const automateTranslation = async (
   // First process simSpecific, shared, common
   for ( const key of order ) {
     if ( translatedValues[ key ] !== undefined ) {
-      await translateFields( translatedValues[ key ] as TranslationFormValues, key + '.' );
+      await translateFields( translatedValues[ key ] as TranslationFormAIValues, key + '.' );
     }
   }
 
   // Then process all other keys not in the order
   for ( const key of Object.keys( translatedValues ) ) {
     if ( !order.includes( key ) ) {
-      await translateFields( translatedValues[ key ] as TranslationFormValues, key + '.' );
+      await translateFields( translatedValues[ key ] as TranslationFormAIValues, key + '.' );
     }
   }
 
