@@ -87,7 +87,6 @@ const TranslationFormButtons: React.FC<TranslationFormButtonsProps> = props => {
           <button
             id='automate'
             onClick={props.handleButtonClick}
-            disabled={disabled}
             className={automateButtonClass}
             data-bs-toggle='tooltip'
             data-bs-placement='top'
@@ -106,7 +105,7 @@ const TranslationFormButtons: React.FC<TranslationFormButtonsProps> = props => {
             onChange={ e => props.setEnableA11y( e.target.checked ) }
           />
           <label className='form-check-label' htmlFor='enableA11y'>
-              Enable a11y ♿
+              Enable Accessibility Strings
           </label>
         </div>
       </div>
