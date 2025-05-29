@@ -6,7 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import privateConfig from '../../common/privateConfig.js';
+import getSimBaseUrl from './getSimBaseUrl.js';
 import logger from './logger.js';
 
 /**
@@ -16,7 +16,7 @@ import logger from './logger.js';
  * @returns - sim url
  */
 const getSimUrl = ( simName: string ): string => {
-  const simUrl = `${privateConfig.SERVER_URL}/sims/html/${simName}/latest/${simName}_en.html`;
+  const simUrl = `${getSimBaseUrl( simName )}/${simName}_en.html`;
   logger.info( `url requested for ${simName}, returning ${simUrl}` );
   return simUrl;
 };

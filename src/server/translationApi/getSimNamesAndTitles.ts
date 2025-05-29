@@ -37,7 +37,8 @@ const getSimNamesAndTitles = ( simMetadata: SimMetadata, isTeamMember: boolean )
     simNamesAndTitles.error = 'unable to get sim names and titles';
   }
 
-  // If the configuration is set up to deliver a short report, filter the object to include fewer sims.
+  // If the configuration is set up to deliver a short report, filter the object to include only the specified sims as
+  // well as any unpublished sims that we want to include.
   if ( publicConfig.ENVIRONMENT === 'development' && privateConfig.SHORT_REPORT ) {
     logger.warn( 'using short report (fewer sims) based on configuration settings' );
     simNamesAndTitles = Object.fromEntries(
