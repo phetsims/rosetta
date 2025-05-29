@@ -19,14 +19,14 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import privateConfig from '../../common/privateConfig.js';
+import getSimBaseUrl from './getSimBaseUrl.js';
 import logger from './logger.js';
 import { StringKeysAndValues } from './StorableTranslationData.js';
 
 const getStringKeysUsedInSim = async ( simName: string ): Promise<StringKeysAndValues> => {
 
   // Assemble the URL for the English string map.
-  const stringMapUrl = `${privateConfig.SERVER_URL}/sims/html/${simName}/latest/english-string-map.json`;
+  const stringMapUrl = `${getSimBaseUrl( simName )}/english-string-map.json`;
 
   logger.info( `getting string map from ${stringMapUrl}` );
 

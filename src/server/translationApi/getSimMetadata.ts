@@ -10,6 +10,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import { UNPUBLISHED_SIMS_TO_INCLUDE } from '../../common/constants.js';
 import privateConfig from '../../common/privateConfig.js';
 import publicConfig from '../../common/publicConfig.js';
 import logger from './logger.js';
@@ -64,6 +65,93 @@ async function fetchMetadata(): Promise<SimMetadata> {
 
   latestSimMetadata = await response.json() as SimMetadata;
   timeOfLastUpdate = Date.now();
+
+  // If there are unpublished sims to include, add them to the metadata here.  This creates a faked-out metadata entry
+  // for each of the specified sims with just the information needed by Rosetta to allow translation.
+  if ( latestSimMetadata && latestSimMetadata.projects && UNPUBLISHED_SIMS_TO_INCLUDE.length > 0 ) {
+    UNPUBLISHED_SIMS_TO_INCLUDE.forEach( simInfo => {
+
+      // First make sure that this sim is NOT in the metadata already.  If it is, we log an error and skip it.
+      if ( latestSimMetadata?.projects.some( project => project.name === `html/${simInfo.name}` ) ) {
+        logger.error( `Sim ${simInfo.name} is on unpublished sim list but was found in the metadata, skipping.` );
+        return;
+      }
+
+      const versionPieces = simInfo.version.split( '.' );
+
+      latestSimMetadata?.projects.push( {
+        visible: true,
+        name: `html/${simInfo.name}`,
+        id: 999,
+        type: 2,
+        version: {
+          string: simInfo.version,
+          major: Number( versionPieces[ 0 ] ),
+          minor: Number( versionPieces[ 1 ] ),
+          dev: Number( versionPieces[ 2 ] ),
+          timestamp: 0
+        },
+        simulations: [
+          {
+            visible: true,
+            name: simInfo.name,
+            altImageCount: 0,
+            highGradeLevel: 0,
+            designTeam: '',
+            lreTerms: [],
+            subjects: [],
+            allLocalesSimURL: '',
+            libraries: '',
+            isNew: 0,
+            relatedSimulations: [],
+            keywordIds: [],
+            lowGradeLevel: 0,
+            alignmentIds: [],
+            scienceLiteracyMapKeys: [],
+            cheerpjVersion: '',
+            licenseUrls: [],
+            secondaryAlignmentIds: [],
+            a11yFeatures: [],
+            thanksTo: '',
+            createTime: 0,
+            credits: {
+              thanksTo: '',
+              designTeam: '',
+              libraries: ''
+            },
+            topicIds: [],
+            id: 0,
+            // @ts-expect-error - this faked-out metadata doesn't contain a fully populated localizedSimulations object
+            localizedSimulations: {
+              en: {
+                id: 5982,
+                title: simInfo.title,
+                isCheerpj: false,
+                teachersGuide: '',
+                videoUrl: '',
+                sonificationVideoUrl: '',
+                descriptionVideoUrl: '',
+                runUrl: '',
+                description: '',
+                simPageUrl: '',
+                learningGoals: '',
+                downloadUrl: ''
+              }
+            },
+            legacyType: 'none'
+          }
+        ]
+      } );
+    } );
+
+    // Sort the projects by sim name to ensure consistent order, since that's how the metadata is supposed to be.
+    latestSimMetadata.projects.sort( ( a, b ) => {
+      const nameA = a.name;
+      const nameB = b.name;
+      return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+    } );
+  }
+
   return latestSimMetadata;
 }
 
@@ -103,6 +191,7 @@ const getSimMetadata = async (): Promise<SimMetadata> => {
     logger.error( `getSimMetadata failed, error = ${error}` );
     throw error;
   }
+
   return data;
 };
 

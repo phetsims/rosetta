@@ -31,8 +31,33 @@ export const SINGLE_BRACE_REGEX = /\{\d+\}/g;
 export const DOUBLE_BRACE_REGEX = /\{\{\w+\}\}/g;
 export const TRIPLE_BRACE_REGEX = /\{\{\{\w+\}\}\}/g;
 
+// Type for the information about unpublished sims that we want to include in the list of translatable sims.
+export type UnpublishedSimInfo = {
+
+  // kebab-case name of the sim, e.g. 'membrane-transport'
+  name: string;
+
+  // title of the sim, e.g. 'Membrane Transport'
+  title: string;
+
+  // version of the sim, e.g. '1.0.0-dev.10'
+  version: string;
+};
+
+// List of unpublished sims that we want to include in the list of translatable sims.
+export const UNPUBLISHED_SIMS_TO_INCLUDE: UnpublishedSimInfo[] = [
+  {
+    name: 'membrane-transport',
+    title: 'Membrane Transport',
+    version: '1.0.0-dev.10'
+  }
+];
+
 // List of the sims included in the short report, which is used for debugging.
 export const SIMS_FOR_SHORT_REPORT = [
+
+  // Any unpublished sims that are specified for inclusion are also included in the short report.
+  ...UNPUBLISHED_SIMS_TO_INCLUDE.map( simInfo => simInfo.name ),
 
   // sim often used for testing because it is first in alphabetical order
   'acid-base-solutions',

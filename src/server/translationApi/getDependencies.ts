@@ -7,7 +7,7 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import privateConfig from '../../common/privateConfig.js';
+import getSimDependenciesUrl from './getSimDependenciesUrl.js';
 import logger from './logger.js';
 
 export type Brand = 'phet' | 'phet-io';
@@ -24,19 +24,8 @@ const getDependencies = async ( simName: string, version: string, brand: Brand =
 
   let dependencies = 'error: unable to get dependencies';
 
-  // Compose the URL where the dependencies should be.
-  let dependenciesUrl = '';
-  if ( brand === 'phet' ) {
-    dependenciesUrl = `${privateConfig.SERVER_URL}/sims/html/${simName}/${version}/dependencies.json`;
-  }
-  else if ( brand === 'phet-io' ) {
-    dependenciesUrl = `${privateConfig.PHET_IO_SERVER_URL}/sims/${simName}/${version}/dependencies.json`;
-  }
-  else {
-    const errorMessage = `invalid brand when getting dependencies: ${brand}`;
-    logger.error( errorMessage );
-    throw new Error( errorMessage );
-  }
+  // Get the URL where the dependencies should be located.
+  const dependenciesUrl = getSimDependenciesUrl( simName, version, brand );
 
   // Get the dependencies.
   logger.info( `getting dependencies from ${dependenciesUrl}` );
