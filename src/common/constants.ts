@@ -40,8 +40,11 @@ export type UnpublishedSimInfo = {
   // title of the sim, e.g. 'Membrane Transport'
   title: string;
 
-  // version of the sim, e.g. '1.0.0-dev.10'
-  version: string;
+  // URL where the sim resources for the phet build can be found, including the en_phet.html file, the string map, and
+  // the dependencies file.  Examples include:
+  //   - https://phet-dev.colorado.edu/html/membrane-transport/1.0.0-dev.10/phet/ for a published dev version
+  //   - http://localhost:8080/membrane-transport/build/phet/ for a local build
+  simResourceUrl: string;
 };
 
 // List of unpublished sims that we want to include in the list of translatable sims.
@@ -49,7 +52,7 @@ export const UNPUBLISHED_SIMS_TO_INCLUDE: UnpublishedSimInfo[] = [
   {
     name: 'membrane-transport',
     title: 'Membrane Transport',
-    version: '1.0.0-dev.10'
+    simResourceUrl: 'https://phet-dev.colorado.edu/html/membrane-transport/1.0.0-dev.10/phet/'
   }
 ];
 

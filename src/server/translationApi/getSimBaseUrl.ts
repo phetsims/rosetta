@@ -22,7 +22,7 @@ const getSimBaseUrl = ( simName: string ): string => {
   const unpublishedSimInfo = UNPUBLISHED_SIMS_TO_INCLUDE.find( simInfo => simInfo.name === simName ) || null;
 
   return unpublishedSimInfo ?
-         `https://phet-dev.colorado.edu/html/${simName}/${unpublishedSimInfo.version}/phet` :
+         unpublishedSimInfo.simResourceUrl :
          `${privateConfig.SERVER_URL}/sims/html/${simName}/latest`;
 };
 

@@ -33,8 +33,8 @@ const getSimDependenciesUrl = ( simName: string, version: string, brand: Brand =
   let dependenciesUrl;
   if ( unpublishedSimInfo ) {
 
-    // If this is an unpublished sim, use the unpublished version's URL.  Note that this ignores the version parameter.
-    dependenciesUrl = `https://phet-dev.colorado.edu/html/${simName}/${unpublishedSimInfo.version}/${brand}/dependencies.json`;
+    // If this is an unpublished sim, use the provided resource URL.  Note that this ignores the version parameter.
+    dependenciesUrl = `${unpublishedSimInfo.simResourceUrl}/dependencies.json`;
   }
   else {
     if ( brand === 'phet' ) {
