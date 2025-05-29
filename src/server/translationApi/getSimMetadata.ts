@@ -68,7 +68,11 @@ async function fetchMetadata(): Promise<SimMetadata> {
 
   // If there are unpublished sims to include, add them to the metadata here.  This creates a faked-out metadata entry
   // for each of the specified sims with just the information needed by Rosetta to allow translation.
-  if ( latestSimMetadata && latestSimMetadata.projects && UNPUBLISHED_SIMS_TO_INCLUDE.length > 0 ) {
+  if ( publicConfig.ENVIRONMENT === 'development' &&
+       latestSimMetadata &&
+       latestSimMetadata.projects &&
+       UNPUBLISHED_SIMS_TO_INCLUDE.length > 0 ) {
+
     UNPUBLISHED_SIMS_TO_INCLUDE.forEach( simInfo => {
 
       // First make sure that this sim is NOT in the metadata already.  If it is, we log an error and skip it.
