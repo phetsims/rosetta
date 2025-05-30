@@ -34,4 +34,6 @@ export type ReportObjectWithCalculatedPercentages = ReportObject & {
   totalPercent: number;
 };
 
+export type ReportObjectSortingKeys = 'simTitle' | 'totalStrings' | 'totalPercent';
+
 export default ReportObject;
