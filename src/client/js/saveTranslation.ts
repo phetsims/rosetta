@@ -6,11 +6,10 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import axios from 'axios';
-import { TRANSLATION_API_ROUTE } from '../../common/constants';
+import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
 import { TranslationFormValues } from '../clientTypes.js';
-import alertErrorMessage from './alertErrorMessage';
-import makeTranslationObject from './makeTranslationObject';
+import alertErrorMessage from './alertErrorMessage.js';
+import makeTranslationObject from './makeTranslationObject.js';
 
 /**
  * Issue a post request to save a translation to the short-term string storage database.
@@ -18,8 +17,20 @@ import makeTranslationObject from './makeTranslationObject';
 const saveTranslation = async ( values: TranslationFormValues, simName: string, locale: string ): Promise<void> => {
   const translation = await makeTranslationObject( values, simName, locale );
   try {
-    const savedRes = await axios.post( `${TRANSLATION_API_ROUTE}/saveTranslation`, translation );
-    if ( savedRes.data ) {
+    const response = await fetch( `${TRANSLATION_API_ROUTE}/saveTranslation`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify( translation )
+    } );
+
+    if ( !response.ok ) {
+      throw new Error( `HTTP error! Status: ${response.status}` );
+    }
+
+    const data = await response.json();
+    if ( data ) {
       window.alert( 'Translation saved.' );
     }
     else {
@@ -27,7 +38,7 @@ const saveTranslation = async ( values: TranslationFormValues, simName: string, 
     }
   }
   catch( e ) {
-    await alertErrorMessage( e as string );
+    await alertErrorMessage( e instanceof Error ? e.message : String( e ) );
   }
 };
 
