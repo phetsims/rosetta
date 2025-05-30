@@ -19,6 +19,7 @@ import makeValidationSchema from '../js/makeValidationSchema';
 import saveTranslation from '../js/saveTranslation';
 import submitTranslation from '../js/submitTranslation';
 import testTranslation from '../js/testTranslation';
+import testTranslationInA11yView from '../js/testTranslationInA11yView.js';
 import LoadingSpinner from './LoadingSpinner';
 import { WebsiteUserDataContext } from './Rosetta';
 import { LocaleInfoContext, SimNamesAndTitlesContext } from './RosettaRoutes';
@@ -134,6 +135,11 @@ const TranslationForm: React.FC = (): ReactElement => {
             else if ( buttonId === 'test' ) {
               setTestIsLoading( true );
               await testTranslation( values, params.simName || '', params.locale || '' );
+              setTestIsLoading( false );
+            }
+            else if ( buttonId === 'testA11y' ) {
+              setTestIsLoading( true );
+              await testTranslationInA11yView( values, params.simName || '', params.locale || '' );
               setTestIsLoading( false );
             }
             else if ( buttonId === 'automate' ) {

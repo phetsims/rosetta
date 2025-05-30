@@ -96,6 +96,10 @@ const TranslationFormButtons: React.FC<TranslationFormButtonsProps> = props => {
           </button>
         )}
         {props.testIsLoading ? <LoadingSpinner/> : <></>}
+      </div>
+      <div className='card-body' style={containerStyle}>
+
+        Accessibility Strings:
         <div className='form-check form-check-inline ms-3' style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <input
             type='checkbox'
@@ -105,9 +109,20 @@ const TranslationFormButtons: React.FC<TranslationFormButtonsProps> = props => {
             onChange={ e => props.setEnableA11y( e.target.checked ) }
           />
           <label className='form-check-label' htmlFor='enableA11y'>
-              Enable Accessibility Strings
+            Enabled
           </label>
         </div>
+        <button
+          id='testA11y'
+          onClick={props.handleButtonClick}
+          disabled={disabled}
+          className={blueButton}
+          data-bs-toggle='tooltip'
+          data-bs-placement='top'
+          title='Test in the Accessibility View with your translated strings'
+        >
+          Test in A11y View
+        </button>
       </div>
     </div>
   );

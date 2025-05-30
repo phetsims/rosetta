@@ -38,6 +38,6 @@ type TranslationFormData = {
 // TODO: Try to use Record https://github.com/phetsims/rosetta/issues/311
 export type ErrorContextType = {
   [ key: string ]: string;
-};
+} | null;
 
 export type { TranslationFormData };

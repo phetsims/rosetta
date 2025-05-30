@@ -16,6 +16,7 @@ import showStats from './api/showStats.js';
 import simNamesAndTitles from './api/simNamesAndTitles.js';
 import submitTranslation from './api/submitTranslation.js';
 import testTranslation from './api/testTranslation.js';
+import testTranslationInA11yView from './api/testTranslationInA11yView.js';
 import translatedAndUntranslatedSims from './api/translatedAndUntranslatedSims.js';
 import translationFormData from './api/translationFormData.js';
 import translationReportEvents from './api/translationReportEvents.js';
@@ -58,6 +59,7 @@ rosettaApiServer.post( '/*', ( req: Request, res: Response, next: NextFunction )
 rosettaApiServer.post( '/saveTranslation', saveTranslation );
 rosettaApiServer.post( '/submitTranslation', submitTranslation );
 rosettaApiServer.post( '/testTranslation', testTranslation );
+rosettaApiServer.post( '/testTranslationInA11yView', testTranslationInA11yView );
 rosettaApiServer.post( '/automateTranslation', automateTranslation );
 
 rosettaApiServer.post( '/logClientError', logClientError );
