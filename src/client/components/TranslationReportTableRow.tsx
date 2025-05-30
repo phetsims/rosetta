@@ -8,11 +8,11 @@
 
 import React, { ReactElement } from 'react';
 import { Link } from 'react-router-dom';
-import { ReportObjectWithCalculatedPercentages } from '../../common/ReportObject.js';
+import ReportObject from '../../common/ReportObject.js';
 import StatsInfoButton from './StatsInfoButton';
 
 type TranslationReportTableRowProps = {
-  item: ReportObjectWithCalculatedPercentages;
+  item: ReportObject;
   locale: string;
 };
 

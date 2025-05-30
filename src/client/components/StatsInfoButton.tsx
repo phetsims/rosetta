@@ -7,11 +7,11 @@
  */
 
 import React from 'react';
-import { ReportObjectWithCalculatedPercentages } from '../clientTypes';
+import { ReportObjectWithPercentages } from '../clientTypes';
 import infoCircle from '../img/info-circle.svg';
 
 type StatsInfoButtonProps = {
-  reportObject: ReportObjectWithCalculatedPercentages;
+  reportObject: ReportObjectWithPercentages;
 };
 
 const StatsInfoButton: React.FC<StatsInfoButtonProps> = ( { reportObject } ) => {
