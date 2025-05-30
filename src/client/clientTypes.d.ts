@@ -7,7 +7,6 @@
  * @author Agustín Vallejo
  */
 
-import ReportObject from '../common/ReportObject.js';
 import { TranslationFormData } from '../common/TranslationFormData.js';
 
 export type SimNamesAndTitles = {
@@ -55,15 +54,4 @@ export type LocaleInfo = {
     name: string;
     direction: 'ltr' | 'rtl';
   };
-};
-
-// This type represents a ReportObject after its percentages have been calculated/re-calculated
-// by `getReportObjectsWithCalculatedPercentages`. These calculated percentages
-// are specifically named `commonPercent`, `simSpecificPercent`, and `sharedPercent` in the original logic.
-// They effectively override or provide the definitive values for sorting and display.
-export type ReportObjectWithCalculatedPercentages = ReportObject & {
-  commonPercent: number; // The calculated common percentage
-  simSpecificPercent: number; // The calculated sim-specific percentage
-  sharedPercent: number; // The calculated shared percentage
-  totalPercent: number; // Optional total percentage, if applicable
 };

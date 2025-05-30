@@ -68,15 +68,18 @@ export const SIMS_FOR_SHORT_REPORT = [
   // sim with lots of translations
   'build-an-atom',
 
+  // Published sim with Tier 2 accessibility strings
+  'greenhouse-effect',
+
   // sim that tends to have fewer translations
   'quadrilateral',
 
   // Include atomic-interactions and states-of-matter because the former shares most strings with the latter, so this
   // allows us to test the behavior of 'shared' strings.
   'states-of-matter',
-  'atomic-interactions'
+  'atomic-interactions',
 
   // chains and example-sim are omitted as of Jan 9 2024 because there aren't published string map files for them
-  // 'chains',
+  'chains'
   // 'example-sim'
 ];
