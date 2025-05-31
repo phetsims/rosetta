@@ -115,7 +115,6 @@ const TranslationFormButtons: React.FC<TranslationFormButtonsProps> = props => {
         <button
           id='testA11y'
           onClick={props.handleButtonClick}
-          disabled={disabled}
           className={blueButton}
           data-bs-toggle='tooltip'
           data-bs-placement='top'
