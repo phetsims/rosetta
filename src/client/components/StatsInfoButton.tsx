@@ -26,10 +26,16 @@ const StatsInfoButton: React.FC<StatsInfoButtonProps> = ( { reportObject } ) => 
       Sim-Specific Strings: ${simSpecificStatsString}
       Shared Strings: ${sharedStatsString}
       Common Strings: ${commonStatsString}`;
+
   const buttonStyle = {
     marginRight: '6px',
-    padding: '0'
+    fontSize: '16px',
+    background: 'transparent',
+    border: 'none',
+    cursor: 'pointer',
+    alignItems: 'center'    // Center items vertically
   };
+
   return (
     <button
       onClick={() => window.alert( statsString )}
