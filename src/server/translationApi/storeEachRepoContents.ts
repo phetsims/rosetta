@@ -6,11 +6,11 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { StorableTranslationData } from './StorableTranslationData.js';
+import { SimTranslationData } from './RosettaServerDataTypes.js';
 import logger from './logger.js';
 import { longTermStorage } from './translationApi.js';
 
-const storeEachRepoContents = async ( preparedTranslation: StorableTranslationData,
+const storeEachRepoContents = async ( preparedTranslation: SimTranslationData,
                                       repos: string[] ): Promise<boolean> => {
 
   logger.info(

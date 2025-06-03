@@ -7,7 +7,7 @@
  */
 
 import { NO_LONGER_USED_FLAG } from '../../../common/constants.js';
-import { StringKeysAndValues } from '../StorableTranslationData.js';
+import { StringKeysAndValues } from '../RosettaServerDataTypes.js';
 import { CategorizedStringKeys } from '../getCategorizedStringKeys.js';
 import logger from '../logger.js';
 import getEnglishStringKeysAndValues from './getEnglishStringKeysAndValues.js';

@@ -9,7 +9,7 @@
 import { Octokit } from '@octokit/rest';
 import privateConfig from '../../common/privateConfig.js';
 import logger from './logger.js';
-import { TranslationDataForRepo } from './StorableTranslationData.js';
+import { TranslationDataForRepo } from './RosettaServerDataTypes.js';
 
 // This type defines a string key to value entry that is potentially nested.
 type PotentiallyNestedStringValue = { value: string } | { [ key: string ]: PotentiallyNestedStringValue };

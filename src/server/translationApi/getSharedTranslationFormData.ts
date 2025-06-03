@@ -8,7 +8,7 @@
 
 import getStringFile from './getStringFile.js';
 import logger from './logger.js';
-import { StringKeysAndValues, TranslationDataForRepo } from './StorableTranslationData.js';
+import { StringKeysAndValues, TranslationDataForRepo } from './RosettaServerDataTypes.js';
 import { longTermStorage } from './translationApi.js';
 
 type EnglishStringFileContents = Record<string, { value: string }>;

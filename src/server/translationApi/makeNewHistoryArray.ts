@@ -5,7 +5,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { HistoryEntry, TranslationDataForRepo } from './StorableTranslationData.js';
+import { HistoryEntry, TranslationDataForRepo } from './RosettaServerDataTypes.js';
 import logger from './logger.js';
 
 /**

@@ -11,7 +11,7 @@ import { CategorizedStringKeys } from '../getCategorizedStringKeys.js';
 import getCommonRepos from '../getCommonRepos.js';
 import getStringFile from '../getStringFile.js';
 import logger from '../logger.js';
-import { StringKeysAndValues } from '../StorableTranslationData.js';
+import { StringKeysAndValues } from '../RosettaServerDataTypes.js';
 
 type StringFile = Record<string, { value: string }>;
 

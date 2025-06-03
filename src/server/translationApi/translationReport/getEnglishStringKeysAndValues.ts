@@ -6,7 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { StringKeysAndValues } from '../StorableTranslationData.js';
+import { StringKeysAndValues } from '../RosettaServerDataTypes.js';
 import getRepoNameFromStringKeyWithRepoName from '../getRepoNameFromStringKeyWithRepoName.js';
 import getStringFile from '../getStringFile.js';
 import getStringKeyFromStringKeyWithRepoName from '../getStringKeyFromStringKeyWithRepoName.js';

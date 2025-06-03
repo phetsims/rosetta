@@ -8,7 +8,7 @@
 
 import { ClientSubmittedTranslationData } from '../../common/ClientSubmittedTranslationData.js';
 import { StringEntry, StringEntryWithRepo } from '../../common/TranslationFormData.js';
-import { HistoryEntry, TranslationDataForRepo } from './StorableTranslationData.js';
+import { HistoryEntry, TranslationDataForRepo } from './RosettaServerDataTypes.js';
 import getSimMetadata from './getSimMetadata.js';
 import getSimNamesAndTitles from './getSimNamesAndTitles.js';
 import logger from './logger.js';

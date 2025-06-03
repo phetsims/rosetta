@@ -9,7 +9,7 @@
 import { CategorizedStringKeys } from '../getCategorizedStringKeys.js';
 import getCommonRepos from '../getCommonRepos.js';
 import getRepoNameToStringKeys from '../getRepoNameToStringKeys.js';
-import { StringKeysAndValues } from '../StorableTranslationData.js';
+import { StringKeysAndValues } from '../RosettaServerDataTypes.js';
 import { longTermStorage } from '../translationApi.js';
 
 /**
