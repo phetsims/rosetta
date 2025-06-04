@@ -16,7 +16,12 @@ type StringValue = string;
 
 // The name of a repository (repo) in kebab-case where strings are coming from or for which translations are being
 // submitted.  Examples: 'joist', 'build-an-atom', 'scenery-phet'.
-type RepoName = string;
+export type RepoName = string;
+
+// A locale is a string that represents a language and region, and as of this writing (June 2025) Rosetta uses the
+// format defined in ISO 639-1 with two lower case letters for language and an optional additional two upper case
+// letters for the country, e.g. 'en' for English, 'es' for Spanish, 'fr_CA' for French as spoken in Canada.
+export type Locale = string;
 
 // An object that matches string keys to their values.  The values can be English strings or translated strings.
 export type StringKeysAndValues = Record<StringKey, StringValue>;

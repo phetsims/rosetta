@@ -1,11 +1,7 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * Get an object that can be used to look up whether a translation exists for any sim+locale combination.
- *
- * @param isTeamMember - whether a translator is a team member
- * @returns A promise resolving to an object with sim names for the 1st keys, two-letter locales for the 2nd, and an object
- *          with a boolean indicating whether a translation exists.
+ * Export a function, see details below.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
  * @author John Blanco (PhET Interactive Simulations)
@@ -13,13 +9,20 @@
 
 import getLocaleInfo from '../getLocaleInfo.js';
 import getSimMetadata from '../getSimMetadata.js';
+import { Locale, RepoName } from '../RosettaServerDataTypes.js';
 
-type TranslationInfo = Record<string, Record<string, { hasTranslation: boolean }>>;
+export type TranslationStatus = Record<RepoName, Record<Locale, { hasTranslation: boolean }>>;
 
-const getTranslationInfo = async ( isTeamMember: boolean ): Promise<TranslationInfo> => {
+/**
+ * Get an object that indicates for each potential combination of sim and locale whether a translation exists.
+ *
+ * @param isTeamMember - Whether a translator is a PhET team member.  If true, some sims that are not visible to the
+ *                       public will be included in the results.
+ */
+const getTranslationStatus = async ( isTeamMember: boolean ): Promise<TranslationStatus> => {
 
   // Create the object that will be returned. It will be populated in the subsequent code.
-  const translationInfo: TranslationInfo = {};
+  const translationStatus: TranslationStatus = {};
 
   const localesList = Object.keys( await getLocaleInfo() );
   const simMetadata = await getSimMetadata();
@@ -31,17 +34,17 @@ const getTranslationInfo = async ( isTeamMember: boolean ): Promise<TranslationI
         const simName = sim.name;
         const localizedSimsList = Object.keys( sim.localizedSimulations );
         for ( const locale of localesList ) {
-          if ( !translationInfo[ simName ] ) {
-            translationInfo[ simName ] = {};
+          if ( !translationStatus[ simName ] ) {
+            translationStatus[ simName ] = {};
           }
-          translationInfo[ simName ][ locale ] = {
+          translationStatus[ simName ][ locale ] = {
             hasTranslation: localizedSimsList.includes( locale )
           };
         }
       }
     }
   }
-  return translationInfo;
+  return translationStatus;
 };
 
-export default getTranslationInfo;
+export default getTranslationStatus;

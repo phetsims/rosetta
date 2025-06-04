@@ -14,9 +14,7 @@
 import { SIMS_FOR_SHORT_REPORT } from '../../../common/constants.js';
 import privateConfig from '../../../common/privateConfig.js';
 import publicConfig from '../../../common/publicConfig.js';
-import getTranslationInfo from './getTranslationInfo.js';
-
-type TranslationInfo = Record<string, Record<string, { hasTranslation: boolean }>>;
+import getTranslationStatus, { TranslationStatus } from './getTranslationStatus.js';
 
 type TranslatedAndUntranslatedSims = {
   translated: string[];
@@ -33,7 +31,7 @@ const getTranslatedAndUntranslatedSims = async ( locale: string,
   };
 
   // Get an object that lists all sims and the translation status for every locale (among other things).
-  const translationInfo: TranslationInfo = await getTranslationInfo( isTeamMember );
+  const translationInfo: TranslationStatus = await getTranslationStatus( isTeamMember );
 
   // If the environment is configured for short reports, reduce the list of sims included here.
   if ( publicConfig.ENVIRONMENT === 'development' && privateConfig.SHORT_REPORT ) {
