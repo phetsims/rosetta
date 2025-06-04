@@ -20,12 +20,23 @@ import getSimMetadata from './getSimMetadata.js';
 import getSimNamesAndTitles from './getSimNamesAndTitles.js';
 import getStringKeyFromStringKeyWithRepoName from './getStringKeyFromStringKeyWithRepoName.js';
 import logger from './logger.js';
+import { RepoName, StringKey } from './RosettaServerDataTypes.js';
 
 export type CategorizedStringKeys = {
-  common: string[];
-  simSpecific: string[];
-  shared: string[];
-  sharedSims: string[];
+
+  // The set of string keys that are specific to the sim, i.e. they are not shared with other sims.
+  simSpecific: StringKey[];
+
+  // The set of string keys that are common to all sims, i.e. they are shared across multiple sims.
+  common: StringKey[];
+
+  // The set of string keys that are shared between this sim and a few other closely rated sims, e.g. the strings found
+  // in number-line-common, which are shared between the Number Line Suite of sims.
+  shared: StringKey[];
+
+  // The set of sims that are not common-code repos with which this sim shares string keys. This is when putting
+  // together the translation form.
+  sharedSims: RepoName[];
 };
 
 const getCategorizedStringKeys = async ( simName: string,
@@ -52,7 +63,8 @@ const getCategorizedStringKeys = async ( simName: string,
       // Get the repo name from the string key with repo name.
       const repoName = getRepoNameFromStringKeyWithRepoName( stringKeyWithRepoName );
 
-      // Only show a11y keys if the option is enabled. If it's disabled or even if it's not used, the fallback is not showing a11y keys.
+      // Only show a11y keys if the option is enabled. If it's disabled or even if it's not used, the fallback is not
+      // showing a11y keys.
       if ( !privateConfig.TRANSLATE_A11Y && stringKey.startsWith( 'a11y' ) ) {
         logger.verbose( 'not categorizing a11y string key' );
       }

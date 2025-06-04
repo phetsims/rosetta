@@ -9,10 +9,10 @@
  */
 
 // A string key is a string that is used to identify a particular string in the source and translation files.
-type StringKey = string;
+export type StringKey = string;
 
 // A string value is a string that represents the value of a string key in the source or translation files.
-type StringValue = string;
+export type StringValue = string;
 
 // The name of a repository (repo) in kebab-case where strings are coming from or for which translations are being
 // submitted.  Examples: 'joist', 'build-an-atom', 'scenery-phet'.

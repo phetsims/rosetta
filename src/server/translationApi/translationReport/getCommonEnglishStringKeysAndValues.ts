@@ -13,7 +13,8 @@ import getStringFile from '../getStringFile.js';
 import logger from '../logger.js';
 import { StringKeysAndValues } from '../RosettaServerDataTypes.js';
 
-type StringFile = Record<string, { value: string }>;
+// This type format matches the structure of the string files that are used in the sim source code.
+type StringFileContents = Record<string, { value: string }>;
 
 /**
  * Get an object where the keys are common English string keys used in a simulation and the values are the English
@@ -28,7 +29,7 @@ type StringFile = Record<string, { value: string }>;
 const getCommonEnglishStringKeysAndValues = async ( simName: string,
                                                     simNames: string[],
                                                     categorizedStringKeys: CategorizedStringKeys,
-                                                    stringKeysWithRepoName: string[] ): Promise<Record<string, string>> => {
+                                                    stringKeysWithRepoName: string[] ): Promise<StringKeysAndValues> => {
 
   logger.info( `getting ${simName}'s common English string keys and values` );
   const commonEnglishStringKeysAndValues: StringKeysAndValues = {};
@@ -37,7 +38,7 @@ const getCommonEnglishStringKeysAndValues = async ( simName: string,
 
     // For each common repo, get the string file contents.
     const commonRepos = await getCommonRepos( simName, simNames, stringKeysWithRepoName );
-    const stringFiles: StringFile[] = [];
+    const stringFiles: StringFileContents[] = [];
     for ( const repo of commonRepos ) {
       stringFiles.push( await getStringFile( repo ) );
     }
