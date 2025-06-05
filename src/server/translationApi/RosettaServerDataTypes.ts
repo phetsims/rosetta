@@ -42,7 +42,8 @@ export type HistoryEntry = {
   // The new value of the string that is being submitted by the user.
   newValue: string;
 
-  // TODO: Can we remove this?  See https://github.com/phetsims/rosetta/issues/311.
+  // TODO: Can we remove this?  See https://github.com/phetsims/rosetta/issues/468.
+  // An optional explanation of the motivation for the change, if provided by the user.
   explanation?: string | null;
 
   // The translation value suggested by the AI, if any.
