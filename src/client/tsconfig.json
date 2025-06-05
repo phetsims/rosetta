@@ -2,7 +2,8 @@
   "extends": "../../../perennial-alias/tsconfig/tsconfig-node.json",
   "include": [
     "**/*",
-    "../common/**/*"
+    "../common/**/*",
+    "../../../chipper/js/grunt/modulify/*"
   ],
   "references": [
     {
