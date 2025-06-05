@@ -16,6 +16,7 @@ import getSimNamesAndTitles from './getSimNamesAndTitles.js';
 import getStringKeyFromStringKeyWithRepoName from './getStringKeyFromStringKeyWithRepoName.js';
 import logger from './logger.js';
 
+// TODO: Consolidate these types with the ones in RosettaServerDataTypes if possible, see https://github.com/phetsims/rosetta/issues/311.
 type StringsObject = Record<string, { translated: string }>;
 type StringKeysWithRepoName = Record<string, string>;
 

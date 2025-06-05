@@ -10,11 +10,12 @@
 import privateConfig from '../../common/privateConfig.js';
 import { shortTermStringStorageCollection } from './getShortTermStringStorageCollection.js';
 import logger from './logger.js';
+import { Locale, RepoName } from './RosettaServerDataTypes.js';
 
 type IdSimNameAndLocale = {
   userId: number;
-  simName: string;
-  locale: string;
+  simName: RepoName;
+  locale: Locale;
 };
 
 /**

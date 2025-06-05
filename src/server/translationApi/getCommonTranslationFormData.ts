@@ -4,6 +4,7 @@
  * Export a function that gets a sim's common string keys, their English values, and their translated values.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import { NO_LONGER_USED_FLAG } from '../../common/constants.js';
@@ -11,14 +12,15 @@ import getCommonRepos from './getCommonRepos.js';
 import getRepoNameToStringKeys from './getRepoNameToStringKeys.js';
 import getStringFile from './getStringFile.js';
 import logger from './logger.js';
+import { RepoName, StringKey, StringValue } from './RosettaServerDataTypes.js';
 import { longTermStorage } from './translationApi.js';
 
 type CommonTranslationFormData = Record<
-  string,
+  StringKey,
   {
-    english: string;
-    translated: string;
-    repo: string;
+    english: StringValue;
+    translated: StringValue;
+    repo: RepoName;
   }
 >;
 

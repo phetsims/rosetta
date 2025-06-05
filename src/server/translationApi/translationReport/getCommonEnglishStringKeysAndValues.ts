@@ -11,10 +11,10 @@ import { CategorizedStringKeys } from '../getCategorizedStringKeys.js';
 import getCommonRepos from '../getCommonRepos.js';
 import getStringFile from '../getStringFile.js';
 import logger from '../logger.js';
-import { StringKeysAndValues } from '../RosettaServerDataTypes.js';
+import { StringKey, StringKeysAndValues, StringValue } from '../RosettaServerDataTypes.js';
 
 // This type format matches the structure of the string files that are used in the sim source code.
-type StringFileContents = Record<string, { value: string }>;
+type StringFileContents = Record<StringKey, { value: StringValue }>;
 
 /**
  * Get an object where the keys are common English string keys used in a simulation and the values are the English

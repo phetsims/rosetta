@@ -42,6 +42,7 @@ export type HistoryEntry = {
   // The new value of the string that is being submitted by the user.
   newValue: string;
 
+  // TODO: Can we remove this?  See https://github.com/phetsims/rosetta/issues/311.
   explanation?: string | null;
 
   // The translation value suggested by the AI, if any.
@@ -57,7 +58,7 @@ export type HistoryEntry = {
 
 // Type for a single entry in the translation data.  It contains the value of the string and its history.
 export type TranslationValueEntry = {
-  value: string;
+  value: StringValue;
   history: HistoryEntry[];
 };
 

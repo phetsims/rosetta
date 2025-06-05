@@ -13,7 +13,9 @@ import getStringKeysWithDots from './getStringKeysWithDots.js';
 import logger from './logger.js';
 import makeTranslationFileContentsForRepo from './makeTranslationFileContentsForRepo.js';
 
-const prepareTranslationForLongTermStorage = async ( translation: ClientSubmittedTranslationData ): Promise<SimTranslationData> => {
+const prepareTranslationForLongTermStorage = async (
+  translation: ClientSubmittedTranslationData
+): Promise<SimTranslationData> => {
 
   logger.info( `preparing translation of ${translation.locale}/${translation.simName} for long-term storage` );
   logger.info( 'adding back dots to translation form data from client' );

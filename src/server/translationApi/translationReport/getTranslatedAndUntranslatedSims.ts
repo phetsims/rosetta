@@ -14,11 +14,12 @@
 import { SIMS_FOR_SHORT_REPORT } from '../../../common/constants.js';
 import privateConfig from '../../../common/privateConfig.js';
 import publicConfig from '../../../common/publicConfig.js';
+import { RepoName } from '../RosettaServerDataTypes.js';
 import getTranslationStatus, { TranslationStatus } from './getTranslationStatus.js';
 
 type TranslatedAndUntranslatedSims = {
-  translated: string[];
-  untranslated: string[];
+  translated: RepoName[];
+  untranslated: RepoName[];
 };
 
 const getTranslatedAndUntranslatedSims = async ( locale: string,

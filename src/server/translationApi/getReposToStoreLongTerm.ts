@@ -8,22 +8,19 @@
 
 import { isDeepStrictEqual } from 'node:util';
 import logger from './logger.js';
+import { RepoName, SimTranslationData } from './RosettaServerDataTypes.js';
 import { longTermStorage } from './translationApi.js';
 
-type PreparedTranslation = {
-  locale: string;
-  multiRepoTranslationData: Record<string, Record<string, unknown>>;
-};
-
 /**
- * Given a translation that has been prepared for long-term storage, extract the repos that are in the translation, then for
- * each repo, get the old translation file and check to see if anything changed. If there was a change, add the repo to
- * the list of repos to put in long-term storage.
+ * Given a translation that has been prepared for long-term storage, extract the repos that are in the translation, then
+ * for each repo, get the old translation file and check to see if anything changed. If there was a change, add the repo
+ * to the list of repos that are returned.  The expectation is that the client will then use this information to
+ * determine which translation files to update in long-term storage.
  *
  * @param preparedTranslation - contains the translation file contents for each repo in the translation
  * @returns A promise resolving to a list of repos to store in long-term storage
  */
-const getReposToStoreLongTerm = async ( preparedTranslation: PreparedTranslation ): Promise<string[]> => {
+const getReposToStoreLongTerm = async ( preparedTranslation: SimTranslationData ): Promise<RepoName[]> => {
   const reposToStoreLongTerm: string[] = [];
   const multiRepoTranslationData = preparedTranslation.multiRepoTranslationData;
 

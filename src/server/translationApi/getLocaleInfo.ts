@@ -1,7 +1,7 @@
 // Copyright 2021-2022, University of Colorado Boulder
 
 /**
- * Export a function that gets locale info.
+ * Export a function that gets locale info, see function header for details.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
  * @author John Blanco (PhET Interactive Simulations)
@@ -9,25 +9,34 @@
 
 import privateConfig from '../../common/privateConfig.js';
 import logger from './logger.js';
+import { Locale } from './RosettaServerDataTypes.js';
 
 export type LanguageDirection = 'ltr' | 'rtl';
 
 export type LocaleInfoEntry = {
+
+  // The name of the language in English, e.g. "Spanish".
   name: string;
+
+  // The localized name of the language, e.g. "Español".
   localizedName: string;
+
+  // The direction of the language, either 'ltr' (left-to-right) or 'rtl' (right-to-left).
   direction: LanguageDirection;
 };
 
-export type LocaleInfo = Record<string, LocaleInfoEntry>;
+// The format of the locale info object, which is essentially defined by the structure of the shared file from which the
+// locale info is obtained. The keys are ISO 639-1 locale codes, e.g., 'en' for English, 'es' for Spanish.
+export type LocaleInfo = Record<Locale, LocaleInfoEntry>;
 
 // The time of the last update of the locale info. This is used to determine if the locale info is stale.
 let timeOfLastUpdate: number = Number.NEGATIVE_INFINITY;
 
 // The most recently obtained locale info.  This is the cached data.
-let localeInfo: Record<string, LocaleInfoEntry> | { error: string };
+let localeInfo: LocaleInfo | { error: string };
 
 // This promise is used to ensure that only one request for locale info is made at a time.
-let currentUpdatePromise: Promise<Record<string, LocaleInfoEntry> | { error: string }> | null = null;
+let currentUpdatePromise: Promise<LocaleInfo | { error: string }> | null = null;
 
 /**
  * Return the locale info stored in a remote repository. This locale info contains names of locales and locale codes.
@@ -56,7 +65,7 @@ const getLocaleInfo = async (): Promise<LocaleInfo | { error: string }> => {
       const response = await fetch( localeInfoUrl );
 
       if ( response.ok ) {
-        const fetchedLocaleInfo = await response.json() as Record<string, LocaleInfoEntry>;
+        const fetchedLocaleInfo = await response.json() as LocaleInfo;
 
         // Delete the English locale; we don't want people translating it.
         delete fetchedLocaleInfo.en;
