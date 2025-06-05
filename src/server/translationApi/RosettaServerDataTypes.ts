@@ -26,6 +26,9 @@ export type Locale = string;
 // An object that matches string keys to their values.  The values can be English strings or translated strings.
 export type StringKeysAndValues = Record<StringKey, StringValue>;
 
+// The English strings, which are the source strings used in the sim and common-code repos.
+export type EnglishStrings = Record<StringKey, { value: StringValue }>;
+
 // History entry data exists only in the translation files, not the original English source files.  It keeps track of
 // the changes made to each string in the translation files.
 export type HistoryEntry = {

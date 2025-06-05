@@ -13,7 +13,8 @@ import getEnglishStringFile from '../getEnglishStringFile.js';
 import logger from '../logger.js';
 import { StringKey, StringKeysAndValues, StringValue } from '../RosettaServerDataTypes.js';
 
-// This type format matches the structure of the string files that are used in the sim source code.
+// This type format matches the structure of the English string files that are used in the sim and common-code repos.
+// It omits things like history, which are only present in the translation files.
 type StringFileContents = Record<StringKey, { value: StringValue }>;
 
 /**

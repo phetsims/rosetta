@@ -8,10 +8,9 @@
 
 import getEnglishStringFile from './getEnglishStringFile.js';
 import logger from './logger.js';
-import { StringKeysAndValues, TranslationDataForRepo } from './RosettaServerDataTypes.js';
+import { EnglishStrings, StringKeysAndValues, TranslationDataForRepo } from './RosettaServerDataTypes.js';
 import { longTermStorage } from './translationApi.js';
 
-type EnglishStringFileContents = Record<string, { value: string }>;
 type SharedTranslationFormData = Record<string, {
   english: string;
   translated: string;
@@ -39,7 +38,7 @@ const getSharedTranslationFormData = async ( locale: string,
     try {
 
       // Get string files.
-      const englishStringFileObjects: { repo: string; fileContents: EnglishStringFileContents }[] = [];
+      const englishStringFileObjects: { repo: string; fileContents: EnglishStrings }[] = [];
       const translatedStringFiles: TranslationDataForRepo[] = [];
       for ( const sim of sharedSims ) {
         const englishStringFileObject = {

@@ -10,17 +10,17 @@
 import { Octokit } from '@octokit/rest';
 import privateConfig from '../../common/privateConfig.js';
 import logger from './logger.js';
-import { TranslationDataForRepo } from './RosettaServerDataTypes.js';
-
-// This type defines a string key to value entry that is potentially nested.
-type PotentiallyNestedStringValue = { value: string } | { [ key: string ]: PotentiallyNestedStringValue };
-
-// Type definition for English string files.  These done have history the way translations do, and can potentially
-// contain nested values.
-// TODO: Move this to shared types file and consolidate with other non-translated file types, see https://github.com/phetsims/rosetta/issues/311.
-export type EnglishStringFileContents = Record<string, PotentiallyNestedStringValue>;
+import { EnglishStrings } from './RosettaServerDataTypes.js';
 
 const octokit = new Octokit( { auth: privateConfig.GITHUB_PAT } );
+
+// This type defines a string key to value entry that is potentially nested.  As of this writing (June 2025), this only
+// applies to English string files.  Translation files do not have nested values.
+type PotentiallyNestedStringValue = { value: string } | { [ key: string ]: PotentiallyNestedStringValue };
+
+// Type definition for the content of English string files.  These don't have history the way translation files do, and
+// can potentially contain nested values.
+type EnglishStringFileContents = Record<string, PotentiallyNestedStringValue>;
 
 /**
  * Get the contents of the English language string file for a given repo and, optionally, the specified branch.
@@ -29,7 +29,7 @@ const octokit = new Octokit( { auth: privateConfig.GITHUB_PAT } );
  * @param [ref] - branch or SHA of commit to get the string file from
  * @returns string file contents
  */
-const getEnglishStringFile = async ( simOrLibRepo: string, ref = 'main' ): Promise<TranslationDataForRepo> => {
+const getEnglishStringFile = async ( simOrLibRepo: string, ref = 'main' ): Promise<EnglishStrings> => {
   let stringFile = {};
   try {
     const response = await octokit.repos.getContent( {
@@ -73,8 +73,8 @@ const getEnglishStringFile = async ( simOrLibRepo: string, ref = 'main' ): Promi
 function flattenObject(
   obj: EnglishStringFileContents,
   parentKey = '',
-  result: EnglishStringFileContents = {}
-): EnglishStringFileContents {
+  result: EnglishStrings = {}
+): EnglishStrings {
 
   for ( const key in obj ) {
     if ( obj.hasOwnProperty( key ) ) {
