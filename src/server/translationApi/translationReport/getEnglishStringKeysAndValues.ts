@@ -8,7 +8,7 @@
 
 import { StringKeysAndValues } from '../RosettaServerDataTypes.js';
 import getRepoNameFromStringKeyWithRepoName from '../getRepoNameFromStringKeyWithRepoName.js';
-import getStringFile from '../getStringFile.js';
+import getEnglishStringFile from '../getEnglishStringFile.js';
 import getStringKeyFromStringKeyWithRepoName from '../getStringKeyFromStringKeyWithRepoName.js';
 import logger from '../logger.js';
 
@@ -27,7 +27,7 @@ const getEnglishStringKeysAndValues = async ( simOrLibName: string,
 
   logger.info( 'getting English string keys and values' );
   const englishStringKeysAndValues: StringKeysAndValues = {};
-  const englishStringData = await getStringFile( simOrLibName, shaOrBranch );
+  const englishStringData = await getEnglishStringFile( simOrLibName, shaOrBranch );
   for ( const stringKeyWithRepoName of stringKeysWithRepoName ) {
     const stringKey = getStringKeyFromStringKeyWithRepoName( stringKeyWithRepoName );
     const repoName = getRepoNameFromStringKeyWithRepoName( stringKeyWithRepoName );

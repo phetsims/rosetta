@@ -10,7 +10,7 @@
 import { NO_LONGER_USED_FLAG } from '../../common/constants.js';
 import getCommonRepos from './getCommonRepos.js';
 import getRepoNameToStringKeys from './getRepoNameToStringKeys.js';
-import getStringFile from './getStringFile.js';
+import getEnglishStringFile from './getEnglishStringFile.js';
 import logger from './logger.js';
 import { RepoName, StringKey, StringValue } from './RosettaServerDataTypes.js';
 import { longTermStorage } from './translationApi.js';
@@ -51,7 +51,7 @@ const getCommonTranslationFormData = async ( simName: string,
     for ( const repo of Object.keys( repoNameToStringKeys ) ) {
 
       // The English file should exist.
-      const commonEnglishStringKeysAndStrings = await getStringFile( repo );
+      const commonEnglishStringKeysAndStrings = await getEnglishStringFile( repo );
 
       // The translated file might not exist.
       const commonTranslatedStringKeysAndStrings = await longTermStorage.get( repo, locale );

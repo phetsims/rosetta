@@ -1,9 +1,10 @@
 // Copyright 2023, University of Colorado Boulder
 
 /**
- * Get a string file for a given repo and locale.
+ * Export a reusable function, see function header below.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import { Octokit } from '@octokit/rest';
@@ -22,13 +23,13 @@ export type EnglishStringFileContents = Record<string, PotentiallyNestedStringVa
 const octokit = new Octokit( { auth: privateConfig.GITHUB_PAT } );
 
 /**
- * Return the contents of the string file.
+ * Get the contents of the English language string file for a given repo and, optionally, the specified branch.
  *
  * @param simOrLibRepo - repository where the strings come from
- * @param ref - branch or SHA of commit to get the string file from
- * @returns string file
+ * @param [ref] - branch or SHA of commit to get the string file from
+ * @returns string file contents
  */
-const getStringFile = async ( simOrLibRepo: string, ref = 'main' ): Promise<TranslationDataForRepo> => {
+const getEnglishStringFile = async ( simOrLibRepo: string, ref = 'main' ): Promise<TranslationDataForRepo> => {
   let stringFile = {};
   try {
     const response = await octokit.repos.getContent( {
@@ -108,4 +109,4 @@ function flattenObject(
   return result;
 }
 
-export default getStringFile;
+export default getEnglishStringFile;

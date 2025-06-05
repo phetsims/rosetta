@@ -9,7 +9,7 @@
 import { NO_LONGER_USED_FLAG } from '../../../common/constants.js';
 import { CategorizedStringKeys } from '../getCategorizedStringKeys.js';
 import getCommonRepos from '../getCommonRepos.js';
-import getStringFile from '../getStringFile.js';
+import getEnglishStringFile from '../getEnglishStringFile.js';
 import logger from '../logger.js';
 import { StringKey, StringKeysAndValues, StringValue } from '../RosettaServerDataTypes.js';
 
@@ -40,7 +40,7 @@ const getCommonEnglishStringKeysAndValues = async ( simName: string,
     const commonRepos = await getCommonRepos( simName, simNames, stringKeysWithRepoName );
     const stringFiles: StringFileContents[] = [];
     for ( const repo of commonRepos ) {
-      stringFiles.push( await getStringFile( repo ) );
+      stringFiles.push( await getEnglishStringFile( repo ) );
     }
 
     // For each common string key, find its value in one of the string files.

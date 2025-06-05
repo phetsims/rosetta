@@ -6,7 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import getStringFile from './getStringFile.js';
+import getEnglishStringFile from './getEnglishStringFile.js';
 import logger from './logger.js';
 import { StringKeysAndValues, TranslationDataForRepo } from './RosettaServerDataTypes.js';
 import { longTermStorage } from './translationApi.js';
@@ -44,7 +44,7 @@ const getSharedTranslationFormData = async ( locale: string,
       for ( const sim of sharedSims ) {
         const englishStringFileObject = {
           repo: sim,
-          fileContents: await getStringFile( sim )
+          fileContents: await getEnglishStringFile( sim )
         };
         englishStringFileObjects.push( englishStringFileObject );
         translatedStringFiles.push( await longTermStorage.get( sim, locale ) );
