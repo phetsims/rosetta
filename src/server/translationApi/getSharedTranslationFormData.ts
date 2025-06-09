@@ -8,7 +8,7 @@
 
 import getEnglishStringFile from './getEnglishStringFile.js';
 import logger from './logger.js';
-import { EnglishStrings, StringKeysAndValues, TranslationDataForRepo } from './RosettaServerDataTypes.js';
+import { EnglishStrings, StringKeysAndValues, TranslationDataForRepo } from './ServerDataTypes.js';
 import { longTermStorage } from './translationApi.js';
 
 type SharedTranslationFormData = Record<string, {

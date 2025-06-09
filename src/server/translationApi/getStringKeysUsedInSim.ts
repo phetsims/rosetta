@@ -21,7 +21,7 @@
 
 import getSimBaseUrl from './getSimBaseUrl.js';
 import logger from './logger.js';
-import { StringKeysAndValues } from './RosettaServerDataTypes.js';
+import { StringKeysAndValues } from './ServerDataTypes.js';
 
 const getStringKeysUsedInSim = async ( simName: string ): Promise<StringKeysAndValues> => {
 

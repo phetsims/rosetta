@@ -12,7 +12,7 @@ import { CategorizedStringKeys } from '../getCategorizedStringKeys.js';
 import getCommonRepos from '../getCommonRepos.js';
 import getEnglishStringFile from '../getEnglishStringFile.js';
 import logger from '../logger.js';
-import { StringKeysAndValues } from '../RosettaServerDataTypes.js';
+import { StringKeysAndValues } from '../ServerDataTypes.js';
 
 // This type format matches the structure of the English string files that are used in the sim and common-code repos.
 // It omits things like history, which are only present in the translation files.

@@ -6,7 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { StringKeysAndValues } from '../RosettaServerDataTypes.js';
+import { StringKeysAndValues } from '../ServerDataTypes.js';
 import { CategorizedStringKeys } from '../getCategorizedStringKeys.js';
 import logger from '../logger.js';
 import { longTermStorage } from '../translationApi.js';

@@ -9,7 +9,7 @@
 import { isDeepStrictEqual } from 'node:util';
 import { RepoName } from '../../common/TypeAliases.js';
 import logger from './logger.js';
-import { SimTranslationData } from './RosettaServerDataTypes.js';
+import { SimTranslationData } from './ServerDataTypes.js';
 import { longTermStorage } from './translationApi.js';
 
 /**

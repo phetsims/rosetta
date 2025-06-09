@@ -12,7 +12,7 @@ import getSimMetadata from './getSimMetadata.js';
 import getSimNamesAndTitles from './getSimNamesAndTitles.js';
 import logger from './logger.js';
 import makeNewHistoryArray from './makeNewHistoryArray.js';
-import { HistoryEntry, TranslationDataForRepo } from './RosettaServerDataTypes.js';
+import { HistoryEntry, TranslationDataForRepo } from './ServerDataTypes.js';
 import { longTermStorage } from './translationApi.js';
 
 /**

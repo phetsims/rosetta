@@ -10,7 +10,7 @@
 import { Octokit } from '@octokit/rest';
 import privateConfig from '../../common/privateConfig.js';
 import logger from './logger.js';
-import { EnglishStrings } from './RosettaServerDataTypes.js';
+import { EnglishStrings } from './ServerDataTypes.js';
 
 const octokit = new Octokit( { auth: privateConfig.GITHUB_PAT } );
 

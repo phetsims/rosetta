@@ -8,7 +8,7 @@
  */
 
 import { ClientSubmittedTranslationData } from '../../common/ClientSubmittedTranslationData.js';
-import { MultiRepoTranslationData, SimTranslationData } from './RosettaServerDataTypes.js';
+import { MultiRepoTranslationData, SimTranslationData } from './ServerDataTypes.js';
 import getStringKeysWithDots from './getStringKeysWithDots.js';
 import logger from './logger.js';
 import makeTranslationFileContentsForRepo from './makeTranslationFileContentsForRepo.js';

@@ -15,7 +15,7 @@ import getSimMetadata from './getSimMetadata.js';
 import getSimNamesAndTitles from './getSimNamesAndTitles.js';
 import getStringKeyFromStringKeyWithRepoName from './getStringKeyFromStringKeyWithRepoName.js';
 import logger from './logger.js';
-import { ExtendedStringKeyAndValue } from './RosettaServerDataTypes.js';
+import { ExtendedStringKeyAndValue } from './ServerDataTypes.js';
 
 /**
  * Create an object in a format that is suitable for replacing the original strings in a sim's HTML with translated

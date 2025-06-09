@@ -6,7 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { SimTranslationData } from './RosettaServerDataTypes.js';
+import { SimTranslationData } from './ServerDataTypes.js';
 import logger from './logger.js';
 import { longTermStorage } from './translationApi.js';
 
