@@ -1,10 +1,10 @@
 // Copyright 2025, University of Colorado Boulder
 
 /**
- * Type definition for the translation form values. This is the data structure that is used to represent the
- * translation form in the client-side code.
+ * Shared type definitions for the data structures used in the Rosetta client.
  *
  * @author Agustín Vallejo
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import ReportObject from '../common/ReportObject.js';
