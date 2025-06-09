@@ -4,10 +4,6 @@
  * Type definition for translation form data.  This is the data structure that is used to populate the translation form
  * the is shown to the user, and also the data that is sent to the server when the user submits the form.
  *
- * TODO: See https://github.com/phetsims/rosetta/issues/311.  As of this writing (April 7 2025), I (jbphet) don't think
- *       the data sent to the server is exactly the same as that used by the server to save and load translations, so
- *       I'll need to reconcile the two.
- *
  * @author John Blanco (PhET Interactive Simulations)
  */
 

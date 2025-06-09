@@ -8,10 +8,11 @@
  */
 
 import { TranslationFormData } from './TranslationFormData.js';
+import { Locale, RepoName } from './TypeAliases.js';
 
 type ClientSubmittedTranslationData = {
-  locale: string;
-  simName: string;
+  locale: Locale;
+  simName: RepoName;
   userId: number;
   timestamp: number;
   translationFormData: TranslationFormData;
