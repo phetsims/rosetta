@@ -2,7 +2,7 @@
 
 /**
  * Type definition for translation form data.  This is the data structure that is used to populate the translation form
- * the is shown to the user, and also the data that is sent to the server when the user submits the form.
+ * the is shown to the user, and also a portion of the data that is sent to the server when the user submits the form.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
