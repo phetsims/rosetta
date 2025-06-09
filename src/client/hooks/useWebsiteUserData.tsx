@@ -7,7 +7,7 @@
  */
 
 import { useEffect, useState } from 'react';
-import { WebsiteUserData } from '../clientTypes';
+import { WebsiteUserData } from '../ClientDataTypes';
 import alertErrorMessage from '../js/alertErrorMessage';
 import getWebsiteUserData from '../js/getWebsiteUserData';
 

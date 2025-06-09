@@ -6,7 +6,7 @@
  * @author Agustín Vallejo + Gemini 2.5
  */
 
-import { ReportObject, ReportObjectWithCalculatedPercentages } from '../clientTypes.js';
+import { ReportObject, ReportObjectWithCalculatedPercentages } from '../ClientDataTypes.js';
 import SortDirectionEnum from '../js/SortDirectionEnum';
 
 /**

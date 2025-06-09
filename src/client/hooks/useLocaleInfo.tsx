@@ -8,7 +8,7 @@
 
 import { useEffect, useState } from 'react';
 import { TRANSLATION_API_ROUTE } from '../../common/constants';
-import { LocaleInfo } from '../clientTypes';
+import { LocaleInfo } from '../ClientDataTypes';
 import alertErrorMessage from '../js/alertErrorMessage';
 
 /**

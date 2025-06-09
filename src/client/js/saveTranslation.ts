@@ -7,7 +7,7 @@
  */
 
 import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
-import { TranslationFormValues } from '../clientTypes.js';
+import { TranslationFormValues } from '../ClientDataTypes.js';
 import alertErrorMessage from './alertErrorMessage.js';
 import makeTranslationObject from './makeTranslationObject.js';
 

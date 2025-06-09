@@ -8,7 +8,7 @@
 
 import { useContext, useEffect, useState } from 'react';
 import { TRANSLATION_API_ROUTE } from '../../common/constants';
-import { ReportObject, WebsiteUserData } from '../clientTypes';
+import { ReportObject, WebsiteUserData } from '../ClientDataTypes';
 import { WebsiteUserDataContext } from '../components/Rosetta';
 
 type TranslationReportHookResult = {

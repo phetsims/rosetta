@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import { ReportObjectWithCalculatedPercentages } from '../clientTypes';
+import { ReportObjectWithCalculatedPercentages } from '../ClientDataTypes';
 import infoCircle from '../img/info-circle.svg';
 
 type StatsInfoButtonProps = {

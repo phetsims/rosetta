@@ -8,7 +8,7 @@
 
 import React, { createContext, ReactElement } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { LocaleInfo, SimNamesAndTitles } from '../clientTypes';
+import { LocaleInfo, SimNamesAndTitles } from '../ClientDataTypes';
 import useLocaleInfo from '../hooks/useLocaleInfo';
 import useSimNamesAndTitles from '../hooks/useSimNamesAndTitles';
 import Admin from './Admin';

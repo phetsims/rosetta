@@ -7,7 +7,7 @@
  */
 
 import publicConfig from '../../common/publicConfig';
-import { WebsiteUserData } from '../clientTypes';
+import { WebsiteUserData } from '../ClientDataTypes';
 
 /**
  * Get the user data object from website.

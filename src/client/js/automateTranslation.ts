@@ -8,7 +8,7 @@
 
 
 import { TRANSLATION_API_ROUTE } from '../../common/constants';
-import { TranslationFormValues } from '../clientTypes.js';
+import { TranslationFormValues } from '../ClientDataTypes.js';
 import logError from './logError';
 
 type TranslationResponse = {

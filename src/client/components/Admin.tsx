@@ -8,7 +8,7 @@
 
 import React, { ReactElement, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { WebsiteUserData } from '../clientTypes';
+import { WebsiteUserData } from '../ClientDataTypes';
 import FlushReportObject from './FlushReportObject';
 import LogCredentials from './LogCredentials';
 import { WebsiteUserDataContext } from './Rosetta';

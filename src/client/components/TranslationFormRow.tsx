@@ -11,7 +11,7 @@ import React, { ReactElement, useContext } from 'react';
 import { DOUBLE_BRACE_REGEX, SINGLE_BRACE_REGEX } from '../../common/constants';
 import '../styles/table.css';
 import '../styles/translation-form.css';
-import { TranslationFormRowProps } from '../clientTypes';
+import { TranslationFormRowProps } from '../ClientDataTypes';
 import InputErrorMessage from './InputErrorMessage';
 import { LocaleInfoContext } from './RosettaRoutes';
 

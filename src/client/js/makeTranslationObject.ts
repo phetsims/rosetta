@@ -7,7 +7,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { TranslationFormValues } from '../clientTypes.js';
+import { TranslationFormValues } from '../ClientDataTypes.js';
 import getWebsiteUserData from './getWebsiteUserData';
 
 export type TranslationObject = {

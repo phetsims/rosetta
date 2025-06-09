@@ -11,7 +11,7 @@ import { Field, Form, Formik, FormikHelpers } from 'formik';
 import React, { useContext } from 'react';
 import * as Yup from 'yup';
 import { TRANSLATION_API_ROUTE } from '../../common/constants';
-import { WebsiteUserData } from '../clientTypes';
+import { WebsiteUserData } from '../ClientDataTypes';
 import { WebsiteUserDataContext } from './Rosetta';
 import '../styles/input-error.css';
 

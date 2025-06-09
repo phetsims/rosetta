@@ -8,7 +8,7 @@
 
 import React from 'react';
 import KeyTypesEnum from '../../common/KeyTypesEnum';
-import { TranslationFormTablesProps } from '../clientTypes.js';
+import { TranslationFormTablesProps } from '../ClientDataTypes.js';
 import TranslationFormRow from './TranslationFormRow';
 
 /**

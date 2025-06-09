@@ -12,7 +12,7 @@ import React, { createContext, ReactElement, useContext, useEffect, useState } f
 import { Link, useParams } from 'react-router-dom';
 import { TRANSLATION_API_ROUTE } from '../../common/constants';
 import { TranslationFormData } from '../../common/TranslationFormData.js';
-import { ErrorContextType, LocaleInfo, SimNamesAndTitles, WebsiteUserData } from '../clientTypes';
+import { ErrorContextType, LocaleInfo, SimNamesAndTitles, WebsiteUserData } from '../ClientDataTypes';
 import alertErrorMessage from '../js/alertErrorMessage';
 import automateTranslation from '../js/automateTranslation';
 import makeValidationSchema from '../js/makeValidationSchema';
@@ -31,7 +31,7 @@ type TranslationFormParams = {
   locale: string;
 };
 
-// Using the imported type from clientTypes
+// Using the imported type from ClientDataTypes
 const ErrorContext = createContext<ErrorContextType>( null );
 
 /**
