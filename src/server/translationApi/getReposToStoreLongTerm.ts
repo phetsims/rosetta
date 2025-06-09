@@ -7,8 +7,9 @@
  */
 
 import { isDeepStrictEqual } from 'node:util';
+import { RepoName } from '../../common/TypeAliases.js';
 import logger from './logger.js';
-import { RepoName, SimTranslationData } from './RosettaServerDataTypes.js';
+import { SimTranslationData } from './RosettaServerDataTypes.js';
 import { longTermStorage } from './translationApi.js';
 
 /**

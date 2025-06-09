@@ -8,11 +8,11 @@
  */
 
 import { NO_LONGER_USED_FLAG } from '../../common/constants.js';
+import { RepoName, StringKey, StringValue } from '../../common/TypeAliases.js';
 import getCommonRepos from './getCommonRepos.js';
 import getRepoNameToStringKeys from './getRepoNameToStringKeys.js';
 import getEnglishStringFile from './getEnglishStringFile.js';
 import logger from './logger.js';
-import { RepoName, StringKey, StringValue } from './RosettaServerDataTypes.js';
 import { longTermStorage } from './translationApi.js';
 
 type CommonTranslationFormData = Record<

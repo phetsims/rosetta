@@ -14,7 +14,7 @@
 import { SIMS_FOR_SHORT_REPORT } from '../../../common/constants.js';
 import privateConfig from '../../../common/privateConfig.js';
 import publicConfig from '../../../common/publicConfig.js';
-import { RepoName } from '../RosettaServerDataTypes.js';
+import { RepoName } from '../../../common/TypeAliases.js';
 import getTranslationStatus, { TranslationStatus } from './getTranslationStatus.js';
 
 type TranslatedAndUntranslatedSims = {

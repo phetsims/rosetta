@@ -7,11 +7,12 @@
  */
 
 import { NO_LONGER_USED_FLAG } from '../../../common/constants.js';
+import { StringKey, StringValue } from '../../../common/TypeAliases.js';
 import { CategorizedStringKeys } from '../getCategorizedStringKeys.js';
 import getCommonRepos from '../getCommonRepos.js';
 import getEnglishStringFile from '../getEnglishStringFile.js';
 import logger from '../logger.js';
-import { StringKey, StringKeysAndValues, StringValue } from '../RosettaServerDataTypes.js';
+import { StringKeysAndValues } from '../RosettaServerDataTypes.js';
 
 // This type format matches the structure of the English string files that are used in the sim and common-code repos.
 // It omits things like history, which are only present in the translation files.

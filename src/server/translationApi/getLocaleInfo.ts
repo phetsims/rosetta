@@ -8,8 +8,8 @@
  */
 
 import privateConfig from '../../common/privateConfig.js';
+import { Locale } from '../../common/TypeAliases.js';
 import logger from './logger.js';
-import { Locale } from './RosettaServerDataTypes.js';
 
 export type LanguageDirection = 'ltr' | 'rtl';
 

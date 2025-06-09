@@ -7,9 +7,9 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
+import { Locale, RepoName } from '../../../common/TypeAliases.js';
 import getLocaleInfo from '../getLocaleInfo.js';
 import getSimMetadata from '../getSimMetadata.js';
-import { Locale, RepoName } from '../RosettaServerDataTypes.js';
 
 export type TranslationStatus = Record<RepoName, Record<Locale, { hasTranslation: boolean }>>;
 

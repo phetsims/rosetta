@@ -15,12 +15,12 @@
  */
 
 import privateConfig from '../../common/privateConfig.js';
+import { RepoName, StringKey } from '../../common/TypeAliases.js';
 import getRepoNameFromStringKeyWithRepoName from './getRepoNameFromStringKeyWithRepoName.js';
 import getSimMetadata from './getSimMetadata.js';
 import getSimNamesAndTitles from './getSimNamesAndTitles.js';
 import getStringKeyFromStringKeyWithRepoName from './getStringKeyFromStringKeyWithRepoName.js';
 import logger from './logger.js';
-import { RepoName, StringKey } from './RosettaServerDataTypes.js';
 
 export type CategorizedStringKeys = {
 

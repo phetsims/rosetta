@@ -8,9 +8,9 @@
  */
 
 import privateConfig from '../../common/privateConfig.js';
+import { Locale, RepoName } from '../../common/TypeAliases.js';
 import { shortTermStringStorageCollection } from './getShortTermStringStorageCollection.js';
 import logger from './logger.js';
-import { Locale, RepoName } from './RosettaServerDataTypes.js';
 
 type IdSimNameAndLocale = {
   userId: number;
