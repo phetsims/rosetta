@@ -8,7 +8,7 @@
 
 import privateConfig from '../../common/privateConfig.js';
 import publicConfig from '../../common/publicConfig.js';
-import { StringEntry, TranslationFormData } from '../../common/TranslationFormData.js';
+import { SimSpecificTranslationFormStrings, TranslationFormData } from '../../common/TranslationFormData.js';
 import { CategorizedStringKeys } from './getCategorizedStringKeys.js';
 import getCommonTranslationFormData from './getCommonTranslationFormData.js';
 import getPrototypeStatus from './getPrototypeStatus.js';
@@ -117,7 +117,11 @@ const getTranslationFormData = async ( simName: string,
  * @param strings - The strings object to sort.
  * @returns A new object with sorted keys.
  */
-const getSortedStringsObject = ( simName: string, strings: Record<string, StringEntry> ): Record<string, StringEntry> => {
+const getSortedStringsObject = (
+  simName: string,
+  strings: SimSpecificTranslationFormStrings
+): SimSpecificTranslationFormStrings => {
+
   const titleKeys: string[] = [];
   const screenKeys: string[] = [];
   const otherKeys: string[] = [];
@@ -161,7 +165,7 @@ const getSortedStringsObject = ( simName: string, strings: Record<string, String
   const sortedKeys = [ ...titleKeys, ...screenKeys, ...otherKeys, ...a11yKeys ];
 
   // Create a new object with sorted keys.
-  const sortedObject: Record<string, StringEntry> = {};
+  const sortedObject: SimSpecificTranslationFormStrings = {};
   sortedKeys.forEach( key => {
     sortedObject[ key ] = strings[ key ];
   } );

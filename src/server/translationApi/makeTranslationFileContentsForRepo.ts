@@ -7,12 +7,12 @@
  */
 
 import { ClientSubmittedTranslationData } from '../../common/ClientSubmittedTranslationData.js';
-import { StringEntry, StringEntryWithRepo } from '../../common/TranslationFormData.js';
-import { HistoryEntry, TranslationDataForRepo } from './RosettaServerDataTypes.js';
+import { CommonAndSharedTranslationFormStrings, SimSpecificTranslationFormStrings } from '../../common/TranslationFormData.js';
 import getSimMetadata from './getSimMetadata.js';
 import getSimNamesAndTitles from './getSimNamesAndTitles.js';
 import logger from './logger.js';
 import makeNewHistoryArray from './makeNewHistoryArray.js';
+import { HistoryEntry, TranslationDataForRepo } from './RosettaServerDataTypes.js';
 import { longTermStorage } from './translationApi.js';
 
 /**
@@ -40,27 +40,27 @@ const makeTranslationFileContentsForRepo = async (
   const simMetadata = await getSimMetadata();
   const simNames = Object.keys( getSimNamesAndTitles( simMetadata, true ) );
 
-  let translationFormData: Record<string, StringEntry> | Record<string, StringEntryWithRepo>;
+  let translationFormStringsObject: SimSpecificTranslationFormStrings | CommonAndSharedTranslationFormStrings;
   if ( repo === translation.simName ) {
 
     // We're dealing with sim-specific strings.
-    translationFormData = translation.translationFormData.simSpecific;
+    translationFormStringsObject = translation.translationFormData.simSpecific;
   }
   else if ( simNames.includes( repo ) ) {
 
     // We're dealing with shared strings.
-    translationFormData = translation.translationFormData.shared;
+    translationFormStringsObject = translation.translationFormData.shared;
   }
   else {
 
     // We're dealing with common strings.
-    translationFormData = translation.translationFormData.common;
+    translationFormStringsObject = translation.translationFormData.common;
   }
 
   // We want to iterate over the keys contained in the union of the set of old string keys and the set of string keys in
   // the translation form data. See https://github.com/phetsims/rosetta/issues/378.
   const stringKeysToIterateOver = oldTranslationFile ? Object.keys( oldTranslationFile ) : [];
-  for ( const stringKey of Object.keys( translationFormData ) ) {
+  for ( const stringKey of Object.keys( translationFormStringsObject ) ) {
     if ( !stringKeysToIterateOver.includes( stringKey ) ) {
       stringKeysToIterateOver.push( stringKey );
     }
@@ -70,7 +70,7 @@ const makeTranslationFileContentsForRepo = async (
 
     const ableToCheckStringKeyCases =
       repo === translation.simName ||
-      ( translationFormData[ stringKey ] && 'repo' in translationFormData[ stringKey ] && repo === translationFormData[ stringKey ].repo ) ||
+      ( translationFormStringsObject[ stringKey ] && 'repo' in translationFormStringsObject[ stringKey ] && repo === translationFormStringsObject[ stringKey ].repo ) ||
       ( oldTranslationFile && oldTranslationFile[ stringKey ] );
 
     if ( ableToCheckStringKeyCases ) {
@@ -78,8 +78,8 @@ const makeTranslationFileContentsForRepo = async (
       // Trim leading and trailing whitespace.  NOTE: If a user deliberately wants a space, this will change the string
       // from ' ' to '', which makes the string fall back to English. In this case, they should use a non-breaking space
       // character instead. A non-breaking space character is &nbsp;.
-      if ( translationFormData[ stringKey ] ) {
-        translationFormData[ stringKey ].translated = translationFormData[ stringKey ].translated.trim();
+      if ( translationFormStringsObject[ stringKey ] ) {
+        translationFormStringsObject[ stringKey ].translated = translationFormStringsObject[ stringKey ].translated.trim();
       }
 
       const stringNotYetTranslated = !oldTranslationFile ||
@@ -87,12 +87,12 @@ const makeTranslationFileContentsForRepo = async (
                                      oldTranslationFile[ stringKey ].value === '';
 
       const translationLeftBlank = stringNotYetTranslated &&
-                                   translationFormData[ stringKey ] &&
-                                   translationFormData[ stringKey ].translated === '';
+                                   translationFormStringsObject[ stringKey ] &&
+                                   translationFormStringsObject[ stringKey ].translated === '';
 
       const userProvidedInitialTranslation = stringNotYetTranslated &&
-                                             translationFormData[ stringKey ] &&
-                                             translationFormData[ stringKey ].translated !== '';
+                                             translationFormStringsObject[ stringKey ] &&
+                                             translationFormStringsObject[ stringKey ].translated !== '';
 
       const stringHasNonBlankTranslation = oldTranslationFile &&
                                            oldTranslationFile[ stringKey ] &&
@@ -103,19 +103,19 @@ const makeTranslationFileContentsForRepo = async (
                                         oldTranslationFile[ stringKey ].value === '';
 
       const translationErased = stringHasNonBlankTranslation &&
-                                translationFormData[ stringKey ] &&
-                                translationFormData[ stringKey ].translated === '';
+                                translationFormStringsObject[ stringKey ] &&
+                                translationFormStringsObject[ stringKey ].translated === '';
 
       const translationUntouched = stringHasNonBlankTranslation &&
-                                   translationFormData[ stringKey ] &&
-                                   translationFormData[ stringKey ].translated === oldTranslationFile[ stringKey ].value;
+                                   translationFormStringsObject[ stringKey ] &&
+                                   translationFormStringsObject[ stringKey ].translated === oldTranslationFile[ stringKey ].value;
 
       const translationModified = ( stringHasNonBlankTranslation || stringHasBlankTranslation ) &&
-                                  translationFormData[ stringKey ] &&
-                                  translationFormData[ stringKey ].translated !== oldTranslationFile[ stringKey ].value;
+                                  translationFormStringsObject[ stringKey ] &&
+                                  translationFormStringsObject[ stringKey ].translated !== oldTranslationFile[ stringKey ].value;
 
       const stringKeyNotInSim = stringHasNonBlankTranslation &&
-                                !translationFormData[ stringKey ];
+                                !translationFormStringsObject[ stringKey ];
 
       if ( translationLeftBlank ) {
         logger.verbose( `string for ${stringKey} not translated; not adding it to the translation file for ${repo}` );
@@ -128,12 +128,12 @@ const makeTranslationFileContentsForRepo = async (
           userId: translation.userId,
           timestamp: translation.timestamp,
           oldValue: '',
-          newValue: translationFormData[ stringKey ].translated
+          newValue: translationFormStringsObject[ stringKey ].translated
         };
 
         // Add translated value and history to translation file.
         translationFileContentsForRepo[ stringKey ] = {
-          value: translationFormData[ stringKey ].translated,
+          value: translationFormStringsObject[ stringKey ].translated,
           history: [ newHistoryEntry ]
         };
       }
@@ -143,7 +143,7 @@ const makeTranslationFileContentsForRepo = async (
           userId: translation.userId,
           timestamp: translation.timestamp,
           oldValue: oldTranslationFile[ stringKey ].value,
-          newValue: translationFormData[ stringKey ].translated
+          newValue: translationFormStringsObject[ stringKey ].translated
         };
 
         const newHistoryArray = makeNewHistoryArray(
@@ -153,7 +153,7 @@ const makeTranslationFileContentsForRepo = async (
         );
 
         translationFileContentsForRepo[ stringKey ] = {
-          value: translationFormData[ stringKey ].translated,
+          value: translationFormStringsObject[ stringKey ].translated,
           history: newHistoryArray
         };
       }
@@ -169,7 +169,7 @@ const makeTranslationFileContentsForRepo = async (
           userId: translation.userId,
           timestamp: translation.timestamp,
           oldValue: oldTranslationFile[ stringKey ].value,
-          newValue: translationFormData[ stringKey ].translated,
+          newValue: translationFormStringsObject[ stringKey ].translated,
           explanation: null // this is no longer used, but for some reason we keep it around
         };
 
@@ -177,7 +177,7 @@ const makeTranslationFileContentsForRepo = async (
 
         // Add translated value and history to translation file.
         translationFileContentsForRepo[ stringKey ] = {
-          value: translationFormData[ stringKey ].translated,
+          value: translationFormStringsObject[ stringKey ].translated,
           history: newHistoryArray
         };
       }

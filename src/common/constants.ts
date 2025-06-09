@@ -23,7 +23,7 @@ export const NO_LONGER_USED_FLAG = 'no longer used gooble';
 
 export const TRANSLATION_API_ROUTE = publicConfig.ENVIRONMENT === 'development' ?
                                      'http://localhost:16372/translate/api' :
-                                      '/translate/api';
+                                     '/translate/api';
 
 // These are used in validating the user input for strings that
 // have placeholder patterns.
@@ -69,14 +69,14 @@ export const SIMS_FOR_SHORT_REPORT = [
   'build-an-atom',
 
   // sim that tends to have fewer translations
-  'quadrilateral',
+  // 'quadrilateral',
 
   // Include atomic-interactions and states-of-matter because the former shares most strings with the latter, so this
   // allows us to test the behavior of 'shared' strings.
   'states-of-matter',
-  'atomic-interactions'
+  'atomic-interactions',
 
   // chains and example-sim are omitted as of Jan 9 2024 because there aren't published string map files for them
-  // 'chains',
+  'chains'
   // 'example-sim'
 ];

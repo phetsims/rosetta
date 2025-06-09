@@ -1,22 +1,17 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * Export a function that gets a sim's sim-specific string keys, their English values, and their translated values.
+ * Export a shared function, see function header for details.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
+import { SimSpecificTranslationFormStrings } from '../../common/TranslationFormData.js';
 import getLatestSimSha from './getLatestSimSha.js';
 import getEnglishStringFile from './getEnglishStringFile.js';
 import logger from './logger.js';
 import { longTermStorage } from './translationApi.js';
-
-type SimSpecificStringKey = {
-  english: string;
-  translated: string;
-};
-
-type SimSpecificStringKeysAndStrings = Record<string, SimSpecificStringKey>;
 
 /**
  * Return an object that contains a sim's sim-specific string keys, their English values, and their translated values.
@@ -26,11 +21,15 @@ type SimSpecificStringKeysAndStrings = Record<string, SimSpecificStringKey>;
  * @param simSpecificStringKeys - list of sim-specific string keys
  * @returns - sim-specific string keys, their English values, and their translated values
  */
-const getSimSpecificTranslationFormData = async ( simName: string, locale: string, simSpecificStringKeys: string[] ): Promise<SimSpecificStringKeysAndStrings> => {
+const getSimSpecificTranslationFormData = async (
+  simName: string,
+  locale: string,
+  simSpecificStringKeys: string[]
+): Promise<SimSpecificTranslationFormStrings> => {
 
   logger.info( 'getting sim-specific translation form data' );
 
-  const simSpecific: SimSpecificStringKeysAndStrings = {};
+  const simSpecific: SimSpecificTranslationFormStrings = {};
 
   try {
 
