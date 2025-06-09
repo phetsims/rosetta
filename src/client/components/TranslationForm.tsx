@@ -11,7 +11,8 @@ import { Form, Formik, FormikHelpers, FormikProps } from 'formik';
 import React, { createContext, ReactElement, useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { TRANSLATION_API_ROUTE } from '../../common/constants';
-import { ErrorContextType, LocaleInfo, SimNamesAndTitles, TranslationFormData as ClientTranslationFormData, WebsiteUserData } from '../clientTypes';
+import { TranslationFormData } from '../../common/TranslationFormData.js';
+import { ErrorContextType, LocaleInfo, SimNamesAndTitles, WebsiteUserData } from '../clientTypes';
 import alertErrorMessage from '../js/alertErrorMessage';
 import automateTranslation from '../js/automateTranslation';
 import makeValidationSchema from '../js/makeValidationSchema';
@@ -40,7 +41,7 @@ const TranslationForm: React.FC = (): ReactElement => {
   const params = useParams<TranslationFormParams>();
   const websiteUserData = useContext<WebsiteUserData>( WebsiteUserDataContext );
 
-  const [ translationFormData, setTranslationFormData ] = useState<ClientTranslationFormData | null>( null );
+  const [ translationFormData, setTranslationFormData ] = useState<TranslationFormData | null>( null );
 
   useEffect( () => {
     const fetchData = async (): Promise<void> => {
@@ -117,7 +118,7 @@ const TranslationForm: React.FC = (): ReactElement => {
         <Formik
           initialValues={translationFormData}
           validationSchema={validationSchema}
-          onSubmit={async ( values: ClientTranslationFormData, { setFieldValue }: FormikHelpers<ClientTranslationFormData> ) => {
+          onSubmit={async ( values: TranslationFormData, { setFieldValue }: FormikHelpers<TranslationFormData> ) => {
             if ( buttonId === '' ) {
               console.error( 'unable to get button id' );
             }
@@ -156,7 +157,7 @@ const TranslationForm: React.FC = (): ReactElement => {
             }
           }}
         >
-          {( props: FormikProps<ClientTranslationFormData> ) => {
+          {( props: FormikProps<TranslationFormData> ) => {
             // Convert Formik errors to compatible format for ErrorContext
             const contextErrors: ErrorContextType = Object.keys( props.errors ).length > 0 ?
                                                     props.errors as unknown as ErrorContextType : null;
