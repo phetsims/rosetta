@@ -6,16 +6,12 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import { CommonAndSharedTranslationFormStrings } from '../../common/TranslationFormData.js';
+import { RepoName, StringKey, StringValue } from '../../common/TypeAliases.js';
 import getEnglishStringFile from './getEnglishStringFile.js';
 import logger from './logger.js';
 import { EnglishStrings, StringKeysAndValues, TranslationDataForRepo } from './ServerDataTypes.js';
 import { longTermStorage } from './translationApi.js';
-
-type SharedTranslationFormData = Record<string, {
-  english: string;
-  translated: string;
-  repo: string;
-}>;
 
 /**
  * Get data needed for rendering shared string translation form table.
@@ -27,10 +23,10 @@ type SharedTranslationFormData = Record<string, {
  */
 const getSharedTranslationFormData = async ( locale: string,
                                              sharedStringKeys: string[],
-                                             sharedSims: string[] ): Promise<SharedTranslationFormData> => {
+                                             sharedSims: string[] ): Promise<CommonAndSharedTranslationFormStrings> => {
 
   logger.info( 'getting shared translation form data' );
-  const sharedTranslationFormData: SharedTranslationFormData = {};
+  const sharedTranslationFormData: CommonAndSharedTranslationFormStrings = {};
 
   // As of this writing, most sims do not have shared strings. Thus, we add a check here to ensure there are shared
   // string keys before making request for string files.
@@ -50,7 +46,7 @@ const getSharedTranslationFormData = async ( locale: string,
       }
 
       // Populate string keys and values.
-      const englishKeyValueAndRepoObjects: Record<string, { value: string; repo: string }> = {};
+      const englishKeyValueAndRepoObjects: Record<StringKey, { value: StringValue; repo: RepoName }> = {};
       const translatedKeysAndValues: StringKeysAndValues = {};
       for ( const stringKey of sharedStringKeys ) {
 
@@ -116,7 +112,7 @@ const getSharedTranslationFormData = async ( locale: string,
   const SharedDataKeys = Object.keys( sharedTranslationFormData );
   const a11yKeys = SharedDataKeys.filter( key => key.includes( 'a11y' ) ).sort();
   const otherKeys = SharedDataKeys.filter( key => !key.includes( 'a11y' ) ).sort();
-  const sortedSharedData: SharedTranslationFormData = {};
+  const sortedSharedData: CommonAndSharedTranslationFormStrings = {};
   otherKeys.forEach( key => {
     sortedSharedData[ key ] = sharedTranslationFormData[ key ];
   } );

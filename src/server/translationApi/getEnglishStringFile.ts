@@ -9,6 +9,7 @@
 
 import { Octokit } from '@octokit/rest';
 import privateConfig from '../../common/privateConfig.js';
+import { StringKey } from '../../common/TypeAliases.js';
 import logger from './logger.js';
 import { EnglishStrings } from './ServerDataTypes.js';
 
@@ -20,7 +21,7 @@ type PotentiallyNestedStringValue = { value: string } | { [ key: string ]: Poten
 
 // Type definition for the content of English string files.  These don't have history the way translation files do, and
 // can potentially contain nested values.
-type EnglishStringFileContents = Record<string, PotentiallyNestedStringValue>;
+type EnglishStringFileContents = Record<StringKey, PotentiallyNestedStringValue>;
 
 /**
  * Get the contents of the English language string file for a given repo and, optionally, the specified branch.

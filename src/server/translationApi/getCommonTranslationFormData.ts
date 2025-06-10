@@ -8,11 +8,12 @@
  */
 
 import { NO_LONGER_USED_FLAG } from '../../common/constants.js';
-import { RepoName, StringKey, StringValue } from '../../common/TypeAliases.js';
+import { Locale, RepoName, StringKey, StringValue } from '../../common/TypeAliases.js';
 import getCommonRepos from './getCommonRepos.js';
 import getRepoNameToStringKeys from './getRepoNameToStringKeys.js';
 import getEnglishStringFile from './getEnglishStringFile.js';
 import logger from './logger.js';
+import { ExtendedStringKey } from './ServerDataTypes.js';
 import { longTermStorage } from './translationApi.js';
 
 type CommonTranslationFormData = Record<
@@ -34,11 +35,11 @@ type CommonTranslationFormData = Record<
  * @param commonStringKeys - list of common string keys for the sim
  * @returns A promise resolving to an object containing common string keys, their English values, and their translated values
  */
-const getCommonTranslationFormData = async ( simName: string,
-                                             locale: string,
-                                             simNames: string[],
-                                             stringKeysWithRepoName: string[],
-                                             commonStringKeys: string[] ): Promise<CommonTranslationFormData> => {
+const getCommonTranslationFormData = async ( simName: RepoName,
+                                             locale: Locale,
+                                             simNames: RepoName[],
+                                             stringKeysWithRepoName: ExtendedStringKey[],
+                                             commonStringKeys: StringKey[] ): Promise<CommonTranslationFormData> => {
 
   logger.info( 'getting common translation form data' );
 

@@ -11,10 +11,13 @@
  * @author Agustín Vallejo
  */
 
+import { Locale, RepoName } from '../../../common/TypeAliases.js';
+import { StringKeysAndValues } from '../ServerDataTypes.js';
+
 class AutomationCache {
 
   // Record from locale to sim to stringKey to translated value
-  private cache: Record<string, Record<string, Record<string, string>>> = {};
+  private cache: Record<Locale, Record<RepoName, StringKeysAndValues>> = {};
 
   /**
    * @param locale

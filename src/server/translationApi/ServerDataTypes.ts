@@ -8,7 +8,7 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import { RepoName, StringKey, StringValue } from '../../common/TypeAliases.js';
+import { Locale, RepoName, StringKey, StringValue } from '../../common/TypeAliases.js';
 
 // An object that matches string keys to their values.  The values can be English strings or translated strings.
 export type StringKeysAndValues = Record<StringKey, StringValue>;
@@ -65,10 +65,10 @@ export type MultiRepoTranslationData = Record<RepoName, TranslationDataForRepo>;
 type SimTranslationData = {
 
   // The name of the simulation for which this translation was submitted, e.g. 'area-model-algebra'.
-  simName: string;
+  simName: RepoName;
 
   // The locale for the translation, e.g. 'es' for Spanish.
-  locale: string;
+  locale: Locale;
 
   // All the repo & string keys & strings that represent the translation.
   multiRepoTranslationData: MultiRepoTranslationData;
@@ -77,7 +77,7 @@ type SimTranslationData = {
 // A type for a string that includes both the repo where the string is defined and the string key itself.  This is used
 // in the string map files that are a build artifact as of early 2024, e.g. english-string-map.json.  The values look
 // like this: "AREA_BUILDER/area", "JOIST/credits.title", or "SCENERY_PHET/SoundToggleButton.name".
-type ExtendedStringKey = string;
+export type ExtendedStringKey = string;
 
 // A type for an object that maps string keys (which include the repo name) to their values.  This is used in the
 // string map files that are a build artifact as of early 2024, e.g. english-string-map.json.
