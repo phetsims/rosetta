@@ -47,12 +47,13 @@ export type TranslationFormRowProps = {
   englishString: string;
 } & LocaleAndAIMetadata;
 
-// TODO: Try to use Record https://github.com/phetsims/rosetta/issues/311
+// TODO: Try to use Record once the linting issues are resolved, see https://github.com/phetsims/rosetta/issues/370.
 export type ErrorContextType = {
   [ key: string ]: string;
 } | null;
 
-// Below types used for the TranslationFormRow component
+// TODO: Try to use Record once the linting issues are resolved, see https://github.com/phetsims/rosetta/issues/370.
+// Below types used for the TranslationFormRow component.
 export type LocaleInfo = {
   [locale: string]: {
     name: string;
