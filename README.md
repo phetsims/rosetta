@@ -8,6 +8,8 @@ Node.
 1. Install Git
 2. Install Node.js
 3. Execute `git clone git@github.com:phetsims/rosetta.git`
+3. Execute `git clone git@github.com:phetsims/chipper.git`
+3. Execute `git clone git@github.com:phetsims/perennial.git perennial-alias`
 4. Execute `cd rosetta && npm install`
 5. Execute `./bin/bootstrap.sh`
 6. Install Grunt globally (`npm i -g grunt-cli`)
