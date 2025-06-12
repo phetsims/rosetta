@@ -14,9 +14,9 @@
 import React, { createContext, ReactElement } from 'react';
 import publicConfig from '../../common/publicConfig';
 import useWebsiteUserData from '../hooks/useWebsiteUserData';
-import { WebsiteUserData } from '../js/getWebsiteUserData.js';
 import PhetHomePageLink from './PhetHomePageLink';
 import RosettaRoutes from './RosettaRoutes';
+import { WebsiteUserData } from '../ClientDataTypes';
 
 const WebsiteUserDataContext = createContext<WebsiteUserData>( {} as WebsiteUserData );
 
@@ -33,7 +33,7 @@ const WebsiteUserDataContext = createContext<WebsiteUserData>( {} as WebsiteUser
  * If Rosetta isn't enabled, a message about Rosetta being down for maintenance will be shown.
  */
 const Rosetta: React.FC = (): ReactElement => {
-  const websiteUserData = useWebsiteUserData() as WebsiteUserData;
+  const websiteUserData = useWebsiteUserData();
   let jsx: ReactElement = <p>Loading...</p>;
   const rosettaEnabled = Object.keys( publicConfig ).length > 0 && publicConfig.IS_ENABLED;
 

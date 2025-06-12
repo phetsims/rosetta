@@ -12,7 +12,6 @@
  */
 
 import bodyParser from 'body-parser';
-// @ts-expect-error - no types for libs, see https://github.com/phetsims/perennial/issues/428
 import cors from 'cors';
 import express from 'express';
 import os from 'os';
