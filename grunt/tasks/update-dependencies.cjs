@@ -1,8 +1,8 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * Rosetta depends on a parallel checkout of chipper and perennial-alias, so we update these repos as part of updating
- * rosetta. For the history of this, see:
+ * Rosetta depends on parallel checkouts of chipper and perennial-alias, so we update these repos as part of updating
+ * rosetta. For this to work, these repos need to have been initially cloned.  For the history of this, see:
  * https://github.com/phetsims/phet-io/issues/1874#issuecomment-1233493616
  *
  * This task is intended to be used when you are pulling rosetta onto the production server or the test server.
@@ -12,7 +12,6 @@
  */
 'use strict';
 
-const cloneRepo = require( '../../../perennial-alias/js/common/cloneRepo.js' );
 const fs = require( 'fs' );
 const gitCheckout = require( '../../../perennial-alias/js/common/gitCheckout.js' );
 const gitPull = require( '../../../perennial-alias/js/common/gitPull.js' );
@@ -23,16 +22,6 @@ const npmUpdate = require( '../../../perennial-alias/js/common/npmUpdate.js' );
   const dependencies = JSON.parse( fs.readFileSync( './dependencies.json', 'utf8' ) );
 
   for ( const repo of Object.keys( dependencies ) ) {
-
-    // Make sure the dependency directory exists and if not, clone it.
-    if ( !fs.existsSync( `../${repo}` ) ) {
-      try {
-        await cloneRepo( repo );
-      }
-      catch( e ) {
-        throw new Error( `issue with cloning ${repo}: ${e}` );
-      }
-    }
 
     // Pull the latest changes from the remote repository.
     try {
