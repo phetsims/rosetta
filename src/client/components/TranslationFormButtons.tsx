@@ -6,15 +6,9 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import React, { useContext } from 'react';
+import React from 'react';
 import LoadingSpinner from './LoadingSpinner';
 import '../styles/translation-form.css';
-import { WebsiteUserDataContext } from './Rosetta';
-
-// TODO: Probably remove this when WebsiteUserDataContext is properly typed https://github.com/phetsims/rosetta/issues/311
-type WebsiteUserData = {
-  teamMember: boolean; // Indicates if the user is a team member
-};
 
 type TranslationFormButtonsProps = {
   simName: string;
@@ -30,8 +24,9 @@ type TranslationFormButtonsProps = {
  * Return the set of buttons used in the translation form. These appear above and below the translation form.
  */
 const TranslationFormButtons: React.FC<TranslationFormButtonsProps> = props => {
-  const websiteUserData = useContext( WebsiteUserDataContext ) as WebsiteUserData;
-  const showAutomate = websiteUserData.teamMember; // Only show automation feature if user is a team member
+  // const websiteUserData = useContext( WebsiteUserDataContext ) as WebsiteUserData;
+  // const showAutomate = websiteUserData.teamMember; // Only show automation feature if user is a team member
+  const showAutomate = false; // TODO: For now, we are not showing the automate button in the UI, https://github.com/phetsims/rosetta/issues/451
   const disabled = !( props.isValid && props.dirty ) || props.isDisabled;
   const grayButton = 'btn btn-secondary';
   const blueButton = 'btn btn-primary';
