@@ -49,7 +49,7 @@ const logMessages = logCommandOutput.toString().split( '\n' );
 let activeSimList;
 try {
   const initialDirectory = process.cwd();
-  activeSimList = fs.readFileSync( '../../../perennial/data/active-sims', 'utf-8' );
+  activeSimList = fs.readFileSync( '../../../perennial-alias/data/active-sims', 'utf-8' );
   process.chdir( initialDirectory );
 }
 catch( e ) {

@@ -10,7 +10,7 @@
 
 // imports
 const fs = require( 'fs' );
-const getActiveRepos = require( '../../../perennial/js/common/getActiveRepos' );
+const getActiveRepos = require( '../../../perennial-alias/js/common/getActiveRepos' );
 
 const activeRepos = getActiveRepos();
 

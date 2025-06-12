@@ -1,28 +1,30 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * Rosetta depends on a parallel checkout of perennial, perennial-alias, and chipper, so we update these repos
- * as part of updating rosetta. For the history of this, see:
+ * Rosetta depends on a parallel checkout of chipper and perennial-alias, so we update these repos as part of updating
+ * rosetta. For the history of this, see:
  * https://github.com/phetsims/phet-io/issues/1874#issuecomment-1233493616
  *
  * This task is intended to be used when you are pulling rosetta onto the production server or the test server.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
- * @author John Blanco
+ * @author John Blanco (PhET Interactive Simulations)
  */
 'use strict';
 
-const cloneRepo = require( '../../../perennial/js/common/cloneRepo.js' );
+const cloneRepo = require( '../../../perennial-alias/js/common/cloneRepo.js' );
 const fs = require( 'fs' );
-const gitPull = require( '../../../perennial/js/common/gitPull.js' );
-const npmUpdate = require( '../../../perennial/js/common/npmUpdate.js' );
-
-const REPO_DEPENDENCIES = [ 'chipper', 'perennial', 'perennial-alias' ];
+const gitCheckout = require( '../../../perennial-alias/js/common/gitCheckout.js' );
+const gitPull = require( '../../../perennial-alias/js/common/gitPull.js' );
+const npmUpdate = require( '../../../perennial-alias/js/common/npmUpdate.js' );
 
 ( async function() {
-  for ( const repo of REPO_DEPENDENCIES ) {
 
-    // Try to clone repos.
+  const dependencies = JSON.parse( fs.readFileSync( './dependencies.json', 'utf8' ) );
+
+  for ( const repo of Object.keys( dependencies ) ) {
+
+    // Make sure the dependency directory exists and if not, clone it.
     if ( !fs.existsSync( `../${repo}` ) ) {
       try {
         await cloneRepo( repo );
@@ -32,7 +34,7 @@ const REPO_DEPENDENCIES = [ 'chipper', 'perennial', 'perennial-alias' ];
       }
     }
 
-    // Try to pull repos.
+    // Pull the latest changes from the remote repository.
     try {
       const pullResult = await gitPull( repo );
       console.log( pullResult );
@@ -41,7 +43,16 @@ const REPO_DEPENDENCIES = [ 'chipper', 'perennial', 'perennial-alias' ];
       throw new Error( `issue with git pull on ${repo}: ${e}` );
     }
 
-    // Try to update repos.
+    // Check out the version of the repo that is specified in the dependencies file.
+    try {
+      console.log( `Checking out SHA ${dependencies[ repo ].sha} for ${repo}` );
+      await gitCheckout( repo, dependencies[ repo ].sha );
+    }
+    catch( e ) {
+      throw new Error( `error checking out SHA for ${repo}: ${e}` );
+    }
+
+    // Update node packages for the dependency.
     try {
       await npmUpdate( repo );
     }
