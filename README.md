@@ -5,14 +5,10 @@ Node.
 
 ## Quick Start
 
-1. Install Git
-2. Install Node.js
-3. Execute `git clone git@github.com:phetsims/chipper.git`
-4. Execute `cd chipper && npm install && cd -`
-3. Execute `git clone git@github.com:phetsims/perennial.git perennial-alias`
-4. Execute `cd perennial-alias && npm install && cd -`
-3. Execute `git clone git@github.com:phetsims/rosetta.git`
+1. Install git
+2. Install NodeJS
+3. Execute `git clone https://github.com/phetsims/rosetta.git`
 4. Execute `cd rosetta && npm install`
-5. Execute `./bin/bootstrap.sh`
+5. Execute `./scripts/sh/bootstrap.sh`
 6. Install Grunt globally (`npm i -g grunt-cli`)
 7. Execute `grunt update-dependencies`

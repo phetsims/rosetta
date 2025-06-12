@@ -17,5 +17,4 @@ function clone_and_update {
 cd .. || exit
 
 clone_and_update "chipper" "chipper"
-clone_and_update "perennial" "perennial"
 clone_and_update "perennial" "perennial-alias"
