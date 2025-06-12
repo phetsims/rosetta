@@ -11,4 +11,4 @@ Node.
 4. Execute `cd rosetta && npm install`
 5. Execute `./bin/bootstrap.sh`
 6. Install Grunt globally (`npm i -g grunt-cli`)
-7. Execute `grunt update-rosetta`
+7. Execute `grunt update-dependencies`

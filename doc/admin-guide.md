@@ -119,7 +119,7 @@ Update
 ------
 
 Before trying to update Rosetta, you need to check its logs (see below), ensure no one is using it, and then stop its
-systemd service (see below). Then, you should be able to simply `sudo -u phet-admin grunt update-rosetta`.
+systemd service (see below). Then, you should be able to simply `sudo -u phet-admin grunt update-dependencies`.
 
 Manage systemd Service
 ----------------------
