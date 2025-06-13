@@ -8,7 +8,6 @@
 
 import React, { ReactElement, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { WebsiteUserData } from '../ClientDataTypes';
 import FlushReportObject from './FlushReportObject';
 import LogCredentials from './LogCredentials';
 import { WebsiteUserDataContext } from './Rosetta';
@@ -21,7 +20,7 @@ import TriggerBuild from './TriggerBuild';
  */
 const Admin: React.FC = (): ReactElement => {
 
-  const websiteUserData = useContext( WebsiteUserDataContext ) as WebsiteUserData;
+  const websiteUserData = useContext( WebsiteUserDataContext );
 
   let jsx: ReactElement;
   const allowedAccess = websiteUserData.loggedIn && websiteUserData.teamMember;

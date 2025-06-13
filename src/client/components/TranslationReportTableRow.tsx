@@ -8,7 +8,7 @@
 
 import React, { ReactElement } from 'react';
 import { Link } from 'react-router-dom';
-import { ReportObjectWithCalculatedPercentages } from '../ClientDataTypes'; // Use the type with calculated percentages
+import { ReportObjectWithCalculatedPercentages } from '../../common/ReportObject.js';
 import StatsInfoButton from './StatsInfoButton';
 
 type TranslationReportTableRowProps = {

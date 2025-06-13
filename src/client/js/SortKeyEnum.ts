@@ -8,12 +8,15 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-const SortKeyEnum = {
+import { ReportObjectSortingKeys } from '../../common/ReportObject.js';
+
+type SortingKeys = {
+  [ key: string ]: ReportObjectSortingKeys[];
+};
+
+const SortKeyEnum: SortingKeys = {
   SIM_TITLE: [ 'simTitle' ],
-  TOTAL_STRINGS: [ 'percentTotal', 'totalStrings' ],
-  SIM_SPECIFIC_PERCENT: [ 'percentSimSpecific', 'numSimSpecificStrings' ],
-  COMMON_PERCENT: [ 'percentCommon', 'numCommonStrings' ],
-  SHARED_PERCENT: [ 'percentShared', 'numSharedStrings' ]
+  TOTAL_STRINGS: [ 'totalPercent', 'totalStrings' ]
 };
 
 Object.freeze( SortKeyEnum );

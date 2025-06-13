@@ -6,7 +6,7 @@
  * @author Agustín Vallejo + Gemini 2.5
  */
 
-import { ReportObject, ReportObjectWithCalculatedPercentages } from '../ClientDataTypes.js';
+import ReportObject, { ReportObjectSortingKeys, ReportObjectWithCalculatedPercentages } from '../../common/ReportObject.js';
 import SortDirectionEnum from '../js/SortDirectionEnum';
 
 /**
@@ -49,13 +49,11 @@ const getReportObjectsWithCalculatedPercentages = ( reportObjects: ReportObject[
 
 /**
  * Compares two report objects based on a single sort key and direction.
- * This function should be pure and not have side effects like `alertErrorMessage`.
- * If types are inconsistent, it's better to log a warning or provide a default comparison.
  */
 const compareReportObjectsByKey = (
   a: ReportObjectWithCalculatedPercentages,
   b: ReportObjectWithCalculatedPercentages,
-  sortKey: string,
+  sortKey: ReportObjectSortingKeys,
   sortDirection: string
 ): number => {
   let itemA = a[ sortKey ];
@@ -84,7 +82,7 @@ const compareReportObjectsByKey = (
   }
 
   // Standard comparison logic
-  const comparison = itemA! > itemB! ? 1 : ( itemA! < itemB! ? -1 : 0 );
+  const comparison = itemA > itemB ? 1 : ( itemA < itemB ? -1 : 0 );
 
   return sortDirection === SortDirectionEnum.ASCENDING ? comparison : -comparison;
 };
@@ -96,7 +94,7 @@ const compareReportObjectsByKey = (
 const getSortedReportData = (
   reportObjectsWithPercentages: ReportObjectWithCalculatedPercentages[],
   sortDirection: string,
-  sortKeys: string[]
+  sortKeys: ReportObjectSortingKeys[]
 ): ReportObjectWithCalculatedPercentages[] => {
   // Use a copy to ensure immutability
   return [ ...reportObjectsWithPercentages ].sort( ( a, b ) => {
@@ -118,7 +116,7 @@ const getSortedReportData = (
 const prepareSortedTranslationReportData = (
   listOfSims: string[],
   reportObjects: ReportObject[], // These are the raw report objects from the backend
-  sortKeys: string[],
+  sortKeys: ReportObjectSortingKeys[],
   sortDirection: string
 ): ReportObjectWithCalculatedPercentages[] => {
 

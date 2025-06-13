@@ -7,7 +7,8 @@
  */
 
 import React, { ReactElement, useContext, useState } from 'react';
-import { Link } from 'react-router-dom'; // Added for manual row rendering in no-stats/loading states
+import { Link } from 'react-router-dom';
+import { ReportObjectSortingKeys } from '../../common/ReportObject.js'; // Added for manual row rendering in no-stats/loading states
 import useTranslatedAndUntranslatedSims from '../hooks/useTranslatedAndUntranslatedSims';
 import useTranslationReportObjects from '../hooks/useTranslationReportObjects';
 import SortDirectionEnum from '../js/SortDirectionEnum';
@@ -48,7 +49,7 @@ const TranslationReportTable: React.FC<TranslationReportTableProps> = ( {
   );
 
   // State variables used in sorting the table.
-  const [ sortKeys, setSortKeys ] = useState<string[]>( SortKeyEnum.SIM_TITLE );
+  const [ sortKeys, setSortKeys ] = useState<ReportObjectSortingKeys[]>( SortKeyEnum.SIM_TITLE );
   const [ sortDirection, setSortDirection ] = useState<string>( SortDirectionEnum.ASCENDING );
 
   const translatedAndUntranslatedSims = useTranslatedAndUntranslatedSims( locale );
@@ -114,7 +115,7 @@ const TranslationReportTable: React.FC<TranslationReportTableProps> = ( {
   }
 
   // Handler for sort button clicks
-  const handleSortButtonClick = ( newSortKeys: string[] ): void => {
+  const handleSortButtonClick = ( newSortKeys: ReportObjectSortingKeys[] ): void => {
     setSortKeys( newSortKeys );
     // Toggle sort direction
     setSortDirection( prevDirection =>

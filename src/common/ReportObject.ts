@@ -8,7 +8,7 @@
 
 type ReportObject = {
   simTitle: string;
-  simName: string; // Do we need simName AND title?
+  simName: string;
   isDirty: boolean;
   timestamp: number; // milliseconds, used by the cache to decide if the report object should be updated
 
@@ -24,5 +24,16 @@ type ReportObject = {
   totalTranslatedStrings: number;
   totalStrings: number;
 };
+
+// This type represents a ReportObject after its percentages have been calculated/re-calculated
+// by `getReportObjectsWithCalculatedPercentages`
+export type ReportObjectWithCalculatedPercentages = ReportObject & {
+  commonPercent: number;
+  simSpecificPercent: number;
+  sharedPercent: number;
+  totalPercent: number;
+};
+
+export type ReportObjectSortingKeys = 'simTitle' | 'totalStrings' | 'totalPercent';
 
 export default ReportObject;
