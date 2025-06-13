@@ -8,17 +8,17 @@
 
 import React, { ReactElement, useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ReportObjectSortingKeys } from '../../common/ReportObject.js'; // Added for manual row rendering in no-stats/loading states
+import { ReportObjectSortingKeys } from '../../common/ReportObject.js';
 import useTranslatedAndUntranslatedSims from '../hooks/useTranslatedAndUntranslatedSims';
 import useTranslationReportObjects from '../hooks/useTranslationReportObjects';
 import SortDirectionEnum from '../js/SortDirectionEnum';
 import SortKeyEnum from '../js/SortKeyEnum';
-import { prepareSortedTranslationReportData } from '../js/translationReportData'; // NEW: Import data processing utility
+import { getSortedTranslationReport } from '../js/translationReportData';
 import LoadingSpinner from './LoadingSpinner';
 import NoStatsBanner from './NoStatsBanner';
 import { SimNamesAndTitlesContext } from './RosettaRoutes';
 import SortButton from './SortButton';
-import TranslationReportTableRow from './TranslationReportTableRow'; // NEW: Import the dedicated row component
+import TranslationReportTableRow from './TranslationReportTableRow';
 
 type TranslationReportTableProps = {
   locale: string;
@@ -76,16 +76,23 @@ const TranslationReportTable: React.FC<TranslationReportTableProps> = ( {
   else if ( !reportPopulated ) {
     // If stats are enabled but data is still loading
     headerMessage = <p>Translation data loading... <LoadingSpinner/></p>;
-    tableRows = listOfSims.map( simName => (
-      <tr key={simName}>
-        <td><Link to={`/translate/${locale}/${simName}`}>{simNamesAndTitles[ simName ]}</Link></td>
-        <td>Loading...</td>
-      </tr>
-    ) );
+    tableRows = listOfSims.map( simName => {
+      // If there's already a reportObject with this simName, use the TranslationReportTableRow
+      const existingReport = reportObjects.find( obj => obj.simName === simName );
+      if ( existingReport ) {
+        return <TranslationReportTableRow key={simName} item={existingReport} locale={locale}/>;
+      }
+      else {
+        return <tr key={simName}>
+          <td><Link to={`/translate/${locale}/${simName}`}>{simNamesAndTitles[ simName ]}</Link></td>
+          <td>Loading...</td>
+        </tr>;
+      }
+    } );
   }
   else {
     // Stats are populated, prepare and sort the data
-    const sortedReportData = prepareSortedTranslationReportData(
+    const sortedReportData = getSortedTranslationReport(
       listOfSims,
       reportObjects,
       sortKeys,

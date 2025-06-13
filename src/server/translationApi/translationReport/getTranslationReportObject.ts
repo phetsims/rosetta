@@ -37,6 +37,8 @@ const getTranslationReportObject = async ( simName: string,
   const translationReportObject: ReportObject = {
     simName: simName,
     simTitle: simTitle,
+
+    // String counts
     numCommonStrings: 0,
     numCommonTranslatedStrings: 0,
     numSimSpecificStrings: 0,
@@ -45,6 +47,14 @@ const getTranslationReportObject = async ( simName: string,
     numSharedTranslatedStrings: 0,
     totalStrings: 0,
     totalTranslatedStrings: 0,
+
+    // Percentages
+    commonPercent: 0,
+    simSpecificPercent: 0,
+    sharedPercent: 0,
+    totalPercent: 0,
+
+    // Cache metadata
     isDirty: true,
     timestamp: Number.NEGATIVE_INFINITY
   };

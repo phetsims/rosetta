@@ -6,53 +6,60 @@
  * @author Agustín Vallejo + Gemini 2.5
  */
 
-import ReportObject, { ReportObjectSortingKeys, ReportObjectWithCalculatedPercentages } from '../../common/ReportObject.js';
+import ReportObject, { ReportObjectSortingKeys } from '../../common/ReportObject.js';
 import SortDirectionEnum from '../js/SortDirectionEnum';
 
 /**
- * Return an array of translation report objects with calculated percentages.
- * This takes the raw ReportObject and computes/adds the specific percentage fields.
+ * Prepares and sorts translation report data for display.
+ * This function orchestrates filtering, percentage calculation, and sorting.
+ * It returns an array of *data objects*, ready to be mapped to JSX.
  */
-const getReportObjectsWithCalculatedPercentages = ( reportObjects: ReportObject[] ): ReportObjectWithCalculatedPercentages[] => {
-  const objectsWithCalculatedPercents: ReportObjectWithCalculatedPercentages[] = [];
-  for ( const reportObject of reportObjects ) {
-    // Ensure division by zero is handled to avoid NaN and provide a meaningful percentage (0).
-    const simSpecificPercent = reportObject.numSimSpecificStrings > 0
-                               ? Math.floor( ( reportObject.numSimSpecificTranslatedStrings / reportObject.numSimSpecificStrings ) * 100 )
-                               : 0;
+const getSortedTranslationReport = (
+  listOfSims: string[],
+  reportObjects: ReportObject[], // These are the raw report objects from the backend
+  sortKeys: ReportObjectSortingKeys[],
+  sortDirection: string
+): ReportObject[] => {
 
-    const commonPercent = reportObject.numCommonStrings > 0
-                          ? Math.floor( ( reportObject.numCommonTranslatedStrings / reportObject.numCommonStrings ) * 100 )
-                          : 0;
+  // Filter: Include only report objects for the sims in listOfSims.
+  const filteredReportObjects = reportObjects.filter( reportObject =>
+    listOfSims.includes( reportObject.simName )
+  );
 
-    // Check if there are shared strings to avoid division by null/zero.
-    let sharedPercent = 0;
-    if ( reportObject.numSharedStrings !== null && reportObject.numSharedStrings > 0 ) {
-      sharedPercent = Math.floor( ( reportObject.numSharedTranslatedStrings / reportObject.numSharedStrings ) * 100 );
+  return getSortedReportData(
+    filteredReportObjects,
+    sortDirection,
+    sortKeys
+  );
+};
+
+/**
+ * Sorts an array of report objects by multiple keys.
+ * This is the refined sorting function that takes care of multiple sort keys.
+ */
+const getSortedReportData = (
+  reportObjectsWithPercentages: ReportObject[],
+  sortDirection: string,
+  sortKeys: ReportObjectSortingKeys[]
+): ReportObject[] => {
+  // Use a copy to ensure immutability
+  return [ ...reportObjectsWithPercentages ].sort( ( a, b ) => {
+    for ( const sortKey of sortKeys ) {
+      const result = compareReportObjectsByKey( a, b, sortKey, sortDirection );
+      if ( result !== 0 ) {
+        return result; // Found a difference, return it
+      }
     }
-
-    let totalPercent = 0;
-    if ( reportObject.totalStrings > 0 ) {
-      totalPercent = Math.floor( ( reportObject.totalTranslatedStrings / reportObject.totalStrings ) * 100 );
-    }
-
-    objectsWithCalculatedPercents.push( {
-      ...reportObject,
-      commonPercent: commonPercent,
-      simSpecificPercent: simSpecificPercent,
-      sharedPercent: sharedPercent,
-      totalPercent: totalPercent
-    } );
-  }
-  return objectsWithCalculatedPercents;
+    return 0; // All sort keys are equal, objects are considered equal
+  } );
 };
 
 /**
  * Compares two report objects based on a single sort key and direction.
  */
 const compareReportObjectsByKey = (
-  a: ReportObjectWithCalculatedPercentages,
-  b: ReportObjectWithCalculatedPercentages,
+  a: ReportObject,
+  b: ReportObject,
   sortKey: ReportObjectSortingKeys,
   sortDirection: string
 ): number => {
@@ -87,55 +94,4 @@ const compareReportObjectsByKey = (
   return sortDirection === SortDirectionEnum.ASCENDING ? comparison : -comparison;
 };
 
-/**
- * Sorts an array of report objects by multiple keys.
- * This is the refined sorting function that takes care of multiple sort keys.
- */
-const getSortedReportData = (
-  reportObjectsWithPercentages: ReportObjectWithCalculatedPercentages[],
-  sortDirection: string,
-  sortKeys: ReportObjectSortingKeys[]
-): ReportObjectWithCalculatedPercentages[] => {
-  // Use a copy to ensure immutability
-  return [ ...reportObjectsWithPercentages ].sort( ( a, b ) => {
-    for ( const sortKey of sortKeys ) {
-      const result = compareReportObjectsByKey( a, b, sortKey, sortDirection );
-      if ( result !== 0 ) {
-        return result; // Found a difference, return it
-      }
-    }
-    return 0; // All sort keys are equal, objects are considered equal
-  } );
-};
-
-/**
- * Prepares and sorts translation report data for display.
- * This function orchestrates filtering, percentage calculation, and sorting.
- * It returns an array of *data objects*, ready to be mapped to JSX.
- */
-const prepareSortedTranslationReportData = (
-  listOfSims: string[],
-  reportObjects: ReportObject[], // These are the raw report objects from the backend
-  sortKeys: ReportObjectSortingKeys[],
-  sortDirection: string
-): ReportObjectWithCalculatedPercentages[] => {
-
-  // 1. Filter: Include only report objects for the sims in listOfSims.
-  const filteredReportObjects = reportObjects.filter( reportObject =>
-    listOfSims.includes( reportObject.simName )
-  );
-
-  // 2. Calculate Derived Values: Add/re-calculate percentages.
-  const reportObjectsWithCalculatedPercentages = getReportObjectsWithCalculatedPercentages( filteredReportObjects );
-
-  // 3. Sort: Sort the processed data.
-  const sortedData = getSortedReportData(
-    reportObjectsWithCalculatedPercentages,
-    sortDirection,
-    sortKeys
-  );
-
-  return sortedData;
-};
-
-export { prepareSortedTranslationReportData };
+export { getSortedTranslationReport };

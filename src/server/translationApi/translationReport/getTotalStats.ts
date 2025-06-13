@@ -28,7 +28,17 @@ const getTotalStats = ( translationReportObject: ReportObject ): ReportObject =>
     translationReportObject.numSharedTranslatedStrings
   ] );
 
+  // Calculate percentage of translated strings
+  translationReportObject.simSpecificPercent = getPercentage( translationReportObject.numSimSpecificTranslatedStrings, translationReportObject.numSimSpecificStrings );
+  translationReportObject.commonPercent = getPercentage( translationReportObject.numCommonTranslatedStrings, translationReportObject.numCommonStrings );
+  translationReportObject.sharedPercent = getPercentage( translationReportObject.numSharedTranslatedStrings, translationReportObject.numSharedStrings );
+  translationReportObject.totalPercent = getPercentage( translationReportObject.totalTranslatedStrings, translationReportObject.totalStrings );
+
   return translationReportObject;
+};
+
+const getPercentage = ( translated: number, total: number ): number => {
+  return total > 0 ? Math.floor( ( translated / total ) * 100 ) : 0;
 };
 
 export default getTotalStats;

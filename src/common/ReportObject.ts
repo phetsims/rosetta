@@ -16,18 +16,15 @@ type ReportObject = {
   numSimSpecificStrings: number;
 
   numSharedTranslatedStrings: number;
-  numSharedStrings: number | null;
+  numSharedStrings: number;
 
   numCommonTranslatedStrings: number;
   numCommonStrings: number;
 
   totalTranslatedStrings: number;
   totalStrings: number;
-};
 
-// This type represents a ReportObject after its percentages have been calculated/re-calculated
-// by `getReportObjectsWithCalculatedPercentages`
-export type ReportObjectWithCalculatedPercentages = ReportObject & {
+  // Percentages
   commonPercent: number;
   simSpecificPercent: number;
   sharedPercent: number;
