@@ -62,7 +62,7 @@ const getTranslationReportObject = async ( simName: string,
     // Get the string keys used by the specified sim.
     const stringKeysWithRepoName = Object.keys( await getStringKeysUsedInSim( simName ) );
 
-    // Sort the string keys into sim-specific or common-code categories.
+    // Sort the string keys into sim-specific, common-code, or shared categories.
     const categorizedStringKeys = await getCategorizedStringKeys( simName, stringKeysWithRepoName );
 
     // Maintenance Note: In January 2024 there was some work done on this file to make it use the new method for obtaining
