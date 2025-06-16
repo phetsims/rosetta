@@ -15,17 +15,14 @@ type StatsInfoButtonProps = {
 };
 
 const StatsInfoButton: React.FC<StatsInfoButtonProps> = ( { reportObject } ) => {
-  const hasSharedStrings = reportObject.numSharedStrings > 0;
-  let sharedStatsString = 'N/A';
-  if ( hasSharedStrings ) {
-    sharedStatsString = `${reportObject.sharedPercent}% (${reportObject.numSharedTranslatedStrings} of ${reportObject.numSharedStrings})`;
+
+  // Create a string that summarizes the statistics for the sim.
+  let statsString = `Statistics for ${reportObject.simTitle}:`;
+  statsString += `\nSim-Specific Strings: ${reportObject.simSpecificPercent}% (${reportObject.numSimSpecificTranslatedStrings} of ${reportObject.numSimSpecificStrings})`;
+  if ( reportObject.numSharedStrings > 0 ) {
+    statsString += `\nShared Strings: ${reportObject.sharedPercent}% (${reportObject.numSharedTranslatedStrings} of ${reportObject.numSharedStrings})`;
   }
-  const simSpecificStatsString = `${reportObject.simSpecificPercent}% (${reportObject.numSimSpecificTranslatedStrings} of ${reportObject.numSimSpecificStrings})`;
-  const commonStatsString = `${reportObject.commonPercent}% (${reportObject.numCommonTranslatedStrings} of ${reportObject.numCommonStrings})`;
-  const statsString = `Statistics for ${reportObject.simTitle}:
-      Sim-Specific Strings: ${simSpecificStatsString}
-      Shared Strings: ${sharedStatsString}
-      Common Strings: ${commonStatsString}`;
+  statsString += `\nCommon Strings: ${reportObject.commonPercent}% (${reportObject.numCommonTranslatedStrings} of ${reportObject.numCommonStrings})`;
 
   const buttonStyle = {
     marginRight: '6px',
