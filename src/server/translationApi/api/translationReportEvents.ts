@@ -65,8 +65,7 @@ const translationReportEvents = async ( req: Request, res: Response ): Promise<v
         sim,
         req.params.locale,
         simNames,
-        simNamesAndTitles[ sim ]!,
-        req.query.wantsUntranslated === 'true'
+        simNamesAndTitles[ sim ]!
       );
       reportObjectCache.setObject( req.params.locale, sim, translationReportObject, Date.now() );
     }

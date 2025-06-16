@@ -49,6 +49,7 @@ class LongTermStorage {
     locale: string,
     branch: string | null = null
   ): Promise<TranslationDataForRepo> {
+
     logger.info( `attempting to get translation for ${simOrLibRepo}/${locale} from long-term storage` );
     let translatedStringFileContents: TranslationDataForRepo = {};
     try {
@@ -65,6 +66,7 @@ class LongTermStorage {
       }
     }
     catch( error ) {
+
       // Type guard to check if error matches the structure of Octokit errors
       if ( error instanceof RequestError && error.status === 404 ) {
         logger.warn( `no translation file for ${simOrLibRepo} in ${locale}` );

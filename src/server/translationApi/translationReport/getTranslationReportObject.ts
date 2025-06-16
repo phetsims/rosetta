@@ -26,13 +26,11 @@ import getTotalStats from './getTotalStats.js';
  * @param locale
  * @param simNames
  * @param simTitle
- * @param wantsUntranslated
  */
 const getTranslationReportObject = async ( simName: string,
                                            locale: string,
                                            simNames: string[],
-                                           simTitle: string,
-                                           wantsUntranslated: boolean ): Promise<ReportObject> => {
+                                           simTitle: string ): Promise<ReportObject> => {
 
   const translationReportObject: ReportObject = {
     simName: simName,
@@ -106,19 +104,17 @@ const getTranslationReportObject = async ( simName: string,
       .values( simSpecificEnglishStringKeysAndValues )
       .filter( value => value !== NO_LONGER_USED_FLAG ).length;
 
-    if ( !wantsUntranslated ) {
-      const simSpecificTranslatedStringKeysAndValues = await getSimSpecificTranslatedStringKeysAndValues(
-        simName,
-        locale,
-        categorizedStringKeys
-      );
-      translationReportObject.numSimSpecificTranslatedStrings = Object
-        .keys( simSpecificTranslatedStringKeysAndValues )
-        .filter( key => {
-          return simSpecificTranslatedStringKeysAndValues[ key ] !== ''
-                 && simSpecificEnglishStringKeysAndValues[ key ] !== NO_LONGER_USED_FLAG;
-        } ).length;
-    }
+    const simSpecificTranslatedStringKeysAndValues = await getSimSpecificTranslatedStringKeysAndValues(
+      simName,
+      locale,
+      categorizedStringKeys
+    );
+    translationReportObject.numSimSpecificTranslatedStrings = Object
+      .keys( simSpecificTranslatedStringKeysAndValues )
+      .filter( key => {
+        return simSpecificTranslatedStringKeysAndValues[ key ] !== ''
+               && simSpecificEnglishStringKeysAndValues[ key ] !== NO_LONGER_USED_FLAG;
+      } ).length;
 
     // If there are shared strings for this sim, we need to get the stats for those.
     if ( categorizedStringKeys.shared.length > 0 ) {
@@ -126,36 +122,33 @@ const getTranslationReportObject = async ( simName: string,
       // Set the number of shared strings to be the number we get from the categorized string keys object.
       translationReportObject.numSharedStrings = categorizedStringKeys.shared.length;
 
-      if ( !wantsUntranslated ) {
+      // Create an array for collecting the translated string keys and values for the shared strings.
+      const sharedTranslatedStringKeysAndValuesArray = [];
 
-        // Create an array for collecting the translated string keys and values for the shared strings.
-        const sharedTranslatedStringKeysAndValuesArray = [];
+      // By PhET convention, sims don't share strings with multiple other sims (though the DO often share strings with
+      // multiple common-code repos), but as of this writing there's nothing preventing this, hence the loop.
+      for ( const sharedSim of categorizedStringKeys.sharedSims ) {
 
-        // By convention, it's not possible a sim shares strings with multiple sims, but as of this writing there's
-        // nothing preventing this, hence the loop.
-        for ( const sharedSim of categorizedStringKeys.sharedSims ) {
+        // Get the translated keys and values.
+        logger.info( `getting shared sim-specific translated string keys and values for ${sharedSim}` );
+        const sharedTranslatedStringKeysAndValues = await getSharedTranslatedStringKeysAndValues(
+          sharedSim,
+          locale,
+          categorizedStringKeys.shared
+        );
+        sharedTranslatedStringKeysAndValuesArray.push( sharedTranslatedStringKeysAndValues );
+      }
 
-          // Get the translated keys and values.
-          logger.info( `getting shared sim-specific translated string keys and values for ${sharedSim}` );
-          const sharedTranslatedStringKeysAndValues = await getSharedTranslatedStringKeysAndValues(
-            sharedSim,
-            locale,
-            categorizedStringKeys.shared
-          );
-          sharedTranslatedStringKeysAndValuesArray.push( sharedTranslatedStringKeysAndValues );
-        }
-
-        // Loop through the shared string keys and see if any of the translated string keys and values objects have a
-        // value for that key.
-        for ( const sharedKey of categorizedStringKeys.shared ) {
-          for ( const sharedTranslatedStringKeysAndValues of sharedTranslatedStringKeysAndValuesArray ) {
-            if (
-              sharedTranslatedStringKeysAndValues[ sharedKey ] &&
-              sharedTranslatedStringKeysAndValues[ sharedKey ] !== ''
-            ) {
-              translationReportObject.numSharedTranslatedStrings && translationReportObject.numSharedTranslatedStrings++;
-              break;
-            }
+      // Loop through the shared string keys and see if any of the translated string keys and values objects have a
+      // value for that key.
+      for ( const sharedKey of categorizedStringKeys.shared ) {
+        for ( const sharedTranslatedStringKeysAndValues of sharedTranslatedStringKeysAndValuesArray ) {
+          if (
+            sharedTranslatedStringKeysAndValues[ sharedKey ] &&
+            sharedTranslatedStringKeysAndValues[ sharedKey ] !== ''
+          ) {
+            translationReportObject.numSharedTranslatedStrings++;
+            break;
           }
         }
       }
