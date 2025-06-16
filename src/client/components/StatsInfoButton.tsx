@@ -15,7 +15,7 @@ type StatsInfoButtonProps = {
 };
 
 const StatsInfoButton: React.FC<StatsInfoButtonProps> = ( { reportObject } ) => {
-  const hasSharedStrings = reportObject.numSharedStrings !== null;
+  const hasSharedStrings = reportObject.numSharedStrings > 0;
   let sharedStatsString = 'N/A';
   if ( hasSharedStrings ) {
     sharedStatsString = `${reportObject.sharedPercent}% (${reportObject.numSharedTranslatedStrings} of ${reportObject.numSharedStrings})`;
