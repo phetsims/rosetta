@@ -17,7 +17,6 @@ import getCommonTranslatedStringKeysAndValues from './getCommonTranslatedStringK
 import getSharedTranslatedStringKeysAndValues from './getSharedTranslatedStringKeysAndValues.js';
 import getSimSpecificEnglishStringKeysAndValues from './getSimSpecificEnglishStringKeysAndValues.js';
 import getSimSpecificTranslatedStringKeysAndValues from './getSimSpecificTranslatedStringKeysAndValues.js';
-import getTotalStats from './getTotalStats.js';
 
 /**
  * Get an object containing the information needed to populate a row in the "translation report", which is a report that
@@ -36,7 +35,7 @@ const getTranslationReportObject = async ( simName: string,
     simName: simName,
     simTitle: simTitle,
 
-    // String counts
+    // string counts
     numCommonStrings: 0,
     numCommonTranslatedStrings: 0,
     numSimSpecificStrings: 0,
@@ -46,13 +45,13 @@ const getTranslationReportObject = async ( simName: string,
     totalStrings: 0,
     totalTranslatedStrings: 0,
 
-    // Percentages
+    // percentages
     commonPercent: 0,
     simSpecificPercent: 0,
     sharedPercent: 0,
     totalPercent: 0,
 
-    // Cache metadata
+    // cache metadata
     isDirty: true,
     timestamp: Number.NEGATIVE_INFINITY
   };
@@ -162,7 +161,29 @@ const getTranslationReportObject = async ( simName: string,
     logger.error( `error while obtaining info for translation report object, report may be inaccurate, error = ${e}` );
   }
 
-  return getTotalStats( translationReportObject );
+  // Calculate the totals.
+  translationReportObject.totalStrings = translationReportObject.numCommonStrings +
+                                          translationReportObject.numSimSpecificStrings +
+                                          translationReportObject.numSharedStrings;
+  translationReportObject.totalTranslatedStrings = translationReportObject.numCommonTranslatedStrings +
+                                                   translationReportObject.numSimSpecificTranslatedStrings +
+                                                   translationReportObject.numSharedTranslatedStrings;
+
+  // Calculate the percentages.
+  translationReportObject.simSpecificPercent = translationReportObject.numSimSpecificStrings > 0
+    ? Math.floor( ( translationReportObject.numSimSpecificTranslatedStrings / translationReportObject.numSimSpecificStrings ) * 100 )
+    : 0;
+  translationReportObject.commonPercent = translationReportObject.numCommonStrings > 0
+    ? Math.floor( ( translationReportObject.numCommonTranslatedStrings / translationReportObject.numCommonStrings ) * 100 )
+    : 0;
+  translationReportObject.sharedPercent = translationReportObject.numSharedStrings > 0
+    ? Math.floor( ( translationReportObject.numSharedTranslatedStrings / translationReportObject.numSharedStrings ) * 100 )
+    : 0;
+  translationReportObject.totalPercent = translationReportObject.totalStrings > 0
+    ? Math.floor( ( translationReportObject.totalTranslatedStrings / translationReportObject.totalStrings ) * 100 )
+    : 0;
+
+  return translationReportObject;
 };
 
 export default getTranslationReportObject;
