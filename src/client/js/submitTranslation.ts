@@ -37,7 +37,7 @@ const submitTranslation = async (
   const messages: Message = {};
 
   for ( const keyType of Object.values( KeyTypesEnum ) ) {
-    if ( translatedStringsData[ keyType ]?.translated !== undefined ) {
+    if ( translatedStringsData[ keyType ]?.translated !== undefined && translatedStringsData[ keyType ].total > 0 ) {
       messages[ keyType ] = `You have ${translatedStringsData[ keyType ].translated}`
                             + ` of ${translatedStringsData[ keyType ].total}`
                             + ` ${translatedStringsData[ keyType ].name} string(s) translated.\n`;
