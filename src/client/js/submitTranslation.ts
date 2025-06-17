@@ -48,7 +48,7 @@ const submitTranslation = async (
   for ( const message of Object.keys( messages ) ) {
     confirmMessage += '    ' + messages[ message ];
   }
-  confirmMessage += 'Are you sure you want to submit?';
+  confirmMessage += 'Continue with submission and publication?';
 
   if ( window.confirm( confirmMessage ) ) {
     try {
