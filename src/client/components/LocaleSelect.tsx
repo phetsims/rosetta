@@ -36,15 +36,26 @@ type LocaleSelectProps = {
 const LocaleSelect: React.FC<LocaleSelectProps> = ( { field } ) => {
   const localeInfo = useContext( LocaleInfoContext ) as LocaleInfo;
 
-  // Sort the locales by name.
-  // In other words, sort the languages alphabetically.
+  // Put the locale names and codes into an array as a set of tuples.
   const localeNamesAndCodes: [ string, string ][] = [];
   for ( const localeCode in localeInfo ) {
     localeNamesAndCodes.push( [ localeInfo[ localeCode ].name, localeCode ] );
   }
-  localeNamesAndCodes.sort();
 
-  // Create a list of locale options to iterate over.
+  // Sort the locales by name in alphabetical order (case-insensitive).
+  localeNamesAndCodes.sort( ( a, b ) => {
+    const lowerA = a[ 0 ].toLowerCase();
+    const lowerB = b[ 0 ].toLowerCase();
+    if ( lowerA < lowerB ) {
+      return -1;
+    }
+    if ( lowerA > lowerB ) {
+      return 1;
+    }
+    return 0;
+  } );
+
+  // Put the locale names and codes into an array of JSX option elements.
   const defaultOptionJsx = (
     <option key='' value=''>
       — Select Locale —
@@ -67,6 +78,7 @@ const LocaleSelect: React.FC<LocaleSelectProps> = ( { field } ) => {
     jsx = <LoadingSpinner/>;
   }
   else {
+
     // Use the spread operator to give the select each of the props in the field object.
     jsx = (
       <select {...field}>
