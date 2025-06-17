@@ -50,7 +50,6 @@ const getWebsiteUserData = async (): Promise<WebsiteUserData> => {
   if ( typeof websiteUserData.userId === 'string' && !isNaN( Number( websiteUserData.userId ) ) ) {
     websiteUserData.userId = Number( websiteUserData.userId );
   }
-  console.log( `websiteUserData = ${JSON.stringify( websiteUserData, null, 2 )}` );
   return websiteUserData;
 };
 
