@@ -33,9 +33,10 @@ import { WebsiteUserData } from '../ClientDataTypes';
  *
  */
 const getWebsiteUserData = async (): Promise<WebsiteUserData> => {
-  const response = await fetch(
-    publicConfig.WEBSITE_USER_DATA_URL,
-    { credentials: 'include' } // Include cookies so website backend can look up the session.
+  const response = await fetch( publicConfig.WEBSITE_USER_DATA_URL, {
+      method: 'GET',
+      credentials: 'include' // Include cookies so website backend can look up the session.
+    }
   );
 
   if ( !response.ok ) {
@@ -49,6 +50,7 @@ const getWebsiteUserData = async (): Promise<WebsiteUserData> => {
   if ( typeof websiteUserData.userId === 'string' && !isNaN( Number( websiteUserData.userId ) ) ) {
     websiteUserData.userId = Number( websiteUserData.userId );
   }
+  console.log( `websiteUserData = ${JSON.stringify( websiteUserData, null, 2 )}` );
   return websiteUserData;
 };
 
