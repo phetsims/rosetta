@@ -25,8 +25,7 @@ export const TRANSLATION_API_ROUTE = publicConfig.ENVIRONMENT === 'development' 
                                      'http://localhost:16372/translate/api' :
                                      '/translate/api';
 
-// These are used in validating the user input for strings that
-// have placeholder patterns.
+// These are used in validating the user input for strings that have placeholder patterns.
 export const SINGLE_BRACE_REGEX = /\{\d+\}/g;
 export const DOUBLE_BRACE_REGEX = /\{\{\w+\}\}/g;
 export const TRIPLE_BRACE_REGEX = /\{\{\{\w+\}\}\}/g;

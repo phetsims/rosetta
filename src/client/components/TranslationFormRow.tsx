@@ -30,8 +30,10 @@ const TranslationFormRow: React.FC<TranslationFormRowProps> = ( props ): ReactEl
   const localeInfo = useContext( LocaleInfoContext );
   const direction = localeInfo[ props.locale ].direction;
 
-  const isPatternString = SINGLE_BRACE_REGEX.test( props.englishString ) ||
-                          DOUBLE_BRACE_REGEX.test( props.englishString );
+  const singleBraceRegex = new RegExp( SINGLE_BRACE_REGEX );
+  const doubleBraceRegex = new RegExp( DOUBLE_BRACE_REGEX );
+  const isPatternString = singleBraceRegex.test( props.englishString ) ||
+                          doubleBraceRegex.test( props.englishString );
 
   // If the English string contains either one of the supported curly brace patterns, color it differently
   const englishStringStyle = {
@@ -48,6 +50,7 @@ const TranslationFormRow: React.FC<TranslationFormRowProps> = ( props ): ReactEl
   const { setFieldValue } = useFormikContext();
   const objPath = props.name.replace( /\.translated$/, '' );
   const aiPending = props.aiTranslatedFields && props.aiTranslatedFields.has( props.name );
+
   // Determine text area styling, orange for AI pending, blue for pattern strings, otherwise black
   const textAreaStyle: TextAreaStyle = {
     textAlign: direction === 'rtl' ? 'right' : 'left',
