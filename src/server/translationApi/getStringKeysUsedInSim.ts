@@ -14,6 +14,7 @@
  *            .
  *            .
  *          }
+ *
  *          If the file can't be retrieved an empty object will be returned.
  *
  * @author John Blanco (PhET Interactive Simulations)
