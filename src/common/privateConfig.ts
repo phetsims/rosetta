@@ -1,12 +1,18 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * Types for private configuration.
+ * This module gets the configuration for Rosetta from ~/.phet/rosetta-config.json.
  *
- * @author John Blanco (PhET Interactive Simulations)
+ * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-type PrivateConfigDataType = {
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
+
+export const pathToConfig = path.join( os.homedir(), '.phet', 'rosetta-config.json' );
+
+export type PrivateConfigDataType = {
 
   // the branch of the phetsims/babel repo to use for long-term storage, useful for debugging
   readonly BABEL_BRANCH: string;
@@ -26,7 +32,7 @@ type PrivateConfigDataType = {
   // whether the short-term storage database is enabled
   readonly 'DB_ENABLED' : boolean;
 
-  // wether to use the real translation api or a mock one
+  // whether to use the real AI-enabled translation API or a mock one
   readonly FAKE_AUTOMATIC_TRANSLATION : boolean;
 
   // the Personal Access Token (PAT) for GitHub, used to authenticate requests to the GitHub API
@@ -62,13 +68,29 @@ type PrivateConfigDataType = {
   // whether to generate a short translation report, which is useful for debugging without hitting GitHub excessively
   readonly 'SHORT_REPORT' : boolean;
 
-  // wether to expose a11y keys and translate them
+  // whether to expose a11y keys and thus allow them to be translated
   readonly TRANSLATE_A11Y : boolean;
 
-  // the duration in milliseconds that locale info is valid for
+  // the duration in milliseconds for which cached locale info is valid
   readonly 'VALID_LOCALE_INFO_DURATION' : number;
 };
 
-export default {} as PrivateConfigDataType;
+let privateConfig : PrivateConfigDataType;
+try {
+  const unparsedJson = fs.readFileSync( pathToConfig, 'utf8' );
+  privateConfig = JSON.parse( unparsedJson );
+}
+catch( e ) {
+  console.error( e );
+  throw new Error( `Unable to read or parse the configuration file at ${pathToConfig}. Please ensure it exists and is valid JSON.` );
+}
 
-export const pathToConfig: string;
+// eslint-disable-next-line phet/bad-text
+if ( privateConfig.BABEL_BRANCH && privateConfig.BABEL_BRANCH === 'master' ) {
+
+  // eslint-disable-next-line phet/bad-text
+  console.error( 'The branch name "master" is no longer supported, please update your config.  Aborting.' );
+  throw new Error( 'Invalid branch name for string repo.' );
+}
+
+export default privateConfig;
