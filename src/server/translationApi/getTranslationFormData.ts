@@ -7,7 +7,6 @@
  */
 
 import config from '../../common/config.js';
-import clientConfig from '../../common/clientConfig.js';
 import { SimSpecificTranslationFormStrings, TranslationFormData } from '../../common/TranslationFormData.js';
 import { CategorizedStringKeys } from './getCategorizedStringKeys.js';
 import getCommonTranslationFormData from './getCommonTranslationFormData.js';
@@ -46,8 +45,8 @@ const getTranslationFormData = async ( simName: string,
       logger.info( 'checking for saved translation' );
 
       // Get user id; depends on whether we're running on localhost or on a server.
-      if ( clientConfig.ENVIRONMENT === 'development' ) {
-        userId = clientConfig.LOCAL_USER_ID;
+      if ( config.ENVIRONMENT === 'development' ) {
+        userId = config.LOCAL_USER_ID;
       }
 
       // Try to get saved translation in short-term storage database.

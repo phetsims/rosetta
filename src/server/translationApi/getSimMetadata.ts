@@ -12,7 +12,6 @@
 
 import { UNPUBLISHED_SIMS_TO_INCLUDE } from '../../common/constants.js';
 import config from '../../common/config.js';
-import clientConfig from '../../common/clientConfig.js';
 import logger from './logger.js';
 import { SimMetadata } from './SimMetadataTypes.js';
 
@@ -68,7 +67,7 @@ async function fetchMetadata(): Promise<SimMetadata> {
 
   // If there are unpublished sims to include, add them to the metadata here.  This creates a faked-out metadata entry
   // for each of the specified sims with just the information needed by Rosetta to allow translation.
-  if ( clientConfig.ENVIRONMENT === 'development' &&
+  if ( config.ENVIRONMENT === 'development' &&
        latestSimMetadata &&
        latestSimMetadata.projects &&
        UNPUBLISHED_SIMS_TO_INCLUDE.length > 0 ) {
@@ -173,7 +172,7 @@ const getSimMetadata = async (): Promise<SimMetadata> => {
 
   let data: SimMetadata;
   try {
-    const isStale = !latestSimMetadata || ( Date.now() - timeOfLastUpdate > clientConfig.VALID_METADATA_DURATION );
+    const isStale = !latestSimMetadata || ( Date.now() - timeOfLastUpdate > config.VALID_METADATA_DURATION );
     logger.info( `sim metadata requested, isStale = ${isStale}` );
 
     if ( isStale ) {

@@ -7,7 +7,7 @@
  */
 
 import { Request, Response } from 'express';
-import clientConfig from '../../../common/clientConfig.js';
+import config from '../../../common/config.js';
 import logger from '../logger.js';
 
 /**
@@ -20,7 +20,7 @@ import logger from '../logger.js';
 const mockWebsiteUserData = ( req: Request, res: Response ): void => {
   const mockWebsiteUserData = {
     username: 'PhET Girl',
-    userId: clientConfig.LOCAL_USER_ID,
+    userId: config.LOCAL_USER_ID,
     email: 'phet.girl@colorado.edu',
     loggedIn: true,
     teamMember: true,

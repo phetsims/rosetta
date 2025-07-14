@@ -13,7 +13,6 @@
 
 import { SIMS_FOR_SHORT_REPORT } from '../../../common/constants.js';
 import config from '../../../common/config.js';
-import clientConfig from '../../../common/clientConfig.js';
 import { RepoName } from '../../../common/TypeAliases.js';
 import getTranslationStatus, { TranslationStatus } from './getTranslationStatus.js';
 
@@ -35,7 +34,7 @@ const getTranslatedAndUntranslatedSims = async ( locale: string,
   const translationInfo: TranslationStatus = await getTranslationStatus( isTeamMember );
 
   // If the environment is configured for short reports, reduce the list of sims included here.
-  if ( clientConfig.ENVIRONMENT === 'development' && config.SHORT_REPORT ) {
+  if ( config.ENVIRONMENT === 'development' && config.SHORT_REPORT ) {
     Object.keys( translationInfo ).forEach( key => {
       if ( !SIMS_FOR_SHORT_REPORT.includes( key ) ) {
         delete translationInfo[ key ];

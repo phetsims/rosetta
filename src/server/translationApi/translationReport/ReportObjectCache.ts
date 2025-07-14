@@ -9,7 +9,7 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import clientConfig from '../../../common/clientConfig.js';
+import config from '../../../common/config.js';
 import ReportObject from '../../../common/ReportObject.js';
 import logger from '../logger.js';
 
@@ -56,7 +56,7 @@ class ReportObjectCache {
     let reportObject: ReportObject | null = null;
     if ( this.cache[ locale ] !== undefined && this.cache[ locale ][ sim ] !== undefined ) {
       const withinSimMetadataCacheWindow = Date.now() - this.cache[ locale ][ sim ].timestamp
-                                           < clientConfig.VALID_METADATA_DURATION;
+                                           < config.VALID_METADATA_DURATION;
       if ( !this.cache[ locale ][ sim ].isDirty && withinSimMetadataCacheWindow ) {
         reportObject = this.cache[ locale ][ sim ];
         logger.info( `ReportObjectCache.getObject: returning cached report object for ${locale}/${sim}` );
