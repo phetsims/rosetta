@@ -52,7 +52,7 @@ The login info URLs are:
 - localhost current: http://localhost:16372/services/check-login,
 
 There are some configuration values needed right away by the client-side code. We extract these values and write them to
-the `publicConfig.js` file when Rosetta is started. For more info on this, see the README in the
+the `clientConfig.js` file when Rosetta is started. For more info on this, see the README in the
 `src/common` directory.
 
 Logging Out

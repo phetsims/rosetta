@@ -18,7 +18,7 @@ import os from 'os';
 import path from 'path';
 import { URL } from 'url';
 import privateConfig, { pathToConfig } from '../common/privateConfig.js';
-import publicConfig from '../common/publicConfig.js';
+import clientConfig from '../common/clientConfig.js';
 import builtReactAppServer from './builtReactAppServer/builtReactAppServer.js';
 import mockSignOut from './translationApi/api/mockSignOut.js';
 import mockWebsiteUserData from './translationApi/api/mockWebsiteUserData.js';
@@ -34,7 +34,7 @@ const DEV_SERVER_PORT = 5173;
 
 app.use( bodyParser.json() );
 app.use( bodyParser.urlencoded( { extended: false } ) );
-if ( publicConfig.ENVIRONMENT === 'development' ) {
+if ( clientConfig.ENVIRONMENT === 'development' ) {
 
   // Allow CORS requests from the React front end.
   // This is only needed for local development.
@@ -77,7 +77,7 @@ app.use( '/translate/api', translationApi );
 app.use( '/translate', builtReactAppServer );
 
 // Mock website user data for local development.
-if ( publicConfig.ENVIRONMENT === 'development' ) {
+if ( clientConfig.ENVIRONMENT === 'development' ) {
   app.get( '/services/check-login', mockWebsiteUserData );
   app.get( '/services/logout', mockSignOut );
 }

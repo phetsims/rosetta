@@ -6,7 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import publicConfig from '../../common/publicConfig';
+import clientConfig from '../../common/clientConfig';
 import alertErrorMessage from './alertErrorMessage';
 
 /**
@@ -14,7 +14,7 @@ import alertErrorMessage from './alertErrorMessage';
  */
 const signOut = async (): Promise<void> => {
   try {
-    const response = await fetch( publicConfig.SIGN_OUT_URL, {
+    const response = await fetch( clientConfig.SIGN_OUT_URL, {
       method: 'GET',
       credentials: 'include'
     } );

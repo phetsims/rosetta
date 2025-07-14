@@ -8,7 +8,7 @@
 
 import { TRANSLATION_API_ROUTE } from '../../common/constants';
 import KeyTypesEnum from '../../common/KeyTypesEnum';
-import publicConfig from '../../common/publicConfig';
+import clientConfig from '../../common/clientConfig';
 import { TranslationFormData } from '../../common/TranslationFormData.js';
 import alertErrorMessage from './alertErrorMessage';
 import computeTranslatedStringsData from './computeTranslatedStringsData';
@@ -68,7 +68,7 @@ const submitTranslation = async (
 
       if ( submitStatus.allRepoContentsStored && submitStatus.buildRequestsSucceeded ) {
         const units = 'hours';
-        const timeUntilChanges = publicConfig.VALID_METADATA_DURATION / 1000 / 60 / 60;
+        const timeUntilChanges = clientConfig.VALID_METADATA_DURATION / 1000 / 60 / 60;
         const submissionMessage = 'Translation submitted.'
                                   + ' Your translation should appear on the PhET website in about half an hour.'
                                   + ` It will take about ${timeUntilChanges} ${units} for the translation utility to`

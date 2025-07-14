@@ -12,7 +12,7 @@
  */
 
 import React, { createContext, ReactElement } from 'react';
-import publicConfig from '../../common/publicConfig';
+import clientConfig from '../../common/clientConfig';
 import useWebsiteUserData from '../hooks/useWebsiteUserData';
 import PhetHomePageLink from './PhetHomePageLink';
 import RosettaRoutes from './RosettaRoutes';
@@ -35,7 +35,7 @@ const WebsiteUserDataContext = createContext<WebsiteUserData>( {} as WebsiteUser
 const Rosetta: React.FC = (): ReactElement => {
   const websiteUserData = useWebsiteUserData();
   let jsx: ReactElement = <p>Loading...</p>;
-  const rosettaEnabled = Object.keys( publicConfig ).length > 0 && publicConfig.IS_ENABLED;
+  const rosettaEnabled = Object.keys( clientConfig ).length > 0 && clientConfig.IS_ENABLED;
 
   if ( rosettaEnabled ) {
     const allowedAccess = websiteUserData.loggedIn && ( websiteUserData.trustedTranslator || websiteUserData.teamMember );

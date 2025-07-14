@@ -6,7 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import publicConfig from './publicConfig.js';
+import clientConfig from './clientConfig.js';
 
 // TODO: See https://github.com/phetsims/rosetta/issues/395.  If all sims are re-published off of main at some point
 //       after May 2023, then this constant is obsolete, and the code associated with it can be removed.
@@ -21,7 +21,7 @@ import publicConfig from './publicConfig.js';
 // are prefixed with a11y.
 export const NO_LONGER_USED_FLAG = 'no longer used gooble';
 
-export const TRANSLATION_API_ROUTE = publicConfig.ENVIRONMENT === 'development' ?
+export const TRANSLATION_API_ROUTE = clientConfig.ENVIRONMENT === 'development' ?
                                      'http://localhost:16372/translate/api' :
                                      '/translate/api';
 

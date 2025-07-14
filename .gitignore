@@ -1,6 +1,7 @@
 .DS_Store
 .env
 .idea
+clientConfig.ts
 dist
 node_modules
 package-lock.json

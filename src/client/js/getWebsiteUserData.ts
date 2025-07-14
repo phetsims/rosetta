@@ -6,7 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import publicConfig from '../../common/publicConfig';
+import clientConfig from '../../common/clientConfig';
 import { WebsiteUserData } from '../ClientDataTypes';
 
 /**
@@ -33,7 +33,7 @@ import { WebsiteUserData } from '../ClientDataTypes';
  *
  */
 const getWebsiteUserData = async (): Promise<WebsiteUserData> => {
-  const response = await fetch( publicConfig.WEBSITE_USER_DATA_URL, {
+  const response = await fetch( clientConfig.WEBSITE_USER_DATA_URL, {
       method: 'GET',
       credentials: 'include' // Include cookies so website backend can look up the session.
     }
