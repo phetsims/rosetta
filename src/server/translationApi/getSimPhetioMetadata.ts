@@ -8,13 +8,13 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import privateConfig from '../../common/privateConfig.js';
+import config from '../../common/config.js';
 import { SimPhetioMetadata } from './SimMetadataTypes.js';
 
-const PHET_IO_METADATA_URL = privateConfig.SERVER_URL + '/services/metadata/phetio?active=true&latest=true';
+const PHET_IO_METADATA_URL = config.SERVER_URL + '/services/metadata/phetio?active=true&latest=true';
 const REQ_OPTIONS = {
   headers: {
-    Authorization: `Basic ${Buffer.from( `token:${privateConfig.SERVER_TOKEN}` ).toString( 'base64' )}`
+    Authorization: `Basic ${Buffer.from( `token:${config.SERVER_TOKEN}` ).toString( 'base64' )}`
   }
 };
 

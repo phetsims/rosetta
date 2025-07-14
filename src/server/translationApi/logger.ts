@@ -7,14 +7,14 @@
  */
 
 import winston from 'winston';
-import privateConfig from '../../common/privateConfig.js';
+import config from '../../common/config.js';
 
 const logger = winston.createLogger( {
   format: winston.format.combine(
     winston.format.colorize(),
     winston.format.simple()
   ),
-  level: privateConfig.LOGGER_LEVEL,
+  level: config.LOGGER_LEVEL,
   transports: [
     new winston.transports.Console(),
 

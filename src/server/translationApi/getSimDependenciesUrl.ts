@@ -7,7 +7,7 @@
  */
 
 import { UNPUBLISHED_SIMS_TO_INCLUDE } from '../../common/constants.js';
-import privateConfig from '../../common/privateConfig.js';
+import config from '../../common/config.js';
 import { Brand } from './getDependencies.js';
 import logger from './logger.js';
 
@@ -38,10 +38,10 @@ const getSimDependenciesUrl = ( simName: string, version: string, brand: Brand =
   }
   else {
     if ( brand === 'phet' ) {
-      dependenciesUrl = `${privateConfig.SERVER_URL}/sims/html/${simName}/${version}/dependencies.json`;
+      dependenciesUrl = `${config.SERVER_URL}/sims/html/${simName}/${version}/dependencies.json`;
     }
     else {
-      dependenciesUrl = `${privateConfig.PHET_IO_SERVER_URL}/sims/${simName}/${version}/dependencies.json`;
+      dependenciesUrl = `${config.PHET_IO_SERVER_URL}/sims/${simName}/${version}/dependencies.json`;
     }
   }
 

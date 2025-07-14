@@ -75,10 +75,10 @@ export type PrivateConfigDataType = {
   readonly 'VALID_LOCALE_INFO_DURATION' : number;
 };
 
-let privateConfig : PrivateConfigDataType;
+let config : PrivateConfigDataType;
 try {
   const unparsedJson = fs.readFileSync( pathToConfig, 'utf8' );
-  privateConfig = JSON.parse( unparsedJson );
+  config = JSON.parse( unparsedJson );
 }
 catch( e ) {
   console.error( e );
@@ -86,11 +86,11 @@ catch( e ) {
 }
 
 // eslint-disable-next-line phet/bad-text
-if ( privateConfig.BABEL_BRANCH && privateConfig.BABEL_BRANCH === 'master' ) {
+if ( config.BABEL_BRANCH && config.BABEL_BRANCH === 'master' ) {
 
   // eslint-disable-next-line phet/bad-text
   console.error( 'The branch name "master" is no longer supported, please update your config.  Aborting.' );
   throw new Error( 'Invalid branch name for string repo.' );
 }
 
-export default privateConfig;
+export default config;

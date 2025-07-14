@@ -7,7 +7,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import privateConfig from '../../common/privateConfig.js';
+import config from '../../common/config.js';
 import { Locale, RepoName } from '../../common/TypeAliases.js';
 import { shortTermStringStorageCollection } from './getShortTermStringStorageCollection.js';
 import logger from './logger.js';
@@ -26,7 +26,7 @@ type IdSimNameAndLocale = {
  */
 const deleteSavedTranslation = async ( idSimNameAndLocale: IdSimNameAndLocale ): Promise<boolean> => {
   let wasDeleted = false;
-  if ( privateConfig.DB_ENABLED ) {
+  if ( config.DB_ENABLED ) {
     logger.info(
       `attempting to delete old ${idSimNameAndLocale.locale}/${idSimNameAndLocale.simName} translation(s) in short-term storage`
     );

@@ -17,7 +17,7 @@ import express from 'express';
 import os from 'os';
 import path from 'path';
 import { URL } from 'url';
-import privateConfig, { pathToConfig } from '../common/privateConfig.js';
+import config, { pathToConfig } from '../common/config.js';
 import clientConfig from '../common/clientConfig.js';
 import builtReactAppServer from './builtReactAppServer/builtReactAppServer.js';
 import mockSignOut from './translationApi/api/mockSignOut.js';
@@ -82,14 +82,14 @@ if ( clientConfig.ENVIRONMENT === 'development' ) {
   app.get( '/services/logout', mockSignOut );
 }
 
-app.listen( privateConfig.ROSETTA_PORT, () => {
+app.listen( config.ROSETTA_PORT, () => {
   logger.info( 'rosetta started' );
-  logger.info( `http://localhost:${privateConfig.ROSETTA_PORT}/translate` );
+  logger.info( `http://localhost:${config.ROSETTA_PORT}/translate` );
 
   // Log private config keys except for secret ones.
   const unsafeKeys = [ 'BUILD_SERVER_AUTH', 'GITHUB_PAT', 'SERVER_TOKEN' ];
   logger.info( `config (from ${pathToConfig}):` );
-  for ( const [ key, value ] of Object.entries( privateConfig ) ) {
+  for ( const [ key, value ] of Object.entries( config ) ) {
     if ( !unsafeKeys.includes( key ) ) {
       logger.info( `    ${key}: ${value}` );
     }

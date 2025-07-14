@@ -11,18 +11,18 @@
  */
 
 import { UNPUBLISHED_SIMS_TO_INCLUDE } from '../../common/constants.js';
-import privateConfig from '../../common/privateConfig.js';
+import config from '../../common/config.js';
 import clientConfig from '../../common/clientConfig.js';
 import logger from './logger.js';
 import { SimMetadata } from './SimMetadataTypes.js';
 
 const { randomBytes } = await import( 'node:crypto' );
 const PSEUDO_RANDOM_STRING_LENGTH = 40;
-const METADATA_URL = privateConfig.SERVER_URL +
+const METADATA_URL = config.SERVER_URL +
                      '/services/metadata/1.3/simulations?format=json&type=html&include-unpublished=true&summary';
 const METADATA_REQ_OPTIONS = {
   headers: {
-    Authorization: `Basic ${Buffer.from( `token:${privateConfig.SERVER_TOKEN}` ).toString( 'base64' )}`
+    Authorization: `Basic ${Buffer.from( `token:${config.SERVER_TOKEN}` ).toString( 'base64' )}`
   }
 };
 

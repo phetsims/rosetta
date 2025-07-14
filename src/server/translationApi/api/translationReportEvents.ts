@@ -9,7 +9,7 @@
 
 import { Request, Response } from 'express';
 import { SIMS_FOR_SHORT_REPORT } from '../../../common/constants.js';
-import privateConfig from '../../../common/privateConfig.js';
+import config from '../../../common/config.js';
 import clientConfig from '../../../common/clientConfig.js';
 import getSimMetadata from '../getSimMetadata.js';
 import getSimNamesAndTitles from '../getSimNamesAndTitles.js';
@@ -49,7 +49,7 @@ const translationReportEvents = async ( req: Request, res: Response ): Promise<v
   // If the server is running in the development environment and the configuration is set for a short report, reduce
   // the number of simulations for which translation report objects are obtained. This is useful for debugging, since
   // getting all the data takes several minutes and also can cause us to exceed some GitHub file read limitations.
-  if ( clientConfig.ENVIRONMENT === 'development' && privateConfig.SHORT_REPORT ) {
+  if ( clientConfig.ENVIRONMENT === 'development' && config.SHORT_REPORT ) {
     simNames = simNames.filter( simName => SIMS_FOR_SHORT_REPORT.includes( simName ) );
   }
 

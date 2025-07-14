@@ -13,7 +13,7 @@
  */
 
 import { SIMS_FOR_SHORT_REPORT } from '../../common/constants.js';
-import privateConfig from '../../common/privateConfig.js';
+import config from '../../common/config.js';
 import clientConfig from '../../common/clientConfig.js';
 import logger from './logger.js';
 import { SimMetadata } from './SimMetadataTypes.js';
@@ -39,7 +39,7 @@ const getSimNamesAndTitles = ( simMetadata: SimMetadata, isTeamMember: boolean )
 
   // If the configuration is set up to deliver a short report, filter the object to include only the specified sims as
   // well as any unpublished sims that we want to include.
-  if ( clientConfig.ENVIRONMENT === 'development' && privateConfig.SHORT_REPORT ) {
+  if ( clientConfig.ENVIRONMENT === 'development' && config.SHORT_REPORT ) {
     logger.warn( 'using short report (fewer sims) based on configuration settings' );
     simNamesAndTitles = Object.fromEntries(
       Object.entries( simNamesAndTitles ).filter( ( [ key ] ) => SIMS_FOR_SHORT_REPORT.includes( key ) )

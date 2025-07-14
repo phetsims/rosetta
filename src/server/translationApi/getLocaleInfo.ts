@@ -7,7 +7,7 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import privateConfig from '../../common/privateConfig.js';
+import config from '../../common/config.js';
 import { Locale } from '../../common/TypeAliases.js';
 import logger from './logger.js';
 
@@ -51,7 +51,7 @@ const getLocaleInfo = async (): Promise<LocaleInfo | { error: string }> => {
     return currentUpdatePromise;
   }
 
-  const localeInfoValidDurationElapsed = timeOfLastUpdate + privateConfig.VALID_LOCALE_INFO_DURATION < Date.now();
+  const localeInfoValidDurationElapsed = timeOfLastUpdate + config.VALID_LOCALE_INFO_DURATION < Date.now();
 
   if ( !localeInfoValidDurationElapsed ) {
     logger.info( 'using cached locale info' );
@@ -61,7 +61,7 @@ const getLocaleInfo = async (): Promise<LocaleInfo | { error: string }> => {
   currentUpdatePromise = ( async () => {
     try {
       logger.info( 'locale info is stale or nonexistent; getting it' );
-      const localeInfoUrl = `${privateConfig.GITHUB_URL}/chipper/main/data/localeInfo.json`;
+      const localeInfoUrl = `${config.GITHUB_URL}/chipper/main/data/localeInfo.json`;
       const response = await fetch( localeInfoUrl );
 
       if ( response.ok ) {

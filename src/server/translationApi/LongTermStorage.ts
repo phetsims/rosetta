@@ -8,7 +8,7 @@
 
 import { RequestError } from '@octokit/request-error';
 import { Octokit } from '@octokit/rest';
-import privateConfig from '../../common/privateConfig.js';
+import config from '../../common/config.js';
 import { TranslationDataForRepo } from './ServerDataTypes.js';
 import logger from './logger.js';
 
@@ -22,7 +22,7 @@ class LongTermStorage {
   public constructor() {
 
     // Create the Octokit instance. Octokit is a library that allows us to interface with the GitHub API.
-    this.octokit = new Octokit( { auth: privateConfig.GITHUB_PAT } );
+    this.octokit = new Octokit( { auth: config.GITHUB_PAT } );
   }
 
   /**
@@ -57,7 +57,7 @@ class LongTermStorage {
         owner: OWNER,
         repo: REPO,
         path: this._getFilePath( simOrLibRepo, locale ),
-        ref: branch ? branch : privateConfig.BABEL_BRANCH
+        ref: branch ? branch : config.BABEL_BRANCH
       } );
 
       if ( 'content' in response.data && response.data.content ) {
@@ -97,7 +97,7 @@ class LongTermStorage {
         owner: OWNER,
         repo: REPO,
         path: this._getFilePath( simOrLibRepo, locale ),
-        ref: branch ? branch : privateConfig.BABEL_BRANCH
+        ref: branch ? branch : config.BABEL_BRANCH
       } );
       if ( 'sha' in response.data && response.data.sha ) {
         sha = response.data.sha;
@@ -131,7 +131,7 @@ class LongTermStorage {
   ): Promise<boolean> {
     let stored = false;
     const emptyTranslationFileContents = Object.keys( translationFileContents ).length === 0;
-    if ( privateConfig.PERFORM_STRING_COMMITS && !emptyTranslationFileContents ) {
+    if ( config.PERFORM_STRING_COMMITS && !emptyTranslationFileContents ) {
       logger.info( `attempting to store translation for ${simOrLibRepo}/${locale} in long-term storage` );
       const sha = await this._getGitShaOfFile( simOrLibRepo, locale, branch );
       try {
@@ -139,7 +139,7 @@ class LongTermStorage {
           owner: OWNER,
           repo: REPO,
           path: this._getFilePath( simOrLibRepo, locale ),
-          branch: branch ? branch : privateConfig.BABEL_BRANCH,
+          branch: branch ? branch : config.BABEL_BRANCH,
           message: `automated commit from rosetta for sim/lib ${simOrLibRepo}, locale ${locale}`,
           content: Buffer.from(
             JSON.stringify( translationFileContents, null, 2 ), 'utf-8'
@@ -157,7 +157,7 @@ class LongTermStorage {
       }
     }
     else {
-      if ( !privateConfig.PERFORM_STRING_COMMITS ) {
+      if ( !config.PERFORM_STRING_COMMITS ) {
         logger.warn( 'config option for committing to long-term storage is false' );
       }
       if ( emptyTranslationFileContents ) {

@@ -6,7 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import privateConfig from '../../common/privateConfig.js';
+import config from '../../common/config.js';
 import clientConfig from '../../common/clientConfig.js';
 import { SimSpecificTranslationFormStrings, TranslationFormData } from '../../common/TranslationFormData.js';
 import { CategorizedStringKeys } from './getCategorizedStringKeys.js';
@@ -41,7 +41,7 @@ const getTranslationFormData = async ( simName: string,
   logger.info( 'getting translation form data' );
 
   // Try to get a saved translation from the short-term storage database.
-  if ( privateConfig.DB_ENABLED ) {
+  if ( config.DB_ENABLED ) {
     try {
       logger.info( 'checking for saved translation' );
 

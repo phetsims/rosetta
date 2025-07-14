@@ -7,7 +7,7 @@
  */
 
 import { ClientSubmittedTranslationData } from '../../common/ClientSubmittedTranslationData.js';
-import privateConfig from '../../common/privateConfig.js';
+import config from '../../common/config.js';
 import deleteSavedTranslation from './deleteSavedTranslation.js';
 import { shortTermStringStorageCollection } from './getShortTermStringStorageCollection.js';
 import logger from './logger.js';
@@ -20,7 +20,7 @@ import logger from './logger.js';
  */
 const storeTranslationShortTerm = async ( translation: ClientSubmittedTranslationData ): Promise<boolean> => {
   let stored = false;
-  if ( privateConfig.DB_ENABLED ) {
+  if ( config.DB_ENABLED ) {
     logger.info( `storing ${translation.locale}/${translation.simName} translation in short-term storage` );
     try {
 

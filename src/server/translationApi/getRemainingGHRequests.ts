@@ -8,7 +8,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import privateConfig from '../../common/privateConfig.js';
+import config from '../../common/config.js';
 
 /**
  * Fetches the number of remaining requests to the GitHub API in the current hour.
@@ -19,7 +19,7 @@ const getRemainingGHRequests = async (): Promise<number> => {
   const response = await fetch( 'https://api.github.com/users/phet-dev', {
     method: 'GET',
     headers: new Headers( {
-      Authorization: `Bearer ${privateConfig.GITHUB_PAT}`,
+      Authorization: `Bearer ${config.GITHUB_PAT}`,
       'X-GitHub-Api-Version': '2022-11-28'
     } )
   } );

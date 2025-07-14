@@ -7,7 +7,7 @@
  */
 
 import { Collection, MongoClient } from 'mongodb';
-import privateConfig from '../../common/privateConfig.js';
+import config from '../../common/config.js';
 import logger from './logger.js';
 
 // Create a mock Collection object.  This is needed for when the DB is not enabled or cannot be connected to.
@@ -20,8 +20,8 @@ const mockCollection: Collection = {
 
 let shortTermStringStorageCollection: Collection = mockCollection;
 
-if ( privateConfig.DB_ENABLED ) {
-  const client = new MongoClient( privateConfig.DB_URI );
+if ( config.DB_ENABLED ) {
+  const client = new MongoClient( config.DB_URI );
 
   try {
 
@@ -29,8 +29,8 @@ if ( privateConfig.DB_ENABLED ) {
     logger.info( 'establishing connection to database' );
     await client.connect();
     logger.info( 'established connection to database' );
-    const database = client.db( privateConfig.DB_NAME );
-    shortTermStringStorageCollection = database.collection( privateConfig.DB_SHORT_TERM_STORAGE_COLLECTION_NAME );
+    const database = client.db( config.DB_NAME );
+    shortTermStringStorageCollection = database.collection( config.DB_SHORT_TERM_STORAGE_COLLECTION_NAME );
 
     // Close the connection to the database when the process exits.
     process.on( 'exit', async () => {

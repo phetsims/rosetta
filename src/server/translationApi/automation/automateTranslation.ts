@@ -7,7 +7,7 @@
 
 
 import { Request, Response } from 'express';
-import privateConfig from '../../../common/privateConfig.js';
+import config from '../../../common/config.js';
 import logger from '../logger.js';
 import { automationCache } from '../translationApi.js';
 
@@ -54,7 +54,7 @@ const automateTranslation = async ( req: Request, res: Response ): Promise<void>
   }
 
   // If we'll fake the automatic translation, use the mockTranslate function
-  if ( privateConfig.FAKE_AUTOMATIC_TRANSLATION ) {
+  if ( config.FAKE_AUTOMATIC_TRANSLATION ) {
     // This is a mock translation function that reverses the string but preserves {} structure.
     const mockTranslatedText = mockTranslate( textToTranslate );
     res.json( {
@@ -63,7 +63,7 @@ const automateTranslation = async ( req: Request, res: Response ): Promise<void>
     } );
     return;
   }
-  else if ( !privateConfig.OPENROUTER_API_KEY ) {
+  else if ( !config.OPENROUTER_API_KEY ) {
     // If we use the real automatic translation, make sure the API key is set
     res.json( {
       translation: '',
@@ -93,7 +93,7 @@ const automateTranslation = async ( req: Request, res: Response ): Promise<void>
     const response = await fetch( 'https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${privateConfig.OPENROUTER_API_KEY}`,
+        Authorization: `Bearer ${config.OPENROUTER_API_KEY}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify( {

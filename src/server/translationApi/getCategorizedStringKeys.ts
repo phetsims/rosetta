@@ -14,7 +14,7 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import privateConfig from '../../common/privateConfig.js';
+import config from '../../common/config.js';
 import { RepoName, StringKey } from '../../common/TypeAliases.js';
 import getRepoNameFromStringKeyWithRepoName from './getRepoNameFromStringKeyWithRepoName.js';
 import getSimMetadata from './getSimMetadata.js';
@@ -65,7 +65,7 @@ const getCategorizedStringKeys = async ( simName: string,
 
       // Only show a11y keys if the option is enabled. If it's disabled or even if it's not used, the fallback is not
       // showing a11y keys.
-      if ( !privateConfig.TRANSLATE_A11Y && stringKey.startsWith( 'a11y' ) ) {
+      if ( !config.TRANSLATE_A11Y && stringKey.startsWith( 'a11y' ) ) {
         logger.verbose( 'not categorizing a11y string key' );
       }
       else {

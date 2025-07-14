@@ -13,7 +13,7 @@
  */
 
 import SimVersion from '../../../../perennial-alias/js/browser-and-node/SimVersion.js';
-import privateConfig from '../../common/privateConfig.js';
+import config from '../../common/config.js';
 import getDependencies from './getDependencies.js';
 import getSimPhetioMetadata from './getSimPhetioMetadata.js';
 import getSimVersionObject from './getSimVersionObject.js';
@@ -112,8 +112,8 @@ const requestBuilds = async ( simName: string,
 
   let numberOfSuccessfulBuildRequests = 0;
 
-  if ( privateConfig.SEND_BUILD_REQUESTS ) {
-    const url = `${privateConfig.SERVER_URL}/deploy-html-simulation`;
+  if ( config.SEND_BUILD_REQUESTS ) {
+    const url = `${config.SERVER_URL}/deploy-html-simulation`;
     logger.info( `starting to send build requests to ${url}` );
 
     for ( const bro of buildRequestObjects ) {
@@ -170,7 +170,7 @@ const createBuildRequestObject = async ( simName: string,
     servers: [ 'production' ],
     brands: brands,
     translatorId: userID,
-    authorizationCode: privateConfig.BUILD_SERVER_AUTH
+    authorizationCode: config.BUILD_SERVER_AUTH
   };
 };
 

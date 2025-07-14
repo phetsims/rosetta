@@ -9,7 +9,7 @@
 
 import { Request, Response } from 'express';
 import { ClientSubmittedTranslationData } from '../../../common/ClientSubmittedTranslationData.js';
-import privateConfig from '../../../common/privateConfig.js';
+import config from '../../../common/config.js';
 import deleteSavedTranslation from '../deleteSavedTranslation.js';
 import getReposToStoreLongTerm from '../getReposToStoreLongTerm.js';
 import getSimMetadata from '../getSimMetadata.js';
@@ -54,7 +54,7 @@ const submitTranslation = async ( req: Request, res: Response ): Promise<void> =
       logger.info( 'successfully stored translation long term' );
     }
 
-    if ( submissionStatus.allRepoContentsStored || !privateConfig.PERFORM_STRING_COMMITS ) {
+    if ( submissionStatus.allRepoContentsStored || !config.PERFORM_STRING_COMMITS ) {
 
       // For each sim repo in the translation, we need to set the sim repo's report object to dirty. See
       // https://github.com/phetsims/rosetta/issues/379 for more info and background on this.

@@ -13,7 +13,7 @@
  */
 
 import fs from 'fs';
-import privateConfig from '../../src/common/privateConfig.js';
+import config from '../../src/common/config.js';
 
 // These are the keys whose values we want to extract from the private config file.
 // IMPORTANT: Don't put sensitive keys in this array such as API keys, authorization codes, etc.
@@ -41,9 +41,9 @@ const addQuotes = ( key, object ) => {
 };
 
 // Add the values needed by the client to the file string.
-for ( const key of Object.keys( privateConfig ) ) {
+for ( const key of Object.keys( config ) ) {
   if ( CLIENT_CONFIG_VALUES.includes( key ) ) {
-    const value = addQuotes( key, privateConfig );
+    const value = addQuotes( key, config );
     clientConfigString += `  ${key}: ${value},\n`;
   }
 }

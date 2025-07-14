@@ -8,12 +8,12 @@
  */
 
 import { Octokit } from '@octokit/rest';
-import privateConfig from '../../common/privateConfig.js';
+import config from '../../common/config.js';
 import { StringKey } from '../../common/TypeAliases.js';
 import logger from './logger.js';
 import { EnglishStrings } from './ServerDataTypes.js';
 
-const octokit = new Octokit( { auth: privateConfig.GITHUB_PAT } );
+const octokit = new Octokit( { auth: config.GITHUB_PAT } );
 
 // This type defines a string key to value entry that is potentially nested.  As of this writing (June 2025), this only
 // applies to English string files.  Translation files do not have nested values.

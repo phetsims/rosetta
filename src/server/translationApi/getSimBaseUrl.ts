@@ -7,7 +7,7 @@
  */
 
 import { UNPUBLISHED_SIMS_TO_INCLUDE } from '../../common/constants.js';
-import privateConfig from '../../common/privateConfig.js';
+import config from '../../common/config.js';
 
 /**
  * Return a sim's base URL meaning the portion of the URL that is common for accessing the sim's HTML file and its
@@ -23,7 +23,7 @@ const getSimBaseUrl = ( simName: string ): string => {
 
   return unpublishedSimInfo ?
          unpublishedSimInfo.simResourceUrl :
-         `${privateConfig.SERVER_URL}/sims/html/${simName}/latest`;
+         `${config.SERVER_URL}/sims/html/${simName}/latest`;
 };
 
 export default getSimBaseUrl;
