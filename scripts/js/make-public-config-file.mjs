@@ -1,15 +1,15 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * Make the public config file that has values the client-side code needs right away like
- * whether the utility is enabled, where to get website user data, whether we're in dev
- * or in production, etc. Once this file is made, the client-side code simply imports it.
+ * Make the public config file that has values the client-side code needs right away like whether the utility is
+ * enabled, where to get website user data, whether we're in dev or in production, etc. Once this file is made, the
+ * client-side code simply imports it.
  *
- * IMPORTANT: Never put anything sensitive in this file or the file it produces such as API keys,
- * etc. This file is tracked in version control, and the file it produces is imported in
- * client-side code.
+ * IMPORTANT: Never put anything sensitive in this file or the file it produces such as API keys, etc. This file is
+ * tracked in version control, and the file it produces is imported in client-side code.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import fs from 'fs';
@@ -52,7 +52,7 @@ for ( const key of Object.keys( privateConfig ) ) {
 publicConfigString += '};';
 
 // This script is meant to be run from the root of the rosetta repo, hence this file path.
-const pathToPublicConfig = './src/common/publicConfig.js';
+const pathToPublicConfig = './src/common/publicConfig.ts';
 
 console.log( 'info: making public config file' );
 fs.writeFileSync( pathToPublicConfig, publicConfigString );
