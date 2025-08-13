@@ -24,8 +24,8 @@ type TranslationFormButtonsProps = {
  * Return the set of buttons used in the translation form. These appear above and below the translation form.
  */
 const TranslationFormButtons: React.FC<TranslationFormButtonsProps> = props => {
-  // const websiteUserData = useContext( WebsiteUserDataContext ) as WebsiteUserData;
-  // const showAutomate = websiteUserData.teamMember; // Only show automation feature if user is a team member
+  // const loginState = useContext( LoginStateContext );
+  // const showAutomate = loginState.isTeamMember; // Only show automation feature if user is a team member
   const showAutomate = false; // TODO: For now, we are not showing the automate button in the UI, https://github.com/phetsims/rosetta/issues/451
   const disabled = !( props.isValid && props.dirty ) || props.isDisabled;
   const grayButton = 'btn btn-secondary';

@@ -10,11 +10,11 @@
 
 import '../styles/input-error.css';
 import React, { ReactElement } from 'react';
-import getWebsiteUserData from '../js/getWebsiteUserData';
+import getLoginState from '../js/getLoginState.js';
 
 const logUserCredentials = async (): Promise<void> => {
-  const websiteUserData = await getWebsiteUserData();
-  console.log( `websiteUserData = ${JSON.stringify( websiteUserData, null, 2 )}` );
+  const loginState = await getLoginState();
+  console.log( `loginState = ${JSON.stringify( loginState, null, 2 )}` );
   console.log( `userId from session storage: ${window.sessionStorage.getItem( 'userId' )}` );
 };
 

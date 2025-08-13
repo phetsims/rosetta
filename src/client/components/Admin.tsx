@@ -10,7 +10,7 @@ import React, { ReactElement, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import FlushReportObject from './FlushReportObject';
 import LogCredentials from './LogCredentials';
-import { WebsiteUserDataContext } from './Rosetta';
+import { LoginStateContext } from './Rosetta';
 import Sha from './Sha';
 import TriggerBuild from './TriggerBuild';
 
@@ -20,10 +20,10 @@ import TriggerBuild from './TriggerBuild';
  */
 const Admin: React.FC = (): ReactElement => {
 
-  const websiteUserData = useContext( WebsiteUserDataContext );
+  const loginState = useContext( LoginStateContext );
 
   let jsx: ReactElement;
-  const allowedAccess = websiteUserData.loggedIn && websiteUserData.teamMember;
+  const allowedAccess = loginState.loggedIn && loginState.isTeamMember;
 
   if ( allowedAccess ) {
     jsx = (

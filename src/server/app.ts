@@ -20,7 +20,7 @@ import { URL } from 'url';
 import config, { pathToConfig } from '../common/config.js';
 import builtReactAppServer from './builtReactAppServer/builtReactAppServer.js';
 import mockSignOut from './translationApi/api/mockSignOut.js';
-import mockWebsiteUserData from './translationApi/api/mockWebsiteUserData.js';
+import mockLoginState from './translationApi/api/mockLoginState.js';
 import getCurrentRosettaSha from './translationApi/getCurrentRosettaSha.js';
 import logger from './translationApi/logger.js';
 
@@ -77,7 +77,7 @@ app.use( '/translate', builtReactAppServer );
 
 // Mock website user data for local development.
 if ( config.ENVIRONMENT === 'development' ) {
-  app.get( '/services/check-login', mockWebsiteUserData );
+  app.get( '/services/check-login', mockLoginState );
   app.get( '/services/logout', mockSignOut );
 }
 

@@ -8,21 +8,17 @@
 
 import React, { useContext } from 'react';
 import personCircle from '../img/person-circle.svg';
-import { WebsiteUserDataContext } from './Rosetta';
-
-type WebsiteUserDataType = {
-  email: string;
-};
+import { LoginStateContext } from './Rosetta';
 
 /**
  * Display user's sign-in info obtained from website user data.
  */
 const UserInfo: React.FC = () => {
-  const websiteUserData = useContext( WebsiteUserDataContext ) as WebsiteUserDataType;
+  const loginState = useContext( LoginStateContext );
   return (
     <>
       <img src={personCircle} alt='person icon' width='20px'/>&nbsp;
-      Signed in as: {websiteUserData.email}
+      Signed in as: {loginState.email}
     </>
   );
 };

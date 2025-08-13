@@ -13,12 +13,12 @@
 
 import React, { createContext, ReactElement } from 'react';
 import clientConfig from '../../common/clientConfig';
-import useWebsiteUserData from '../hooks/useWebsiteUserData';
+import { LoginState } from '../../common/LoginState.js';
+import useLoginState from '../hooks/useLoginState';
 import PhetHomePageLink from './PhetHomePageLink';
 import RosettaRoutes from './RosettaRoutes';
-import { WebsiteUserData } from '../ClientDataTypes';
 
-const WebsiteUserDataContext = createContext<WebsiteUserData>( {} as WebsiteUserData );
+const LoginStateContext = createContext<LoginState>( { loggedIn: false } );
 
 /**
  * If a user is allowed access to the translation tool, this component will contain some header stuff and the routes
@@ -33,25 +33,25 @@ const WebsiteUserDataContext = createContext<WebsiteUserData>( {} as WebsiteUser
  * If Rosetta isn't enabled, a message about Rosetta being down for maintenance will be shown.
  */
 const Rosetta: React.FC = (): ReactElement => {
-  const websiteUserData = useWebsiteUserData();
+  const loginState = useLoginState();
   let jsx: ReactElement = <p>Loading...</p>;
   const rosettaEnabled = Object.keys( clientConfig ).length > 0 && clientConfig.IS_ENABLED;
 
   if ( rosettaEnabled ) {
-    const allowedAccess = websiteUserData.loggedIn && ( websiteUserData.trustedTranslator || websiteUserData.teamMember );
-    const notAllowedAccess = websiteUserData.loggedIn && ( !websiteUserData.trustedTranslator && !websiteUserData.teamMember );
+    const allowedAccess = loginState.loggedIn && ( loginState.isTrustedTranslator || loginState.isTeamMember );
+    const notAllowedAccess = loginState.loggedIn && ( !loginState.isTrustedTranslator && !loginState.isTeamMember );
 
     if ( allowedAccess ) {
       jsx = (
-        <WebsiteUserDataContext.Provider value={websiteUserData}>
+        <LoginStateContext.Provider value={loginState}>
           <RosettaRoutes/>
-        </WebsiteUserDataContext.Provider>
+        </LoginStateContext.Provider>
       );
 
       // Save the user ID in session storage.  This is part of a workaround for an issue where null user IDs where being
       // committed when sessions expired, see https://github.com/phetsims/rosetta/issues/412.
       // TODO: Remove this when better login checking exists, see https://github.com/phetsims/rosetta/issues/413.
-      window.sessionStorage.setItem( 'userId', websiteUserData.userId.toString() );
+      window.sessionStorage.setItem( 'userId', loginState.userId.toString() );
     }
     else if ( notAllowedAccess ) {
       jsx = (
@@ -64,7 +64,7 @@ const Rosetta: React.FC = (): ReactElement => {
         </div>
       );
     }
-    else if ( !websiteUserData.loggedIn ) {
+    else if ( !loginState.loggedIn ) {
       jsx = (
         <div className='container m-5'>
           <h1>PhET Translation Utility (HTML5)</h1>
@@ -91,5 +91,5 @@ const Rosetta: React.FC = (): ReactElement => {
   return jsx;
 };
 
-export { WebsiteUserDataContext };
+export { LoginStateContext };
 export default Rosetta;

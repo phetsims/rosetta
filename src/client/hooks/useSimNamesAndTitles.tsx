@@ -9,7 +9,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { TRANSLATION_API_ROUTE } from '../../common/constants';
 import { SimNamesAndTitles } from '../ClientDataTypes';
-import { WebsiteUserDataContext } from '../components/Rosetta';
+import { LoginStateContext } from '../components/Rosetta';
 import alertErrorMessage from '../js/alertErrorMessage';
 
 /**
@@ -17,14 +17,14 @@ import alertErrorMessage from '../js/alertErrorMessage';
  */
 const useSimNamesAndTitles = (): SimNamesAndTitles => {
 
-  const websiteUserData = useContext( WebsiteUserDataContext );
+  const loginState = useContext( LoginStateContext );
 
   const [ simNamesAndTitles, setSimNamesAndTitles ] = useState<SimNamesAndTitles>( {} as SimNamesAndTitles );
 
   useEffect( () => {
     const fetchSimNamesAndTitles = async (): Promise<void> => {
       try {
-        const response = await fetch( `${TRANSLATION_API_ROUTE}/simNamesAndTitles?isTeamMember=${websiteUserData.teamMember}` );
+        const response = await fetch( `${TRANSLATION_API_ROUTE}/simNamesAndTitles?isTeamMember=${loginState.isTeamMember}` );
         if ( !response.ok ) {
           throw new Error( `HTTP error! Status: ${response.status}` );
         }
@@ -37,7 +37,7 @@ const useSimNamesAndTitles = (): SimNamesAndTitles => {
     };
 
     void fetchSimNamesAndTitles();
-  }, [ websiteUserData ] );
+  }, [ loginState ] );
 
   return simNamesAndTitles;
 };

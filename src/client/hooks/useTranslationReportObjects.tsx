@@ -9,8 +9,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { TRANSLATION_API_ROUTE } from '../../common/constants';
 import ReportObject from '../../common/ReportObject';
-import { WebsiteUserData } from '../ClientDataTypes';
-import { WebsiteUserDataContext } from '../components/Rosetta';
+import { LoginStateContext } from '../components/Rosetta';
 
 type TranslationReportHookResult = {
   reportPopulated: boolean;
@@ -33,11 +32,11 @@ const useTranslationReportObjects = (
   const [ reportPopulated, setReportPopulated ] = useState<boolean>( false );
   const [ reportObjects, setReportObjects ] = useState<ReportObject[]>( [] );
 
-  const websiteUserData = useContext<WebsiteUserData>( WebsiteUserDataContext );
+  const loginState = useContext( LoginStateContext );
 
   useEffect( () => {
     if ( !listening && !reportPopulated && showStats ) {
-      const translationReportUrl = `${TRANSLATION_API_ROUTE}/translationReportEvents/${locale}?wantsUntranslated=${wantsUntranslated}&isTeamMember=${websiteUserData.teamMember}`;
+      const translationReportUrl = `${TRANSLATION_API_ROUTE}/translationReportEvents/${locale}?wantsUntranslated=${wantsUntranslated}&isTeamMember=${loginState.isTeamMember}`;
       const translationReportSource = new EventSource( translationReportUrl );
       translationReportSource.onmessage = event => {
         if ( event.data !== 'closed' ) {
@@ -51,7 +50,7 @@ const useTranslationReportObjects = (
       };
       setListening( true );
     }
-  }, [ listening, reportPopulated, locale, wantsUntranslated, websiteUserData.teamMember, showStats ] );
+  }, [ listening, reportPopulated, locale, wantsUntranslated, loginState.isTeamMember, showStats ] );
 
   // If showStats is false, this is a dummy object.
   return {

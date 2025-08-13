@@ -8,7 +8,7 @@
  */
 
 import { TranslationFormValues } from '../ClientDataTypes.js';
-import getWebsiteUserData from './getWebsiteUserData';
+import getLoginState from './getLoginState.js';
 
 export type TranslationObject = {
   userId: number | string; // some servers use a string for userId
@@ -22,17 +22,17 @@ export type TranslationObject = {
  * Return an object with the data needed for submitting the sim for publication, saving it for later, or testing it.
  */
 const makeTranslationObject = async ( values: TranslationFormValues, simName: string, locale: string ): Promise<TranslationObject> => {
-  const websiteUserData = await getWebsiteUserData();
+  const loginState = await getLoginState();
 
   // Check for a user ID and if it's missing, replace it with a value from session storage.  This is part of a
   // workaround for an issue where null user IDs were being used when sessions expired, see
   // https://github.com/phetsims/rosetta/issues/412.
   // TODO: Remove this when better login checking exists, see https://github.com/phetsims/rosetta/issues/413.
-  if ( typeof websiteUserData.userId !== 'number' ) {
+  if ( typeof loginState.userId !== 'number' ) {
     const storedUserId = window.sessionStorage.getItem( 'userId' );
     if ( storedUserId ) {
       console.warn( `Replacing null user ID with stored value ${storedUserId}.` );
-      websiteUserData.userId = Number( storedUserId );
+      loginState.userId = Number( storedUserId );
     }
     else {
       console.warn( 'Null user ID found and no stored value available.' );
@@ -40,7 +40,7 @@ const makeTranslationObject = async ( values: TranslationFormValues, simName: st
   }
 
   return {
-    userId: websiteUserData.userId,
+    userId: loginState.userId,
     timestamp: Date.now(),
     simName: simName,
     locale: locale,

@@ -11,8 +11,7 @@ import { Field, Form, Formik, FormikHelpers } from 'formik';
 import React, { useContext } from 'react';
 import * as Yup from 'yup';
 import { TRANSLATION_API_ROUTE } from '../../common/constants';
-import { WebsiteUserData } from '../ClientDataTypes';
-import { WebsiteUserDataContext } from './Rosetta';
+import { LoginStateContext } from './Rosetta';
 import '../styles/input-error.css';
 
 type RebuildFormValues = {
@@ -31,10 +30,10 @@ const TriggerBuild: React.FC = () => {
     userId: ''
   };
 
-  const websiteUserData = useContext<WebsiteUserData>( WebsiteUserDataContext );
+  const loginState = useContext( LoginStateContext );
 
   const handleSubmit = async ( values: RebuildFormValues, _: FormikHelpers<RebuildFormValues> ): Promise<void> => {
-    if ( websiteUserData.loggedIn && websiteUserData.teamMember ) {
+    if ( loginState.loggedIn && loginState.isTeamMember ) {
       try {
         const response = await fetch( `${TRANSLATION_API_ROUTE}/triggerBuild/${values.sim}/${values.locale}/${values.userId}` );
 

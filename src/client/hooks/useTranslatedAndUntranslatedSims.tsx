@@ -8,7 +8,7 @@
 
 import { useContext, useEffect, useState } from 'react';
 import { TRANSLATION_API_ROUTE } from '../../common/constants';
-import { WebsiteUserDataContext } from '../components/Rosetta';
+import { LoginStateContext } from '../components/Rosetta';
 import alertErrorMessage from '../js/alertErrorMessage';
 
 type TranslatedAndUntranslatedSims = {
@@ -20,14 +20,14 @@ type TranslatedAndUntranslatedSims = {
  * Return an object containing a list of translated sims and a list of untranslated sims for the given locale.
  */
 const useTranslatedAndUntranslatedSims = ( locale: string ): TranslatedAndUntranslatedSims => {
-  const websiteUserData = useContext( WebsiteUserDataContext );
+  const loginState = useContext( LoginStateContext );
   const [ translatedAndUntranslatedSims, setTranslatedAndUntranslatedSims ] = useState<TranslatedAndUntranslatedSims>( null );
 
   useEffect( () => {
     const fetchTranslatedAndUntranslatedSims = async (): Promise<void> => {
       try {
         const response = await fetch(
-          `${TRANSLATION_API_ROUTE}/translatedAndUntranslatedSims/${locale}?isTeamMember=${websiteUserData.teamMember}`
+          `${TRANSLATION_API_ROUTE}/translatedAndUntranslatedSims/${locale}?isTeamMember=${loginState.isTeamMember}`
         );
         if ( !response.ok ) {
           throw new Error( `HTTP error! Status: ${response.status}` );
@@ -41,7 +41,7 @@ const useTranslatedAndUntranslatedSims = ( locale: string ): TranslatedAndUntran
     };
 
     void fetchTranslatedAndUntranslatedSims();
-  }, [ websiteUserData, locale ] );
+  }, [ loginState, locale ] );
 
   return translatedAndUntranslatedSims;
 };

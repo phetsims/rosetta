@@ -12,7 +12,7 @@ import React, { createContext, ReactElement, useContext, useEffect, useState } f
 import { Link, useParams } from 'react-router-dom';
 import { TRANSLATION_API_ROUTE } from '../../common/constants';
 import { TranslationFormData } from '../../common/TranslationFormData.js';
-import { ErrorContextType, LocaleInfo, SimNamesAndTitles, WebsiteUserData } from '../ClientDataTypes';
+import { ErrorContextType, LocaleInfo, SimNamesAndTitles } from '../ClientDataTypes';
 import alertErrorMessage from '../js/alertErrorMessage';
 import automateTranslation from '../js/automateTranslation';
 import makeValidationSchema from '../js/makeValidationSchema';
@@ -20,7 +20,7 @@ import saveTranslation from '../js/saveTranslation';
 import submitTranslation from '../js/submitTranslation';
 import testTranslation from '../js/testTranslation';
 import LoadingSpinner from './LoadingSpinner';
-import { WebsiteUserDataContext } from './Rosetta';
+import { LoginStateContext } from './Rosetta';
 import { LocaleInfoContext, SimNamesAndTitlesContext } from './RosettaRoutes';
 import TranslationFormButtons from './TranslationFormButtons';
 import TranslationFormHeader from './TranslationFormHeader';
@@ -39,14 +39,14 @@ const ErrorContext = createContext<ErrorContextType>( null );
  */
 const TranslationForm: React.FC = (): ReactElement => {
   const params = useParams<TranslationFormParams>();
-  const websiteUserData = useContext<WebsiteUserData>( WebsiteUserDataContext );
+  const loginState = useContext( LoginStateContext );
 
   const [ translationFormData, setTranslationFormData ] = useState<TranslationFormData | null>( null );
 
   useEffect( () => {
     const fetchData = async (): Promise<void> => {
       try {
-        const response = await fetch( `${TRANSLATION_API_ROUTE}/translationFormData/${params.simName}/${params.locale}?userId=${websiteUserData.userId}` );
+        const response = await fetch( `${TRANSLATION_API_ROUTE}/translationFormData/${params.simName}/${params.locale}?userId=${loginState.userId}` );
         if ( response.ok ) {
           const data = await response.json();
           setTranslationFormData( data );
@@ -61,7 +61,7 @@ const TranslationForm: React.FC = (): ReactElement => {
     };
 
     void fetchData();
-  }, [ params.simName, params.locale, websiteUserData.userId ] );
+  }, [ params.simName, params.locale, loginState.userId ] );
 
   const [ isDisabled, setIsDisabled ] = useState<boolean>( false );
   const [ buttonId, setButtonId ] = useState<string>( '' );

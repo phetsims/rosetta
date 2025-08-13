@@ -9,20 +9,15 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import PhetHomePageLink from './PhetHomePageLink';
-import { WebsiteUserDataContext } from './Rosetta';
+import { LoginStateContext } from './Rosetta';
 import UserGuideLink from './UserGuideLink';
-
-type WebsiteUserData = {
-  loggedIn: boolean;
-  teamMember: boolean;
-};
 
 /**
  * Display user info, and several links.
  */
 const Nav: React.FC = () => {
-  const websiteUserData = useContext( WebsiteUserDataContext ) as WebsiteUserData;
-  const shouldSeeAdminLink = websiteUserData.loggedIn && websiteUserData.teamMember;
+  const loginState = useContext( LoginStateContext );
+  const shouldSeeAdminLink = loginState.loggedIn && loginState.isTeamMember;
   return (
     <div className='card mt-4 mb-4'>
       <div className='card-body'>

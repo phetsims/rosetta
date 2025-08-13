@@ -8,6 +8,7 @@
 
 import { Request, Response } from 'express';
 import config from '../../../common/config.js';
+import { LoginState } from '../../../common/LoginState.js';
 import logger from '../logger.js';
 
 /**
@@ -17,18 +18,16 @@ import logger from '../logger.js';
  * @param req - Express request object
  * @param res - Express response object
  */
-const mockWebsiteUserData = ( req: Request, res: Response ): void => {
-  const mockWebsiteUserData = {
-    username: 'PhET Girl',
-    userId: config.LOCAL_USER_ID,
+const mockLoginState = ( req: Request, res: Response ): void => {
+  const mockLoginState: LoginState = {
+    phetUserId: config.LOCAL_USER_ID,
     email: 'phet.girl@colorado.edu',
     loggedIn: true,
-    teamMember: true,
-    trustedTranslator: true,
-    subscribed: true
+    isTeamMember: true,
+    isTrustedTranslator: true
   };
   logger.info( 'responding with mock website user data' );
-  res.json( mockWebsiteUserData );
+  res.json( mockLoginState );
 };
 
-export default mockWebsiteUserData;
+export default mockLoginState;
