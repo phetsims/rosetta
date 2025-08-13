@@ -17,7 +17,7 @@ import '../styles/input-error.css';
 type RebuildFormValues = {
   sim: string;
   locale: string;
-  userId: string;
+  phetUserId: string;
 };
 
 /**
@@ -27,7 +27,7 @@ const TriggerBuild: React.FC = () => {
   const initialRebuildValues: RebuildFormValues = {
     sim: '',
     locale: '',
-    userId: ''
+    phetUserId: ''
   };
 
   const loginState = useContext( LoginStateContext );
@@ -35,12 +35,12 @@ const TriggerBuild: React.FC = () => {
   const handleSubmit = async ( values: RebuildFormValues, _: FormikHelpers<RebuildFormValues> ): Promise<void> => {
     if ( loginState.loggedIn && loginState.isTeamMember ) {
       try {
-        const response = await fetch( `${TRANSLATION_API_ROUTE}/triggerBuild/${values.sim}/${values.locale}/${values.userId}` );
+        const response = await fetch( `${TRANSLATION_API_ROUTE}/triggerBuild/${values.sim}/${values.locale}/${values.phetUserId}` );
 
         if ( response.ok ) {
           const data = await response.text();
           if ( data === 'success' ) {
-            window.alert( `Rebuild request sent for sim ${values.sim} in locale ${values.locale} with user ID ${values.userId}.` );
+            window.alert( `Rebuild request sent for sim ${values.sim} in locale ${values.locale} with user ID ${values.phetUserId}.` );
           }
           else if ( data === 'failure' ) {
             window.alert( 'Rebuild request failed. Check the build request flag in your config.' );
@@ -68,7 +68,7 @@ const TriggerBuild: React.FC = () => {
       .required( 'Required' )
       .min( 2, 'Too short' )
       .max( 5, 'Too long' ),
-    userId: Yup.number()
+    phetUserId: Yup.number()
       .required( 'Required' )
       .positive( 'User ID should be a positive number' )
       .integer( 'User ID should be an integer' )
@@ -107,9 +107,9 @@ const TriggerBuild: React.FC = () => {
             </div>
             <div>
               <label className='mt-2'>User ID:</label><br/>
-              <Field type='text' name='userId'/>
+              <Field type='text' name='phetUserId'/>
               <div className='error-container'>
-                {errors.userId && touched.userId ? errors.userId : null}
+                {errors.phetUserId && touched.phetUserId ? errors.phetUserId : null}
               </div>
             </div>
             <button

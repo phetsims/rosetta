@@ -7,7 +7,7 @@
  */
 
 import clientConfig from '../../common/clientConfig';
-import { LoginState } from '../ClientDataTypes';
+import { LoginState } from '../../common/LoginState.js';
 
 /**
  * Get the user data object from website.
@@ -27,8 +27,8 @@ const getLoginState = async (): Promise<LoginState> => {
 
   // Make sure the user ID is a number if it is present. We do this because on some servers it's a string and on others
   // it's a number, see https://github.com/phetsims/rosetta/issues/373.
-  if ( typeof loginState.userId === 'string' && !isNaN( Number( loginState.userId ) ) ) {
-    loginState.userId = Number( loginState.userId );
+  if ( typeof loginState.phetUserId === 'string' && !isNaN( Number( loginState.phetUserId ) ) ) {
+    loginState.phetUserId = Number( loginState.phetUserId );
   }
   return loginState;
 };

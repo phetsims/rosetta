@@ -15,7 +15,7 @@ import getLoginState from '../js/getLoginState.js';
 const logUserCredentials = async (): Promise<void> => {
   const loginState = await getLoginState();
   console.log( `loginState = ${JSON.stringify( loginState, null, 2 )}` );
-  console.log( `userId from session storage: ${window.sessionStorage.getItem( 'userId' )}` );
+  console.log( `phetUserId from session storage: ${window.sessionStorage.getItem( 'phetUserId' )}` );
 };
 
 const LogCredentials = (): ReactElement => {

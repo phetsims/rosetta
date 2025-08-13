@@ -1,12 +1,7 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * Request one or more translation builds from the PhET build server.
- *
- * @param simName - name of the home repo of the sim, e.g. build-an-atom
- * @param locale - locale to build, e.g. 'de' (Deutsch, aka German)
- * @param userID - user ID of the translator, used in the build request so that credits on the website can be updated
- * @returns A promise that resolves to a boolean indicating success or failure
+ * Export a shared function, see function header for details.
  *
  * @author John Blanco (PhET Interactive Simulations)
  * @author Liam Mulhall
@@ -32,9 +27,17 @@ type BuildRequestObject = {
   authorizationCode: string;
 };
 
+/**
+ * Request one or more translation builds from the PhET build server.
+ *
+ * @param simName - name of the home repo of the sim, e.g. build-an-atom
+ * @param locale - locale to build, e.g. 'de' (Deutsch, aka German)
+ * @param userId - PhET user ID of the translator, used in the build request so that credits on the website can be updated
+ * @returns A promise that resolves to a boolean indicating success or failure
+ */
 const requestBuilds = async ( simName: string,
                               locale: string,
-                              userID: number ): Promise<boolean> => {
+                              userId: number ): Promise<boolean> => {
 
   logger.info( `initiating build requests for sim: ${simName}, locale: ${locale}` );
   const currentSimVersionObject = await getSimVersionObject( simName );
@@ -49,7 +52,7 @@ const requestBuilds = async ( simName: string,
       currentSimVersionObject.string,
       locale,
       [ 'phet' ],
-      userID
+      userId
     )
   );
 
@@ -95,7 +98,7 @@ const requestBuilds = async ( simName: string,
           simVersion.toString(),
           locale,
           [ 'phet-io' ],
-          userID
+          userId
         )
       );
     }
@@ -157,7 +160,7 @@ const createBuildRequestObject = async ( simName: string,
                                          versionString: string,
                                          locale: string,
                                          brands: string[],
-                                         userID: number ): Promise<BuildRequestObject> => {
+                                         userId: number ): Promise<BuildRequestObject> => {
 
   const brandForDependencies = brands.includes( 'phet' ) ? 'phet' : 'phet-io';
   const dependencies = await getDependencies( simName, versionString, brandForDependencies );
@@ -169,7 +172,7 @@ const createBuildRequestObject = async ( simName: string,
     locales: [ locale ],
     servers: [ 'production' ],
     brands: brands,
-    translatorId: userID,
+    translatorId: userId,
     authorizationCode: config.BUILD_SERVER_AUTH
   };
 };

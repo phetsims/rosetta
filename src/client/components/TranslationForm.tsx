@@ -46,7 +46,7 @@ const TranslationForm: React.FC = (): ReactElement => {
   useEffect( () => {
     const fetchData = async (): Promise<void> => {
       try {
-        const response = await fetch( `${TRANSLATION_API_ROUTE}/translationFormData/${params.simName}/${params.locale}?userId=${loginState.userId}` );
+        const response = await fetch( `${TRANSLATION_API_ROUTE}/translationFormData/${params.simName}/${params.locale}?userId=${loginState.phetUserId}` );
         if ( response.ok ) {
           const data = await response.json();
           setTranslationFormData( data );
@@ -61,7 +61,7 @@ const TranslationForm: React.FC = (): ReactElement => {
     };
 
     void fetchData();
-  }, [ params.simName, params.locale, loginState.userId ] );
+  }, [ params.simName, params.locale, loginState.phetUserId ] );
 
   const [ isDisabled, setIsDisabled ] = useState<boolean>( false );
   const [ buttonId, setButtonId ] = useState<string>( '' );
