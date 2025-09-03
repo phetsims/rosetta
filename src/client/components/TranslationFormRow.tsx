@@ -61,6 +61,11 @@ const TranslationFormRow: React.FC<TranslationFormRowProps> = ( props ): ReactEl
   // Formik has a handful of props that it needs on inputs.
   // Get field props for the input.
   const [ field ] = useField( props.name );
+
+  // Check if this row had a translation when the form was loaded and should be hidden
+  const hadInitialTranslation = field.value && field.value.trim() !== '';
+  const shouldHide = props.hasTranslation && props.hideTranslated && hadInitialTranslation;
+
   // Handlers for AI validation actions
   const handleAiAccept = () => {
     const newSet = new Set( props.aiTranslatedFields );
@@ -78,7 +83,7 @@ const TranslationFormRow: React.FC<TranslationFormRowProps> = ( props ): ReactEl
   };
 
   return (
-    <tr>
+    <tr style={{ display: shouldHide ? 'none' : 'table-row' }}>
       <td style={stringKeyStyle}>{props.stringKey}</td>
       <td style={englishStringStyle}>{props.englishString}</td>
 

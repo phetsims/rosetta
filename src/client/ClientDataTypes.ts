@@ -26,6 +26,7 @@ type LocaleAndAIMetadata = {
 
 export type TranslationFormTablesProps = {
   translationFormData: TranslationFormData;
+  hideTranslated: boolean;
 } & LocaleAndAIMetadata;
 
 export type TranslationFormRowProps = {
@@ -33,6 +34,8 @@ export type TranslationFormRowProps = {
   name: string;
   stringKey: string;
   englishString: string;
+  hideTranslated: boolean;
+  hasTranslation: boolean;
 } & LocaleAndAIMetadata;
 
 // TODO: Try to use Record once the linting issues are resolved, see https://github.com/phetsims/rosetta/issues/370.

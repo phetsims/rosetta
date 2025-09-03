@@ -70,6 +70,9 @@ const TranslationForm: React.FC = (): ReactElement => {
   // Track AI-translated fields for metadata and styling
   const [ aiTranslatedFields, setAiTranslatedFields ] = useState<Set<string>>( new Set() );
 
+  // Track hide translated strings state
+  const [ hideTranslated, setHideTranslated ] = useState<boolean>( false );
+
   // Reset AI-translated metadata when form data changes
   useEffect( () => {
     setAiTranslatedFields( new Set() );
@@ -170,6 +173,8 @@ const TranslationForm: React.FC = (): ReactElement => {
                   handleButtonClick={handleButtonClick}
                   isDisabled={isDisabled}
                   testIsLoading={testIsLoading}
+                  hideTranslated={hideTranslated}
+                  setHideTranslated={setHideTranslated}
                   {...props}
                 />
                 <ErrorContext.Provider value={contextErrors}>
@@ -179,6 +184,7 @@ const TranslationForm: React.FC = (): ReactElement => {
                     locale={params.locale || ''}
                     aiTranslatedFields={aiTranslatedFields}
                     setAiTranslatedFields={setAiTranslatedFields}
+                    hideTranslated={hideTranslated}
                   />
                 </ErrorContext.Provider>
               </Form>

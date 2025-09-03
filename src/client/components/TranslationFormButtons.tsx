@@ -10,6 +10,7 @@ import React from 'react';
 import LoadingSpinner from './LoadingSpinner';
 import '../styles/translation-form.css';
 
+// TODO: Should this be in the ClientDataTypes file? https://github.com/phetsims/rosetta/issues/370
 type TranslationFormButtonsProps = {
   simName: string;
   locale: string;
@@ -17,6 +18,8 @@ type TranslationFormButtonsProps = {
   dirty: boolean;
   isDisabled: boolean;
   testIsLoading: boolean;
+  hideTranslated: boolean;
+  setHideTranslated: ( hide: boolean ) => void;
   handleButtonClick: ( event: React.MouseEvent<HTMLButtonElement> ) => void;
 };
 
@@ -35,7 +38,7 @@ const TranslationFormButtons: React.FC<TranslationFormButtonsProps> = props => {
 
   return (
     <div className='card sticky-top mt-4 mb-4'>
-      <div className='card-body save-test-publish-buttons-container'>
+      <div className='card-body save-test-publish-buttons-container d-flex align-items-center flex-wrap'>
         <button
           id='save'
           onClick={props.handleButtonClick}
@@ -83,6 +86,17 @@ const TranslationFormButtons: React.FC<TranslationFormButtonsProps> = props => {
           </button>
         )}
         {props.testIsLoading ? <LoadingSpinner/> : <></>}
+        <div className='ms-auto'>
+          <label className='form-check-label'>
+            <input
+              type='checkbox'
+              className='form-check-input me-2'
+              checked={props.hideTranslated}
+              onChange={event => props.setHideTranslated( event.target.checked )}
+            />
+            Hide translated strings
+          </label>
+        </div>
       </div>
     </div>
   );

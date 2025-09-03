@@ -24,18 +24,23 @@ const TranslationFormTables: React.FC<TranslationFormTablesProps> = props => {
   const commonRows = [];
   for ( const translationFormKey of Object.values( KeyTypesEnum ) ) {
     for ( const stringKeyWithoutDots in props.translationFormData[ translationFormKey ] ) {
-      const englishString = props.translationFormData[ translationFormKey ][ stringKeyWithoutDots ].english;
+      const stringData = props.translationFormData[ translationFormKey ][ stringKeyWithoutDots ];
+      const englishString = stringData.english;
       const stringKeyWithDots = stringKeyWithoutDots.split( '_DOT_' ).join( '.' );
+      const stringName = `${translationFormKey}.${stringKeyWithoutDots}.translated`;
+      const hasTranslation = stringData.translated.length > 0;
       const row = (
         <TranslationFormRow
           key={stringKeyWithDots}
           keyWithoutDots={stringKeyWithoutDots}
-          name={`${translationFormKey}.${stringKeyWithoutDots}.translated`}
+          name={stringName}
           stringKey={stringKeyWithDots}
           englishString={englishString}
           locale={props.locale}
           aiTranslatedFields={props.aiTranslatedFields}
           setAiTranslatedFields={props.setAiTranslatedFields}
+          hideTranslated={props.hideTranslated}
+          hasTranslation={hasTranslation}
         />
       );
       if ( translationFormKey === KeyTypesEnum.SIM_SPECIFIC ) {
