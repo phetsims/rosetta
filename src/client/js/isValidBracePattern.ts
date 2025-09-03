@@ -7,7 +7,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { DOUBLE_BRACE_REGEX, SINGLE_BRACE_REGEX, TRIPLE_BRACE_REGEX } from '../../common/constants';
+import { DOUBLE_BRACE_REGEX, SINGLE_BRACE_REGEX, TRIPLE_BRACE_REGEX } from '../../common/constants.js';
 
 /**
  * Return a boolean telling whether a given value has a valid brace pattern.

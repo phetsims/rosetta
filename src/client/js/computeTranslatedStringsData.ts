@@ -7,7 +7,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import KeyTypesEnum from '../../common/KeyTypesEnum';
+import KeyTypesEnum from '../../common/KeyTypesEnum.js';
 import { TranslationFormData } from '../../common/TranslationFormData.js';
 
 type TranslatedStringsData = Record<string, {

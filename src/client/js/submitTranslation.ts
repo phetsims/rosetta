@@ -6,13 +6,13 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import clientConfig from '../../common/clientConfig';
-import { TRANSLATION_API_ROUTE } from '../../common/constants';
-import KeyTypesEnum from '../../common/KeyTypesEnum';
+import clientConfig from '../../common/clientConfig.js';
+import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
+import KeyTypesEnum from '../../common/KeyTypesEnum.js';
 import { TranslationFormData } from '../../common/TranslationFormData.js';
-import alertErrorMessage from './alertErrorMessage';
-import computeTranslatedStringsData from './computeTranslatedStringsData';
-import makeTranslationObject from './makeTranslationObject';
+import alertErrorMessage from './alertErrorMessage.js';
+import computeTranslatedStringsData from './computeTranslatedStringsData.js';
+import makeTranslationObject from './makeTranslationObject.js';
 
 type SubmitStatus = {
   allRepoContentsStored: boolean;

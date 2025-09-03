@@ -6,11 +6,11 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import { TRANSLATION_API_ROUTE } from '../../common/constants';
+import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
 import { TranslationFormValues } from '../ClientDataTypes.js';
-import alertErrorMessage from './alertErrorMessage';
+import alertErrorMessage from './alertErrorMessage.js';
 import logError from './logError.js';
-import makeTranslationObject from './makeTranslationObject';
+import makeTranslationObject from './makeTranslationObject.js';
 
 /**
  * Use the backend to replace the sim's strings with the user's inputted strings, then open a new tab with the sim with

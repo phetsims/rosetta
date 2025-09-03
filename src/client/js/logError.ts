@@ -6,7 +6,7 @@
  * @author Agustín Vallejo
  */
 
-import { TRANSLATION_API_ROUTE } from '../../common/constants';
+import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
 
 /**
  * @param error - the error message to be sent to the server

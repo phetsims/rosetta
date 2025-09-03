@@ -10,11 +10,11 @@
 /* eslint-disable prefer-arrow-callback */
 
 import * as Yup from 'yup';
-import { DOUBLE_BRACE_REGEX, SINGLE_BRACE_REGEX } from '../../common/constants';
-import KeyTypesEnum from '../../common/KeyTypesEnum';
+import { DOUBLE_BRACE_REGEX, SINGLE_BRACE_REGEX } from '../../common/constants.js';
+import KeyTypesEnum from '../../common/KeyTypesEnum.js';
 import { TranslationFormData } from '../../common/TranslationFormData.js';
-import alertErrorMessage from './alertErrorMessage';
-import isValidBracePattern from './isValidBracePattern';
+import alertErrorMessage from './alertErrorMessage.js';
+import isValidBracePattern from './isValidBracePattern.js';
 
 type ValidationSubObjects = Record<string, Record<string, Yup.AnyObjectSchema>>;
 

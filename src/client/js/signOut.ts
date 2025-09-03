@@ -6,8 +6,8 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import clientConfig from '../../common/clientConfig';
-import alertErrorMessage from './alertErrorMessage';
+import clientConfig from '../../common/clientConfig.js';
+import alertErrorMessage from './alertErrorMessage.js';
 
 /**
  * Send request to PhET server to sign the user out.

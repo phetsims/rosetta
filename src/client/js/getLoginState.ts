@@ -6,7 +6,7 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
-import clientConfig from '../../common/clientConfig';
+import clientConfig from '../../common/clientConfig.js';
 import { LoginState } from '../../common/LoginState.js';
 
 /**

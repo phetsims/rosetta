@@ -7,9 +7,9 @@
  */
 
 
-import { TRANSLATION_API_ROUTE } from '../../common/constants';
+import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
 import { TranslationFormValues } from '../ClientDataTypes.js';
-import logError from './logError';
+import logError from './logError.js';
 
 type TranslationResponse = {
   translation: string;

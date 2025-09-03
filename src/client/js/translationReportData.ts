@@ -7,7 +7,7 @@
  */
 
 import ReportObject, { ReportObjectSortingKeys } from '../../common/ReportObject.js';
-import SortDirectionEnum from '../js/SortDirectionEnum';
+import SortDirectionEnum from '../js/SortDirectionEnum.js';
 
 /**
  * Prepares and sorts translation report data for display.
