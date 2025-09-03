@@ -10,9 +10,7 @@
 import ReportObject from '../common/ReportObject.js';
 import { TranslationFormData } from '../common/TranslationFormData.js';
 
-export type SimNamesAndTitles = {
-  [ simName: string ]: string;
-};
+export type SimNamesAndTitles = Record<string, string>;
 
 export type TranslationFormValues = {
   [ key: string ]: string | boolean | TranslationFormValues;
@@ -39,18 +37,14 @@ export type TranslationFormRowProps = {
 } & LocaleAndAIMetadata;
 
 // TODO: Try to use Record once the linting issues are resolved, see https://github.com/phetsims/rosetta/issues/370.
-export type ErrorContextType = {
-  [ key: string ]: string;
-} | null;
+export type ErrorContextType = Record<string, string> | null;
 
 // TODO: Try to use Record once the linting issues are resolved, see https://github.com/phetsims/rosetta/issues/370.
 // Below types used for the TranslationFormRow component.
-export type LocaleInfo = {
-  [locale: string]: {
-    name: string;
-    direction: 'ltr' | 'rtl';
-  };
-};
+export type LocaleInfo = Record<string, {
+  name: string;
+  direction: 'ltr' | 'rtl';
+}>;
 
 // This type represents a ReportObject after its percentages have been calculated/re-calculated
 // by `getReportObjectsWithCalculatedPercentages`. These calculated percentages

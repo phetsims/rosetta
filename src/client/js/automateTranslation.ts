@@ -55,15 +55,13 @@ const translateWithAI = async (
  * Automates the translation of all strings and updates the values object.
  */
 const automateTranslation = async (
-  values: TranslationFormValues,
+  translatedValues: TranslationFormValues,
   simName: string,
   locale: string,
   simTitle: string,
   localeName: string,
   setFieldValue: ( fieldPath: string, value: string | boolean ) => void
 ): Promise<string[]> => {
-  const translatedValues = { ...values };  // Create a copy of the original values object
-
   // Track which fields have been automatically translated
   const updatedPaths: string[] = [];
 

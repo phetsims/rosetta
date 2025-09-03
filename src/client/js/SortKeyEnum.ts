@@ -10,9 +10,7 @@
 
 import { ReportObjectSortingKeys } from '../../common/ReportObject.js';
 
-type SortingKeys = {
-  [ key: string ]: ReportObjectSortingKeys[];
-};
+type SortingKeys = Record<string, ReportObjectSortingKeys[]>;
 
 const SortKeyEnum: SortingKeys = {
   SIM_TITLE: [ 'simTitle' ],

@@ -6,9 +6,9 @@
  * @author Liam Mulhall <liammulh@gmail.com>
  */
 
+import clientConfig from '../../common/clientConfig';
 import { TRANSLATION_API_ROUTE } from '../../common/constants';
 import KeyTypesEnum from '../../common/KeyTypesEnum';
-import clientConfig from '../../common/clientConfig';
 import { TranslationFormData } from '../../common/TranslationFormData.js';
 import alertErrorMessage from './alertErrorMessage';
 import computeTranslatedStringsData from './computeTranslatedStringsData';
@@ -19,7 +19,7 @@ type SubmitStatus = {
   buildRequestsSucceeded: boolean;
 };
 
-type Message = { [key: string]: string };
+type Message = Record<string, string>;
 
 /**
  * Issue a post request to submit a translation for publication to the PhET website.

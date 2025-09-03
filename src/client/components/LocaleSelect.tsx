@@ -10,15 +10,11 @@ import React, { useContext } from 'react';
 import LoadingSpinner from './LoadingSpinner';
 import { LocaleInfoContext } from './RosettaRoutes';
 
-type LocaleInfo = {
-  [ localeCode: string ]: {
-    name: string;
-  };
-};
+type LocaleInfo = Record<string, {
+  name: string;
+}>;
 
-type FieldProps = {
-  [ key: string ]: string;
-};
+type FieldProps = Record<string, string>;
 
 type LocaleSelectProps = {
   field: FieldProps;

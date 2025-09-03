@@ -30,13 +30,9 @@ type InputErrorMessageProps = {
   isPatternString: boolean;
 };
 
-type ErrorType = {
-  [ keyType: string ]: {
-    [ key: string ]: {
-      translated?: string;
-    };
-  };
-};
+type ErrorType = Record<string, Record<string, {
+  translated?: string;
+}>>;
 
 const InputErrorMessage: React.FC<InputErrorMessageProps> = ( { fieldKey, isPatternString } ): ReactElement | null => {
 

@@ -10,13 +10,11 @@
 import KeyTypesEnum from '../../common/KeyTypesEnum';
 import { TranslationFormData } from '../../common/TranslationFormData.js';
 
-type TranslatedStringsData = {
-  [ key: string ]: {
-    name: string;
-    translated: number;
-    total: number;
-  };
-};
+type TranslatedStringsData = Record<string, {
+  name: string;
+  translated: number;
+  total: number;
+}>;
 
 /**
  * Return an object with data about the translated strings in a translation form.

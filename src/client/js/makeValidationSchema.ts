@@ -16,11 +16,7 @@ import { TranslationFormData } from '../../common/TranslationFormData.js';
 import alertErrorMessage from './alertErrorMessage';
 import isValidBracePattern from './isValidBracePattern';
 
-type ValidationSubObjects = {
-  [ keyType: string ]: {
-    [ stringKey: string ]: Yup.AnyObjectSchema;
-  };
-};
+type ValidationSubObjects = Record<string, Record<string, Yup.AnyObjectSchema>>;
 
 /**
  * Return a Yup schema for validating our Formik translation form.
