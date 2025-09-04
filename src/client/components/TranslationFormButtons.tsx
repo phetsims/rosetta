@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import LoadingSpinner from './LoadingSpinner';
+import LoadingSpinner from './LoadingSpinner.jsx';
 import '../styles/translation-form.css';
 
 // TODO: Should this be in the ClientDataTypes file? https://github.com/phetsims/rosetta/issues/370

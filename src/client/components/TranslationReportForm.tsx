@@ -9,7 +9,7 @@
 import { Field, Form, Formik } from 'formik';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import LocaleSelect from './LocaleSelect';
+import LocaleSelect from './LocaleSelect.jsx';
 
 type FormValues = {
   locale: string;

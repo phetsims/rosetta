@@ -8,14 +8,14 @@
 
 import React, { createContext, ReactElement } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { LocaleInfo, SimNamesAndTitles } from '../ClientDataTypes';
-import useLocaleInfo from '../hooks/useLocaleInfo';
-import useSimNamesAndTitles from '../hooks/useSimNamesAndTitles';
-import Admin from './Admin';
-import RosettaHeader from './RosettaHeader';
-import TranslationForm from './TranslationForm';
-import TranslationReport from './TranslationReport';
-import TranslationReportForm from './TranslationReportForm';
+import { LocaleInfo, SimNamesAndTitles } from '../ClientDataTypes.js';
+import useLocaleInfo from '../hooks/useLocaleInfo.jsx';
+import useSimNamesAndTitles from '../hooks/useSimNamesAndTitles.jsx';
+import Admin from './Admin.jsx';
+import RosettaHeader from './RosettaHeader.jsx';
+import TranslationForm from './TranslationForm.jsx';
+import TranslationReport from './TranslationReport.jsx';
+import TranslationReportForm from './TranslationReportForm.jsx';
 
 const LocaleInfoContext = createContext<LocaleInfo>( {} as LocaleInfo );
 const SimNamesAndTitlesContext = createContext<SimNamesAndTitles>( {} as SimNamesAndTitles );

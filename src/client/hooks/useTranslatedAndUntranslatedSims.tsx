@@ -7,9 +7,9 @@
  */
 
 import { useContext, useEffect, useState } from 'react';
-import { TRANSLATION_API_ROUTE } from '../../common/constants';
-import { LoginStateContext } from '../components/Rosetta';
-import alertErrorMessage from '../js/alertErrorMessage';
+import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
+import { LoginStateContext } from '../components/Rosetta.jsx';
+import alertErrorMessage from '../js/alertErrorMessage.js';
 
 type TranslatedAndUntranslatedSims = {
   translated: string[];

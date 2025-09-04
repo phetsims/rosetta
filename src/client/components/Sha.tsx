@@ -8,9 +8,9 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { TRANSLATION_API_ROUTE } from '../../common/constants';
+import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
 import Xerxes from '../img/xerxes.jpg';
-import alertErrorMessage from '../js/alertErrorMessage';
+import alertErrorMessage from '../js/alertErrorMessage.js';
 
 type ShaResponse = {
   sha: string;

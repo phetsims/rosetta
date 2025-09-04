@@ -8,7 +8,7 @@
 
 import { useEffect, useState } from 'react';
 import { LoginState } from '../../common/LoginState.js';
-import alertErrorMessage from '../js/alertErrorMessage';
+import alertErrorMessage from '../js/alertErrorMessage.js';
 import getLoginState from '../js/getLoginState.js';
 
 /**

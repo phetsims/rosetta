@@ -8,11 +8,11 @@
 
 import React, { ReactElement, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import FlushReportObject from './FlushReportObject';
-import LogCredentials from './LogCredentials';
-import { LoginStateContext } from './Rosetta';
-import Sha from './Sha';
-import TriggerBuild from './TriggerBuild';
+import FlushReportObject from './FlushReportObject.jsx';
+import LogCredentials from './LogCredentials.jsx';
+import { LoginStateContext } from './Rosetta.jsx';
+import Sha from './Sha.jsx';
+import TriggerBuild from './TriggerBuild.jsx';
 
 /**
  * This component is an admin page for Rosetta. It contains information on the running instance of Rosetta, and has the

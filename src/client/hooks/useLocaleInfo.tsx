@@ -7,9 +7,9 @@
  */
 
 import { useEffect, useState } from 'react';
-import { TRANSLATION_API_ROUTE } from '../../common/constants';
-import { LocaleInfo } from '../ClientDataTypes';
-import alertErrorMessage from '../js/alertErrorMessage';
+import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
+import { LocaleInfo } from '../ClientDataTypes.js';
+import alertErrorMessage from '../js/alertErrorMessage.js';
 
 /**
  * Get the locale info from the backend and return it. If the request fails, show an error message.

@@ -8,12 +8,12 @@
 
 import { useField, useFormikContext } from 'formik';
 import React, { ReactElement, useContext } from 'react';
-import { DOUBLE_BRACE_REGEX, SINGLE_BRACE_REGEX } from '../../common/constants';
+import { DOUBLE_BRACE_REGEX, SINGLE_BRACE_REGEX } from '../../common/constants.js';
 import '../styles/table.css';
 import '../styles/translation-form.css';
-import { TranslationFormRowProps } from '../ClientDataTypes';
-import InputErrorMessage from './InputErrorMessage';
-import { LocaleInfoContext } from './RosettaRoutes';
+import { TranslationFormRowProps } from '../ClientDataTypes.js';
+import InputErrorMessage from './InputErrorMessage.jsx';
+import { LocaleInfoContext } from './RosettaRoutes.jsx';
 
 type TextAreaStyle = {
   textAlign: 'left' | 'right';

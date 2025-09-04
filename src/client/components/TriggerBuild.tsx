@@ -10,8 +10,8 @@
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import React, { useContext } from 'react';
 import * as Yup from 'yup';
-import { TRANSLATION_API_ROUTE } from '../../common/constants';
-import { LoginStateContext } from './Rosetta';
+import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
+import { LoginStateContext } from './Rosetta.jsx';
 import '../styles/input-error.css';
 
 type RebuildFormValues = {

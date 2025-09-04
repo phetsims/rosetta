@@ -10,21 +10,21 @@
 import { Form, Formik, FormikHelpers, FormikProps } from 'formik';
 import React, { createContext, ReactElement, useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { TRANSLATION_API_ROUTE } from '../../common/constants';
+import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
 import { TranslationFormData } from '../../common/TranslationFormData.js';
-import { ErrorContextType, LocaleInfo, SimNamesAndTitles } from '../ClientDataTypes';
-import alertErrorMessage from '../js/alertErrorMessage';
-import automateTranslation from '../js/automateTranslation';
-import makeValidationSchema from '../js/makeValidationSchema';
-import saveTranslation from '../js/saveTranslation';
-import submitTranslation from '../js/submitTranslation';
-import testTranslation from '../js/testTranslation';
-import LoadingSpinner from './LoadingSpinner';
-import { LoginStateContext } from './Rosetta';
-import { LocaleInfoContext, SimNamesAndTitlesContext } from './RosettaRoutes';
-import TranslationFormButtons from './TranslationFormButtons';
-import TranslationFormHeader from './TranslationFormHeader';
-import TranslationFormTables from './TranslationFormTables';
+import { ErrorContextType, LocaleInfo, SimNamesAndTitles } from '../ClientDataTypes.js';
+import alertErrorMessage from '../js/alertErrorMessage.js';
+import automateTranslation from '../js/automateTranslation.js';
+import makeValidationSchema from '../js/makeValidationSchema.js';
+import saveTranslation from '../js/saveTranslation.js';
+import submitTranslation from '../js/submitTranslation.js';
+import testTranslation from '../js/testTranslation.js';
+import LoadingSpinner from './LoadingSpinner.jsx';
+import { LoginStateContext } from './Rosetta.jsx';
+import { LocaleInfoContext, SimNamesAndTitlesContext } from './RosettaRoutes.jsx';
+import TranslationFormButtons from './TranslationFormButtons.jsx';
+import TranslationFormHeader from './TranslationFormHeader.jsx';
+import TranslationFormTables from './TranslationFormTables.jsx';
 
 type TranslationFormParams = {
   simName: string;

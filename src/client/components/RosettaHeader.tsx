@@ -7,9 +7,9 @@
  */
 
 import React from 'react';
-import Nav from './Nav';
-import SignOutLink from './SignOutLink';
-import UserInfo from './UserInfo';
+import Nav from './Nav.jsx';
+import SignOutLink from './SignOutLink.jsx';
+import UserInfo from './UserInfo.jsx';
 
 /**
  * Return a "header" (i.e. info) to be shown at the top of every page on the translation

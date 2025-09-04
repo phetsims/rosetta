@@ -8,8 +8,8 @@
  */
 
 import { useEffect, useState } from 'react';
-import { TRANSLATION_API_ROUTE } from '../../common/constants';
-import alertErrorMessage from '../js/alertErrorMessage';
+import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
+import alertErrorMessage from '../js/alertErrorMessage.js';
 
 /**
  * Get the show stats boolean from the backend and return it.

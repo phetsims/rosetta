@@ -7,9 +7,9 @@
  */
 
 import { useContext, useEffect, useState } from 'react';
-import { TRANSLATION_API_ROUTE } from '../../common/constants';
-import ReportObject from '../../common/ReportObject';
-import { LoginStateContext } from '../components/Rosetta';
+import { TRANSLATION_API_ROUTE } from '../../common/constants.js';
+import ReportObject from '../../common/ReportObject.js';
+import { LoginStateContext } from '../components/Rosetta.jsx';
 
 type TranslationReportHookResult = {
   reportPopulated: boolean;

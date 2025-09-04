@@ -8,9 +8,9 @@
 
 import React, { ReactElement, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import useShowStats from '../hooks/useShowStats';
-import { LocaleInfoContext } from './RosettaRoutes';
-import TranslationReportTable from './TranslationReportTable';
+import useShowStats from '../hooks/useShowStats.jsx';
+import { LocaleInfoContext } from './RosettaRoutes.jsx';
+import TranslationReportTable from './TranslationReportTable.jsx';
 
 type TranslationReportParams = {
   locale: string;

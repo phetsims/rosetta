@@ -9,16 +9,16 @@
 import React, { ReactElement, useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ReportObjectSortingKeys } from '../../common/ReportObject.js';
-import useTranslatedAndUntranslatedSims from '../hooks/useTranslatedAndUntranslatedSims';
-import useTranslationReportObjects from '../hooks/useTranslationReportObjects';
-import SortDirectionEnum from '../js/SortDirectionEnum';
-import SortKeyEnum from '../js/SortKeyEnum';
-import { getSortedTranslationReport } from '../js/translationReportData';
-import LoadingSpinner from './LoadingSpinner';
-import NoStatsBanner from './NoStatsBanner';
-import { SimNamesAndTitlesContext } from './RosettaRoutes';
-import SortButton from './SortButton';
-import TranslationReportTableRow from './TranslationReportTableRow';
+import useTranslatedAndUntranslatedSims from '../hooks/useTranslatedAndUntranslatedSims.jsx';
+import useTranslationReportObjects from '../hooks/useTranslationReportObjects.jsx';
+import SortDirectionEnum from '../js/SortDirectionEnum.js';
+import SortKeyEnum from '../js/SortKeyEnum.js';
+import { getSortedTranslationReport } from '../js/translationReportData.js';
+import LoadingSpinner from './LoadingSpinner.jsx';
+import NoStatsBanner from './NoStatsBanner.jsx';
+import { SimNamesAndTitlesContext } from './RosettaRoutes.jsx';
+import SortButton from './SortButton.jsx';
+import TranslationReportTableRow from './TranslationReportTableRow.jsx';
 
 type TranslationReportTableProps = {
   locale: string;

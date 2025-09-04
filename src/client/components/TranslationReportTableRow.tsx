@@ -9,7 +9,7 @@
 import React, { ReactElement } from 'react';
 import { Link } from 'react-router-dom';
 import ReportObject from '../../common/ReportObject.js';
-import StatsInfoButton from './StatsInfoButton';
+import StatsInfoButton from './StatsInfoButton.jsx';
 
 type TranslationReportTableRowProps = {
   item: ReportObject;

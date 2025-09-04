@@ -7,9 +7,9 @@
  */
 
 import React from 'react';
-import KeyTypesEnum from '../../common/KeyTypesEnum';
+import KeyTypesEnum from '../../common/KeyTypesEnum.js';
 import { TranslationFormTablesProps } from '../ClientDataTypes.js';
-import TranslationFormRow from './TranslationFormRow';
+import TranslationFormRow from './TranslationFormRow.jsx';
 
 /**
  * This component has some headers, some info, and a table for sim-specific strings and common strings. The header

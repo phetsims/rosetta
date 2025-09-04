@@ -7,8 +7,8 @@
  */
 
 import React, { useContext } from 'react';
-import LoadingSpinner from './LoadingSpinner';
-import { LocaleInfoContext } from './RosettaRoutes';
+import LoadingSpinner from './LoadingSpinner.jsx';
+import { LocaleInfoContext } from './RosettaRoutes.jsx';
 
 type LocaleInfo = Record<string, {
   name: string;

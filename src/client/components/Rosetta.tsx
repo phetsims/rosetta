@@ -12,11 +12,11 @@
  */
 
 import React, { createContext, ReactElement } from 'react';
-import clientConfig from '../../common/clientConfig';
+import clientConfig from '../../common/clientConfig.js';
 import { LoginState } from '../../common/LoginState.js';
-import useLoginState from '../hooks/useLoginState';
-import PhetHomePageLink from './PhetHomePageLink';
-import RosettaRoutes from './RosettaRoutes';
+import useLoginState from '../hooks/useLoginState.jsx';
+import PhetHomePageLink from './PhetHomePageLink.jsx';
+import RosettaRoutes from './RosettaRoutes.jsx';
 
 const LoginStateContext = createContext<LoginState>( { loggedIn: false } );
 
