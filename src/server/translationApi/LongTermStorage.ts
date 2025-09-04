@@ -42,7 +42,7 @@ class LongTermStorage {
    * @param simOrLibRepo - repository where the strings come from
    * @param locale - ISO 639-1 locale code, e.g. es for Spanish
    * @param branch - phetsims/babel branch to get the translation from
-   * @returns translation file contents for the given repo and locale if it exists or empty object
+   * @returns translation file contents for the given repo and locale if it exists, empty object if not
    */
   public async get(
     simOrLibRepo: string,
