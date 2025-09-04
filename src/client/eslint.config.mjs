@@ -22,7 +22,6 @@ export default [
       'phet/default-import-match-filename': 'off',
       'react/no-unescaped-entities': 'off',
       'react/prop-types': 'off',
-      'phet/import-statement-extension': 'off',
 
       // It isn't clear that rosetta wants to use perennial's node modules via npm-dependencies/. If this isn't true,
       // please see https://github.com/phetsims/perennial/issues/372 and fix in rosetta.
