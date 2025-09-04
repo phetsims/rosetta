@@ -2,8 +2,8 @@
 
 /**
  * Make the client config file that has values the client-side code needs during the build process, like whether the
- * utility is enabled, where to get website user data, whether we're in dev or in production, etc. Once this file is
- * made, the client-side code simply imports it.
+ * utility is enabled, where to get website user data, whether the client is running in a dev or production environment,
+ * etc. Once this file is made, the client-side code simply imports it.
  *
  * IMPORTANT: Never put anything sensitive in this file or the file it produces such as API keys, etc. This file is
  * tracked in version control, and the file it produces is imported in client-side code.
@@ -52,7 +52,7 @@ for ( const key of Object.keys( config ) ) {
 clientConfigString += '};';
 
 // This script is meant to be run from the root of the rosetta repo, hence this file path.
-const pathToClientConfig = './src/common/clientConfig.ts';
+const pathToClientConfig = './src/common/clientConfig.js';
 
 console.log( 'info: making client config file' );
 fs.writeFileSync( pathToClientConfig, clientConfigString );
