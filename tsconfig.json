@@ -1,13 +1,19 @@
 {
   "extends": "../perennial-alias/tsconfig/tsconfig-node.json",
   "include": [
-    "src/common/**/*",
-    "src/server/**/*",
+    "src/**/*",
     "../perennial-alias/js/common/simPhetioMetadata.ts"
+  ],
+  "exclude": [
+    "./src/client/eslint.config.mjs",
+    "./src/client/vite.config.ts"
   ],
   "references": [
     {
       "path": "../perennial-alias/js/browser-and-node/tsconfig.json"
     }
-  ]
+  ],
+  "compilerOptions": {
+    "lib": [ "es2023", "dom" ]
+  }
 }
