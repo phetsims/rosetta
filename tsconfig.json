@@ -5,8 +5,7 @@
     "../perennial-alias/js/common/simPhetioMetadata.ts"
   ],
   "exclude": [
-    "./src/client/eslint.config.mjs",
-    "./src/client/vite.config.ts"
+    "./src/client/eslint.config.mjs"
   ],
   "references": [
     {
