@@ -8,7 +8,9 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Rosetta from './components/Rosetta.jsx';
+
+// eslint-disable-next-line phet/import-statement-extension-js
+import Rosetta from './components/Rosetta.tsx';
 
 ReactDOM.render(
   <Rosetta/>,
