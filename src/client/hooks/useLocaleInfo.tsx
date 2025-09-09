@@ -18,7 +18,7 @@ const useLocaleInfo = (): LocaleInfo => {
   const [ localeInfo, setLocaleInfo ] = useState<LocaleInfo>( {} as LocaleInfo );
 
   useEffect( () => {
-    const fetchLocaleInfo = async (): Promise<void> => {
+    ( async (): Promise<void> => {
       try {
         const response = await fetch( `${TRANSLATION_API_ROUTE}/localeInfo` );
         if ( !response.ok ) {
@@ -28,11 +28,10 @@ const useLocaleInfo = (): LocaleInfo => {
         setLocaleInfo( data );
       }
       catch( e ) {
-        void alertErrorMessage( e as string );
+        await alertErrorMessage( e as string );
       }
-    };
+    } )();
 
-    void fetchLocaleInfo();
   }, [] );
 
   return localeInfo;

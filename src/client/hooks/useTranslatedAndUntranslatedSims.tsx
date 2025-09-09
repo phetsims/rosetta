@@ -24,7 +24,7 @@ const useTranslatedAndUntranslatedSims = ( locale: string ): TranslatedAndUntran
   const [ translatedAndUntranslatedSims, setTranslatedAndUntranslatedSims ] = useState<TranslatedAndUntranslatedSims>( null );
 
   useEffect( () => {
-    const fetchTranslatedAndUntranslatedSims = async (): Promise<void> => {
+    ( async (): Promise<void> => {
       try {
         const response = await fetch(
           `${TRANSLATION_API_ROUTE}/translatedAndUntranslatedSims/${locale}?isTeamMember=${loginState.isTeamMember}`
@@ -36,11 +36,10 @@ const useTranslatedAndUntranslatedSims = ( locale: string ): TranslatedAndUntran
         setTranslatedAndUntranslatedSims( data );
       }
       catch( e ) {
-        void alertErrorMessage( e as string );
+        await alertErrorMessage( e as string );
       }
-    };
+    } )();
 
-    void fetchTranslatedAndUntranslatedSims();
   }, [ loginState, locale ] );
 
   return translatedAndUntranslatedSims;

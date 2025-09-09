@@ -21,7 +21,7 @@ const useShowStats = (): boolean => {
   const [ showStats, setShowStats ] = useState<boolean>( false );
 
   useEffect( () => {
-    const fetchShowStats = async (): Promise<void> => {
+    ( async (): Promise<void> => {
       try {
         const response = await fetch( `${TRANSLATION_API_ROUTE}/showStats` );
         if ( !response.ok ) {
@@ -31,11 +31,10 @@ const useShowStats = (): boolean => {
         setShowStats( data );
       }
       catch( e ) {
-        void alertErrorMessage( e as string );
+        await alertErrorMessage( e as string );
       }
-    };
+    } )();
 
-    void fetchShowStats();
   }, [] );
 
   return showStats;

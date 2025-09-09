@@ -74,12 +74,12 @@ const TranslationFormRow: React.FC<TranslationFormRowProps> = ( props ): ReactEl
   };
   const handleAiDeny = () => {
     // Clear the translation and the pending AI flag upon denial
-    void setFieldValue( props.name, '' );
-    void setFieldValue( `${objPath}.aiTranslated`, false );
+    setFieldValue( props.name, '' );
+    setFieldValue( `${objPath}.aiTranslated`, false );
   };
 
   const handleCopyButtonClick = () => {
-    void setFieldValue( field.name, props.englishString );
+    setFieldValue( field.name, props.englishString );
   };
 
   return (

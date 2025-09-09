@@ -18,16 +18,15 @@ const useLoginState = (): LoginState => {
   const [ loginState, setLoginState ] = useState<LoginState>( {} as LoginState );
 
   useEffect( () => {
-    const fetchLoginState = async (): Promise<void> => {
+    ( async (): Promise<void> => {
       try {
         setLoginState( await getLoginState() );
       }
       catch( e ) {
-        void alertErrorMessage( e as string );
+        await alertErrorMessage( e as string );
       }
-    };
+    } )();
 
-    void fetchLoginState();
   }, [] );
 
   return loginState;

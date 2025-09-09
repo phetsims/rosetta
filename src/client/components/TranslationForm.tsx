@@ -44,7 +44,7 @@ const TranslationForm: React.FC = (): ReactElement => {
   const [ translationFormData, setTranslationFormData ] = useState<TranslationFormData | null>( null );
 
   useEffect( () => {
-    const fetchData = async (): Promise<void> => {
+    ( async (): Promise<void> => {
       try {
         const response = await fetch( `${TRANSLATION_API_ROUTE}/translationFormData/${params.simName}/${params.locale}?userId=${loginState.phetUserId}` );
         if ( response.ok ) {
@@ -56,11 +56,9 @@ const TranslationForm: React.FC = (): ReactElement => {
         }
       }
       catch( e ) {
-        void alertErrorMessage( e as string );
+        await alertErrorMessage( e as string );
       }
-    };
-
-    void fetchData();
+    } )();
   }, [ params.simName, params.locale, loginState.phetUserId ] );
 
   const [ isDisabled, setIsDisabled ] = useState<boolean>( false );
@@ -143,7 +141,7 @@ const TranslationForm: React.FC = (): ReactElement => {
               setAiTranslatedFields( new Set() );
 
               const aiSetFieldValue = ( field: string, value: string | boolean ): void => {
-                void setFieldValue( field, value );
+                setFieldValue( field, value );
                 setAiTranslatedFields( prev => new Set( [ ...prev, field ] ) );
               };
 

@@ -22,7 +22,7 @@ const useSimNamesAndTitles = (): SimNamesAndTitles => {
   const [ simNamesAndTitles, setSimNamesAndTitles ] = useState<SimNamesAndTitles>( {} as SimNamesAndTitles );
 
   useEffect( () => {
-    const fetchSimNamesAndTitles = async (): Promise<void> => {
+    ( async (): Promise<void> => {
       try {
         const response = await fetch( `${TRANSLATION_API_ROUTE}/simNamesAndTitles?isTeamMember=${loginState.isTeamMember}` );
         if ( !response.ok ) {
@@ -32,11 +32,10 @@ const useSimNamesAndTitles = (): SimNamesAndTitles => {
         setSimNamesAndTitles( data );
       }
       catch( e ) {
-        void alertErrorMessage( e as string );
+        await alertErrorMessage( e as string );
       }
-    };
+    } )();
 
-    void fetchSimNamesAndTitles();
   }, [ loginState ] );
 
   return simNamesAndTitles;
