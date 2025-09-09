@@ -19,6 +19,7 @@ type TextAreaStyle = {
   textAlign: 'left' | 'right';
   color: string;
   resize: 'both';
+  direction: 'ltr';
 };
 
 /**
@@ -55,7 +56,8 @@ const TranslationFormRow: React.FC<TranslationFormRowProps> = ( props ): ReactEl
   const textAreaStyle: TextAreaStyle = {
     textAlign: direction === 'rtl' ? 'right' : 'left',
     color: aiPending ? 'orange' : ( isPatternString ? 'blue' : 'black' ),
-    resize: 'both' as const
+    resize: 'both' as const,
+    direction: 'ltr' as const
   };
 
   // Formik has a handful of props that it needs on inputs.
