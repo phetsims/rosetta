@@ -73,7 +73,6 @@ const makeValidationSchema = (
     validationSchema = Yup.object().shape( validationObject );
   }
   catch( e ) {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     alertErrorMessage( e as string );
     validationSchema = { error: 'unable to make validation schema' };
   }

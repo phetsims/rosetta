@@ -23,7 +23,7 @@ const Sha: React.FC = () => {
   const [ sha, setSha ] = useState<ShaResponse | null>( null );
 
   useEffect( () => {
-    const fetchSha = async (): Promise<void> => {
+    ( async (): Promise<void> => {
       try {
         const response = await fetch( `${TRANSLATION_API_ROUTE}/sha` );
         if ( !response.ok ) {
@@ -33,11 +33,10 @@ const Sha: React.FC = () => {
         setSha( data );
       }
       catch( e ) {
-        void alertErrorMessage( e as string );
+        await alertErrorMessage( e as string );
       }
-    };
+    } )();
 
-    void fetchSha();
   }, [] );
 
   return (

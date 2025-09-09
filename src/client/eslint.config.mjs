@@ -27,11 +27,8 @@ export default [
       // please see https://github.com/phetsims/perennial/issues/372 and fix in rosetta.
       'no-restricted-imports': 'off',
 
-      // Added for client to pass linting https://github.com/phetsims/rosetta/issues/370
-      'no-undef': 'off',
-
-      // Added for client to pass linting https://github.com/phetsims/rosetta/issues/370
-      'no-void': 'off'
+      // We need to leave floating promises in rosetta, because we call async functions from React's useEffect
+      '@typescript-eslint/no-floating-promises': 'off'
     },
     settings: {
       react: {
