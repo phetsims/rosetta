@@ -7,7 +7,7 @@
  */
 
 import { useField, useFormikContext } from 'formik';
-import React, { ReactElement, useContext } from 'react';
+import React, { ReactElement, useContext, useState } from 'react';
 import { DOUBLE_BRACE_REGEX, SINGLE_BRACE_REGEX } from '../../common/constants.js';
 import '../styles/table.css';
 import '../styles/translation-form.css';
@@ -84,12 +84,50 @@ const TranslationFormRow: React.FC<TranslationFormRowProps> = ( props ): ReactEl
     setFieldValue( field.name, props.englishString );
   };
 
+  // State for RTL checkbox
+  const [isRtl, setIsRtl] = useState(true);
+
+  // Unicode characters for directional isolation
+  const LTR_ISOLATE = '\u2066';
+  const POP_DIRECTIONAL_ISOLATE = '\u2069';
+
+  // Function to wrap text with Unicode directional characters
+  const wrapWithDirectionalChars = (text: string): string => {
+    return LTR_ISOLATE + text + POP_DIRECTIONAL_ISOLATE;
+  };
+
+  // Function to remove directional characters from text
+  const removeDirectionalChars = (text: string): string => {
+    return text.replaceAll(/[\u2066\u2069]/g, '');
+  };
+
+  // Handle RTL checkbox change
+  const handleRtlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checked = e.target.checked;
+    setIsRtl(checked);
+    
+    const currentValue = field.value || '';
+    let newValue: string;
+    
+    if (checked) {
+      // If checking RTL, remove directional characters
+      newValue = removeDirectionalChars(currentValue);
+    } else {
+      // If unchecking RTL, add directional characters
+      const cleanValue = removeDirectionalChars(currentValue);
+      newValue = wrapWithDirectionalChars(cleanValue);
+    }
+    
+    setFieldValue(field.name, newValue);
+  };
+
   return (
     <tr style={{ display: shouldHide ? 'none' : 'table-row' }}>
       <td style={{ width: '50px', textAlign: 'center', whiteSpace: 'nowrap' }}>
         <input
           type='checkbox'
-          defaultChecked={true}
+          checked={isRtl}
+          onChange={handleRtlChange}
           style={{ transform: 'scale(2)' }}
         />
       </td>
