@@ -86,6 +86,13 @@ const TranslationFormRow: React.FC<TranslationFormRowProps> = ( props ): ReactEl
 
   return (
     <tr style={{ display: shouldHide ? 'none' : 'table-row' }}>
+      <td style={{ width: '50px', textAlign: 'center', whiteSpace: 'nowrap' }}>
+        <input
+          type='checkbox'
+          defaultChecked={true}
+          style={{ transform: 'scale(2)' }}
+        />
+      </td>
       <td style={stringKeyStyle}>{props.stringKey}</td>
       <td style={englishStringStyle}>{props.englishString}</td>
 
