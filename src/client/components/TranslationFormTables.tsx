@@ -72,9 +72,10 @@ const TranslationFormTables: React.FC<TranslationFormTablesProps> = props => {
     <div className='mt-2'>
       <h2>Shared Strings</h2>
       <h4 className='text-muted'>Translating these strings will affect a handful of simulations.</h4>
-      <table className='table table-striped'>
+      <table className='table table-striped' style={{ tableLayout: 'fixed' }}>
         <thead>
         <tr>
+          <th style={{width:'50px'}}>RTL</th>
           <th>String Key</th>
           <th>English String</th>
           <th>Translation</th>
@@ -95,9 +96,10 @@ const TranslationFormTables: React.FC<TranslationFormTablesProps> = props => {
         <h2>Sim-Specific Strings</h2>
         {props.translationFormData.simIsPrototype ? prototypeWarningJsx : <></>}
         <h4 className='text-muted'>Translating these strings will only affect the selected simulation.</h4>
-        <table className='table table-striped'>
+        <table className='table table-striped' style={{ tableLayout: 'fixed' }}>
           <thead>
           <tr>
+            <th style={{width:'50px'}}>RTL</th>
             <th>String Key</th>
             <th>English String</th>
             <th>Translation</th>
@@ -114,9 +116,10 @@ const TranslationFormTables: React.FC<TranslationFormTablesProps> = props => {
       <div className='mt-2'>
         <h2>Common Strings</h2>
         <h4 className='text-muted'>Translating these strings will affect many simulations.</h4>
-        <table className='table table-striped'>
+        <table className='table table-striped' style={{ tableLayout: 'fixed' }}>
           <thead>
           <tr>
+            <th style={{width:'50px'}}>RTL</th>
             <th>String Key</th>
             <th>English String</th>
             <th>Translation</th>

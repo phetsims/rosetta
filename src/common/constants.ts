@@ -75,6 +75,8 @@ export const SIMS_FOR_SHORT_REPORT = [
   'states-of-matter',
   'atomic-interactions',
 
+  'number-line-operations',
+
   // chains and example-sim are omitted as of Jan 9 2024 because there aren't published string map files for them
   'chains'
   // 'example-sim'
