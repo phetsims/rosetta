@@ -16,7 +16,7 @@
     "debug": "npm run make-client-config && npm run build --workspace=client && bash ../perennial-alias/bin/sage run --inspect src/server/app.ts",
     "make-client-config": "bash ../perennial-alias/bin/sage run ./scripts/js/make-client-config-file.mjs",
     "dev": "npm run make-client-config && npm run lint && npm run type-check && concurrently \"npm run dev --workspace=client\" \"npm run dev-node\"",
-    "start": "npm run make-client-config && npm run lint && npm run type-check && npm run build --workspace=client && npm run start-node",
+    "start": "npm run make-client-config && npm run type-check && npm run build --workspace=client && npm run start-node",
     "prod": "npm run make-client-config && npm run build --workspace=client && npm run start-node",
     "update-dependencies": "node ./scripts/js/update-dependencies.js"
   },
