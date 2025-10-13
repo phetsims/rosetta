@@ -46,13 +46,20 @@ export type UnpublishedSimInfo = {
   simResourceUrl: string;
 };
 
-// List of unpublished sims that we want to include in the list of translatable sims.
+// Define a list of unpublished sims that we want to include in the list of translatable sims.  This is here to support
+// experimenting with translation of a sim prior to its publication.  For more information on why this is here, see
+// https://github.com/phetsims/rosetta/issues/465.
+//
+// **IMPORTANT**: If you use this, make sure to log and issue and put a "to do" marker in the code here so that it is
+// removed when the sim is published.
 export const UNPUBLISHED_SIMS_TO_INCLUDE: UnpublishedSimInfo[] = [
-  {
-    name: 'membrane-transport',
-    title: 'Membrane Transport',
-    simResourceUrl: 'https://phet-dev.colorado.edu/html/membrane-transport/1.0.0-dev.10/phet/'
-  }
+
+  // Below is a commented-out example of how to include an unpublished sim for reference.
+  // {
+  //   name: 'membrane-transport',
+  //   title: 'Membrane Transport',
+  //   simResourceUrl: 'https://phet-dev.colorado.edu/html/membrane-transport/1.0.0-dev.10/phet/'
+  // }
 ];
 
 // List of the sims included in the short report, which is used for debugging.

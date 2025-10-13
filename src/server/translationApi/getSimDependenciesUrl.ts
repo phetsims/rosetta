@@ -6,7 +6,7 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import { UNPUBLISHED_SIMS_TO_INCLUDE } from '../../common/constants.js';
+import { UNPUBLISHED_SIMS_TO_INCLUDE, UnpublishedSimInfo } from '../../common/constants.js';
 import config from '../../common/config.js';
 import { Brand } from './getDependencies.js';
 import logger from './logger.js';
@@ -27,8 +27,12 @@ const getSimDependenciesUrl = ( simName: string, version: string, brand: Brand =
     brand = 'phet'; // Default to 'phet' if an invalid brand is provided.
   }
 
-  // See if this is an unpublished sim and if so, get the information needed to fulfil this request.
-  const unpublishedSimInfo = UNPUBLISHED_SIMS_TO_INCLUDE.find( simInfo => simInfo.name === simName ) || null;
+  // See if this is an unpublished sim and if so, get the information needed to fulfil this request.  This only works
+  // in the development environment.
+  let unpublishedSimInfo: UnpublishedSimInfo | null = null;
+  if ( config.ENVIRONMENT === 'development' ) {
+    unpublishedSimInfo = UNPUBLISHED_SIMS_TO_INCLUDE.find( simInfo => simInfo.name === simName ) || null;
+  }
 
   let dependenciesUrl;
   if ( unpublishedSimInfo ) {
