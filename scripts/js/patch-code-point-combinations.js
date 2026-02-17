@@ -5,7 +5,7 @@
  *
  * See https://github.com/phetsims/website-meteor/issues/656#issuecomment-1970099190
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 // imports
