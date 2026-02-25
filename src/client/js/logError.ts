@@ -3,7 +3,7 @@
 /**
  * Sends an error message to the server.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import { TRANSLATION_API_ROUTE } from '../../common/constants.js';

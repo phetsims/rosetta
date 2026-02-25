@@ -3,7 +3,7 @@
 /**
  * Shared type definitions for the data structures used in the Rosetta client.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  * @author John Blanco (PhET Interactive Simulations)
  */
 

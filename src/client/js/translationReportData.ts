@@ -3,7 +3,7 @@
 /**
  * Utility function to handle the translation report data
  *
- * @author Agustín Vallejo + Gemini 2.5
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import ReportObject, { ReportObjectSortingKeys } from '../../common/ReportObject.js';

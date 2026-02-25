@@ -8,7 +8,7 @@
  *
  * TODO: Include AI model in the cache! https://github.com/phetsims/rosetta/issues/451
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import { Locale, RepoName } from '../../../common/TypeAliases.js';

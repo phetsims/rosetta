@@ -3,7 +3,7 @@
 /**
  * Creates an automatic translation of the text using the server-side automated translation endpoint.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 

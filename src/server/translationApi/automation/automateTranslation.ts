@@ -2,7 +2,7 @@
 /**
  * Automatically translate a given text using OpenAI's API.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 

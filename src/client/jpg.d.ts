@@ -3,7 +3,7 @@
 /**
  * Module declaration for importing JPG files.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 declare module '*.jpg' {

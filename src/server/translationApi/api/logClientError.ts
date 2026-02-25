@@ -3,7 +3,7 @@
 /**
  * Logs errors that are coming from the client
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import { Request, Response } from 'express';
