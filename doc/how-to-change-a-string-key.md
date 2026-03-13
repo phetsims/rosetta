@@ -128,7 +128,7 @@ keys, and several can be changed at once if necessary.
   process, and is well beyond the scope of this document, so please refer to
   https://github.com/phetsims/perennial/blob/main/doc/automated-maintenance-process.md, and you'll also probably need to
   consult with @jonathanolson.
-- [ ] Publish the maintanance releases. Make sure that you don't move to the next step until this is complete.
+- [ ] Publish the maintenance releases. Make sure that you don't move to the next step until this is complete.
 - [ ] Take Rosetta out of maintenance mode (again, see the
   [Admin Guide](https://github.com/phetsims/rosetta/blob/main/doc/admin-guide.md) for information on how to do this).
 - [ ] Verify that the string key change worked by going to Rosetta (https://phet.colorado.edu/translate/), selecting a
