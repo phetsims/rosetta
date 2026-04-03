@@ -56,7 +56,7 @@ const makeValidationSchema = (
             const placeholderErrorMessage = 'Curly brace pattern does not match English version.';
             subObjects[ keyType ][ stringKey ] = Yup.object( {
               translated: Yup.string().test( 'validBracePattern', placeholderErrorMessage, function foo( value ) {
-                return isValidBracePattern( value!, englishValue );
+                return isValidBracePattern( value ?? '', englishValue );
               } )
             } );
           }

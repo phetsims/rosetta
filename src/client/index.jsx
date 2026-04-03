@@ -7,13 +7,11 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 // Since index.jsx is not compiled, we need to import the .tsx file directly.
 // eslint-disable-next-line phet/import-statement-extension-js
 import Rosetta from './components/Rosetta.tsx';
 
-ReactDOM.render(
-  <Rosetta/>,
-  document.getElementById( 'root' )
-);
+const root = createRoot( document.getElementById( 'root' ) );
+root.render( <Rosetta/> );

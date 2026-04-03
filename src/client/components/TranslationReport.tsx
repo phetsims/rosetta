@@ -23,13 +23,13 @@ type TranslationReportParams = {
 const TranslationReport: React.FC = (): ReactElement => {
 
   // Get URL params. (Need locale from params.)
-  const params = useParams<TranslationReportParams>();
+  const { locale = '' } = useParams<TranslationReportParams>();
 
   // Tell user what locale they are seeing the report for.
   const localeInfo = useContext( LocaleInfoContext );
   let localeName = 'Loading...';
   if ( Object.keys( localeInfo ).length > 0 ) {
-    localeName = localeInfo[ params.locale! ].name;
+    localeName = localeInfo[ locale ].name;
   }
 
   // Determine whether we have enough GitHub API requests to show stats.
@@ -43,7 +43,7 @@ const TranslationReport: React.FC = (): ReactElement => {
     <div>
       {/* Unpublished sims */}
       <TranslationReportTable
-        locale={params.locale!}
+        locale={locale}
         wantsUntranslated={true}
         localeName={localeName}
         showStats={showStats}
@@ -51,7 +51,7 @@ const TranslationReport: React.FC = (): ReactElement => {
 
       {/* Published sims */}
       <TranslationReportTable
-        locale={params.locale!}
+        locale={locale}
         wantsUntranslated={false}
         localeName={localeName}
         showStats={showStats}
