@@ -4,7 +4,6 @@
 clientConfig.js
 dist
 node_modules
-package-lock.json
 publicConfig.js
 publicConfig.ts
 simMetadata.json
