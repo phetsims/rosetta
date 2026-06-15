@@ -20,7 +20,7 @@
     "prod": "npm run make-client-config && npm run build --workspace=client && npm run start-node",
     "update-dependencies": "node ./scripts/js/update-dependencies.js"
   },
-  "devDependencies": {
+  "dependencies": {
     "@babel/core": "~7.20.12",
     "concurrently": "~8.0.1",
     "grunt": "~1.5.3",

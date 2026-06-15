@@ -7,7 +7,7 @@
     "dev": "vite build --minify=false --watch",
     "build": "vite build"
   },
-  "devDependencies": {
+  "dependencies": {
     "@babel/preset-react": "^7.28.0",
     "@types/react": "^18.x",
     "@vitejs/plugin-react": "^5.0.0",
