@@ -1,21 +1,23 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * Create a function that checks whether a given translated value in the translation form has a valid brace pattern.
- * The brace patterns are used in PhET sims for strings that can be filled in with variables.
+ * Utility function, see function header for details.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import { DOUBLE_BRACE_REGEX, SINGLE_BRACE_REGEX, TRIPLE_BRACE_REGEX } from '../../common/constants.js';
 
 /**
- * Return a boolean telling whether a given value has a valid brace pattern.
+ * Return a boolean value indicating whether a given value has a valid brace pattern.
+ * @param translatedValue - The translated string, or undefined if no translation was supplied.
+ * @param englishValue - The English version of the string pattern.
  */
-const isValidBracePattern = ( translatedValue: string, englishValue: string ): boolean => {
+const isValidBracePattern = ( translatedValue: string | undefined, englishValue: string ): boolean => {
   if ( translatedValue === undefined ) {
 
-    // If the user hasn't supplied a translation yet.  This is considered valid.
+    // The user hasn't supplied a translation yet. This is considered valid.
     return true;
   }
 

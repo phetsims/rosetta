@@ -106,6 +106,7 @@ const TranslationForm: React.FC = (): ReactElement => {
     );
   }
   else {
+
     // Make the Formik form validation schema.
     const validationSchema = makeValidationSchema( params.simName || '', translationFormData );
     translationFormJsx = (
