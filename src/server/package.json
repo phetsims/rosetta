@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@octokit/rest": "~19.0.7",
+    "@octokit/rest": "~22.0.1",
     "@types/cors": "~2.8.5",
     "@types/express": "~4.17.1",
     "body-parser": "~1.20.1",
