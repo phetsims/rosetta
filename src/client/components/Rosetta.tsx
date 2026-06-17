@@ -81,7 +81,7 @@ const Rosetta: React.FC = (): ReactElement => {
       <div className='container m-5'>
         <h1>PhET Translation Utility (HTML5)</h1>
         <p>
-          The PhET translation utility is currently down for maintenance, please try again later.
+          The translation utility is down for maintenance.
         </p>
         <PhetHomePageLink/>
       </div>
