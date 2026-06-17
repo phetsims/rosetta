@@ -21,9 +21,12 @@
     "update-dependencies": "node ./scripts/js/update-dependencies.js"
   },
   "dependencies": {
-    "@babel/core": "~7.20.12",
+    "@babel/core": "~7.29.7",
     "concurrently": "~8.0.1",
     "grunt": "~1.5.3",
     "winston": "~3.8.2"
+  },
+  "overrides": {
+    "minimatch": "^3.1.4"
   }
 }
