@@ -162,7 +162,7 @@ async function fetchMetadata(): Promise<SimMetadata> {
 }
 
 /**
- * Return the sim metadata object. Update it if it is stale, otherwise use cached sim metadata.
+ * Return the sim metadata object. Update it if it is stale, otherwise use cached version.
  *
  * @returns A promise resolving to the sim metadata
  * @throws Error if the metadata cannot be retrieved

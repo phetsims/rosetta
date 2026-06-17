@@ -7,24 +7,13 @@
  * @author Liam Mulhall
  */
 
+import { BuildServerRequest, SupportedBuildServerBrand } from '../../../../perennial-alias/js/browser-and-node/PerennialTypes.js';
 import config from '../../common/config.js';
-import getDependencies from './getDependencies.js';
+import getBuildInfo from './getBuildInfo.js';
 import getSimPhetioMetadata from './getSimPhetioMetadata.js';
 import getSimVersionObject from './getSimVersionObject.js';
 import logger from './logger.js';
-import { SimPhetioMetadata } from './SimMetadataTypes.js';
-
-type BuildRequestObject = {
-  api: string;
-  dependencies: string;
-  simName: string;
-  version: string;
-  locales: string[];
-  servers: string[];
-  brands: string[];
-  translatorId: number;
-  authorizationCode: string;
-};
+import { MetadataSimVersion, SimPhetioMetadata } from './SimMetadataTypes.js';
 
 /**
  * Request one or more translation builds from the PhET build server.
@@ -42,16 +31,16 @@ const requestBuilds = async ( simName: string,
   const currentSimVersionObject = await getSimVersionObject( simName );
   logger.info( `latest version of the sim: ${currentSimVersionObject.string}.` );
 
-  const buildRequestObjects: BuildRequestObject[] = [];
+  const buildRequestObjects: BuildServerRequest[] = [];
 
   // Add the build request for the phet brand version of the sim.
   buildRequestObjects.push(
     await createBuildRequestObject(
       simName,
-      currentSimVersionObject.string,
+      currentSimVersionObject,
       locale,
       [ 'phet' ],
-      userId
+      String( userId )
     )
   );
 
@@ -92,25 +81,31 @@ const requestBuilds = async ( simName: string,
       // The phet-io version is different from the current version, so we need to create a separate build request object
       // for it.
       const simVersionString = `${metadataElement.versionMajor}.${metadataElement.versionMinor}.${metadataElement.versionMaintenance}`;
-
+      const simVersion: MetadataSimVersion = {
+        string: simVersionString,
+        major: metadataElement.versionMajor,
+        minor: metadataElement.versionMinor,
+        dev: metadataElement.versionMaintenance,
+        timestamp: Date.parse( metadataElement.timestamp )
+      };
       buildRequestObjects.push(
         await createBuildRequestObject(
           simName,
-          simVersionString,
+          simVersion,
           locale,
           [ 'phet-io' ],
-          userId
+          String( userId )
         )
       );
     }
   }
 
-  // Log the build request objects, excluding the authorization code and dependencies for security and brevity reasons.
-  buildRequestObjects.forEach( ( bro, index ) => {
+  // Log the build request objects, excluding the authorization code and for security reasons.
+  buildRequestObjects.forEach( ( buildRequestObject, index ) => {
     logger.info( `build request object ${index + 1} of ${buildRequestObjects.length}:` );
-    for ( const key in bro ) {
-      if ( key !== 'authorizationCode' && key !== 'dependencies' ) {
-        logger.info( `  ${key}: ${JSON.stringify( bro[ key as keyof BuildRequestObject ] )}` );
+    for ( const key in buildRequestObject ) {
+      if ( key !== 'authorizationCode' ) {
+        logger.info( `  ${key}: ${JSON.stringify( buildRequestObject[ key as keyof BuildServerRequest ] )}` );
       }
     }
   } );
@@ -160,22 +155,23 @@ const requestBuilds = async ( simName: string,
 };
 
 const createBuildRequestObject = async ( simName: string,
-                                         versionString: string,
+                                         version: MetadataSimVersion,
                                          locale: string,
-                                         brands: string[],
-                                         userId: number ): Promise<BuildRequestObject> => {
+                                         brands: SupportedBuildServerBrand[],
+                                         userId: string ): Promise<BuildServerRequest> => {
 
   const brandForDependencies = brands.includes( 'phet' ) ? 'phet' : 'phet-io';
-  const dependencies = await getDependencies( simName, versionString, brandForDependencies );
+  const buildInfo = await getBuildInfo( simName, version.string, brandForDependencies );
   return {
-    api: '2.0',
-    dependencies: dependencies,
+    api: '3.0',
+    totalitySHA: buildInfo.totalitySHA,
+    branchVersion: `${version.major.toString()}.${version.minor.toString()}`,
     simName: simName,
-    version: versionString,
-    locales: [ locale ],
+    versionString: version.string,
+    locales: locale,
     servers: [ 'production' ],
     brands: brands,
-    translatorId: userId,
+    userId: userId,
     authorizationCode: config.BUILD_SERVER_AUTH
   };
 };

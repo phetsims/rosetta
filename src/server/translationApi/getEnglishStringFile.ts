@@ -26,17 +26,17 @@ type EnglishStringFileContents = Record<StringKey, PotentiallyNestedStringValue>
 /**
  * Get the contents of the English language string file for a given repo and, optionally, the specified branch.
  *
- * @param simOrLibRepo - repository where the strings come from
+ * @param simOrLibName - name of the sim or library whose English strings are requested
  * @param [ref] - branch or SHA of commit to get the string file from
  * @returns string file contents
  */
-const getEnglishStringFile = async ( simOrLibRepo: string, ref = 'main' ): Promise<EnglishStrings> => {
+const getEnglishStringFile = async ( simOrLibName: string, ref = 'main' ): Promise<EnglishStrings> => {
   let stringFile = {};
   try {
     const response = await octokit.repos.getContent( {
       owner: 'phetsims',
-      repo: simOrLibRepo,
-      path: `${simOrLibRepo}-strings_en.json`,
+      repo: 'totality',
+      path: `${simOrLibName}/${simOrLibName}-strings_en.json`,
       ref: ref
     } );
     if ( 'content' in response.data && response.data.content ) {

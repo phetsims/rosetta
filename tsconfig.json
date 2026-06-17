@@ -2,7 +2,7 @@
   "extends": "../perennial-alias/tsconfig/tsconfig-node.json",
   "include": [
     "src/**/*",
-    "../perennial-alias/js/common/simPhetioMetadata.ts"
+    "../perennial-alias/js/browser-and-node/PerennialTypes.ts"
   ],
   "exclude": [
     "./src/client/eslint.config.mjs"

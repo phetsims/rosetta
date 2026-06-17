@@ -1,23 +1,23 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * Get the SHA of the most recently published (latest) version of a sim.
+ * Utility function, see function header for details.
  *
  * @author Liam Mulhall <liammulh@gmail.com>
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
-import getDependencies from './getDependencies.js';
+import getBuildInfo from './getBuildInfo.js';
 
 /**
- * Return the SHA of the most recently published (latest) version of the supplied sim.
+ * Return the SHA of the most recently published (latest) version of the specified sim.
  *
  * @param simName - lowercase kebab case sim name, e.g. acid-base-solutions
  * @returns the SHA as a string
  */
 const getLatestSimSha = async ( simName: string ): Promise<string> => {
-  const depsString = await getDependencies( simName, 'latest' );
-  const depsObject = JSON.parse( depsString );
-  return depsObject[ simName ].sha;
+  const buildInfo = await getBuildInfo( simName, 'latest' );
+  return buildInfo.totalitySHA;
 };
 
 export default getLatestSimSha;
