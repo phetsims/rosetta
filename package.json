@@ -3,6 +3,9 @@
   "private": true,
   "type": "module",
   "version": "2.0.7",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "workspaces": [
     "src/client",
     "src/server",
