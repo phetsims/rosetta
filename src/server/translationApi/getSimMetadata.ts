@@ -195,7 +195,16 @@ const getSimMetadata = async (): Promise<SimMetadata> => {
   }
   catch( error ) {
     logger.error( `getSimMetadata failed, error = ${error}` );
-    throw error;
+    if ( latestSimMetadata ) {
+      logger.info( '  using previously obtained metadata' );
+      data = latestSimMetadata;
+    }
+    else {
+      logger.info( '  using empty metadata, Rosetta will not function properly' );
+      data = {
+        projects: []
+      };
+    }
   }
 
   return data;
