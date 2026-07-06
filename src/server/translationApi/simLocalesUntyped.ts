@@ -4,7 +4,7 @@
  * To generate this file, run the "Generate Locale Info" file on the main phet.colorado.edu admin page. Then copy that
  * file here, replacing the contents of simLocalesUntyped. Use IntelliJ to automatically fix the lint errors and auto-format.
  *
- * TODO: See https://github.com/phetsims/rosetta/issues/452.  This was copied from the website-common repo, and should
+ * TODO: See https://github.com/phetsims/rosetta/issues/452.  This was copied from the website-singularity repo (in the website-common package), and should
  *       eventually reference that file instead of using a copied version.
  *
  * @author John Blanco (PhET Interactive Simulations)
