@@ -73,7 +73,7 @@ keys, and several can be changed at once if necessary.
 - [ ] Determine all places where the string is used. If it is used in another sim, you'll need to do a maintenance
   release.
 - [ ] Put Rosetta into maintenance mode to avoid any translation submissions while this is in progress (see the
-  [Admin Guide](https://github.com/phetsims/rosetta/blob/main/doc/admin-guide.md) for information on how to do this).
+  [Admin Guide](admin-guide.md) for information on how to do this).
 - [ ] Change the value of the string key on main. This will need to be done in the string file and at all usage sites.
 - [ ] Run `grunt update` in the repo with the changed string to update the conglomerate string files.
 - [ ] Build the sim and verify that there are no string errors, then test the built sim and verify the string looks
@@ -97,7 +97,7 @@ keys, and several can be changed at once if necessary.
 - [ ] If there are previous phet-io releases of this sim that are still active, you'll need to change the string keys on
   each of the branches where it exists and do a maintenance release off of that branch.
 - [ ] Take Rosetta out of maintenance mode (again, see the
-  [Admin Guide](https://github.com/phetsims/rosetta/blob/main/doc/admin-guide.md) for information on how to do this).
+  [Admin Guide](admin-guide.md) for information on how to do this).
 - [ ] Verify that the string key change worked by going to Rosetta (https://phet.colorado.edu/translate/), selecting the
   simulation for which the update or updates were made, choosing a locale for which a translation exists, pressing "Go",
   and verifying that the old string key is gone, the new one is shown, and the value of the new one is correct. Do this
@@ -119,18 +119,18 @@ keys, and several can be changed at once if necessary.
 - [ ] For later verification, make a record of the string key that is changing and its value for at least one
   translation and simulation (bonus points for doing multiple translations).
 - [ ] Put Rosetta into maintenance mode to avoid any translation submissions while this is in progress (see the
-  [Admin Guide](https://github.com/phetsims/rosetta/blob/main/doc/admin-guide.md) for information on how to do this).
+  [Admin Guide](admin-guide.md) for information on how to do this).
 - [ ] Change the value of the string key on main. This will need to be changed in the string file and in all usage
   sites.
 - [ ] Change the value of the string key in all translations on the main branch in babel. This can generally be done
   using search-and-replace.
 - [ ] Do a maintenance release for every simulation that is currently using this string. This can be quite an involved
   process, and is well beyond the scope of this document, so please refer to
-  https://github.com/phetsims/perennial/blob/main/doc/automated-maintenance-process.md, and you'll also probably need to
+  [automated-maintenance-process.md](../../perennial-alias/doc/automated-maintenance-process.md), and you'll also probably need to
   consult with @jonathanolson.
 - [ ] Publish the maintenance releases. Make sure that you don't move to the next step until this is complete.
 - [ ] Take Rosetta out of maintenance mode (again, see the
-  [Admin Guide](https://github.com/phetsims/rosetta/blob/main/doc/admin-guide.md) for information on how to do this).
+  [Admin Guide](admin-guide.md) for information on how to do this).
 - [ ] Verify that the string key change worked by going to Rosetta (https://phet.colorado.edu/translate/), selecting a
   simulation that used the changed key, choosing a locale for which a translation exists, pressing "Go", and verifying
   that the old string key is gone, the new one is shown, and the value of the new one is correct. Do this for all locale

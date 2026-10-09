@@ -1,22 +1,24 @@
-# Rosetta
+# ⚠️ This Repository Is No Longer Maintained
 
-Rosetta is a tool for translating PhET simulations. It is built using the MERN tech stack: MongoDB, Express, React, and
-Node.
+This repository is **out of date and no longer actively maintained.**
 
-## Quick Start
+As part of our ongoing effort to better sustain the PhET project, we have restructured our library and consolidated our individual repositories into a single **monorepo**.
 
-1. Make sure you have git installed on your system and in your PATH.
-   - On Windows, you can install git from [git-scm.com](https://git-scm.com/download/win).
-   - On macOS, you can install git using Homebrew with `brew install git`.
-2. Make sure you have Node.js and npm installed on your system.
-   - You can download Node.js from [nodejs.org](https://nodejs.org/).
-   - After installing Node.js, you can verify the installation by running `node -v` and `npm -v` in your terminal.
-   - If you are using Windows, make sure to add Node.js to your PATH during installation.
-3. Execute `git clone https://github.com/phetsims/rosetta.git`
-4. Execute `cd rosetta && npm install`
-5. Execute `./scripts/sh/bootstrap.sh`
-6. Execute `npm run update-dependencies`
-7. Rosetta requires a configuration file to run. You can create a sample configuration file by copying sampleConfig.json 
-   from this repository into <your-home-dir>/.phet/rosetta-config.json.  There are several pieces of information that
-   would be a security risk to include in the sample file, so if you're a PhET developer, you will need to work with
-   other devs to get values for those fields.
+## Current status
+
+As part of this restructuring, we are currently reviewing what to make publicly available. The monorepo is **not publicly available at this time**, and we appreciate your patience while we work through this to keep the PhET project sustainable.
+
+In the meantime, please note that the code here is outdated. Issues and pull requests opened against this repository may not receive a response.
+
+## Why the change?
+
+Moving to a monorepo allows us to:
+
+- Coordinate changes across the library more easily
+- Simplify dependency management and versioning
+- Reduce maintenance overhead so we can focus on the project itself
+- Provide a more consistent experience for contributors and users
+
+## Thank you
+
+Thank you for your patience while we restructure our library to better sustain the PhET project. We appreciate your continued interest and support. You can access all of our free sims on our website: https://phet.colorado.edu/
